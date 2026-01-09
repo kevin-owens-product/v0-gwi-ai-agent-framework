@@ -142,6 +142,7 @@ export async function POST(request: NextRequest) {
       inviterName: session.user.name || 'A team member',
       organizationName: organization?.name || 'the organization',
       inviteUrl: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/invite/${token}`,
+      role: role.toLowerCase(),
     })
 
     // Log audit event
