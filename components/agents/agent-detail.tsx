@@ -113,6 +113,169 @@ function formatDuration(startedAt: string, completedAt: string | null): string {
   return `${Math.round(diffMs / 60000)}m`
 }
 
+// Demo agents for when API is unavailable
+const demoAgents: Record<string, Agent> = {
+  "audience-explorer": {
+    id: "audience-explorer",
+    name: "Audience Explorer",
+    description: "Discover and analyze consumer segments, build detailed personas, and uncover behavioral patterns across global markets using GWI data. This agent specializes in demographic profiling, psychographic analysis, and behavioral mapping to help you understand your target audiences deeply.",
+    type: "RESEARCH",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.7, enableCitations: true, maxTokens: 8192 },
+    createdAt: "2024-01-15T10:00:00Z",
+    updatedAt: "2025-01-08T14:30:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-08T14:00:00Z", completedAt: "2025-01-08T14:02:30Z", tokensUsed: 4521 },
+      { id: "run-2", status: "COMPLETED", startedAt: "2025-01-07T09:15:00Z", completedAt: "2025-01-07T09:18:45Z", tokensUsed: 5234 },
+      { id: "run-3", status: "COMPLETED", startedAt: "2025-01-06T16:30:00Z", completedAt: "2025-01-06T16:33:20Z", tokensUsed: 3892 },
+    ],
+    _count: { runs: 1247 },
+  },
+  "persona-architect": {
+    id: "persona-architect",
+    name: "Persona Architect",
+    description: "Create rich, data-driven personas based on real consumer data. Visualize motivations, pain points, media habits, and journey maps. This agent transforms raw data into compelling character profiles that bring your target audience to life for strategic planning.",
+    type: "RESEARCH",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.8, outputFormat: "rich", enableVisualization: true },
+    createdAt: "2024-02-20T08:00:00Z",
+    updatedAt: "2025-01-07T11:20:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-07T11:00:00Z", completedAt: "2025-01-07T11:04:15Z", tokensUsed: 6234 },
+      { id: "run-2", status: "COMPLETED", startedAt: "2025-01-05T14:30:00Z", completedAt: "2025-01-05T14:35:00Z", tokensUsed: 7102 },
+    ],
+    _count: { runs: 892 },
+  },
+  "motivation-decoder": {
+    id: "motivation-decoder",
+    name: "Motivation Decoder",
+    description: "Analyze the 'why' behind consumer behavior - values, beliefs, emotional drivers, and decision factors that shape purchasing decisions. Uncover hidden motivations that traditional research misses.",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.6, reasoningMode: true, depthAnalysis: true },
+    createdAt: "2024-03-10T12:00:00Z",
+    updatedAt: "2025-01-06T09:45:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-06T09:30:00Z", completedAt: "2025-01-06T09:34:20Z", tokensUsed: 5678 },
+    ],
+    _count: { runs: 654 },
+  },
+  "culture-tracker": {
+    id: "culture-tracker",
+    name: "Culture Tracker",
+    description: "Monitor cultural shifts, emerging movements, and societal trends that shape consumer behavior. Track viral content, sentiment changes, and cultural moments in real-time across global markets.",
+    type: "MONITORING",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.7, sources: ["zeitgeist", "social", "news"], realTimeUpdates: true },
+    createdAt: "2024-04-05T14:00:00Z",
+    updatedAt: "2025-01-08T16:00:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "RUNNING", startedAt: "2025-01-08T15:55:00Z", completedAt: null, tokensUsed: 0 },
+      { id: "run-2", status: "COMPLETED", startedAt: "2025-01-08T12:00:00Z", completedAt: "2025-01-08T12:03:45Z", tokensUsed: 4123 },
+      { id: "run-3", status: "COMPLETED", startedAt: "2025-01-07T12:00:00Z", completedAt: "2025-01-07T12:04:10Z", tokensUsed: 4456 },
+    ],
+    _count: { runs: 2103 },
+  },
+  "brand-analyst": {
+    id: "brand-analyst",
+    name: "Brand Relationship Analyst",
+    description: "Examine how consumers connect with brands emotionally and functionally. Analyze brand perception, loyalty drivers, competitive positioning, and affinity mapping across consumer segments.",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.7, enableBenchmarks: true, competitiveAnalysis: true },
+    createdAt: "2024-05-15T10:00:00Z",
+    updatedAt: "2025-01-05T17:30:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-05T17:00:00Z", completedAt: "2025-01-05T17:05:30Z", tokensUsed: 6789 },
+      { id: "run-2", status: "FAILED", startedAt: "2025-01-04T10:00:00Z", completedAt: "2025-01-04T10:01:15Z", tokensUsed: 1234 },
+    ],
+    _count: { runs: 1456 },
+  },
+  "global-perspective": {
+    id: "global-perspective",
+    name: "Global Perspective Agent",
+    description: "Compare consumer behaviors across markets and cultures. Identify universal truths and local nuances for international strategy. Perfect for market expansion planning and global campaign development.",
+    type: "RESEARCH",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.7, markets: ["all"], crossMarketAnalysis: true },
+    createdAt: "2024-06-01T08:00:00Z",
+    updatedAt: "2025-01-04T13:15:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-04T13:00:00Z", completedAt: "2025-01-04T13:06:45Z", tokensUsed: 8234 },
+    ],
+    _count: { runs: 987 },
+  },
+  "trend-forecaster": {
+    id: "trend-forecaster",
+    name: "Trend Forecaster",
+    description: "Predict emerging consumer trends using historical data patterns, social signals, and market indicators. Generate actionable forecasts with confidence intervals and scenario planning.",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.5, forecastHorizon: "12months", scenarioPlanning: true },
+    createdAt: "2024-07-10T11:00:00Z",
+    updatedAt: "2025-01-03T09:00:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-03T08:30:00Z", completedAt: "2025-01-03T08:37:20Z", tokensUsed: 9123 },
+    ],
+    _count: { runs: 743 },
+  },
+  "campaign-strategist": {
+    id: "campaign-strategist",
+    name: "Campaign Strategist",
+    description: "Design data-driven marketing campaigns with audience targeting, channel recommendations, and message optimization based on consumer insights. Generate comprehensive campaign briefs and media plans.",
+    type: "REPORTING",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.8, outputFormat: "presentation", includeMediaPlan: true },
+    createdAt: "2024-08-20T09:00:00Z",
+    updatedAt: "2025-01-02T15:45:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-02T15:30:00Z", completedAt: "2025-01-02T15:38:10Z", tokensUsed: 7856 },
+      { id: "run-2", status: "COMPLETED", startedAt: "2024-12-28T10:00:00Z", completedAt: "2024-12-28T10:07:30Z", tokensUsed: 8234 },
+    ],
+    _count: { runs: 1089 },
+  },
+  "competitive-intel": {
+    id: "competitive-intel",
+    name: "Competitive Intelligence",
+    description: "Track competitor brand perception, market share, and consumer sentiment. Generate competitive analysis reports and opportunity maps. Monitor competitor campaigns and consumer reactions.",
+    type: "MONITORING",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.6, trackCompetitors: true, alertsEnabled: true },
+    createdAt: "2024-09-05T13:00:00Z",
+    updatedAt: "2025-01-08T08:30:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-08T08:00:00Z", completedAt: "2025-01-08T08:04:50Z", tokensUsed: 5432 },
+      { id: "run-2", status: "COMPLETED", startedAt: "2025-01-07T08:00:00Z", completedAt: "2025-01-07T08:05:15Z", tokensUsed: 5678 },
+      { id: "run-3", status: "COMPLETED", startedAt: "2025-01-06T08:00:00Z", completedAt: "2025-01-06T08:04:30Z", tokensUsed: 5123 },
+    ],
+    _count: { runs: 1567 },
+  },
+  "survey-analyst": {
+    id: "survey-analyst",
+    name: "Survey Analyst",
+    description: "Analyze survey data with statistical rigor. Generate cross-tabs, significance tests, and visualizations from custom research data. Perfect for turning raw survey results into actionable insights.",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.4, enableStatistics: true, significanceTesting: true },
+    createdAt: "2024-10-12T10:00:00Z",
+    updatedAt: "2025-01-01T14:20:00Z",
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    runs: [
+      { id: "run-1", status: "COMPLETED", startedAt: "2025-01-01T14:00:00Z", completedAt: "2025-01-01T14:08:45Z", tokensUsed: 10234 },
+    ],
+    _count: { runs: 621 },
+  },
+}
+
 export function AgentDetail({ id }: { id: string }) {
   const router = useRouter()
   const [agent, setAgent] = useState<Agent | null>(null)
@@ -128,6 +291,11 @@ export function AgentDetail({ id }: { id: string }) {
       try {
         const response = await fetch(`/api/v1/agents/${id}`)
         if (!response.ok) {
+          // Try demo data if API fails
+          if (demoAgents[id]) {
+            setAgent(demoAgents[id])
+            return
+          }
           const data = await response.json()
           throw new Error(data.error || 'Failed to fetch agent')
         }
@@ -135,7 +303,12 @@ export function AgentDetail({ id }: { id: string }) {
         setAgent(data.data)
       } catch (err) {
         console.error('Failed to fetch agent:', err)
-        setError(err instanceof Error ? err.message : 'Failed to fetch agent')
+        // Try demo data if API fails
+        if (demoAgents[id]) {
+          setAgent(demoAgents[id])
+        } else {
+          setError(err instanceof Error ? err.message : 'Failed to fetch agent')
+        }
       } finally {
         setIsLoading(false)
       }
