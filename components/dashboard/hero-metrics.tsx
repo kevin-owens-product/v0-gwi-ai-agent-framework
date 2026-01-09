@@ -4,48 +4,33 @@ import { Card } from "@/components/ui/card"
 import { Bot, Zap, TrendingUp, Clock, ArrowUpRight, ArrowDownRight } from "lucide-react"
 import { Area, AreaChart, ResponsiveContainer } from "recharts"
 
-const metrics = [
-  {
-    label: "Active Agents",
-    value: "12",
-    change: "+2",
-    trend: "up",
-    description: "Running now",
-    icon: Bot,
-    color: "emerald",
-    sparkData: [{ v: 8 }, { v: 9 }, { v: 8 }, { v: 10 }, { v: 9 }, { v: 11 }, { v: 10 }, { v: 12 }],
-  },
-  {
-    label: "Insights Generated",
-    value: "3,241",
-    change: "+18%",
-    trend: "up",
-    description: "This week",
-    icon: Zap,
-    color: "blue",
-    sparkData: [{ v: 2100 }, { v: 2400 }, { v: 2200 }, { v: 2800 }, { v: 2600 }, { v: 3000 }, { v: 2900 }, { v: 3241 }],
-  },
-  {
-    label: "Accuracy Rate",
-    value: "94.2%",
-    change: "+2.1%",
-    trend: "up",
-    description: "Verified insights",
-    icon: TrendingUp,
-    color: "violet",
-    sparkData: [{ v: 89 }, { v: 90 }, { v: 91 }, { v: 90 }, { v: 92 }, { v: 93 }, { v: 93 }, { v: 94.2 }],
-  },
-  {
-    label: "Avg. Response",
-    value: "1.2s",
-    change: "-0.3s",
-    trend: "up",
-    description: "Per query",
-    icon: Clock,
-    color: "amber",
-    sparkData: [{ v: 1.8 }, { v: 1.7 }, { v: 1.6 }, { v: 1.5 }, { v: 1.4 }, { v: 1.3 }, { v: 1.3 }, { v: 1.2 }],
-  },
-]
+interface MetricsData {
+  totalAgents: number
+  activeAgents: number
+  weeklyInsights: number
+  monthlyRuns: number
+  successRate: number
+  avgResponseTime: number
+}
+
+interface HeroMetricsProps {
+  metrics?: MetricsData
+}
+
+function generateSparkData(finalValue: number, count: number = 8): { v: number }[] {
+  const data: { v: number }[] = []
+  if (finalValue === 0) {
+    return Array(count).fill({ v: 0 })
+  }
+  const variation = finalValue * 0.2
+  for (let i = 0; i < count - 1; i++) {
+    const progress = i / (count - 1)
+    const randomVariation = (Math.random() - 0.5) * variation * 0.5
+    data.push({ v: Math.max(0, finalValue * (0.7 + progress * 0.3) + randomVariation) })
+  }
+  data.push({ v: finalValue })
+  return data
+}
 
 const colorMap = {
   emerald: {
@@ -74,10 +59,62 @@ const colorMap = {
   },
 }
 
-export function HeroMetrics() {
+const defaultMetrics: MetricsData = {
+  totalAgents: 0,
+  activeAgents: 0,
+  weeklyInsights: 0,
+  monthlyRuns: 0,
+  successRate: 0,
+  avgResponseTime: 0,
+}
+
+export function HeroMetrics({ metrics = defaultMetrics }: HeroMetricsProps) {
+  const metricsConfig = [
+    {
+      label: "Active Agents",
+      value: metrics.activeAgents.toString(),
+      change: `${metrics.totalAgents} total`,
+      trend: "up" as const,
+      description: "Running now",
+      icon: Bot,
+      color: "emerald",
+      sparkData: generateSparkData(metrics.activeAgents),
+    },
+    {
+      label: "Insights Generated",
+      value: metrics.weeklyInsights.toLocaleString(),
+      change: `${metrics.monthlyRuns} runs`,
+      trend: "up" as const,
+      description: "This week",
+      icon: Zap,
+      color: "blue",
+      sparkData: generateSparkData(metrics.weeklyInsights),
+    },
+    {
+      label: "Success Rate",
+      value: `${metrics.successRate}%`,
+      change: metrics.successRate >= 90 ? "Excellent" : metrics.successRate >= 70 ? "Good" : metrics.successRate > 0 ? "Needs attention" : "No data",
+      trend: metrics.successRate >= 70 ? "up" as const : "down" as const,
+      description: "Completed runs",
+      icon: TrendingUp,
+      color: "violet",
+      sparkData: generateSparkData(metrics.successRate),
+    },
+    {
+      label: "Avg. Response",
+      value: metrics.avgResponseTime > 0 ? `${metrics.avgResponseTime}s` : "N/A",
+      change: metrics.avgResponseTime === 0 ? "No data" : metrics.avgResponseTime < 2 ? "Fast" : metrics.avgResponseTime < 5 ? "Normal" : "Slow",
+      trend: metrics.avgResponseTime < 3 || metrics.avgResponseTime === 0 ? "up" as const : "down" as const,
+      description: "Per run",
+      icon: Clock,
+      color: "amber",
+      sparkData: generateSparkData(metrics.avgResponseTime || 1),
+    },
+  ]
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {metrics.map((metric) => {
+      {metricsConfig.map((metric) => {
         const colors = colorMap[metric.color as keyof typeof colorMap]
         return (
           <Card

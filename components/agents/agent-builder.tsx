@@ -9,15 +9,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Save, Play, Plus, X, Sparkles } from "lucide-react"
+import { ArrowLeft, Save, Play, Plus, X, Sparkles, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+
+type AgentType = 'RESEARCH' | 'ANALYSIS' | 'REPORTING' | 'MONITORING' | 'CUSTOM'
 
 export function AgentBuilder() {
+  const router = useRouter()
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
+  const [type, setType] = useState<AgentType>("CUSTOM")
   const [systemPrompt, setSystemPrompt] = useState("")
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState("")
+  const [examplePrompts, setExamplePrompts] = useState<string[]>(["", "", ""])
+  const [temperature, setTemperature] = useState("0.7")
+  const [maxTokens, setMaxTokens] = useState(4096)
+  const [enableMemory, setEnableMemory] = useState(true)
+  const [requireCitations, setRequireCitations] = useState(true)
+  const [dataSources, setDataSources] = useState<string[]>(["GWI Core"])
+  const [outputFormats, setOutputFormats] = useState<string[]>(["Markdown"])
+
+  const [isCreating, setIsCreating] = useState(false)
+  const [isSavingDraft, setIsSavingDraft] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const addTag = () => {
     if (newTag && !tags.includes(newTag)) {
@@ -28,6 +45,91 @@ export function AgentBuilder() {
 
   const removeTag = (tag: string) => {
     setTags(tags.filter((t) => t !== tag))
+  }
+
+  const toggleDataSource = (source: string) => {
+    if (dataSources.includes(source)) {
+      setDataSources(dataSources.filter(s => s !== source))
+    } else {
+      setDataSources([...dataSources, source])
+    }
+  }
+
+  const toggleOutputFormat = (format: string) => {
+    if (outputFormats.includes(format)) {
+      setOutputFormats(outputFormats.filter(f => f !== format))
+    } else {
+      setOutputFormats([...outputFormats, format])
+    }
+  }
+
+  const updateExamplePrompt = (index: number, value: string) => {
+    const newPrompts = [...examplePrompts]
+    newPrompts[index] = value
+    setExamplePrompts(newPrompts)
+  }
+
+  const addExamplePrompt = () => {
+    setExamplePrompts([...examplePrompts, ""])
+  }
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+
+    if (!name.trim()) {
+      newErrors.name = "Agent name is required"
+    } else if (name.length > 100) {
+      newErrors.name = "Agent name must be 100 characters or less"
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleCreate = async (asDraft: boolean = false) => {
+    if (!validateForm()) return
+
+    const setLoading = asDraft ? setIsSavingDraft : setIsCreating
+    setLoading(true)
+
+    try {
+      const configuration = {
+        systemPrompt,
+        examplePrompts: examplePrompts.filter(p => p.trim()),
+        temperature: parseFloat(temperature),
+        maxTokens,
+        enableMemory,
+        requireCitations,
+        dataSources,
+        outputFormats,
+        tags,
+      }
+
+      const response = await fetch('/api/v1/agents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name.trim(),
+          description: description.trim() || undefined,
+          type,
+          configuration,
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to create agent')
+      }
+
+      const data = await response.json()
+      toast.success(asDraft ? 'Agent draft saved' : 'Agent created successfully')
+      router.push(`/dashboard/agents/${data.id}`)
+    } catch (err) {
+      console.error('Failed to create agent:', err)
+      toast.error(err instanceof Error ? err.message : 'Failed to create agent')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -46,13 +148,30 @@ export function AgentBuilder() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="gap-2 bg-transparent">
-            <Save className="h-4 w-4" />
+          <Button
+            variant="outline"
+            className="gap-2 bg-transparent"
+            onClick={() => handleCreate(true)}
+            disabled={isSavingDraft || isCreating}
+          >
+            {isSavingDraft ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="h-4 w-4" />
+            )}
             Save Draft
           </Button>
-          <Button className="gap-2">
-            <Play className="h-4 w-4" />
-            Test Agent
+          <Button
+            className="gap-2"
+            onClick={() => handleCreate(false)}
+            disabled={isCreating || isSavingDraft}
+          >
+            {isCreating ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
+            Create Agent
           </Button>
         </div>
       </div>
@@ -66,13 +185,16 @@ export function AgentBuilder() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Agent Name</Label>
+                <Label>Agent Name *</Label>
                 <Input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g., Brand Perception Analyzer"
-                  className="mt-1.5 bg-secondary"
+                  className={`mt-1.5 bg-secondary ${errors.name ? 'border-red-500' : ''}`}
                 />
+                {errors.name && (
+                  <p className="text-xs text-red-400 mt-1">{errors.name}</p>
+                )}
               </div>
               <div>
                 <Label>Description</Label>
@@ -84,17 +206,17 @@ export function AgentBuilder() {
                 />
               </div>
               <div>
-                <Label>Category</Label>
-                <Select defaultValue="analysis">
+                <Label>Agent Type</Label>
+                <Select value={type} onValueChange={(v) => setType(v as AgentType)}>
                   <SelectTrigger className="mt-1.5 bg-secondary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="analysis">Analysis</SelectItem>
-                    <SelectItem value="content">Content Generation</SelectItem>
-                    <SelectItem value="prediction">Prediction</SelectItem>
-                    <SelectItem value="strategy">Strategy</SelectItem>
-                    <SelectItem value="automation">Automation</SelectItem>
+                    <SelectItem value="RESEARCH">Research</SelectItem>
+                    <SelectItem value="ANALYSIS">Analysis</SelectItem>
+                    <SelectItem value="REPORTING">Reporting</SelectItem>
+                    <SelectItem value="MONITORING">Monitoring</SelectItem>
+                    <SelectItem value="CUSTOM">Custom</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -165,13 +287,18 @@ When responding:
               <CardTitle>Example Prompts</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {[1, 2, 3].map((i) => (
+              {examplePrompts.map((prompt, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground w-6">{i}.</span>
-                  <Input placeholder={`Example prompt ${i}...`} className="bg-secondary" />
+                  <span className="text-sm text-muted-foreground w-6">{i + 1}.</span>
+                  <Input
+                    value={prompt}
+                    onChange={(e) => updateExamplePrompt(i, e.target.value)}
+                    placeholder={`Example prompt ${i + 1}...`}
+                    className="bg-secondary"
+                  />
                 </div>
               ))}
-              <Button variant="ghost" size="sm" className="gap-2">
+              <Button variant="ghost" size="sm" className="gap-2" onClick={addExamplePrompt}>
                 <Plus className="h-4 w-4" />
                 Add Example
               </Button>
@@ -189,7 +316,10 @@ When responding:
               {["GWI Core", "GWI USA", "GWI Zeitgeist", "Custom Uploads"].map((source) => (
                 <div key={source} className="flex items-center justify-between p-3 rounded-lg border border-border">
                   <span className="text-sm text-foreground">{source}</span>
-                  <Switch defaultChecked={source === "GWI Core"} />
+                  <Switch
+                    checked={dataSources.includes(source)}
+                    onCheckedChange={() => toggleDataSource(source)}
+                  />
                 </div>
               ))}
             </CardContent>
@@ -203,7 +333,10 @@ When responding:
               {["Markdown", "JSON", "Slides", "PDF Report"].map((format) => (
                 <div key={format} className="flex items-center justify-between p-3 rounded-lg border border-border">
                   <span className="text-sm text-foreground">{format}</span>
-                  <Switch defaultChecked={format === "Markdown"} />
+                  <Switch
+                    checked={outputFormats.includes(format)}
+                    onCheckedChange={() => toggleOutputFormat(format)}
+                  />
                 </div>
               ))}
             </CardContent>
@@ -216,7 +349,7 @@ When responding:
             <CardContent className="space-y-4">
               <div>
                 <Label className="text-sm">Default Temperature</Label>
-                <Select defaultValue="0.7">
+                <Select value={temperature} onValueChange={setTemperature}>
                   <SelectTrigger className="mt-1.5 bg-secondary">
                     <SelectValue />
                   </SelectTrigger>
@@ -230,21 +363,26 @@ When responding:
               </div>
               <div>
                 <Label className="text-sm">Max Tokens</Label>
-                <Input type="number" defaultValue={4096} className="mt-1.5 bg-secondary" />
+                <Input
+                  type="number"
+                  value={maxTokens}
+                  onChange={(e) => setMaxTokens(parseInt(e.target.value) || 4096)}
+                  className="mt-1.5 bg-secondary"
+                />
               </div>
               <div className="flex items-center justify-between">
                 <div>
                   <Label className="text-sm">Enable Memory</Label>
                   <p className="text-xs text-muted-foreground">Remember past conversations</p>
                 </div>
-                <Switch defaultChecked />
+                <Switch checked={enableMemory} onCheckedChange={setEnableMemory} />
               </div>
               <div className="flex items-center justify-between">
                 <div>
                   <Label className="text-sm">Require Citations</Label>
                   <p className="text-xs text-muted-foreground">Always include data sources</p>
                 </div>
-                <Switch defaultChecked />
+                <Switch checked={requireCitations} onCheckedChange={setRequireCitations} />
               </div>
             </CardContent>
           </Card>

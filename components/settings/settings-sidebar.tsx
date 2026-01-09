@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { User, Building2, Users, CreditCard, Bell, Shield, Key, Palette } from "lucide-react"
+import { User, Building2, Users, CreditCard, Bell, Shield, Key, Palette, FileText } from "lucide-react"
 
 const settingsNav = [
   { name: "General", href: "/dashboard/settings/general", icon: Building2 },
@@ -13,6 +13,7 @@ const settingsNav = [
   { name: "Notifications", href: "/dashboard/settings/notifications", icon: Bell },
   { name: "Security", href: "/dashboard/settings/security", icon: Shield },
   { name: "API Keys", href: "/dashboard/settings/api-keys", icon: Key },
+  { name: "Audit Log", href: "/dashboard/settings/audit-log", icon: FileText },
   { name: "Appearance", href: "/dashboard/settings/appearance", icon: Palette },
 ]
 

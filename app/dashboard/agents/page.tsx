@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { AgentGrid } from "@/components/agents/agent-grid"
 import { AgentFilters } from "@/components/agents/agent-filters"
 import { Button } from "@/components/ui/button"
@@ -7,6 +10,9 @@ import { Search, Plus } from "lucide-react"
 import Link from "next/link"
 
 export default function AgentsPage() {
+  const [search, setSearch] = useState("")
+  const [activeTab, setActiveTab] = useState("all")
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -22,35 +28,32 @@ export default function AgentsPage() {
         </Link>
       </div>
 
-      <Tabs defaultValue="all" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <TabsList className="bg-secondary">
             <TabsTrigger value="all">All Agents</TabsTrigger>
-            <TabsTrigger value="official">Official</TabsTrigger>
-            <TabsTrigger value="custom">Custom</TabsTrigger>
-            <TabsTrigger value="community">Community</TabsTrigger>
+            <TabsTrigger value="custom">My Agents</TabsTrigger>
           </TabsList>
 
           <div className="flex gap-2 w-full sm:w-auto">
             <div className="relative flex-1 sm:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search agents..." className="pl-10 bg-secondary" />
+              <Input
+                placeholder="Search agents..."
+                className="pl-10 bg-secondary"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
             <AgentFilters />
           </div>
         </div>
 
         <TabsContent value="all" className="mt-0">
-          <AgentGrid filter="all" />
-        </TabsContent>
-        <TabsContent value="official" className="mt-0">
-          <AgentGrid filter="official" />
+          <AgentGrid filter="all" search={search} />
         </TabsContent>
         <TabsContent value="custom" className="mt-0">
-          <AgentGrid filter="custom" />
-        </TabsContent>
-        <TabsContent value="community" className="mt-0">
-          <AgentGrid filter="community" />
+          <AgentGrid filter="custom" search={search} />
         </TabsContent>
       </Tabs>
     </div>

@@ -17,9 +17,22 @@ export default function ForgotPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsSubmitted(true)
-    setIsLoading(false)
+
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+
+      // Always show success to prevent email enumeration
+      setIsSubmitted(true)
+    } catch {
+      // Even on error, show success to prevent email enumeration
+      setIsSubmitted(true)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   if (isSubmitted) {
