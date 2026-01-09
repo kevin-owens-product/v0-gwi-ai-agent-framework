@@ -224,13 +224,14 @@ export default function PlaygroundPage() {
         return {
           id,
           type: "chart",
-          title: "Consumer Trends Analysis",
+          title: "Purchase Drivers by Generation",
           content: {
             chartType: "bar",
-            categories: ["Q1", "Q2", "Q3", "Q4"],
+            categories: ["Price", "Quality", "Sustainability", "Brand Trust", "Convenience"],
             series: [
-              { name: "Engagement", data: [65, 72, 78, 85], color: "#8b5cf6" },
-              { name: "Conversion", data: [45, 52, 58, 62], color: "#3b82f6" },
+              { name: "Gen Z", data: [65, 72, 89, 45, 71], color: "#8b5cf6" },
+              { name: "Millennials", data: [72, 78, 76, 52, 68], color: "#3b82f6" },
+              { name: "Gen X", data: [85, 82, 58, 61, 74], color: "#10b981" },
             ],
           },
         }
@@ -238,13 +239,14 @@ export default function PlaygroundPage() {
         return {
           id,
           type: "table",
-          title: "Market Metrics",
+          title: "Consumer Segment Analysis",
           content: {
-            headers: ["Metric", "Value", "Change", "Trend"],
+            headers: ["Segment", "Size", "Growth", "Engagement", "Value Index"],
             rows: [
-              ["Market Size", "$4.2B", "+12%", "↑"],
-              ["Active Users", "2.3M", "+8%", "↑"],
-              ["Engagement Rate", "4.2%", "+15%", "↑"],
+              ["Eco-Warriors", "18%", "+24%", "High", "142"],
+              ["Conscious Mainstream", "34%", "+12%", "Medium", "118"],
+              ["Passive Supporters", "28%", "+5%", "Low", "95"],
+              ["Price-Focused", "20%", "-2%", "Medium", "87"],
             ],
           },
         }
@@ -252,26 +254,31 @@ export default function PlaygroundPage() {
         return {
           id,
           type: "persona",
-          title: "Target Persona",
+          title: "Eco-Conscious Millennial",
           content: {
-            name: "Digital Native",
-            age: "25-34",
-            income: "$50K-$80K",
-            location: "Urban areas",
-            values: ["Innovation", "Convenience", "Sustainability"],
-            behaviors: ["Mobile-first", "Research-driven", "Social-influenced"],
-            mediaHabits: ["Instagram (2.5h/day)", "TikTok (1.8h/day)", "Podcasts (45min/day)"],
+            name: "Eco-Conscious Millennial",
+            age: "28-35",
+            income: "$65K-$95K",
+            location: "Urban/suburban areas",
+            values: ["Sustainability", "Authenticity", "Work-life balance", "Social impact"],
+            behaviors: [
+              "Researches brand ethics before purchasing",
+              "Willing to pay 20% premium for sustainable products",
+              "Shares brand experiences on social media",
+              "Prefers direct-to-consumer brands",
+            ],
+            mediaHabits: ["Instagram (2.1h/day)", "LinkedIn (1.2h/day)", "Podcasts (45min/day)", "YouTube (1.5h/day)"],
           },
         }
       case "comparison":
         return {
           id,
           type: "comparison",
-          title: "Market Comparison",
+          title: "US vs UK Market Comparison",
           content: {
             items: [
-              { name: "US Market", metrics: { size: "$2.1B", growth: "+15%", share: "32%" } },
-              { name: "UK Market", metrics: { size: "$0.8B", growth: "+12%", share: "18%" } },
+              { name: "United States", metrics: { "Market Size": "$2.1B", "YoY Growth": "+15%", "Digital Adoption": "78%", "Sustainability Focus": "64%" } },
+              { name: "United Kingdom", metrics: { "Market Size": "$0.8B", "YoY Growth": "+18%", "Digital Adoption": "82%", "Sustainability Focus": "74%" } },
             ],
           },
         }
@@ -279,11 +286,17 @@ export default function PlaygroundPage() {
         return {
           id,
           type: "slides",
-          title: "Presentation",
+          title: "Consumer Insights Presentation",
           content: {
             slides: [
-              { title: "Key Insights", content: "Overview of consumer trends" },
-              { title: "Market Analysis", content: "Detailed breakdown by segment" },
+              { title: "Executive Summary", content: "Key findings from Q4 2024 consumer research across 15 markets" },
+              { title: "Audience Overview", content: "Primary demographic: 25-34 year olds with high digital engagement" },
+              { title: "Key Trends", content: "Sustainability concerns driving 67% of purchase decisions in target segment" },
+              { title: "Behavioral Insights", content: "Mobile-first discovery with 78% researching products on smartphones" },
+              { title: "Market Comparison", content: "US leads in adoption at 42%, followed by UK at 28% and Germany at 18%" },
+              { title: "Competitive Landscape", content: "Brand loyalty declining, with 54% open to switching for better values alignment" },
+              { title: "Recommendations", content: "Focus on authentic storytelling and mobile-optimized experiences" },
+              { title: "Next Steps", content: "Deep-dive into Gen Z segment and expand to APAC markets in Q1" },
             ],
           },
         }
@@ -291,15 +304,29 @@ export default function PlaygroundPage() {
         return {
           id,
           type: "image",
-          title: "Generated Visual",
-          content: { placeholder: true, description: "Visual representation of data" },
+          title: "Consumer Journey Infographic",
+          content: {
+            placeholder: true,
+            description: "Visual infographic showing the consumer decision journey from awareness to purchase, highlighting key touchpoints and conversion rates at each stage"
+          },
         }
       case "code":
         return {
           id,
           type: "code",
-          title: "Data Export",
-          content: { format: "json", data: { insights: [], metrics: {} } },
+          title: "Data Export - Consumer Insights",
+          content: {
+            format: "json",
+            data: {
+              segments: [
+                { name: "Gen Z", size: "2.1B", engagement: "high", sustainability_index: 89 },
+                { name: "Millennials", size: "1.8B", engagement: "high", sustainability_index: 76 },
+                { name: "Gen X", size: "1.2B", engagement: "medium", sustainability_index: 58 }
+              ],
+              markets: ["US", "UK", "Germany", "France", "Japan"],
+              metrics: { total_reach: "5.1B", avg_engagement: 4.2, confidence: 0.94 }
+            }
+          },
         }
       default:
         return {
