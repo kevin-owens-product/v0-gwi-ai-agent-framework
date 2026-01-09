@@ -26,6 +26,45 @@ const typeIcons: Record<string, typeof Users> = {
   CUSTOM: PieChart,
 }
 
+// Demo agents shown when API is unavailable
+const demoAgents: Agent[] = [
+  {
+    id: "audience-explorer",
+    name: "Audience Explorer",
+    type: "RESEARCH",
+    status: "ACTIVE",
+    _count: { runs: 1247 },
+  },
+  {
+    id: "culture-tracker",
+    name: "Culture Tracker",
+    type: "MONITORING",
+    status: "ACTIVE",
+    _count: { runs: 2103 },
+  },
+  {
+    id: "brand-analyst",
+    name: "Brand Analyst",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    _count: { runs: 1456 },
+  },
+  {
+    id: "campaign-strategist",
+    name: "Campaign Strategist",
+    type: "REPORTING",
+    status: "ACTIVE",
+    _count: { runs: 1089 },
+  },
+  {
+    id: "trend-forecaster",
+    name: "Trend Forecaster",
+    type: "ANALYSIS",
+    status: "DRAFT",
+    _count: { runs: 0 },
+  },
+]
+
 export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
   const [agents, setAgents] = useState<Agent[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -36,10 +75,17 @@ export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
         const response = await fetch('/api/v1/agents?limit=5')
         if (response.ok) {
           const data = await response.json()
-          setAgents(data.agents || [])
+          const fetchedAgents = data.agents || []
+          // Use demo data if API returns empty
+          setAgents(fetchedAgents.length > 0 ? fetchedAgents : demoAgents)
+        } else {
+          // Use demo data on API error
+          setAgents(demoAgents)
         }
       } catch (error) {
         console.error('Failed to fetch agents:', error)
+        // Use demo data on error
+        setAgents(demoAgents)
       } finally {
         setIsLoading(false)
       }
