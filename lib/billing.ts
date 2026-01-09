@@ -2,9 +2,23 @@ import Stripe from 'stripe'
 import { prisma } from './db'
 import type { PlanTier } from '@prisma/client'
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-06-20',
-})
+// Lazy-initialized Stripe client to avoid build-time errors
+let _stripe: Stripe | null = null
+
+function getStripe(): Stripe {
+  if (_stripe) return _stripe
+
+  const apiKey = process.env.STRIPE_SECRET_KEY
+  if (!apiKey) {
+    throw new Error('STRIPE_SECRET_KEY environment variable is not configured')
+  }
+
+  _stripe = new Stripe(apiKey, {
+    apiVersion: '2024-06-20',
+  })
+
+  return _stripe
+}
 
 export const PLAN_LIMITS = {
   STARTER: {
@@ -126,8 +140,9 @@ export async function checkUsageLimit(
   return { allowed: current < limit, current, limit }
 }
 
-// Stripe helpers
+// Stripe helpers - use getStripe() for lazy initialization
 export async function createCustomer(orgId: string, email: string, name: string) {
+  const stripe = getStripe()
   const customer = await stripe.customers.create({
     email,
     name,
@@ -148,6 +163,7 @@ export async function createCheckoutSession(
   successUrl: string,
   cancelUrl: string
 ) {
+  const stripe = getStripe()
   const subscription = await prisma.billingSubscription.findUnique({
     where: { orgId },
     include: { organization: true }
@@ -170,6 +186,7 @@ export async function createCheckoutSession(
 }
 
 export async function createPortalSession(orgId: string, returnUrl: string) {
+  const stripe = getStripe()
   const subscription = await prisma.billingSubscription.findUnique({
     where: { orgId }
   })
@@ -241,3 +258,6 @@ function mapStripeStatus(status: Stripe.Subscription.Status) {
   }
   return statusMap[status] || 'ACTIVE'
 }
+
+// Export a getter for Stripe (for webhook verification)
+export { getStripe }
