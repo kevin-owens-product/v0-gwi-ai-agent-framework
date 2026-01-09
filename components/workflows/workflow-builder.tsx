@@ -28,12 +28,16 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 
 const availableAgents = [
-  { id: "audience-strategist", name: "Audience Strategist", icon: Users, color: "bg-chart-1/20 text-chart-1" },
-  { id: "creative-brief", name: "Creative Brief Builder", icon: Lightbulb, color: "bg-chart-2/20 text-chart-2" },
-  { id: "competitive-tracker", name: "Competitive Tracker", icon: Target, color: "bg-chart-3/20 text-chart-3" },
+  { id: "audience-explorer", name: "Audience Explorer", icon: Users, color: "bg-chart-1/20 text-chart-1" },
+  { id: "persona-architect", name: "Persona Architect", icon: Users, color: "bg-chart-1/20 text-chart-1" },
+  { id: "campaign-strategist", name: "Campaign Strategist", icon: Lightbulb, color: "bg-chart-2/20 text-chart-2" },
+  { id: "competitive-intel", name: "Competitive Intelligence", icon: Target, color: "bg-chart-3/20 text-chart-3" },
   { id: "trend-forecaster", name: "Trend Forecaster", icon: TrendingUp, color: "bg-chart-4/20 text-chart-4" },
+  { id: "culture-tracker", name: "Culture Tracker", icon: TrendingUp, color: "bg-chart-4/20 text-chart-4" },
+  { id: "brand-analyst", name: "Brand Analyst", icon: Target, color: "bg-chart-3/20 text-chart-3" },
   { id: "survey-analyst", name: "Survey Analyst", icon: PieChart, color: "bg-chart-5/20 text-chart-5" },
-  { id: "market-expander", name: "Market Expander", icon: Globe, color: "bg-accent/20 text-accent" },
+  { id: "global-perspective", name: "Global Perspective", icon: Globe, color: "bg-accent/20 text-accent" },
+  { id: "motivation-decoder", name: "Motivation Decoder", icon: Lightbulb, color: "bg-chart-2/20 text-chart-2" },
 ]
 
 interface WorkflowStep {
@@ -52,7 +56,7 @@ export function WorkflowBuilder() {
   const [steps, setSteps] = useState<WorkflowStep[]>([
     {
       id: "1",
-      agentId: "audience-strategist",
+      agentId: "audience-explorer",
       config: { dataSources: ["gwi-core"], outputFormat: "markdown", customPrompt: "" },
     },
   ])
@@ -149,9 +153,7 @@ export function WorkflowBuilder() {
             <CardContent>
               <div className="space-y-4">
                 {steps.map((step, index) => {
-                  const agent =
-                    availableAgents.find((a) => a.agentId === step.agentId) ||
-                    availableAgents.find((a) => a.id === step.agentId)
+                  const agent = availableAgents.find((a) => a.id === step.agentId)
                   return (
                     <div key={step.id} className="relative">
                       {index > 0 && <div className="absolute -top-4 left-6 w-px h-4 bg-border" />}
