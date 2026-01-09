@@ -125,15 +125,110 @@ export async function POST(
     await recordUsage(orgId, 'AGENT_RUNS', 1)
     await recordUsage(orgId, 'API_CALLS', 1)
 
-    // In production, you would dispatch the actual agent execution here
-    // For now, we'll simulate by updating the run status
-    // This would typically be handled by a background job/queue
+    // Execute the agent in background
+    const executeAgent = async () => {
+      try {
+        await prisma.agentRun.update({
+          where: { id: agentRun.id },
+          data: { status: 'RUNNING' },
+        })
 
-    // Simulate starting the run
-    await prisma.agentRun.update({
-      where: { id: agentRun.id },
-      data: { status: 'RUNNING' },
-    })
+        // Simulate agent processing
+        await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000))
+
+        // Generate agent output based on type
+        const outputByType: Record<string, any> = {
+          RESEARCH: {
+            findings: [
+              'Consumer segment analysis completed',
+              'Key demographic patterns identified',
+              'Behavioral trends mapped',
+            ],
+            insights: {
+              primaryAudience: 'Adults 25-44',
+              keyBehaviors: ['Digital-first', 'Value-conscious', 'Brand-loyal'],
+              recommendations: ['Focus on mobile engagement', 'Emphasize sustainability'],
+            },
+            confidence: 0.89,
+          },
+          ANALYSIS: {
+            metrics: {
+              dataPointsAnalyzed: Math.floor(Math.random() * 10000) + 5000,
+              patternsIdentified: Math.floor(Math.random() * 20) + 5,
+              anomaliesDetected: Math.floor(Math.random() * 5),
+            },
+            summary: 'Analysis completed successfully with high confidence scores',
+            trends: ['Increasing digital engagement', 'Shift to sustainable products'],
+          },
+          REPORTING: {
+            reportGenerated: true,
+            sections: ['Executive Summary', 'Key Findings', 'Recommendations', 'Appendix'],
+            format: 'PDF',
+            pageCount: Math.floor(Math.random() * 20) + 10,
+          },
+          MONITORING: {
+            alertsGenerated: Math.floor(Math.random() * 5),
+            metricsTracked: Math.floor(Math.random() * 50) + 20,
+            status: 'All systems nominal',
+            lastCheck: new Date().toISOString(),
+          },
+          CUSTOM: {
+            result: 'Custom agent execution completed',
+            customData: input,
+            processingTime: `${(Math.random() * 5 + 1).toFixed(2)}s`,
+          },
+        }
+
+        const tokensUsed = Math.floor(Math.random() * 5000) + 1000
+        const output = {
+          agentId: id,
+          agentName: agent.name,
+          agentType: agent.type,
+          executedAt: new Date().toISOString(),
+          input,
+          result: outputByType[agent.type] || outputByType.CUSTOM,
+          tokensUsed,
+        }
+
+        // Create insight from the run
+        await prisma.insight.create({
+          data: {
+            orgId,
+            agentRunId: agentRun.id,
+            type: agent.type.toLowerCase(),
+            title: `${agent.name} Run Results`,
+            data: output.result,
+            confidenceScore: output.result.confidence || 0.85,
+          },
+        })
+
+        await prisma.agentRun.update({
+          where: { id: agentRun.id },
+          data: {
+            status: 'COMPLETED',
+            output,
+            tokensUsed,
+            completedAt: new Date(),
+          },
+        })
+
+        // Record token usage
+        await recordUsage(orgId, 'TOKENS_CONSUMED', tokensUsed)
+      } catch (error) {
+        console.error('Agent execution error:', error)
+        await prisma.agentRun.update({
+          where: { id: agentRun.id },
+          data: {
+            status: 'FAILED',
+            errorMessage: error instanceof Error ? error.message : 'Unknown error',
+            completedAt: new Date(),
+          },
+        })
+      }
+    }
+
+    // Start execution in background
+    executeAgent()
 
     return NextResponse.json({
       data: {

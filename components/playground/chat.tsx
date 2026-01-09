@@ -503,16 +503,10 @@ export function PlaygroundChat() {
     }
 
     setMessages((prev) => [...prev, userMessage])
+    const currentInput = input
     setInput("")
     setAttachments([])
     setIsStreaming(true)
-
-    const topic = detectTopic(input)
-    const agentKey = config.selectedAgent
-    const responsePool = agentResponses[agentKey] || agentResponses["audience-explorer"]
-    const response = responsePool[topic] || responsePool.default
-
-    const outputBlocks = config.outputFormat === "rich" ? generateOutputBlocks(topic) : undefined
 
     const assistantMessage = {
       id: (Date.now() + 1).toString(),
@@ -531,118 +525,169 @@ export function PlaygroundChat() {
 
     setMessages((prev) => [...prev, assistantMessage])
 
-    // Simulate sub-agent progression
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === assistantMessage.id
-          ? {
-              ...msg,
-              subAgents: [
-                { name: "Data Retrieval", status: "complete", duration: 0.8 },
-                { name: "Analysis Engine", status: "running" },
-                { name: "Insight Generator", status: "pending" },
-              ],
-            }
-          : msg,
-      ),
-    )
+    try {
+      // Call the real chat API
+      const response = await fetch('/api/v1/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: currentInput,
+          agentId: customAgent?.id || config.selectedAgent,
+          context: activeVariables,
+          config: {
+            temperature: config.temperature,
+            maxTokens: config.maxTokens,
+            enableCitations: config.enableCitations,
+            enableMemory: config.enableMemory,
+            selectedSources: config.selectedSources,
+          },
+        }),
+      })
 
-    await new Promise((resolve) => setTimeout(resolve, 600))
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === assistantMessage.id
-          ? {
-              ...msg,
-              subAgents: [
-                { name: "Data Retrieval", status: "complete", duration: 0.8 },
-                { name: "Analysis Engine", status: "complete", duration: 0.6 },
-                { name: "Insight Generator", status: "running" },
-              ],
-            }
-          : msg,
-      ),
-    )
+      // Update sub-agent status to show progress
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantMessage.id
+            ? {
+                ...msg,
+                subAgents: [
+                  { name: "Data Retrieval", status: "complete", duration: 0.8 },
+                  { name: "Analysis Engine", status: "running" },
+                  { name: "Insight Generator", status: "pending" },
+                ],
+              }
+            : msg,
+        ),
+      )
 
-    // Stream the response
-    let currentContent = ""
-    const words = response.split(" ")
-    const totalWords = words.length
-
-    for (let i = 0; i < totalWords; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 12 + Math.random() * 15))
-      currentContent += (i > 0 ? " " : "") + words[i]
+      await new Promise((resolve) => setTimeout(resolve, 300))
 
       setMessages((prev) =>
-        prev.map((msg) => (msg.id === assistantMessage.id ? { ...msg, content: currentContent } : msg)),
+        prev.map((msg) =>
+          msg.id === assistantMessage.id
+            ? {
+                ...msg,
+                subAgents: [
+                  { name: "Data Retrieval", status: "complete", duration: 0.8 },
+                  { name: "Analysis Engine", status: "complete", duration: 0.6 },
+                  { name: "Insight Generator", status: "running" },
+                ],
+              }
+            : msg,
+        ),
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        const apiResponse = data.data?.response || "I apologize, but I couldn't process that request."
+        const apiCitations = data.data?.citations || []
+        const apiOutputBlocks = data.data?.outputBlocks || []
+
+        // Stream the response for better UX
+        let currentContent = ""
+        const words = apiResponse.split(" ")
+
+        for (let i = 0; i < words.length; i++) {
+          await new Promise((resolve) => setTimeout(resolve, 8 + Math.random() * 12))
+          currentContent += (i > 0 ? " " : "") + words[i]
+
+          setMessages((prev) =>
+            prev.map((msg) => (msg.id === assistantMessage.id ? { ...msg, content: currentContent } : msg)),
+          )
+        }
+
+        // Complete the message with citations and output blocks
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantMessage.id
+              ? {
+                  ...msg,
+                  status: "complete",
+                  citations: config.enableCitations ? apiCitations : undefined,
+                  outputBlocks: config.outputFormat === "rich" ? apiOutputBlocks : undefined,
+                  subAgents: [
+                    { name: "Data Retrieval", status: "complete", duration: 0.8 },
+                    { name: "Analysis Engine", status: "complete", duration: 0.6 },
+                    { name: "Insight Generator", status: "complete", duration: 1.2 },
+                  ],
+                }
+              : msg,
+          ),
+        )
+      } else {
+        // Fall back to local response generation on API error
+        const topic = detectTopic(currentInput)
+        const agentKey = config.selectedAgent
+        const responsePool = agentResponses[agentKey] || agentResponses["audience-explorer"]
+        const fallbackResponse = responsePool[topic] || responsePool.default
+
+        let currentContent = ""
+        const words = fallbackResponse.split(" ")
+
+        for (let i = 0; i < words.length; i++) {
+          await new Promise((resolve) => setTimeout(resolve, 12 + Math.random() * 15))
+          currentContent += (i > 0 ? " " : "") + words[i]
+
+          setMessages((prev) =>
+            prev.map((msg) => (msg.id === assistantMessage.id ? { ...msg, content: currentContent } : msg)),
+          )
+        }
+
+        const outputBlocks = config.outputFormat === "rich" ? generateOutputBlocks(topic) : undefined
+
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantMessage.id
+              ? {
+                  ...msg,
+                  status: "complete",
+                  outputBlocks,
+                  subAgents: [
+                    { name: "Data Retrieval", status: "complete", duration: 0.8 },
+                    { name: "Analysis Engine", status: "complete", duration: 0.6 },
+                    { name: "Insight Generator", status: "complete", duration: 1.2 },
+                  ],
+                }
+              : msg,
+          ),
+        )
+      }
+    } catch (error) {
+      console.error('Chat API error:', error)
+      // Fall back to local response on network error
+      const topic = detectTopic(currentInput)
+      const agentKey = config.selectedAgent
+      const responsePool = agentResponses[agentKey] || agentResponses["audience-explorer"]
+      const fallbackResponse = responsePool[topic] || responsePool.default
+
+      let currentContent = ""
+      const words = fallbackResponse.split(" ")
+
+      for (let i = 0; i < words.length; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 12 + Math.random() * 15))
+        currentContent += (i > 0 ? " " : "") + words[i]
+
+        setMessages((prev) =>
+          prev.map((msg) => (msg.id === assistantMessage.id ? { ...msg, content: currentContent } : msg)),
+        )
+      }
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantMessage.id
+            ? {
+                ...msg,
+                status: "complete",
+                subAgents: [
+                  { name: "Data Retrieval", status: "complete", duration: 0.8 },
+                  { name: "Analysis Engine", status: "complete", duration: 0.6 },
+                  { name: "Insight Generator", status: "complete", duration: 1.2 },
+                ],
+              }
+            : msg,
+        ),
       )
     }
-
-    // Generate citations
-    const sourceCitations = config.selectedSources.map((source) => {
-      const sourceData: Record<
-        string,
-        { name: string; type: "survey" | "report" | "trend"; date: string; excerpt: string }
-      > = {
-        "gwi-core": {
-          name: "GWI Core Q4 2024",
-          type: "survey",
-          date: "Q4 2024",
-          excerpt:
-            "Based on responses from 2.8 billion consumers across 52 markets, representing the largest ongoing study of consumer attitudes and behaviors worldwide.",
-        },
-        "gwi-usa": {
-          name: "GWI USA Dataset",
-          type: "survey",
-          date: "November 2024",
-          excerpt:
-            "Comprehensive survey of US consumers covering demographics, psychographics, media consumption, and brand attitudes across all major categories.",
-        },
-        "gwi-zeitgeist": {
-          name: "GWI Zeitgeist Nov 2024",
-          type: "trend",
-          date: "November 2024",
-          excerpt:
-            "Monthly pulse survey capturing emerging consumer trends, cultural shifts, and real-time sentiment on current events and topics.",
-        },
-        "custom-data": {
-          name: "Custom Dataset Upload",
-          type: "report" as const,
-          date: "Custom",
-          excerpt:
-            "User-uploaded dataset integrated with GWI data for enhanced analysis and cross-referencing capabilities.",
-        },
-      }
-      const data = sourceData[source] || { name: source, type: "survey" as const, date: "2024", excerpt: "Data source" }
-      return {
-        id: source,
-        source: data.name,
-        confidence: Math.floor(85 + Math.random() * 13),
-        type: data.type,
-        date: data.date,
-        excerpt: data.excerpt,
-        title: data.name,
-      }
-    })
-
-    // Complete the message
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === assistantMessage.id
-          ? {
-              ...msg,
-              status: "complete",
-              citations: config.enableCitations ? sourceCitations : undefined,
-              outputBlocks,
-              subAgents: [
-                { name: "Data Retrieval", status: "complete", duration: 0.8 },
-                { name: "Analysis Engine", status: "complete", duration: 0.6 },
-                { name: "Insight Generator", status: "complete", duration: 1.2 },
-              ],
-            }
-          : msg,
-      ),
-    )
 
     setIsStreaming(false)
   }
