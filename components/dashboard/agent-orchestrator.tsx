@@ -1,49 +1,53 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Users, Lightbulb, Target, TrendingUp, PieChart, ArrowRight, Play } from "lucide-react"
+import { Users, Lightbulb, Target, TrendingUp, PieChart, ArrowRight, Play, Bot, Loader2, Inbox } from "lucide-react"
 import Link from "next/link"
 
-const agents = [
-  {
-    name: "Audience Strategist",
-    icon: Users,
-    status: "active",
-    tasks: 3,
-    load: 75,
-  },
-  {
-    name: "Creative Brief Builder",
-    icon: Lightbulb,
-    status: "active",
-    tasks: 1,
-    load: 45,
-  },
-  {
-    name: "Competitive Tracker",
-    icon: Target,
-    status: "idle",
-    tasks: 0,
-    load: 0,
-  },
-  {
-    name: "Trend Forecaster",
-    icon: TrendingUp,
-    status: "idle",
-    tasks: 0,
-    load: 0,
-  },
-  {
-    name: "Survey Analyst",
-    icon: PieChart,
-    status: "active",
-    tasks: 2,
-    load: 60,
-  },
-]
+interface Agent {
+  id: string
+  name: string
+  type: string
+  status: string
+  _count?: { runs: number }
+}
 
-export function AgentOrchestrator() {
+interface AgentOrchestratorProps {
+  orgId?: string
+}
+
+const typeIcons: Record<string, typeof Users> = {
+  RESEARCH: Users,
+  ANALYSIS: Lightbulb,
+  REPORTING: Target,
+  MONITORING: TrendingUp,
+  CUSTOM: PieChart,
+}
+
+export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
+  const [agents, setAgents] = useState<Agent[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchAgents() {
+      try {
+        const response = await fetch('/api/v1/agents?limit=5')
+        if (response.ok) {
+          const data = await response.json()
+          setAgents(data.agents || [])
+        }
+      } catch (error) {
+        console.error('Failed to fetch agents:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchAgents()
+  }, [orgId])
+
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
@@ -56,58 +60,81 @@ export function AgentOrchestrator() {
         </Link>
       </CardHeader>
       <CardContent className="space-y-2">
-        {agents.map((agent) => (
-          <div
-            key={agent.name}
-            className="flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-secondary/20 hover:bg-secondary/40 transition-colors group"
-          >
-            <div className={`p-2 rounded-lg ${agent.status === "active" ? "bg-emerald-500/10" : "bg-muted"}`}>
-              <agent.icon
-                className={`h-4 w-4 ${agent.status === "active" ? "text-emerald-400" : "text-muted-foreground"}`}
-              />
-            </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : agents.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+            <Bot className="h-8 w-8 mb-2 opacity-50" />
+            <p className="text-sm">No agents yet</p>
+            <Link href="/dashboard/agents/new">
+              <Button variant="outline" size="sm" className="mt-2">
+                Create Agent
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          agents.map((agent) => {
+            const Icon = typeIcons[agent.type] || Bot
+            const isActive = agent.status === "ACTIVE"
+            const runCount = agent._count?.runs || 0
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-foreground truncate">{agent.name}</p>
-                <div className="flex items-center gap-2">
-                  {agent.status === "active" ? (
-                    <span className="text-xs text-muted-foreground">
-                      {agent.tasks} task{agent.tasks !== 1 ? "s" : ""}
-                    </span>
-                  ) : (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 px-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Play className="h-3 w-3 mr-1" />
-                      Run
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              {agent.status === "active" && (
-                <div className="flex items-center gap-2 mt-1.5">
-                  <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-emerald-500 rounded-full transition-all"
-                      style={{ width: `${agent.load}%` }}
+            return (
+              <Link key={agent.id} href={`/dashboard/agents/${agent.id}`}>
+                <div className="flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-secondary/20 hover:bg-secondary/40 transition-colors group cursor-pointer">
+                  <div className={`p-2 rounded-lg ${isActive ? "bg-emerald-500/10" : "bg-muted"}`}>
+                    <Icon
+                      className={`h-4 w-4 ${isActive ? "text-emerald-400" : "text-muted-foreground"}`}
                     />
                   </div>
-                  <span className="text-xs text-muted-foreground w-8">{agent.load}%</span>
-                </div>
-              )}
-            </div>
 
-            <div
-              className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                agent.status === "active" ? "bg-emerald-400 animate-pulse" : "bg-muted-foreground/30"
-              }`}
-            />
-          </div>
-        ))}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-foreground truncate">{agent.name}</p>
+                      <div className="flex items-center gap-2">
+                        {isActive ? (
+                          <span className="text-xs text-muted-foreground">
+                            {runCount} run{runCount !== 1 ? "s" : ""}
+                          </span>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 px-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              // TODO: Activate agent
+                            }}
+                          >
+                            <Play className="h-3 w-3 mr-1" />
+                            Activate
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-muted-foreground capitalize">
+                        {agent.type.toLowerCase()}
+                      </span>
+                      <span className="text-xs text-muted-foreground">·</span>
+                      <span className={`text-xs ${isActive ? "text-emerald-400" : "text-muted-foreground"}`}>
+                        {agent.status.toLowerCase()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div
+                    className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                      isActive ? "bg-emerald-400 animate-pulse" : "bg-muted-foreground/30"
+                    }`}
+                  />
+                </div>
+              </Link>
+            )
+          })
+        )}
       </CardContent>
     </Card>
   )

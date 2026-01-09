@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { checkRateLimit, getRateLimitHeaders, getRateLimitIdentifier } from '@/lib/rate-limit'
-import { recordUsage, checkUsageLimit } from '@/lib/billing'
+import { recordUsage } from '@/lib/billing'
 import { z } from 'zod'
 
 // Validation schema for creating an agent
@@ -16,6 +17,25 @@ const createAgentSchema = z.object({
   configuration: z.record(z.unknown()).optional(),
 })
 
+// Helper to get org ID from header or cookies
+async function getOrgId(request: NextRequest, userId: string): Promise<string | null> {
+  // First try header
+  const headerOrgId = request.headers.get('x-organization-id')
+  if (headerOrgId) return headerOrgId
+
+  // Fall back to cookies
+  const cookieStore = await cookies()
+  const memberships = await prisma.organizationMember.findMany({
+    where: { userId },
+    include: { organization: true },
+    orderBy: { joinedAt: 'asc' },
+  })
+
+  if (memberships.length === 0) return null
+
+  return cookieStore.get('currentOrgId')?.value || memberships[0].organization.id
+}
+
 // GET /api/v1/agents - List agents for organization
 export async function GET(request: NextRequest) {
   try {
@@ -24,9 +44,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    const orgId = await getOrgId(request, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: 'Organization ID required' }, { status: 400 })
+      return NextResponse.json({ error: 'No organization found' }, { status: 404 })
     }
 
     // Check rate limit
@@ -61,13 +81,24 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100)
+    const offset = parseInt(searchParams.get('offset') || '0')
     const status = searchParams.get('status') as 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'ARCHIVED' | null
     const type = searchParams.get('type') as 'RESEARCH' | 'ANALYSIS' | 'REPORTING' | 'MONITORING' | 'CUSTOM' | null
+    const search = searchParams.get('search')
 
     // Build query
-    const where: Record<string, unknown> = { orgId }
+    const where: any = { orgId }
     if (status) where.status = status
     if (type) where.type = type
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ]
+    }
+
+    // Calculate skip - use offset if provided, otherwise use page
+    const skip = offset > 0 ? offset : (page - 1) * limit
 
     // Fetch agents with pagination
     const [agents, total] = await Promise.all([
@@ -78,18 +109,20 @@ export async function GET(request: NextRequest) {
           _count: { select: { runs: true } },
         },
         orderBy: { updatedAt: 'desc' },
-        skip: (page - 1) * limit,
+        skip,
         take: limit,
       }),
       prisma.agent.count({ where }),
     ])
 
-    // Record API usage
-    await recordUsage(orgId, 'API_CALLS', 1)
+    // Record API usage (don't await to not slow response)
+    recordUsage(orgId, 'API_CALLS', 1).catch(console.error)
 
     return NextResponse.json(
       {
+        agents, // Also include as 'agents' for simpler access
         data: agents,
+        total,
         meta: {
           page,
           limit,
@@ -116,9 +149,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    const orgId = await getOrgId(request, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: 'Organization ID required' }, { status: 400 })
+      return NextResponse.json({ error: 'No organization found' }, { status: 404 })
     }
 
     // Check membership and permissions
@@ -170,9 +203,9 @@ export async function POST(request: NextRequest) {
     }))
 
     // Record API usage
-    await recordUsage(orgId, 'API_CALLS', 1)
+    recordUsage(orgId, 'API_CALLS', 1).catch(console.error)
 
-    return NextResponse.json({ data: agent }, { status: 201 })
+    return NextResponse.json(agent, { status: 201 })
   } catch (error) {
     console.error('Error creating agent:', error)
     return NextResponse.json(
