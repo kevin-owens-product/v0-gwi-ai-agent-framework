@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
@@ -47,6 +47,7 @@ import {
   Eye,
   Edit,
   Check,
+  Loader2,
 } from "lucide-react"
 
 interface Report {
@@ -62,7 +63,8 @@ interface Report {
   author: { name: string; avatar: string }
 }
 
-const initialReports: Report[] = [
+// Demo reports shown when API returns empty
+const demoReports: Report[] = [
   {
     id: "1",
     title: "Q4 2024 Consumer Insights Report",
@@ -99,43 +101,29 @@ const initialReports: Report[] = [
     agent: "Competitive Tracker Agent",
     author: { name: "Emily Johnson", avatar: "/professional-woman.png" },
   },
-  {
-    id: "4",
-    title: "Sustainability Segment Export",
-    type: "export",
-    status: "published",
-    thumbnail: "/data-export-spreadsheet.jpg",
-    createdAt: "2024-11-20",
-    updatedAt: "2024-11-22",
-    views: 89,
-    agent: "Data Export Agent",
-    author: { name: "James Wilson", avatar: "/professional-man.png" },
-  },
-  {
-    id: "5",
-    title: "Holiday Campaign Creative Brief",
-    type: "pdf",
-    status: "published",
-    thumbnail: "/creative-brief-marketing.jpg",
-    createdAt: "2024-11-15",
-    updatedAt: "2024-11-18",
-    views: 342,
-    agent: "Creative Brief Builder",
-    author: { name: "Lisa Wang", avatar: "/asian-woman-avatar.png" },
-  },
-  {
-    id: "6",
-    title: "Sports Audience Infographic",
-    type: "infographic",
-    status: "archived",
-    thumbnail: "/infographic-sports-audience.jpg",
-    createdAt: "2024-10-10",
-    updatedAt: "2024-10-15",
-    views: 1205,
-    agent: "Infographic Builder",
-    author: { name: "David Kim", avatar: "/korean-man-avatar.jpg" },
-  },
 ]
+
+function mapApiReportToUI(apiReport: any): Report {
+  const typeMap: Record<string, string> = {
+    PRESENTATION: 'presentation',
+    DASHBOARD: 'dashboard',
+    PDF: 'pdf',
+    EXPORT: 'export',
+    INFOGRAPHIC: 'infographic',
+  }
+  return {
+    id: apiReport.id,
+    title: apiReport.title,
+    type: typeMap[apiReport.type] || 'pdf',
+    status: apiReport.status?.toLowerCase() || 'draft',
+    thumbnail: apiReport.thumbnail || '/placeholder.svg',
+    createdAt: apiReport.createdAt,
+    updatedAt: apiReport.updatedAt,
+    views: apiReport.views || 0,
+    agent: apiReport.agentId || 'AI Agent',
+    author: { name: 'User', avatar: '' },
+  }
+}
 
 const typeIcons = {
   presentation: Presentation,
@@ -153,13 +141,40 @@ const statusColors = {
 
 export function ReportsGrid() {
   const router = useRouter()
-  const [reports, setReports] = useState<Report[]>(initialReports)
+  const [reports, setReports] = useState<Report[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [reportToDelete, setReportToDelete] = useState<Report | null>(null)
   const [shareDialogOpen, setShareDialogOpen] = useState(false)
   const [reportToShare, setReportToShare] = useState<Report | null>(null)
   const [copied, setCopied] = useState(false)
+
+  // Fetch reports from API
+  useEffect(() => {
+    async function fetchReports() {
+      try {
+        const response = await fetch('/api/v1/reports')
+        if (response.ok) {
+          const data = await response.json()
+          const apiReports = data.reports || []
+          if (apiReports.length > 0) {
+            setReports(apiReports.map(mapApiReportToUI))
+          } else {
+            setReports(demoReports)
+          }
+        } else {
+          setReports(demoReports)
+        }
+      } catch (error) {
+        console.error('Failed to fetch reports:', error)
+        setReports(demoReports)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchReports()
+  }, [])
 
   const handleEditReport = (report: Report) => {
     router.push(`/dashboard/reports/${report.id}/edit`)
@@ -178,21 +193,44 @@ export function ReportsGrid() {
     }
   }
 
-  const handleDuplicateReport = (report: Report) => {
-    const newReport: Report = {
-      ...report,
-      id: `report-${Date.now()}`,
-      title: `${report.title} (Copy)`,
-      status: "draft",
-      views: 0,
-      createdAt: new Date().toISOString().split('T')[0],
-      updatedAt: new Date().toISOString().split('T')[0],
+  const handleDuplicateReport = async (report: Report) => {
+    try {
+      const typeMap: Record<string, string> = {
+        presentation: 'PRESENTATION',
+        dashboard: 'DASHBOARD',
+        pdf: 'PDF',
+        export: 'EXPORT',
+        infographic: 'INFOGRAPHIC',
+      }
+      const response = await fetch('/api/v1/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: `${report.title} (Copy)`,
+          type: typeMap[report.type] || 'PDF',
+        }),
+      })
+      if (response.ok) {
+        const newReport = await response.json()
+        setReports(prev => [mapApiReportToUI(newReport), ...prev])
+      }
+    } catch (error) {
+      console.error('Failed to duplicate report:', error)
+      // Fallback to local duplicate
+      const newReport: Report = {
+        ...report,
+        id: `report-${Date.now()}`,
+        title: `${report.title} (Copy)`,
+        status: "draft",
+        views: 0,
+        createdAt: new Date().toISOString().split('T')[0],
+        updatedAt: new Date().toISOString().split('T')[0],
+      }
+      setReports(prev => [newReport, ...prev])
     }
-    setReports(prev => [newReport, ...prev])
   }
 
   const handleDownloadReport = (report: Report) => {
-    // Simulate download - in real app would trigger actual download
     const link = document.createElement('a')
     link.href = report.thumbnail || '/placeholder.svg'
     link.download = `${report.title}.${report.type === 'pdf' ? 'pdf' : 'png'}`
@@ -206,12 +244,25 @@ export function ReportsGrid() {
     setDeleteDialogOpen(true)
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (reportToDelete) {
+      try {
+        await fetch(`/api/v1/reports/${reportToDelete.id}`, { method: 'DELETE' })
+      } catch (error) {
+        console.error('Failed to delete report:', error)
+      }
       setReports(prev => prev.filter(r => r.id !== reportToDelete.id))
     }
     setDeleteDialogOpen(false)
     setReportToDelete(null)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   return (

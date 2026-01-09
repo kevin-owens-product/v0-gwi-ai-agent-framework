@@ -28,6 +28,13 @@ model Organization {
   ssoConfig     SSOConfiguration?
   subscription  BillingSubscription?
   invitations   Invitation[]
+  workflows     Workflow[]
+  reports       Report[]
+  dashboards    Dashboard[]
+  crosstabs     Crosstab[]
+  audiences     Audience[]
+  memories      Memory[]
+  charts        Chart[]
 }
 
 model OrganizationMember {
@@ -356,4 +363,249 @@ enum InvitationStatus {
   ACCEPTED
   EXPIRED
   REVOKED
+}
+
+// ==================== WORKFLOWS ====================
+
+model Workflow {
+  id          String         @id @default(cuid())
+  orgId       String
+  name        String
+  description String?
+  status      WorkflowStatus @default(DRAFT)
+  schedule    String?        // cron expression or "on-demand"
+  agents      String[]       // array of agent IDs in execution order
+  configuration Json         @default("{}")
+  lastRun     DateTime?
+  nextRun     DateTime?
+  runCount    Int            @default(0)
+  createdBy   String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  organization Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  runs         WorkflowRun[]
+
+  @@index([orgId])
+  @@index([status])
+  @@index([createdBy])
+}
+
+model WorkflowRun {
+  id           String            @id @default(cuid())
+  workflowId   String
+  orgId        String
+  status       WorkflowRunStatus @default(PENDING)
+  input        Json              @default("{}")
+  output       Json?
+  startedAt    DateTime          @default(now())
+  completedAt  DateTime?
+  errorMessage String?
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  @@index([workflowId])
+  @@index([orgId])
+  @@index([status])
+}
+
+enum WorkflowStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum WorkflowRunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+// ==================== REPORTS ====================
+
+model Report {
+  id          String       @id @default(cuid())
+  orgId       String
+  title       String
+  description String?
+  type        ReportType
+  status      ReportStatus @default(DRAFT)
+  content     Json         @default("{}")
+  thumbnail   String?
+  agentId     String?      // agent that generated this report
+  views       Int          @default(0)
+  createdBy   String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([status])
+  @@index([type])
+  @@index([createdBy])
+}
+
+enum ReportType {
+  PRESENTATION
+  DASHBOARD
+  PDF
+  EXPORT
+  INFOGRAPHIC
+}
+
+enum ReportStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ==================== DASHBOARDS ====================
+
+model Dashboard {
+  id          String          @id @default(cuid())
+  orgId       String
+  name        String
+  description String?
+  layout      Json            @default("[]") // grid layout configuration
+  widgets     Json            @default("[]") // array of widget configurations
+  status      DashboardStatus @default(DRAFT)
+  isPublic    Boolean         @default(false)
+  views       Int             @default(0)
+  createdBy   String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([status])
+  @@index([createdBy])
+}
+
+enum DashboardStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ==================== CROSSTABS ====================
+
+model Crosstab {
+  id          String   @id @default(cuid())
+  orgId       String
+  name        String
+  description String?
+  audiences   String[] // array of audience IDs
+  metrics     String[] // array of metric identifiers
+  filters     Json     @default("{}")
+  results     Json?    // cached results
+  views       Int      @default(0)
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([createdBy])
+}
+
+// ==================== AUDIENCES ====================
+
+model Audience {
+  id           String   @id @default(cuid())
+  orgId        String
+  name         String
+  description  String?
+  criteria     Json     @default("{}") // audience definition criteria
+  size         Int?     // estimated audience size
+  markets      String[] // array of market codes
+  isFavorite   Boolean  @default(false)
+  lastUsed     DateTime?
+  usageCount   Int      @default(0)
+  createdBy    String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([createdBy])
+  @@index([isFavorite])
+}
+
+// ==================== MEMORY / CONTEXT ====================
+
+model Memory {
+  id          String     @id @default(cuid())
+  orgId       String
+  agentId     String?
+  type        MemoryType
+  key         String
+  value       Json
+  metadata    Json       @default("{}")
+  expiresAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, agentId, type, key])
+  @@index([orgId])
+  @@index([agentId])
+  @@index([type])
+}
+
+enum MemoryType {
+  CONTEXT
+  PREFERENCE
+  FACT
+  CONVERSATION
+  CACHE
+}
+
+// ==================== CHARTS ====================
+
+model Chart {
+  id          String      @id @default(cuid())
+  orgId       String
+  name        String
+  description String?
+  type        ChartType
+  config      Json        @default("{}") // chart configuration
+  data        Json?       // cached data
+  dataSource  String?     // reference to data source
+  status      ChartStatus @default(DRAFT)
+  createdBy   String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([type])
+  @@index([createdBy])
+}
+
+enum ChartType {
+  BAR
+  LINE
+  PIE
+  DONUT
+  AREA
+  SCATTER
+  HEATMAP
+  TREEMAP
+  FUNNEL
+  RADAR
+}
+
+enum ChartStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }

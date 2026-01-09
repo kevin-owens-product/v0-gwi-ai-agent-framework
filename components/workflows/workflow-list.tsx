@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -48,7 +48,8 @@ interface Workflow {
   schedule: string
 }
 
-const initialWorkflows: Workflow[] = [
+// Demo workflows shown when API returns empty
+const demoWorkflows: Workflow[] = [
   {
     id: "wf-001",
     name: "Gen Z Sustainability Analysis",
@@ -64,37 +65,15 @@ const initialWorkflows: Workflow[] = [
     id: "wf-002",
     name: "Q4 Campaign Brief Generation",
     description: "Automated campaign brief creation for Q4 marketing initiatives with audience insights",
-    status: "running",
-    lastRun: "Running now",
-    nextRun: "-",
+    status: "active",
+    lastRun: "1 day ago",
+    nextRun: "On-demand",
     runs: 8,
     agents: ["Campaign Strategist", "Persona Architect"],
     schedule: "On-demand",
   },
   {
     id: "wf-003",
-    name: "Competitor Market Share Tracking",
-    description: "Daily competitor brand perception and market share analysis across key markets",
-    status: "scheduled",
-    lastRun: "3 hours ago",
-    nextRun: "In 4 hours",
-    runs: 312,
-    agents: ["Competitive Intelligence", "Brand Analyst"],
-    schedule: "Daily",
-  },
-  {
-    id: "wf-004",
-    name: "EU Market Expansion Research",
-    description: "Comprehensive market analysis for European expansion strategy and localization",
-    status: "failed",
-    lastRun: "Yesterday",
-    nextRun: "Paused",
-    runs: 5,
-    agents: ["Global Perspective", "Survey Analyst", "Culture Tracker"],
-    schedule: "Weekly",
-  },
-  {
-    id: "wf-005",
     name: "Brand Health Monitor",
     description: "Continuous brand perception tracking across demographics and sentiment analysis",
     status: "active",
@@ -104,62 +83,37 @@ const initialWorkflows: Workflow[] = [
     agents: ["Brand Analyst", "Trend Forecaster"],
     schedule: "Daily",
   },
-  {
-    id: "wf-006",
-    name: "Consumer Persona Weekly Refresh",
-    description: "Automated refresh of consumer personas with latest behavioral data and trend insights",
-    status: "active",
-    lastRun: "3 days ago",
-    nextRun: "In 4 days",
-    runs: 52,
-    agents: ["Persona Architect", "Motivation Decoder", "Audience Explorer"],
-    schedule: "Weekly",
-  },
-  {
-    id: "wf-007",
-    name: "Cultural Trend Alert System",
-    description: "Real-time monitoring of emerging cultural trends and viral moments across social platforms",
-    status: "active",
-    lastRun: "15 minutes ago",
-    nextRun: "In 45 minutes",
-    runs: 2847,
-    agents: ["Culture Tracker", "Trend Forecaster"],
-    schedule: "Hourly",
-  },
-  {
-    id: "wf-008",
-    name: "Monthly Consumer Insights Report",
-    description: "Comprehensive monthly report combining audience, brand, and trend insights for stakeholders",
-    status: "scheduled",
-    lastRun: "2 weeks ago",
-    nextRun: "In 2 weeks",
-    runs: 18,
-    agents: ["Audience Explorer", "Brand Analyst", "Campaign Strategist", "Survey Analyst"],
-    schedule: "Monthly",
-  },
-  {
-    id: "wf-009",
-    name: "Product Launch Research Pipeline",
-    description: "End-to-end research workflow for new product launches with audience validation",
-    status: "active",
-    lastRun: "5 hours ago",
-    nextRun: "On-demand",
-    runs: 34,
-    agents: ["Audience Explorer", "Motivation Decoder", "Global Perspective", "Campaign Strategist"],
-    schedule: "On-demand",
-  },
-  {
-    id: "wf-010",
-    name: "APAC Market Intelligence",
-    description: "Weekly deep-dive into Asia-Pacific consumer trends and market opportunities",
-    status: "active",
-    lastRun: "4 days ago",
-    nextRun: "In 3 days",
-    runs: 89,
-    agents: ["Global Perspective", "Culture Tracker", "Competitive Intelligence"],
-    schedule: "Weekly",
-  },
 ]
+
+function formatDate(date: Date | string | null): string {
+  if (!date) return "Never"
+  const d = new Date(date)
+  const now = new Date()
+  const diff = now.getTime() - d.getTime()
+  const minutes = Math.floor(diff / 60000)
+  const hours = Math.floor(diff / 3600000)
+  const days = Math.floor(diff / 86400000)
+
+  if (minutes < 1) return "Just now"
+  if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`
+  if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`
+  if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`
+  return d.toLocaleDateString()
+}
+
+function mapApiWorkflowToUI(apiWorkflow: any): Workflow {
+  return {
+    id: apiWorkflow.id,
+    name: apiWorkflow.name,
+    description: apiWorkflow.description || "",
+    status: apiWorkflow.status?.toLowerCase() || "draft",
+    lastRun: formatDate(apiWorkflow.lastRun),
+    nextRun: apiWorkflow.nextRun ? formatDate(apiWorkflow.nextRun) : "Not scheduled",
+    runs: apiWorkflow.runCount || 0,
+    agents: apiWorkflow.agents || [],
+    schedule: apiWorkflow.schedule || "On-demand",
+  }
+}
 
 const statusConfig = {
   active: { icon: CheckCircle2, color: "text-chart-5", bg: "bg-chart-5/10", label: "Active" },
@@ -171,11 +125,40 @@ const statusConfig = {
 
 export function WorkflowList() {
   const router = useRouter()
-  const [workflows, setWorkflows] = useState<Workflow[]>(initialWorkflows)
+  const [workflows, setWorkflows] = useState<Workflow[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [workflowToDelete, setWorkflowToDelete] = useState<Workflow | null>(null)
 
-  const handleRunWorkflow = (workflow: Workflow) => {
+  // Fetch workflows from API
+  useEffect(() => {
+    async function fetchWorkflows() {
+      try {
+        const response = await fetch('/api/v1/workflows')
+        if (response.ok) {
+          const data = await response.json()
+          const apiWorkflows = data.workflows || []
+          if (apiWorkflows.length > 0) {
+            setWorkflows(apiWorkflows.map(mapApiWorkflowToUI))
+          } else {
+            // Use demo data if API returns empty
+            setWorkflows(demoWorkflows)
+          }
+        } else {
+          setWorkflows(demoWorkflows)
+        }
+      } catch (error) {
+        console.error('Failed to fetch workflows:', error)
+        setWorkflows(demoWorkflows)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchWorkflows()
+  }, [])
+
+  const handleRunWorkflow = async (workflow: Workflow) => {
+    // Optimistically update UI
     setWorkflows(prev =>
       prev.map(w =>
         w.id === workflow.id
@@ -183,43 +166,92 @@ export function WorkflowList() {
           : w
       )
     )
-    // Simulate workflow completion after 3 seconds
-    setTimeout(() => {
+
+    try {
+      const response = await fetch(`/api/v1/workflows/${workflow.id}/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: {} }),
+      })
+
+      if (response.ok) {
+        // Poll for completion or just update after delay
+        setTimeout(() => {
+          setWorkflows(prev =>
+            prev.map(w =>
+              w.id === workflow.id
+                ? { ...w, status: "active", lastRun: "Just now" }
+                : w
+            )
+          )
+        }, 3000)
+      }
+    } catch (error) {
+      console.error('Failed to run workflow:', error)
       setWorkflows(prev =>
         prev.map(w =>
           w.id === workflow.id
-            ? { ...w, status: "active", lastRun: "Just now" }
+            ? { ...w, status: "active", lastRun: workflow.lastRun }
             : w
         )
       )
-    }, 3000)
+    }
   }
 
-  const handlePauseWorkflow = (workflow: Workflow) => {
-    setWorkflows(prev =>
-      prev.map(w =>
-        w.id === workflow.id
-          ? { ...w, status: "paused", nextRun: "Paused" }
-          : w
+  const handlePauseWorkflow = async (workflow: Workflow) => {
+    try {
+      await fetch(`/api/v1/workflows/${workflow.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'PAUSED' }),
+      })
+      setWorkflows(prev =>
+        prev.map(w =>
+          w.id === workflow.id
+            ? { ...w, status: "paused", nextRun: "Paused" }
+            : w
+        )
       )
-    )
+    } catch (error) {
+      console.error('Failed to pause workflow:', error)
+    }
   }
 
   const handleEditWorkflow = (workflow: Workflow) => {
     router.push(`/dashboard/workflows/${workflow.id}/edit`)
   }
 
-  const handleDuplicateWorkflow = (workflow: Workflow) => {
-    const newWorkflow: Workflow = {
-      ...workflow,
-      id: `wf-${Date.now()}`,
-      name: `${workflow.name} (Copy)`,
-      status: "scheduled",
-      runs: 0,
-      lastRun: "Never",
-      nextRun: "Not scheduled",
+  const handleDuplicateWorkflow = async (workflow: Workflow) => {
+    try {
+      const response = await fetch('/api/v1/workflows', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `${workflow.name} (Copy)`,
+          description: workflow.description,
+          schedule: workflow.schedule,
+          agents: workflow.agents,
+        }),
+      })
+
+      if (response.ok) {
+        const newWorkflow = await response.json()
+        setWorkflows(prev => [mapApiWorkflowToUI(newWorkflow), ...prev])
+      }
+    } catch (error) {
+      console.error('Failed to duplicate workflow:', error)
+      // Fallback to local duplicate
+      const newWorkflow: Workflow = {
+        ...workflow,
+        id: `wf-${Date.now()}`,
+        name: `${workflow.name} (Copy)`,
+        status: "draft",
+        runs: 0,
+        lastRun: "Never",
+        nextRun: "Not scheduled",
+      }
+      setWorkflows(prev => [newWorkflow, ...prev])
     }
-    setWorkflows(prev => [newWorkflow, ...prev])
   }
 
   const handleDeleteWorkflow = (workflow: Workflow) => {
@@ -227,12 +259,27 @@ export function WorkflowList() {
     setDeleteDialogOpen(true)
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (workflowToDelete) {
+      try {
+        await fetch(`/api/v1/workflows/${workflowToDelete.id}`, {
+          method: 'DELETE',
+        })
+      } catch (error) {
+        console.error('Failed to delete workflow:', error)
+      }
       setWorkflows(prev => prev.filter(w => w.id !== workflowToDelete.id))
     }
     setDeleteDialogOpen(false)
     setWorkflowToDelete(null)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   return (

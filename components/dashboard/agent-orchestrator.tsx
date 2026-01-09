@@ -148,9 +148,25 @@ export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
                             variant="ghost"
                             size="sm"
                             className="h-6 px-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={(e) => {
+                            onClick={async (e) => {
                               e.preventDefault()
-                              // TODO: Activate agent
+                              e.stopPropagation()
+                              try {
+                                const response = await fetch(`/api/v1/agents/${agent.id}`, {
+                                  method: 'PATCH',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ status: 'ACTIVE' }),
+                                })
+                                if (response.ok) {
+                                  setAgents(prev =>
+                                    prev.map(a =>
+                                      a.id === agent.id ? { ...a, status: 'ACTIVE' } : a
+                                    )
+                                  )
+                                }
+                              } catch (error) {
+                                console.error('Failed to activate agent:', error)
+                              }
                             }}
                           >
                             <Play className="h-3 w-3 mr-1" />
