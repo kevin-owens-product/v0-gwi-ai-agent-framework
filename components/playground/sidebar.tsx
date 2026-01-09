@@ -20,6 +20,7 @@ import {
   Heart,
   TrendingUp,
   Search,
+  Bot,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { usePlayground } from "@/app/dashboard/playground/page"
@@ -111,12 +112,16 @@ const sessionHistory = [
 ]
 
 export function PlaygroundSidebar() {
-  const { config, setConfig, setMessages, resetChat } = usePlayground()
+  const { config, setConfig, setMessages, resetChat, customAgent, setCustomAgent } = usePlayground()
   const [collapsed, setCollapsed] = useState(false)
   const [sessions, setSessions] = useState(sessionHistory)
 
   const handleAgentChange = (agentId: string) => {
     setConfig((prev) => ({ ...prev, selectedAgent: agentId }))
+    // Clear custom agent when switching to a built-in agent
+    if (agents.find(a => a.id === agentId)) {
+      setCustomAgent(null)
+    }
 
     const agentGreetings: Record<string, string> = {
       "audience-explorer":
@@ -229,6 +234,48 @@ export function PlaygroundSidebar() {
               <div>
                 <Label className="text-xs text-muted-foreground mb-2 block">Select Agent</Label>
                 <div className="space-y-2">
+                  {/* Show custom agent from URL at top if loaded */}
+                  {customAgent && (
+                    <button
+                      onClick={() => {
+                        setConfig((prev) => ({ ...prev, selectedAgent: customAgent.id }))
+                        setMessages([
+                          {
+                            id: Date.now().toString(),
+                            role: "assistant",
+                            content: `Hello! I'm ${customAgent.name}. ${customAgent.description || "How can I help you today?"}`,
+                            status: "complete",
+                          },
+                        ])
+                      }}
+                      className={cn(
+                        "w-full text-left p-3 rounded-lg border transition-all",
+                        config.selectedAgent === customAgent.id
+                          ? "border-accent bg-accent/10"
+                          : "border-border hover:border-muted-foreground/30",
+                      )}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div
+                          className={cn(
+                            "w-8 h-8 rounded-lg flex items-center justify-center",
+                            config.selectedAgent === customAgent.id ? "bg-accent/20" : "bg-secondary",
+                          )}
+                        >
+                          <Bot className="h-4 w-4 text-violet-500" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium text-foreground">{customAgent.name}</p>
+                            <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-violet-500/20 text-violet-400">
+                              Custom
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground line-clamp-1">{customAgent.description || "Custom agent"}</p>
+                        </div>
+                      </div>
+                    </button>
+                  )}
                   {agents.map((agent) => {
                     const Icon = agent.icon
                     return (

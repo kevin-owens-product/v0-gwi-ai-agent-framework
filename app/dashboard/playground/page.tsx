@@ -52,6 +52,12 @@ interface Message {
   toolCalls?: { name: string; args: any; result?: any }[]
 }
 
+interface CustomAgent {
+  id: string
+  name: string
+  description: string | null
+}
+
 interface PlaygroundContextType {
   config: PlaygroundConfig
   setConfig: React.Dispatch<React.SetStateAction<PlaygroundConfig>>
@@ -68,6 +74,8 @@ interface PlaygroundContextType {
   setContextPanelOpen: React.Dispatch<React.SetStateAction<boolean>>
   activeVariables: Record<string, any>
   setActiveVariables: React.Dispatch<React.SetStateAction<Record<string, any>>>
+  customAgent: CustomAgent | null
+  setCustomAgent: React.Dispatch<React.SetStateAction<CustomAgent | null>>
 }
 
 const PlaygroundContext = createContext<PlaygroundContextType | null>(null)
@@ -151,7 +159,7 @@ export default function PlaygroundPage() {
     market: "Global",
     timeframe: "Last 12 months",
   })
-  const [customAgent, setCustomAgent] = useState<{ id: string; name: string; description: string | null } | null>(null)
+  const [customAgent, setCustomAgent] = useState<CustomAgent | null>(null)
 
   // Fetch agent from API if agent ID is in URL
   useEffect(() => {
@@ -225,6 +233,8 @@ export default function PlaygroundPage() {
         setContextPanelOpen,
         activeVariables,
         setActiveVariables,
+        customAgent,
+        setCustomAgent,
       }}
     >
       <div className="-m-6 flex h-[calc(100vh-4rem)] overflow-hidden bg-background">
