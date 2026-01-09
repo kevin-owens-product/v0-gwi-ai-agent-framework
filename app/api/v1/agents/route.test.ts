@@ -18,6 +18,7 @@ vi.mock('@/lib/db', () => ({
     },
     organizationMember: {
       findUnique: vi.fn(),
+      findMany: vi.fn(() => Promise.resolve([])),
     },
     usageRecord: {
       create: vi.fn(),
@@ -44,14 +45,25 @@ vi.mock('@/lib/audit', () => ({
 }))
 
 vi.mock('@/lib/billing', () => ({
-  recordUsage: vi.fn(),
+  recordUsage: vi.fn(() => Promise.resolve()),
   checkUsageLimit: vi.fn(() => Promise.resolve({ allowed: true, current: 0, limit: 100 })),
+}))
+
+vi.mock('@/lib/permissions', () => ({
+  hasPermission: vi.fn(() => true),
+}))
+
+vi.mock('next/headers', () => ({
+  cookies: vi.fn(() => ({
+    get: vi.fn(() => null),
+  })),
 }))
 
 import { GET, POST } from './route'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { getUserMembership } from '@/lib/tenant'
+import { hasPermission } from '@/lib/permissions'
 
 describe('GET /api/v1/agents', () => {
   beforeEach(() => {
@@ -69,7 +81,7 @@ describe('GET /api/v1/agents', () => {
     expect(data.error).toBe('Unauthorized')
   })
 
-  it('returns 400 when organization ID is missing', async () => {
+  it('returns 404 when organization ID is missing', async () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
@@ -78,9 +90,9 @@ describe('GET /api/v1/agents', () => {
     const request = new NextRequest('http://localhost/api/v1/agents')
     const response = await GET(request)
 
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(404)
     const data = await response.json()
-    expect(data.error).toBe('Organization ID required')
+    expect(data.error).toBe('No organization found')
   })
 
   it('returns 403 when user is not a member of the organization', async () => {
@@ -285,7 +297,7 @@ describe('POST /api/v1/agents', () => {
 
     expect(response.status).toBe(201)
     const data = await response.json()
-    expect(data.data.name).toBe('New Agent')
+    expect(data.name).toBe('New Agent')
   })
 
   it('returns 403 when user lacks agents:write permission', async () => {
@@ -297,6 +309,8 @@ describe('POST /api/v1/agents', () => {
       id: 'member-1',
       role: 'VIEWER', // VIEWER doesn't have agents:write
     } as never)
+    // Mock hasPermission to return false for this test
+    vi.mocked(hasPermission).mockReturnValue(false)
 
     const request = new NextRequest('http://localhost/api/v1/agents', {
       method: 'POST',

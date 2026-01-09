@@ -6,6 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "start": "next start",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate deploy",
@@ -14,12 +15,16 @@
     "db:seed": "tsx prisma/seed.ts",
     "test": "vitest",
     "test:run": "vitest run",
+    "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
+    "test:all": "npm run test:coverage && npm run test:e2e",
     "type-check": "tsc --noEmit",
-    "ci": "npm run type-check && npm run lint && npm run test:run && npm run build"
+    "ci": "npm run type-check && npm run lint && npm run test:coverage && npm run build"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
@@ -100,6 +105,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.1.2",
+    "@vitest/coverage-v8": "^4.0.16",
     "jsdom": "^27.4.0",
     "msw": "^2.12.7",
     "vitest": "^4.0.16"
