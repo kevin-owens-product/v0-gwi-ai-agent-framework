@@ -76,6 +76,7 @@ interface PlaygroundContextType {
   setActiveVariables: React.Dispatch<React.SetStateAction<Record<string, any>>>
   customAgent: CustomAgent | null
   setCustomAgent: React.Dispatch<React.SetStateAction<CustomAgent | null>>
+  addOutput: (type: OutputBlock["type"]) => void
 }
 
 const PlaygroundContext = createContext<PlaygroundContextType | null>(null)
@@ -215,6 +216,127 @@ export default function PlaygroundPage() {
     setSelectedBlocks([])
   }
 
+  // Generate sample output block based on type
+  const generateSampleOutput = (type: OutputBlock["type"]): OutputBlock => {
+    const id = `${type}-${Date.now()}`
+    switch (type) {
+      case "chart":
+        return {
+          id,
+          type: "chart",
+          title: "Consumer Trends Analysis",
+          content: {
+            chartType: "bar",
+            categories: ["Q1", "Q2", "Q3", "Q4"],
+            series: [
+              { name: "Engagement", data: [65, 72, 78, 85], color: "#8b5cf6" },
+              { name: "Conversion", data: [45, 52, 58, 62], color: "#3b82f6" },
+            ],
+          },
+        }
+      case "table":
+        return {
+          id,
+          type: "table",
+          title: "Market Metrics",
+          content: {
+            headers: ["Metric", "Value", "Change", "Trend"],
+            rows: [
+              ["Market Size", "$4.2B", "+12%", "↑"],
+              ["Active Users", "2.3M", "+8%", "↑"],
+              ["Engagement Rate", "4.2%", "+15%", "↑"],
+            ],
+          },
+        }
+      case "persona":
+        return {
+          id,
+          type: "persona",
+          title: "Target Persona",
+          content: {
+            name: "Digital Native",
+            age: "25-34",
+            income: "$50K-$80K",
+            location: "Urban areas",
+            values: ["Innovation", "Convenience", "Sustainability"],
+            behaviors: ["Mobile-first", "Research-driven", "Social-influenced"],
+            mediaHabits: ["Instagram (2.5h/day)", "TikTok (1.8h/day)", "Podcasts (45min/day)"],
+          },
+        }
+      case "comparison":
+        return {
+          id,
+          type: "comparison",
+          title: "Market Comparison",
+          content: {
+            items: [
+              { name: "US Market", metrics: { size: "$2.1B", growth: "+15%", share: "32%" } },
+              { name: "UK Market", metrics: { size: "$0.8B", growth: "+12%", share: "18%" } },
+            ],
+          },
+        }
+      case "slides":
+        return {
+          id,
+          type: "slides",
+          title: "Presentation",
+          content: {
+            slides: [
+              { title: "Key Insights", content: "Overview of consumer trends" },
+              { title: "Market Analysis", content: "Detailed breakdown by segment" },
+            ],
+          },
+        }
+      case "image":
+        return {
+          id,
+          type: "image",
+          title: "Generated Visual",
+          content: { placeholder: true, description: "Visual representation of data" },
+        }
+      case "code":
+        return {
+          id,
+          type: "code",
+          title: "Data Export",
+          content: { format: "json", data: { insights: [], metrics: {} } },
+        }
+      default:
+        return {
+          id,
+          type: "text",
+          title: "Output",
+          content: "Generated content",
+        }
+    }
+  }
+
+  const addOutput = (type: OutputBlock["type"]) => {
+    if (isStreaming) return
+
+    const outputBlock = generateSampleOutput(type)
+    const outputNames: Record<string, string> = {
+      chart: "chart",
+      table: "data table",
+      persona: "persona",
+      comparison: "comparison",
+      slides: "presentation",
+      image: "visual",
+      code: "data export",
+      text: "output",
+    }
+
+    const newMessage = {
+      id: Date.now().toString(),
+      role: "assistant" as const,
+      content: `I've generated a ${outputNames[type] || type} based on the current context. You can interact with it below or ask me to modify it.`,
+      status: "complete" as const,
+      outputBlocks: [outputBlock],
+    }
+
+    setMessages((prev) => [...prev, newMessage])
+  }
+
   return (
     <PlaygroundContext.Provider
       value={{
@@ -235,6 +357,7 @@ export default function PlaygroundPage() {
         setActiveVariables,
         customAgent,
         setCustomAgent,
+        addOutput,
       }}
     >
       <div className="-m-6 flex h-[calc(100vh-4rem)] overflow-hidden bg-background">

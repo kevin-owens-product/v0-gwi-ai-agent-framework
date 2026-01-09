@@ -190,6 +190,120 @@ function TableBlock({ block }: { block: OutputBlock }) {
   )
 }
 
+function ComparisonBlock({ block }: { block: OutputBlock }) {
+  const { content } = block
+  if (!content?.items) return null
+
+  return (
+    <Card className="p-4 mt-4">
+      <div className="flex items-center gap-2 mb-4">
+        <svg className="h-4 w-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M16 3h5v5M8 3H3v5M3 16v5h5M21 16v5h-5M12 8v8M8 12h8" />
+        </svg>
+        <h4 className="text-sm font-medium">{block.title}</h4>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {content.items.map((item: any, index: number) => (
+          <div key={index} className="p-3 rounded-lg bg-secondary/50 border border-border">
+            <h5 className="text-sm font-medium mb-2">{item.name}</h5>
+            {item.metrics && (
+              <div className="space-y-1">
+                {Object.entries(item.metrics).map(([key, value]) => (
+                  <div key={key} className="flex justify-between text-xs">
+                    <span className="text-muted-foreground capitalize">{key}</span>
+                    <span className="font-medium">{value as string}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </Card>
+  )
+}
+
+function SlidesBlock({ block }: { block: OutputBlock }) {
+  const { content } = block
+  if (!content?.slides) return null
+
+  return (
+    <Card className="p-4 mt-4">
+      <div className="flex items-center gap-2 mb-4">
+        <svg className="h-4 w-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <path d="M8 21h8M12 17v4" />
+        </svg>
+        <h4 className="text-sm font-medium">{block.title}</h4>
+        <Badge variant="secondary" className="text-[10px] ml-auto">{content.slides.length} slides</Badge>
+      </div>
+      <div className="space-y-2">
+        {content.slides.map((slide: any, index: number) => (
+          <div key={index} className="p-3 rounded-lg bg-secondary/30 border border-border flex items-center gap-3">
+            <div className="w-8 h-8 rounded bg-accent/20 flex items-center justify-center text-xs font-medium text-accent">
+              {index + 1}
+            </div>
+            <div>
+              <p className="text-sm font-medium">{slide.title}</p>
+              <p className="text-xs text-muted-foreground">{slide.content}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+  )
+}
+
+function ImageBlock({ block }: { block: OutputBlock }) {
+  const { content } = block
+
+  return (
+    <Card className="p-4 mt-4">
+      <div className="flex items-center gap-2 mb-4">
+        <svg className="h-4 w-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <path d="M21 15l-5-5L5 21" />
+        </svg>
+        <h4 className="text-sm font-medium">{block.title}</h4>
+      </div>
+      <div className="aspect-video rounded-lg bg-secondary/50 border border-dashed border-border flex items-center justify-center">
+        <div className="text-center">
+          <svg className="h-12 w-12 text-muted-foreground/50 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="M21 15l-5-5L5 21" />
+          </svg>
+          <p className="text-sm text-muted-foreground">{content?.description || "Visual generated from data"}</p>
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+function CodeBlock({ block }: { block: OutputBlock }) {
+  const { content } = block
+  const codeContent = content?.data ? JSON.stringify(content.data, null, 2) : "{}"
+
+  return (
+    <Card className="p-4 mt-4">
+      <div className="flex items-center gap-2 mb-4">
+        <svg className="h-4 w-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <polyline points="16,18 22,12 16,6" />
+          <polyline points="8,6 2,12 8,18" />
+        </svg>
+        <h4 className="text-sm font-medium">{block.title}</h4>
+        <Badge variant="secondary" className="text-[10px] ml-auto">{content?.format || 'json'}</Badge>
+      </div>
+      <div className="rounded-lg bg-[#1e1e1e] p-4 overflow-x-auto">
+        <pre className="text-xs text-green-400 font-mono">
+          <code>{codeContent}</code>
+        </pre>
+      </div>
+    </Card>
+  )
+}
+
 export function ChatMessage({ message }: { message: Message }) {
   const isUser = message.role === "user"
   const [copied, setCopied] = useState(false)
@@ -228,6 +342,14 @@ export function ChatMessage({ message }: { message: Message }) {
         return <PersonaBlock key={block.id} block={block} />
       case "table":
         return <TableBlock key={block.id} block={block} />
+      case "comparison":
+        return <ComparisonBlock key={block.id} block={block} />
+      case "slides":
+        return <SlidesBlock key={block.id} block={block} />
+      case "image":
+        return <ImageBlock key={block.id} block={block} />
+      case "code":
+        return <CodeBlock key={block.id} block={block} />
       default:
         return null
     }

@@ -34,7 +34,13 @@ const outputTypes = [
 ]
 
 export function PlaygroundToolbar() {
-  const { mode, setMode, config, setConfig, isStreaming } = usePlayground()
+  const { mode, setMode, config, setConfig, isStreaming, addOutput } = usePlayground()
+
+  const handleAutoGenerate = () => {
+    // Generate a chart and table together
+    addOutput("chart")
+    setTimeout(() => addOutput("table"), 100)
+  }
 
   return (
     <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/50">
@@ -62,14 +68,18 @@ export function PlaygroundToolbar() {
         {/* Output Type Selector */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 gap-2 text-xs bg-transparent">
+            <Button variant="outline" size="sm" className="h-8 gap-2 text-xs bg-transparent" disabled={isStreaming}>
               <Plus className="h-3.5 w-3.5" />
               Add Output
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
             {outputTypes.map((type) => (
-              <DropdownMenuItem key={type.id} className="gap-3 py-2">
+              <DropdownMenuItem
+                key={type.id}
+                className="gap-3 py-2 cursor-pointer"
+                onClick={() => addOutput(type.id as any)}
+              >
                 <type.icon className="h-4 w-4 text-muted-foreground" />
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">{type.label}</span>
@@ -81,7 +91,13 @@ export function PlaygroundToolbar() {
         </DropdownMenu>
 
         {/* Quick Actions */}
-        <Button variant="ghost" size="sm" className="h-8 gap-2 text-xs" disabled={isStreaming}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 gap-2 text-xs"
+          disabled={isStreaming}
+          onClick={handleAutoGenerate}
+        >
           <Wand2 className="h-3.5 w-3.5" />
           Auto-Generate
         </Button>
