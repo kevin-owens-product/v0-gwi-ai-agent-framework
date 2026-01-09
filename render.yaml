@@ -6,8 +6,8 @@ services:
     plan: standard
     region: oregon
     buildCommand: |
-      npm ci
-      npx prisma generate
+      npm install
+      ./node_modules/.bin/prisma generate
       npm run build
     startCommand: npm start
     healthCheckPath: /api/health
