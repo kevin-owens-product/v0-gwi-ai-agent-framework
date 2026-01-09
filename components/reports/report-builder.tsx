@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -101,9 +102,11 @@ const audiences = [
 ]
 
 export function ReportBuilder() {
+  const router = useRouter()
   const [step, setStep] = useState(1)
   const [isGenerating, setIsGenerating] = useState(false)
   const [generationProgress, setGenerationProgress] = useState(0)
+  const [generationComplete, setGenerationComplete] = useState(false)
   const [selectedType, setSelectedType] = useState("presentation")
   const [formData, setFormData] = useState({
     title: "",
@@ -119,6 +122,7 @@ export function ReportBuilder() {
   const handleGenerate = async () => {
     setIsGenerating(true)
     setGenerationProgress(0)
+    setGenerationComplete(false)
 
     const steps = [
       { progress: 15, label: "Analyzing data sources..." },
@@ -136,6 +140,24 @@ export function ReportBuilder() {
 
     await new Promise((resolve) => setTimeout(resolve, 500))
     setIsGenerating(false)
+    setGenerationComplete(true)
+  }
+
+  const handleViewReport = () => {
+    // Generate a report ID and navigate to it
+    const reportId = `report-${Date.now()}`
+    router.push(`/dashboard/reports/${reportId}`)
+  }
+
+  const handleDownloadReport = () => {
+    // Simulate download - in real app would generate file
+    const blob = new Blob([`Report: ${formData.title || 'Generated Report'}\n\nGenerated successfully.`], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${formData.title || 'report'}.txt`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   const totalSteps = 4
@@ -537,31 +559,62 @@ export function ReportBuilder() {
                   </p>
                 </div>
               )}
+
+              {generationComplete && !isGenerating && (
+                <div className="space-y-4 pt-4 border-t">
+                  <div className="flex items-center gap-3 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                    <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+                    <div>
+                      <p className="font-medium text-emerald-500">Report Generated Successfully!</p>
+                      <p className="text-sm text-muted-foreground">Your {selectedType} is ready to view and download.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button onClick={handleViewReport} className="flex-1">
+                      <FileText className="mr-2 h-4 w-4" />
+                      View Report
+                    </Button>
+                    <Button variant="outline" onClick={handleDownloadReport} className="flex-1">
+                      <Download className="mr-2 h-4 w-4" />
+                      Download
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep(3)} disabled={isGenerating}>
+            <Button variant="outline" onClick={() => setStep(3)} disabled={isGenerating || generationComplete}>
               Back
             </Button>
             <div className="flex gap-2">
-              <Button variant="outline" disabled={isGenerating}>
-                <Settings2 className="mr-2 h-4 w-4" />
-                Advanced Options
-              </Button>
-              <Button onClick={handleGenerate} disabled={isGenerating}>
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Generate Report
-                  </>
-                )}
-              </Button>
+              {!generationComplete && (
+                <>
+                  <Button variant="outline" disabled={isGenerating}>
+                    <Settings2 className="mr-2 h-4 w-4" />
+                    Advanced Options
+                  </Button>
+                  <Button onClick={handleGenerate} disabled={isGenerating}>
+                    {isGenerating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="mr-2 h-4 w-4" />
+                        Generate Report
+                      </>
+                    )}
+                  </Button>
+                </>
+              )}
+              {generationComplete && (
+                <Button variant="outline" onClick={() => router.push('/dashboard/reports')}>
+                  Back to Reports
+                </Button>
+              )}
             </div>
           </div>
         </div>
