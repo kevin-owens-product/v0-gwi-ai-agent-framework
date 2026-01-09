@@ -211,3 +211,67 @@ describe('NextAuth configuration', () => {
     })
   })
 })
+
+describe('getSession and requireAuth', () => {
+  let mockAuth: ReturnType<typeof vi.fn>
+
+  beforeEach(() => {
+    vi.resetModules()
+    mockAuth = vi.fn()
+
+    // Re-mock NextAuth with a controllable auth function
+    vi.doMock('next-auth', () => ({
+      default: vi.fn(() => ({
+        handlers: {},
+        auth: mockAuth,
+        signIn: vi.fn(),
+        signOut: vi.fn(),
+      })),
+    }))
+  })
+
+  it('getSession returns session from auth', async () => {
+    const mockSession = { user: { id: 'user-1', email: 'test@example.com' } }
+    mockAuth.mockResolvedValue(mockSession)
+
+    const { getSession } = await import('./auth')
+    const session = await getSession()
+
+    expect(session).toEqual(mockSession)
+  })
+
+  it('getSession returns null when not authenticated', async () => {
+    mockAuth.mockResolvedValue(null)
+
+    const { getSession } = await import('./auth')
+    const session = await getSession()
+
+    expect(session).toBeNull()
+  })
+
+  it('requireAuth returns session when authenticated', async () => {
+    const mockSession = { user: { id: 'user-1', email: 'test@example.com' } }
+    mockAuth.mockResolvedValue(mockSession)
+
+    const { requireAuth } = await import('./auth')
+    const session = await requireAuth()
+
+    expect(session).toEqual(mockSession)
+  })
+
+  it('requireAuth throws when not authenticated', async () => {
+    mockAuth.mockResolvedValue(null)
+
+    const { requireAuth } = await import('./auth')
+
+    await expect(requireAuth()).rejects.toThrow('Unauthorized')
+  })
+
+  it('requireAuth throws when session has no user', async () => {
+    mockAuth.mockResolvedValue({ user: null })
+
+    const { requireAuth } = await import('./auth')
+
+    await expect(requireAuth()).rejects.toThrow('Unauthorized')
+  })
+})

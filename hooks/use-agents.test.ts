@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, waitFor, act } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
+import { http, HttpResponse } from 'msw'
 import { useAgents, useAgent } from './use-agents'
-import { createOrganizationContext } from '@/tests/factories'
-import React from 'react'
+import { createOrganizationContext, createAgentWithDetails } from '@/tests/factories'
+import { server } from '@/tests/mocks/server'
 
 // Mock use-organization hook
 const mockOrg = createOrganizationContext({ id: 'org-1', name: 'Test Org' })
@@ -11,28 +12,23 @@ vi.mock('./use-organization', () => ({
   useCurrentOrg: () => ({ org: mockOrg, isLoading: false }),
 }))
 
-// Mock fetch
-const mockFetch = vi.fn()
-global.fetch = mockFetch
-
-// Note: These tests are skipped because they conflict with MSW handlers.
-// The fetch mocking approach doesn't work when MSW is active.
-// Tests should be refactored to use server.use() for per-test handler overrides.
-describe.skip('useAgents', () => {
+describe('useAgents', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockFetch.mockReset()
   })
 
   describe('fetchAgents', () => {
     it('fetches agents with organization header', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: [{ id: 'agent-1', name: 'Test Agent' }],
-          meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
-        }),
-      })
+      server.use(
+        http.get('/api/v1/agents', ({ request }) => {
+          const orgId = request.headers.get('x-organization-id')
+          expect(orgId).toBe('org-1')
+          return HttpResponse.json({
+            data: [{ id: 'agent-1', name: 'Test Agent', orgId: 'org-1', status: 'ACTIVE', type: 'RESEARCH' }],
+            meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
+          })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -40,27 +36,24 @@ describe.skip('useAgents', () => {
         await result.current.fetchAgents()
       })
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/v1/agents'),
-        expect.objectContaining({
-          headers: { 'x-organization-id': 'org-1' },
-        })
-      )
+      expect(result.current.agents).toHaveLength(1)
+      expect(result.current.agents[0].name).toBe('Test Agent')
     })
 
     it('updates agents state on successful fetch', async () => {
       const mockAgents = [
-        { id: 'agent-1', name: 'Agent 1' },
-        { id: 'agent-2', name: 'Agent 2' },
+        createAgentWithDetails({ id: 'agent-1', name: 'Agent 1', orgId: 'org-1' }),
+        createAgentWithDetails({ id: 'agent-2', name: 'Agent 2', orgId: 'org-1' }),
       ]
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: mockAgents,
-          meta: { page: 1, limit: 20, total: 2, totalPages: 1 },
-        }),
-      })
+      server.use(
+        http.get('/api/v1/agents', () => {
+          return HttpResponse.json({
+            data: mockAgents,
+            meta: { page: 1, limit: 20, total: 2, totalPages: 1 },
+          })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -68,18 +61,22 @@ describe.skip('useAgents', () => {
         await result.current.fetchAgents()
       })
 
-      expect(result.current.agents).toEqual(mockAgents)
+      expect(result.current.agents).toHaveLength(2)
       expect(result.current.meta.total).toBe(2)
     })
 
     it('applies filters to fetch request', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: [],
-          meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
-        }),
-      })
+      let capturedUrl = ''
+
+      server.use(
+        http.get('/api/v1/agents', ({ request }) => {
+          capturedUrl = request.url
+          return HttpResponse.json({
+            data: [],
+            meta: { page: 2, limit: 10, total: 0, totalPages: 0 },
+          })
+        })
+      )
 
       const { result } = renderHook(() => useAgents({
         status: 'ACTIVE',
@@ -92,17 +89,18 @@ describe.skip('useAgents', () => {
         await result.current.fetchAgents()
       })
 
-      const url = mockFetch.mock.calls[0][0]
-      expect(url).toContain('status=ACTIVE')
-      expect(url).toContain('type=RESEARCH')
-      expect(url).toContain('page=2')
-      expect(url).toContain('limit=10')
+      expect(capturedUrl).toContain('status=ACTIVE')
+      expect(capturedUrl).toContain('type=RESEARCH')
+      expect(capturedUrl).toContain('page=2')
+      expect(capturedUrl).toContain('limit=10')
     })
 
     it('sets error state on fetch failure', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-      })
+      server.use(
+        http.get('/api/v1/agents', () => {
+          return new HttpResponse(null, { status: 500 })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -115,7 +113,11 @@ describe.skip('useAgents', () => {
     })
 
     it('handles network errors', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Network error'))
+      server.use(
+        http.get('/api/v1/agents', () => {
+          return HttpResponse.error()
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -123,30 +125,34 @@ describe.skip('useAgents', () => {
         await result.current.fetchAgents()
       })
 
-      expect(result.current.error).toBe('Network error')
+      expect(result.current.error).toBeTruthy()
     })
 
     it('sets loading state during fetch', async () => {
-      let resolvePromise: (value: any) => void
-      const promise = new Promise((resolve) => {
-        resolvePromise = resolve
-      })
-
-      mockFetch.mockReturnValueOnce(promise)
+      server.use(
+        http.get('/api/v1/agents', async () => {
+          await new Promise(resolve => setTimeout(resolve, 50))
+          return HttpResponse.json({
+            data: [],
+            meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
+          })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
+      // Start fetch
+      let fetchPromise: Promise<void>
       act(() => {
-        result.current.fetchAgents()
+        fetchPromise = result.current.fetchAgents()
       })
 
+      // Should be loading
       expect(result.current.isLoading).toBe(true)
 
+      // Wait for completion
       await act(async () => {
-        resolvePromise!({
-          ok: true,
-          json: async () => ({ data: [], meta: {} }),
-        })
+        await fetchPromise
       })
 
       expect(result.current.isLoading).toBe(false)
@@ -155,16 +161,20 @@ describe.skip('useAgents', () => {
 
   describe('createAgent', () => {
     it('creates agent with POST request', async () => {
-      const newAgent = { id: 'new-1', name: 'New Agent', type: 'RESEARCH' }
+      let capturedBody: any
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: newAgent }),
-      })
+      server.use(
+        http.post('/api/v1/agents', async ({ request }) => {
+          capturedBody = await request.json()
+          return HttpResponse.json({
+            data: { id: 'new-1', name: 'New Agent', type: 'RESEARCH', status: 'DRAFT' }
+          }, { status: 201 })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
-      let createdAgent
+      let createdAgent: any
       await act(async () => {
         createdAgent = await result.current.createAgent({
           name: 'New Agent',
@@ -172,26 +182,20 @@ describe.skip('useAgents', () => {
         })
       })
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        '/api/v1/agents',
-        expect.objectContaining({
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-organization-id': 'org-1',
-          },
-        })
-      )
-      expect(createdAgent).toEqual(newAgent)
+      expect(capturedBody.name).toBe('New Agent')
+      expect(capturedBody.type).toBe('RESEARCH')
+      expect(createdAgent.id).toBe('new-1')
+      expect(createdAgent.name).toBe('New Agent')
     })
 
     it('adds created agent to state', async () => {
-      const newAgent = { id: 'new-1', name: 'New Agent' }
-
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: newAgent }),
-      })
+      server.use(
+        http.post('/api/v1/agents', () => {
+          return HttpResponse.json({
+            data: { id: 'new-1', name: 'New Agent', type: 'RESEARCH', status: 'DRAFT' }
+          }, { status: 201 })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -199,14 +203,16 @@ describe.skip('useAgents', () => {
         await result.current.createAgent({ name: 'New Agent', type: 'RESEARCH' })
       })
 
-      expect(result.current.agents).toContainEqual(newAgent)
+      expect(result.current.agents.some(a => a.id === 'new-1')).toBe(true)
+      expect(result.current.agents.find(a => a.id === 'new-1')?.name).toBe('New Agent')
     })
 
     it('throws error on failed creation', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({ error: 'Validation error' }),
-      })
+      server.use(
+        http.post('/api/v1/agents', () => {
+          return HttpResponse.json({ error: 'Validation error' }, { status: 400 })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -220,12 +226,15 @@ describe.skip('useAgents', () => {
 
   describe('updateAgent', () => {
     it('updates agent with PATCH request', async () => {
-      const updatedAgent = { id: 'agent-1', name: 'Updated Name' }
+      const updatedAgent = createAgentWithDetails({ id: 'agent-1', name: 'Updated Name', orgId: 'org-1' })
+      let capturedBody: any
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: updatedAgent }),
-      })
+      server.use(
+        http.patch('/api/v1/agents/:id', async ({ request }) => {
+          capturedBody = await request.json()
+          return HttpResponse.json({ data: updatedAgent })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -233,34 +242,29 @@ describe.skip('useAgents', () => {
         await result.current.updateAgent('agent-1', { name: 'Updated Name' })
       })
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        '/api/v1/agents/agent-1',
-        expect.objectContaining({
-          method: 'PATCH',
-        })
-      )
+      expect(capturedBody.name).toBe('Updated Name')
     })
 
     it('updates agent in local state', async () => {
-      // First, set up initial agents
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: [{ id: 'agent-1', name: 'Old Name' }],
-          meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
+      const initialAgents = [createAgentWithDetails({ id: 'agent-1', name: 'Old Name', orgId: 'org-1' })]
+      const updatedAgent = createAgentWithDetails({ id: 'agent-1', name: 'New Name', orgId: 'org-1' })
+
+      server.use(
+        http.get('/api/v1/agents', () => {
+          return HttpResponse.json({
+            data: initialAgents,
+            meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
+          })
         }),
-      })
+        http.patch('/api/v1/agents/:id', () => {
+          return HttpResponse.json({ data: updatedAgent })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
       await act(async () => {
         await result.current.fetchAgents()
-      })
-
-      // Now update
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: { id: 'agent-1', name: 'New Name' } }),
       })
 
       await act(async () => {
@@ -274,7 +278,15 @@ describe.skip('useAgents', () => {
 
   describe('deleteAgent', () => {
     it('deletes agent with DELETE request', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: true })
+      let deleteCalled = false
+
+      server.use(
+        http.delete('/api/v1/agents/:id', ({ params }) => {
+          expect(params.id).toBe('agent-1')
+          deleteCalled = true
+          return new HttpResponse(null, { status: 204 })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -282,23 +294,26 @@ describe.skip('useAgents', () => {
         await result.current.deleteAgent('agent-1')
       })
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        '/api/v1/agents/agent-1',
-        expect.objectContaining({
-          method: 'DELETE',
-        })
-      )
+      expect(deleteCalled).toBe(true)
     })
 
     it('removes agent from local state', async () => {
-      // Set up initial agents
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: [{ id: 'agent-1' }, { id: 'agent-2' }],
-          meta: { page: 1, limit: 20, total: 2, totalPages: 1 },
+      const initialAgents = [
+        createAgentWithDetails({ id: 'agent-1', orgId: 'org-1' }),
+        createAgentWithDetails({ id: 'agent-2', orgId: 'org-1' }),
+      ]
+
+      server.use(
+        http.get('/api/v1/agents', () => {
+          return HttpResponse.json({
+            data: initialAgents,
+            meta: { page: 1, limit: 20, total: 2, totalPages: 1 },
+          })
         }),
-      })
+        http.delete('/api/v1/agents/:id', () => {
+          return new HttpResponse(null, { status: 204 })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -307,9 +322,6 @@ describe.skip('useAgents', () => {
       })
 
       expect(result.current.agents).toHaveLength(2)
-
-      // Delete
-      mockFetch.mockResolvedValueOnce({ ok: true })
 
       await act(async () => {
         await result.current.deleteAgent('agent-1')
@@ -322,10 +334,15 @@ describe.skip('useAgents', () => {
 
   describe('runAgent', () => {
     it('runs agent with POST request', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ runId: 'run-1', status: 'PENDING' }),
-      })
+      let capturedBody: any
+
+      server.use(
+        http.post('/api/v1/agents/:id/run', async ({ request, params }) => {
+          expect(params.id).toBe('agent-1')
+          capturedBody = await request.json()
+          return HttpResponse.json({ runId: 'run-1', status: 'PENDING' }, { status: 202 })
+        })
+      )
 
       const { result } = renderHook(() => useAgents())
 
@@ -334,31 +351,27 @@ describe.skip('useAgents', () => {
         runResult = await result.current.runAgent('agent-1', { query: 'Test query' })
       })
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        '/api/v1/agents/agent-1/run',
-        expect.objectContaining({
-          method: 'POST',
-          body: JSON.stringify({ query: 'Test query' }),
-        })
-      )
+      expect(capturedBody.query).toBe('Test query')
       expect(runResult).toEqual({ runId: 'run-1', status: 'PENDING' })
     })
   })
 })
 
-describe.skip('useAgent', () => {
+describe('useAgent', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockFetch.mockReset()
   })
 
   it('fetches single agent by ID', async () => {
-    const mockAgent = { id: 'agent-1', name: 'Test Agent' }
+    const mockAgent = createAgentWithDetails({ id: 'agent-1', name: 'Test Agent', orgId: 'org-1' })
 
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ data: mockAgent }),
-    })
+    server.use(
+      http.get('/api/v1/agents/:id', ({ params, request }) => {
+        expect(params.id).toBe('agent-1')
+        expect(request.headers.get('x-organization-id')).toBe('org-1')
+        return HttpResponse.json({ data: mockAgent })
+      })
+    )
 
     const { result } = renderHook(() => useAgent('agent-1'))
 
@@ -366,28 +379,36 @@ describe.skip('useAgent', () => {
       await result.current.fetchAgent()
     })
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      '/api/v1/agents/agent-1',
-      expect.objectContaining({
-        headers: { 'x-organization-id': 'org-1' },
-      })
-    )
-    expect(result.current.agent).toEqual(mockAgent)
+    expect(result.current.agent?.id).toBe('agent-1')
+    expect(result.current.agent?.name).toBe('Test Agent')
   })
 
   it('does not fetch when ID is empty', async () => {
+    let fetchCalled = false
+
+    server.use(
+      http.get('/api/v1/agents/:id', () => {
+        fetchCalled = true
+        return HttpResponse.json({ data: {} })
+      })
+    )
+
     const { result } = renderHook(() => useAgent(''))
 
     await act(async () => {
       await result.current.fetchAgent()
     })
 
-    expect(mockFetch).not.toHaveBeenCalled()
+    expect(fetchCalled).toBe(false)
     expect(result.current.agent).toBeNull()
   })
 
   it('sets error state on fetch failure', async () => {
-    mockFetch.mockResolvedValueOnce({ ok: false })
+    server.use(
+      http.get('/api/v1/agents/:id', () => {
+        return new HttpResponse(null, { status: 500 })
+      })
+    )
 
     const { result } = renderHook(() => useAgent('agent-1'))
 
@@ -399,28 +420,26 @@ describe.skip('useAgent', () => {
   })
 
   it('manages loading state', async () => {
-    let resolvePromise: (value: any) => void
-    const promise = new Promise((resolve) => {
-      resolvePromise = resolve
-    })
-
-    mockFetch.mockReturnValueOnce(promise)
+    server.use(
+      http.get('/api/v1/agents/:id', async () => {
+        await new Promise(resolve => setTimeout(resolve, 50))
+        return HttpResponse.json({ data: { id: 'agent-1' } })
+      })
+    )
 
     const { result } = renderHook(() => useAgent('agent-1'))
 
     expect(result.current.isLoading).toBe(false)
 
+    let fetchPromise: Promise<void>
     act(() => {
-      result.current.fetchAgent()
+      fetchPromise = result.current.fetchAgent()
     })
 
     expect(result.current.isLoading).toBe(true)
 
     await act(async () => {
-      resolvePromise!({
-        ok: true,
-        json: async () => ({ data: {} }),
-      })
+      await fetchPromise
     })
 
     expect(result.current.isLoading).toBe(false)

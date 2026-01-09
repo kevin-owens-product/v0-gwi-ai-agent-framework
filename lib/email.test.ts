@@ -3,14 +3,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // Store original env
 const originalEnv = process.env
 
-// Mock Resend
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: {
-      send: vi.fn(),
+// Create mock send function that persists across module reloads
+const mockSend = vi.fn()
+
+// Mock Resend with a proper class implementation
+vi.mock('resend', () => {
+  return {
+    Resend: class MockResend {
+      emails = {
+        send: mockSend,
+      }
     },
-  })),
-}))
+  }
+})
 
 describe('email utilities', () => {
   beforeEach(() => {
@@ -204,6 +209,118 @@ describe('email utilities', () => {
       expect(html).toContain('</html>')
       expect(html).toContain('charset="utf-8"')
       expect(html).toContain('viewport')
+    })
+  })
+
+  describe('sendEmail with Resend configured', () => {
+    beforeEach(() => {
+      vi.resetModules()
+      mockSend.mockReset()
+    })
+
+    it('sends email successfully via Resend', async () => {
+      vi.stubEnv('RESEND_API_KEY', 'test_api_key')
+      mockSend.mockResolvedValue({ data: { id: 'email-123' }, error: null })
+
+      const { sendEmail } = await import('./email')
+
+      const result = await sendEmail({
+        to: 'test@example.com',
+        subject: 'Test Email',
+        html: '<p>Test content</p>',
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.id).toBe('email-123')
+      expect(mockSend).toHaveBeenCalledWith({
+        from: expect.stringContaining('GWI AI Platform'),
+        to: 'test@example.com',
+        subject: 'Test Email',
+        html: '<p>Test content</p>',
+      })
+    })
+
+    it('uses custom from address when provided', async () => {
+      vi.stubEnv('RESEND_API_KEY', 'test_api_key')
+      mockSend.mockResolvedValue({ data: { id: 'email-456' }, error: null })
+
+      const { sendEmail } = await import('./email')
+
+      await sendEmail({
+        to: 'recipient@example.com',
+        subject: 'Custom Sender',
+        html: '<p>Content</p>',
+        from: 'custom@sender.com',
+      })
+
+      expect(mockSend).toHaveBeenCalledWith(
+        expect.objectContaining({
+          from: 'custom@sender.com',
+        })
+      )
+    })
+
+    it('throws error when Resend returns an error', async () => {
+      vi.stubEnv('RESEND_API_KEY', 'test_api_key')
+      mockSend.mockResolvedValue({
+        data: null,
+        error: { message: 'Invalid API key' },
+      })
+
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const { sendEmail } = await import('./email')
+
+      await expect(
+        sendEmail({
+          to: 'test@example.com',
+          subject: 'Test',
+          html: '<p>Test</p>',
+        })
+      ).rejects.toThrow('Invalid API key')
+
+      expect(consoleSpy).toHaveBeenCalledWith('Resend error:', expect.any(Object))
+      consoleSpy.mockRestore()
+    })
+
+    it('throws and logs error when send throws', async () => {
+      vi.stubEnv('RESEND_API_KEY', 'test_api_key')
+      mockSend.mockRejectedValue(new Error('Network error'))
+
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const { sendEmail } = await import('./email')
+
+      await expect(
+        sendEmail({
+          to: 'test@example.com',
+          subject: 'Test',
+          html: '<p>Test</p>',
+        })
+      ).rejects.toThrow('Network error')
+
+      expect(consoleSpy).toHaveBeenCalledWith('Failed to send email:', expect.any(Error))
+      consoleSpy.mockRestore()
+    })
+
+    it('uses EMAIL_DOMAIN env variable for default from address', async () => {
+      vi.stubEnv('RESEND_API_KEY', 'test_api_key')
+      vi.stubEnv('EMAIL_DOMAIN', 'custom-domain.io')
+      mockSend.mockResolvedValue({ data: { id: 'email-789' }, error: null })
+
+      const { sendEmail } = await import('./email')
+
+      await sendEmail({
+        to: 'test@example.com',
+        subject: 'Test',
+        html: '<p>Test</p>',
+      })
+
+      expect(mockSend).toHaveBeenCalledWith(
+        expect.objectContaining({
+          from: expect.stringContaining('custom-domain.io'),
+        })
+      )
     })
   })
 })
