@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe, handleStripeWebhook } from '@/lib/billing'
+import { getStripe, handleStripeWebhook } from '@/lib/billing'
 import Stripe from 'stripe'
 
 export async function POST(request: NextRequest) {
@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event
 
   try {
+    const stripe = getStripe()
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error'
