@@ -39,15 +39,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return { id: user.id, email: user.email, name: user.name }
       }
     }),
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    MicrosoftEntraID({
-      clientId: process.env.AZURE_AD_CLIENT_ID!,
-      clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
-      tenantId: process.env.AZURE_AD_TENANT_ID!,
-    }),
+    // Only include OAuth providers if credentials are configured
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? [
+      Google({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      }),
+    ] : []),
+    ...(process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_CLIENT_SECRET && process.env.AZURE_AD_TENANT_ID ? [
+      MicrosoftEntraID({
+        clientId: process.env.AZURE_AD_CLIENT_ID,
+        clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+        tenantId: process.env.AZURE_AD_TENANT_ID,
+      }),
+    ] : []),
   ],
   callbacks: {
     async jwt({ token, user, account }) {
