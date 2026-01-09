@@ -8,7 +8,9 @@ services:
     buildCommand: |
       npm install
       ./node_modules/.bin/prisma generate
+      ./node_modules/.bin/prisma migrate deploy
       npm run build
+      npm run db:seed
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
