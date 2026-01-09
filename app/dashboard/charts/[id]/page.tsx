@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -182,9 +182,10 @@ const ChartIcon = ({ type }: { type: "bar" | "line" | "pie" }) => {
   }
 }
 
-export default function ChartDetailPage({ params }: { params: { id: string } }) {
+export default function ChartDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [isExporting, setIsExporting] = useState(false)
-  const chart = chartData[params.id]
+  const chart = chartData[id]
 
   if (!chart) {
     return (

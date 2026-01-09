@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -391,9 +391,10 @@ const audienceData: Record<string, {
   },
 }
 
-export default function AudienceDetailPage({ params }: { params: { id: string } }) {
+export default function AudienceDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [isExporting, setIsExporting] = useState(false)
-  const audience = audienceData[params.id]
+  const audience = audienceData[id]
 
   if (!audience) {
     return (
