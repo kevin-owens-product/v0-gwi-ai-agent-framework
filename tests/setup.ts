@@ -35,8 +35,8 @@ vi.mock('next-auth/react', () => ({
   SessionProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
-// Setup MSW
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
+// Setup MSW - use 'bypass' to allow tests that mock fetch directly
+beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }))
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 

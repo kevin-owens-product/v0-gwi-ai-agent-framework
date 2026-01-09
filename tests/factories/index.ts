@@ -1,15 +1,28 @@
 import { faker } from '@faker-js/faker'
 
+// Types aligned with Prisma schema
+export type PlanTier = 'STARTER' | 'PROFESSIONAL' | 'ENTERPRISE'
+export type Role = 'OWNER' | 'ADMIN' | 'MEMBER' | 'VIEWER'
+export type AgentType = 'RESEARCH' | 'ANALYSIS' | 'REPORTING' | 'MONITORING' | 'CUSTOM'
+export type AgentStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'ARCHIVED'
+export type AgentRunStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'CANCELLED'
+export type DataSourceType = 'API' | 'DATABASE' | 'FILE_UPLOAD' | 'WEBHOOK' | 'INTEGRATION'
+export type DataSourceStatus = 'PENDING' | 'CONNECTED' | 'ERROR' | 'DISABLED'
+export type UsageMetric = 'AGENT_RUNS' | 'TOKENS_CONSUMED' | 'API_CALLS' | 'DATA_SOURCES' | 'TEAM_SEATS' | 'STORAGE_GB'
+export type SubscriptionStatus = 'TRIALING' | 'ACTIVE' | 'PAST_DUE' | 'CANCELED' | 'UNPAID'
+export type InvitationStatus = 'PENDING' | 'ACCEPTED' | 'EXPIRED' | 'REVOKED'
+
 /**
  * Factory for creating mock User objects
  */
 export function createUser(overrides: Partial<ReturnType<typeof createUser>> = {}) {
   return {
     id: faker.string.uuid(),
-    email: faker.internet.email(),
+    email: faker.internet.email().toLowerCase(),
     name: faker.person.fullName(),
     avatarUrl: faker.image.avatar(),
-    passwordHash: faker.string.alphanumeric(60),
+    passwordHash: '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/X4.u7Kq2Gg6Ey6Onu', // "password123"
+    emailVerified: faker.date.past(),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
     ...overrides,
@@ -26,6 +39,7 @@ export function createOrganization(overrides: Partial<ReturnType<typeof createOr
     name,
     slug: faker.helpers.slugify(name).toLowerCase(),
     planTier: faker.helpers.arrayElement(['STARTER', 'PROFESSIONAL', 'ENTERPRISE'] as const),
+    settings: {},
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
     ...overrides,
@@ -41,7 +55,74 @@ export function createMembership(overrides: Partial<ReturnType<typeof createMemb
     orgId: faker.string.uuid(),
     userId: faker.string.uuid(),
     role: faker.helpers.arrayElement(['OWNER', 'ADMIN', 'MEMBER', 'VIEWER'] as const),
-    createdAt: faker.date.past(),
+    invitedBy: faker.helpers.maybe(() => faker.string.uuid()) || null,
+    joinedAt: faker.date.past(),
+    ...overrides,
+  }
+}
+
+/**
+ * Factory for creating mock Account objects (OAuth)
+ */
+export function createAccount(overrides: Partial<ReturnType<typeof createAccount>> = {}) {
+  const provider = faker.helpers.arrayElement(['google', 'microsoft-entra-id'])
+  return {
+    id: faker.string.uuid(),
+    userId: faker.string.uuid(),
+    type: 'oauth',
+    provider,
+    providerAccountId: faker.string.alphanumeric(21),
+    refresh_token: faker.string.alphanumeric(100),
+    access_token: faker.string.alphanumeric(100),
+    expires_at: Math.floor(Date.now() / 1000) + 3600,
+    token_type: 'Bearer',
+    scope: 'openid profile email',
+    id_token: null,
+    session_state: null,
+    ...overrides,
+  }
+}
+
+/**
+ * Factory for creating mock Session objects
+ */
+export function createSession(overrides: Partial<ReturnType<typeof createSession>> = {}) {
+  return {
+    id: faker.string.uuid(),
+    sessionToken: faker.string.uuid(),
+    userId: faker.string.uuid(),
+    expires: faker.date.future(),
+    ipAddress: faker.internet.ip(),
+    userAgent: faker.internet.userAgent(),
+    ...overrides,
+  }
+}
+
+/**
+ * Factory for creating mock VerificationToken objects
+ */
+export function createVerificationToken(overrides: Partial<ReturnType<typeof createVerificationToken>> = {}) {
+  return {
+    identifier: faker.internet.email().toLowerCase(),
+    token: faker.string.hexadecimal({ length: 64, casing: 'lower' }),
+    expires: faker.date.future(),
+    ...overrides,
+  }
+}
+
+/**
+ * Factory for creating mock SSOConfiguration objects
+ */
+export function createSSOConfiguration(overrides: Partial<ReturnType<typeof createSSOConfiguration>> = {}) {
+  const provider = faker.helpers.arrayElement(['saml', 'oidc'])
+  return {
+    id: faker.string.uuid(),
+    orgId: faker.string.uuid(),
+    provider,
+    metadataUrl: provider === 'saml' ? faker.internet.url() : null,
+    clientId: provider === 'oidc' ? faker.string.alphanumeric(32) : null,
+    clientSecret: provider === 'oidc' ? faker.string.alphanumeric(64) : null,
+    enabled: faker.datatype.boolean(),
     ...overrides,
   }
 }
@@ -53,11 +134,15 @@ export function createAgent(overrides: Partial<ReturnType<typeof createAgent>> =
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
-    name: faker.commerce.productName() + ' Agent',
+    name: `${faker.commerce.productAdjective()} ${faker.commerce.product()} Agent`,
     description: faker.lorem.sentence(),
     type: faker.helpers.arrayElement(['RESEARCH', 'ANALYSIS', 'REPORTING', 'MONITORING', 'CUSTOM'] as const),
+    configuration: {
+      model: 'claude-sonnet-4-20250514',
+      maxTokens: 4096,
+      temperature: 0.7,
+    },
     status: faker.helpers.arrayElement(['DRAFT', 'ACTIVE', 'PAUSED', 'ARCHIVED'] as const),
-    configuration: {},
     createdBy: faker.string.uuid(),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
@@ -66,7 +151,7 @@ export function createAgent(overrides: Partial<ReturnType<typeof createAgent>> =
 }
 
 /**
- * Factory for creating mock Agent with full details
+ * Factory for creating mock Agent with full details (includes relations)
  */
 export function createAgentWithDetails(overrides: Partial<ReturnType<typeof createAgentWithDetails>> = {}) {
   const agent = createAgent(overrides)
@@ -75,7 +160,7 @@ export function createAgentWithDetails(overrides: Partial<ReturnType<typeof crea
     creator: {
       id: agent.createdBy,
       name: faker.person.fullName(),
-      email: faker.internet.email(),
+      email: faker.internet.email().toLowerCase(),
     },
     _count: {
       runs: faker.number.int({ min: 0, max: 100 }),
@@ -88,16 +173,19 @@ export function createAgentWithDetails(overrides: Partial<ReturnType<typeof crea
  * Factory for creating mock AgentRun objects
  */
 export function createAgentRun(overrides: Partial<ReturnType<typeof createAgentRun>> = {}) {
-  const status = faker.helpers.arrayElement(['PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED'] as const)
+  const status = overrides.status || faker.helpers.arrayElement(['PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED'] as const)
+  const completedStatuses = ['COMPLETED', 'FAILED', 'CANCELLED']
   return {
     id: faker.string.uuid(),
     agentId: faker.string.uuid(),
-    status,
+    orgId: faker.string.uuid(),
     input: { query: faker.lorem.sentence() },
-    output: status === 'COMPLETED' ? { result: faker.lorem.paragraph() } : null,
-    tokensUsed: status === 'COMPLETED' ? faker.number.int({ min: 100, max: 10000 }) : null,
+    output: status === 'COMPLETED' ? { result: faker.lorem.paragraphs(2) } : null,
+    status,
+    tokensUsed: status === 'COMPLETED' ? faker.number.int({ min: 100, max: 10000 }) : 0,
     startedAt: faker.date.recent(),
-    completedAt: status === 'COMPLETED' || status === 'FAILED' ? faker.date.recent() : null,
+    completedAt: completedStatuses.includes(status) ? faker.date.recent() : null,
+    errorMessage: status === 'FAILED' ? faker.lorem.sentence() : null,
     ...overrides,
   }
 }
@@ -109,16 +197,18 @@ export function createInsight(overrides: Partial<ReturnType<typeof createInsight
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
-    agentId: faker.string.uuid(),
-    type: faker.helpers.arrayElement(['trend', 'anomaly', 'recommendation', 'comparison'] as const),
+    agentRunId: faker.helpers.maybe(() => faker.string.uuid()) || null,
+    type: faker.helpers.arrayElement(['trend', 'anomaly', 'recommendation', 'summary', 'comparison'] as const),
     title: faker.lorem.sentence(),
     data: {
-      value: faker.number.int({ min: 1, max: 100 }),
-      change: faker.number.float({ min: -50, max: 50, fractionDigits: 2 }),
-      details: faker.lorem.paragraph(),
+      content: faker.lorem.paragraphs(2),
+      metrics: {
+        value: faker.number.int({ min: 1, max: 100 }),
+        change: faker.number.float({ min: -50, max: 50, fractionDigits: 2 }),
+      },
     },
     confidenceScore: faker.number.float({ min: 0.5, max: 1, fractionDigits: 2 }),
-    createdAt: faker.date.past(),
+    createdAt: faker.date.recent(),
     ...overrides,
   }
 }
@@ -127,16 +217,20 @@ export function createInsight(overrides: Partial<ReturnType<typeof createInsight
  * Factory for creating mock DataSource objects
  */
 export function createDataSource(overrides: Partial<ReturnType<typeof createDataSource>> = {}) {
+  const type = overrides.type || faker.helpers.arrayElement(['API', 'DATABASE', 'FILE_UPLOAD', 'WEBHOOK', 'INTEGRATION'] as const)
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
-    name: faker.commerce.productName() + ' Data',
-    type: faker.helpers.arrayElement(['API', 'DATABASE', 'FILE_UPLOAD', 'WEBHOOK', 'INTEGRATION'] as const),
-    status: faker.helpers.arrayElement(['PENDING', 'CONNECTED', 'ERROR', 'DISABLED'] as const),
-    configuration: {
-      endpoint: faker.internet.url(),
+    name: `${faker.company.name()} ${type}`,
+    type,
+    connectionConfig: {
+      url: type === 'API' ? faker.internet.url() : undefined,
+      apiKey: type === 'API' ? '••••••••' + faker.string.alphanumeric(4) : undefined,
+      host: type === 'DATABASE' ? faker.internet.domainName() : undefined,
+      port: type === 'DATABASE' ? faker.number.int({ min: 1000, max: 9999 }) : undefined,
     },
-    lastSyncAt: faker.date.recent(),
+    lastSync: faker.helpers.maybe(() => faker.date.recent()) || null,
+    status: faker.helpers.arrayElement(['PENDING', 'CONNECTED', 'ERROR', 'DISABLED'] as const),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
     ...overrides,
@@ -150,10 +244,10 @@ export function createAuditLog(overrides: Partial<ReturnType<typeof createAuditL
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
-    userId: faker.string.uuid(),
+    userId: faker.helpers.maybe(() => faker.string.uuid()) || null,
     action: faker.helpers.arrayElement(['create', 'read', 'update', 'delete', 'execute', 'export', 'login', 'logout', 'invite', 'join', 'leave'] as const),
     resourceType: faker.helpers.arrayElement(['agent', 'insight', 'data_source', 'user', 'settings', 'api_key', 'invitation', 'organization', 'agent_run', 'workflow'] as const),
-    resourceId: faker.string.uuid(),
+    resourceId: faker.helpers.maybe(() => faker.string.uuid()) || null,
     metadata: {},
     ipAddress: faker.internet.ip(),
     userAgent: faker.internet.userAgent(),
@@ -163,36 +257,17 @@ export function createAuditLog(overrides: Partial<ReturnType<typeof createAuditL
 }
 
 /**
- * Factory for creating mock ApiKey objects
+ * Factory for creating mock AuditLog with user details
  */
-export function createApiKey(overrides: Partial<ReturnType<typeof createApiKey>> = {}) {
+export function createAuditLogWithUser(overrides: Partial<ReturnType<typeof createAuditLogWithUser>> = {}) {
+  const log = createAuditLog(overrides)
   return {
-    id: faker.string.uuid(),
-    orgId: faker.string.uuid(),
-    name: faker.commerce.productName() + ' Key',
-    keyPrefix: 'gwi_' + faker.string.alphanumeric(8),
-    keyHash: faker.string.alphanumeric(64),
-    permissions: ['agents:read', 'agents:execute'],
-    rateLimit: faker.number.int({ min: 100, max: 1000 }),
-    expiresAt: faker.date.future(),
-    lastUsedAt: faker.date.recent(),
-    createdAt: faker.date.past(),
-    ...overrides,
-  }
-}
-
-/**
- * Factory for creating mock Invitation objects
- */
-export function createInvitation(overrides: Partial<ReturnType<typeof createInvitation>> = {}) {
-  return {
-    id: faker.string.uuid(),
-    orgId: faker.string.uuid(),
-    email: faker.internet.email(),
-    role: faker.helpers.arrayElement(['ADMIN', 'MEMBER', 'VIEWER'] as const),
-    status: faker.helpers.arrayElement(['PENDING', 'ACCEPTED', 'EXPIRED', 'REVOKED'] as const),
-    expiresAt: faker.date.future(),
-    createdAt: faker.date.past(),
+    ...log,
+    user: log.userId ? {
+      id: log.userId,
+      name: faker.person.fullName(),
+      email: faker.internet.email().toLowerCase(),
+    } : null,
     ...overrides,
   }
 }
@@ -205,8 +280,65 @@ export function createUsageRecord(overrides: Partial<ReturnType<typeof createUsa
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
     metricType: faker.helpers.arrayElement(['AGENT_RUNS', 'TOKENS_CONSUMED', 'API_CALLS', 'DATA_SOURCES', 'TEAM_SEATS', 'STORAGE_GB'] as const),
-    value: faker.number.int({ min: 1, max: 1000 }),
+    quantity: faker.number.int({ min: 1, max: 1000 }),
     recordedAt: faker.date.recent(),
+    ...overrides,
+  }
+}
+
+/**
+ * Factory for creating mock BillingSubscription objects
+ */
+export function createBillingSubscription(overrides: Partial<ReturnType<typeof createBillingSubscription>> = {}) {
+  return {
+    id: faker.string.uuid(),
+    orgId: faker.string.uuid(),
+    stripeCustomerId: `cus_${faker.string.alphanumeric(14)}`,
+    stripeSubscriptionId: `sub_${faker.string.alphanumeric(14)}`,
+    planId: faker.helpers.arrayElement(['starter', 'professional', 'enterprise']),
+    status: faker.helpers.arrayElement(['TRIALING', 'ACTIVE', 'PAST_DUE', 'CANCELED', 'UNPAID'] as const),
+    currentPeriodEnd: faker.date.future(),
+    cancelAtPeriodEnd: false,
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.recent(),
+    ...overrides,
+  }
+}
+
+/**
+ * Factory for creating mock ApiKey objects
+ */
+export function createApiKey(overrides: Partial<ReturnType<typeof createApiKey>> = {}) {
+  const planPrefix = faker.helpers.arrayElement(['starter', 'professional', 'enterprise'])
+  return {
+    id: faker.string.uuid(),
+    orgId: faker.string.uuid(),
+    userId: faker.string.uuid(),
+    name: `${faker.word.adjective()} API Key`,
+    keyPrefix: `gwi_${planPrefix}_`,
+    keyHash: faker.string.hexadecimal({ length: 64, casing: 'lower' }),
+    permissions: ['agents:read', 'agents:execute', 'insights:read'],
+    rateLimit: faker.number.int({ min: 100, max: 1000 }),
+    lastUsed: faker.helpers.maybe(() => faker.date.recent()) || null,
+    expiresAt: faker.helpers.maybe(() => faker.date.future()) || null,
+    createdAt: faker.date.past(),
+    ...overrides,
+  }
+}
+
+/**
+ * Factory for creating mock Invitation objects
+ */
+export function createInvitation(overrides: Partial<ReturnType<typeof createInvitation>> = {}) {
+  return {
+    id: faker.string.uuid(),
+    orgId: faker.string.uuid(),
+    email: faker.internet.email().toLowerCase(),
+    role: faker.helpers.arrayElement(['ADMIN', 'MEMBER', 'VIEWER'] as const),
+    token: faker.string.hexadecimal({ length: 64, casing: 'lower' }),
+    status: faker.helpers.arrayElement(['PENDING', 'ACCEPTED', 'EXPIRED', 'REVOKED'] as const),
+    expiresAt: faker.date.future(),
+    createdAt: faker.date.recent(),
     ...overrides,
   }
 }
@@ -243,5 +375,60 @@ export function createInsightList(count: number = 10) {
  * Factory for creating a collection of mock audit logs
  */
 export function createAuditLogList(count: number = 50) {
-  return Array.from({ length: count }, () => createAuditLog())
+  return Array.from({ length: count }, () => createAuditLogWithUser())
+}
+
+/**
+ * Factory for creating a collection of mock data sources
+ */
+export function createDataSourceList(count: number = 5) {
+  return Array.from({ length: count }, () => createDataSource())
+}
+
+/**
+ * Factory for creating a collection of mock team members
+ */
+export function createTeamMemberList(count: number = 5) {
+  return Array.from({ length: count }, (_, i) => {
+    const user = createUser()
+    const membership = createMembership({
+      userId: user.id,
+      role: i === 0 ? 'OWNER' : faker.helpers.arrayElement(['ADMIN', 'MEMBER', 'VIEWER'] as const),
+    })
+    return {
+      ...membership,
+      user,
+    }
+  })
+}
+
+/**
+ * Factory for creating a collection of mock API keys
+ */
+export function createApiKeyList(count: number = 3) {
+  return Array.from({ length: count }, () => createApiKey())
+}
+
+/**
+ * Factory for creating a collection of mock usage records for a period
+ */
+export function createUsageRecordList(count: number = 30, orgId?: string) {
+  const id = orgId || faker.string.uuid()
+  return Array.from({ length: count }, () => createUsageRecord({ orgId: id }))
+}
+
+/**
+ * Factory for creating a paginated response structure
+ */
+export function createPaginatedResponse<T>(data: T[], page = 1, limit = 20, total?: number) {
+  const totalCount = total ?? data.length
+  return {
+    data,
+    meta: {
+      page,
+      limit,
+      total: totalCount,
+      totalPages: Math.ceil(totalCount / limit),
+    },
+  }
 }
