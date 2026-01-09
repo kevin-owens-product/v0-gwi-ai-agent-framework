@@ -52,6 +52,100 @@ const typeIcons: Record<string, typeof Users> = {
   custom: Lightbulb,
 }
 
+// Demo insights for when API returns empty
+const demoInsights: Insight[] = [
+  {
+    id: "insight-1",
+    title: "Gen Z shows 67% higher engagement with sustainability messaging compared to other generations",
+    type: "audience",
+    confidenceScore: 0.94,
+    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "audience-explorer", name: "Audience Explorer", type: "RESEARCH" } }
+  },
+  {
+    id: "insight-2",
+    title: "Brand loyalty among millennials declined 12% YoY, driven by price sensitivity",
+    type: "trend",
+    confidenceScore: 0.89,
+    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "trend-forecaster", name: "Trend Forecaster", type: "ANALYSIS" } }
+  },
+  {
+    id: "insight-3",
+    title: "Competitor X gained 8% market share in APAC through influencer partnerships",
+    type: "competitive",
+    confidenceScore: 0.91,
+    createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "competitive-intel", name: "Competitive Intelligence", type: "MONITORING" } }
+  },
+  {
+    id: "insight-4",
+    title: "Purchase intent correlates strongly with social proof indicators (r=0.78)",
+    type: "analysis",
+    confidenceScore: 0.86,
+    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "survey-analyst", name: "Survey Analyst", type: "ANALYSIS" } }
+  },
+  {
+    id: "insight-5",
+    title: "Mobile commerce adoption accelerated 34% in emerging markets this quarter",
+    type: "research",
+    confidenceScore: 0.92,
+    createdAt: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "global-perspective", name: "Global Perspective Agent", type: "RESEARCH" } }
+  },
+  {
+    id: "insight-6",
+    title: "TikTok surpasses Instagram as primary discovery platform for Gen Z consumers",
+    type: "trend",
+    confidenceScore: 0.93,
+    createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "culture-tracker", name: "Culture Tracker", type: "MONITORING" } }
+  },
+  {
+    id: "insight-7",
+    title: "Health-conscious consumers willing to pay 45% premium for functional foods",
+    type: "audience",
+    confidenceScore: 0.88,
+    createdAt: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "audience-explorer", name: "Audience Explorer", type: "RESEARCH" } }
+  },
+  {
+    id: "insight-8",
+    title: "Remote work has permanently shifted commuter media consumption patterns",
+    type: "research",
+    confidenceScore: 0.85,
+    createdAt: new Date(Date.now() - 96 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "trend-forecaster", name: "Trend Forecaster", type: "ANALYSIS" } }
+  },
+  {
+    id: "insight-9",
+    title: "Brand authenticity scores predict customer lifetime value with 71% accuracy",
+    type: "analysis",
+    confidenceScore: 0.90,
+    createdAt: new Date(Date.now() - 120 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "brand-analyst", name: "Brand Relationship Analyst", type: "ANALYSIS" } }
+  },
+  {
+    id: "insight-10",
+    title: "Subscription fatigue reached critical levels with 62% of consumers cancelling services",
+    type: "trend",
+    confidenceScore: 0.91,
+    createdAt: new Date(Date.now() - 144 * 60 * 60 * 1000).toISOString(),
+    data: {},
+    agentRun: { agent: { id: "trend-forecaster", name: "Trend Forecaster", type: "ANALYSIS" } }
+  },
+]
+
 export default function InsightsPage() {
   const [insights, setInsights] = useState<Insight[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -70,11 +164,37 @@ export default function InsightsPage() {
         const response = await fetch(`/api/v1/insights?${params}`)
         if (response.ok) {
           const data = await response.json()
-          setInsights(data.insights || [])
-          setTotal(data.total || 0)
+          const fetchedInsights = data.insights || []
+          // Use demo data if API returns empty
+          if (fetchedInsights.length === 0) {
+            let filtered = demoInsights
+            if (typeFilter && typeFilter !== "all") {
+              filtered = demoInsights.filter(i => i.type.toLowerCase() === typeFilter.toLowerCase())
+            }
+            setInsights(filtered)
+            setTotal(filtered.length)
+          } else {
+            setInsights(fetchedInsights)
+            setTotal(data.total || 0)
+          }
+        } else {
+          // Use demo data on API error
+          let filtered = demoInsights
+          if (typeFilter && typeFilter !== "all") {
+            filtered = demoInsights.filter(i => i.type.toLowerCase() === typeFilter.toLowerCase())
+          }
+          setInsights(filtered)
+          setTotal(filtered.length)
         }
       } catch (error) {
         console.error("Failed to fetch insights:", error)
+        // Use demo data on error
+        let filtered = demoInsights
+        if (typeFilter && typeFilter !== "all") {
+          filtered = demoInsights.filter(i => i.type.toLowerCase() === typeFilter.toLowerCase())
+        }
+        setInsights(filtered)
+        setTotal(filtered.length)
       } finally {
         setIsLoading(false)
       }

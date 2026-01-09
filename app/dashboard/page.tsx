@@ -114,9 +114,87 @@ async function getDashboardData(orgId: string) {
   }
 }
 
+// Demo data for when user has no organization yet
+const demoMetrics = {
+  totalAgents: 10,
+  activeAgents: 6,
+  weeklyInsights: 47,
+  monthlyRuns: 342,
+  successRate: 94,
+  avgResponseTime: 3.2,
+}
+
+const demoActivities = [
+  {
+    id: "demo-1",
+    type: "completed" as const,
+    title: "Audience Explorer Run",
+    agent: "Audience Explorer",
+    time: "2 hours ago",
+    insights: 8,
+    href: "/dashboard/agents/audience-explorer",
+  },
+  {
+    id: "demo-2",
+    type: "completed" as const,
+    title: "Culture Tracker Run",
+    agent: "Culture Tracker",
+    time: "4 hours ago",
+    insights: 5,
+    href: "/dashboard/agents/culture-tracker",
+  },
+  {
+    id: "demo-3",
+    type: "running" as const,
+    title: "Brand Analyst Run",
+    agent: "Brand Analyst",
+    time: "Just now",
+    insights: 0,
+    href: "/dashboard/agents/brand-analyst",
+    progress: 65,
+  },
+  {
+    id: "demo-4",
+    type: "completed" as const,
+    title: "Trend Forecaster Run",
+    agent: "Trend Forecaster",
+    time: "1 day ago",
+    insights: 12,
+    href: "/dashboard/agents/trend-forecaster",
+  },
+  {
+    id: "demo-5",
+    type: "warning" as const,
+    title: "Competitive Intelligence Run",
+    agent: "Competitive Intelligence",
+    time: "2 days ago",
+    insights: 0,
+    href: "/dashboard/agents/competitive-intel",
+    message: "Rate limit exceeded",
+  },
+]
+
 export default async function DashboardPage() {
   const session = await auth()
-  if (!session?.user?.id) return null
+  if (!session?.user?.id) {
+    // Return demo dashboard for unauthenticated users
+    return (
+      <div className="space-y-6">
+        <DashboardHeader />
+        <HeroMetrics metrics={demoMetrics} />
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2 space-y-6">
+            <PerformanceCharts />
+            <LiveActivityFeed activities={demoActivities} />
+          </div>
+          <div className="space-y-6">
+            <AgentOrchestrator />
+            <InsightsPanel />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // Get current organization ID
   const cookieStore = await cookies()
@@ -126,7 +204,25 @@ export default async function DashboardPage() {
     orderBy: { joinedAt: "asc" },
   })
 
-  if (memberships.length === 0) return null
+  if (memberships.length === 0) {
+    // Return demo dashboard for users without organization
+    return (
+      <div className="space-y-6">
+        <DashboardHeader />
+        <HeroMetrics metrics={demoMetrics} />
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2 space-y-6">
+            <PerformanceCharts />
+            <LiveActivityFeed activities={demoActivities} />
+          </div>
+          <div className="space-y-6">
+            <AgentOrchestrator />
+            <InsightsPanel />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const currentOrgId = cookieStore.get("currentOrgId")?.value || memberships[0].organization.id
   const dashboardData = await getDashboardData(currentOrgId)
