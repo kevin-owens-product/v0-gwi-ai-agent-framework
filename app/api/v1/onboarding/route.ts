@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
               type: (agentTypeMap[agentId] as any) || 'CUSTOM',
               status: 'ACTIVE',
               orgId: organization.id,
-              createdById: session.user.id,
+              createdBy: session.user.id,
               configuration: {},
             },
           })
