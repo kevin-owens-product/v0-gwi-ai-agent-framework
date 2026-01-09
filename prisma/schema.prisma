@@ -1,0 +1,359 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== MULTI-TENANCY ====================
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  planTier    PlanTier @default(STARTER)
+  settings    Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members       OrganizationMember[]
+  agents        Agent[]
+  dataSources   DataSource[]
+  insights      Insight[]
+  auditLogs     AuditLog[]
+  usageRecords  UsageRecord[]
+  apiKeys       ApiKey[]
+  ssoConfig     SSOConfiguration?
+  subscription  BillingSubscription?
+  invitations   Invitation[]
+}
+
+model OrganizationMember {
+  id        String   @id @default(cuid())
+  orgId     String
+  userId    String
+  role      Role     @default(MEMBER)
+  invitedBy String?
+  joinedAt  DateTime @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, userId])
+  @@index([orgId])
+  @@index([userId])
+}
+
+enum PlanTier {
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+// ==================== USERS & AUTH ====================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  avatarUrl     String?
+  passwordHash  String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  memberships   OrganizationMember[]
+  sessions      Session[]
+  accounts      Account[]
+  apiKeys       ApiKey[]
+  auditLogs     AuditLog[]
+  agentsCreated Agent[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  ipAddress    String?
+  userAgent    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model SSOConfiguration {
+  id           String  @id @default(cuid())
+  orgId        String  @unique
+  provider     String  // 'saml' | 'oidc'
+  metadataUrl  String?
+  clientId     String?
+  clientSecret String?
+  enabled      Boolean @default(false)
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+}
+
+// ==================== AGENT FRAMEWORK CORE ====================
+
+model Agent {
+  id            String      @id @default(cuid())
+  orgId         String
+  name          String
+  description   String?
+  type          AgentType
+  configuration Json        @default("{}")
+  status        AgentStatus @default(DRAFT)
+  createdBy     String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator      User         @relation(fields: [createdBy], references: [id])
+  runs         AgentRun[]
+
+  @@index([orgId])
+  @@index([createdBy])
+}
+
+enum AgentType {
+  RESEARCH
+  ANALYSIS
+  REPORTING
+  MONITORING
+  CUSTOM
+}
+
+enum AgentStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+model AgentRun {
+  id           String         @id @default(cuid())
+  agentId      String
+  orgId        String
+  input        Json
+  output       Json?
+  status       AgentRunStatus @default(PENDING)
+  tokensUsed   Int            @default(0)
+  startedAt    DateTime       @default(now())
+  completedAt  DateTime?
+  errorMessage String?
+
+  agent    Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  insights Insight[]
+
+  @@index([agentId])
+  @@index([orgId])
+  @@index([status])
+}
+
+enum AgentRunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model DataSource {
+  id               String           @id @default(cuid())
+  orgId            String
+  name             String
+  type             DataSourceType
+  connectionConfig Json             @default("{}")
+  lastSync         DateTime?
+  status           DataSourceStatus @default(PENDING)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+enum DataSourceType {
+  API
+  DATABASE
+  FILE_UPLOAD
+  WEBHOOK
+  INTEGRATION
+}
+
+enum DataSourceStatus {
+  PENDING
+  CONNECTED
+  ERROR
+  DISABLED
+}
+
+model Insight {
+  id              String   @id @default(cuid())
+  orgId           String
+  agentRunId      String?
+  type            String
+  title           String
+  data            Json
+  confidenceScore Float?
+  createdAt       DateTime @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  agentRun     AgentRun?    @relation(fields: [agentRunId], references: [id])
+
+  @@index([orgId])
+  @@index([agentRunId])
+}
+
+// ==================== ENTERPRISE FEATURES ====================
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  orgId        String
+  userId       String?
+  action       String
+  resourceType String
+  resourceId   String?
+  metadata     Json     @default("{}")
+  ipAddress    String?
+  userAgent    String?
+  timestamp    DateTime @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id])
+
+  @@index([orgId])
+  @@index([userId])
+  @@index([timestamp])
+  @@index([action])
+}
+
+model UsageRecord {
+  id         String      @id @default(cuid())
+  orgId      String
+  metricType UsageMetric
+  quantity   Int
+  recordedAt DateTime    @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([metricType])
+  @@index([recordedAt])
+}
+
+enum UsageMetric {
+  AGENT_RUNS
+  TOKENS_CONSUMED
+  API_CALLS
+  DATA_SOURCES
+  TEAM_SEATS
+  STORAGE_GB
+}
+
+model BillingSubscription {
+  id                   String             @id @default(cuid())
+  orgId                String             @unique
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  planId               String
+  status               SubscriptionStatus @default(TRIALING)
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  orgId       String
+  userId      String
+  name        String
+  keyPrefix   String    // First 8 chars for identification
+  keyHash     String    // SHA-256 hash of full key
+  permissions String[]  @default([])
+  rateLimit   Int       @default(100) // requests per minute
+  lastUsed    DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@index([orgId])
+  @@index([keyHash])
+}
+
+model Invitation {
+  id        String           @id @default(cuid())
+  orgId     String
+  email     String
+  role      Role             @default(MEMBER)
+  token     String           @unique
+  status    InvitationStatus @default(PENDING)
+  expiresAt DateTime
+  createdAt DateTime         @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([email])
+  @@index([token])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
