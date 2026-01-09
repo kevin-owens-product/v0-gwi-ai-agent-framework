@@ -1,14 +1,32 @@
 "use client"
 
+import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { X, Database, Brain, Variable, Clock, Trash2, Edit2, ChevronRight } from "lucide-react"
+import { X, Database, Brain, Variable, Clock, Trash2, Edit2, ChevronRight, Loader2 } from "lucide-react"
 import { usePlayground } from "@/app/dashboard/playground/page"
 import { cn } from "@/lib/utils"
 
-const activeMemories = [
+interface DataSource {
+  id: string
+  name: string
+  status: 'PENDING' | 'CONNECTED' | 'ERROR' | 'DISABLED' | string
+  type?: string
+  lastSyncAt?: string
+}
+
+interface Memory {
+  id: string
+  type: 'audience' | 'preference' | 'context'
+  content: string
+  timestamp: string
+  confidence: number
+}
+
+// Demo memories shown when memory is enabled
+const demoMemories: Memory[] = [
   {
     id: "mem-1",
     type: "audience",
@@ -32,32 +50,84 @@ const activeMemories = [
   },
 ]
 
-const dataSources = [
+// Demo data sources shown when API returns empty or errors
+const demoDataSources: DataSource[] = [
   {
     id: "gwi-core",
     name: "GWI Core",
-    status: "connected",
-    records: "2.8B consumers",
-    lastSync: "Real-time",
+    status: "CONNECTED",
+    type: "GWI",
   },
   {
     id: "gwi-zeitgeist",
     name: "GWI Zeitgeist",
-    status: "connected",
-    records: "Nov 2024",
-    lastSync: "2 days ago",
+    status: "CONNECTED",
+    type: "GWI",
   },
   {
     id: "custom-1",
     name: "Brand Tracker Q4",
-    status: "processing",
-    records: "15K responses",
-    lastSync: "Uploading...",
+    status: "PENDING",
+    type: "CUSTOM",
   },
 ]
 
 export function PlaygroundContextPanel() {
-  const { setContextPanelOpen, activeVariables, setActiveVariables, config } = usePlayground()
+  const { setContextPanelOpen, activeVariables, setActiveVariables, config, messages } = usePlayground()
+  const [dataSources, setDataSources] = useState<DataSource[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [sessionStart] = useState(Date.now())
+
+  // Fetch data sources from API
+  useEffect(() => {
+    async function fetchDataSources() {
+      try {
+        const response = await fetch('/api/v1/data-sources')
+        if (!response.ok) {
+          setDataSources(demoDataSources)
+          return
+        }
+        const data = await response.json()
+        const fetchedSources = data.dataSources || data.data || []
+
+        if (fetchedSources.length === 0) {
+          setDataSources(demoDataSources)
+        } else {
+          setDataSources(fetchedSources)
+        }
+      } catch (err) {
+        console.error('Failed to fetch data sources:', err)
+        setDataSources(demoDataSources)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchDataSources()
+  }, [])
+
+  // Calculate session stats
+  const sessionStats = useMemo(() => {
+    const duration = Math.floor((Date.now() - sessionStart) / 60000)
+    const messageCount = messages.length
+    // Rough token estimate: ~4 chars per token
+    const tokenEstimate = messages.reduce((acc, m) => acc + Math.ceil(m.content.length / 4), 0)
+
+    return {
+      duration: duration < 1 ? "< 1 minute" : `${duration} minutes`,
+      messages: messageCount,
+      tokens: tokenEstimate.toLocaleString(),
+    }
+  }, [messages, sessionStart])
+
+  const getStatusDisplay = (status: string) => {
+    const statusLower = status.toLowerCase()
+    if (statusLower === 'connected') return { label: 'connected', className: 'bg-emerald-500/10 text-emerald-500' }
+    if (statusLower === 'pending') return { label: 'processing', className: 'bg-amber-500/10 text-amber-500' }
+    if (statusLower === 'error') return { label: 'error', className: 'bg-red-500/10 text-red-500' }
+    if (statusLower === 'disabled') return { label: 'disabled', className: 'bg-muted text-muted-foreground' }
+    return { label: statusLower, className: '' }
+  }
 
   return (
     <div className="w-80 border-l border-border bg-card flex flex-col">
@@ -107,35 +177,40 @@ export function PlaygroundContextPanel() {
               <Database className="h-4 w-4 text-accent" />
               <h4 className="text-sm font-medium text-foreground">Data Sources</h4>
             </div>
-            <div className="space-y-2">
-              {dataSources.map((source) => (
-                <div
-                  key={source.id}
-                  className={cn(
-                    "p-3 rounded-lg border transition-all",
-                    config.selectedSources.includes(source.id) ? "border-accent bg-accent/5" : "border-border",
-                  )}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-foreground">{source.name}</span>
-                    <Badge
-                      variant="secondary"
+            {isLoading ? (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {dataSources.map((source) => {
+                  const statusDisplay = getStatusDisplay(source.status)
+                  return (
+                    <div
+                      key={source.id}
                       className={cn(
-                        "text-[10px]",
-                        source.status === "connected" && "bg-emerald-500/10 text-emerald-500",
-                        source.status === "processing" && "bg-amber-500/10 text-amber-500",
+                        "p-3 rounded-lg border transition-all",
+                        config.selectedSources.includes(source.id) ? "border-accent bg-accent/5" : "border-border",
                       )}
                     >
-                      {source.status}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>{source.records}</span>
-                    <span>{source.lastSync}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium text-foreground">{source.name}</span>
+                        <Badge
+                          variant="secondary"
+                          className={cn("text-[10px]", statusDisplay.className)}
+                        >
+                          {statusDisplay.label}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>{source.type || 'Custom'}</span>
+                        <span>{source.lastSyncAt ? new Date(source.lastSyncAt).toLocaleDateString() : 'Real-time'}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           {/* Active Memories */}
@@ -147,11 +222,11 @@ export function PlaygroundContextPanel() {
                   <h4 className="text-sm font-medium text-foreground">Active Memories</h4>
                 </div>
                 <Badge variant="secondary" className="text-[10px]">
-                  {activeMemories.length}
+                  {demoMemories.length}
                 </Badge>
               </div>
               <div className="space-y-2">
-                {activeMemories.map((memory) => (
+                {demoMemories.map((memory) => (
                   <div
                     key={memory.id}
                     className="p-3 rounded-lg border border-border hover:border-muted-foreground/30 transition-all group"
@@ -200,19 +275,15 @@ export function PlaygroundContextPanel() {
               <div className="space-y-2 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Duration</span>
-                  <span className="text-foreground">12 minutes</span>
+                  <span className="text-foreground">{sessionStats.duration}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Messages</span>
-                  <span className="text-foreground">8</span>
+                  <span className="text-foreground">{sessionStats.messages}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Tokens Used</span>
-                  <span className="text-foreground">4,821</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Sub-agents Spawned</span>
-                  <span className="text-foreground">3</span>
+                  <span className="text-muted-foreground">Est. Tokens</span>
+                  <span className="text-foreground">{sessionStats.tokens}</span>
                 </div>
               </div>
             </Card>
