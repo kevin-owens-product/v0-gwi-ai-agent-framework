@@ -110,30 +110,16 @@ function ChartsGridSkeleton() {
 
 function ChartsGrid({ filter }: { filter?: string }) {
   const charts = [
-    {
-      id: "1",
-      name: "Social Media Usage by Age",
-      type: "Bar Chart",
-      audience: "All Adults 18-65",
-      lastModified: "2 hours ago",
-      views: 234,
-    },
-    {
-      id: "2",
-      name: "Purchase Intent Trends",
-      type: "Line Chart",
-      audience: "Shoppers",
-      lastModified: "1 day ago",
-      views: 156,
-    },
-    {
-      id: "3",
-      name: "Brand Awareness Comparison",
-      type: "Horizontal Bar",
-      audience: "Target Demo",
-      lastModified: "3 days ago",
-      views: 89,
-    },
+    { id: "1", name: "Social Media Platform Penetration by Generation", type: "Bar Chart", audience: "All Adults 18-65", lastModified: "2 hours ago", views: 1234 },
+    { id: "2", name: "E-commerce Purchase Intent Trajectory", type: "Line Chart", audience: "Online Shoppers", lastModified: "4 hours ago", views: 892 },
+    { id: "3", name: "Competitive Brand Health Dashboard", type: "Bar Chart", audience: "Category Buyers", lastModified: "1 day ago", views: 567 },
+    { id: "4", name: "Media Consumption Time Share", type: "Pie Chart", audience: "Eco-Conscious Millennials", lastModified: "6 hours ago", views: 445 },
+    { id: "5", name: "Cross-Market Sustainability Attitudes", type: "Bar Chart", audience: "Premium Consumers", lastModified: "2 days ago", views: 723 },
+    { id: "6", name: "Streaming Service Subscriber Journey", type: "Line Chart", audience: "Cord-Cutters", lastModified: "12 hours ago", views: 1089 },
+    { id: "7", name: "Gen Z Financial Product Adoption", type: "Bar Chart", audience: "Gen Z (18-25)", lastModified: "1 day ago", views: 634 },
+    { id: "8", name: "Influencer Trust by Category", type: "Pie Chart", audience: "Social Media Active Users", lastModified: "3 days ago", views: 512 },
+    { id: "9", name: "Health & Wellness Spending Trends", type: "Line Chart", audience: "Health-Optimized Professionals", lastModified: "8 hours ago", views: 378 },
+    { id: "10", name: "Luxury Purchase Drivers Analysis", type: "Bar Chart", audience: "Luxury Experience Seekers", lastModified: "5 hours ago", views: 456 },
   ]
 
   return (

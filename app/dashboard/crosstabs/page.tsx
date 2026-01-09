@@ -107,27 +107,16 @@ function CrosstabsGridSkeleton() {
 
 function CrosstabsGrid({ filter }: { filter?: string }) {
   const crosstabs = [
-    {
-      id: "1",
-      name: "Age vs Social Media Platforms",
-      audiences: 4,
-      metrics: 6,
-      lastModified: "1 hour ago",
-    },
-    {
-      id: "2",
-      name: "Income vs Purchase Behavior",
-      audiences: 3,
-      metrics: 8,
-      lastModified: "2 days ago",
-    },
-    {
-      id: "3",
-      name: "Gen Z Preferences Across Markets",
-      audiences: 5,
-      metrics: 10,
-      lastModified: "5 days ago",
-    },
+    { id: "1", name: "Generational Social Media Platform Analysis", audiences: 4, metrics: 8, lastModified: "1 hour ago" },
+    { id: "2", name: "Income Segment Purchase Channel Preferences", audiences: 5, metrics: 8, lastModified: "4 hours ago" },
+    { id: "3", name: "Global Market Digital Behavior Comparison", audiences: 8, metrics: 8, lastModified: "2 days ago" },
+    { id: "4", name: "Sustainability Attitudes by Consumer Segment", audiences: 5, metrics: 8, lastModified: "6 hours ago" },
+    { id: "5", name: "Brand Awareness Competitive Landscape", audiences: 6, metrics: 8, lastModified: "3 hours ago" },
+    { id: "6", name: "Media Consumption by Daypart", audiences: 5, metrics: 8, lastModified: "8 hours ago" },
+    { id: "7", name: "Financial Product Adoption by Life Stage", audiences: 6, metrics: 8, lastModified: "1 day ago" },
+    { id: "8", name: "Health & Wellness Priorities by Persona", audiences: 5, metrics: 8, lastModified: "5 hours ago" },
+    { id: "9", name: "Luxury Brand Perception Matrix", audiences: 6, metrics: 8, lastModified: "12 hours ago" },
+    { id: "10", name: "Content Format Preferences by Platform", audiences: 6, metrics: 8, lastModified: "2 hours ago" },
   ]
 
   return (

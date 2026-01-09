@@ -107,27 +107,16 @@ function DashboardsGridSkeleton() {
 
 function DashboardsGrid({ filter }: { filter?: string }) {
   const dashboards = [
-    {
-      id: "1",
-      name: "Q4 Campaign Performance",
-      charts: 8,
-      lastModified: "1 hour ago",
-      views: 234,
-    },
-    {
-      id: "2",
-      name: "Consumer Trends 2024",
-      charts: 12,
-      lastModified: "2 days ago",
-      views: 567,
-    },
-    {
-      id: "3",
-      name: "Brand Health Monitor",
-      charts: 6,
-      lastModified: "1 week ago",
-      views: 892,
-    },
+    { id: "1", name: "Q4 2024 Campaign Performance Hub", charts: 10, lastModified: "1 hour ago", views: 2341 },
+    { id: "2", name: "Global Consumer Trends 2024", charts: 12, lastModified: "4 hours ago", views: 5672 },
+    { id: "3", name: "Competitive Brand Health Tracker", charts: 8, lastModified: "2 days ago", views: 3892 },
+    { id: "4", name: "Gen Z Insights Command Center", charts: 9, lastModified: "6 hours ago", views: 4521 },
+    { id: "5", name: "E-commerce Performance Analytics", charts: 10, lastModified: "3 hours ago", views: 2987 },
+    { id: "6", name: "Media Mix Optimization Center", charts: 8, lastModified: "8 hours ago", views: 1876 },
+    { id: "7", name: "Sustainability & ESG Tracker", charts: 9, lastModified: "1 day ago", views: 2234 },
+    { id: "8", name: "Streaming & Entertainment Landscape", charts: 10, lastModified: "5 hours ago", views: 3456 },
+    { id: "9", name: "Financial Services Consumer Insights", charts: 9, lastModified: "12 hours ago", views: 2789 },
+    { id: "10", name: "Health & Wellness Market Monitor", charts: 10, lastModified: "2 hours ago", views: 1923 },
   ]
 
   return (

@@ -110,30 +110,16 @@ function AudiencesGridSkeleton() {
 
 function AudiencesGrid({ filter }: { filter?: string }) {
   const audiences = [
-    {
-      id: "1",
-      name: "Eco-Conscious Millennials",
-      description: "25-40, urban, high engagement with sustainability brands",
-      size: "1.2M",
-      markets: ["US", "UK", "DE"],
-      lastUsed: "2 hours ago",
-    },
-    {
-      id: "2",
-      name: "Tech Early Adopters",
-      description: "High-income professionals, first to try new technology",
-      size: "850K",
-      markets: ["US", "JP", "KR"],
-      lastUsed: "1 day ago",
-    },
-    {
-      id: "3",
-      name: "Gen Z Content Creators",
-      description: "16-25, active on social media, creating content weekly",
-      size: "2.1M",
-      markets: ["Global"],
-      lastUsed: "3 days ago",
-    },
+    { id: "1", name: "Eco-Conscious Millennials", description: "Sustainability-focused consumers with strong environmental values", size: "1.2M", markets: ["US", "UK", "DE", "FR", "NL"], lastUsed: "2 hours ago" },
+    { id: "2", name: "Tech Early Adopters", description: "High-income innovation enthusiasts first to adopt new technologies", size: "850K", markets: ["US", "JP", "KR", "DE", "UK"], lastUsed: "1 day ago" },
+    { id: "3", name: "Gen Z Content Creators", description: "Digital-native creators building personal brands across platforms", size: "2.1M", markets: ["Global"], lastUsed: "3 days ago" },
+    { id: "4", name: "Luxury Experience Seekers", description: "Affluent consumers prioritizing premium experiences over goods", size: "680K", markets: ["US", "UK", "UAE", "SG", "HK"], lastUsed: "5 hours ago" },
+    { id: "5", name: "Health-Optimized Professionals", description: "Career-focused individuals investing in health optimization", size: "920K", markets: ["US", "UK", "AU", "CA", "DE"], lastUsed: "1 day ago" },
+    { id: "6", name: "Suburban Family Decision Makers", description: "Parents controlling majority of family purchasing decisions", size: "3.4M", markets: ["US", "UK", "CA", "AU"], lastUsed: "6 hours ago" },
+    { id: "7", name: "Digital Nomad Professionals", description: "Location-independent workers blending travel with remote careers", size: "1.5M", markets: ["Global"], lastUsed: "2 days ago" },
+    { id: "8", name: "Gaming & Esports Enthusiasts", description: "Dedicated gamers spending significant time on gaming content", size: "4.2M", markets: ["US", "KR", "JP", "BR", "DE", "UK"], lastUsed: "4 hours ago" },
+    { id: "9", name: "Conscious Beauty Consumers", description: "Beauty enthusiasts prioritizing clean and cruelty-free products", size: "2.8M", markets: ["US", "UK", "FR", "KR", "AU"], lastUsed: "1 day ago" },
+    { id: "10", name: "Financial Independence Seekers", description: "Individuals pursuing early retirement through aggressive saving", size: "1.8M", markets: ["US", "UK", "CA", "AU", "NL"], lastUsed: "8 hours ago" },
   ]
 
   return (
