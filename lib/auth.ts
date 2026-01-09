@@ -6,9 +6,17 @@ import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id"
 import bcrypt from "bcryptjs"
 import { prisma } from "./db"
 
+// Use RENDER_EXTERNAL_URL as fallback for NEXTAUTH_URL on Render
+const getAuthUrl = () => {
+  if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL
+  if (process.env.RENDER_EXTERNAL_URL) return process.env.RENDER_EXTERNAL_URL
+  return 'http://localhost:3000'
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  trustHost: true, // Trust the host header (needed for Render/Vercel)
   pages: {
     signIn: "/login",
     error: "/login",
