@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -111,7 +112,10 @@ const agentOptions = [
 ]
 
 export default function OnboardingPage() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -125,7 +129,47 @@ export default function OnboardingPage() {
 
   const progress = (currentStep / steps.length) * 100
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    setError(null)
+
+    // On step 4, submit the form to the API
+    if (currentStep === 4) {
+      // Validate required fields
+      if (!formData.firstName || !formData.lastName) {
+        setError("Please enter your first and last name")
+        setCurrentStep(1)
+        return
+      }
+      if (!formData.companyName) {
+        setError("Please enter your company name")
+        setCurrentStep(2)
+        return
+      }
+
+      setIsLoading(true)
+      try {
+        const response = await fetch("/api/v1/onboarding", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to complete onboarding")
+        }
+
+        // Success - move to completion step
+        setCurrentStep(5)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong")
+      } finally {
+        setIsLoading(false)
+      }
+      return
+    }
+
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1)
     }
@@ -450,15 +494,28 @@ export default function OnboardingPage() {
       {/* Footer */}
       {currentStep < 5 && (
         <footer className="border-t py-4 px-6">
-          <div className="max-w-2xl mx-auto flex justify-between">
-            <Button variant="ghost" onClick={handleBack} disabled={currentStep === 1}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-            <Button onClick={handleNext}>
-              {currentStep === 4 ? "Complete Setup" : "Continue"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+          <div className="max-w-2xl mx-auto">
+            {error && (
+              <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm text-center">
+                {error}
+              </div>
+            )}
+            <div className="flex justify-between">
+              <Button variant="ghost" onClick={handleBack} disabled={currentStep === 1 || isLoading}>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
+              </Button>
+              <Button onClick={handleNext} disabled={isLoading}>
+                {isLoading ? (
+                  "Setting up..."
+                ) : (
+                  <>
+                    {currentStep === 4 ? "Complete Setup" : "Continue"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </footer>
       )}
