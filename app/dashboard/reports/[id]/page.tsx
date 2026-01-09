@@ -1,5 +1,6 @@
 import { ReportViewer } from "@/components/reports/report-viewer"
 
-export default function ReportDetailPage({ params }: { params: { id: string } }) {
-  return <ReportViewer id={params.id} />
+export default async function ReportDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  return <ReportViewer id={id} />
 }

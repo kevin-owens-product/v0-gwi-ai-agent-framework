@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -257,9 +257,10 @@ const crosstabData: Record<string, {
   },
 }
 
-export default function CrosstabDetailPage({ params }: { params: { id: string } }) {
+export default function CrosstabDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [isExporting, setIsExporting] = useState(false)
-  const crosstab = crosstabData[params.id]
+  const crosstab = crosstabData[id]
 
   if (!crosstab) {
     return (
