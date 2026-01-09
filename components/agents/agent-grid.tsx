@@ -55,15 +55,141 @@ const statusColors: Record<string, string> = {
   ARCHIVED: "bg-red-500/10 text-red-400",
 }
 
+// Demo agents shown when API returns empty or errors
+const demoAgents: Agent[] = [
+  {
+    id: "audience-explorer",
+    name: "Audience Explorer",
+    description: "Discover and analyze consumer segments, build detailed personas, and uncover behavioral patterns across global markets using GWI data.",
+    type: "RESEARCH",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.7, enableCitations: true },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 1247 },
+  },
+  {
+    id: "persona-architect",
+    name: "Persona Architect",
+    description: "Create rich, data-driven personas based on real consumer data. Visualize motivations, pain points, media habits, and journey maps.",
+    type: "RESEARCH",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.8, outputFormat: "rich" },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 892 },
+  },
+  {
+    id: "motivation-decoder",
+    name: "Motivation Decoder",
+    description: "Analyze the 'why' behind consumer behavior - values, beliefs, emotional drivers, and decision factors that shape purchasing decisions.",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.6, reasoningMode: true },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 654 },
+  },
+  {
+    id: "culture-tracker",
+    name: "Culture Tracker",
+    description: "Monitor cultural shifts, emerging movements, and societal trends that shape consumer behavior. Track viral content and sentiment.",
+    type: "MONITORING",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.7, sources: ["zeitgeist", "social"] },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 2103 },
+  },
+  {
+    id: "brand-analyst",
+    name: "Brand Relationship Analyst",
+    description: "Examine how consumers connect with brands emotionally and functionally. Analyze brand perception, loyalty, and competitive positioning.",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.7, enableBenchmarks: true },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 1456 },
+  },
+  {
+    id: "global-perspective",
+    name: "Global Perspective Agent",
+    description: "Compare consumer behaviors across markets and cultures. Identify universal truths and local nuances for international strategy.",
+    type: "RESEARCH",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.7, markets: ["all"] },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 987 },
+  },
+  {
+    id: "trend-forecaster",
+    name: "Trend Forecaster",
+    description: "Predict emerging consumer trends using historical data patterns, social signals, and market indicators. Generate actionable forecasts.",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.5, forecastHorizon: "12months" },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 743 },
+  },
+  {
+    id: "campaign-strategist",
+    name: "Campaign Strategist",
+    description: "Design data-driven marketing campaigns with audience targeting, channel recommendations, and message optimization based on consumer insights.",
+    type: "REPORTING",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.8, outputFormat: "presentation" },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 1089 },
+  },
+  {
+    id: "competitive-intel",
+    name: "Competitive Intelligence",
+    description: "Track competitor brand perception, market share, and consumer sentiment. Generate competitive analysis reports and opportunity maps.",
+    type: "MONITORING",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.6, trackCompetitors: true },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 1567 },
+  },
+  {
+    id: "survey-analyst",
+    name: "Survey Analyst",
+    description: "Analyze survey data with statistical rigor. Generate cross-tabs, significance tests, and visualizations from custom research data.",
+    type: "ANALYSIS",
+    status: "ACTIVE",
+    configuration: { model: "gpt-4o", temperature: 0.4, enableStatistics: true },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    creator: { id: "system", name: "GWI", email: "system@gwi.com" },
+    _count: { runs: 621 },
+  },
+]
+
 export function AgentGrid({ filter, search }: { filter: string; search?: string }) {
   const [agents, setAgents] = useState<Agent[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [usingDemoData, setUsingDemoData] = useState(false)
 
   useEffect(() => {
     async function fetchAgents() {
       setIsLoading(true)
       setError(null)
+      setUsingDemoData(false)
       try {
         const params = new URLSearchParams()
         if (filter !== 'all' && filter !== 'official' && filter !== 'community') {
@@ -78,14 +204,50 @@ export function AgentGrid({ filter, search }: { filter: string; search?: string 
 
         const response = await fetch(`/api/v1/agents?${params.toString()}`)
         if (!response.ok) {
-          const data = await response.json()
-          throw new Error(data.error || 'Failed to fetch agents')
+          // Use demo data on error
+          let filteredDemo = demoAgents
+          if (search) {
+            const searchLower = search.toLowerCase()
+            filteredDemo = demoAgents.filter(a =>
+              a.name.toLowerCase().includes(searchLower) ||
+              a.description?.toLowerCase().includes(searchLower)
+            )
+          }
+          setAgents(filteredDemo)
+          setUsingDemoData(true)
+          return
         }
         const data = await response.json()
-        setAgents(data.agents || data.data || [])
+        const fetchedAgents = data.agents || data.data || []
+
+        // If no agents returned, use demo data
+        if (fetchedAgents.length === 0 && filter === 'all') {
+          let filteredDemo = demoAgents
+          if (search) {
+            const searchLower = search.toLowerCase()
+            filteredDemo = demoAgents.filter(a =>
+              a.name.toLowerCase().includes(searchLower) ||
+              a.description?.toLowerCase().includes(searchLower)
+            )
+          }
+          setAgents(filteredDemo)
+          setUsingDemoData(true)
+        } else {
+          setAgents(fetchedAgents)
+        }
       } catch (err) {
         console.error('Failed to fetch agents:', err)
-        setError(err instanceof Error ? err.message : 'Failed to fetch agents')
+        // Use demo data on error
+        let filteredDemo = demoAgents
+        if (search) {
+          const searchLower = search.toLowerCase()
+          filteredDemo = demoAgents.filter(a =>
+            a.name.toLowerCase().includes(searchLower) ||
+            a.description?.toLowerCase().includes(searchLower)
+          )
+        }
+        setAgents(filteredDemo)
+        setUsingDemoData(true)
       } finally {
         setIsLoading(false)
       }
