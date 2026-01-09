@@ -2,7 +2,8 @@
 
 import type React from "react"
 
-import { useState, createContext, useContext } from "react"
+import { useState, useEffect, createContext, useContext } from "react"
+import { useSearchParams } from "next/navigation"
 import { PlaygroundChat } from "@/components/playground/chat"
 import { PlaygroundSidebar } from "@/components/playground/sidebar"
 import { PlaygroundHeader } from "@/components/playground/header"
@@ -129,6 +130,9 @@ const agents: Record<string, { name: string; greeting: string; capabilities: str
 }
 
 export default function PlaygroundPage() {
+  const searchParams = useSearchParams()
+  const agentIdFromUrl = searchParams.get("agent")
+
   const [config, setConfig] = useState<PlaygroundConfig>(defaultConfig)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -147,13 +151,55 @@ export default function PlaygroundPage() {
     market: "Global",
     timeframe: "Last 12 months",
   })
+  const [customAgent, setCustomAgent] = useState<{ id: string; name: string; description: string | null } | null>(null)
+
+  // Fetch agent from API if agent ID is in URL
+  useEffect(() => {
+    if (agentIdFromUrl && !agents[agentIdFromUrl]) {
+      fetch(`/api/v1/agents/${agentIdFromUrl}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.data) {
+            const agent = data.data
+            setCustomAgent(agent)
+            setConfig((prev) => ({ ...prev, selectedAgent: agent.id }))
+            setMessages([
+              {
+                id: Date.now().toString(),
+                role: "assistant",
+                content: `Hello! I'm ${agent.name}. ${agent.description || "How can I help you today?"}`,
+                status: "complete",
+              },
+            ])
+          }
+        })
+        .catch((err) => console.error("Failed to fetch agent:", err))
+    } else if (agentIdFromUrl && agents[agentIdFromUrl]) {
+      // Use built-in agent
+      setConfig((prev) => ({ ...prev, selectedAgent: agentIdFromUrl }))
+      setMessages([
+        {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: agents[agentIdFromUrl].greeting,
+          status: "complete",
+        },
+      ])
+    }
+  }, [agentIdFromUrl])
 
   const resetChat = () => {
+    let greeting = agents["audience-explorer"].greeting
+    if (customAgent) {
+      greeting = `Hello! I'm ${customAgent.name}. ${customAgent.description || "How can I help you today?"}`
+    } else if (agents[config.selectedAgent]) {
+      greeting = agents[config.selectedAgent].greeting
+    }
     setMessages([
       {
         id: Date.now().toString(),
         role: "assistant",
-        content: agents[config.selectedAgent]?.greeting || agents["audience-explorer"].greeting,
+        content: greeting,
         status: "complete",
       },
     ])
