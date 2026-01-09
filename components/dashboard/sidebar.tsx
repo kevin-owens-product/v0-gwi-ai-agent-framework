@@ -23,6 +23,10 @@ import {
   Sparkles,
   Search,
   Layers,
+  Users,
+  Table2,
+  PieChart,
+  UsersRound,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
@@ -48,6 +52,18 @@ const navGroups = [
       { name: "Gen Z Sustainability", href: "/dashboard/projects/gen-z-sustainability", color: "bg-emerald-500" },
       { name: "Q4 Campaign", href: "/dashboard/projects/q4-campaign", color: "bg-blue-500" },
       { name: "Market Expansion", href: "/dashboard/projects/market-expansion", color: "bg-amber-500" },
+    ],
+  },
+  {
+    id: "gwi-tools",
+    label: "GWI Tools",
+    defaultOpen: true,
+    items: [
+      { name: "Audiences", href: "/dashboard/audiences", icon: Users, description: "Build audience segments" },
+      { name: "Charts", href: "/dashboard/charts", icon: BarChart3, description: "Data visualizations" },
+      { name: "Crosstabs", href: "/dashboard/crosstabs", icon: Table2, description: "Compare audiences" },
+      { name: "Dashboards", href: "/dashboard/dashboards", icon: PieChart, description: "Combined insights" },
+      { name: "Teams", href: "/dashboard/teams", icon: UsersRound, description: "Manage team members" },
     ],
   },
   {
