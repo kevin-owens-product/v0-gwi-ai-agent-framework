@@ -34,6 +34,18 @@ export async function POST(request: NextRequest) {
 
     const { firstName, lastName, companyName, teamSize, goals, selectedAgents } = validation.data
 
+    // Verify user exists
+    const existingUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    })
+
+    if (!existingUser) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
     // Check if user already has an organization
     const existingMembership = await prisma.organizationMember.findFirst({
       where: { userId: session.user.id },
@@ -149,6 +161,23 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('POST /api/v1/onboarding error:', error)
+
+    // Provide more specific error messages for common issues
+    if (error instanceof Error) {
+      if (error.message.includes('Unique constraint')) {
+        return NextResponse.json(
+          { error: 'Organization with this name already exists' },
+          { status: 400 }
+        )
+      }
+      if (error.message.includes('Foreign key constraint')) {
+        return NextResponse.json(
+          { error: 'Invalid user or organization reference' },
+          { status: 400 }
+        )
+      }
+    }
+
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

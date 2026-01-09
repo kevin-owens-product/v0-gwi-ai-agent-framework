@@ -138,7 +138,7 @@ export default function PlaygroundPage() {
     {
       id: "1",
       role: "assistant",
-      content: agents[config.selectedAgent].greeting,
+      content: agents[defaultConfig.selectedAgent]?.greeting || "Hello! How can I help you today?",
       status: "complete",
     },
   ])
@@ -189,7 +189,7 @@ export default function PlaygroundPage() {
   }, [agentIdFromUrl])
 
   const resetChat = () => {
-    let greeting = agents["audience-explorer"].greeting
+    let greeting = agents["audience-explorer"]?.greeting || "Hello! How can I help you today?"
     if (customAgent) {
       greeting = `Hello! I'm ${customAgent.name}. ${customAgent.description || "How can I help you today?"}`
     } else if (agents[config.selectedAgent]) {
