@@ -1,8 +1,20 @@
 "use client"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import {
   ArrowLeft,
   Play,
@@ -14,6 +26,7 @@ import {
   CheckCircle2,
   AlertCircle,
   ChevronRight,
+  Loader2,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -275,11 +288,16 @@ const runStatusConfig = {
 }
 
 export function WorkflowDetail({ id }: { id: string }) {
-  // Get workflow data based on ID, fall back to first workflow if not found
-  const workflowData = workflowsData[id] || workflowsData["wf-001"]
+  const router = useRouter()
+  const [isRunning, setIsRunning] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
-  // Handle case where workflow doesn't exist
-  if (!workflowsData[id] && !id.startsWith("wf-")) {
+  // Get workflow data based on ID, fall back to first workflow if not found
+  const initialWorkflowData = workflowsData[id] || workflowsData["wf-001"]
+  const [workflowData, setWorkflowData] = useState(initialWorkflowData)
+
+  // Handle case where workflow doesn't exist and is not a valid format
+  if (!workflowsData[id] && !id.startsWith("wf-") && !id.startsWith("workflow-")) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
@@ -290,6 +308,47 @@ export function WorkflowDetail({ id }: { id: string }) {
         </Link>
       </div>
     )
+  }
+
+  const handleRunWorkflow = () => {
+    setIsRunning(true)
+    setWorkflowData(prev => ({ ...prev, status: "running", lastRun: "Running now" }))
+    // Simulate workflow completion
+    setTimeout(() => {
+      setIsRunning(false)
+      setWorkflowData(prev => ({
+        ...prev,
+        status: "active",
+        lastRun: "Just now",
+        totalRuns: prev.totalRuns + 1
+      }))
+    }, 3000)
+  }
+
+  const handlePauseWorkflow = () => {
+    setWorkflowData(prev => ({ ...prev, status: "paused", nextRun: "Paused" }))
+  }
+
+  const handleResumeWorkflow = () => {
+    setWorkflowData(prev => ({ ...prev, status: "active", nextRun: "Tomorrow" }))
+  }
+
+  const handleEditWorkflow = () => {
+    router.push(`/dashboard/workflows/${id}/edit`)
+  }
+
+  const handleDuplicateWorkflow = () => {
+    // Navigate to workflows page - in real app would create duplicate via API
+    router.push("/dashboard/workflows")
+  }
+
+  const handleDeleteWorkflow = () => {
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = () => {
+    setDeleteDialogOpen(false)
+    router.push("/dashboard/workflows")
   }
 
   return (
@@ -313,13 +372,26 @@ export function WorkflowDetail({ id }: { id: string }) {
           </div>
         </div>
         <div className="flex items-center gap-2 ml-12 sm:ml-0">
-          <Button variant="outline" size="sm" className="gap-2 bg-transparent">
-            <Pause className="h-4 w-4" />
-            Pause
-          </Button>
-          <Button size="sm" className="gap-2">
-            <Play className="h-4 w-4" />
-            Run Now
+          {workflowData.status === "paused" ? (
+            <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={handleResumeWorkflow}>
+              <Play className="h-4 w-4" />
+              Resume
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 bg-transparent"
+              onClick={handlePauseWorkflow}
+              disabled={isRunning}
+            >
+              <Pause className="h-4 w-4" />
+              Pause
+            </Button>
+          )}
+          <Button size="sm" className="gap-2" onClick={handleRunWorkflow} disabled={isRunning}>
+            {isRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
+            {isRunning ? "Running..." : "Run Now"}
           </Button>
         </div>
       </div>
@@ -433,11 +505,11 @@ export function WorkflowDetail({ id }: { id: string }) {
                 </div>
               </div>
               <div className="flex gap-2 pt-4 border-t border-border">
-                <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+                <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={handleEditWorkflow}>
                   <Edit className="h-4 w-4" />
                   Edit Workflow
                 </Button>
-                <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+                <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={handleDuplicateWorkflow}>
                   <Copy className="h-4 w-4" />
                   Duplicate
                 </Button>
@@ -445,6 +517,7 @@ export function WorkflowDetail({ id }: { id: string }) {
                   variant="outline"
                   size="sm"
                   className="gap-2 text-destructive hover:text-destructive bg-transparent"
+                  onClick={handleDeleteWorkflow}
                 >
                   <Trash2 className="h-4 w-4" />
                   Delete
@@ -454,6 +527,24 @@ export function WorkflowDetail({ id }: { id: string }) {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Workflow</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{workflowData.name}"? This will also delete all run history and associated data. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
