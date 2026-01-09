@@ -135,6 +135,28 @@ export function getInvitationEmailHtml(params: {
   `
 }
 
+// Send invitation email helper
+export async function sendInvitationEmail(params: {
+  to: string
+  inviterName: string
+  organizationName: string
+  inviteUrl: string
+  role?: string
+}) {
+  const html = getInvitationEmailHtml({
+    orgName: params.organizationName,
+    inviterName: params.inviterName,
+    role: params.role || 'member',
+    inviteUrl: params.inviteUrl,
+  })
+
+  return sendEmail({
+    to: params.to,
+    subject: `You've been invited to join ${params.organizationName}`,
+    html,
+  })
+}
+
 export function getWelcomeEmailHtml(params: { userName: string; loginUrl: string }) {
   return `
     <!DOCTYPE html>
