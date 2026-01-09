@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,12 +16,34 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus, Search, Folder, Calendar, Users, MoreHorizontal, Bot, FileText, Workflow } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Plus, Search, Folder, Calendar, Users, MoreHorizontal, Bot, FileText, Workflow, Archive, Edit, Trash2 } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-const projects = [
+interface Project {
+  id: string
+  name: string
+  description: string
+  status: string
+  createdAt: string
+  members: number
+  workflows: number
+  reports: number
+  agents: number
+}
+
+const initialProjects: Project[] = [
   {
     id: "gen-z-sustainability",
     name: "Gen Z Sustainability",
@@ -79,14 +102,94 @@ const projects = [
 ]
 
 export default function ProjectsPage() {
+  const router = useRouter()
+  const [projects, setProjects] = useState<Project[]>(initialProjects)
   const [searchQuery, setSearchQuery] = useState("")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [projectToEdit, setProjectToEdit] = useState<Project | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null)
+  const [newProjectName, setNewProjectName] = useState("")
+  const [newProjectDescription, setNewProjectDescription] = useState("")
+  const [editName, setEditName] = useState("")
+  const [editDescription, setEditDescription] = useState("")
 
   const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.description.toLowerCase().includes(searchQuery.toLowerCase()),
   )
+
+  const handleCreateProject = () => {
+    if (!newProjectName.trim()) return
+
+    const newProject: Project = {
+      id: `project-${Date.now()}`,
+      name: newProjectName,
+      description: newProjectDescription,
+      status: "active",
+      createdAt: new Date().toISOString().split('T')[0],
+      members: 1,
+      workflows: 0,
+      reports: 0,
+      agents: 0,
+    }
+    setProjects(prev => [newProject, ...prev])
+    setNewProjectName("")
+    setNewProjectDescription("")
+    setIsCreateOpen(false)
+  }
+
+  const handleEditProject = (project: Project, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setProjectToEdit(project)
+    setEditName(project.name)
+    setEditDescription(project.description)
+    setIsEditOpen(true)
+  }
+
+  const handleSaveEdit = () => {
+    if (!projectToEdit || !editName.trim()) return
+
+    setProjects(prev =>
+      prev.map(p =>
+        p.id === projectToEdit.id
+          ? { ...p, name: editName, description: editDescription }
+          : p
+      )
+    )
+    setIsEditOpen(false)
+    setProjectToEdit(null)
+  }
+
+  const handleArchiveProject = (project: Project, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setProjects(prev =>
+      prev.map(p =>
+        p.id === project.id
+          ? { ...p, status: p.status === "archived" ? "active" : "archived" }
+          : p
+      )
+    )
+  }
+
+  const handleDeleteProject = (project: Project, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setProjectToDelete(project)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = () => {
+    if (projectToDelete) {
+      setProjects(prev => prev.filter(p => p.id !== projectToDelete.id))
+    }
+    setDeleteDialogOpen(false)
+    setProjectToDelete(null)
+  }
 
   return (
     <div className="space-y-6">
@@ -112,18 +215,31 @@ export default function ProjectsPage() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Project Name</Label>
-                <Input id="name" placeholder="Enter project name" />
+                <Input
+                  id="name"
+                  placeholder="Enter project name"
+                  value={newProjectName}
+                  onChange={(e) => setNewProjectName(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
-                <Textarea id="description" placeholder="Describe your project" rows={3} />
+                <Textarea
+                  id="description"
+                  placeholder="Describe your project"
+                  rows={3}
+                  value={newProjectDescription}
+                  onChange={(e) => setNewProjectDescription(e.target.value)}
+                />
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={() => setIsCreateOpen(false)}>Create Project</Button>
+              <Button onClick={handleCreateProject} disabled={!newProjectName.trim()}>
+                Create Project
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -174,9 +290,22 @@ export default function ProjectsPage() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Archive</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => handleEditProject(project, e)}>
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => handleArchiveProject(project, e)}>
+                        <Archive className="h-4 w-4 mr-2" />
+                        {project.status === "archived" ? "Unarchive" : "Archive"}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="text-destructive"
+                        onClick={(e) => handleDeleteProject(project, e)}
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
@@ -220,6 +349,65 @@ export default function ProjectsPage() {
           <p className="mt-2 text-sm text-muted-foreground">Try adjusting your search or create a new project.</p>
         </div>
       )}
+
+      {/* Edit Project Dialog */}
+      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Project</DialogTitle>
+            <DialogDescription>
+              Update your project details.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Project Name</Label>
+              <Input
+                id="edit-name"
+                placeholder="Enter project name"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-description">Description</Label>
+              <Textarea
+                id="edit-description"
+                placeholder="Describe your project"
+                rows={3}
+                value={editDescription}
+                onChange={(e) => setEditDescription(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveEdit} disabled={!editName.trim()}>
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Project</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{projectToDelete?.name}"? This will also delete all associated workflows, reports, and agents. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
