@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
+import { http, HttpResponse } from 'msw'
 import { useInsights, useInsight } from './use-insights'
-import { createOrganizationContext, createInsight } from '@/tests/factories'
+import { createOrganizationContext } from '@/tests/factories'
+import { server } from '@/tests/mocks/server'
 
 // Mock use-organization hook
 const mockOrg = createOrganizationContext({ id: 'org-1', name: 'Test Org' })
@@ -10,32 +12,27 @@ vi.mock('./use-organization', () => ({
   useCurrentOrg: () => ({ org: mockOrg, isLoading: false }),
 }))
 
-// Mock fetch
-const mockFetch = vi.fn()
-global.fetch = mockFetch
-
 // Mock URL.createObjectURL and URL.revokeObjectURL
 global.URL.createObjectURL = vi.fn(() => 'blob:mock-url')
 global.URL.revokeObjectURL = vi.fn()
 
-// Note: These tests are skipped because they conflict with MSW handlers.
-// The fetch mocking approach doesn't work when MSW is active.
-// Tests should be refactored to use server.use() for per-test handler overrides.
-describe.skip('useInsights', () => {
+describe('useInsights', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockFetch.mockReset()
   })
 
   describe('fetchInsights', () => {
     it('fetches insights with organization header', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: [createInsight()],
-          meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
-        }),
-      })
+      server.use(
+        http.get('/api/v1/insights', ({ request }) => {
+          const orgId = request.headers.get('x-organization-id')
+          expect(orgId).toBe('org-1')
+          return HttpResponse.json({
+            data: [{ id: 'insight-1', type: 'trend', title: 'Test Insight', confidenceScore: 0.9 }],
+            meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
+          })
+        })
+      )
 
       const { result } = renderHook(() => useInsights())
 
@@ -43,27 +40,22 @@ describe.skip('useInsights', () => {
         await result.current.fetchInsights()
       })
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/v1/insights'),
-        expect.objectContaining({
-          headers: { 'x-organization-id': 'org-1' },
-        })
-      )
+      expect(result.current.insights).toHaveLength(1)
+      expect(result.current.insights[0].title).toBe('Test Insight')
     })
 
     it('updates insights state on successful fetch', async () => {
-      const mockInsights = [
-        createInsight({ id: 'insight-1', title: 'Insight 1' }),
-        createInsight({ id: 'insight-2', title: 'Insight 2' }),
-      ]
-
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: mockInsights,
-          meta: { page: 1, limit: 20, total: 2, totalPages: 1 },
-        }),
-      })
+      server.use(
+        http.get('/api/v1/insights', () => {
+          return HttpResponse.json({
+            data: [
+              { id: 'insight-1', type: 'trend', title: 'Insight 1', confidenceScore: 0.9 },
+              { id: 'insight-2', type: 'anomaly', title: 'Insight 2', confidenceScore: 0.85 },
+            ],
+            meta: { page: 1, limit: 20, total: 2, totalPages: 1 },
+          })
+        })
+      )
 
       const { result } = renderHook(() => useInsights())
 
@@ -71,82 +63,95 @@ describe.skip('useInsights', () => {
         await result.current.fetchInsights()
       })
 
-      expect(result.current.insights).toEqual(mockInsights)
+      expect(result.current.insights).toHaveLength(2)
       expect(result.current.meta.total).toBe(2)
     })
 
     it('applies filters to fetch request', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: [],
-          meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
-        }),
-      })
+      let capturedUrl = ''
 
-      const { result } = renderHook(() => useInsights())
+      server.use(
+        http.get('/api/v1/insights', ({ request }) => {
+          capturedUrl = request.url
+          return HttpResponse.json({
+            data: [],
+            meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useInsights({
+        agentId: 'agent-1',
+        type: 'trend',
+        minConfidence: 0.8,
+      }))
 
       await act(async () => {
-        await result.current.fetchInsights({
-          agentId: 'agent-1',
-          type: 'trend',
-          minConfidence: 0.8,
-        })
+        await result.current.fetchInsights()
       })
 
-      const url = mockFetch.mock.calls[0][0]
-      expect(url).toContain('agentId=agent-1')
-      expect(url).toContain('type=trend')
-      expect(url).toContain('minConfidence=0.8')
+      expect(capturedUrl).toContain('agentId=agent-1')
+      expect(capturedUrl).toContain('type=trend')
+      expect(capturedUrl).toContain('minConfidence=0.8')
     })
 
     it('applies date filters to request', async () => {
+      let capturedUrl = ''
       const startDate = new Date('2024-01-01')
-      const endDate = new Date('2024-12-31')
+      const endDate = new Date('2024-01-31')
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: [],
-          meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
-        }),
-      })
+      server.use(
+        http.get('/api/v1/insights', ({ request }) => {
+          capturedUrl = request.url
+          return HttpResponse.json({
+            data: [],
+            meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
+          })
+        })
+      )
 
-      const { result } = renderHook(() => useInsights())
+      const { result } = renderHook(() => useInsights({
+        startDate,
+        endDate,
+      }))
 
       await act(async () => {
-        await result.current.fetchInsights({
-          startDate,
-          endDate,
-        })
+        await result.current.fetchInsights()
       })
 
-      const url = mockFetch.mock.calls[0][0]
-      expect(url).toContain('startDate=')
-      expect(url).toContain('endDate=')
+      expect(capturedUrl).toContain('startDate=')
+      expect(capturedUrl).toContain('endDate=')
     })
 
     it('supports pagination', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: [],
-          meta: { page: 2, limit: 20, total: 50, totalPages: 3 },
-        }),
-      })
+      let capturedUrl = ''
+
+      server.use(
+        http.get('/api/v1/insights', ({ request }) => {
+          capturedUrl = request.url
+          return HttpResponse.json({
+            data: [],
+            meta: { page: 2, limit: 20, total: 50, totalPages: 3 },
+          })
+        })
+      )
 
       const { result } = renderHook(() => useInsights())
 
       await act(async () => {
-        await result.current.fetchInsights({}, 2)
+        await result.current.fetchInsights(undefined, 2)
       })
 
-      const url = mockFetch.mock.calls[0][0]
-      expect(url).toContain('page=2')
+      expect(capturedUrl).toContain('page=2')
+      expect(result.current.meta.page).toBe(2)
     })
 
     it('sets error state on fetch failure', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: false })
+      server.use(
+        http.get('/api/v1/insights', () => {
+          return new HttpResponse(null, { status: 500 })
+        })
+      )
 
       const { result } = renderHook(() => useInsights())
 
@@ -159,7 +164,11 @@ describe.skip('useInsights', () => {
     })
 
     it('handles network errors', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Network error'))
+      server.use(
+        http.get('/api/v1/insights', () => {
+          return HttpResponse.error()
+        })
+      )
 
       const { result } = renderHook(() => useInsights())
 
@@ -167,57 +176,47 @@ describe.skip('useInsights', () => {
         await result.current.fetchInsights()
       })
 
-      expect(result.current.error).toBe('Network error')
+      expect(result.current.error).toBeTruthy()
     })
 
     it('sets loading state during fetch', async () => {
-      let resolvePromise: (value: any) => void
-      const promise = new Promise((resolve) => {
-        resolvePromise = resolve
-      })
-
-      mockFetch.mockReturnValueOnce(promise)
+      server.use(
+        http.get('/api/v1/insights', async () => {
+          await new Promise(resolve => setTimeout(resolve, 50))
+          return HttpResponse.json({
+            data: [],
+            meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
+          })
+        })
+      )
 
       const { result } = renderHook(() => useInsights())
 
+      let fetchPromise: Promise<void>
       act(() => {
-        result.current.fetchInsights()
+        fetchPromise = result.current.fetchInsights()
       })
 
       expect(result.current.isLoading).toBe(true)
 
       await act(async () => {
-        resolvePromise!({
-          ok: true,
-          json: async () => ({ data: [], meta: {} }),
-        })
+        await fetchPromise
       })
 
       expect(result.current.isLoading).toBe(false)
     })
 
-    it('preserves filters when not provided', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: [], meta: {} }),
-      })
+    it('updates filters when passing new filters', async () => {
+      server.use(
+        http.get('/api/v1/insights', () => {
+          return HttpResponse.json({
+            data: [],
+            meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
+          })
+        })
+      )
 
-      const { result } = renderHook(() => useInsights({ type: 'anomaly' }))
-
-      await act(async () => {
-        await result.current.fetchInsights()
-      })
-
-      expect(result.current.filters.type).toBe('anomaly')
-    })
-
-    it('updates filters when provided', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: [], meta: {} }),
-      })
-
-      const { result } = renderHook(() => useInsights({ type: 'trend' }))
+      const { result } = renderHook(() => useInsights())
 
       await act(async () => {
         await result.current.fetchInsights({ type: 'anomaly' })
@@ -229,22 +228,29 @@ describe.skip('useInsights', () => {
 
   describe('exportInsights', () => {
     it('exports insights as CSV', async () => {
-      const mockBlob = new Blob(['test,data'], { type: 'text/csv' })
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        blob: async () => mockBlob,
-      })
+      const mockBlob = new Blob(['id,type,title\n1,trend,Test'], { type: 'text/csv' })
 
-      const mockCreateElement = vi.spyOn(document, 'createElement')
-      const mockAppendChild = vi.spyOn(document.body, 'appendChild').mockImplementation(() => document.body)
-      const mockRemoveChild = vi.spyOn(document.body, 'removeChild').mockImplementation(() => document.body)
+      server.use(
+        http.get('/api/v1/insights/export', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('format')).toBe('csv')
+          return new HttpResponse(mockBlob, {
+            headers: {
+              'Content-Type': 'text/csv',
+            },
+          })
+        })
+      )
 
-      const mockLink = {
+      // Mock DOM methods
+      const mockAnchor = {
         href: '',
         download: '',
         click: vi.fn(),
       }
-      mockCreateElement.mockReturnValue(mockLink as any)
+      vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as any)
+      vi.spyOn(document.body, 'appendChild').mockImplementation(() => document.body)
+      vi.spyOn(document.body, 'removeChild').mockImplementation(() => document.body)
 
       const { result } = renderHook(() => useInsights())
 
@@ -252,30 +258,24 @@ describe.skip('useInsights', () => {
         await result.current.exportInsights('csv')
       })
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('format=csv'),
-        expect.objectContaining({
-          headers: { 'x-organization-id': 'org-1' },
-        })
-      )
-      expect(mockLink.download).toContain('insights-')
-      expect(mockLink.download).toContain('.csv')
-      expect(mockLink.click).toHaveBeenCalled()
-
-      mockCreateElement.mockRestore()
-      mockAppendChild.mockRestore()
-      mockRemoveChild.mockRestore()
+      expect(mockAnchor.click).toHaveBeenCalled()
     })
 
     it('exports insights as JSON', async () => {
-      const mockBlob = new Blob(['{"test": "data"}'], { type: 'application/json' })
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        blob: async () => mockBlob,
-      })
+      server.use(
+        http.get('/api/v1/insights/export', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('format')).toBe('json')
+          return new HttpResponse(JSON.stringify({ insights: [] }), {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+        })
+      )
 
-      const mockLink = { href: '', download: '', click: vi.fn() }
-      vi.spyOn(document, 'createElement').mockReturnValue(mockLink as any)
+      const mockAnchor = { href: '', download: '', click: vi.fn() }
+      vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as any)
       vi.spyOn(document.body, 'appendChild').mockImplementation(() => document.body)
       vi.spyOn(document.body, 'removeChild').mockImplementation(() => document.body)
 
@@ -285,30 +285,15 @@ describe.skip('useInsights', () => {
         await result.current.exportInsights('json')
       })
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('format=json'),
-        expect.any(Object)
+      expect(mockAnchor.click).toHaveBeenCalled()
+    })
+
+    it('throws error on export failure', async () => {
+      server.use(
+        http.get('/api/v1/insights/export', () => {
+          return new HttpResponse(null, { status: 500 })
+        })
       )
-    })
-
-    it('throws error when organization not selected', async () => {
-      // Override mock temporarily
-      vi.doMock('./use-organization', () => ({
-        useCurrentOrg: () => ({ org: null, isLoading: false }),
-      }))
-
-      // For this test, we need to test the original behavior
-      // The hook checks org at runtime
-      const { result } = renderHook(() => useInsights())
-
-      // We can't easily test this without more complex mocking
-      // Skip this specific case for now
-    })
-
-    // Skipping: MSW handles export endpoint, can't easily mock failure
-    // Error path is simple: throws 'Failed to export insights' when response.ok is false
-    it.skip('throws error on export failure', async () => {
-      mockFetch.mockResolvedValueOnce({ ok: false })
 
       const { result } = renderHook(() => useInsights())
 
@@ -320,13 +305,19 @@ describe.skip('useInsights', () => {
     })
 
     it('includes filters in export request', async () => {
-      const mockBlob = new Blob([''])
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        blob: async () => mockBlob,
-      })
+      let capturedUrl = ''
 
-      vi.spyOn(document, 'createElement').mockReturnValue({ href: '', download: '', click: vi.fn() } as any)
+      server.use(
+        http.get('/api/v1/insights/export', ({ request }) => {
+          capturedUrl = request.url
+          return new HttpResponse('', {
+            headers: { 'Content-Type': 'text/csv' },
+          })
+        })
+      )
+
+      const mockAnchor = { href: '', download: '', click: vi.fn() }
+      vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as any)
       vi.spyOn(document.body, 'appendChild').mockImplementation(() => document.body)
       vi.spyOn(document.body, 'removeChild').mockImplementation(() => document.body)
 
@@ -339,9 +330,8 @@ describe.skip('useInsights', () => {
         await result.current.exportInsights('csv')
       })
 
-      const url = mockFetch.mock.calls[0][0]
-      expect(url).toContain('agentId=agent-1')
-      expect(url).toContain('type=trend')
+      expect(capturedUrl).toContain('agentId=agent-1')
+      expect(capturedUrl).toContain('type=trend')
     })
   })
 
@@ -358,19 +348,21 @@ describe.skip('useInsights', () => {
   })
 })
 
-describe.skip('useInsight', () => {
+describe('useInsight', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockFetch.mockReset()
   })
 
   it('fetches single insight by ID', async () => {
-    const mockInsight = createInsight({ id: 'insight-1', title: 'Test Insight' })
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ data: mockInsight }),
-    })
+    server.use(
+      http.get('/api/v1/insights/:id', ({ params, request }) => {
+        expect(params.id).toBe('insight-1')
+        expect(request.headers.get('x-organization-id')).toBe('org-1')
+        return HttpResponse.json({
+          data: { id: 'insight-1', type: 'trend', title: 'Test Insight', confidenceScore: 0.95 }
+        })
+      })
+    )
 
     const { result } = renderHook(() => useInsight('insight-1'))
 
@@ -378,28 +370,36 @@ describe.skip('useInsight', () => {
       await result.current.fetchInsight()
     })
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      '/api/v1/insights/insight-1',
-      expect.objectContaining({
-        headers: { 'x-organization-id': 'org-1' },
-      })
-    )
-    expect(result.current.insight).toEqual(mockInsight)
+    expect(result.current.insight?.id).toBe('insight-1')
+    expect(result.current.insight?.title).toBe('Test Insight')
   })
 
   it('does not fetch when ID is empty', async () => {
+    let fetchCalled = false
+
+    server.use(
+      http.get('/api/v1/insights/:id', () => {
+        fetchCalled = true
+        return HttpResponse.json({ data: {} })
+      })
+    )
+
     const { result } = renderHook(() => useInsight(''))
 
     await act(async () => {
       await result.current.fetchInsight()
     })
 
-    expect(mockFetch).not.toHaveBeenCalled()
+    expect(fetchCalled).toBe(false)
     expect(result.current.insight).toBeNull()
   })
 
   it('sets error state on fetch failure', async () => {
-    mockFetch.mockResolvedValueOnce({ ok: false })
+    server.use(
+      http.get('/api/v1/insights/:id', () => {
+        return new HttpResponse(null, { status: 500 })
+      })
+    )
 
     const { result } = renderHook(() => useInsight('insight-1'))
 
@@ -411,28 +411,26 @@ describe.skip('useInsight', () => {
   })
 
   it('manages loading state', async () => {
-    let resolvePromise: (value: any) => void
-    const promise = new Promise((resolve) => {
-      resolvePromise = resolve
-    })
-
-    mockFetch.mockReturnValueOnce(promise)
+    server.use(
+      http.get('/api/v1/insights/:id', async () => {
+        await new Promise(resolve => setTimeout(resolve, 50))
+        return HttpResponse.json({ data: { id: 'insight-1' } })
+      })
+    )
 
     const { result } = renderHook(() => useInsight('insight-1'))
 
     expect(result.current.isLoading).toBe(false)
 
+    let fetchPromise: Promise<void>
     act(() => {
-      result.current.fetchInsight()
+      fetchPromise = result.current.fetchInsight()
     })
 
     expect(result.current.isLoading).toBe(true)
 
     await act(async () => {
-      resolvePromise!({
-        ok: true,
-        json: async () => ({ data: {} }),
-      })
+      await fetchPromise
     })
 
     expect(result.current.isLoading).toBe(false)

@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { getRateLimitHeaders, getRateLimitIdentifier, type RateLimitResult } from './rate-limit'
-
-// Note: checkRateLimit and checkApiKeyRateLimit require Redis
-// and are tested in integration tests
+import {
+  getRateLimitHeaders,
+  getRateLimitIdentifier,
+  checkRateLimit,
+  checkApiKeyRateLimit,
+  type RateLimitResult,
+} from './rate-limit'
 
 describe('getRateLimitHeaders', () => {
   it('returns correct headers from rate limit result', () => {
@@ -130,5 +133,90 @@ describe('getRateLimitIdentifier', () => {
     const identifier = getRateLimitIdentifier(request, 'user-1', 'org-1')
 
     expect(identifier).toBe('org-1:user-1')
+  })
+})
+
+describe('checkRateLimit', () => {
+  // Note: When Redis is not configured, rate limiting is disabled
+  // and all requests are allowed. This tests the fallback behavior.
+
+  it('allows requests when Redis is not configured (STARTER plan)', async () => {
+    const result = await checkRateLimit('user-123', 'STARTER')
+
+    expect(result.success).toBe(true)
+    expect(result.limit).toBe(100) // STARTER apiCallsPerMin
+    expect(result.remaining).toBe(100)
+    expect(result.reset).toBeGreaterThan(Date.now())
+  })
+
+  it('allows requests when Redis is not configured (PROFESSIONAL plan)', async () => {
+    const result = await checkRateLimit('user-123', 'PROFESSIONAL')
+
+    expect(result.success).toBe(true)
+    expect(result.limit).toBe(500) // PROFESSIONAL apiCallsPerMin
+    expect(result.remaining).toBe(500)
+  })
+
+  it('allows requests when Redis is not configured (ENTERPRISE plan)', async () => {
+    const result = await checkRateLimit('user-123', 'ENTERPRISE')
+
+    expect(result.success).toBe(true)
+    expect(result.limit).toBe(2000) // ENTERPRISE apiCallsPerMin
+    expect(result.remaining).toBe(2000)
+  })
+
+  it('defaults to STARTER plan when no plan specified', async () => {
+    const result = await checkRateLimit('user-123')
+
+    expect(result.success).toBe(true)
+    expect(result.limit).toBe(100) // STARTER apiCallsPerMin
+  })
+
+  it('returns reset time approximately 1 minute in the future', async () => {
+    const before = Date.now()
+    const result = await checkRateLimit('user-123')
+    const after = Date.now()
+
+    // Reset should be ~60 seconds from now
+    expect(result.reset).toBeGreaterThanOrEqual(before + 60000)
+    expect(result.reset).toBeLessThanOrEqual(after + 60000)
+  })
+})
+
+describe('checkApiKeyRateLimit', () => {
+  // Note: When Redis is not configured, rate limiting is disabled
+  // and all requests are allowed. This tests the fallback behavior.
+
+  it('allows requests when Redis is not configured', async () => {
+    const result = await checkApiKeyRateLimit('api-key-123')
+
+    expect(result.success).toBe(true)
+    expect(result.limit).toBe(100) // default limit
+    expect(result.remaining).toBe(100)
+    expect(result.reset).toBeGreaterThan(Date.now())
+  })
+
+  it('uses custom limit when provided', async () => {
+    const result = await checkApiKeyRateLimit('api-key-123', 500)
+
+    expect(result.success).toBe(true)
+    expect(result.limit).toBe(500)
+    expect(result.remaining).toBe(500)
+  })
+
+  it('uses default limit of 100 when custom limit not provided', async () => {
+    const result = await checkApiKeyRateLimit('api-key-456')
+
+    expect(result.limit).toBe(100)
+  })
+
+  it('returns reset time approximately 1 minute in the future', async () => {
+    const before = Date.now()
+    const result = await checkApiKeyRateLimit('api-key-789')
+    const after = Date.now()
+
+    // Reset should be ~60 seconds from now
+    expect(result.reset).toBeGreaterThanOrEqual(before + 60000)
+    expect(result.reset).toBeLessThanOrEqual(after + 60000)
   })
 })
