@@ -58,7 +58,7 @@ services:
 
 databases:
   - name: gwi-postgres
-    plan: standard
+    plan: starter
     region: oregon
     postgresMajorVersion: 16
     databaseName: gwi_production
