@@ -41,7 +41,7 @@ const agentNames: Record<string, string> = {
 }
 
 export function PlaygroundHeader() {
-  const { config, messages, resetChat, contextPanelOpen, setContextPanelOpen } = usePlayground()
+  const { config, messages, resetChat, contextPanelOpen, setContextPanelOpen, customAgent } = usePlayground()
   const [showSaveDialog, setShowSaveDialog] = useState(false)
   const [showShareDialog, setShowShareDialog] = useState(false)
   const [showWorkflowDialog, setShowWorkflowDialog] = useState(false)
@@ -129,7 +129,7 @@ export function PlaygroundHeader() {
             </div>
           </div>
           <Badge variant="secondary" className="text-xs font-medium">
-            {agentNames[config.selectedAgent] || config.selectedAgent}
+            {customAgent?.name || agentNames[config.selectedAgent] || config.selectedAgent}
           </Badge>
           {config.enableMemory && (
             <Badge variant="outline" className="text-xs text-emerald-500 border-emerald-500/30">
