@@ -43,7 +43,7 @@ Key capabilities include:
   author: "GWI Labs",
   verified: true,
   rating: 4.9,
-  reviews: 284,
+  reviewCount: 284,
   installs: "12.4k",
   category: "Audience & Targeting",
   price: "Included",
@@ -150,7 +150,7 @@ export default function AgentDetailPage() {
             <div className="flex items-center gap-1">
               <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
               <span className="font-semibold">{agentDetails.rating}</span>
-              <span className="text-muted-foreground">({agentDetails.reviews} reviews)</span>
+              <span className="text-muted-foreground">({agentDetails.reviewCount} reviews)</span>
             </div>
             <div className="flex items-center gap-1 text-muted-foreground">
               <Download className="h-5 w-5" />
