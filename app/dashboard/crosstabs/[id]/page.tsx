@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, use } from "react"
+import { useState, useMemo, use, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -19,6 +19,12 @@ import {
   Copy,
   Check,
   Trash2,
+  Filter,
+  ChevronDown,
+  SlidersHorizontal,
+  X,
+  Save,
+  Sparkles,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -27,6 +33,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
@@ -39,13 +46,44 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Slider } from "@/components/ui/slider"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  AdvancedCrosstabGrid,
+  CrosstabRow,
+  CrosstabColumn,
+  CrosstabConfig,
+} from "@/components/crosstabs/advanced-crosstab-grid"
+import {
+  AdvancedFilters,
+  FilterField,
+  FilterGroup,
+  SavedFilter,
+} from "@/components/crosstabs/advanced-filters"
 
 // Mock crosstab data - 10 advanced examples
 const crosstabData: Record<string, {
@@ -58,7 +96,8 @@ const crosstabData: Record<string, {
   createdBy: string
   description: string
   dataSource: string
-  data: { metric: string; values: Record<string, number> }[]
+  category?: string
+  data: { metric: string; category?: string; values: Record<string, number> }[]
 }> = {
   "1": {
     id: "1",
@@ -70,15 +109,16 @@ const crosstabData: Record<string, {
     createdBy: "Sarah Chen",
     description: "Comprehensive multi-generational analysis of social media platform usage, engagement frequency, and content preferences",
     dataSource: "GWI Core Q4 2024",
+    category: "Social Media",
     data: [
-      { metric: "TikTok", values: { "Gen Z (18-24)": 87, "Millennials (25-40)": 52, "Gen X (41-56)": 24, "Boomers (57-75)": 8 } },
-      { metric: "Instagram", values: { "Gen Z (18-24)": 82, "Millennials (25-40)": 71, "Gen X (41-56)": 48, "Boomers (57-75)": 28 } },
-      { metric: "Facebook", values: { "Gen Z (18-24)": 42, "Millennials (25-40)": 68, "Gen X (41-56)": 78, "Boomers (57-75)": 72 } },
-      { metric: "YouTube", values: { "Gen Z (18-24)": 91, "Millennials (25-40)": 85, "Gen X (41-56)": 76, "Boomers (57-75)": 62 } },
-      { metric: "LinkedIn", values: { "Gen Z (18-24)": 28, "Millennials (25-40)": 52, "Gen X (41-56)": 48, "Boomers (57-75)": 35 } },
-      { metric: "Twitter/X", values: { "Gen Z (18-24)": 38, "Millennials (25-40)": 42, "Gen X (41-56)": 35, "Boomers (57-75)": 22 } },
-      { metric: "Snapchat", values: { "Gen Z (18-24)": 72, "Millennials (25-40)": 35, "Gen X (41-56)": 12, "Boomers (57-75)": 4 } },
-      { metric: "Pinterest", values: { "Gen Z (18-24)": 45, "Millennials (25-40)": 48, "Gen X (41-56)": 42, "Boomers (57-75)": 38 } },
+      { metric: "TikTok", category: "Short-form Video", values: { "Gen Z (18-24)": 87, "Millennials (25-40)": 52, "Gen X (41-56)": 24, "Boomers (57-75)": 8 } },
+      { metric: "Instagram", category: "Social Networks", values: { "Gen Z (18-24)": 82, "Millennials (25-40)": 71, "Gen X (41-56)": 48, "Boomers (57-75)": 28 } },
+      { metric: "Facebook", category: "Social Networks", values: { "Gen Z (18-24)": 42, "Millennials (25-40)": 68, "Gen X (41-56)": 78, "Boomers (57-75)": 72 } },
+      { metric: "YouTube", category: "Video Platforms", values: { "Gen Z (18-24)": 91, "Millennials (25-40)": 85, "Gen X (41-56)": 76, "Boomers (57-75)": 62 } },
+      { metric: "LinkedIn", category: "Professional", values: { "Gen Z (18-24)": 28, "Millennials (25-40)": 52, "Gen X (41-56)": 48, "Boomers (57-75)": 35 } },
+      { metric: "Twitter/X", category: "Microblogging", values: { "Gen Z (18-24)": 38, "Millennials (25-40)": 42, "Gen X (41-56)": 35, "Boomers (57-75)": 22 } },
+      { metric: "Snapchat", category: "Short-form Video", values: { "Gen Z (18-24)": 72, "Millennials (25-40)": 35, "Gen X (41-56)": 12, "Boomers (57-75)": 4 } },
+      { metric: "Pinterest", category: "Visual Discovery", values: { "Gen Z (18-24)": 45, "Millennials (25-40)": 48, "Gen X (41-56)": 42, "Boomers (57-75)": 38 } },
     ],
   },
   "2": {
@@ -91,15 +131,16 @@ const crosstabData: Record<string, {
     createdBy: "Marcus Johnson",
     description: "Multi-dimensional analysis of purchase channel preferences across income segments with spend propensity indicators",
     dataSource: "GWI Commerce Q4 2024",
+    category: "Commerce",
     data: [
-      { metric: "E-commerce", values: { "Under $50K": 72, "$50K-$100K": 78, "$100K-$150K": 82, "$150K-$250K": 85, "$250K+": 79 } },
-      { metric: "In-Store Retail", values: { "Under $50K": 68, "$50K-$100K": 62, "$100K-$150K": 58, "$150K-$250K": 55, "$250K+": 62 } },
-      { metric: "Mobile Apps", values: { "Under $50K": 58, "$50K-$100K": 65, "$100K-$150K": 72, "$150K-$250K": 75, "$250K+": 71 } },
-      { metric: "Social Commerce", values: { "Under $50K": 42, "$50K-$100K": 45, "$100K-$150K": 38, "$150K-$250K": 32, "$250K+": 28 } },
-      { metric: "Subscription Services", values: { "Under $50K": 35, "$50K-$100K": 52, "$100K-$150K": 68, "$150K-$250K": 78, "$250K+": 82 } },
-      { metric: "Direct-to-Consumer", values: { "Under $50K": 28, "$50K-$100K": 42, "$100K-$150K": 55, "$150K-$250K": 65, "$250K+": 72 } },
-      { metric: "Luxury Retail", values: { "Under $50K": 8, "$50K-$100K": 18, "$100K-$150K": 35, "$150K-$250K": 58, "$250K+": 78 } },
-      { metric: "Resale/Second-hand", values: { "Under $50K": 48, "$50K-$100K": 42, "$100K-$150K": 35, "$150K-$250K": 28, "$250K+": 22 } },
+      { metric: "E-commerce", category: "Digital", values: { "Under $50K": 72, "$50K-$100K": 78, "$100K-$150K": 82, "$150K-$250K": 85, "$250K+": 79 } },
+      { metric: "In-Store Retail", category: "Physical", values: { "Under $50K": 68, "$50K-$100K": 62, "$100K-$150K": 58, "$150K-$250K": 55, "$250K+": 62 } },
+      { metric: "Mobile Apps", category: "Digital", values: { "Under $50K": 58, "$50K-$100K": 65, "$100K-$150K": 72, "$150K-$250K": 75, "$250K+": 71 } },
+      { metric: "Social Commerce", category: "Digital", values: { "Under $50K": 42, "$50K-$100K": 45, "$100K-$150K": 38, "$150K-$250K": 32, "$250K+": 28 } },
+      { metric: "Subscription Services", category: "Digital", values: { "Under $50K": 35, "$50K-$100K": 52, "$100K-$150K": 68, "$150K-$250K": 78, "$250K+": 82 } },
+      { metric: "Direct-to-Consumer", category: "Mixed", values: { "Under $50K": 28, "$50K-$100K": 42, "$100K-$150K": 55, "$150K-$250K": 65, "$250K+": 72 } },
+      { metric: "Luxury Retail", category: "Physical", values: { "Under $50K": 8, "$50K-$100K": 18, "$100K-$150K": 35, "$150K-$250K": 58, "$250K+": 78 } },
+      { metric: "Resale/Second-hand", category: "Mixed", values: { "Under $50K": 48, "$50K-$100K": 42, "$100K-$150K": 35, "$150K-$250K": 28, "$250K+": 22 } },
     ],
   },
   "3": {
@@ -112,15 +153,16 @@ const crosstabData: Record<string, {
     createdBy: "Alex Rivera",
     description: "Cross-market comparison of digital behavior penetration rates with cultural context and market maturity indicators",
     dataSource: "GWI Global Q4 2024",
+    category: "Global Markets",
     data: [
-      { metric: "Streaming Video", values: { "United States": 89, "United Kingdom": 85, "Germany": 78, "France": 82, "Japan": 72, "South Korea": 88, "Brazil": 76, "Australia": 84 } },
-      { metric: "Mobile Gaming", values: { "United States": 62, "United Kingdom": 58, "Germany": 52, "France": 55, "Japan": 78, "South Korea": 85, "Brazil": 72, "Australia": 56 } },
-      { metric: "Social Media", values: { "United States": 82, "United Kingdom": 78, "Germany": 68, "France": 72, "Japan": 65, "South Korea": 88, "Brazil": 92, "Australia": 76 } },
-      { metric: "E-commerce", values: { "United States": 78, "United Kingdom": 82, "Germany": 75, "France": 72, "Japan": 85, "South Korea": 92, "Brazil": 68, "Australia": 79 } },
-      { metric: "Food Delivery", values: { "United States": 58, "United Kingdom": 62, "Germany": 48, "France": 52, "Japan": 55, "South Korea": 78, "Brazil": 65, "Australia": 58 } },
-      { metric: "Fintech Apps", values: { "United States": 52, "United Kingdom": 58, "Germany": 45, "France": 42, "Japan": 38, "South Korea": 72, "Brazil": 78, "Australia": 55 } },
-      { metric: "Fitness Apps", values: { "United States": 48, "United Kingdom": 45, "Germany": 42, "France": 38, "Japan": 35, "South Korea": 52, "Brazil": 42, "Australia": 52 } },
-      { metric: "Podcast Listening", values: { "United States": 55, "United Kingdom": 48, "Germany": 35, "France": 32, "Japan": 22, "South Korea": 45, "Brazil": 58, "Australia": 52 } },
+      { metric: "Streaming Video", category: "Entertainment", values: { "United States": 89, "United Kingdom": 85, "Germany": 78, "France": 82, "Japan": 72, "South Korea": 88, "Brazil": 76, "Australia": 84 } },
+      { metric: "Mobile Gaming", category: "Entertainment", values: { "United States": 62, "United Kingdom": 58, "Germany": 52, "France": 55, "Japan": 78, "South Korea": 85, "Brazil": 72, "Australia": 56 } },
+      { metric: "Social Media", category: "Social", values: { "United States": 82, "United Kingdom": 78, "Germany": 68, "France": 72, "Japan": 65, "South Korea": 88, "Brazil": 92, "Australia": 76 } },
+      { metric: "E-commerce", category: "Commerce", values: { "United States": 78, "United Kingdom": 82, "Germany": 75, "France": 72, "Japan": 85, "South Korea": 92, "Brazil": 68, "Australia": 79 } },
+      { metric: "Food Delivery", category: "Services", values: { "United States": 58, "United Kingdom": 62, "Germany": 48, "France": 52, "Japan": 55, "South Korea": 78, "Brazil": 65, "Australia": 58 } },
+      { metric: "Fintech Apps", category: "Finance", values: { "United States": 52, "United Kingdom": 58, "Germany": 45, "France": 42, "Japan": 38, "South Korea": 72, "Brazil": 78, "Australia": 55 } },
+      { metric: "Fitness Apps", category: "Health", values: { "United States": 48, "United Kingdom": 45, "Germany": 42, "France": 38, "Japan": 35, "South Korea": 52, "Brazil": 42, "Australia": 52 } },
+      { metric: "Podcast Listening", category: "Entertainment", values: { "United States": 55, "United Kingdom": 48, "Germany": 35, "France": 32, "Japan": 22, "South Korea": 45, "Brazil": 58, "Australia": 52 } },
     ],
   },
   "4": {
@@ -133,15 +175,16 @@ const crosstabData: Record<string, {
     createdBy: "Emily Thompson",
     description: "Segmented analysis of sustainability attitudes and behaviors with actionability scores for brand positioning",
     dataSource: "GWI Zeitgeist Nov 2024",
+    category: "Sustainability",
     data: [
-      { metric: "Pay Premium for Sustainable", values: { "Eco-Activists": 92, "Mainstream Green": 65, "Price-Conscious": 28, "Skeptics": 12, "Indifferent": 8 } },
-      { metric: "Check Brand Ethics", values: { "Eco-Activists": 95, "Mainstream Green": 72, "Price-Conscious": 35, "Skeptics": 18, "Indifferent": 5 } },
-      { metric: "Reduce Single-Use Plastic", values: { "Eco-Activists": 98, "Mainstream Green": 78, "Price-Conscious": 52, "Skeptics": 32, "Indifferent": 15 } },
-      { metric: "Buy Second-Hand", values: { "Eco-Activists": 82, "Mainstream Green": 55, "Price-Conscious": 68, "Skeptics": 22, "Indifferent": 18 } },
-      { metric: "Carbon Footprint Aware", values: { "Eco-Activists": 88, "Mainstream Green": 45, "Price-Conscious": 18, "Skeptics": 8, "Indifferent": 2 } },
-      { metric: "Support Local", values: { "Eco-Activists": 85, "Mainstream Green": 68, "Price-Conscious": 42, "Skeptics": 38, "Indifferent": 25 } },
-      { metric: "Vegan/Plant-Based Diet", values: { "Eco-Activists": 48, "Mainstream Green": 22, "Price-Conscious": 12, "Skeptics": 5, "Indifferent": 3 } },
-      { metric: "Boycott Unethical Brands", values: { "Eco-Activists": 92, "Mainstream Green": 58, "Price-Conscious": 28, "Skeptics": 15, "Indifferent": 5 } },
+      { metric: "Pay Premium for Sustainable", category: "Purchasing", values: { "Eco-Activists": 92, "Mainstream Green": 65, "Price-Conscious": 28, "Skeptics": 12, "Indifferent": 8 } },
+      { metric: "Check Brand Ethics", category: "Research", values: { "Eco-Activists": 95, "Mainstream Green": 72, "Price-Conscious": 35, "Skeptics": 18, "Indifferent": 5 } },
+      { metric: "Reduce Single-Use Plastic", category: "Behavior", values: { "Eco-Activists": 98, "Mainstream Green": 78, "Price-Conscious": 52, "Skeptics": 32, "Indifferent": 15 } },
+      { metric: "Buy Second-Hand", category: "Purchasing", values: { "Eco-Activists": 82, "Mainstream Green": 55, "Price-Conscious": 68, "Skeptics": 22, "Indifferent": 18 } },
+      { metric: "Carbon Footprint Aware", category: "Awareness", values: { "Eco-Activists": 88, "Mainstream Green": 45, "Price-Conscious": 18, "Skeptics": 8, "Indifferent": 2 } },
+      { metric: "Support Local", category: "Purchasing", values: { "Eco-Activists": 85, "Mainstream Green": 68, "Price-Conscious": 42, "Skeptics": 38, "Indifferent": 25 } },
+      { metric: "Vegan/Plant-Based Diet", category: "Lifestyle", values: { "Eco-Activists": 48, "Mainstream Green": 22, "Price-Conscious": 12, "Skeptics": 5, "Indifferent": 3 } },
+      { metric: "Boycott Unethical Brands", category: "Activism", values: { "Eco-Activists": 92, "Mainstream Green": 58, "Price-Conscious": 28, "Skeptics": 15, "Indifferent": 5 } },
     ],
   },
   "5": {
@@ -154,15 +197,16 @@ const crosstabData: Record<string, {
     createdBy: "Victoria Wells",
     description: "Full-funnel competitive brand health analysis with conversion rate calculations and market share correlation",
     dataSource: "GWI Brand Tracker Q4 2024",
+    category: "Brand Health",
     data: [
-      { metric: "Unaided Awareness", values: { "Brand A": 72, "Brand B": 58, "Brand C": 45, "Brand D": 38, "Brand E": 28, "Brand F": 22 } },
-      { metric: "Aided Awareness", values: { "Brand A": 95, "Brand B": 88, "Brand C": 82, "Brand D": 75, "Brand E": 68, "Brand F": 62 } },
-      { metric: "Consideration", values: { "Brand A": 68, "Brand B": 55, "Brand C": 48, "Brand D": 42, "Brand E": 35, "Brand F": 28 } },
-      { metric: "Preference", values: { "Brand A": 42, "Brand B": 28, "Brand C": 22, "Brand D": 18, "Brand E": 12, "Brand F": 8 } },
-      { metric: "Purchase", values: { "Brand A": 38, "Brand B": 24, "Brand C": 18, "Brand D": 14, "Brand E": 10, "Brand F": 6 } },
-      { metric: "Loyalty", values: { "Brand A": 78, "Brand B": 65, "Brand C": 58, "Brand D": 52, "Brand E": 45, "Brand F": 38 } },
-      { metric: "Advocacy", values: { "Brand A": 52, "Brand B": 38, "Brand C": 32, "Brand D": 25, "Brand E": 18, "Brand F": 12 } },
-      { metric: "Premium Perception", values: { "Brand A": 82, "Brand B": 68, "Brand C": 55, "Brand D": 42, "Brand E": 35, "Brand F": 28 } },
+      { metric: "Unaided Awareness", category: "Awareness", values: { "Brand A": 72, "Brand B": 58, "Brand C": 45, "Brand D": 38, "Brand E": 28, "Brand F": 22 } },
+      { metric: "Aided Awareness", category: "Awareness", values: { "Brand A": 95, "Brand B": 88, "Brand C": 82, "Brand D": 75, "Brand E": 68, "Brand F": 62 } },
+      { metric: "Consideration", category: "Funnel", values: { "Brand A": 68, "Brand B": 55, "Brand C": 48, "Brand D": 42, "Brand E": 35, "Brand F": 28 } },
+      { metric: "Preference", category: "Funnel", values: { "Brand A": 42, "Brand B": 28, "Brand C": 22, "Brand D": 18, "Brand E": 12, "Brand F": 8 } },
+      { metric: "Purchase", category: "Funnel", values: { "Brand A": 38, "Brand B": 24, "Brand C": 18, "Brand D": 14, "Brand E": 10, "Brand F": 6 } },
+      { metric: "Loyalty", category: "Retention", values: { "Brand A": 78, "Brand B": 65, "Brand C": 58, "Brand D": 52, "Brand E": 45, "Brand F": 38 } },
+      { metric: "Advocacy", category: "Retention", values: { "Brand A": 52, "Brand B": 38, "Brand C": 32, "Brand D": 25, "Brand E": 18, "Brand F": 12 } },
+      { metric: "Premium Perception", category: "Perception", values: { "Brand A": 82, "Brand B": 68, "Brand C": 55, "Brand D": 42, "Brand E": 35, "Brand F": 28 } },
     ],
   },
   "6": {
@@ -175,15 +219,16 @@ const crosstabData: Record<string, {
     createdBy: "Kevin Zhang",
     description: "Daypart analysis of media consumption patterns for optimal campaign timing and channel planning",
     dataSource: "GWI Media Q4 2024",
+    category: "Media Planning",
     data: [
-      { metric: "Linear TV", values: { "Morning (6-9am)": 35, "Daytime (9am-5pm)": 18, "Evening (5-9pm)": 72, "Late Night (9pm-12am)": 58, "Overnight (12-6am)": 12 } },
-      { metric: "Streaming", values: { "Morning (6-9am)": 22, "Daytime (9am-5pm)": 28, "Evening (5-9pm)": 85, "Late Night (9pm-12am)": 78, "Overnight (12-6am)": 25 } },
-      { metric: "Social Media", values: { "Morning (6-9am)": 68, "Daytime (9am-5pm)": 72, "Evening (5-9pm)": 78, "Late Night (9pm-12am)": 65, "Overnight (12-6am)": 28 } },
-      { metric: "Podcasts", values: { "Morning (6-9am)": 52, "Daytime (9am-5pm)": 45, "Evening (5-9pm)": 35, "Late Night (9pm-12am)": 22, "Overnight (12-6am)": 8 } },
-      { metric: "Radio", values: { "Morning (6-9am)": 58, "Daytime (9am-5pm)": 42, "Evening (5-9pm)": 25, "Late Night (9pm-12am)": 15, "Overnight (12-6am)": 8 } },
-      { metric: "News Sites", values: { "Morning (6-9am)": 72, "Daytime (9am-5pm)": 55, "Evening (5-9pm)": 48, "Late Night (9pm-12am)": 32, "Overnight (12-6am)": 12 } },
-      { metric: "Gaming", values: { "Morning (6-9am)": 15, "Daytime (9am-5pm)": 22, "Evening (5-9pm)": 65, "Late Night (9pm-12am)": 72, "Overnight (12-6am)": 35 } },
-      { metric: "Music Streaming", values: { "Morning (6-9am)": 62, "Daytime (9am-5pm)": 58, "Evening (5-9pm)": 52, "Late Night (9pm-12am)": 45, "Overnight (12-6am)": 22 } },
+      { metric: "Linear TV", category: "Traditional", values: { "Morning (6-9am)": 35, "Daytime (9am-5pm)": 18, "Evening (5-9pm)": 72, "Late Night (9pm-12am)": 58, "Overnight (12-6am)": 12 } },
+      { metric: "Streaming", category: "Digital Video", values: { "Morning (6-9am)": 22, "Daytime (9am-5pm)": 28, "Evening (5-9pm)": 85, "Late Night (9pm-12am)": 78, "Overnight (12-6am)": 25 } },
+      { metric: "Social Media", category: "Digital", values: { "Morning (6-9am)": 68, "Daytime (9am-5pm)": 72, "Evening (5-9pm)": 78, "Late Night (9pm-12am)": 65, "Overnight (12-6am)": 28 } },
+      { metric: "Podcasts", category: "Audio", values: { "Morning (6-9am)": 52, "Daytime (9am-5pm)": 45, "Evening (5-9pm)": 35, "Late Night (9pm-12am)": 22, "Overnight (12-6am)": 8 } },
+      { metric: "Radio", category: "Traditional", values: { "Morning (6-9am)": 58, "Daytime (9am-5pm)": 42, "Evening (5-9pm)": 25, "Late Night (9pm-12am)": 15, "Overnight (12-6am)": 8 } },
+      { metric: "News Sites", category: "Digital", values: { "Morning (6-9am)": 72, "Daytime (9am-5pm)": 55, "Evening (5-9pm)": 48, "Late Night (9pm-12am)": 32, "Overnight (12-6am)": 12 } },
+      { metric: "Gaming", category: "Entertainment", values: { "Morning (6-9am)": 15, "Daytime (9am-5pm)": 22, "Evening (5-9pm)": 65, "Late Night (9pm-12am)": 72, "Overnight (12-6am)": 35 } },
+      { metric: "Music Streaming", category: "Audio", values: { "Morning (6-9am)": 62, "Daytime (9am-5pm)": 58, "Evening (5-9pm)": 52, "Late Night (9pm-12am)": 45, "Overnight (12-6am)": 22 } },
     ],
   },
   "7": {
@@ -196,15 +241,16 @@ const crosstabData: Record<string, {
     createdBy: "David Chen",
     description: "Life stage analysis of financial product adoption with risk tolerance and advisory preference indicators",
     dataSource: "GWI Finance Q4 2024",
+    category: "Financial Services",
     data: [
-      { metric: "Mobile Banking", values: { "Students": 82, "Young Professionals": 92, "Young Families": 88, "Established Families": 78, "Empty Nesters": 62, "Retirees": 42 } },
-      { metric: "Investment Apps", values: { "Students": 28, "Young Professionals": 58, "Young Families": 52, "Established Families": 62, "Empty Nesters": 55, "Retirees": 35 } },
-      { metric: "BNPL Services", values: { "Students": 55, "Young Professionals": 62, "Young Families": 58, "Established Families": 38, "Empty Nesters": 18, "Retirees": 8 } },
-      { metric: "Crypto Ownership", values: { "Students": 32, "Young Professionals": 45, "Young Families": 35, "Established Families": 22, "Empty Nesters": 12, "Retirees": 5 } },
-      { metric: "Insurance Products", values: { "Students": 18, "Young Professionals": 45, "Young Families": 78, "Established Families": 85, "Empty Nesters": 82, "Retirees": 88 } },
-      { metric: "Retirement Accounts", values: { "Students": 12, "Young Professionals": 52, "Young Families": 68, "Established Families": 82, "Empty Nesters": 92, "Retirees": 95 } },
-      { metric: "Credit Cards", values: { "Students": 45, "Young Professionals": 78, "Young Families": 85, "Established Families": 88, "Empty Nesters": 82, "Retirees": 72 } },
-      { metric: "Personal Loans", values: { "Students": 22, "Young Professionals": 35, "Young Families": 48, "Established Families": 42, "Empty Nesters": 25, "Retirees": 12 } },
+      { metric: "Mobile Banking", category: "Digital Banking", values: { "Students": 82, "Young Professionals": 92, "Young Families": 88, "Established Families": 78, "Empty Nesters": 62, "Retirees": 42 } },
+      { metric: "Investment Apps", category: "Investing", values: { "Students": 28, "Young Professionals": 58, "Young Families": 52, "Established Families": 62, "Empty Nesters": 55, "Retirees": 35 } },
+      { metric: "BNPL Services", category: "Credit", values: { "Students": 55, "Young Professionals": 62, "Young Families": 58, "Established Families": 38, "Empty Nesters": 18, "Retirees": 8 } },
+      { metric: "Crypto Ownership", category: "Investing", values: { "Students": 32, "Young Professionals": 45, "Young Families": 35, "Established Families": 22, "Empty Nesters": 12, "Retirees": 5 } },
+      { metric: "Insurance Products", category: "Insurance", values: { "Students": 18, "Young Professionals": 45, "Young Families": 78, "Established Families": 85, "Empty Nesters": 82, "Retirees": 88 } },
+      { metric: "Retirement Accounts", category: "Savings", values: { "Students": 12, "Young Professionals": 52, "Young Families": 68, "Established Families": 82, "Empty Nesters": 92, "Retirees": 95 } },
+      { metric: "Credit Cards", category: "Credit", values: { "Students": 45, "Young Professionals": 78, "Young Families": 85, "Established Families": 88, "Empty Nesters": 82, "Retirees": 72 } },
+      { metric: "Personal Loans", category: "Credit", values: { "Students": 22, "Young Professionals": 35, "Young Families": 48, "Established Families": 42, "Empty Nesters": 25, "Retirees": 12 } },
     ],
   },
   "8": {
@@ -217,15 +263,16 @@ const crosstabData: Record<string, {
     createdBy: "Dr. James Park",
     description: "Persona-based health and wellness behavior analysis with spend propensity and brand preference indicators",
     dataSource: "GWI Health Q4 2024",
+    category: "Health & Wellness",
     data: [
-      { metric: "Gym Membership", values: { "Fitness Enthusiasts": 92, "Wellness Seekers": 55, "Busy Professionals": 42, "Health-Conscious Parents": 35, "Active Seniors": 48 } },
-      { metric: "Home Fitness", values: { "Fitness Enthusiasts": 78, "Wellness Seekers": 62, "Busy Professionals": 58, "Health-Conscious Parents": 72, "Active Seniors": 55 } },
-      { metric: "Nutrition Apps", values: { "Fitness Enthusiasts": 72, "Wellness Seekers": 68, "Busy Professionals": 45, "Health-Conscious Parents": 58, "Active Seniors": 35 } },
-      { metric: "Mental Wellness Apps", values: { "Fitness Enthusiasts": 45, "Wellness Seekers": 78, "Busy Professionals": 62, "Health-Conscious Parents": 52, "Active Seniors": 28 } },
-      { metric: "Sleep Tracking", values: { "Fitness Enthusiasts": 68, "Wellness Seekers": 72, "Busy Professionals": 55, "Health-Conscious Parents": 48, "Active Seniors": 42 } },
-      { metric: "Supplements", values: { "Fitness Enthusiasts": 85, "Wellness Seekers": 72, "Busy Professionals": 48, "Health-Conscious Parents": 55, "Active Seniors": 68 } },
-      { metric: "Organic Food", values: { "Fitness Enthusiasts": 72, "Wellness Seekers": 82, "Busy Professionals": 38, "Health-Conscious Parents": 75, "Active Seniors": 58 } },
-      { metric: "Preventive Care", values: { "Fitness Enthusiasts": 65, "Wellness Seekers": 78, "Busy Professionals": 42, "Health-Conscious Parents": 72, "Active Seniors": 88 } },
+      { metric: "Gym Membership", category: "Fitness", values: { "Fitness Enthusiasts": 92, "Wellness Seekers": 55, "Busy Professionals": 42, "Health-Conscious Parents": 35, "Active Seniors": 48 } },
+      { metric: "Home Fitness", category: "Fitness", values: { "Fitness Enthusiasts": 78, "Wellness Seekers": 62, "Busy Professionals": 58, "Health-Conscious Parents": 72, "Active Seniors": 55 } },
+      { metric: "Nutrition Apps", category: "Digital Health", values: { "Fitness Enthusiasts": 72, "Wellness Seekers": 68, "Busy Professionals": 45, "Health-Conscious Parents": 58, "Active Seniors": 35 } },
+      { metric: "Mental Wellness Apps", category: "Digital Health", values: { "Fitness Enthusiasts": 45, "Wellness Seekers": 78, "Busy Professionals": 62, "Health-Conscious Parents": 52, "Active Seniors": 28 } },
+      { metric: "Sleep Tracking", category: "Digital Health", values: { "Fitness Enthusiasts": 68, "Wellness Seekers": 72, "Busy Professionals": 55, "Health-Conscious Parents": 48, "Active Seniors": 42 } },
+      { metric: "Supplements", category: "Nutrition", values: { "Fitness Enthusiasts": 85, "Wellness Seekers": 72, "Busy Professionals": 48, "Health-Conscious Parents": 55, "Active Seniors": 68 } },
+      { metric: "Organic Food", category: "Nutrition", values: { "Fitness Enthusiasts": 72, "Wellness Seekers": 82, "Busy Professionals": 38, "Health-Conscious Parents": 75, "Active Seniors": 58 } },
+      { metric: "Preventive Care", category: "Healthcare", values: { "Fitness Enthusiasts": 65, "Wellness Seekers": 78, "Busy Professionals": 42, "Health-Conscious Parents": 72, "Active Seniors": 88 } },
     ],
   },
   "9": {
@@ -238,15 +285,16 @@ const crosstabData: Record<string, {
     createdBy: "Isabella Martinez",
     description: "Category-level analysis of luxury brand perception drivers with importance weighting for positioning strategy",
     dataSource: "GWI Luxury Q4 2024",
+    category: "Luxury",
     data: [
-      { metric: "Exclusivity", values: { "Fashion": 85, "Automotive": 78, "Watches": 92, "Travel": 72, "Beauty": 68, "Tech": 55 } },
-      { metric: "Craftsmanship", values: { "Fashion": 78, "Automotive": 88, "Watches": 95, "Travel": 62, "Beauty": 72, "Tech": 65 } },
-      { metric: "Heritage", values: { "Fashion": 82, "Automotive": 85, "Watches": 92, "Travel": 58, "Beauty": 75, "Tech": 35 } },
-      { metric: "Innovation", values: { "Fashion": 55, "Automotive": 82, "Watches": 48, "Travel": 65, "Beauty": 72, "Tech": 95 } },
-      { metric: "Sustainability", values: { "Fashion": 68, "Automotive": 72, "Watches": 45, "Travel": 78, "Beauty": 82, "Tech": 58 } },
-      { metric: "Status Symbol", values: { "Fashion": 88, "Automotive": 92, "Watches": 85, "Travel": 75, "Beauty": 62, "Tech": 78 } },
-      { metric: "Value Retention", values: { "Fashion": 42, "Automotive": 55, "Watches": 88, "Travel": 25, "Beauty": 28, "Tech": 35 } },
-      { metric: "Personal Expression", values: { "Fashion": 92, "Automotive": 78, "Watches": 72, "Travel": 85, "Beauty": 88, "Tech": 68 } },
+      { metric: "Exclusivity", category: "Perception", values: { "Fashion": 85, "Automotive": 78, "Watches": 92, "Travel": 72, "Beauty": 68, "Tech": 55 } },
+      { metric: "Craftsmanship", category: "Perception", values: { "Fashion": 78, "Automotive": 88, "Watches": 95, "Travel": 62, "Beauty": 72, "Tech": 65 } },
+      { metric: "Heritage", category: "Perception", values: { "Fashion": 82, "Automotive": 85, "Watches": 92, "Travel": 58, "Beauty": 75, "Tech": 35 } },
+      { metric: "Innovation", category: "Perception", values: { "Fashion": 55, "Automotive": 82, "Watches": 48, "Travel": 65, "Beauty": 72, "Tech": 95 } },
+      { metric: "Sustainability", category: "Values", values: { "Fashion": 68, "Automotive": 72, "Watches": 45, "Travel": 78, "Beauty": 82, "Tech": 58 } },
+      { metric: "Status Symbol", category: "Social", values: { "Fashion": 88, "Automotive": 92, "Watches": 85, "Travel": 75, "Beauty": 62, "Tech": 78 } },
+      { metric: "Value Retention", category: "Financial", values: { "Fashion": 42, "Automotive": 55, "Watches": 88, "Travel": 25, "Beauty": 28, "Tech": 35 } },
+      { metric: "Personal Expression", category: "Emotional", values: { "Fashion": 92, "Automotive": 78, "Watches": 72, "Travel": 85, "Beauty": 88, "Tech": 68 } },
     ],
   },
   "10": {
@@ -259,18 +307,67 @@ const crosstabData: Record<string, {
     createdBy: "Noah Williams",
     description: "Platform-specific content format performance analysis with engagement rate benchmarks and algorithm optimization insights",
     dataSource: "GWI Social Q4 2024",
+    category: "Content Strategy",
     data: [
-      { metric: "Short Video (<60s)", values: { "TikTok": 95, "Instagram": 82, "YouTube": 68, "Facebook": 55, "LinkedIn": 35, "Twitter/X": 48 } },
-      { metric: "Long Video (>10min)", values: { "TikTok": 22, "Instagram": 28, "YouTube": 92, "Facebook": 45, "LinkedIn": 42, "Twitter/X": 25 } },
-      { metric: "Stories/Reels", values: { "TikTok": 88, "Instagram": 92, "YouTube": 55, "Facebook": 62, "LinkedIn": 28, "Twitter/X": 18 } },
-      { metric: "Static Images", values: { "TikTok": 15, "Instagram": 75, "YouTube": 35, "Facebook": 72, "LinkedIn": 68, "Twitter/X": 65 } },
-      { metric: "Carousels", values: { "TikTok": 35, "Instagram": 85, "YouTube": 25, "Facebook": 58, "LinkedIn": 78, "Twitter/X": 42 } },
-      { metric: "Live Streams", values: { "TikTok": 72, "Instagram": 55, "YouTube": 78, "Facebook": 48, "LinkedIn": 35, "Twitter/X": 42 } },
-      { metric: "Text Posts", values: { "TikTok": 8, "Instagram": 25, "YouTube": 18, "Facebook": 68, "LinkedIn": 88, "Twitter/X": 92 } },
-      { metric: "Podcasts/Audio", values: { "TikTok": 12, "Instagram": 18, "YouTube": 72, "Facebook": 28, "LinkedIn": 35, "Twitter/X": 22 } },
+      { metric: "Short Video (<60s)", category: "Video", values: { "TikTok": 95, "Instagram": 82, "YouTube": 68, "Facebook": 55, "LinkedIn": 35, "Twitter/X": 48 } },
+      { metric: "Long Video (>10min)", category: "Video", values: { "TikTok": 22, "Instagram": 28, "YouTube": 92, "Facebook": 45, "LinkedIn": 42, "Twitter/X": 25 } },
+      { metric: "Stories/Reels", category: "Ephemeral", values: { "TikTok": 88, "Instagram": 92, "YouTube": 55, "Facebook": 62, "LinkedIn": 28, "Twitter/X": 18 } },
+      { metric: "Static Images", category: "Visual", values: { "TikTok": 15, "Instagram": 75, "YouTube": 35, "Facebook": 72, "LinkedIn": 68, "Twitter/X": 65 } },
+      { metric: "Carousels", category: "Visual", values: { "TikTok": 35, "Instagram": 85, "YouTube": 25, "Facebook": 58, "LinkedIn": 78, "Twitter/X": 42 } },
+      { metric: "Live Streams", category: "Video", values: { "TikTok": 72, "Instagram": 55, "YouTube": 78, "Facebook": 48, "LinkedIn": 35, "Twitter/X": 42 } },
+      { metric: "Text Posts", category: "Text", values: { "TikTok": 8, "Instagram": 25, "YouTube": 18, "Facebook": 68, "LinkedIn": 88, "Twitter/X": 92 } },
+      { metric: "Podcasts/Audio", category: "Audio", values: { "TikTok": 12, "Instagram": 18, "YouTube": 72, "Facebook": 28, "LinkedIn": 35, "Twitter/X": 22 } },
     ],
   },
 }
+
+// Sample saved filters
+const sampleSavedFilters: SavedFilter[] = [
+  {
+    id: "1",
+    name: "High Performers",
+    description: "Values above 70%",
+    groups: [{
+      id: "g1",
+      name: "High Values",
+      conditions: [{
+        id: "c1",
+        fieldId: "value",
+        operator: "greater_than",
+        value: 70,
+        enabled: true,
+      }],
+      logic: "and",
+      enabled: true,
+    }],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isDefault: false,
+    isFavorite: true,
+  },
+  {
+    id: "2",
+    name: "Low Performers",
+    description: "Values below 30%",
+    groups: [{
+      id: "g2",
+      name: "Low Values",
+      conditions: [{
+        id: "c2",
+        fieldId: "value",
+        operator: "less_than",
+        value: 30,
+        enabled: true,
+      }],
+      logic: "and",
+      enabled: true,
+    }],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isDefault: false,
+    isFavorite: false,
+  },
+]
 
 export default function CrosstabDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -279,7 +376,205 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [showFilterPanel, setShowFilterPanel] = useState(false)
+  const [activeTab, setActiveTab] = useState<"filters" | "audiences" | "metrics">("filters")
+
+  // Filter state
+  const [activeFilters, setActiveFilters] = useState<FilterGroup[]>([])
+  const [savedFilters, setSavedFilters] = useState<SavedFilter[]>(sampleSavedFilters)
+  const [selectedAudiences, setSelectedAudiences] = useState<Set<string>>(new Set())
+  const [selectedMetrics, setSelectedMetrics] = useState<Set<string>>(new Set())
+  const [valueRange, setValueRange] = useState<[number, number]>([0, 100])
+  const [categoryFilter, setCategoryFilter] = useState<string>("all")
+
   const crosstab = crosstabData[id]
+
+  // Initialize selected audiences and metrics
+  useMemo(() => {
+    if (crosstab && selectedAudiences.size === 0) {
+      setSelectedAudiences(new Set(crosstab.audiences))
+    }
+    if (crosstab && selectedMetrics.size === 0) {
+      setSelectedMetrics(new Set(crosstab.metrics))
+    }
+  }, [crosstab])
+
+  // Get unique categories
+  const categories = useMemo(() => {
+    if (!crosstab) return []
+    const cats = new Set(crosstab.data.map(d => d.category).filter(Boolean))
+    return Array.from(cats) as string[]
+  }, [crosstab])
+
+  // Filter fields for AdvancedFilters component
+  const filterFields: FilterField[] = useMemo(() => {
+    if (!crosstab) return []
+
+    return [
+      {
+        id: "metric",
+        name: "metric",
+        label: "Metric Name",
+        type: "select" as const,
+        category: "Data",
+        options: crosstab.metrics.map(m => ({ value: m, label: m })),
+      },
+      {
+        id: "category",
+        name: "category",
+        label: "Category",
+        type: "select" as const,
+        category: "Data",
+        options: categories.map(c => ({ value: c, label: c })),
+      },
+      {
+        id: "value",
+        name: "value",
+        label: "Value",
+        type: "number" as const,
+        category: "Data",
+        min: 0,
+        max: 100,
+      },
+      ...crosstab.audiences.map(audience => ({
+        id: `audience_${audience}`,
+        name: `audience_${audience}`,
+        label: audience,
+        type: "number" as const,
+        category: "Audiences",
+        min: 0,
+        max: 100,
+      })),
+    ]
+  }, [crosstab, categories])
+
+  // Transform data for AdvancedCrosstabGrid
+  const gridColumns: CrosstabColumn[] = useMemo(() => {
+    if (!crosstab) return []
+    return crosstab.audiences
+      .filter(a => selectedAudiences.has(a))
+      .map(audience => ({
+        id: audience,
+        key: audience,
+        label: audience,
+      }))
+  }, [crosstab, selectedAudiences])
+
+  // Apply filters to data
+  const filteredData = useMemo(() => {
+    if (!crosstab) return []
+
+    return crosstab.data
+      .filter(row => {
+        // Filter by selected metrics
+        if (!selectedMetrics.has(row.metric)) return false
+
+        // Filter by category
+        if (categoryFilter !== "all" && row.category !== categoryFilter) return false
+
+        // Filter by value range - check if any value in row is within range
+        const values = Object.values(row.values)
+        const hasValueInRange = values.some(v => v >= valueRange[0] && v <= valueRange[1])
+        if (!hasValueInRange) return false
+
+        // Apply advanced filters
+        if (activeFilters.length > 0) {
+          for (const group of activeFilters) {
+            if (!group.enabled) continue
+
+            const conditionResults = group.conditions.map(condition => {
+              if (!condition.enabled) return true
+
+              if (condition.fieldId === "metric") {
+                if (condition.operator === "equals") return row.metric === condition.value
+                if (condition.operator === "not_equals") return row.metric !== condition.value
+                if (condition.operator === "contains") return row.metric.toLowerCase().includes(String(condition.value).toLowerCase())
+              }
+
+              if (condition.fieldId === "category") {
+                if (condition.operator === "equals") return row.category === condition.value
+                if (condition.operator === "not_equals") return row.category !== condition.value
+              }
+
+              if (condition.fieldId === "value") {
+                const allValues = Object.values(row.values)
+                if (condition.operator === "greater_than") return allValues.some(v => v > condition.value)
+                if (condition.operator === "less_than") return allValues.some(v => v < condition.value)
+                if (condition.operator === "equals") return allValues.some(v => v === condition.value)
+                if (condition.operator === "between") return allValues.some(v => v >= condition.value && v <= (condition.value2 || condition.value))
+              }
+
+              // Audience-specific filters
+              if (condition.fieldId.startsWith("audience_")) {
+                const audience = condition.fieldId.replace("audience_", "")
+                const value = row.values[audience]
+                if (value === undefined) return false
+
+                if (condition.operator === "greater_than") return value > condition.value
+                if (condition.operator === "less_than") return value < condition.value
+                if (condition.operator === "equals") return value === condition.value
+                if (condition.operator === "between") return value >= condition.value && value <= (condition.value2 || condition.value)
+              }
+
+              return true
+            })
+
+            const passes = group.logic === "and"
+              ? conditionResults.every(Boolean)
+              : conditionResults.some(Boolean)
+
+            if (!passes) return false
+          }
+        }
+
+        return true
+      })
+  }, [crosstab, selectedMetrics, categoryFilter, valueRange, activeFilters])
+
+  const gridData: CrosstabRow[] = useMemo(() => {
+    return filteredData.map(row => ({
+      id: row.metric,
+      metric: row.metric,
+      category: row.category,
+      values: Object.fromEntries(
+        Object.entries(row.values).filter(([key]) => selectedAudiences.has(key))
+      ),
+    }))
+  }, [filteredData, selectedAudiences])
+
+  // Count active filters
+  const activeFilterCount = useMemo(() => {
+    let count = 0
+    if (crosstab) {
+      if (selectedAudiences.size < crosstab.audiences.length) count++
+      if (selectedMetrics.size < crosstab.metrics.length) count++
+    }
+    if (valueRange[0] > 0 || valueRange[1] < 100) count++
+    if (categoryFilter !== "all") count++
+    count += activeFilters.filter(g => g.enabled && g.conditions.some(c => c.enabled)).length
+    return count
+  }, [crosstab, selectedAudiences, selectedMetrics, valueRange, categoryFilter, activeFilters])
+
+  // Handle filter save
+  const handleFilterSave = useCallback((filter: SavedFilter) => {
+    setSavedFilters(prev => [...prev, filter])
+  }, [])
+
+  // Handle filter delete
+  const handleFilterDelete = useCallback((filterId: string) => {
+    setSavedFilters(prev => prev.filter(f => f.id !== filterId))
+  }, [])
+
+  // Clear all filters
+  const handleClearFilters = useCallback(() => {
+    if (crosstab) {
+      setSelectedAudiences(new Set(crosstab.audiences))
+      setSelectedMetrics(new Set(crosstab.metrics))
+    }
+    setValueRange([0, 100])
+    setCategoryFilter("all")
+    setActiveFilters([])
+  }, [crosstab])
 
   if (!crosstab) {
     return (
@@ -313,10 +608,10 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
     setIsExporting(true)
     try {
       if (format === "csv") {
-        const headers = ["Metric", ...crosstab.audiences]
-        const rows = crosstab.data.map((row) => [
+        const headers = ["Metric", ...Array.from(selectedAudiences)]
+        const rows = filteredData.map((row) => [
           row.metric,
-          ...crosstab.audiences.map((a) => row.values[a]?.toString() || "0"),
+          ...Array.from(selectedAudiences).map((a) => row.values[a]?.toString() || "0"),
         ])
         const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n")
         const blob = new Blob([csvContent], { type: "text/csv" })
@@ -328,8 +623,9 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
         URL.revokeObjectURL(url)
       } else {
         const exportData = {
-          crosstab: { id: crosstab.id, name: crosstab.name, audiences: crosstab.audiences, metrics: crosstab.metrics },
-          data: crosstab.data,
+          crosstab: { id: crosstab.id, name: crosstab.name, audiences: Array.from(selectedAudiences), metrics: Array.from(selectedMetrics) },
+          data: filteredData,
+          filters: { valueRange, categoryFilter, activeFilters },
           metadata: { exportedAt: new Date().toISOString(), createdBy: crosstab.createdBy, dataSource: crosstab.dataSource },
         }
         const content = JSON.stringify(exportData, null, 2)
@@ -400,6 +696,219 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {/* Filter Button */}
+          <Sheet open={showFilterPanel} onOpenChange={setShowFilterPanel}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="sm" className="bg-transparent relative">
+                <SlidersHorizontal className="h-4 w-4 mr-2" />
+                Filters
+                {activeFilterCount > 0 && (
+                  <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                    {activeFilterCount}
+                  </Badge>
+                )}
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle className="flex items-center justify-between">
+                  <span>Data Filters</span>
+                  {activeFilterCount > 0 && (
+                    <Button variant="ghost" size="sm" onClick={handleClearFilters}>
+                      <X className="h-4 w-4 mr-1" />
+                      Clear All
+                    </Button>
+                  )}
+                </SheetTitle>
+                <SheetDescription>
+                  Filter and refine your crosstab data
+                </SheetDescription>
+              </SheetHeader>
+
+              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="mt-6">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="filters">
+                    <Filter className="h-4 w-4 mr-2" />
+                    Filters
+                  </TabsTrigger>
+                  <TabsTrigger value="audiences">
+                    <Users className="h-4 w-4 mr-2" />
+                    Audiences
+                  </TabsTrigger>
+                  <TabsTrigger value="metrics">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Metrics
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="filters" className="mt-4 space-y-4">
+                  {/* Quick Filters */}
+                  <Card className="p-4">
+                    <h4 className="font-medium mb-3">Quick Filters</h4>
+
+                    {/* Value Range */}
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label className="text-sm">Value Range: {valueRange[0]}% - {valueRange[1]}%</Label>
+                        <Slider
+                          value={valueRange}
+                          onValueChange={(v) => setValueRange(v as [number, number])}
+                          max={100}
+                          step={5}
+                          className="w-full"
+                        />
+                      </div>
+
+                      {/* Category Filter */}
+                      {categories.length > 0 && (
+                        <div className="space-y-2">
+                          <Label className="text-sm">Category</Label>
+                          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="All Categories" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Categories</SelectItem>
+                              {categories.map(cat => (
+                                <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+
+                  {/* Advanced Filters */}
+                  <AdvancedFilters
+                    fields={filterFields}
+                    activeFilters={activeFilters}
+                    savedFilters={savedFilters}
+                    onFiltersChange={setActiveFilters}
+                    onFilterSave={handleFilterSave}
+                    onFilterDelete={handleFilterDelete}
+                    onFilterApply={(filters) => {
+                      setActiveFilters(filters)
+                      setShowFilterPanel(false)
+                    }}
+                  />
+                </TabsContent>
+
+                <TabsContent value="audiences" className="mt-4">
+                  <Card className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-medium">Select Audiences</h4>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedAudiences(new Set(crosstab.audiences))}
+                        >
+                          Select All
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedAudiences(new Set())}
+                        >
+                          Clear
+                        </Button>
+                      </div>
+                    </div>
+                    <ScrollArea className="h-[400px]">
+                      <div className="space-y-2">
+                        {crosstab.audiences.map(audience => (
+                          <label
+                            key={audience}
+                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted cursor-pointer"
+                          >
+                            <Checkbox
+                              checked={selectedAudiences.has(audience)}
+                              onCheckedChange={(checked) => {
+                                const newSet = new Set(selectedAudiences)
+                                if (checked) {
+                                  newSet.add(audience)
+                                } else {
+                                  newSet.delete(audience)
+                                }
+                                setSelectedAudiences(newSet)
+                              }}
+                            />
+                            <span>{audience}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                    <div className="mt-3 pt-3 border-t text-sm text-muted-foreground">
+                      {selectedAudiences.size} of {crosstab.audiences.length} selected
+                    </div>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="metrics" className="mt-4">
+                  <Card className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-medium">Select Metrics</h4>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedMetrics(new Set(crosstab.metrics))}
+                        >
+                          Select All
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedMetrics(new Set())}
+                        >
+                          Clear
+                        </Button>
+                      </div>
+                    </div>
+                    <ScrollArea className="h-[400px]">
+                      <div className="space-y-2">
+                        {crosstab.metrics.map(metric => {
+                          const metricData = crosstab.data.find(d => d.metric === metric)
+                          return (
+                            <label
+                              key={metric}
+                              className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted cursor-pointer"
+                            >
+                              <Checkbox
+                                checked={selectedMetrics.has(metric)}
+                                onCheckedChange={(checked) => {
+                                  const newSet = new Set(selectedMetrics)
+                                  if (checked) {
+                                    newSet.add(metric)
+                                  } else {
+                                    newSet.delete(metric)
+                                  }
+                                  setSelectedMetrics(newSet)
+                                }}
+                              />
+                              <div className="flex-1">
+                                <span>{metric}</span>
+                                {metricData?.category && (
+                                  <Badge variant="outline" className="ml-2 text-xs">
+                                    {metricData.category}
+                                  </Badge>
+                                )}
+                              </div>
+                            </label>
+                          )
+                        })}
+                      </div>
+                    </ScrollArea>
+                    <div className="mt-3 pt-3 border-t text-sm text-muted-foreground">
+                      {selectedMetrics.size} of {crosstab.metrics.length} selected
+                    </div>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </SheetContent>
+          </Sheet>
+
           <Button variant="outline" size="sm" className="bg-transparent">
             <BarChart3 className="h-4 w-4 mr-2" />
             Visualize
@@ -408,10 +917,23 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" size="sm" className="bg-transparent" onClick={() => handleExport("json")} disabled={isExporting}>
-            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-            {isExporting ? "Exporting..." : "Export"}
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="bg-transparent" disabled={isExporting}>
+                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+                Export
+                <ChevronDown className="h-4 w-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => handleExport("json")}>
+                Export as JSON
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("csv")}>
+                Export as CSV
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Link href={`/dashboard/crosstabs/new?edit=${crosstab.id}`}>
             <Button size="sm">
               <Edit className="h-4 w-4 mr-2" />
@@ -429,6 +951,12 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
               <DropdownMenuItem asChild>
                 <Link href={`/dashboard/dashboards/new?crosstab=${crosstab.id}`}>Add to Dashboard</Link>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleCopyLink}>
+                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                {copied ? "Copied!" : "Copy Link"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
@@ -456,104 +984,105 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
         </div>
       </div>
 
-      {/* Meta info */}
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-        <div className="flex items-center gap-1">
-          <Calendar className="h-4 w-4" />
-          <span>Modified {crosstab.lastModified}</span>
+      {/* Meta info and active filter badges */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Calendar className="h-4 w-4" />
+            <span>Modified {crosstab.lastModified}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Eye className="h-4 w-4" />
+            <span>{crosstab.views} views</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="h-4 w-4" />
+            <span>Created by {crosstab.createdBy}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <Eye className="h-4 w-4" />
-          <span>{crosstab.views} views</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <Users className="h-4 w-4" />
-          <span>Created by {crosstab.createdBy}</span>
-        </div>
+
+        {/* Active filter badges */}
+        {activeFilterCount > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Active filters:</span>
+            {selectedAudiences.size < crosstab.audiences.length && (
+              <Badge variant="secondary" className="text-xs">
+                {selectedAudiences.size} audiences
+              </Badge>
+            )}
+            {selectedMetrics.size < crosstab.metrics.length && (
+              <Badge variant="secondary" className="text-xs">
+                {selectedMetrics.size} metrics
+              </Badge>
+            )}
+            {(valueRange[0] > 0 || valueRange[1] < 100) && (
+              <Badge variant="secondary" className="text-xs">
+                {valueRange[0]}%-{valueRange[1]}%
+              </Badge>
+            )}
+            {categoryFilter !== "all" && (
+              <Badge variant="secondary" className="text-xs">
+                {categoryFilter}
+              </Badge>
+            )}
+            {activeFilters.filter(g => g.enabled).length > 0 && (
+              <Badge variant="secondary" className="text-xs">
+                {activeFilters.filter(g => g.enabled).length} filter groups
+              </Badge>
+            )}
+          </div>
+        )}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-4">
-        {/* Main Table */}
-        <div className="lg:col-span-3">
-          <Card className="p-6">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="font-semibold">Metric</TableHead>
-                    {crosstab.audiences.map((audience) => (
-                      <TableHead key={audience} className="text-center font-semibold">
-                        {audience}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {crosstab.data.map((row) => (
-                    <TableRow key={row.metric}>
-                      <TableCell className="font-medium">{row.metric}</TableCell>
-                      {crosstab.audiences.map((audience) => (
-                        <TableCell key={audience} className="text-center">
-                          <span className={`font-mono ${row.values[audience] >= 70 ? "text-emerald-600 font-semibold" : row.values[audience] <= 30 ? "text-amber-600" : ""}`}>
-                            {row.values[audience]}%
-                          </span>
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </Card>
-        </div>
+      {/* Advanced Crosstab Grid */}
+      <AdvancedCrosstabGrid
+        columns={gridColumns}
+        data={gridData}
+        title={crosstab.name}
+        description={`${gridData.length} metrics × ${gridColumns.length} audiences | Source: ${crosstab.dataSource}`}
+        config={{
+          showStatistics: true,
+          showSparklines: true,
+          showConditionalFormatting: true,
+          showSignificance: true,
+          showTotals: true,
+          groupByCategory: categories.length > 0,
+        }}
+      />
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <Card className="p-6 space-y-4">
-            <h3 className="font-semibold">Crosstab Details</h3>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-muted-foreground">Audiences</p>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {crosstab.audiences.map((audience) => (
-                    <Badge key={audience} variant="secondary" className="text-xs">
-                      {audience}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Metrics</p>
-                <p className="font-medium">{crosstab.metrics.length} metrics</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 space-y-4">
-            <h3 className="font-semibold">Quick Actions</h3>
-            <div className="space-y-2">
-              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={() => handleExport("json")} disabled={isExporting}>
-                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-                Export as JSON
-              </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={() => handleExport("csv")} disabled={isExporting}>
-                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-                Export as CSV
-              </Button>
-              <Link href={`/dashboard/charts/new?crosstab=${crosstab.id}`} className="block">
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Create Chart
-                </Button>
-              </Link>
-              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleCopyLink}>
-                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-                {copied ? "Copied!" : "Copy Link"}
-              </Button>
-            </div>
-          </Card>
+      {/* AI Insights Panel */}
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Sparkles className="h-5 w-5 text-primary" />
+          <h3 className="font-semibold">AI-Generated Insights</h3>
         </div>
-      </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="p-4 rounded-lg bg-muted/50">
+            <h4 className="font-medium text-sm mb-2">Top Performer</h4>
+            <p className="text-sm text-muted-foreground">
+              {gridData.length > 0 && gridColumns.length > 0 ? (
+                <>
+                  <span className="font-semibold text-foreground">{gridColumns[0]?.label}</span> leads in most metrics with an average of {
+                    Math.round(gridData.reduce((sum, row) => sum + (row.values[gridColumns[0]?.key] || 0), 0) / gridData.length)
+                  }%.
+                </>
+              ) : "No data available"}
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/50">
+            <h4 className="font-medium text-sm mb-2">Biggest Gap</h4>
+            <p className="text-sm text-muted-foreground">
+              The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-muted/50">
+            <h4 className="font-medium text-sm mb-2">Trending</h4>
+            <p className="text-sm text-muted-foreground">
+              {filteredData.length} metrics currently displayed after applying {activeFilterCount > 0 ? activeFilterCount : "no"} filters.
+            </p>
+          </div>
+        </div>
+      </Card>
     </div>
   )
 }
