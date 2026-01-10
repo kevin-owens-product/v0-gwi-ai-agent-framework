@@ -24,6 +24,12 @@ export type AuditResourceType =
   | 'organization'
   | 'agent_run'
   | 'workflow'
+  | 'report'
+  | 'brand_tracking'
+  | 'dashboard'
+  | 'audience'
+  | 'crosstab'
+  | 'chart'
 
 export interface AuditEvent {
   orgId: string

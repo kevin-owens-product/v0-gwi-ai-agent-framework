@@ -54,11 +54,30 @@ export const PERMISSIONS = {
   'data_sources:read': 'View data sources',
   'data_sources:write': 'Create and edit data sources',
   'data_sources:delete': 'Delete data sources',
+  // Aliases for camelCase usage
+  'dataSources:read': 'View data sources',
+  'dataSources:write': 'Create and edit data sources',
+  'dataSources:delete': 'Delete data sources',
 
   // Team
   'team:read': 'View team members',
+  'team:write': 'Create and edit team members',
   'team:invite': 'Invite team members',
   'team:manage': 'Manage team roles',
+
+  // API Keys
+  'apiKeys:read': 'View API keys',
+  'apiKeys:write': 'Create and manage API keys',
+  'apiKeys:delete': 'Delete API keys',
+
+  // Analytics
+  'analytics:read': 'View analytics',
+  'analytics:write': 'Manage analytics',
+
+  // Integrations
+  'integrations:read': 'View integrations',
+  'integrations:write': 'Manage integrations',
+  'integrations:delete': 'Delete integrations',
 
   // Billing
   'billing:read': 'View billing info',
@@ -91,7 +110,11 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'memory:read', 'memory:write', 'memory:delete',
     'insights:read', 'insights:export',
     'data_sources:read', 'data_sources:write', 'data_sources:delete',
-    'team:read', 'team:invite', 'team:manage',
+    'dataSources:read', 'dataSources:write', 'dataSources:delete',
+    'team:read', 'team:write', 'team:invite', 'team:manage',
+    'apiKeys:read', 'apiKeys:write', 'apiKeys:delete',
+    'analytics:read', 'analytics:write',
+    'integrations:read', 'integrations:write', 'integrations:delete',
     'settings:read', 'settings:manage',
     'audit:read',
   ],
@@ -107,7 +130,11 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'memory:read', 'memory:write',
     'insights:read',
     'data_sources:read',
+    'dataSources:read',
     'team:read',
+    'apiKeys:read',
+    'analytics:read',
+    'integrations:read',
   ],
   VIEWER: [
     'agents:read',
@@ -120,6 +147,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'brand-tracking:read',
     'memory:read',
     'insights:read',
+    'analytics:read',
   ],
 }
 
