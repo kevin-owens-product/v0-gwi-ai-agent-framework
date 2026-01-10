@@ -36,6 +36,8 @@ model Organization {
   memories      Memory[]
   charts        Chart[]
   templates     Template[]
+  brandTrackings BrandTracking[]
+  brandSnapshots BrandTrackingSnapshot[]
 }
 
 model OrganizationMember {
@@ -645,4 +647,70 @@ enum TemplateCategory {
   ANALYSIS
   BRIEFS
   CUSTOM
+}
+
+// ==================== BRAND TRACKING ====================
+
+model BrandTracking {
+  id              String               @id @default(cuid())
+  orgId           String
+  brandName       String
+  description     String?
+  industry        String?
+  competitors     Json                 @default("[]") // array of competitor brand names
+  audiences       String[]             // audience IDs to track against
+  metrics         Json                 @default("{}") // metric configurations
+  trackingConfig  Json                 @default("{}") // advanced settings
+  status          BrandTrackingStatus  @default(DRAFT)
+  schedule        String?              // cron expression for auto-snapshots
+  alertThresholds Json                 @default("{}") // alert configurations
+  lastSnapshot    DateTime?
+  nextSnapshot    DateTime?
+  snapshotCount   Int                  @default(0)
+  createdBy       String
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  organization Organization            @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  snapshots    BrandTrackingSnapshot[]
+
+  @@index([orgId])
+  @@index([status])
+  @@index([createdBy])
+  @@index([brandName])
+}
+
+model BrandTrackingSnapshot {
+  id               String        @id @default(cuid())
+  brandTrackingId  String
+  orgId            String
+  snapshotDate     DateTime      @default(now())
+  metrics          Json          @default("{}") // all metric values at this point in time
+  brandHealth      Float?        // overall health score 0-100
+  marketShare      Float?        // market share percentage
+  sentimentScore   Float?        // sentiment -1 to 1
+  awareness        Float?        // awareness percentage
+  consideration    Float?        // consideration percentage
+  preference       Float?        // preference percentage
+  loyalty          Float?        // loyalty score
+  nps              Float?        // net promoter score
+  competitorData   Json          @default("{}") // competitor metrics
+  audienceBreakdown Json         @default("{}") // metrics by audience segment
+  insights         String[]      // AI-generated insights
+  metadata         Json          @default("{}")
+  createdAt        DateTime      @default(now())
+
+  brandTracking BrandTracking  @relation(fields: [brandTrackingId], references: [id], onDelete: Cascade)
+  organization  Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([brandTrackingId])
+  @@index([orgId])
+  @@index([snapshotDate])
+}
+
+enum BrandTrackingStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
 }

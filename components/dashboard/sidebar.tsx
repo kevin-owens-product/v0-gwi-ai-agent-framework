@@ -27,6 +27,7 @@ import {
   Table2,
   PieChart,
   UsersRound,
+  Target,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
@@ -60,6 +61,7 @@ const navGroups = [
     defaultOpen: true,
     items: [
       { name: "Audiences", href: "/dashboard/audiences", icon: Users, description: "Build audience segments" },
+      { name: "Brand Tracking", href: "/dashboard/brand-tracking", icon: Target, description: "Monitor brand health" },
       { name: "Charts", href: "/dashboard/charts", icon: BarChart3, description: "Data visualizations" },
       { name: "Crosstabs", href: "/dashboard/crosstabs", icon: Table2, description: "Compare audiences" },
       { name: "Dashboards", href: "/dashboard/dashboards", icon: PieChart, description: "Combined insights" },
