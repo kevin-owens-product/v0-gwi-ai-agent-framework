@@ -31,6 +31,14 @@ const publicPaths = [
   '/partners',
 ]
 
+// Check if path is an API route that handles its own authentication
+function isApiRoute(pathname: string): boolean {
+  return pathname.startsWith('/api/') &&
+         !pathname.startsWith('/api/auth') &&
+         !pathname.startsWith('/api/webhooks') &&
+         !pathname.startsWith('/api/health')
+}
+
 // Check if path matches any public path
 function isPublicPath(pathname: string): boolean {
   return publicPaths.some(path =>
@@ -60,7 +68,12 @@ export async function middleware(request: NextRequest) {
     return addSecurityHeaders(NextResponse.next())
   }
 
-  // Check authentication for protected routes
+  // API routes handle their own authentication - don't redirect, let them return 401
+  if (isApiRoute(pathname)) {
+    return addSecurityHeaders(NextResponse.next())
+  }
+
+  // Check authentication for protected browser routes
   const session = await auth()
 
   if (!session) {
