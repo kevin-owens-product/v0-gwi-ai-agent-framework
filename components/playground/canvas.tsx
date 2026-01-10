@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Users, GripVertical, Maximize2, Download, MoreHorizontal, Plus } from "lucide-react"
+import { Users, GripVertical, Maximize2, Download, MoreHorizontal, Plus, Sparkles } from "lucide-react"
 import { usePlayground } from "@/app/dashboard/playground/page"
 import { cn } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -17,67 +17,7 @@ interface CanvasBlock {
   size: { width: number; height: number }
 }
 
-const sampleBlocks: CanvasBlock[] = [
-  {
-    id: "persona-1",
-    type: "persona",
-    title: "Eco-Conscious Millennial",
-    data: {
-      age: "28-35",
-      income: "$75K-$120K",
-      values: ["Sustainability", "Authenticity", "Experience"],
-      behaviors: ["Researches before buying", "Prefers brands with purpose", "Active on Instagram"],
-      image: "/young-professional-woman-eco-conscious.jpg",
-    },
-    position: { x: 0, y: 0 },
-    size: { width: 1, height: 2 },
-  },
-  {
-    id: "chart-1",
-    type: "chart",
-    title: "Purchase Drivers by Generation",
-    data: {
-      chartType: "bar",
-      categories: ["Price", "Quality", "Brand", "Sustainability", "Convenience"],
-      series: [
-        { name: "Gen Z", data: [78, 65, 45, 82, 71] },
-        { name: "Millennials", data: [72, 78, 52, 76, 68] },
-        { name: "Gen X", data: [85, 82, 61, 58, 74] },
-      ],
-    },
-    position: { x: 1, y: 0 },
-    size: { width: 2, height: 2 },
-  },
-  {
-    id: "insight-1",
-    type: "insight",
-    title: "Key Finding",
-    data: {
-      headline: "Sustainability drives 82% of Gen Z purchase decisions",
-      body: "Gen Z consumers are 2.3x more likely to switch brands based on environmental practices compared to other generations.",
-      confidence: 94,
-      source: "GWI Core Q4 2024",
-    },
-    position: { x: 0, y: 2 },
-    size: { width: 1, height: 1 },
-  },
-  {
-    id: "comparison-1",
-    type: "comparison",
-    title: "US vs UK Consumer Values",
-    data: {
-      markets: ["United States", "United Kingdom"],
-      metrics: [
-        { name: "Brand Loyalty", values: [67, 72] },
-        { name: "Price Sensitivity", values: [78, 71] },
-        { name: "Eco Preference", values: [62, 74] },
-        { name: "Digital Engagement", values: [81, 76] },
-      ],
-    },
-    position: { x: 1, y: 2 },
-    size: { width: 2, height: 1 },
-  },
-]
+// Canvas starts empty - blocks are added when users interact with the chat or add them manually
 
 function PersonaBlock({ block }: { block: CanvasBlock }) {
   return (
@@ -207,7 +147,7 @@ function ComparisonBlock({ block }: { block: CanvasBlock }) {
 
 export function PlaygroundCanvas() {
   const { selectedBlocks, setSelectedBlocks } = usePlayground()
-  const [blocks, setBlocks] = useState(sampleBlocks)
+  const [blocks, setBlocks] = useState<CanvasBlock[]>([])
   const [hoveredBlock, setHoveredBlock] = useState<string | null>(null)
 
   const toggleSelect = (blockId: string) => {
@@ -236,73 +176,90 @@ export function PlaygroundCanvas() {
 
   return (
     <div className="flex-1 overflow-auto p-6 bg-secondary/20">
-      <div className="grid grid-cols-3 gap-4 auto-rows-[200px]">
-        {blocks.map((block) => (
-          <Card
-            key={block.id}
-            className={cn(
-              "relative p-4 transition-all cursor-pointer group",
-              "border-border hover:border-muted-foreground/30",
-              selectedBlocks.includes(block.id) && "ring-2 ring-accent border-accent",
-              block.size.width === 2 && "col-span-2",
-              block.size.height === 2 && "row-span-2",
-            )}
-            onClick={() => toggleSelect(block.id)}
-            onMouseEnter={() => setHoveredBlock(block.id)}
-            onMouseLeave={() => setHoveredBlock(null)}
-          >
-            {/* Drag Handle */}
-            <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab">
-              <GripVertical className="h-4 w-4 text-muted-foreground" />
+      {blocks.length === 0 ? (
+        <div className="h-full flex items-center justify-center">
+          <div className="text-center max-w-md">
+            <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mx-auto mb-4">
+              <Sparkles className="h-8 w-8 text-muted-foreground" />
             </div>
-
-            {/* Actions */}
-            <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <Maximize2 className="h-3 w-3" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <Download className="h-3 w-3" />
-              </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-6 w-6">
-                    <MoreHorizontal className="h-3 w-3" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                  <DropdownMenuItem>Export</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive" onClick={() => removeBlock(block.id)}>
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
-            {/* Block Title */}
-            <div className="mb-3 pr-20">
-              <h3 className="text-sm font-medium text-foreground truncate">{block.title}</h3>
-            </div>
-
-            {/* Block Content */}
-            <div className="h-[calc(100%-2rem)]">{renderBlockContent(block)}</div>
-          </Card>
-        ))}
-
-        {/* Add Block Card */}
-        <Card className="flex items-center justify-center border-dashed border-2 border-border hover:border-muted-foreground/50 transition-colors cursor-pointer group">
-          <div className="text-center">
-            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mx-auto mb-2 group-hover:bg-accent/10 transition-colors">
-              <Plus className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
-            </div>
-            <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-              Add Block
+            <h3 className="text-lg font-medium text-foreground mb-2">No blocks yet</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Use the chat to ask questions and generate insights. Output blocks like charts, personas, and comparisons will appear here for you to visualize and export.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Or use the toolbar to add blocks manually.
             </p>
           </div>
-        </Card>
-      </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-3 gap-4 auto-rows-[200px]">
+          {blocks.map((block) => (
+            <Card
+              key={block.id}
+              className={cn(
+                "relative p-4 transition-all cursor-pointer group",
+                "border-border hover:border-muted-foreground/30",
+                selectedBlocks.includes(block.id) && "ring-2 ring-accent border-accent",
+                block.size.width === 2 && "col-span-2",
+                block.size.height === 2 && "row-span-2",
+              )}
+              onClick={() => toggleSelect(block.id)}
+              onMouseEnter={() => setHoveredBlock(block.id)}
+              onMouseLeave={() => setHoveredBlock(null)}
+            >
+              {/* Drag Handle */}
+              <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab">
+                <GripVertical className="h-4 w-4 text-muted-foreground" />
+              </div>
+
+              {/* Actions */}
+              <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button variant="ghost" size="icon" className="h-6 w-6">
+                  <Maximize2 className="h-3 w-3" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-6 w-6">
+                  <Download className="h-3 w-3" />
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-6 w-6">
+                      <MoreHorizontal className="h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem>Duplicate</DropdownMenuItem>
+                    <DropdownMenuItem>Export</DropdownMenuItem>
+                    <DropdownMenuItem className="text-destructive" onClick={() => removeBlock(block.id)}>
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* Block Title */}
+              <div className="mb-3 pr-20">
+                <h3 className="text-sm font-medium text-foreground truncate">{block.title}</h3>
+              </div>
+
+              {/* Block Content */}
+              <div className="h-[calc(100%-2rem)]">{renderBlockContent(block)}</div>
+            </Card>
+          ))}
+
+          {/* Add Block Card */}
+          <Card className="flex items-center justify-center border-dashed border-2 border-border hover:border-muted-foreground/50 transition-colors cursor-pointer group">
+            <div className="text-center">
+              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mx-auto mb-2 group-hover:bg-accent/10 transition-colors">
+                <Plus className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
+              </div>
+              <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                Add Block
+              </p>
+            </div>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }

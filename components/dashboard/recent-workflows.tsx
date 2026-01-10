@@ -23,6 +23,21 @@ const statusConfig = {
   failed: { icon: AlertCircle, color: "text-destructive", bg: "bg-destructive/10" },
 }
 
+// Format a date to relative time (e.g., "2 hours ago")
+function formatRelativeTime(date: Date): string {
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+
+  if (diffMins < 1) return 'Just now'
+  if (diffMins < 60) return `${diffMins} minute${diffMins === 1 ? '' : 's'} ago`
+  if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`
+  if (diffDays < 7) return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`
+  return date.toLocaleDateString()
+}
+
 // Demo workflows shown when API returns empty or errors
 const demoWorkflows: Workflow[] = [
   {
@@ -66,9 +81,9 @@ export function RecentWorkflows() {
   useEffect(() => {
     async function fetchWorkflows() {
       try {
-        // TODO: Replace with actual workflows API when available
         const response = await fetch('/api/v1/workflows?limit=4')
         if (!response.ok) {
+          // Use demo data for unauthenticated or error states
           setWorkflows(demoWorkflows)
           return
         }
@@ -76,12 +91,34 @@ export function RecentWorkflows() {
         const fetchedWorkflows = data.workflows || data.data || []
 
         if (fetchedWorkflows.length === 0) {
+          // Show demo data when user has no workflows yet
           setWorkflows(demoWorkflows)
         } else {
-          setWorkflows(fetchedWorkflows.slice(0, 4))
+          // Transform API response to match component interface
+          const transformedWorkflows: Workflow[] = fetchedWorkflows.slice(0, 4).map((wf: any) => {
+            // Map API status to display status
+            const statusMap: Record<string, Workflow['status']> = {
+              ACTIVE: 'running',
+              DRAFT: 'scheduled',
+              PAUSED: 'scheduled',
+              ARCHIVED: 'completed',
+              COMPLETED: 'completed',
+              FAILED: 'failed',
+              RUNNING: 'running',
+            }
+            return {
+              id: wf.id,
+              name: wf.name,
+              status: statusMap[wf.status] || 'scheduled',
+              agents: Array.isArray(wf.agents) ? wf.agents : [],
+              lastRun: wf.lastRunAt ? formatRelativeTime(new Date(wf.lastRunAt)) : wf.schedule || 'Not run yet',
+              insights: wf.insightsCount || 0,
+            }
+          })
+          setWorkflows(transformedWorkflows)
         }
       } catch (err) {
-        // Workflows API not available yet, use demo data
+        // Use demo data on network/auth errors
         setWorkflows(demoWorkflows)
       } finally {
         setIsLoading(false)
