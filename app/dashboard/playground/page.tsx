@@ -10,6 +10,7 @@ import { PlaygroundHeader } from "@/components/playground/header"
 import { PlaygroundCanvas } from "@/components/playground/canvas"
 import { PlaygroundToolbar } from "@/components/playground/toolbar"
 import { PlaygroundContextPanel } from "@/components/playground/context-panel"
+import { WelcomeWizard } from "@/components/playground/welcome-wizard"
 
 export interface PlaygroundConfig {
   selectedAgent: string
@@ -77,6 +78,8 @@ interface PlaygroundContextType {
   customAgent: CustomAgent | null
   setCustomAgent: React.Dispatch<React.SetStateAction<CustomAgent | null>>
   addOutput: (type: OutputBlock["type"]) => void
+  showWelcome: boolean
+  setShowWelcome: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const PlaygroundContext = createContext<PlaygroundContextType | null>(null)
@@ -161,6 +164,33 @@ export default function PlaygroundPage() {
     timeframe: "Last 12 months",
   })
   const [customAgent, setCustomAgent] = useState<CustomAgent | null>(null)
+  const [showWelcome, setShowWelcome] = useState(false)
+
+  // Check if this is first visit
+  useEffect(() => {
+    const hasVisited = localStorage.getItem("playground-visited")
+    if (!hasVisited) {
+      setShowWelcome(true)
+      localStorage.setItem("playground-visited", "true")
+    }
+  }, [])
+
+  const handleExampleSelect = (example: { prompt: string; agent: string }) => {
+    // Set the agent
+    setConfig((prev) => ({ ...prev, selectedAgent: example.agent }))
+
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: example.prompt,
+      status: "complete",
+    }
+
+    setMessages((prev) => [...prev, userMessage])
+
+    // Would trigger AI response here in production
+  }
 
   // Fetch agent from API if agent ID is in URL
   useEffect(() => {
@@ -385,8 +415,15 @@ export default function PlaygroundPage() {
         customAgent,
         setCustomAgent,
         addOutput,
+        showWelcome,
+        setShowWelcome,
       }}
     >
+      <WelcomeWizard
+        open={showWelcome}
+        onClose={() => setShowWelcome(false)}
+        onExampleSelect={handleExampleSelect}
+      />
       <div className="-m-6 flex h-[calc(100vh-4rem)] overflow-hidden bg-background">
         <PlaygroundSidebar />
         <div className="flex-1 flex flex-col min-w-0">
