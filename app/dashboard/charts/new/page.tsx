@@ -6,15 +6,51 @@ import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, BarChart3, LineChart, PieChart } from "lucide-react"
+import { ArrowLeft, BarChart3, LineChart, PieChart, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function NewChartPage() {
   const router = useRouter()
   const [chartType, setChartType] = useState("bar")
+  const [chartName, setChartName] = useState("")
   const [selectedAudience, setSelectedAudience] = useState("")
   const [selectedMetric, setSelectedMetric] = useState("")
+  const [timePeriod, setTimePeriod] = useState("12m")
+  const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleCreate = async () => {
+    if (!chartName.trim()) {
+      setError("Please enter a chart name")
+      return
+    }
+    setIsSaving(true)
+    setError("")
+    try {
+      const response = await fetch("/api/v1/charts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: chartName.trim(),
+          type: chartType,
+          audienceId: selectedAudience,
+          metric: selectedMetric,
+          timePeriod,
+        }),
+      })
+      if (response.ok) {
+        router.push("/dashboard/charts")
+      } else {
+        setError("Failed to create chart")
+      }
+    } catch (err) {
+      console.error("Failed to create chart:", err)
+      setError("Failed to create chart. Please try again.")
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   return (
     <div className="flex-1 space-y-6 p-6">
@@ -68,7 +104,7 @@ export default function NewChartPage() {
 
             <div>
               <Label htmlFor="name">Chart Name</Label>
-              <Input id="name" placeholder="e.g., Social Media Usage by Age" />
+              <Input id="name" placeholder="e.g., Social Media Usage by Age" value={chartName} onChange={(e) => setChartName(e.target.value)} />
             </div>
 
             <div>
@@ -113,7 +149,7 @@ export default function NewChartPage() {
             <h3 className="font-semibold">Chart Options</h3>
             <div>
               <Label>Time Period</Label>
-              <Select>
+              <Select value={timePeriod} onValueChange={setTimePeriod}>
                 <SelectTrigger>
                   <SelectValue placeholder="Last 12 months" />
                 </SelectTrigger>
@@ -127,10 +163,11 @@ export default function NewChartPage() {
           </Card>
 
           <div className="space-y-2">
-            <Button className="w-full" onClick={() => router.push("/dashboard/charts")}>
-              Create Chart
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <Button className="w-full" onClick={handleCreate} disabled={isSaving}>
+              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating...</> : "Create Chart"}
             </Button>
-            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()}>
+            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()} disabled={isSaving}>
               Cancel
             </Button>
           </div>

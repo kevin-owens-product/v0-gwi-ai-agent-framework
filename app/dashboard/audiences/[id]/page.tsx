@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, use } from "react"
+import { useState, useEffect, use } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   ArrowLeft,
   Download,
@@ -17,14 +18,29 @@ import {
   BarChart3,
   Target,
   Zap,
+  Loader2,
+  Copy,
+  Check,
+  Trash2,
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 // Mock audience data - 10 advanced examples
 const audienceData: Record<string, {
@@ -391,10 +407,104 @@ const audienceData: Record<string, {
   },
 }
 
+interface AudienceType {
+  id: string
+  name: string
+  description: string
+  size: string
+  markets: string[]
+  lastUsed: string
+  createdBy: string
+  demographics: { label: string; value: string }[]
+  behaviors: string[]
+  interests: string[]
+}
+
 export default function AudienceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
+  const router = useRouter()
   const [isExporting, setIsExporting] = useState(false)
-  const audience = audienceData[id]
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [audience, setAudience] = useState<AudienceType | null>(null)
+
+  useEffect(() => {
+    async function fetchAudience() {
+      setIsLoading(true)
+      try {
+        const response = await fetch(`/api/v1/audiences/${id}`)
+        if (response.ok) {
+          const data = await response.json()
+          const apiAudience = data.data || data
+          if (apiAudience && apiAudience.id) {
+            const criteria = apiAudience.criteria || {}
+            setAudience({
+              id: apiAudience.id,
+              name: apiAudience.name,
+              description: apiAudience.description || "",
+              size: formatSize(apiAudience.size || 0),
+              markets: criteria.markets || ["Global"],
+              lastUsed: formatTimeAgo(apiAudience.updatedAt),
+              createdBy: apiAudience.createdByName || "Unknown",
+              demographics: criteria.demographics || [],
+              behaviors: criteria.behaviors || [],
+              interests: criteria.interests || [],
+            })
+          } else {
+            setAudience(audienceData[id] || null)
+          }
+        } else {
+          setAudience(audienceData[id] || null)
+        }
+      } catch (error) {
+        console.error("Failed to fetch audience:", error)
+        setAudience(audienceData[id] || null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchAudience()
+  }, [id])
+
+  function formatTimeAgo(dateString: string): string {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffHours / 24)
+    if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`
+    if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`
+    return "Just now"
+  }
+
+  function formatSize(size: number): string {
+    if (size >= 1000000) return `${(size / 1000000).toFixed(1)}M`
+    if (size >= 1000) return `${(size / 1000).toFixed(0)}K`
+    return size.toString()
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-6 p-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-10 w-10" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-6">
+            <Skeleton className="h-48" />
+            <Skeleton className="h-32" />
+          </div>
+          <Skeleton className="h-64" />
+        </div>
+      </div>
+    )
+  }
 
   if (!audience) {
     return (
@@ -426,8 +536,82 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
 
   const handleExport = async () => {
     setIsExporting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsExporting(false)
+    try {
+      const exportData = {
+        audience: {
+          id: audience.id,
+          name: audience.name,
+          description: audience.description,
+          size: audience.size,
+          markets: audience.markets,
+          demographics: audience.demographics,
+          behaviors: audience.behaviors,
+          interests: audience.interests,
+        },
+        metadata: {
+          exportedAt: new Date().toISOString(),
+          lastUsed: audience.lastUsed,
+          createdBy: audience.createdBy,
+        },
+      }
+      const content = JSON.stringify(exportData, null, 2)
+      const blob = new Blob([content], { type: "application/json" })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `audience-${audience.id}-${new Date().toISOString().split("T")[0]}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error("Export failed:", error)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/v1/audiences/${id}`, { method: "DELETE" })
+      if (response.ok) {
+        router.push("/dashboard/audiences")
+      }
+    } catch (error) {
+      console.error("Delete failed:", error)
+    } finally {
+      setIsDeleting(false)
+      setShowDeleteDialog(false)
+    }
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleDuplicate = async () => {
+    try {
+      const response = await fetch("/api/v1/audiences", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${audience.name} (Copy)`,
+          description: audience.description,
+          criteria: {
+            demographics: audience.demographics,
+            behaviors: audience.behaviors,
+            interests: audience.interests,
+            markets: audience.markets,
+          },
+        }),
+      })
+      if (response.ok) {
+        router.push("/dashboard/audiences")
+      }
+    } catch (error) {
+      console.error("Duplicate failed:", error)
+    }
   }
 
   return (
@@ -457,7 +641,7 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
             Share
           </Button>
           <Button variant="outline" size="sm" className="bg-transparent" onClick={handleExport} disabled={isExporting}>
-            <Download className="h-4 w-4 mr-2" />
+            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
             {isExporting ? "Exporting..." : "Export"}
           </Button>
           <Link href={`/dashboard/audiences/new?edit=${audience.id}`}>
@@ -473,12 +657,37 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem>Create Lookalike</DropdownMenuItem>
-              <DropdownMenuItem>Add to Project</DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/audiences/new?lookalike=${audience.id}`}>Create Lookalike</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/crosstabs/new?audience=${audience.id}`}>Add to Crosstab</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Audience</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete "{audience.name}"? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 
@@ -577,21 +786,25 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
           <Card className="p-6 space-y-4">
             <h3 className="font-semibold">Quick Actions</h3>
             <div className="space-y-2">
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Create Chart
-              </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Users className="h-4 w-4 mr-2" />
-                Compare Audiences
-              </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Download className="h-4 w-4 mr-2" />
+              <Link href={`/dashboard/charts/new?audience=${audience.id}`}>
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Create Chart
+                </Button>
+              </Link>
+              <Link href={`/dashboard/crosstabs/new?audience=${audience.id}`}>
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Users className="h-4 w-4 mr-2" />
+                  Compare Audiences
+                </Button>
+              </Link>
+              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleExport} disabled={isExporting}>
+                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
                 Export Profile
               </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Share2 className="h-4 w-4 mr-2" />
-                Copy Link
+              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleCopyLink}>
+                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                {copied ? "Copied!" : "Copy Link"}
               </Button>
             </div>
           </Card>

@@ -5,15 +5,52 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, X } from "lucide-react"
+import { ArrowLeft, X, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 
 export default function NewCrosstabPage() {
   const router = useRouter()
+  const [name, setName] = useState("")
   const [selectedAudiences, setSelectedAudiences] = useState<string[]>([])
   const [selectedMetrics, setSelectedMetrics] = useState<string[]>([])
+  const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleCreate = async () => {
+    if (!name.trim()) {
+      setError("Please enter a crosstab name")
+      return
+    }
+    if (selectedAudiences.length === 0) {
+      setError("Please select at least one audience")
+      return
+    }
+    if (selectedMetrics.length === 0) {
+      setError("Please select at least one metric")
+      return
+    }
+    setIsSaving(true)
+    setError("")
+    try {
+      const response = await fetch("/api/v1/crosstabs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), audiences: selectedAudiences, metrics: selectedMetrics }),
+      })
+      if (response.ok) {
+        router.push("/dashboard/crosstabs")
+      } else {
+        setError("Failed to create crosstab")
+      }
+    } catch (err) {
+      console.error("Failed to create crosstab:", err)
+      setError("Failed to create crosstab. Please try again.")
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   const availableAudiences = [
     "Eco-Conscious Millennials",
@@ -50,7 +87,7 @@ export default function NewCrosstabPage() {
           <Card className="p-6 space-y-4">
             <div>
               <Label htmlFor="name">Crosstab Name</Label>
-              <Input id="name" placeholder="e.g., Age vs Social Media Platforms" />
+              <Input id="name" placeholder="e.g., Age vs Social Media Platforms" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
           </Card>
 
@@ -151,10 +188,11 @@ export default function NewCrosstabPage() {
           </Card>
 
           <div className="space-y-2">
-            <Button className="w-full" onClick={() => router.push("/dashboard/crosstabs")}>
-              Generate Crosstab
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <Button className="w-full" onClick={handleCreate} disabled={isSaving}>
+              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating...</> : "Generate Crosstab"}
             </Button>
-            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()}>
+            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()} disabled={isSaving}>
               Cancel
             </Button>
           </div>

@@ -15,14 +15,29 @@ import {
   Users,
   Table2,
   BarChart3,
+  Loader2,
+  Copy,
+  Check,
+  Trash2,
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import {
   Table,
   TableBody,
@@ -259,7 +274,11 @@ const crosstabData: Record<string, {
 
 export default function CrosstabDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
+  const router = useRouter()
   const [isExporting, setIsExporting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [copied, setCopied] = useState(false)
   const crosstab = crosstabData[id]
 
   if (!crosstab) {
@@ -290,10 +309,79 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
     )
   }
 
-  const handleExport = async () => {
+  const handleExport = async (format: "json" | "csv" = "json") => {
     setIsExporting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsExporting(false)
+    try {
+      if (format === "csv") {
+        const headers = ["Metric", ...crosstab.audiences]
+        const rows = crosstab.data.map((row) => [
+          row.metric,
+          ...crosstab.audiences.map((a) => row.values[a]?.toString() || "0"),
+        ])
+        const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n")
+        const blob = new Blob([csvContent], { type: "text/csv" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `crosstab-${crosstab.id}-${new Date().toISOString().split("T")[0]}.csv`
+        a.click()
+        URL.revokeObjectURL(url)
+      } else {
+        const exportData = {
+          crosstab: { id: crosstab.id, name: crosstab.name, audiences: crosstab.audiences, metrics: crosstab.metrics },
+          data: crosstab.data,
+          metadata: { exportedAt: new Date().toISOString(), createdBy: crosstab.createdBy, dataSource: crosstab.dataSource },
+        }
+        const content = JSON.stringify(exportData, null, 2)
+        const blob = new Blob([content], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `crosstab-${crosstab.id}-${new Date().toISOString().split("T")[0]}.json`
+        a.click()
+        URL.revokeObjectURL(url)
+      }
+    } catch (error) {
+      console.error("Export failed:", error)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/v1/crosstabs/${id}`, { method: "DELETE" })
+      if (response.ok) {
+        router.push("/dashboard/crosstabs")
+      }
+    } catch (error) {
+      console.error("Delete failed:", error)
+    } finally {
+      setIsDeleting(false)
+      setShowDeleteDialog(false)
+    }
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleDuplicate = async () => {
+    try {
+      const response = await fetch("/api/v1/crosstabs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: `${crosstab.name} (Copy)`, audiences: crosstab.audiences, metrics: crosstab.metrics }),
+      })
+      if (response.ok) {
+        router.push("/dashboard/crosstabs")
+      }
+    } catch (error) {
+      console.error("Duplicate failed:", error)
+    }
   }
 
   return (
@@ -320,8 +408,8 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" size="sm" className="bg-transparent" onClick={handleExport} disabled={isExporting}>
-            <Download className="h-4 w-4 mr-2" />
+          <Button variant="outline" size="sm" className="bg-transparent" onClick={() => handleExport("json")} disabled={isExporting}>
+            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
             {isExporting ? "Exporting..." : "Export"}
           </Button>
           <Link href={`/dashboard/crosstabs/new?edit=${crosstab.id}`}>
@@ -337,12 +425,34 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem>Add to Report</DropdownMenuItem>
-              <DropdownMenuItem>Save as Template</DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/dashboards/new?crosstab=${crosstab.id}`}>Add to Dashboard</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Crosstab</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete "{crosstab.name}"? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 
@@ -422,21 +532,23 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
           <Card className="p-6 space-y-4">
             <h3 className="font-semibold">Quick Actions</h3>
             <div className="space-y-2">
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Download className="h-4 w-4 mr-2" />
-                Export as Excel
+              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={() => handleExport("json")} disabled={isExporting}>
+                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+                Export as JSON
               </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Download className="h-4 w-4 mr-2" />
+              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={() => handleExport("csv")} disabled={isExporting}>
+                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
                 Export as CSV
               </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Create Chart
-              </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Share2 className="h-4 w-4 mr-2" />
-                Copy Link
+              <Link href={`/dashboard/charts/new?crosstab=${crosstab.id}`} className="block">
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Create Chart
+                </Button>
+              </Link>
+              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleCopyLink}>
+                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                {copied ? "Copied!" : "Copy Link"}
               </Button>
             </div>
           </Card>

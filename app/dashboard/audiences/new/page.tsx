@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Plus, X, Sparkles } from "lucide-react"
+import { ArrowLeft, Plus, X, Sparkles, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -18,10 +18,45 @@ export default function NewAudiencePage() {
   const [aiQuery, setAiQuery] = useState("")
   const [selectedMarkets, setSelectedMarkets] = useState<string[]>(["Global"])
   const [attributes, setAttributes] = useState<{ dimension: string; operator: string; value: string }[]>([])
+  const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState("")
 
-  const handleSave = () => {
-    // Save audience logic here
-    router.push("/dashboard/audiences")
+  const handleSave = async () => {
+    if (!name.trim()) {
+      setError("Please enter an audience name")
+      return
+    }
+
+    setIsSaving(true)
+    setError("")
+
+    try {
+      const response = await fetch("/api/v1/audiences", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          description: description.trim(),
+          markets: selectedMarkets,
+          criteria: {
+            attributes,
+            aiQuery: aiQuery.trim(),
+          },
+        }),
+      })
+
+      if (response.ok) {
+        router.push("/dashboard/audiences")
+      } else {
+        const data = await response.json()
+        setError(data.error || "Failed to create audience")
+      }
+    } catch (err) {
+      console.error("Failed to save audience:", err)
+      setError("Failed to create audience. Please try again.")
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -189,10 +224,20 @@ export default function NewAudiencePage() {
 
           {/* Actions */}
           <div className="space-y-2">
-            <Button className="w-full" onClick={handleSave}>
-              Save Audience
+            {error && (
+              <p className="text-sm text-destructive">{error}</p>
+            )}
+            <Button className="w-full" onClick={handleSave} disabled={isSaving}>
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save Audience"
+              )}
             </Button>
-            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()}>
+            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()} disabled={isSaving}>
               Cancel
             </Button>
           </div>
