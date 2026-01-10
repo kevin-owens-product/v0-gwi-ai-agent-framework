@@ -388,11 +388,12 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
           const data = await response.json()
           const apiDashboard = data.data || data
           if (apiDashboard && apiDashboard.id) {
+            const widgetsArray = Array.isArray(apiDashboard.widgets) ? apiDashboard.widgets : []
             setDashboard({
               id: apiDashboard.id,
               name: apiDashboard.name,
               description: apiDashboard.description || "",
-              charts: (apiDashboard.widgets || []).map((w: any, i: number) => ({
+              charts: widgetsArray.map((w: any, i: number) => ({
                 id: w.id || `chart-${i}`,
                 name: w.title || w.name || `Chart ${i + 1}`,
                 type: w.type || "BAR",

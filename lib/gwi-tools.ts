@@ -626,7 +626,7 @@ export const updateDashboardTool: GWITool = {
           throw new Error(`Dashboard not found: ${dashboardId}`)
         }
 
-        const existingWidgets = (dashboard.widgets as DashboardWidget[]) || []
+        const existingWidgets = Array.isArray(dashboard.widgets) ? (dashboard.widgets as DashboardWidget[]) : []
         const mergedWidgets = [...existingWidgets]
 
         // Add position to new widgets
@@ -676,11 +676,12 @@ export const updateDashboardTool: GWITool = {
         })
       }
 
+      const finalWidgets = Array.isArray(dashboard.widgets) ? dashboard.widgets : []
       return {
         dashboardId: dashboard.id,
         name: dashboard.name,
-        widgetCount: (dashboard.widgets as DashboardWidget[]).length,
-        widgets: dashboard.widgets,
+        widgetCount: finalWidgets.length,
+        widgets: finalWidgets,
         updatedAt: dashboard.updatedAt.toISOString(),
       }
     })

@@ -24,16 +24,17 @@ export default function DashboardBuilderPage() {
         ? `/api/v1/dashboards/${dashboardId}`
         : "/api/v1/dashboards"
 
+      const widgetsArray = Array.isArray(state.widgets) ? state.widgets : []
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: state.name,
           description: state.description,
-          widgets: state.widgets.map((w: any) => ({
+          widgets: widgetsArray.map((w: any) => ({
             id: w.id,
             type: w.type,
-            title: w.config.title,
+            title: w.config?.title,
             x: w.x,
             y: w.y,
             width: w.width,
