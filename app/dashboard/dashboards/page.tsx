@@ -7,6 +7,8 @@ import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ChartRenderer, generateSampleData } from "@/components/charts"
+import type { ChartType } from "@/components/charts"
 
 interface Dashboard {
   id: string
@@ -214,23 +216,46 @@ function DashboardsGrid({ dashboards }: { dashboards: Dashboard[] }) {
     )
   }
 
+  // Generate consistent chart types for a dashboard based on its id
+  const getDashboardChartTypes = (dashboardId: string): ChartType[] => {
+    const seed = parseInt(dashboardId) || 1
+    const types: ChartType[] = ["BAR", "LINE", "PIE", "AREA"]
+    return [
+      types[seed % 4],
+      types[(seed + 1) % 4],
+      types[(seed + 2) % 4],
+      types[(seed + 3) % 4],
+    ]
+  }
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {dashboards.map((dashboard) => (
-        <Link key={dashboard.id} href={`/dashboard/dashboards/${dashboard.id}`}>
-          <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer">
-            <div className="aspect-video bg-muted rounded-lg mb-3 flex items-center justify-center">
-              <LayoutDashboard className="h-12 w-12 text-muted-foreground" />
-            </div>
-            <h3 className="font-semibold">{dashboard.name}</h3>
-            <p className="text-sm text-muted-foreground">{dashboard.charts} charts</p>
-            <div className="flex items-center justify-between mt-3 text-xs text-muted-foreground">
-              <span>{dashboard.lastModified}</span>
-              <span>{dashboard.views} views</span>
-            </div>
-          </Card>
-        </Link>
-      ))}
+      {dashboards.map((dashboard) => {
+        const chartTypes = getDashboardChartTypes(dashboard.id)
+        return (
+          <Link key={dashboard.id} href={`/dashboard/dashboards/${dashboard.id}`}>
+            <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer">
+              <div className="aspect-video bg-muted rounded-lg mb-3 overflow-hidden grid grid-cols-2 grid-rows-2 gap-0.5 p-0.5">
+                {chartTypes.map((type, idx) => (
+                  <div key={idx} className="bg-background rounded overflow-hidden">
+                    <ChartRenderer
+                      type={type}
+                      data={generateSampleData(type, 4)}
+                      config={{ showLegend: false, showGrid: false, showTooltip: false, height: 60 }}
+                    />
+                  </div>
+                ))}
+              </div>
+              <h3 className="font-semibold">{dashboard.name}</h3>
+              <p className="text-sm text-muted-foreground">{dashboard.charts} charts</p>
+              <div className="flex items-center justify-between mt-3 text-xs text-muted-foreground">
+                <span>{dashboard.lastModified}</span>
+                <span>{dashboard.views} views</span>
+              </div>
+            </Card>
+          </Link>
+        )
+      })}
     </div>
   )
 }

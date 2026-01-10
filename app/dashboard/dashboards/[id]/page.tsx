@@ -16,10 +16,7 @@ import {
   Users,
   LayoutDashboard,
   BarChart3,
-  LineChart,
-  PieChart,
   Plus,
-  Settings,
   Loader2,
   Copy,
   Check,
@@ -43,13 +40,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { ChartRenderer, generateSampleData } from "@/components/charts"
+import type { ChartType } from "@/components/charts"
 
 // Mock dashboard data - 10 advanced examples
 const dashboardData: Record<string, {
   id: string
   name: string
   description: string
-  charts: { id: string; name: string; type: "bar" | "line" | "pie" }[]
+  charts: { id: string; name: string; type: ChartType }[]
   lastModified: string
   views: number
   createdBy: string
@@ -61,16 +60,16 @@ const dashboardData: Record<string, {
     name: "Q4 2024 Campaign Performance Hub",
     description: "Comprehensive performance analytics for Q4 marketing campaigns across all channels with real-time KPI tracking",
     charts: [
-      { id: "c1", name: "Multi-Channel Engagement Rates", type: "bar" },
-      { id: "c2", name: "Full-Funnel Conversion Analysis", type: "bar" },
-      { id: "c3", name: "Weekly Performance Trajectory", type: "line" },
-      { id: "c4", name: "Audience Reach by Demographic", type: "pie" },
-      { id: "c5", name: "ROI by Campaign & Creative", type: "bar" },
-      { id: "c6", name: "CTR Trend with Benchmarks", type: "line" },
-      { id: "c7", name: "Brand Lift by Exposure Level", type: "bar" },
-      { id: "c8", name: "CPA Optimization Tracker", type: "line" },
-      { id: "c9", name: "Attribution Model Comparison", type: "bar" },
-      { id: "c10", name: "Budget Allocation Efficiency", type: "pie" },
+      { id: "c1", name: "Multi-Channel Engagement Rates", type: "BAR" },
+      { id: "c2", name: "Full-Funnel Conversion Analysis", type: "FUNNEL" },
+      { id: "c3", name: "Weekly Performance Trajectory", type: "LINE" },
+      { id: "c4", name: "Audience Reach by Demographic", type: "PIE" },
+      { id: "c5", name: "ROI by Campaign & Creative", type: "BAR" },
+      { id: "c6", name: "CTR Trend with Benchmarks", type: "AREA" },
+      { id: "c7", name: "Brand Lift by Exposure Level", type: "RADAR" },
+      { id: "c8", name: "CPA Optimization Tracker", type: "LINE" },
+      { id: "c9", name: "Attribution Model Comparison", type: "BAR" },
+      { id: "c10", name: "Budget Allocation Efficiency", type: "DONUT" },
     ],
     lastModified: "1 hour ago",
     views: 2341,
@@ -83,18 +82,18 @@ const dashboardData: Record<string, {
     name: "Global Consumer Trends 2024",
     description: "Annual consumer behavior analysis covering digital habits, purchase patterns, and emerging lifestyle trends across 48 markets",
     charts: [
-      { id: "c1", name: "Social Platform Penetration by Gen", type: "bar" },
-      { id: "c2", name: "Omnichannel Shopping Mix", type: "pie" },
-      { id: "c3", name: "Brand Loyalty Evolution (3Y)", type: "line" },
-      { id: "c4", name: "Sustainability Attitude Segments", type: "bar" },
-      { id: "c5", name: "Device Ecosystem Usage", type: "pie" },
-      { id: "c6", name: "Content Format Preferences", type: "bar" },
-      { id: "c7", name: "Purchase Decision Drivers", type: "bar" },
-      { id: "c8", name: "Generational Breakdown", type: "pie" },
-      { id: "c9", name: "Regional Behavior Variations", type: "bar" },
-      { id: "c10", name: "YoY Trend Comparison", type: "line" },
-      { id: "c11", name: "Emerging Behavior Indicators", type: "bar" },
-      { id: "c12", name: "Category Market Share", type: "pie" },
+      { id: "c1", name: "Social Platform Penetration by Gen", type: "BAR" },
+      { id: "c2", name: "Omnichannel Shopping Mix", type: "PIE" },
+      { id: "c3", name: "Brand Loyalty Evolution (3Y)", type: "LINE" },
+      { id: "c4", name: "Sustainability Attitude Segments", type: "TREEMAP" },
+      { id: "c5", name: "Device Ecosystem Usage", type: "DONUT" },
+      { id: "c6", name: "Content Format Preferences", type: "BAR" },
+      { id: "c7", name: "Purchase Decision Drivers", type: "RADAR" },
+      { id: "c8", name: "Generational Breakdown", type: "PIE" },
+      { id: "c9", name: "Regional Behavior Variations", type: "BAR" },
+      { id: "c10", name: "YoY Trend Comparison", type: "AREA" },
+      { id: "c11", name: "Emerging Behavior Indicators", type: "BAR" },
+      { id: "c12", name: "Category Market Share", type: "DONUT" },
     ],
     lastModified: "4 hours ago",
     views: 5672,
@@ -107,14 +106,14 @@ const dashboardData: Record<string, {
     name: "Competitive Brand Health Tracker",
     description: "Real-time monitoring of brand perception metrics vs. key competitors with sentiment analysis and advocacy tracking",
     charts: [
-      { id: "c1", name: "Unaided vs Aided Awareness", type: "bar" },
-      { id: "c2", name: "NPS Trend Analysis", type: "line" },
-      { id: "c3", name: "Share of Voice Distribution", type: "pie" },
-      { id: "c4", name: "Sentiment Score by Channel", type: "bar" },
-      { id: "c5", name: "Purchase Consideration Funnel", type: "bar" },
-      { id: "c6", name: "Brand Attribute Mapping", type: "bar" },
-      { id: "c7", name: "Competitive Positioning Matrix", type: "bar" },
-      { id: "c8", name: "Brand Advocacy Index", type: "line" },
+      { id: "c1", name: "Unaided vs Aided Awareness", type: "BAR" },
+      { id: "c2", name: "NPS Trend Analysis", type: "LINE" },
+      { id: "c3", name: "Share of Voice Distribution", type: "PIE" },
+      { id: "c4", name: "Sentiment Score by Channel", type: "RADAR" },
+      { id: "c5", name: "Purchase Consideration Funnel", type: "FUNNEL" },
+      { id: "c6", name: "Brand Attribute Mapping", type: "BAR" },
+      { id: "c7", name: "Competitive Positioning Matrix", type: "SCATTER" },
+      { id: "c8", name: "Brand Advocacy Index", type: "AREA" },
     ],
     lastModified: "2 days ago",
     views: 3892,
@@ -127,15 +126,15 @@ const dashboardData: Record<string, {
     name: "Gen Z Insights Command Center",
     description: "Deep-dive analysis of Gen Z consumer behaviors, platform preferences, and brand relationships across global markets",
     charts: [
-      { id: "c1", name: "Platform Time Allocation", type: "pie" },
-      { id: "c2", name: "Content Consumption by Format", type: "bar" },
-      { id: "c3", name: "Shopping Journey Mapping", type: "line" },
-      { id: "c4", name: "Influencer Trust Levels", type: "bar" },
-      { id: "c5", name: "Values & Causes Alignment", type: "bar" },
-      { id: "c6", name: "Brand Discovery Channels", type: "pie" },
-      { id: "c7", name: "Purchase Influence Factors", type: "bar" },
-      { id: "c8", name: "Cross-Market Comparison", type: "bar" },
-      { id: "c9", name: "Emerging Trend Radar", type: "bar" },
+      { id: "c1", name: "Platform Time Allocation", type: "DONUT" },
+      { id: "c2", name: "Content Consumption by Format", type: "BAR" },
+      { id: "c3", name: "Shopping Journey Mapping", type: "FUNNEL" },
+      { id: "c4", name: "Influencer Trust Levels", type: "BAR" },
+      { id: "c5", name: "Values & Causes Alignment", type: "RADAR" },
+      { id: "c6", name: "Brand Discovery Channels", type: "PIE" },
+      { id: "c7", name: "Purchase Influence Factors", type: "BAR" },
+      { id: "c8", name: "Cross-Market Comparison", type: "BAR" },
+      { id: "c9", name: "Emerging Trend Radar", type: "RADAR" },
     ],
     lastModified: "6 hours ago",
     views: 4521,
@@ -148,16 +147,16 @@ const dashboardData: Record<string, {
     name: "E-commerce Performance Analytics",
     description: "End-to-end e-commerce funnel analysis with cart behavior, payment preferences, and cross-channel attribution",
     charts: [
-      { id: "c1", name: "Funnel Drop-off Analysis", type: "bar" },
-      { id: "c2", name: "Cart Abandonment Reasons", type: "pie" },
-      { id: "c3", name: "Revenue by Channel", type: "bar" },
-      { id: "c4", name: "Payment Method Preferences", type: "pie" },
-      { id: "c5", name: "AOV Trend by Segment", type: "line" },
-      { id: "c6", name: "Repeat Purchase Patterns", type: "line" },
-      { id: "c7", name: "Cross-sell/Upsell Success", type: "bar" },
-      { id: "c8", name: "Mobile vs Desktop Split", type: "pie" },
-      { id: "c9", name: "Seasonal Performance", type: "line" },
-      { id: "c10", name: "Customer Lifetime Value", type: "bar" },
+      { id: "c1", name: "Funnel Drop-off Analysis", type: "FUNNEL" },
+      { id: "c2", name: "Cart Abandonment Reasons", type: "PIE" },
+      { id: "c3", name: "Revenue by Channel", type: "BAR" },
+      { id: "c4", name: "Payment Method Preferences", type: "DONUT" },
+      { id: "c5", name: "AOV Trend by Segment", type: "LINE" },
+      { id: "c6", name: "Repeat Purchase Patterns", type: "AREA" },
+      { id: "c7", name: "Cross-sell/Upsell Success", type: "BAR" },
+      { id: "c8", name: "Mobile vs Desktop Split", type: "PIE" },
+      { id: "c9", name: "Seasonal Performance", type: "LINE" },
+      { id: "c10", name: "Customer Lifetime Value", type: "TREEMAP" },
     ],
     lastModified: "3 hours ago",
     views: 2987,
@@ -170,14 +169,14 @@ const dashboardData: Record<string, {
     name: "Media Mix Optimization Center",
     description: "Cross-channel media performance analysis with budget allocation recommendations and reach/frequency optimization",
     charts: [
-      { id: "c1", name: "Channel Efficiency Matrix", type: "bar" },
-      { id: "c2", name: "Budget Allocation Current", type: "pie" },
-      { id: "c3", name: "Reach Curve Analysis", type: "line" },
-      { id: "c4", name: "Frequency Distribution", type: "bar" },
-      { id: "c5", name: "Cross-Channel Synergy", type: "bar" },
-      { id: "c6", name: "Daypart Performance", type: "bar" },
-      { id: "c7", name: "Creative Fatigue Tracker", type: "line" },
-      { id: "c8", name: "Incremental Reach by Medium", type: "bar" },
+      { id: "c1", name: "Channel Efficiency Matrix", type: "BAR" },
+      { id: "c2", name: "Budget Allocation Current", type: "DONUT" },
+      { id: "c3", name: "Reach Curve Analysis", type: "AREA" },
+      { id: "c4", name: "Frequency Distribution", type: "BAR" },
+      { id: "c5", name: "Cross-Channel Synergy", type: "RADAR" },
+      { id: "c6", name: "Daypart Performance", type: "BAR" },
+      { id: "c7", name: "Creative Fatigue Tracker", type: "LINE" },
+      { id: "c8", name: "Incremental Reach by Medium", type: "BAR" },
     ],
     lastModified: "8 hours ago",
     views: 1876,
@@ -190,15 +189,15 @@ const dashboardData: Record<string, {
     name: "Sustainability & ESG Tracker",
     description: "Consumer sustainability attitudes, brand perception on ESG issues, and green product adoption patterns",
     charts: [
-      { id: "c1", name: "Sustainability Segment Sizes", type: "pie" },
-      { id: "c2", name: "Willingness to Pay Premium", type: "bar" },
-      { id: "c3", name: "ESG Awareness Trend", type: "line" },
-      { id: "c4", name: "Green Product Adoption", type: "bar" },
-      { id: "c5", name: "Brand ESG Perception", type: "bar" },
-      { id: "c6", name: "Greenwashing Skepticism", type: "bar" },
-      { id: "c7", name: "Sustainable Behavior Index", type: "line" },
-      { id: "c8", name: "Category Sustainability Importance", type: "bar" },
-      { id: "c9", name: "Gen Comparison on ESG", type: "bar" },
+      { id: "c1", name: "Sustainability Segment Sizes", type: "PIE" },
+      { id: "c2", name: "Willingness to Pay Premium", type: "BAR" },
+      { id: "c3", name: "ESG Awareness Trend", type: "AREA" },
+      { id: "c4", name: "Green Product Adoption", type: "FUNNEL" },
+      { id: "c5", name: "Brand ESG Perception", type: "RADAR" },
+      { id: "c6", name: "Greenwashing Skepticism", type: "BAR" },
+      { id: "c7", name: "Sustainable Behavior Index", type: "LINE" },
+      { id: "c8", name: "Category Sustainability Importance", type: "BAR" },
+      { id: "c9", name: "Gen Comparison on ESG", type: "BAR" },
     ],
     lastModified: "1 day ago",
     views: 2234,
@@ -211,16 +210,16 @@ const dashboardData: Record<string, {
     name: "Streaming & Entertainment Landscape",
     description: "Comprehensive analysis of streaming platform usage, content preferences, and subscriber behavior patterns",
     charts: [
-      { id: "c1", name: "Platform Subscriber Share", type: "pie" },
-      { id: "c2", name: "Multi-Subscription Patterns", type: "bar" },
-      { id: "c3", name: "Churn Risk Indicators", type: "bar" },
-      { id: "c4", name: "Content Genre Preferences", type: "bar" },
-      { id: "c5", name: "Viewing Time by Daypart", type: "line" },
-      { id: "c6", name: "Ad-Tier Adoption Rate", type: "line" },
-      { id: "c7", name: "Device Preference Split", type: "pie" },
-      { id: "c8", name: "Binge vs Linear Viewing", type: "bar" },
-      { id: "c9", name: "Password Sharing Behavior", type: "bar" },
-      { id: "c10", name: "Content Discovery Methods", type: "pie" },
+      { id: "c1", name: "Platform Subscriber Share", type: "DONUT" },
+      { id: "c2", name: "Multi-Subscription Patterns", type: "BAR" },
+      { id: "c3", name: "Churn Risk Indicators", type: "FUNNEL" },
+      { id: "c4", name: "Content Genre Preferences", type: "TREEMAP" },
+      { id: "c5", name: "Viewing Time by Daypart", type: "AREA" },
+      { id: "c6", name: "Ad-Tier Adoption Rate", type: "LINE" },
+      { id: "c7", name: "Device Preference Split", type: "PIE" },
+      { id: "c8", name: "Binge vs Linear Viewing", type: "BAR" },
+      { id: "c9", name: "Password Sharing Behavior", type: "BAR" },
+      { id: "c10", name: "Content Discovery Methods", type: "RADAR" },
     ],
     lastModified: "5 hours ago",
     views: 3456,
@@ -233,15 +232,15 @@ const dashboardData: Record<string, {
     name: "Financial Services Consumer Insights",
     description: "Banking, fintech, and investment behavior analysis with product adoption and trust metrics by segment",
     charts: [
-      { id: "c1", name: "Digital Banking Adoption", type: "line" },
-      { id: "c2", name: "Fintech Product Usage", type: "bar" },
-      { id: "c3", name: "Investment App Penetration", type: "bar" },
-      { id: "c4", name: "BNPL Usage by Demo", type: "bar" },
-      { id: "c5", name: "Trust in Financial Institutions", type: "bar" },
-      { id: "c6", name: "Crypto Ownership Trends", type: "line" },
-      { id: "c7", name: "Insurance Product Gaps", type: "bar" },
-      { id: "c8", name: "Financial Wellness Score", type: "pie" },
-      { id: "c9", name: "Advisory Preference", type: "pie" },
+      { id: "c1", name: "Digital Banking Adoption", type: "AREA" },
+      { id: "c2", name: "Fintech Product Usage", type: "BAR" },
+      { id: "c3", name: "Investment App Penetration", type: "BAR" },
+      { id: "c4", name: "BNPL Usage by Demo", type: "BAR" },
+      { id: "c5", name: "Trust in Financial Institutions", type: "RADAR" },
+      { id: "c6", name: "Crypto Ownership Trends", type: "LINE" },
+      { id: "c7", name: "Insurance Product Gaps", type: "FUNNEL" },
+      { id: "c8", name: "Financial Wellness Score", type: "DONUT" },
+      { id: "c9", name: "Advisory Preference", type: "PIE" },
     ],
     lastModified: "12 hours ago",
     views: 2789,
@@ -254,16 +253,16 @@ const dashboardData: Record<string, {
     name: "Health & Wellness Market Monitor",
     description: "Consumer health priorities, wellness product adoption, and fitness behavior trends across demographics",
     charts: [
-      { id: "c1", name: "Wellness Priority Rankings", type: "bar" },
-      { id: "c2", name: "Fitness App Market Share", type: "pie" },
-      { id: "c3", name: "Supplement Category Growth", type: "line" },
-      { id: "c4", name: "Mental Health Awareness", type: "line" },
-      { id: "c5", name: "Wearable Adoption Rates", type: "bar" },
-      { id: "c6", name: "Telehealth Usage Patterns", type: "bar" },
-      { id: "c7", name: "Diet & Nutrition Trends", type: "bar" },
-      { id: "c8", name: "Sleep Optimization Behaviors", type: "bar" },
-      { id: "c9", name: "Preventive Care Spending", type: "line" },
-      { id: "c10", name: "Wellness Spend by Segment", type: "pie" },
+      { id: "c1", name: "Wellness Priority Rankings", type: "BAR" },
+      { id: "c2", name: "Fitness App Market Share", type: "DONUT" },
+      { id: "c3", name: "Supplement Category Growth", type: "AREA" },
+      { id: "c4", name: "Mental Health Awareness", type: "LINE" },
+      { id: "c5", name: "Wearable Adoption Rates", type: "BAR" },
+      { id: "c6", name: "Telehealth Usage Patterns", type: "FUNNEL" },
+      { id: "c7", name: "Diet & Nutrition Trends", type: "TREEMAP" },
+      { id: "c8", name: "Sleep Optimization Behaviors", type: "RADAR" },
+      { id: "c9", name: "Preventive Care Spending", type: "LINE" },
+      { id: "c10", name: "Wellness Spend by Segment", type: "PIE" },
     ],
     lastModified: "2 hours ago",
     views: 1923,
@@ -273,22 +272,27 @@ const dashboardData: Record<string, {
   },
 }
 
-const ChartIcon = ({ type }: { type: "bar" | "line" | "pie" }) => {
-  switch (type) {
-    case "line":
-      return <LineChart className="h-8 w-8 text-muted-foreground" />
-    case "pie":
-      return <PieChart className="h-8 w-8 text-muted-foreground" />
-    default:
-      return <BarChart3 className="h-8 w-8 text-muted-foreground" />
+function formatChartTypeName(type: ChartType): string {
+  const typeMap: Record<ChartType, string> = {
+    BAR: "Bar",
+    LINE: "Line",
+    PIE: "Pie",
+    DONUT: "Donut",
+    AREA: "Area",
+    SCATTER: "Scatter",
+    HEATMAP: "Heatmap",
+    TREEMAP: "Treemap",
+    FUNNEL: "Funnel",
+    RADAR: "Radar",
   }
+  return typeMap[type] || type
 }
 
 interface DashboardType {
   id: string
   name: string
   description: string
-  charts: { id: string; name: string; type: "bar" | "line" | "pie" }[]
+  charts: { id: string; name: string; type: ChartType }[]
   lastModified: string
   views: number
   createdBy: string
@@ -590,23 +594,34 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {dashboard.charts.map((chart) => (
           <Card key={chart.id} className="p-4 hover:bg-accent/50 transition-colors cursor-pointer">
-            <div className="aspect-video bg-muted rounded-lg mb-3 flex items-center justify-center">
-              <ChartIcon type={chart.type} />
+            <div className="aspect-video bg-muted rounded-lg mb-3 overflow-hidden">
+              <ChartRenderer
+                type={chart.type}
+                data={generateSampleData(chart.type, 6)}
+                config={{
+                  showLegend: false,
+                  showGrid: false,
+                  showTooltip: true,
+                  height: 120,
+                }}
+              />
             </div>
             <h3 className="font-medium text-sm">{chart.name}</h3>
-            <p className="text-xs text-muted-foreground capitalize">{chart.type} chart</p>
+            <p className="text-xs text-muted-foreground">{formatChartTypeName(chart.type)} Chart</p>
           </Card>
         ))}
 
         {/* Add Chart Card */}
-        <Card className="p-4 border-dashed hover:bg-accent/50 transition-colors cursor-pointer">
-          <div className="aspect-video rounded-lg mb-3 flex items-center justify-center">
-            <div className="text-center">
-              <Plus className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Add Chart</p>
+        <Link href="/dashboard/charts/new">
+          <Card className="p-4 border-dashed hover:bg-accent/50 transition-colors cursor-pointer h-full">
+            <div className="aspect-video rounded-lg mb-3 flex items-center justify-center">
+              <div className="text-center">
+                <Plus className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground">Add Chart</p>
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </Link>
       </div>
     </div>
   )
