@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -101,10 +101,16 @@ const audiences = [
   { id: "eco-conscious", name: "Eco-Conscious Consumers", size: "380M" },
 ]
 
-export function ReportBuilder() {
+interface ReportBuilderProps {
+  reportId?: string
+}
+
+export function ReportBuilder({ reportId }: ReportBuilderProps) {
   const router = useRouter()
+  const isEditMode = !!reportId
   const [step, setStep] = useState(1)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isLoading, setIsLoading] = useState(isEditMode)
   const [generationProgress, setGenerationProgress] = useState(0)
   const [generationComplete, setGenerationComplete] = useState(false)
   const [selectedType, setSelectedType] = useState("presentation")
@@ -118,6 +124,39 @@ export function ReportBuilder() {
     audiences: ["gen-z", "millennials"],
     timeframe: "q4-2024",
   })
+
+  // Load existing report data when editing
+  useEffect(() => {
+    if (reportId) {
+      async function loadReport() {
+        try {
+          const response = await fetch(`/api/v1/reports/${reportId}`)
+          if (response.ok) {
+            const data = await response.json()
+            const report = data.data || data
+            if (report) {
+              setFormData({
+                title: report.name || report.title || "",
+                description: report.description || "",
+                agent: report.agent || "",
+                prompt: report.prompt || report.query || "",
+                dataSources: report.dataSources || ["core"],
+                markets: report.markets || ["United States", "United Kingdom"],
+                audiences: report.audiences || ["gen-z", "millennials"],
+                timeframe: report.timeframe || "q4-2024",
+              })
+              setSelectedType(report.type?.toLowerCase() || "presentation")
+            }
+          }
+        } catch (error) {
+          console.error("Failed to load report:", error)
+        } finally {
+          setIsLoading(false)
+        }
+      }
+      loadReport()
+    }
+  }, [reportId])
 
   const handleGenerate = async () => {
     setIsGenerating(true)
@@ -162,6 +201,16 @@ export function ReportBuilder() {
 
   const totalSteps = 4
 
+  if (isLoading) {
+    return (
+      <div className="flex-1 p-6 max-w-5xl mx-auto">
+        <div className="flex items-center justify-center h-64">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex-1 p-6 max-w-5xl mx-auto">
       <div className="flex items-center gap-4 mb-8">
@@ -171,8 +220,8 @@ export function ReportBuilder() {
           </Link>
         </Button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold">Create New Report</h1>
-          <p className="text-muted-foreground">Generate insights powered by AI agents</p>
+          <h1 className="text-2xl font-bold">{isEditMode ? "Edit Report" : "Create New Report"}</h1>
+          <p className="text-muted-foreground">{isEditMode ? "Modify your report settings" : "Generate insights powered by AI agents"}</p>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           Step {step} of {totalSteps}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Progress } from "@/components/ui/progress"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   ArrowLeft,
   ArrowRight,
@@ -115,6 +116,7 @@ export default function OnboardingPage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [isCheckingStatus, setIsCheckingStatus] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     firstName: "",
@@ -127,7 +129,53 @@ export default function OnboardingPage() {
     selectedAgents: ["audience-strategist", "creative-brief", "insight-generator"],
   })
 
+  // Check if user has already completed onboarding
+  useEffect(() => {
+    async function checkOnboardingStatus() {
+      try {
+        const response = await fetch("/api/v1/onboarding")
+        if (response.ok) {
+          const data = await response.json()
+          if (data.completed) {
+            // User already completed onboarding, redirect to dashboard
+            router.replace("/dashboard")
+            return
+          }
+        }
+      } catch (error) {
+        console.error("Failed to check onboarding status:", error)
+      } finally {
+        setIsCheckingStatus(false)
+      }
+    }
+    checkOnboardingStatus()
+  }, [router])
+
   const progress = (currentStep / steps.length) * 100
+
+  // Show loading state while checking onboarding status
+  if (isCheckingStatus) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <header className="border-b py-4 px-6">
+          <div className="flex items-center justify-between max-w-4xl mx-auto">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <Cpu className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <span className="font-bold text-xl">GWI</span>
+            </div>
+          </div>
+        </header>
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <Skeleton className="h-8 w-64 mx-auto" />
+            <Skeleton className="h-4 w-48 mx-auto" />
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   const handleNext = async () => {
     setError(null)

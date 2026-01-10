@@ -14,6 +14,38 @@ const onboardingSchema = z.object({
   selectedAgents: z.array(z.string()).optional(),
 })
 
+// GET /api/v1/onboarding - Check onboarding status
+export async function GET() {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Check if user has an organization membership (indicates completed onboarding)
+    const membership = await prisma.organizationMember.findFirst({
+      where: { userId: session.user.id },
+      include: { organization: true },
+    })
+
+    if (membership) {
+      return NextResponse.json({
+        completed: true,
+        organization: {
+          id: membership.organization.id,
+          name: membership.organization.name,
+          slug: membership.organization.slug,
+        },
+      })
+    }
+
+    return NextResponse.json({ completed: false })
+  } catch (error) {
+    console.error('GET /api/v1/onboarding error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+
 // POST /api/v1/onboarding - Complete onboarding
 export async function POST(request: NextRequest) {
   try {
