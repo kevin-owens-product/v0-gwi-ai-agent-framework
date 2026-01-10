@@ -1,4 +1,4 @@
-import { PrismaClient, Role, PlanTier, AgentType, AgentStatus, AgentRunStatus, DataSourceType, DataSourceStatus, UsageMetric, SubscriptionStatus, InvitationStatus, DashboardStatus } from '@prisma/client'
+import { PrismaClient, Role, PlanTier, AgentType, AgentStatus, AgentRunStatus, DataSourceType, DataSourceStatus, UsageMetric, SubscriptionStatus, InvitationStatus, BrandTrackingStatus } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 
@@ -19,6 +19,8 @@ async function main() {
 
   // Clean existing data (in reverse order of dependencies)
   console.log('🧹 Cleaning existing data...')
+  await prisma.brandTrackingSnapshot.deleteMany()
+  await prisma.brandTracking.deleteMany()
   await prisma.insight.deleteMany()
   await prisma.agentRun.deleteMany()
   await prisma.agent.deleteMany()
@@ -806,604 +808,630 @@ async function main() {
     }
   })
 
-  // ==================== AUDIENCES ====================
-  console.log('👥 Creating audiences...')
+  // ==================== BRAND TRACKING ====================
+  console.log('🎯 Creating brand tracking data...')
 
-  const genZAudience = await prisma.audience.create({
+  // Helper function to generate realistic brand metrics with progression
+  function generateBrandMetricsForDate(
+    baseAwareness: number,
+    baseHealth: number,
+    baseNps: number,
+    dayIndex: number,
+    totalDays: number,
+    trend: 'up' | 'down' | 'stable'
+  ) {
+    // Add realistic progression based on trend
+    const trendMultiplier = trend === 'up' ? 1.003 : trend === 'down' ? 0.997 : 1
+    const progressFactor = Math.pow(trendMultiplier, dayIndex)
+
+    // Add natural variance
+    const variance = () => (Math.random() - 0.5) * 4
+
+    const awareness = Math.min(95, Math.max(20, baseAwareness * progressFactor + variance()))
+    const consideration = awareness * (0.55 + Math.random() * 0.15) + variance()
+    const preference = consideration * (0.6 + Math.random() * 0.15) + variance()
+    const loyalty = preference * (0.65 + Math.random() * 0.15) + variance()
+
+    return {
+      brandHealth: Math.min(100, Math.max(40, baseHealth * progressFactor + variance())),
+      awareness,
+      consideration,
+      preference,
+      loyalty,
+      nps: Math.min(80, Math.max(-10, baseNps * progressFactor + variance() * 3)),
+      marketShare: 15 + Math.random() * 20 + (dayIndex * (trend === 'up' ? 0.1 : trend === 'down' ? -0.05 : 0)),
+      sentimentScore: 0.3 + Math.random() * 0.5,
+    }
+  }
+
+  // Nike Brand Tracking - Strong, upward trend
+  const nikeBrandTracking = await prisma.brandTracking.create({
     data: {
       orgId: acmeCorp.id,
-      name: 'Gen Z (18-24)',
-      description: 'Digital natives born 1997-2009, highly active on social media and mobile-first',
-      criteria: {
-        ageRange: { min: 18, max: 24 },
-        generation: 'gen_z',
-        interests: ['social_media', 'gaming', 'streaming', 'sustainability']
+      brandName: 'Nike',
+      description: 'Global leader in athletic footwear and apparel. Tracking brand health, awareness, and competitive positioning across key demographics.',
+      industry: 'Sportswear & Athletic Apparel',
+      competitors: ['Adidas', 'Under Armour', 'Puma', 'New Balance', 'Reebok'],
+      audiences: ['Gen Z Athletes', 'Millennials', 'Fitness Enthusiasts', 'Sneaker Culture'],
+      status: BrandTrackingStatus.ACTIVE,
+      schedule: '0 6 * * *',
+      metrics: {
+        brandAwareness: true,
+        consideration: true,
+        preference: true,
+        loyalty: true,
+        nps: true,
+        sentimentAnalysis: true
       },
-      size: 4850000,
-      markets: ['US', 'UK', 'DE', 'FR'],
-      isFavorite: true,
-      createdBy: adminUser.id
+      alertThresholds: {
+        brandHealth: { min: 70, max: 100 },
+        nps: { min: 40, max: 100 }
+      },
+      createdBy: adminUser.id,
+      snapshotCount: 52,
+      lastSnapshot: new Date(now.getTime() - 2 * 60 * 60 * 1000),
     }
   })
 
-  const millennialsAudience = await prisma.audience.create({
+  // Create 52 weeks of historical data for Nike (weekly snapshots)
+  const nikeSnapshots = []
+  for (let week = 51; week >= 0; week--) {
+    const snapshotDate = new Date(now.getTime() - week * 7 * 24 * 60 * 60 * 1000)
+    const metrics = generateBrandMetricsForDate(78, 82, 58, 51 - week, 52, 'up')
+
+    nikeSnapshots.push({
+      brandTrackingId: nikeBrandTracking.id,
+      orgId: acmeCorp.id,
+      snapshotDate,
+      metrics,
+      brandHealth: metrics.brandHealth,
+      awareness: metrics.awareness,
+      consideration: metrics.consideration,
+      preference: metrics.preference,
+      loyalty: metrics.loyalty,
+      nps: metrics.nps,
+      marketShare: metrics.marketShare,
+      sentimentScore: metrics.sentimentScore,
+      competitorData: {
+        'Adidas': { awareness: 72 + Math.random() * 5, consideration: 45 + Math.random() * 8, marketShare: 18 + Math.random() * 4, sentiment: 0.65 + Math.random() * 0.15 },
+        'Under Armour': { awareness: 58 + Math.random() * 8, consideration: 32 + Math.random() * 6, marketShare: 8 + Math.random() * 3, sentiment: 0.55 + Math.random() * 0.2 },
+        'Puma': { awareness: 62 + Math.random() * 6, consideration: 35 + Math.random() * 7, marketShare: 10 + Math.random() * 3, sentiment: 0.6 + Math.random() * 0.15 },
+        'New Balance': { awareness: 55 + Math.random() * 8, consideration: 38 + Math.random() * 6, marketShare: 7 + Math.random() * 3, sentiment: 0.7 + Math.random() * 0.1 },
+        'Reebok': { awareness: 48 + Math.random() * 8, consideration: 25 + Math.random() * 5, marketShare: 5 + Math.random() * 2, sentiment: 0.5 + Math.random() * 0.2 },
+      },
+      audienceBreakdown: {
+        '18-24': { awareness: metrics.awareness * 1.15, preference: metrics.preference * 1.2, nps: metrics.nps * 1.1 },
+        '25-34': { awareness: metrics.awareness * 1.1, preference: metrics.preference * 1.1, nps: metrics.nps * 1.05 },
+        '35-44': { awareness: metrics.awareness, preference: metrics.preference * 0.95, nps: metrics.nps },
+        '45-54': { awareness: metrics.awareness * 0.9, preference: metrics.preference * 0.85, nps: metrics.nps * 0.95 },
+        '55+': { awareness: metrics.awareness * 0.8, preference: metrics.preference * 0.7, nps: metrics.nps * 0.9 },
+      },
+      insights: week === 0 ? [
+        'Brand awareness increased 12% year-over-year, driven by successful athlete partnerships',
+        'Gen Z engagement outpacing other demographics by 23% - TikTok campaigns showing strong ROI',
+        'NPS score reached all-time high of 62 following sustainability initiative launch',
+        'Market share gains primarily coming from Under Armour and Reebok customer acquisition',
+        'Recommendation: Double down on digital-first marketing to maintain Gen Z momentum'
+      ] : [],
+    })
+  }
+  await prisma.brandTrackingSnapshot.createMany({ data: nikeSnapshots })
+
+  // Spotify Brand Tracking - Tech/Entertainment, stable with seasonal bumps
+  const spotifyBrandTracking = await prisma.brandTracking.create({
     data: {
       orgId: acmeCorp.id,
-      name: 'Millennials (25-40)',
-      description: 'Tech-savvy generation balancing work and life, value experiences over possessions',
-      criteria: {
-        ageRange: { min: 25, max: 40 },
-        generation: 'millennials',
-        interests: ['career', 'travel', 'wellness', 'sustainability']
+      brandName: 'Spotify',
+      description: 'Leading music streaming platform. Monitoring brand perception, user engagement metrics, and competitive landscape against Apple Music and YouTube Music.',
+      industry: 'Music Streaming & Entertainment',
+      competitors: ['Apple Music', 'YouTube Music', 'Amazon Music', 'Tidal', 'Deezer'],
+      audiences: ['Music Enthusiasts', 'Podcast Listeners', 'Premium Subscribers', 'Gen Z'],
+      status: BrandTrackingStatus.ACTIVE,
+      schedule: '0 8 * * 1',
+      metrics: {
+        brandAwareness: true,
+        consideration: true,
+        preference: true,
+        loyalty: true,
+        nps: true,
+        sentimentAnalysis: true
       },
-      size: 7200000,
-      markets: ['US', 'UK', 'DE', 'FR', 'ES'],
-      isFavorite: true,
-      createdBy: adminUser.id
+      alertThresholds: {
+        brandHealth: { min: 65, max: 100 },
+        nps: { min: 35, max: 100 }
+      },
+      createdBy: johnDoe.id,
+      snapshotCount: 45,
+      lastSnapshot: new Date(now.getTime() - 5 * 60 * 60 * 1000),
     }
   })
 
-  const genXAudience = await prisma.audience.create({
+  const spotifySnapshots = []
+  for (let week = 44; week >= 0; week--) {
+    const snapshotDate = new Date(now.getTime() - week * 7 * 24 * 60 * 60 * 1000)
+    const metrics = generateBrandMetricsForDate(85, 78, 52, 44 - week, 45, 'up')
+
+    spotifySnapshots.push({
+      brandTrackingId: spotifyBrandTracking.id,
+      orgId: acmeCorp.id,
+      snapshotDate,
+      metrics,
+      brandHealth: metrics.brandHealth,
+      awareness: metrics.awareness,
+      consideration: metrics.consideration,
+      preference: metrics.preference,
+      loyalty: metrics.loyalty,
+      nps: metrics.nps,
+      marketShare: metrics.marketShare,
+      sentimentScore: metrics.sentimentScore,
+      competitorData: {
+        'Apple Music': { awareness: 80 + Math.random() * 5, consideration: 55 + Math.random() * 8, marketShare: 22 + Math.random() * 4, sentiment: 0.7 + Math.random() * 0.1 },
+        'YouTube Music': { awareness: 75 + Math.random() * 8, consideration: 48 + Math.random() * 8, marketShare: 18 + Math.random() * 4, sentiment: 0.6 + Math.random() * 0.15 },
+        'Amazon Music': { awareness: 65 + Math.random() * 8, consideration: 35 + Math.random() * 6, marketShare: 12 + Math.random() * 3, sentiment: 0.55 + Math.random() * 0.2 },
+        'Tidal': { awareness: 35 + Math.random() * 8, consideration: 18 + Math.random() * 5, marketShare: 3 + Math.random() * 2, sentiment: 0.65 + Math.random() * 0.15 },
+        'Deezer': { awareness: 25 + Math.random() * 6, consideration: 12 + Math.random() * 4, marketShare: 2 + Math.random() * 1, sentiment: 0.5 + Math.random() * 0.2 },
+      },
+      audienceBreakdown: {
+        '18-24': { awareness: metrics.awareness * 1.12, preference: metrics.preference * 1.25, nps: metrics.nps * 1.15 },
+        '25-34': { awareness: metrics.awareness * 1.08, preference: metrics.preference * 1.15, nps: metrics.nps * 1.1 },
+        '35-44': { awareness: metrics.awareness * 0.98, preference: metrics.preference * 0.9, nps: metrics.nps * 0.95 },
+        '45-54': { awareness: metrics.awareness * 0.85, preference: metrics.preference * 0.75, nps: metrics.nps * 0.85 },
+        '55+': { awareness: metrics.awareness * 0.7, preference: metrics.preference * 0.55, nps: metrics.nps * 0.75 },
+      },
+      insights: week === 0 ? [
+        'Spotify Wrapped campaign generated 340% increase in social mentions year-over-year',
+        'Podcast exclusive content driving 18% lift in premium subscription conversions',
+        'Apple Music closing awareness gap in 25-34 demographic - recommend targeted campaigns',
+        'AI-powered DJ feature receiving exceptionally positive sentiment (0.89 score)',
+        'Recommendation: Invest in audiobook expansion to capture growing segment'
+      ] : [],
+    })
+  }
+  await prisma.brandTrackingSnapshot.createMany({ data: spotifySnapshots })
+
+  // Tesla Brand Tracking - Innovative but volatile sentiment
+  const teslaBrandTracking = await prisma.brandTracking.create({
     data: {
       orgId: acmeCorp.id,
-      name: 'Gen X (41-56)',
-      description: 'Established professionals with high purchasing power, value quality and reliability',
-      criteria: {
-        ageRange: { min: 41, max: 56 },
-        generation: 'gen_x',
-        interests: ['family', 'finance', 'home', 'health']
+      brandName: 'Tesla',
+      description: 'Electric vehicle pioneer and clean energy company. Tracking brand perception, purchase intent, and sentiment across EV market segments.',
+      industry: 'Electric Vehicles & Clean Energy',
+      competitors: ['Ford', 'Rivian', 'Lucid Motors', 'BMW', 'Mercedes-Benz EQ'],
+      audiences: ['EV Enthusiasts', 'Tech Early Adopters', 'Eco-Conscious Consumers', 'Luxury Auto Buyers'],
+      status: BrandTrackingStatus.ACTIVE,
+      schedule: '0 7 * * *',
+      metrics: {
+        brandAwareness: true,
+        consideration: true,
+        preference: true,
+        loyalty: true,
+        nps: true,
+        sentimentAnalysis: true
       },
-      size: 5100000,
-      markets: ['US', 'UK', 'DE'],
-      isFavorite: false,
-      createdBy: johnDoe.id
+      alertThresholds: {
+        brandHealth: { min: 60, max: 100 },
+        sentimentScore: { min: 0.3, max: 1 }
+      },
+      createdBy: adminUser.id,
+      snapshotCount: 78,
+      lastSnapshot: new Date(now.getTime() - 4 * 60 * 60 * 1000),
     }
   })
 
-  const boomersAudience = await prisma.audience.create({
+  const teslaSnapshots = []
+  for (let week = 77; week >= 0; week--) {
+    const snapshotDate = new Date(now.getTime() - week * 7 * 24 * 60 * 60 * 1000)
+    const metrics = generateBrandMetricsForDate(88, 74, 48, 77 - week, 78, 'stable')
+    // Tesla has more sentiment volatility
+    metrics.sentimentScore = 0.4 + Math.random() * 0.4
+
+    teslaSnapshots.push({
+      brandTrackingId: teslaBrandTracking.id,
+      orgId: acmeCorp.id,
+      snapshotDate,
+      metrics,
+      brandHealth: metrics.brandHealth,
+      awareness: metrics.awareness,
+      consideration: metrics.consideration,
+      preference: metrics.preference,
+      loyalty: metrics.loyalty,
+      nps: metrics.nps,
+      marketShare: 28 + Math.random() * 8,
+      sentimentScore: metrics.sentimentScore,
+      competitorData: {
+        'Ford': { awareness: 75 + Math.random() * 5, consideration: 42 + Math.random() * 8, marketShare: 15 + Math.random() * 4, sentiment: 0.6 + Math.random() * 0.15 },
+        'Rivian': { awareness: 45 + Math.random() * 10, consideration: 28 + Math.random() * 8, marketShare: 6 + Math.random() * 3, sentiment: 0.72 + Math.random() * 0.12 },
+        'Lucid Motors': { awareness: 35 + Math.random() * 8, consideration: 22 + Math.random() * 6, marketShare: 3 + Math.random() * 2, sentiment: 0.68 + Math.random() * 0.15 },
+        'BMW': { awareness: 82 + Math.random() * 5, consideration: 38 + Math.random() * 6, marketShare: 12 + Math.random() * 3, sentiment: 0.7 + Math.random() * 0.1 },
+        'Mercedes-Benz EQ': { awareness: 78 + Math.random() * 5, consideration: 35 + Math.random() * 5, marketShare: 10 + Math.random() * 3, sentiment: 0.72 + Math.random() * 0.1 },
+      },
+      audienceBreakdown: {
+        '18-24': { awareness: metrics.awareness * 1.1, preference: metrics.preference * 0.95, nps: metrics.nps * 1.05 },
+        '25-34': { awareness: metrics.awareness * 1.15, preference: metrics.preference * 1.2, nps: metrics.nps * 1.1 },
+        '35-44': { awareness: metrics.awareness * 1.08, preference: metrics.preference * 1.15, nps: metrics.nps * 1.05 },
+        '45-54': { awareness: metrics.awareness * 0.95, preference: metrics.preference * 1.1, nps: metrics.nps * 0.95 },
+        '55+': { awareness: metrics.awareness * 0.85, preference: metrics.preference * 0.8, nps: metrics.nps * 0.85 },
+      },
+      insights: week === 0 ? [
+        'Brand awareness remains industry-leading at 91% among EV-considerers',
+        'Sentiment volatility detected - recommend monitoring social media more closely',
+        'Cybertruck launch generated 2.3M social mentions with mixed sentiment (0.58)',
+        'Rivian gaining consideration among eco-conscious segment - watch competitor closely',
+        'Recommendation: Focus messaging on reliability and service network expansion'
+      ] : [],
+    })
+  }
+  await prisma.brandTrackingSnapshot.createMany({ data: teslaSnapshots })
+
+  // Patagonia Brand Tracking - Strong sustainability brand, upward trend
+  const patagoniaBrandTracking = await prisma.brandTracking.create({
     data: {
       orgId: acmeCorp.id,
-      name: 'Boomers (57+)',
-      description: 'Experienced consumers with wealth accumulation, prefer traditional media channels',
-      criteria: {
-        ageRange: { min: 57, max: 75 },
-        generation: 'boomers',
-        interests: ['travel', 'health', 'grandchildren', 'news']
+      brandName: 'Patagonia',
+      description: 'Outdoor apparel company with strong sustainability positioning. Tracking brand perception among eco-conscious consumers and outdoor enthusiasts.',
+      industry: 'Outdoor Apparel & Sustainability',
+      competitors: ['The North Face', 'REI', 'Arc\'teryx', 'Columbia', 'Cotopaxi'],
+      audiences: ['Outdoor Enthusiasts', 'Eco-Conscious Millennials', 'Premium Apparel Buyers', 'Adventure Travelers'],
+      status: BrandTrackingStatus.ACTIVE,
+      schedule: '0 9 * * 1',
+      metrics: {
+        brandAwareness: true,
+        consideration: true,
+        preference: true,
+        loyalty: true,
+        nps: true,
+        sentimentAnalysis: true
       },
-      size: 6800000,
-      markets: ['US', 'UK'],
-      isFavorite: false,
-      createdBy: johnDoe.id
+      alertThresholds: {
+        brandHealth: { min: 75, max: 100 },
+        nps: { min: 50, max: 100 }
+      },
+      createdBy: janeSmith.id,
+      snapshotCount: 36,
+      lastSnapshot: new Date(now.getTime() - 8 * 60 * 60 * 1000),
     }
   })
 
-  const affluentConsumers = await prisma.audience.create({
+  const patagoniaSnapshots = []
+  for (let week = 35; week >= 0; week--) {
+    const snapshotDate = new Date(now.getTime() - week * 7 * 24 * 60 * 60 * 1000)
+    const metrics = generateBrandMetricsForDate(68, 85, 72, 35 - week, 36, 'up')
+
+    patagoniaSnapshots.push({
+      brandTrackingId: patagoniaBrandTracking.id,
+      orgId: acmeCorp.id,
+      snapshotDate,
+      metrics,
+      brandHealth: metrics.brandHealth,
+      awareness: metrics.awareness,
+      consideration: metrics.consideration,
+      preference: metrics.preference,
+      loyalty: metrics.loyalty,
+      nps: metrics.nps,
+      marketShare: 12 + Math.random() * 6,
+      sentimentScore: 0.75 + Math.random() * 0.2,
+      competitorData: {
+        'The North Face': { awareness: 78 + Math.random() * 5, consideration: 52 + Math.random() * 8, marketShare: 22 + Math.random() * 4, sentiment: 0.65 + Math.random() * 0.15 },
+        'REI': { awareness: 62 + Math.random() * 8, consideration: 48 + Math.random() * 8, marketShare: 15 + Math.random() * 4, sentiment: 0.72 + Math.random() * 0.12 },
+        'Arc\'teryx': { awareness: 45 + Math.random() * 8, consideration: 38 + Math.random() * 6, marketShare: 8 + Math.random() * 3, sentiment: 0.78 + Math.random() * 0.1 },
+        'Columbia': { awareness: 72 + Math.random() * 6, consideration: 42 + Math.random() * 6, marketShare: 18 + Math.random() * 4, sentiment: 0.58 + Math.random() * 0.15 },
+        'Cotopaxi': { awareness: 28 + Math.random() * 8, consideration: 22 + Math.random() * 6, marketShare: 4 + Math.random() * 2, sentiment: 0.82 + Math.random() * 0.1 },
+      },
+      audienceBreakdown: {
+        '18-24': { awareness: metrics.awareness * 1.08, preference: metrics.preference * 1.15, nps: metrics.nps * 1.1 },
+        '25-34': { awareness: metrics.awareness * 1.2, preference: metrics.preference * 1.3, nps: metrics.nps * 1.15 },
+        '35-44': { awareness: metrics.awareness * 1.1, preference: metrics.preference * 1.2, nps: metrics.nps * 1.1 },
+        '45-54': { awareness: metrics.awareness * 0.95, preference: metrics.preference * 1.05, nps: metrics.nps * 1.0 },
+        '55+': { awareness: metrics.awareness * 0.8, preference: metrics.preference * 0.85, nps: metrics.nps * 0.95 },
+      },
+      insights: week === 0 ? [
+        'Highest NPS in outdoor apparel category at 74 - sustainability messaging resonating strongly',
+        '"Don\'t Buy This Jacket" philosophy driving 28% higher brand loyalty than competitors',
+        'Worn Wear program contributing to 15% repeat purchase rate increase',
+        '25-34 demographic showing exceptional engagement - key growth segment identified',
+        'Recommendation: Expand Worn Wear program and amplify repair/reuse messaging'
+      ] : [],
+    })
+  }
+  await prisma.brandTrackingSnapshot.createMany({ data: patagoniaSnapshots })
+
+  // Oatly Brand Tracking - Challenger brand, rapid growth
+  const oatlyBrandTracking = await prisma.brandTracking.create({
     data: {
       orgId: acmeCorp.id,
-      name: 'Affluent Consumers ($150K+)',
-      description: 'High-income households with premium purchasing behavior',
-      criteria: {
-        incomeRange: { min: 150000 },
-        lifestyle: 'premium',
-        interests: ['luxury', 'travel', 'investing', 'fine_dining']
+      brandName: 'Oatly',
+      description: 'Plant-based dairy alternative leader. Tracking brand disruption metrics, awareness growth, and competitive positioning in alt-milk category.',
+      industry: 'Plant-Based Foods & Beverages',
+      competitors: ['Califia Farms', 'Silk', 'Alpro', 'Minor Figures', 'Planet Oat'],
+      audiences: ['Vegans & Vegetarians', 'Lactose Intolerant', 'Health-Conscious Millennials', 'Coffee Culture'],
+      status: BrandTrackingStatus.ACTIVE,
+      schedule: '0 10 * * 1',
+      metrics: {
+        brandAwareness: true,
+        consideration: true,
+        preference: true,
+        loyalty: true,
+        nps: true,
+        sentimentAnalysis: true
       },
-      size: 2400000,
-      markets: ['US', 'UK', 'DE', 'FR', 'CH'],
-      isFavorite: true,
-      createdBy: adminUser.id
+      alertThresholds: {
+        brandHealth: { min: 60, max: 100 },
+        awareness: { min: 40, max: 100 }
+      },
+      createdBy: johnDoe.id,
+      snapshotCount: 28,
+      lastSnapshot: new Date(now.getTime() - 12 * 60 * 60 * 1000),
     }
   })
 
-  const sustainabilityFocused = await prisma.audience.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Sustainability Advocates',
-      description: 'Environmentally conscious consumers willing to pay premium for eco-friendly products',
-      criteria: {
-        values: ['sustainability', 'ethical_consumption'],
-        behaviors: ['recycles', 'buys_organic', 'reduces_plastic']
-      },
-      size: 3200000,
-      markets: ['US', 'UK', 'DE', 'NL', 'SE'],
-      isFavorite: true,
-      createdBy: janeSmith.id
-    }
-  })
+  const oatlySnapshots = []
+  for (let week = 27; week >= 0; week--) {
+    const snapshotDate = new Date(now.getTime() - week * 7 * 24 * 60 * 60 * 1000)
+    const metrics = generateBrandMetricsForDate(52, 72, 55, 27 - week, 28, 'up')
 
-  const techEnthusiasts = await prisma.audience.create({
-    data: {
+    oatlySnapshots.push({
+      brandTrackingId: oatlyBrandTracking.id,
       orgId: acmeCorp.id,
-      name: 'Tech Enthusiasts',
-      description: 'Early adopters who follow tech trends and influence purchase decisions',
-      criteria: {
-        interests: ['technology', 'gadgets', 'gaming', 'innovation'],
-        behaviors: ['early_adopter', 'tech_reviewer', 'influencer']
+      snapshotDate,
+      metrics,
+      brandHealth: metrics.brandHealth,
+      awareness: metrics.awareness,
+      consideration: metrics.consideration,
+      preference: metrics.preference,
+      loyalty: metrics.loyalty,
+      nps: metrics.nps,
+      marketShare: 18 + Math.random() * 8,
+      sentimentScore: 0.68 + Math.random() * 0.2,
+      competitorData: {
+        'Califia Farms': { awareness: 42 + Math.random() * 8, consideration: 35 + Math.random() * 6, marketShare: 15 + Math.random() * 4, sentiment: 0.7 + Math.random() * 0.12 },
+        'Silk': { awareness: 68 + Math.random() * 6, consideration: 45 + Math.random() * 6, marketShare: 25 + Math.random() * 5, sentiment: 0.58 + Math.random() * 0.15 },
+        'Alpro': { awareness: 55 + Math.random() * 8, consideration: 38 + Math.random() * 6, marketShare: 18 + Math.random() * 4, sentiment: 0.62 + Math.random() * 0.15 },
+        'Minor Figures': { awareness: 22 + Math.random() * 8, consideration: 18 + Math.random() * 5, marketShare: 5 + Math.random() * 2, sentiment: 0.78 + Math.random() * 0.1 },
+        'Planet Oat': { awareness: 38 + Math.random() * 8, consideration: 28 + Math.random() * 6, marketShare: 12 + Math.random() * 4, sentiment: 0.6 + Math.random() * 0.15 },
       },
-      size: 1800000,
-      markets: ['US', 'UK', 'JP', 'KR', 'DE'],
-      isFavorite: false,
-      createdBy: johnDoe.id
-    }
-  })
-
-  const urbanProfessionals = await prisma.audience.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Urban Professionals',
-      description: 'City-dwelling professionals with busy lifestyles, convenience-oriented',
-      criteria: {
-        location: 'urban',
-        occupation: 'professional',
-        lifestyle: ['busy', 'convenience_focused', 'health_conscious']
+      audienceBreakdown: {
+        '18-24': { awareness: metrics.awareness * 1.25, preference: metrics.preference * 1.35, nps: metrics.nps * 1.2 },
+        '25-34': { awareness: metrics.awareness * 1.3, preference: metrics.preference * 1.4, nps: metrics.nps * 1.25 },
+        '35-44': { awareness: metrics.awareness * 1.05, preference: metrics.preference * 1.1, nps: metrics.nps * 1.05 },
+        '45-54': { awareness: metrics.awareness * 0.85, preference: metrics.preference * 0.8, nps: metrics.nps * 0.9 },
+        '55+': { awareness: metrics.awareness * 0.6, preference: metrics.preference * 0.55, nps: metrics.nps * 0.8 },
       },
-      size: 4100000,
-      markets: ['US', 'UK', 'DE', 'FR', 'JP'],
-      isFavorite: false,
-      createdBy: adminUser.id
-    }
-  })
+      insights: week === 0 ? [
+        'Awareness grew 45% YoY - fastest growth in plant-based category',
+        'Coffee shop partnerships (Starbucks, Blue Bottle) driving 65% of trial conversions',
+        'Distinctive packaging and brand voice creating 2x share of voice vs. competitors',
+        'Gen Z preference 40% higher than category average - brand personality resonating',
+        'Recommendation: Expand barista edition line and deepen specialty coffee partnerships'
+      ] : [],
+    })
+  }
+  await prisma.brandTrackingSnapshot.createMany({ data: oatlySnapshots })
 
-  // Tech Startup audiences
-  await prisma.audience.create({
+  // Airbnb Brand Tracking - Travel recovery, strong brand
+  const airbnbBrandTracking = await prisma.brandTracking.create({
     data: {
       orgId: techStartup.id,
-      name: 'SaaS Decision Makers',
-      description: 'Business leaders responsible for software purchasing decisions',
-      criteria: {
-        role: ['cto', 'cio', 'it_director', 'procurement'],
-        companySize: { min: 50 }
+      brandName: 'Airbnb',
+      description: 'Travel accommodation marketplace. Tracking brand recovery post-pandemic, trust metrics, and competitive positioning against traditional hospitality.',
+      industry: 'Travel & Hospitality',
+      competitors: ['Booking.com', 'Vrbo', 'Hotels.com', 'Expedia', 'Marriott Bonvoy'],
+      audiences: ['Millennial Travelers', 'Remote Workers', 'Experience Seekers', 'Budget Travelers'],
+      status: BrandTrackingStatus.ACTIVE,
+      schedule: '0 6 * * 2',
+      metrics: {
+        brandAwareness: true,
+        consideration: true,
+        preference: true,
+        loyalty: true,
+        nps: true,
+        sentimentAnalysis: true
       },
-      size: 450000,
-      markets: ['US', 'UK', 'DE'],
-      isFavorite: true,
-      createdBy: bobWilson.id
+      alertThresholds: {
+        brandHealth: { min: 65, max: 100 },
+        nps: { min: 30, max: 100 }
+      },
+      createdBy: bobWilson.id,
+      snapshotCount: 42,
+      lastSnapshot: new Date(now.getTime() - 18 * 60 * 60 * 1000),
     }
   })
 
-  await prisma.audience.create({
-    data: {
+  const airbnbSnapshots = []
+  for (let week = 41; week >= 0; week--) {
+    const snapshotDate = new Date(now.getTime() - week * 7 * 24 * 60 * 60 * 1000)
+    const metrics = generateBrandMetricsForDate(82, 76, 45, 41 - week, 42, 'up')
+
+    airbnbSnapshots.push({
+      brandTrackingId: airbnbBrandTracking.id,
       orgId: techStartup.id,
-      name: 'Startup Founders',
-      description: 'Entrepreneurs building early-stage companies',
-      criteria: {
-        role: ['founder', 'co_founder', 'ceo'],
-        companyStage: ['seed', 'series_a']
+      snapshotDate,
+      metrics,
+      brandHealth: metrics.brandHealth,
+      awareness: metrics.awareness,
+      consideration: metrics.consideration,
+      preference: metrics.preference,
+      loyalty: metrics.loyalty,
+      nps: metrics.nps,
+      marketShare: 22 + Math.random() * 8,
+      sentimentScore: 0.62 + Math.random() * 0.22,
+      competitorData: {
+        'Booking.com': { awareness: 85 + Math.random() * 5, consideration: 58 + Math.random() * 8, marketShare: 28 + Math.random() * 5, sentiment: 0.6 + Math.random() * 0.15 },
+        'Vrbo': { awareness: 58 + Math.random() * 8, consideration: 38 + Math.random() * 6, marketShare: 15 + Math.random() * 4, sentiment: 0.58 + Math.random() * 0.15 },
+        'Hotels.com': { awareness: 72 + Math.random() * 6, consideration: 45 + Math.random() * 6, marketShare: 18 + Math.random() * 4, sentiment: 0.55 + Math.random() * 0.15 },
+        'Expedia': { awareness: 78 + Math.random() * 5, consideration: 48 + Math.random() * 6, marketShare: 20 + Math.random() * 4, sentiment: 0.52 + Math.random() * 0.18 },
+        'Marriott Bonvoy': { awareness: 65 + Math.random() * 8, consideration: 42 + Math.random() * 6, marketShare: 22 + Math.random() * 5, sentiment: 0.68 + Math.random() * 0.12 },
       },
-      size: 180000,
-      markets: ['US', 'UK'],
-      isFavorite: true,
-      createdBy: bobWilson.id
-    }
-  })
+      audienceBreakdown: {
+        '18-24': { awareness: metrics.awareness * 1.1, preference: metrics.preference * 1.2, nps: metrics.nps * 1.15 },
+        '25-34': { awareness: metrics.awareness * 1.15, preference: metrics.preference * 1.25, nps: metrics.nps * 1.1 },
+        '35-44': { awareness: metrics.awareness * 1.05, preference: metrics.preference * 1.1, nps: metrics.nps * 1.0 },
+        '45-54': { awareness: metrics.awareness * 0.95, preference: metrics.preference * 0.9, nps: metrics.nps * 0.95 },
+        '55+': { awareness: metrics.awareness * 0.8, preference: metrics.preference * 0.7, nps: metrics.nps * 0.85 },
+      },
+      insights: week === 0 ? [
+        'Brand trust scores recovering - up 18 points from 2022 low',
+        'Experiences category driving 35% of new user acquisition',
+        'Remote work trend benefiting long-stay bookings (28+ days up 65%)',
+        'Host quality concerns impacting NPS - verification program helping',
+        'Recommendation: Amplify guest protection messaging and host quality initiatives'
+      ] : [],
+    })
+  }
+  await prisma.brandTrackingSnapshot.createMany({ data: airbnbSnapshots })
 
-  // Enterprise audiences
-  await prisma.audience.create({
+  // Peloton Brand Tracking - Declining trend, needs attention
+  const pelotonBrandTracking = await prisma.brandTracking.create({
     data: {
       orgId: enterpriseCo.id,
-      name: 'Enterprise Buyers',
-      description: 'Large organization decision makers with complex buying processes',
-      criteria: {
-        companySize: { min: 1000 },
-        role: ['vp', 'director', 'senior_manager'],
-        budget: { min: 100000 }
+      brandName: 'Peloton',
+      description: 'Connected fitness platform. Monitoring brand health during market correction, subscriber retention, and competitive threats from traditional fitness.',
+      industry: 'Connected Fitness & Wellness',
+      competitors: ['Apple Fitness+', 'Mirror', 'Tonal', 'NordicTrack', 'Echelon'],
+      audiences: ['Home Fitness Enthusiasts', 'Affluent Millennials', 'Working Parents', 'Fitness Beginners'],
+      status: BrandTrackingStatus.ACTIVE,
+      schedule: '0 7 * * 1',
+      metrics: {
+        brandAwareness: true,
+        consideration: true,
+        preference: true,
+        loyalty: true,
+        nps: true,
+        sentimentAnalysis: true
       },
-      size: 320000,
-      markets: ['US', 'UK', 'DE', 'FR', 'JP', 'AU'],
-      isFavorite: true,
-      createdBy: sarahEnterprise.id
+      alertThresholds: {
+        brandHealth: { min: 55, max: 100 },
+        nps: { min: 25, max: 100 }
+      },
+      createdBy: sarahEnterprise.id,
+      snapshotCount: 65,
+      lastSnapshot: new Date(now.getTime() - 6 * 60 * 60 * 1000),
     }
   })
 
-  // ==================== CROSSTABS ====================
-  console.log('📊 Creating crosstabs...')
+  const pelotonSnapshots = []
+  for (let week = 64; week >= 0; week--) {
+    const snapshotDate = new Date(now.getTime() - week * 7 * 24 * 60 * 60 * 1000)
+    const metrics = generateBrandMetricsForDate(75, 68, 42, 64 - week, 65, 'down')
 
-  // Social Media Platform Analysis Crosstab
-  await prisma.crosstab.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Generational Social Media Platform Analysis',
-      description: 'Compare social platform usage, engagement, and content preferences across generational cohorts',
-      audiences: [genZAudience.id, millennialsAudience.id, genXAudience.id, boomersAudience.id],
-      metrics: ['TikTok Usage', 'Instagram Usage', 'Facebook Usage', 'YouTube Usage', 'LinkedIn Usage', 'Twitter/X Usage', 'Snapchat Usage', 'Pinterest Usage'],
-      filters: {
-        timeframe: 'last_30_days',
-        markets: ['US', 'UK'],
-        metric_type: 'percentage'
+    pelotonSnapshots.push({
+      brandTrackingId: pelotonBrandTracking.id,
+      orgId: enterpriseCo.id,
+      snapshotDate,
+      metrics,
+      brandHealth: metrics.brandHealth,
+      awareness: metrics.awareness,
+      consideration: metrics.consideration,
+      preference: metrics.preference,
+      loyalty: metrics.loyalty,
+      nps: metrics.nps,
+      marketShare: 35 + Math.random() * 10 - (64 - week) * 0.2,
+      sentimentScore: 0.5 + Math.random() * 0.25,
+      competitorData: {
+        'Apple Fitness+': { awareness: 72 + Math.random() * 6, consideration: 48 + Math.random() * 8, marketShare: 22 + Math.random() * 5, sentiment: 0.75 + Math.random() * 0.1 },
+        'Mirror': { awareness: 35 + Math.random() * 8, consideration: 22 + Math.random() * 6, marketShare: 8 + Math.random() * 3, sentiment: 0.6 + Math.random() * 0.15 },
+        'Tonal': { awareness: 32 + Math.random() * 8, consideration: 25 + Math.random() * 6, marketShare: 6 + Math.random() * 3, sentiment: 0.72 + Math.random() * 0.12 },
+        'NordicTrack': { awareness: 65 + Math.random() * 6, consideration: 42 + Math.random() * 6, marketShare: 18 + Math.random() * 4, sentiment: 0.55 + Math.random() * 0.18 },
+        'Echelon': { awareness: 42 + Math.random() * 8, consideration: 32 + Math.random() * 6, marketShare: 12 + Math.random() * 4, sentiment: 0.58 + Math.random() * 0.15 },
       },
-      results: {
-        data: [
-          { audience: 'Gen Z (18-24)', 'TikTok Usage': 78, 'Instagram Usage': 82, 'Facebook Usage': 32, 'YouTube Usage': 91, 'LinkedIn Usage': 18, 'Twitter/X Usage': 38, 'Snapchat Usage': 65, 'Pinterest Usage': 24 },
-          { audience: 'Millennials (25-40)', 'TikTok Usage': 52, 'Instagram Usage': 74, 'Facebook Usage': 68, 'YouTube Usage': 85, 'LinkedIn Usage': 45, 'Twitter/X Usage': 42, 'Snapchat Usage': 28, 'Pinterest Usage': 38 },
-          { audience: 'Gen X (41-56)', 'TikTok Usage': 24, 'Instagram Usage': 48, 'Facebook Usage': 78, 'YouTube Usage': 72, 'LinkedIn Usage': 52, 'Twitter/X Usage': 35, 'Snapchat Usage': 8, 'Pinterest Usage': 42 },
-          { audience: 'Boomers (57+)', 'TikTok Usage': 8, 'Instagram Usage': 22, 'Facebook Usage': 82, 'YouTube Usage': 58, 'LinkedIn Usage': 28, 'Twitter/X Usage': 18, 'Snapchat Usage': 2, 'Pinterest Usage': 35 }
-        ],
-        generatedAt: new Date().toISOString(),
-        sampleSize: 12500
+      audienceBreakdown: {
+        '18-24': { awareness: metrics.awareness * 0.85, preference: metrics.preference * 0.8, nps: metrics.nps * 0.9 },
+        '25-34': { awareness: metrics.awareness * 1.1, preference: metrics.preference * 1.15, nps: metrics.nps * 1.05 },
+        '35-44': { awareness: metrics.awareness * 1.2, preference: metrics.preference * 1.25, nps: metrics.nps * 1.1 },
+        '45-54': { awareness: metrics.awareness * 1.05, preference: metrics.preference * 1.1, nps: metrics.nps * 1.0 },
+        '55+': { awareness: metrics.awareness * 0.75, preference: metrics.preference * 0.7, nps: metrics.nps * 0.85 },
       },
-      views: 342,
-      createdBy: adminUser.id
-    }
-  })
+      insights: week === 0 ? [
+        'ALERT: Brand health declined 12 points over past 6 months - requires immediate attention',
+        'Apple Fitness+ gaining significant ground in consideration metrics (+22% YoY)',
+        'Core loyalists (35-44) maintaining strong NPS but new user acquisition struggling',
+        'Price perception issue identified - 45% cite cost as barrier to consideration',
+        'Recommendation: Focus on value messaging and introduce lower-tier subscription options'
+      ] : [],
+    })
+  }
+  await prisma.brandTrackingSnapshot.createMany({ data: pelotonSnapshots })
 
-  // Purchase Channel Preferences Crosstab
-  await prisma.crosstab.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Income Segment Purchase Channel Preferences',
-      description: 'Analyze shopping channel preferences and behaviors across income segments',
-      audiences: [affluentConsumers.id, millennialsAudience.id, genXAudience.id],
-      metrics: ['E-commerce', 'In-Store Retail', 'Mobile Apps', 'Social Commerce', 'Subscription Services', 'D2C Brands', 'Marketplaces'],
-      filters: {
-        timeframe: 'last_90_days',
-        markets: ['US'],
-        category: 'retail'
-      },
-      results: {
-        data: [
-          { audience: 'Affluent Consumers ($150K+)', 'E-commerce': 72, 'In-Store Retail': 58, 'Mobile Apps': 68, 'Social Commerce': 28, 'Subscription Services': 64, 'D2C Brands': 52, 'Marketplaces': 45 },
-          { audience: 'Millennials (25-40)', 'E-commerce': 78, 'In-Store Retail': 42, 'Mobile Apps': 82, 'Social Commerce': 45, 'Subscription Services': 58, 'D2C Brands': 48, 'Marketplaces': 72 },
-          { audience: 'Gen X (41-56)', 'E-commerce': 68, 'In-Store Retail': 72, 'Mobile Apps': 52, 'Social Commerce': 18, 'Subscription Services': 42, 'D2C Brands': 32, 'Marketplaces': 65 }
-        ],
-        generatedAt: new Date().toISOString(),
-        sampleSize: 8200
-      },
-      views: 186,
-      createdBy: johnDoe.id
-    }
-  })
-
-  // Brand Health Funnel Crosstab
-  await prisma.crosstab.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Brand Health Funnel Analysis',
-      description: 'Track brand metrics through the purchase funnel against key competitors',
-      audiences: [genZAudience.id, millennialsAudience.id, affluentConsumers.id],
-      metrics: ['Awareness', 'Consideration', 'Preference', 'Purchase', 'Loyalty', 'Advocacy', 'NPS Score'],
-      filters: {
-        brands: ['our_brand', 'competitor_a', 'competitor_b', 'competitor_c'],
-        timeframe: 'current_quarter',
-        markets: ['US', 'UK', 'DE']
-      },
-      results: {
-        data: [
-          { audience: 'Gen Z (18-24)', 'Awareness': 68, 'Consideration': 52, 'Preference': 38, 'Purchase': 24, 'Loyalty': 72, 'Advocacy': 45, 'NPS Score': 42 },
-          { audience: 'Millennials (25-40)', 'Awareness': 82, 'Consideration': 68, 'Preference': 54, 'Purchase': 42, 'Loyalty': 78, 'Advocacy': 58, 'NPS Score': 56 },
-          { audience: 'Affluent Consumers ($150K+)', 'Awareness': 75, 'Consideration': 62, 'Preference': 48, 'Purchase': 38, 'Loyalty': 82, 'Advocacy': 65, 'NPS Score': 62 }
-        ],
-        generatedAt: new Date().toISOString(),
-        sampleSize: 6800
-      },
-      views: 278,
-      createdBy: adminUser.id
-    }
-  })
-
-  // Sustainability Attitudes Crosstab
-  await prisma.crosstab.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Sustainability Attitudes by Consumer Segment',
-      description: 'Compare environmental attitudes and sustainable purchasing behaviors',
-      audiences: [sustainabilityFocused.id, genZAudience.id, millennialsAudience.id, affluentConsumers.id],
-      metrics: ['Pay Premium for Eco', 'Check Brand Ethics', 'Reduce Plastic', 'Buy Second-Hand', 'Carbon Awareness', 'Support Local', 'Boycott Unethical Brands'],
-      filters: {
-        timeframe: 'last_6_months',
-        markets: ['US', 'UK', 'DE', 'NL']
-      },
-      results: {
-        data: [
-          { audience: 'Sustainability Advocates', 'Pay Premium for Eco': 82, 'Check Brand Ethics': 88, 'Reduce Plastic': 92, 'Buy Second-Hand': 68, 'Carbon Awareness': 78, 'Support Local': 85, 'Boycott Unethical Brands': 75 },
-          { audience: 'Gen Z (18-24)', 'Pay Premium for Eco': 58, 'Check Brand Ethics': 72, 'Reduce Plastic': 65, 'Buy Second-Hand': 72, 'Carbon Awareness': 62, 'Support Local': 55, 'Boycott Unethical Brands': 68 },
-          { audience: 'Millennials (25-40)', 'Pay Premium for Eco': 52, 'Check Brand Ethics': 65, 'Reduce Plastic': 58, 'Buy Second-Hand': 45, 'Carbon Awareness': 55, 'Support Local': 62, 'Boycott Unethical Brands': 58 },
-          { audience: 'Affluent Consumers ($150K+)', 'Pay Premium for Eco': 68, 'Check Brand Ethics': 58, 'Reduce Plastic': 52, 'Buy Second-Hand': 22, 'Carbon Awareness': 48, 'Support Local': 72, 'Boycott Unethical Brands': 42 }
-        ],
-        generatedAt: new Date().toISOString(),
-        sampleSize: 9400
-      },
-      views: 156,
-      createdBy: janeSmith.id
-    }
-  })
-
-  // Media Consumption Crosstab
-  await prisma.crosstab.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Media Consumption by Daypart',
-      description: 'Understand media consumption patterns throughout the day for optimal ad scheduling',
-      audiences: [genZAudience.id, millennialsAudience.id, genXAudience.id, urbanProfessionals.id],
-      metrics: ['Linear TV', 'Streaming Video', 'Social Media', 'Podcasts', 'Radio', 'News Sites', 'Gaming', 'Music Streaming'],
-      filters: {
-        dayparts: ['morning_6_9', 'daytime_9_17', 'evening_17_21', 'late_night_21_24'],
-        markets: ['US']
-      },
-      results: {
-        data: [
-          { audience: 'Gen Z (18-24)', 'Linear TV': 12, 'Streaming Video': 78, 'Social Media': 92, 'Podcasts': 42, 'Radio': 18, 'News Sites': 35, 'Gaming': 68, 'Music Streaming': 85 },
-          { audience: 'Millennials (25-40)', 'Linear TV': 28, 'Streaming Video': 72, 'Social Media': 78, 'Podcasts': 58, 'Radio': 32, 'News Sites': 55, 'Gaming': 45, 'Music Streaming': 72 },
-          { audience: 'Gen X (41-56)', 'Linear TV': 52, 'Streaming Video': 58, 'Social Media': 48, 'Podcasts': 45, 'Radio': 48, 'News Sites': 68, 'Gaming': 22, 'Music Streaming': 42 },
-          { audience: 'Urban Professionals', 'Linear TV': 22, 'Streaming Video': 65, 'Social Media': 72, 'Podcasts': 68, 'Radio': 42, 'News Sites': 75, 'Gaming': 28, 'Music Streaming': 65 }
-        ],
-        generatedAt: new Date().toISOString(),
-        sampleSize: 7800
-      },
-      views: 234,
-      createdBy: johnDoe.id
-    }
-  })
-
-  // Streaming Service Comparison Crosstab
-  await prisma.crosstab.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Streaming Service Competitive Analysis',
-      description: 'Compare streaming platform usage, satisfaction, and engagement metrics',
-      audiences: [genZAudience.id, millennialsAudience.id, genXAudience.id],
-      metrics: ['Weekly Usage', 'Satisfaction Score', 'Value Perception', 'Content Quality', 'Would Recommend', 'Cancel Intent'],
-      filters: {
-        platforms: ['netflix', 'disney_plus', 'amazon_prime', 'hbo_max', 'hulu', 'apple_tv', 'youtube_premium'],
-        timeframe: 'current_month'
-      },
-      results: {
-        data: [
-          { audience: 'Gen Z (18-24)', 'Weekly Usage': 85, 'Satisfaction Score': 78, 'Value Perception': 65, 'Content Quality': 82, 'Would Recommend': 72, 'Cancel Intent': 18 },
-          { audience: 'Millennials (25-40)', 'Weekly Usage': 78, 'Satisfaction Score': 75, 'Value Perception': 58, 'Content Quality': 78, 'Would Recommend': 68, 'Cancel Intent': 22 },
-          { audience: 'Gen X (41-56)', 'Weekly Usage': 62, 'Satisfaction Score': 72, 'Value Perception': 55, 'Content Quality': 75, 'Would Recommend': 65, 'Cancel Intent': 25 }
-        ],
-        generatedAt: new Date().toISOString(),
-        sampleSize: 5200
-      },
-      views: 198,
-      createdBy: adminUser.id
-    }
-  })
-
-  // Tech Startup Crosstabs
-  await prisma.crosstab.create({
+  // Notion Brand Tracking - B2B/Productivity, strong growth
+  const notionBrandTracking = await prisma.brandTracking.create({
     data: {
       orgId: techStartup.id,
-      name: 'SaaS Purchase Decision Factors',
-      description: 'Analyze what factors drive B2B software purchasing decisions',
-      audiences: [],
-      metrics: ['Price', 'Features', 'Integration', 'Support', 'Security', 'Scalability', 'User Reviews'],
-      filters: {
-        companySize: ['smb', 'mid_market', 'enterprise'],
-        industry: ['tech', 'finance', 'healthcare', 'retail']
+      brandName: 'Notion',
+      description: 'All-in-one workspace for notes, docs, and project management. Tracking adoption metrics, enterprise penetration, and competitive positioning.',
+      industry: 'Productivity Software & SaaS',
+      competitors: ['Confluence', 'Coda', 'Monday.com', 'Asana', 'ClickUp'],
+      audiences: ['Knowledge Workers', 'Startups', 'Enterprise Teams', 'Students'],
+      status: BrandTrackingStatus.ACTIVE,
+      schedule: '0 8 * * 3',
+      metrics: {
+        brandAwareness: true,
+        consideration: true,
+        preference: true,
+        loyalty: true,
+        nps: true,
+        sentimentAnalysis: true
       },
-      results: {
-        data: [
-          { segment: 'SMB (10-100)', 'Price': 85, 'Features': 72, 'Integration': 58, 'Support': 65, 'Security': 55, 'Scalability': 42, 'User Reviews': 78 },
-          { segment: 'Mid-Market (100-1000)', 'Price': 68, 'Features': 78, 'Integration': 72, 'Support': 75, 'Security': 72, 'Scalability': 68, 'User Reviews': 58 },
-          { segment: 'Enterprise (1000+)', 'Price': 45, 'Features': 82, 'Integration': 85, 'Support': 88, 'Security': 92, 'Scalability': 85, 'User Reviews': 42 }
-        ],
-        generatedAt: new Date().toISOString(),
-        sampleSize: 2400
+      alertThresholds: {
+        brandHealth: { min: 70, max: 100 },
+        nps: { min: 45, max: 100 }
       },
-      views: 89,
-      createdBy: bobWilson.id
+      createdBy: bobWilson.id,
+      snapshotCount: 32,
+      lastSnapshot: new Date(now.getTime() - 10 * 60 * 60 * 1000),
     }
   })
 
-  // Enterprise Crosstabs
-  await prisma.crosstab.create({
-    data: {
-      orgId: enterpriseCo.id,
-      name: 'Global Market Digital Behavior Comparison',
-      description: 'Compare digital behaviors and preferences across key global markets',
-      audiences: [],
-      metrics: ['Mobile-First', 'Social Commerce', 'Voice Search', 'AR/VR Adoption', 'Contactless Payments', 'Smart Home', 'Wearables'],
-      filters: {
-        markets: ['US', 'UK', 'DE', 'JP', 'CN', 'BR', 'IN'],
-        demographic: 'all_adults'
-      },
-      results: {
-        data: [
-          { market: 'United States', 'Mobile-First': 72, 'Social Commerce': 45, 'Voice Search': 58, 'AR/VR Adoption': 28, 'Contactless Payments': 62, 'Smart Home': 48, 'Wearables': 42 },
-          { market: 'United Kingdom', 'Mobile-First': 68, 'Social Commerce': 38, 'Voice Search': 52, 'AR/VR Adoption': 22, 'Contactless Payments': 78, 'Smart Home': 42, 'Wearables': 38 },
-          { market: 'Germany', 'Mobile-First': 58, 'Social Commerce': 28, 'Voice Search': 42, 'AR/VR Adoption': 18, 'Contactless Payments': 55, 'Smart Home': 52, 'Wearables': 35 },
-          { market: 'Japan', 'Mobile-First': 82, 'Social Commerce': 52, 'Voice Search': 35, 'AR/VR Adoption': 32, 'Contactless Payments': 85, 'Smart Home': 38, 'Wearables': 48 },
-          { market: 'China', 'Mobile-First': 92, 'Social Commerce': 78, 'Voice Search': 68, 'AR/VR Adoption': 45, 'Contactless Payments': 95, 'Smart Home': 62, 'Wearables': 58 }
-        ],
-        generatedAt: new Date().toISOString(),
-        sampleSize: 25000
-      },
-      views: 412,
-      createdBy: sarahEnterprise.id
-    }
-  })
+  const notionSnapshots = []
+  for (let week = 31; week >= 0; week--) {
+    const snapshotDate = new Date(now.getTime() - week * 7 * 24 * 60 * 60 * 1000)
+    const metrics = generateBrandMetricsForDate(62, 80, 65, 31 - week, 32, 'up')
 
-  // ==================== DASHBOARDS ====================
-  console.log('📈 Creating dashboards...')
-
-  // Marketing Performance Dashboard
-  await prisma.dashboard.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Marketing Performance Overview',
-      description: 'Track key marketing metrics, campaign performance, and audience engagement',
-      layout: [
-        { i: 'kpi-1', x: 0, y: 0, w: 3, h: 2 },
-        { i: 'kpi-2', x: 3, y: 0, w: 3, h: 2 },
-        { i: 'kpi-3', x: 6, y: 0, w: 3, h: 2 },
-        { i: 'kpi-4', x: 9, y: 0, w: 3, h: 2 },
-        { i: 'chart-1', x: 0, y: 2, w: 6, h: 4 },
-        { i: 'chart-2', x: 6, y: 2, w: 6, h: 4 },
-        { i: 'table-1', x: 0, y: 6, w: 12, h: 4 }
-      ],
-      widgets: [
-        { id: 'kpi-1', type: 'kpi', title: 'Total Reach', value: '2.4M', change: 12.5, trend: 'up' },
-        { id: 'kpi-2', type: 'kpi', title: 'Engagement Rate', value: '4.8%', change: 0.8, trend: 'up' },
-        { id: 'kpi-3', type: 'kpi', title: 'Brand Awareness', value: '68%', change: 5.2, trend: 'up' },
-        { id: 'kpi-4', type: 'kpi', title: 'Share of Voice', value: '24%', change: -2.1, trend: 'down' },
-        { id: 'chart-1', type: 'line', title: 'Engagement Trend', dataSource: 'engagement_metrics', timeframe: 'last_30_days' },
-        { id: 'chart-2', type: 'bar', title: 'Channel Performance', dataSource: 'channel_metrics' },
-        { id: 'table-1', type: 'crosstab', title: 'Audience Segments Performance', crosstabId: 'latest' }
-      ],
-      status: DashboardStatus.PUBLISHED,
-      isPublic: false,
-      views: 1245,
-      createdBy: adminUser.id
-    }
-  })
-
-  // Audience Insights Dashboard
-  await prisma.dashboard.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Audience Insights Dashboard',
-      description: 'Deep-dive into audience demographics, behaviors, and preferences',
-      layout: [
-        { i: 'chart-demo', x: 0, y: 0, w: 6, h: 4 },
-        { i: 'chart-interest', x: 6, y: 0, w: 6, h: 4 },
-        { i: 'chart-platform', x: 0, y: 4, w: 4, h: 4 },
-        { i: 'chart-device', x: 4, y: 4, w: 4, h: 4 },
-        { i: 'chart-location', x: 8, y: 4, w: 4, h: 4 }
-      ],
-      widgets: [
-        { id: 'chart-demo', type: 'pie', title: 'Age Distribution', dataSource: 'demographics', dimension: 'age' },
-        { id: 'chart-interest', type: 'bar', title: 'Top Interests', dataSource: 'interests', limit: 10 },
-        { id: 'chart-platform', type: 'donut', title: 'Platform Preference', dataSource: 'platforms' },
-        { id: 'chart-device', type: 'donut', title: 'Device Usage', dataSource: 'devices' },
-        { id: 'chart-location', type: 'treemap', title: 'Geographic Distribution', dataSource: 'locations' }
-      ],
-      status: DashboardStatus.PUBLISHED,
-      isPublic: false,
-      views: 892,
-      createdBy: johnDoe.id
-    }
-  })
-
-  // Brand Health Dashboard
-  await prisma.dashboard.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Brand Health Tracker',
-      description: 'Monitor brand awareness, consideration, and sentiment over time',
-      layout: [
-        { i: 'funnel', x: 0, y: 0, w: 6, h: 5 },
-        { i: 'nps', x: 6, y: 0, w: 3, h: 5 },
-        { i: 'sentiment', x: 9, y: 0, w: 3, h: 5 },
-        { i: 'trend', x: 0, y: 5, w: 8, h: 4 },
-        { i: 'competitors', x: 8, y: 5, w: 4, h: 4 }
-      ],
-      widgets: [
-        { id: 'funnel', type: 'funnel', title: 'Brand Health Funnel', stages: ['Awareness', 'Consideration', 'Preference', 'Purchase', 'Loyalty'] },
-        { id: 'nps', type: 'gauge', title: 'Net Promoter Score', value: 42, min: -100, max: 100 },
-        { id: 'sentiment', type: 'gauge', title: 'Brand Sentiment', value: 72, min: 0, max: 100 },
-        { id: 'trend', type: 'line', title: 'Brand Metrics Trend', metrics: ['awareness', 'consideration', 'preference'], timeframe: 'last_12_months' },
-        { id: 'competitors', type: 'radar', title: 'Competitive Positioning', competitors: ['Brand A', 'Brand B', 'Brand C'] }
-      ],
-      status: DashboardStatus.PUBLISHED,
-      isPublic: false,
-      views: 567,
-      createdBy: adminUser.id
-    }
-  })
-
-  // Social Media Analytics Dashboard
-  await prisma.dashboard.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Social Media Analytics',
-      description: 'Track social media performance across all platforms',
-      layout: [
-        { i: 'followers', x: 0, y: 0, w: 3, h: 2 },
-        { i: 'engagement', x: 3, y: 0, w: 3, h: 2 },
-        { i: 'reach', x: 6, y: 0, w: 3, h: 2 },
-        { i: 'mentions', x: 9, y: 0, w: 3, h: 2 },
-        { i: 'platform-breakdown', x: 0, y: 2, w: 6, h: 4 },
-        { i: 'content-performance', x: 6, y: 2, w: 6, h: 4 }
-      ],
-      widgets: [
-        { id: 'followers', type: 'kpi', title: 'Total Followers', value: '1.2M', change: 8.5, trend: 'up' },
-        { id: 'engagement', type: 'kpi', title: 'Avg Engagement', value: '5.2%', change: 1.2, trend: 'up' },
-        { id: 'reach', type: 'kpi', title: 'Weekly Reach', value: '3.8M', change: 15.3, trend: 'up' },
-        { id: 'mentions', type: 'kpi', title: 'Brand Mentions', value: '12.4K', change: -5.2, trend: 'down' },
-        { id: 'platform-breakdown', type: 'bar', title: 'Platform Performance', platforms: ['Instagram', 'TikTok', 'Facebook', 'LinkedIn', 'Twitter'] },
-        { id: 'content-performance', type: 'heatmap', title: 'Best Posting Times', dimensions: ['day', 'hour'] }
-      ],
-      status: DashboardStatus.PUBLISHED,
-      isPublic: true,
-      views: 2341,
-      createdBy: janeSmith.id
-    }
-  })
-
-  // Consumer Trends Dashboard
-  await prisma.dashboard.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Consumer Trends Monitor',
-      description: 'Stay ahead of emerging consumer trends and market shifts',
-      layout: [
-        { i: 'trending-topics', x: 0, y: 0, w: 6, h: 4 },
-        { i: 'sentiment-analysis', x: 6, y: 0, w: 6, h: 4 },
-        { i: 'category-growth', x: 0, y: 4, w: 12, h: 4 }
-      ],
-      widgets: [
-        { id: 'trending-topics', type: 'wordcloud', title: 'Trending Topics', dataSource: 'social_listening' },
-        { id: 'sentiment-analysis', type: 'area', title: 'Sentiment Over Time', metrics: ['positive', 'neutral', 'negative'] },
-        { id: 'category-growth', type: 'bar', title: 'Category Growth Rates', categories: ['Sustainability', 'Wellness', 'Tech', 'Experience', 'Value'] }
-      ],
-      status: DashboardStatus.DRAFT,
-      isPublic: false,
-      views: 128,
-      createdBy: johnDoe.id
-    }
-  })
-
-  // Tech Startup Dashboard
-  await prisma.dashboard.create({
-    data: {
+    notionSnapshots.push({
+      brandTrackingId: notionBrandTracking.id,
       orgId: techStartup.id,
-      name: 'Product Analytics Dashboard',
-      description: 'Track product usage, feature adoption, and user engagement',
-      layout: [
-        { i: 'dau', x: 0, y: 0, w: 4, h: 2 },
-        { i: 'retention', x: 4, y: 0, w: 4, h: 2 },
-        { i: 'nps', x: 8, y: 0, w: 4, h: 2 },
-        { i: 'feature-usage', x: 0, y: 2, w: 6, h: 4 },
-        { i: 'user-journey', x: 6, y: 2, w: 6, h: 4 }
-      ],
-      widgets: [
-        { id: 'dau', type: 'kpi', title: 'Daily Active Users', value: '24.5K', change: 12.3, trend: 'up' },
-        { id: 'retention', type: 'kpi', title: '30-Day Retention', value: '42%', change: 3.5, trend: 'up' },
-        { id: 'nps', type: 'kpi', title: 'Product NPS', value: '48', change: 5, trend: 'up' },
-        { id: 'feature-usage', type: 'bar', title: 'Feature Adoption', features: ['Dashboard', 'Reports', 'API', 'Integrations', 'Collaboration'] },
-        { id: 'user-journey', type: 'funnel', title: 'User Activation Funnel', stages: ['Signup', 'Onboarding', 'First Action', 'Habit', 'Advocate'] }
-      ],
-      status: DashboardStatus.PUBLISHED,
-      isPublic: false,
-      views: 456,
-      createdBy: bobWilson.id
-    }
-  })
+      snapshotDate,
+      metrics,
+      brandHealth: metrics.brandHealth,
+      awareness: metrics.awareness,
+      consideration: metrics.consideration,
+      preference: metrics.preference,
+      loyalty: metrics.loyalty,
+      nps: metrics.nps,
+      marketShare: 15 + Math.random() * 8 + (31 - week) * 0.15,
+      sentimentScore: 0.72 + Math.random() * 0.18,
+      competitorData: {
+        'Confluence': { awareness: 72 + Math.random() * 6, consideration: 48 + Math.random() * 6, marketShare: 28 + Math.random() * 5, sentiment: 0.52 + Math.random() * 0.2 },
+        'Coda': { awareness: 28 + Math.random() * 8, consideration: 22 + Math.random() * 5, marketShare: 5 + Math.random() * 2, sentiment: 0.7 + Math.random() * 0.12 },
+        'Monday.com': { awareness: 58 + Math.random() * 8, consideration: 42 + Math.random() * 6, marketShare: 18 + Math.random() * 4, sentiment: 0.62 + Math.random() * 0.15 },
+        'Asana': { awareness: 62 + Math.random() * 6, consideration: 45 + Math.random() * 6, marketShare: 20 + Math.random() * 4, sentiment: 0.6 + Math.random() * 0.15 },
+        'ClickUp': { awareness: 45 + Math.random() * 8, consideration: 38 + Math.random() * 6, marketShare: 12 + Math.random() * 4, sentiment: 0.65 + Math.random() * 0.15 },
+      },
+      audienceBreakdown: {
+        '18-24': { awareness: metrics.awareness * 1.3, preference: metrics.preference * 1.4, nps: metrics.nps * 1.2 },
+        '25-34': { awareness: metrics.awareness * 1.25, preference: metrics.preference * 1.35, nps: metrics.nps * 1.15 },
+        '35-44': { awareness: metrics.awareness * 1.05, preference: metrics.preference * 1.1, nps: metrics.nps * 1.0 },
+        '45-54': { awareness: metrics.awareness * 0.8, preference: metrics.preference * 0.75, nps: metrics.nps * 0.9 },
+        '55+': { awareness: metrics.awareness * 0.55, preference: metrics.preference * 0.5, nps: metrics.nps * 0.8 },
+      },
+      insights: week === 0 ? [
+        'Enterprise adoption accelerating - 85% YoY growth in teams >100 users',
+        'AI features launch driving 40% increase in feature engagement',
+        'Student/startup segment showing highest NPS (72) - strong product-market fit',
+        'Confluence users actively considering switch - opportunity in enterprise migration',
+        'Recommendation: Invest in enterprise sales team and migration tooling'
+      ] : [],
+    })
+  }
+  await prisma.brandTrackingSnapshot.createMany({ data: notionSnapshots })
 
-  // Enterprise Dashboard
-  await prisma.dashboard.create({
-    data: {
-      orgId: enterpriseCo.id,
-      name: 'Global Market Intelligence',
-      description: 'Comprehensive view of market performance across regions',
-      layout: [
-        { i: 'world-map', x: 0, y: 0, w: 8, h: 5 },
-        { i: 'region-kpis', x: 8, y: 0, w: 4, h: 5 },
-        { i: 'market-trends', x: 0, y: 5, w: 6, h: 4 },
-        { i: 'competitor-share', x: 6, y: 5, w: 6, h: 4 }
-      ],
-      widgets: [
-        { id: 'world-map', type: 'map', title: 'Market Performance by Region', metric: 'revenue', regions: ['NA', 'EMEA', 'APAC', 'LATAM'] },
-        { id: 'region-kpis', type: 'table', title: 'Regional KPIs', columns: ['Region', 'Revenue', 'Growth', 'Market Share'] },
-        { id: 'market-trends', type: 'line', title: 'Market Trends', timeframe: 'last_24_months' },
-        { id: 'competitor-share', type: 'pie', title: 'Competitive Market Share' }
-      ],
-      status: DashboardStatus.PUBLISHED,
-      isPublic: false,
-      views: 892,
-      createdBy: sarahEnterprise.id
-    }
-  })
+  // Update brand tracking counts
+  await prisma.brandTracking.update({ where: { id: nikeBrandTracking.id }, data: { snapshotCount: 52 } })
+  await prisma.brandTracking.update({ where: { id: spotifyBrandTracking.id }, data: { snapshotCount: 45 } })
+  await prisma.brandTracking.update({ where: { id: teslaBrandTracking.id }, data: { snapshotCount: 78 } })
+  await prisma.brandTracking.update({ where: { id: patagoniaBrandTracking.id }, data: { snapshotCount: 36 } })
+  await prisma.brandTracking.update({ where: { id: oatlyBrandTracking.id }, data: { snapshotCount: 28 } })
+  await prisma.brandTracking.update({ where: { id: airbnbBrandTracking.id }, data: { snapshotCount: 42 } })
+  await prisma.brandTracking.update({ where: { id: pelotonBrandTracking.id }, data: { snapshotCount: 65 } })
+  await prisma.brandTracking.update({ where: { id: notionBrandTracking.id }, data: { snapshotCount: 32 } })
 
   // ==================== SUMMARY ====================
   console.log('\n✅ Database seeding completed!')
@@ -1424,6 +1452,8 @@ async function main() {
   console.log('   API Keys: 3')
   console.log('   Invitations: 4')
   console.log('   SSO Configurations: 1')
+  console.log('   Brand Trackings: 8 (Nike, Spotify, Tesla, Patagonia, Oatly, Airbnb, Peloton, Notion)')
+  console.log('   Brand Tracking Snapshots: 378+ (52+45+78+36+28+42+65+32 weekly snapshots)')
 
   console.log('\n🔑 Test Credentials:')
   console.log('   ────────────────────────────────────────')
