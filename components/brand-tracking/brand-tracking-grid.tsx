@@ -53,6 +53,14 @@ interface BrandTracking {
   createdAt: string
   updatedAt: string
   _count?: { snapshots: number }
+  snapshots?: Array<{
+    id: string
+    snapshotDate: string
+    brandHealth: number | null
+    awareness: number | null
+    nps: number | null
+    marketShare: number | null
+  }>
 }
 
 // Demo brand trackings shown when API returns empty
@@ -69,7 +77,15 @@ const demoBrandTrackings: BrandTracking[] = [
     snapshotCount: 47,
     createdAt: "2024-11-01",
     updatedAt: new Date().toISOString(),
-    _count: { snapshots: 47 }
+    _count: { snapshots: 47 },
+    snapshots: [{
+      id: "demo-1",
+      snapshotDate: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      brandHealth: 82.5,
+      awareness: 78.3,
+      nps: 45,
+      marketShare: 28.4,
+    }]
   },
   {
     id: "2",
@@ -83,7 +99,15 @@ const demoBrandTrackings: BrandTracking[] = [
     snapshotCount: 124,
     createdAt: "2024-10-15",
     updatedAt: new Date().toISOString(),
-    _count: { snapshots: 124 }
+    _count: { snapshots: 124 },
+    snapshots: [{
+      id: "demo-2",
+      snapshotDate: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      brandHealth: 88.2,
+      awareness: 92.1,
+      nps: 52,
+      marketShare: 42.8,
+    }]
   },
   {
     id: "3",
@@ -97,7 +121,15 @@ const demoBrandTrackings: BrandTracking[] = [
     snapshotCount: 89,
     createdAt: "2024-09-20",
     updatedAt: new Date().toISOString(),
-    _count: { snapshots: 89 }
+    _count: { snapshots: 89 },
+    snapshots: [{
+      id: "demo-3",
+      snapshotDate: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+      brandHealth: 76.8,
+      awareness: 85.5,
+      nps: 62,
+      marketShare: 18.2,
+    }]
   },
 ]
 
@@ -234,6 +266,7 @@ export function BrandTrackingGrid() {
           const snapshotCount = item._count?.snapshots || item.snapshotCount || 0
           const competitorCount = Array.isArray(item.competitors) ? item.competitors.length : 0
           const audienceCount = Array.isArray(item.audiences) ? item.audiences.length : 0
+          const latestSnapshot = item.snapshots?.[0]
 
           return (
             <Card
@@ -309,6 +342,32 @@ export function BrandTrackingGrid() {
                   <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
                     {item.description}
                   </p>
+                )}
+
+                {/* Key Metrics from Latest Snapshot */}
+                {latestSnapshot ? (
+                  <div className="grid grid-cols-4 gap-2 mb-4">
+                    <div className="flex flex-col items-center p-2 bg-primary/5 rounded-lg">
+                      <span className="text-lg font-bold text-primary">{latestSnapshot.brandHealth?.toFixed(0) || '-'}</span>
+                      <span className="text-xs text-muted-foreground">Health</span>
+                    </div>
+                    <div className="flex flex-col items-center p-2 bg-emerald-500/5 rounded-lg">
+                      <span className="text-lg font-bold text-emerald-600">{latestSnapshot.awareness?.toFixed(0) || '-'}%</span>
+                      <span className="text-xs text-muted-foreground">Awareness</span>
+                    </div>
+                    <div className="flex flex-col items-center p-2 bg-blue-500/5 rounded-lg">
+                      <span className="text-lg font-bold text-blue-600">{latestSnapshot.nps?.toFixed(0) || '-'}</span>
+                      <span className="text-xs text-muted-foreground">NPS</span>
+                    </div>
+                    <div className="flex flex-col items-center p-2 bg-amber-500/5 rounded-lg">
+                      <span className="text-lg font-bold text-amber-600">{latestSnapshot.marketShare?.toFixed(0) || '-'}%</span>
+                      <span className="text-xs text-muted-foreground">Share</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center p-3 bg-muted/50 rounded-lg mb-4">
+                    <p className="text-sm text-muted-foreground">No data yet - take a snapshot to see metrics</p>
+                  </div>
                 )}
 
                 <div className="grid grid-cols-3 gap-2">

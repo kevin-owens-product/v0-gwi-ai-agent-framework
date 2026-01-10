@@ -53,6 +53,36 @@ const statusColors = {
   ARCHIVED: "bg-slate-500/10 text-slate-500 border-slate-500/20",
 }
 
+// Generate demo snapshots for visualization when no real data exists
+function generateDemoSnapshots(brandName: string) {
+  const snapshots = []
+  const now = new Date()
+
+  for (let i = 0; i < 10; i++) {
+    const date = new Date(now)
+    date.setDate(date.getDate() - i * 7) // Weekly snapshots
+
+    // Create trending data with slight variations
+    const baseAwareness = 65 + Math.sin(i * 0.5) * 10 + (10 - i) * 1.5
+    const baseHealth = 72 + Math.cos(i * 0.3) * 8 + (10 - i) * 1.2
+
+    snapshots.push({
+      id: `demo-${i}`,
+      snapshotDate: date.toISOString(),
+      brandHealth: Math.min(95, Math.max(50, baseHealth)),
+      awareness: Math.min(95, Math.max(40, baseAwareness)),
+      consideration: Math.min(90, Math.max(30, baseAwareness * 0.65)),
+      preference: Math.min(85, Math.max(20, baseAwareness * 0.45)),
+      loyalty: Math.min(80, Math.max(15, baseAwareness * 0.35)),
+      nps: Math.round(15 + Math.random() * 40),
+      sentimentScore: 0.5 + Math.random() * 0.4,
+      marketShare: 18 + Math.random() * 15,
+    })
+  }
+
+  return snapshots
+}
+
 export default function BrandTrackingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const [brandTracking, setBrandTracking] = useState<BrandTracking | null>(null)
@@ -68,7 +98,59 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
       const response = await fetch(`/api/v1/brand-tracking/${id}`)
       if (response.ok) {
         const data = await response.json()
+        // If no snapshots exist, generate demo data for visualization
+        if (!data.snapshots || data.snapshots.length === 0) {
+          data.snapshots = generateDemoSnapshots(data.brandName)
+          data._isUsingDemoData = true
+        }
         setBrandTracking(data)
+      } else {
+        // For demo IDs or when API fails, create demo brand tracking
+        const demoBrands: Record<string, BrandTracking> = {
+          '1': {
+            id: '1',
+            brandName: 'Nike',
+            description: 'Track Nike\'s brand health and competitive position in athletic wear market',
+            industry: 'Sportswear',
+            status: 'ACTIVE',
+            competitors: ['Adidas', 'Under Armour', 'Puma', 'Reebok'],
+            audiences: ['18-24', '25-34', 'Athletes'],
+            snapshotCount: 47,
+            lastSnapshot: new Date().toISOString(),
+            createdAt: '2024-11-01',
+            snapshots: generateDemoSnapshots('Nike'),
+          },
+          '2': {
+            id: '2',
+            brandName: 'Coca-Cola',
+            description: 'Monitor brand perception and market share in beverage industry',
+            industry: 'Beverages',
+            status: 'ACTIVE',
+            competitors: ['Pepsi', 'Dr Pepper', 'Sprite'],
+            audiences: ['All Ages', 'Health Conscious'],
+            snapshotCount: 124,
+            lastSnapshot: new Date().toISOString(),
+            createdAt: '2024-10-15',
+            snapshots: generateDemoSnapshots('Coca-Cola'),
+          },
+          '3': {
+            id: '3',
+            brandName: 'Tesla',
+            description: 'Track electric vehicle brand performance and innovation perception',
+            industry: 'Automotive',
+            status: 'ACTIVE',
+            competitors: ['Ford', 'GM', 'Rivian', 'Lucid'],
+            audiences: ['Tech Early Adopters', 'Eco-Conscious', '35-54'],
+            snapshotCount: 89,
+            lastSnapshot: new Date().toISOString(),
+            createdAt: '2024-09-20',
+            snapshots: generateDemoSnapshots('Tesla'),
+          },
+        }
+        const demoData = demoBrands[id]
+        if (demoData) {
+          setBrandTracking(demoData)
+        }
       }
     } catch (error) {
       console.error('Failed to fetch brand tracking:', error)

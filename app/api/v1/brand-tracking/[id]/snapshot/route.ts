@@ -89,7 +89,7 @@ export async function POST(
       return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
     }
 
-    if (!hasPermission(membership.role, 'dashboards:write')) {
+    if (!hasPermission(membership.role, 'brand-tracking:write')) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 

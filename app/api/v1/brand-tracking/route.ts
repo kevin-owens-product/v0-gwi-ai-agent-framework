@@ -86,6 +86,18 @@ export async function GET(request: NextRequest) {
         include: {
           _count: {
             select: { snapshots: true }
+          },
+          snapshots: {
+            orderBy: { snapshotDate: 'desc' },
+            take: 1,
+            select: {
+              id: true,
+              snapshotDate: true,
+              brandHealth: true,
+              awareness: true,
+              nps: true,
+              marketShare: true,
+            }
           }
         }
       }),
