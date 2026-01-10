@@ -8,6 +8,25 @@ import { Footer } from "@/components/landing/footer"
 export default function ChangelogPage() {
   const updates = [
     {
+      version: "3.0.0",
+      date: "January 10, 2026",
+      type: "Major Release",
+      items: [
+        "🚀 Real LLM Execution - Multi-provider support with Anthropic Claude, OpenAI GPT, and GWI Spark (no more mock data)",
+        "📊 Multi-Format Reports - Export to PDF, PowerPoint, Excel, CSV, and HTML with AI-powered content generation",
+        "⏰ Scheduled Workflows - Automated cron-based execution with email notifications on completion/failure",
+        "🔐 SSO/SAML 2.0 - Enterprise authentication with Azure AD, Google Workspace, and custom SAML providers",
+        "🔌 Integrations Hub - Connect with Slack, Zapier, webhooks, and 5000+ apps via API",
+        "⚡ Enterprise Reliability - Circuit breakers, retry logic, and request timeouts ensure 99.9% uptime",
+        "📈 Advanced Analytics - Comprehensive dashboards with token tracking, cost estimation, and performance metrics",
+        "🧠 Context-Aware Agents - Memory context automatically integrated with all agent executions",
+        "✉️ Email Notifications - Team invitations, workflow updates, and password resets fully operational",
+        "🛡️ Enhanced Security - 40+ database indexes for performance, audit logs, and RBAC improvements",
+        "🏗️ Code Quality - TypeScript type safety improvements, shared utilities, and standardized error handling",
+        "📦 Background Jobs - Automated cleanup for expired sessions, tokens, and memory items",
+      ],
+    },
+    {
       version: "2.4.0",
       date: "January 8, 2025",
       type: "Feature",

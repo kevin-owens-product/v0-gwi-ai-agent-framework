@@ -20,7 +20,7 @@ export function HeroSection() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
             </span>
-            Now with Advanced Playground, Inbox Agents & Report Builder
+            Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.1] text-balance">
