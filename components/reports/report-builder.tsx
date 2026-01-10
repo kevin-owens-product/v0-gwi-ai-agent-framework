@@ -28,6 +28,7 @@ import {
   ChevronRight,
   Wand2,
   Settings2,
+  AlertCircle,
 } from "lucide-react"
 
 const reportTypes = [
@@ -122,6 +123,8 @@ export function ReportBuilder({
   const [isLoading, setIsLoading] = useState(isEditMode)
   const [generationProgress, setGenerationProgress] = useState(0)
   const [generationComplete, setGenerationComplete] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [selectedType, setSelectedType] = useState("presentation")
   const [formData, setFormData] = useState({
     title: templateTitle || "",
@@ -140,27 +143,31 @@ export function ReportBuilder({
       async function loadReport() {
         try {
           const response = await fetch(`/api/v1/reports/${reportId}`)
-          if (response.ok) {
-            const data = await response.json()
-            const report = data.data || data
-            if (report) {
-              // Map API fields correctly to form fields
-              const content = report.content || {}
-              setFormData({
-                title: report.title || "",
-                description: report.description || "",
-                agent: report.agentId || content.agent || "",
-                prompt: content.prompt || content.query || "",
-                dataSources: content.dataSources || ["core"],
-                markets: content.markets || ["United States", "United Kingdom"],
-                audiences: content.audiences || ["gen-z", "millennials"],
-                timeframe: content.timeframe || "q4-2024",
-              })
-              setSelectedType(report.type?.toLowerCase() || "presentation")
-            }
+          if (!response.ok) {
+            setLoadError("Failed to load report. Please try again.")
+            setIsLoading(false)
+            return
+          }
+          const data = await response.json()
+          const report = data.data || data
+          if (report) {
+            // Map API fields correctly to form fields
+            const content = report.content || {}
+            setFormData({
+              title: report.title || "",
+              description: report.description || "",
+              agent: report.agentId || content.agent || "",
+              prompt: content.prompt || content.query || "",
+              dataSources: content.dataSources || ["core"],
+              markets: content.markets || ["United States", "United Kingdom"],
+              audiences: content.audiences || ["gen-z", "millennials"],
+              timeframe: content.timeframe || "q4-2024",
+            })
+            setSelectedType(report.type?.toLowerCase() || "presentation")
           }
         } catch (error) {
           console.error("Failed to load report:", error)
+          setLoadError("Failed to load report. Please try again.")
         } finally {
           setIsLoading(false)
         }
@@ -173,6 +180,7 @@ export function ReportBuilder({
     setIsGenerating(true)
     setGenerationProgress(0)
     setGenerationComplete(false)
+    setError(null)
 
     const typeMap: Record<string, string> = {
       presentation: "PRESENTATION",
@@ -234,13 +242,15 @@ export function ReportBuilder({
           throw new Error("Failed to create report")
         }
       }
+
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      setIsGenerating(false)
+      setGenerationComplete(true)
     } catch (error) {
       console.error("Error saving report:", error)
+      setError(isEditMode ? "Failed to update report. Please try again." : "Failed to create report. Please try again.")
+      setIsGenerating(false)
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 300))
-    setIsGenerating(false)
-    setGenerationComplete(true)
   }
 
   const handleViewReport = () => {
@@ -267,6 +277,28 @@ export function ReportBuilder({
       <div className="flex-1 p-6 max-w-5xl mx-auto">
         <div className="flex items-center justify-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      </div>
+    )
+  }
+
+  if (loadError) {
+    return (
+      <div className="flex-1 p-6 max-w-5xl mx-auto">
+        <div className="flex flex-col items-center justify-center h-64 gap-4">
+          <div className="flex items-center gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
+            <AlertCircle className="h-6 w-6 text-destructive" />
+            <div>
+              <p className="font-medium text-destructive">Error Loading Report</p>
+              <p className="text-sm text-muted-foreground">{loadError}</p>
+            </div>
+          </div>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/reports">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Reports
+            </Link>
+          </Button>
         </div>
       </div>
     )
@@ -678,7 +710,7 @@ export function ReportBuilder({
                 </div>
               )}
 
-              {generationComplete && !isGenerating && (
+              {generationComplete && !isGenerating && !error && (
                 <div className="space-y-4 pt-4 border-t">
                   <div className="flex items-center gap-3 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                     <CheckCircle2 className="h-6 w-6 text-emerald-500" />
@@ -701,15 +733,33 @@ export function ReportBuilder({
                   </div>
                 </div>
               )}
+
+              {error && !isGenerating && (
+                <div className="space-y-4 pt-4 border-t">
+                  <div className="flex items-center gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
+                    <AlertCircle className="h-6 w-6 text-destructive" />
+                    <div>
+                      <p className="font-medium text-destructive">
+                        {isEditMode ? "Failed to Update Report" : "Failed to Generate Report"}
+                      </p>
+                      <p className="text-sm text-muted-foreground">{error}</p>
+                    </div>
+                  </div>
+                  <Button onClick={handleGenerate} className="w-full">
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Try Again
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep(3)} disabled={isGenerating || generationComplete}>
+            <Button variant="outline" onClick={() => { setStep(3); setError(null); }} disabled={isGenerating || generationComplete}>
               Back
             </Button>
             <div className="flex gap-2">
-              {!generationComplete && (
+              {!generationComplete && !error && (
                 <>
                   <Button variant="outline" disabled={isGenerating}>
                     <Settings2 className="mr-2 h-4 w-4" />
@@ -730,7 +780,7 @@ export function ReportBuilder({
                   </Button>
                 </>
               )}
-              {generationComplete && (
+              {(generationComplete || error) && !isGenerating && (
                 <Button variant="outline" onClick={() => router.push('/dashboard/reports')}>
                   Back to Reports
                 </Button>
