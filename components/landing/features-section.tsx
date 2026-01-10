@@ -11,26 +11,65 @@ import {
   LayoutGrid,
   Sparkles,
   Users,
+  Zap,
+  Lock,
+  Clock,
+  RefreshCw,
 } from "lucide-react"
 
 const features = [
   {
+    icon: Zap,
+    title: "Real LLM Execution",
+    description: "Multi-provider support with Anthropic Claude, OpenAI GPT, and GWI Spark. No mock data—production-ready AI.",
+    isNew: true,
+  },
+  {
+    icon: FileText,
+    title: "Multi-Format Reports",
+    description: "Export to PDF, PowerPoint, Excel, CSV, and HTML. AI-powered content generation with templates.",
+    isNew: true,
+  },
+  {
+    icon: Clock,
+    title: "Scheduled Workflows",
+    description: "Automate workflows with cron scheduling. Set recurring runs and automated brand tracking snapshots.",
+    isNew: true,
+  },
+  {
+    icon: Lock,
+    title: "SSO & SAML 2.0",
+    description: "Enterprise-ready authentication with Azure AD, Google Workspace, and custom SAML providers.",
+    isNew: true,
+  },
+  {
+    icon: Layers,
+    title: "Integrations Hub",
+    description: "Connect Slack, Zapier, webhooks, and custom APIs. Build integrations with 5000+ tools.",
+    isNew: true,
+  },
+  {
+    icon: RefreshCw,
+    title: "Enterprise Reliability",
+    description: "Circuit breakers, retry logic, request timeouts, and automatic failover ensure 99.9% uptime.",
+    isNew: true,
+  },
+  {
+    icon: BarChart3,
+    title: "Advanced Analytics",
+    description: "Comprehensive usage dashboards with token tracking, cost estimation, and performance metrics.",
+    isNew: true,
+  },
+  {
+    icon: Brain,
+    title: "Context-Aware Agents",
+    description: "Agents access memory context automatically. Persistent knowledge across sessions and workflows.",
+    isNew: true,
+  },
+  {
     icon: LayoutGrid,
     title: "Multi-Mode Playground",
     description: "Switch between Chat, Canvas, and Split views. Build insights visually with drag-and-drop blocks.",
-    isNew: true,
-  },
-  {
-    icon: Inbox,
-    title: "Inbox Agents",
-    description: "AI agents that monitor Slack and email, automatically processing incoming research requests.",
-    isNew: true,
-  },
-  {
-    icon: Command,
-    title: "Command Palette",
-    description: "Press ⌘K anywhere to access templates, saved prompts, and quick actions instantly.",
-    isNew: true,
   },
   {
     icon: Workflow,
@@ -38,45 +77,14 @@ const features = [
     description: "Orchestrate complex analysis with drag-and-drop pipelines, triggers, and scheduled runs.",
   },
   {
-    icon: Brain,
-    title: "Persistent Memory",
-    description: "Agents remember past interactions, building deeper understanding across sessions and projects.",
-  },
-  {
     icon: Shield,
     title: "Verified Insights",
     description: "Every insight includes clickable citations, confidence scores, and transparent reasoning chains.",
   },
   {
-    icon: FileText,
-    title: "Report Builder",
-    description: "Generate presentations, dashboards, and exports with AI-assisted slide editing and templates.",
-    isNew: true,
-  },
-  {
-    icon: Sparkles,
-    title: "Reasoning Mode",
-    description: "Watch agents think through problems step-by-step with visible reasoning chains.",
-  },
-  {
-    icon: GitBranch,
-    title: "Multi-Agent Collaboration",
-    description: "Specialized agents hand off tasks seamlessly, working together on complex projects.",
-  },
-  {
     icon: Users,
-    title: "Team Workspaces",
-    description: "Collaborate on projects with shared agents, templates, and version-controlled workflows.",
-  },
-  {
-    icon: BarChart3,
-    title: "2.8B Consumer Dataset",
-    description: "Direct access to GWI's global study with automatic query optimization and market filtering.",
-  },
-  {
-    icon: Layers,
-    title: "Enterprise Integrations",
-    description: "Connect to Google Docs, Slack, Tableau, Figma, and ad platforms like Meta and DV360.",
+    title: "Team Collaboration",
+    description: "Email invitations, role-based access control, and comprehensive audit logs for security.",
   },
 ]
 

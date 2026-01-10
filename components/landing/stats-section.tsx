@@ -1,8 +1,8 @@
 const stats = [
   { value: "2.8B", label: "Consumers represented" },
-  { value: "52", label: "Markets covered" },
-  { value: "10x", label: "Faster audience insights" },
-  { value: "94%", label: "Citation accuracy rate" },
+  { value: "3", label: "LLM providers supported" },
+  { value: "99.9%", label: "Platform uptime with circuit breakers" },
+  { value: "5000+", label: "Integrations via Zapier & webhooks" },
 ]
 
 export function StatsSection() {
