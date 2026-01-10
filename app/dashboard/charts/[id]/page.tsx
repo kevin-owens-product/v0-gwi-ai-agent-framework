@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, use } from "react"
+import { useState, useEffect, use } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   ArrowLeft,
   BarChart3,
@@ -16,14 +17,29 @@ import {
   Users,
   LineChart,
   PieChart,
+  Loader2,
+  Copy,
+  Check,
+  Trash2,
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 // Mock chart data - 10 advanced examples
 const chartData: Record<string, {
@@ -184,7 +200,11 @@ const ChartIcon = ({ type }: { type: "bar" | "line" | "pie" }) => {
 
 export default function ChartDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
+  const router = useRouter()
   const [isExporting, setIsExporting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [copied, setCopied] = useState(false)
   const chart = chartData[id]
 
   if (!chart) {
@@ -215,11 +235,62 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
     )
   }
 
-  const handleExport = async () => {
+  const handleExport = async (format: "json" | "csv" | "png" = "json") => {
     setIsExporting(true)
-    // Simulate export delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsExporting(false)
+    try {
+      const exportData = {
+        chart: { id: chart.id, name: chart.name, type: chart.type, audience: chart.audience, metric: chart.metric },
+        metadata: { exportedAt: new Date().toISOString(), createdBy: chart.createdBy, dataSource: chart.dataSource },
+      }
+      const content = JSON.stringify(exportData, null, 2)
+      const blob = new Blob([content], { type: "application/json" })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `chart-${chart.id}-${new Date().toISOString().split("T")[0]}.${format}`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error("Export failed:", error)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/v1/charts/${id}`, { method: "DELETE" })
+      if (response.ok) {
+        router.push("/dashboard/charts")
+      }
+    } catch (error) {
+      console.error("Delete failed:", error)
+    } finally {
+      setIsDeleting(false)
+      setShowDeleteDialog(false)
+    }
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleDuplicate = async () => {
+    try {
+      const response = await fetch("/api/v1/charts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: `${chart.name} (Copy)`, type: chart.type, audience: chart.audience, metric: chart.metric }),
+      })
+      if (response.ok) {
+        router.push("/dashboard/charts")
+      }
+    } catch (error) {
+      console.error("Duplicate failed:", error)
+    }
   }
 
   return (
@@ -242,8 +313,8 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" size="sm" className="bg-transparent" onClick={handleExport} disabled={isExporting}>
-            <Download className="h-4 w-4 mr-2" />
+          <Button variant="outline" size="sm" className="bg-transparent" onClick={() => handleExport("json")} disabled={isExporting}>
+            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
             {isExporting ? "Exporting..." : "Export"}
           </Button>
           <Link href={`/dashboard/charts/new?edit=${chart.id}`}>
@@ -259,11 +330,34 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem>Add to Dashboard</DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/dashboards/new?chart=${chart.id}`}>Add to Dashboard</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Chart</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete "{chart.name}"? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 
@@ -318,17 +412,17 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
           <Card className="p-6 space-y-4">
             <h3 className="font-semibold">Quick Actions</h3>
             <div className="space-y-2">
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Download className="h-4 w-4 mr-2" />
+              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={() => handleExport("png")} disabled={isExporting}>
+                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
                 Export as PNG
               </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Download className="h-4 w-4 mr-2" />
+              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={() => handleExport("csv")} disabled={isExporting}>
+                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
                 Export as CSV
               </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent">
-                <Share2 className="h-4 w-4 mr-2" />
-                Copy Link
+              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleCopyLink}>
+                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                {copied ? "Copied!" : "Copy Link"}
               </Button>
             </div>
           </Card>

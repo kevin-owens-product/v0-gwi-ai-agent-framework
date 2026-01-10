@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, BarChart3, LineChart, PieChart, Plus, X } from "lucide-react"
+import { ArrowLeft, BarChart3, LineChart, PieChart, Plus, X, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
@@ -38,6 +38,8 @@ export default function NewDashboardPage() {
   const [description, setDescription] = useState("")
   const [selectedCharts, setSelectedCharts] = useState<string[]>([])
   const [isPublic, setIsPublic] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState("")
 
   const toggleChart = (chartId: string) => {
     setSelectedCharts((prev) =>
@@ -45,9 +47,39 @@ export default function NewDashboardPage() {
     )
   }
 
-  const handleCreate = () => {
-    // In production, this would create the dashboard via API
-    router.push("/dashboard/dashboards")
+  const handleCreate = async () => {
+    if (!name.trim()) {
+      setError("Please enter a dashboard name")
+      return
+    }
+    if (selectedCharts.length === 0) {
+      setError("Please select at least one chart")
+      return
+    }
+    setIsSaving(true)
+    setError("")
+    try {
+      const response = await fetch("/api/v1/dashboards", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          description: description.trim(),
+          charts: selectedCharts,
+          isPublic,
+        }),
+      })
+      if (response.ok) {
+        router.push("/dashboard/dashboards")
+      } else {
+        setError("Failed to create dashboard")
+      }
+    } catch (err) {
+      console.error("Failed to create dashboard:", err)
+      setError("Failed to create dashboard. Please try again.")
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -171,14 +203,15 @@ export default function NewDashboardPage() {
           </Card>
 
           <div className="space-y-2">
+            {error && <p className="text-sm text-destructive">{error}</p>}
             <Button
               className="w-full"
               onClick={handleCreate}
-              disabled={!name || selectedCharts.length === 0}
+              disabled={isSaving}
             >
-              Create Dashboard
+              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating...</> : "Create Dashboard"}
             </Button>
-            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()}>
+            <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()} disabled={isSaving}>
               Cancel
             </Button>
           </div>

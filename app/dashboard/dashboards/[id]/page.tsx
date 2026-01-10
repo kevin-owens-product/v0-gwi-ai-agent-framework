@@ -21,14 +21,28 @@ import {
   Plus,
   Settings,
   Loader2,
+  Copy,
+  Check,
+  Trash2,
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 // Mock dashboard data - 10 advanced examples
 const dashboardData: Record<string, {
@@ -284,8 +298,12 @@ interface DashboardType {
 
 export default function DashboardDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
+  const router = useRouter()
   const [isExporting, setIsExporting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [dashboard, setDashboard] = useState<DashboardType | null>(null)
 
   useEffect(() => {
@@ -429,6 +447,47 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
     }
   }
 
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/v1/dashboards/${id}`, { method: "DELETE" })
+      if (response.ok) {
+        router.push("/dashboard/dashboards")
+      }
+    } catch (error) {
+      console.error("Delete failed:", error)
+    } finally {
+      setIsDeleting(false)
+      setShowDeleteDialog(false)
+    }
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleDuplicate = async () => {
+    try {
+      const response = await fetch("/api/v1/dashboards", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${dashboard.name} (Copy)`,
+          description: dashboard.description,
+          charts: dashboard.charts.map((c) => c.id),
+          isPublic: dashboard.isPublic,
+        }),
+      })
+      if (response.ok) {
+        router.push("/dashboard/dashboards")
+      }
+    } catch (error) {
+      console.error("Duplicate failed:", error)
+    }
+  }
+
   return (
     <div className="flex-1 space-y-6 p-6">
       {/* Header */}
@@ -462,10 +521,12 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
             {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
             {isExporting ? "Exporting..." : "Export"}
           </Button>
-          <Button size="sm">
-            <Edit className="h-4 w-4 mr-2" />
-            Edit
-          </Button>
+          <Link href={`/dashboard/dashboards/new?edit=${dashboard.id}`}>
+            <Button size="sm">
+              <Edit className="h-4 w-4 mr-2" />
+              Edit
+            </Button>
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -473,15 +534,35 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
+              <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleCopyLink}>
+                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                {copied ? "Copied!" : "Copy Link"}
               </DropdownMenuItem>
-              <DropdownMenuItem>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem>Add to Report</DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+              <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Dashboard</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete "{dashboard.name}"? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 
