@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import {
   Search,
   Plus,
@@ -20,6 +21,7 @@ import {
   Lightbulb,
   Megaphone,
   Target,
+  Loader2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -160,12 +162,58 @@ const categories = [
 ]
 
 export default function TemplatesPage() {
+  const router = useRouter()
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [starredTemplates, setStarredTemplates] = useState<number[]>(
     templates.filter((t) => t.starred).map((t) => t.id),
   )
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [newTemplate, setNewTemplate] = useState({
+    name: "",
+    description: "",
+    category: "research",
+    prompt: "",
+  })
+
+  const handleUseTemplate = (template: typeof templates[0]) => {
+    // Navigate to playground with the template prompt pre-filled
+    const encodedPrompt = encodeURIComponent(template.prompt)
+    router.push(`/dashboard/playground?template=${template.id}&prompt=${encodedPrompt}`)
+  }
+
+  const handleDuplicate = (template: typeof templates[0]) => {
+    setNewTemplate({
+      name: `${template.name} (Copy)`,
+      description: template.description,
+      category: template.category,
+      prompt: template.prompt,
+    })
+    setCreateDialogOpen(true)
+  }
+
+  const handleCreateTemplate = async () => {
+    if (!newTemplate.name.trim() || !newTemplate.prompt.trim()) return
+
+    setIsSaving(true)
+    try {
+      const response = await fetch("/api/v1/templates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTemplate),
+      })
+      if (response.ok) {
+        setCreateDialogOpen(false)
+        setNewTemplate({ name: "", description: "", category: "research", prompt: "" })
+        // In production, would refresh the templates list
+      }
+    } catch (error) {
+      console.error("Failed to create template:", error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   const filteredTemplates = templates.filter((template) => {
     const matchesCategory = selectedCategory === "all" || template.category === selectedCategory
@@ -202,15 +250,27 @@ export default function TemplatesPage() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label>Template Name</Label>
-                <Input placeholder="e.g., Audience Deep Dive" />
+                <Input
+                  placeholder="e.g., Audience Deep Dive"
+                  value={newTemplate.name}
+                  onChange={(e) => setNewTemplate({ ...newTemplate, name: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Description</Label>
-                <Input placeholder="What does this template do?" />
+                <Input
+                  placeholder="What does this template do?"
+                  value={newTemplate.description}
+                  onChange={(e) => setNewTemplate({ ...newTemplate, description: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Category</Label>
-                <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                <select
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  value={newTemplate.category}
+                  onChange={(e) => setNewTemplate({ ...newTemplate, category: e.target.value })}
+                >
                   <option value="research">Research</option>
                   <option value="analysis">Analysis</option>
                   <option value="briefs">Briefs & Docs</option>
@@ -221,6 +281,8 @@ export default function TemplatesPage() {
                 <Textarea
                   placeholder="Use [BRACKETS] for variables that users will fill in..."
                   className="min-h-[120px]"
+                  value={newTemplate.prompt}
+                  onChange={(e) => setNewTemplate({ ...newTemplate, prompt: e.target.value })}
                 />
                 <p className="text-xs text-muted-foreground">
                   Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template
@@ -228,10 +290,16 @@ export default function TemplatesPage() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+              <Button variant="outline" onClick={() => setCreateDialogOpen(false)} disabled={isSaving}>
                 Cancel
               </Button>
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90">Create Template</Button>
+              <Button
+                className="bg-accent text-accent-foreground hover:bg-accent/90"
+                onClick={handleCreateTemplate}
+                disabled={isSaving || !newTemplate.name.trim() || !newTemplate.prompt.trim()}
+              >
+                {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating...</> : "Create Template"}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -273,6 +341,7 @@ export default function TemplatesPage() {
                 <Card
                   key={template.id}
                   className="bg-card border-border hover:border-accent/50 transition-colors cursor-pointer group"
+                  onClick={() => handleUseTemplate(template)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
@@ -298,11 +367,11 @@ export default function TemplatesPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleUseTemplate(template)}>
                               <Play className="w-4 h-4 mr-2" />
                               Use Template
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleDuplicate(template)}>
                               <Copy className="w-4 h-4 mr-2" />
                               Duplicate
                             </DropdownMenuItem>
@@ -341,6 +410,7 @@ export default function TemplatesPage() {
             <Card
               key={template.id}
               className="bg-card border-border hover:border-accent/50 transition-colors cursor-pointer group"
+              onClick={() => handleUseTemplate(template)}
             >
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">
@@ -370,11 +440,11 @@ export default function TemplatesPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleUseTemplate(template)}>
                           <Play className="w-4 h-4 mr-2" />
                           Use Template
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDuplicate(template)}>
                           <Copy className="w-4 h-4 mr-2" />
                           Duplicate
                         </DropdownMenuItem>
