@@ -15,17 +15,51 @@ const reportTypes = ["Presentation", "Dashboard", "PDF Report", "Data Export", "
 
 const statuses = ["Published", "Draft", "Archived"]
 
-export function ReportsFilters() {
+interface ReportsFiltersProps {
+  searchQuery?: string
+  onSearchChange?: (query: string) => void
+  selectedTypes?: string[]
+  onTypesChange?: (types: string[]) => void
+  selectedStatuses?: string[]
+  onStatusesChange?: (statuses: string[]) => void
+}
+
+export function ReportsFilters({
+  searchQuery = "",
+  onSearchChange,
+  selectedTypes: controlledTypes,
+  onTypesChange,
+  selectedStatuses: controlledStatuses,
+  onStatusesChange,
+}: ReportsFiltersProps) {
   const [view, setView] = useState<"grid" | "list">("grid")
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
+  const [internalTypes, setInternalTypes] = useState<string[]>([])
+  const [internalStatuses, setInternalStatuses] = useState<string[]>([])
+
+  // Use controlled state if provided, otherwise use internal state
+  const selectedTypes = controlledTypes ?? internalTypes
+  const selectedStatuses = controlledStatuses ?? internalStatuses
 
   const toggleType = (type: string) => {
-    setSelectedTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]))
+    const newTypes = selectedTypes.includes(type)
+      ? selectedTypes.filter((t) => t !== type)
+      : [...selectedTypes, type]
+    if (onTypesChange) {
+      onTypesChange(newTypes)
+    } else {
+      setInternalTypes(newTypes)
+    }
   }
 
   const toggleStatus = (status: string) => {
-    setSelectedStatuses((prev) => (prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]))
+    const newStatuses = selectedStatuses.includes(status)
+      ? selectedStatuses.filter((s) => s !== status)
+      : [...selectedStatuses, status]
+    if (onStatusesChange) {
+      onStatusesChange(newStatuses)
+    } else {
+      setInternalStatuses(newStatuses)
+    }
   }
 
   return (
@@ -33,7 +67,12 @@ export function ReportsFilters() {
       <div className="flex flex-1 items-center gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input placeholder="Search reports..." className="pl-9" />
+          <Input
+            placeholder="Search reports..."
+            className="pl-9"
+            value={searchQuery}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+          />
         </div>
 
         <DropdownMenu>

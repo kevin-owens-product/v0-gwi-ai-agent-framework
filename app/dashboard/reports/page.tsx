@@ -1,4 +1,6 @@
-import { Suspense } from "react"
+"use client"
+
+import { Suspense, useState } from "react"
 import { ReportsHeader } from "@/components/reports/reports-header"
 import { ReportsFilters } from "@/components/reports/reports-filters"
 import { ReportsGrid } from "@/components/reports/reports-grid"
@@ -8,6 +10,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function ReportsPage() {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
+
   return (
     <div className="flex-1 space-y-6 p-6">
       <ReportsHeader />
@@ -20,9 +26,20 @@ export default function ReportsPage() {
           <TabsTrigger value="shared">Shared with Me</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="space-y-4">
-          <ReportsFilters />
+          <ReportsFilters
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            selectedTypes={selectedTypes}
+            onTypesChange={setSelectedTypes}
+            selectedStatuses={selectedStatuses}
+            onStatusesChange={setSelectedStatuses}
+          />
           <Suspense fallback={<ReportsGridSkeleton />}>
-            <ReportsGrid />
+            <ReportsGrid
+              searchQuery={searchQuery}
+              selectedTypes={selectedTypes}
+              selectedStatuses={selectedStatuses}
+            />
           </Suspense>
         </TabsContent>
         <TabsContent value="templates">

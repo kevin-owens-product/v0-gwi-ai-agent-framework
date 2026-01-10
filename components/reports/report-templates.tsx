@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -83,10 +84,21 @@ const templates = [
 ]
 
 export function ReportTemplates() {
+  const router = useRouter()
   const [search, setSearch] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const categories = [...new Set(templates.map((t) => t.category))]
+
+  const handleUseTemplate = (template: typeof templates[0]) => {
+    // Navigate to new report page with template data in query params
+    const params = new URLSearchParams({
+      template: template.id,
+      title: template.name,
+      description: template.description,
+    })
+    router.push(`/dashboard/reports/new?${params.toString()}`)
+  }
 
   const filteredTemplates = templates.filter((t) => {
     const matchesSearch =
@@ -157,6 +169,7 @@ export function ReportTemplates() {
                 variant="ghost"
                 size="sm"
                 className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                onClick={() => handleUseTemplate(template)}
               >
                 Use Template
                 <ArrowRight className="ml-2 h-4 w-4" />

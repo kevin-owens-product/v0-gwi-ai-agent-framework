@@ -11,6 +11,7 @@ import { PlaygroundCanvas } from "@/components/playground/canvas"
 import { PlaygroundToolbar } from "@/components/playground/toolbar"
 import { PlaygroundContextPanel } from "@/components/playground/context-panel"
 import { WelcomeWizard } from "@/components/playground/welcome-wizard"
+import { getStoreAgent, installAgent, type StoreAgent } from "@/lib/store-agents"
 
 export interface PlaygroundConfig {
   selectedAgent: string
@@ -57,6 +58,8 @@ interface CustomAgent {
   id: string
   name: string
   description: string | null
+  isStoreAgent?: boolean
+  storeAgent?: StoreAgent
 }
 
 interface PlaygroundContextType {
@@ -194,7 +197,47 @@ export default function PlaygroundPage() {
 
   // Fetch agent from API if agent ID is in URL
   useEffect(() => {
-    if (agentIdFromUrl && !agents[agentIdFromUrl]) {
+    if (agentIdFromUrl) {
+      // First check if it's a built-in playground agent
+      if (agents[agentIdFromUrl]) {
+        setCustomAgent(null)
+        setConfig((prev) => ({ ...prev, selectedAgent: agentIdFromUrl }))
+        setMessages([
+          {
+            id: Date.now().toString(),
+            role: "assistant",
+            content: agents[agentIdFromUrl].greeting,
+            status: "complete",
+          },
+        ])
+        return
+      }
+
+      // Then check if it's a store agent
+      const storeAgent = getStoreAgent(agentIdFromUrl)
+      if (storeAgent) {
+        // Auto-install store agent when opened in playground
+        installAgent(agentIdFromUrl)
+        setCustomAgent({
+          id: storeAgent.id,
+          name: storeAgent.name,
+          description: storeAgent.description,
+          isStoreAgent: true,
+          storeAgent: storeAgent,
+        })
+        setConfig((prev) => ({ ...prev, selectedAgent: storeAgent.id }))
+        setMessages([
+          {
+            id: Date.now().toString(),
+            role: "assistant",
+            content: storeAgent.greeting,
+            status: "complete",
+          },
+        ])
+        return
+      }
+
+      // Finally, try to fetch from API (custom agent)
       fetch(`/api/v1/agents/${agentIdFromUrl}`)
         .then((res) => res.json())
         .then((data) => {
@@ -213,27 +256,27 @@ export default function PlaygroundPage() {
           }
         })
         .catch((err) => console.error("Failed to fetch agent:", err))
-    } else if (agentIdFromUrl && agents[agentIdFromUrl]) {
-      // Use built-in agent
-      setConfig((prev) => ({ ...prev, selectedAgent: agentIdFromUrl }))
-      setMessages([
-        {
-          id: Date.now().toString(),
-          role: "assistant",
-          content: agents[agentIdFromUrl].greeting,
-          status: "complete",
-        },
-      ])
     }
   }, [agentIdFromUrl])
 
   const resetChat = () => {
     let greeting = agents["audience-explorer"]?.greeting || "Hello! How can I help you today?"
-    if (customAgent) {
+
+    // Check for store agent first
+    if (customAgent?.isStoreAgent && customAgent.storeAgent) {
+      greeting = customAgent.storeAgent.greeting
+    } else if (customAgent) {
       greeting = `Hello! I'm ${customAgent.name}. ${customAgent.description || "How can I help you today?"}`
     } else if (agents[config.selectedAgent]) {
       greeting = agents[config.selectedAgent].greeting
+    } else {
+      // Check if selected agent is a store agent
+      const storeAgent = getStoreAgent(config.selectedAgent)
+      if (storeAgent) {
+        greeting = storeAgent.greeting
+      }
     }
+
     setMessages([
       {
         id: Date.now().toString(),

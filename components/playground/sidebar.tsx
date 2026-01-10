@@ -21,10 +21,14 @@ import {
   TrendingUp,
   Search,
   Bot,
+  Store,
+  Star,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { usePlayground } from "@/app/dashboard/playground/page"
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
+import Link from "next/link"
+import { getInstalledAgents, iconMap, type StoreAgent, uninstallAgent } from "@/lib/store-agents"
 
 const agents = [
   {
@@ -115,37 +119,108 @@ export function PlaygroundSidebar() {
   const { config, setConfig, setMessages, resetChat, customAgent, setCustomAgent } = usePlayground()
   const [collapsed, setCollapsed] = useState(false)
   const [sessions, setSessions] = useState(sessionHistory)
+  const [installedStoreAgents, setInstalledStoreAgents] = useState<StoreAgent[]>([])
+
+  // Load installed agents on mount and listen for changes
+  useEffect(() => {
+    const loadInstalledAgents = () => {
+      setInstalledStoreAgents(getInstalledAgents())
+    }
+
+    loadInstalledAgents()
+
+    // Listen for install/uninstall events
+    const handleInstall = () => loadInstalledAgents()
+    const handleUninstall = () => loadInstalledAgents()
+
+    window.addEventListener("agent-installed", handleInstall)
+    window.addEventListener("agent-uninstalled", handleUninstall)
+
+    return () => {
+      window.removeEventListener("agent-installed", handleInstall)
+      window.removeEventListener("agent-uninstalled", handleUninstall)
+    }
+  }, [])
 
   const handleAgentChange = (agentId: string) => {
     setConfig((prev) => ({ ...prev, selectedAgent: agentId }))
-    // Clear custom agent when switching to a built-in agent
-    if (agents.find(a => a.id === agentId)) {
+
+    // Check if it's a built-in agent
+    const builtInAgent = agents.find(a => a.id === agentId)
+    if (builtInAgent) {
       setCustomAgent(null)
+      const agentGreetings: Record<string, string> = {
+        "audience-explorer":
+          "Hello! I'm the Audience Explorer agent. I can help you discover and analyze consumer segments, build detailed profiles, and uncover behavioral patterns. What audience would you like to explore today?",
+        "persona-architect":
+          "Hi there! I'm the Persona Architect. I create rich, data-driven personas based on real consumer data. I can visualize motivations, pain points, and media habits. Who should we bring to life?",
+        "motivation-decoder":
+          "Welcome! I'm the Motivation Decoder. I analyze the 'why' behind consumer behavior - values, beliefs, and emotional drivers. What consumer motivations shall we unpack?",
+        "culture-tracker":
+          "Hello! I'm the Culture Tracker. I monitor cultural shifts, emerging movements, and societal trends that shape consumer behavior. What cultural phenomenon interests you?",
+        "brand-analyst":
+          "Hi! I'm the Brand Relationship Analyst. I examine how consumers connect with brands emotionally and functionally. Which brand relationships should we explore?",
+        "global-perspective":
+          "Welcome! I'm the Global Perspective Agent. I compare consumer behaviors across markets and cultures to identify universal truths and local nuances. Which markets shall we compare?",
+      }
+      setMessages([
+        {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: agentGreetings[agentId] || agentGreetings["audience-explorer"],
+          status: "complete",
+        },
+      ])
+      return
     }
 
-    const agentGreetings: Record<string, string> = {
-      "audience-explorer":
-        "Hello! I'm the Audience Explorer agent. I can help you discover and analyze consumer segments, build detailed profiles, and uncover behavioral patterns. What audience would you like to explore today?",
-      "persona-architect":
-        "Hi there! I'm the Persona Architect. I create rich, data-driven personas based on real consumer data. I can visualize motivations, pain points, and media habits. Who should we bring to life?",
-      "motivation-decoder":
-        "Welcome! I'm the Motivation Decoder. I analyze the 'why' behind consumer behavior - values, beliefs, and emotional drivers. What consumer motivations shall we unpack?",
-      "culture-tracker":
-        "Hello! I'm the Culture Tracker. I monitor cultural shifts, emerging movements, and societal trends that shape consumer behavior. What cultural phenomenon interests you?",
-      "brand-analyst":
-        "Hi! I'm the Brand Relationship Analyst. I examine how consumers connect with brands emotionally and functionally. Which brand relationships should we explore?",
-      "global-perspective":
-        "Welcome! I'm the Global Perspective Agent. I compare consumer behaviors across markets and cultures to identify universal truths and local nuances. Which markets shall we compare?",
+    // Check if it's an installed store agent
+    const storeAgent = installedStoreAgents.find(a => a.id === agentId)
+    if (storeAgent) {
+      setCustomAgent({
+        id: storeAgent.id,
+        name: storeAgent.name,
+        description: storeAgent.description,
+        isStoreAgent: true,
+        storeAgent: storeAgent,
+      })
+      setMessages([
+        {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: storeAgent.greeting,
+          status: "complete",
+        },
+      ])
     }
+  }
 
+  const handleStoreAgentSelect = (storeAgent: StoreAgent) => {
+    setConfig((prev) => ({ ...prev, selectedAgent: storeAgent.id }))
+    setCustomAgent({
+      id: storeAgent.id,
+      name: storeAgent.name,
+      description: storeAgent.description,
+      isStoreAgent: true,
+      storeAgent: storeAgent,
+    })
     setMessages([
       {
         id: Date.now().toString(),
         role: "assistant",
-        content: agentGreetings[agentId] || agentGreetings["audience-explorer"],
+        content: storeAgent.greeting,
         status: "complete",
       },
     ])
+  }
+
+  const handleRemoveStoreAgent = (agentId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    uninstallAgent(agentId)
+    // If the removed agent was selected, switch to default
+    if (config.selectedAgent === agentId) {
+      handleAgentChange("audience-explorer")
+    }
   }
 
   const toggleSource = (sourceId: string) => {
@@ -231,51 +306,120 @@ export function PlaygroundSidebar() {
             </TabsList>
 
             <TabsContent value="agents" className="p-3 space-y-3 mt-0">
-              <div>
-                <Label className="text-xs text-muted-foreground mb-2 block">Select Agent</Label>
-                <div className="space-y-2">
-                  {/* Show custom agent from URL at top if loaded */}
-                  {customAgent && (
-                    <button
-                      onClick={() => {
-                        setConfig((prev) => ({ ...prev, selectedAgent: customAgent.id }))
-                        setMessages([
-                          {
-                            id: Date.now().toString(),
-                            role: "assistant",
-                            content: `Hello! I'm ${customAgent.name}. ${customAgent.description || "How can I help you today?"}`,
-                            status: "complete",
-                          },
-                        ])
-                      }}
-                      className={cn(
-                        "w-full text-left p-3 rounded-lg border transition-all",
-                        config.selectedAgent === customAgent.id
-                          ? "border-accent bg-accent/10"
-                          : "border-border hover:border-muted-foreground/30",
-                      )}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div
+              {/* Installed Store Agents Section */}
+              {installedStoreAgents.length > 0 && (
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Store className="h-3.5 w-3.5 text-primary" />
+                    <Label className="text-xs text-muted-foreground">From Store</Label>
+                  </div>
+                  <div className="space-y-2">
+                    {installedStoreAgents.map((storeAgent) => {
+                      const IconComponent = iconMap[storeAgent.iconName]
+                      const isSelected = config.selectedAgent === storeAgent.id
+                      return (
+                        <button
+                          key={storeAgent.id}
+                          onClick={() => handleStoreAgentSelect(storeAgent)}
                           className={cn(
-                            "w-8 h-8 rounded-lg flex items-center justify-center",
-                            config.selectedAgent === customAgent.id ? "bg-accent/20" : "bg-secondary",
+                            "w-full text-left p-3 rounded-lg border transition-all group relative",
+                            isSelected
+                              ? "border-primary bg-primary/10"
+                              : "border-border hover:border-muted-foreground/30",
                           )}
                         >
-                          <Bot className="h-4 w-4 text-violet-500" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-sm font-medium text-foreground">{customAgent.name}</p>
-                            <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-violet-500/20 text-violet-400">
-                              Custom
-                            </Badge>
+                          <div className="flex items-start gap-3">
+                            <div
+                              className={cn(
+                                "w-8 h-8 rounded-lg flex items-center justify-center",
+                                isSelected ? "bg-primary/20" : "bg-secondary",
+                              )}
+                            >
+                              {IconComponent && <IconComponent className={cn("h-4 w-4", storeAgent.color)} />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="text-sm font-medium text-foreground">{storeAgent.name}</p>
+                                <div className="flex items-center gap-1 text-yellow-500">
+                                  <Star className="h-3 w-3 fill-current" />
+                                  <span className="text-[10px]">{storeAgent.rating}</span>
+                                </div>
+                              </div>
+                              <p className="text-xs text-muted-foreground line-clamp-1">{storeAgent.description}</p>
+                              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 mt-1.5 bg-primary/20 text-primary">
+                                {storeAgent.category}
+                              </Badge>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2"
+                              onClick={(e) => handleRemoveStoreAgent(storeAgent.id, e)}
+                              title="Remove agent"
+                            >
+                              <Trash2 className="h-3 w-3 text-muted-foreground hover:text-destructive" />
+                            </Button>
                           </div>
-                          <p className="text-xs text-muted-foreground line-clamp-1">{customAgent.description || "Custom agent"}</p>
-                        </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Custom agent from API */}
+              {customAgent && !customAgent.isStoreAgent && (
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Bot className="h-3.5 w-3.5 text-violet-500" />
+                    <Label className="text-xs text-muted-foreground">Custom Agent</Label>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setConfig((prev) => ({ ...prev, selectedAgent: customAgent.id }))
+                      setMessages([
+                        {
+                          id: Date.now().toString(),
+                          role: "assistant",
+                          content: `Hello! I'm ${customAgent.name}. ${customAgent.description || "How can I help you today?"}`,
+                          status: "complete",
+                        },
+                      ])
+                    }}
+                    className={cn(
+                      "w-full text-left p-3 rounded-lg border transition-all",
+                      config.selectedAgent === customAgent.id
+                        ? "border-accent bg-accent/10"
+                        : "border-border hover:border-muted-foreground/30",
+                    )}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={cn(
+                          "w-8 h-8 rounded-lg flex items-center justify-center",
+                          config.selectedAgent === customAgent.id ? "bg-accent/20" : "bg-secondary",
+                        )}
+                      >
+                        <Bot className="h-4 w-4 text-violet-500" />
                       </div>
-                    </button>
-                  )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-medium text-foreground">{customAgent.name}</p>
+                          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-violet-500/20 text-violet-400">
+                            Custom
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground line-clamp-1">{customAgent.description || "Custom agent"}</p>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              )}
+
+              {/* Built-in Agents */}
+              <div>
+                <Label className="text-xs text-muted-foreground mb-2 block">Built-in Agents</Label>
+                <div className="space-y-2">
                   {agents.map((agent) => {
                     const Icon = agent.icon
                     return (
@@ -315,6 +459,14 @@ export function PlaygroundSidebar() {
                   })}
                 </div>
               </div>
+
+              {/* Browse Store Link */}
+              <Link href="/dashboard/store" className="block">
+                <Button variant="outline" size="sm" className="w-full mt-3 text-xs bg-transparent gap-2">
+                  <Store className="h-3.5 w-3.5" />
+                  Browse Agent Store
+                </Button>
+              </Link>
             </TabsContent>
 
             <TabsContent value="data" className="p-3 space-y-3 mt-0">
