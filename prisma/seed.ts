@@ -811,200 +811,240 @@ async function main() {
   // ==================== AUDIENCES ====================
   console.log('👥 Creating audiences...')
 
-  const audiences = await prisma.audience.createMany({
-    data: [
-      {
-        orgId: acmeCorp.id,
-        name: 'Gen Z Digital Natives',
-        description: 'Young consumers aged 18-25 who are highly engaged with social media and digital platforms. Early adopters of new technology and trends.',
-        criteria: {
-          ageRange: { min: 18, max: 25 },
-          behaviors: ['heavy_social_media_users', 'mobile_first', 'streaming_subscribers'],
-          interests: ['gaming', 'short_form_video', 'sustainability', 'mental_health'],
-          platforms: ['TikTok', 'Instagram', 'YouTube', 'Discord'],
-          purchaseDrivers: ['brand_values', 'peer_recommendations', 'social_proof']
-        },
-        size: 42500000,
-        markets: ['US', 'UK', 'AU', 'CA', 'DE'],
-        isFavorite: true,
-        usageCount: 156,
-        lastUsed: new Date(now.getTime() - 2 * 60 * 60 * 1000),
-        createdBy: adminUser.id
+  // Create audiences with explicit IDs for reliable API access
+  const audience1 = await prisma.audience.create({
+    data: {
+      id: '1',
+      orgId: acmeCorp.id,
+      name: 'Gen Z Digital Natives',
+      description: 'Young consumers aged 18-25 who are highly engaged with social media and digital platforms. Early adopters of new technology and trends.',
+      criteria: {
+        ageRange: { min: 18, max: 25 },
+        behaviors: ['heavy_social_media_users', 'mobile_first', 'streaming_subscribers'],
+        interests: ['gaming', 'short_form_video', 'sustainability', 'mental_health'],
+        platforms: ['TikTok', 'Instagram', 'YouTube', 'Discord'],
+        purchaseDrivers: ['brand_values', 'peer_recommendations', 'social_proof']
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Affluent Millennials',
-        description: 'High-income millennials aged 28-40 with disposable income. Quality-conscious consumers who value experiences and premium products.',
-        criteria: {
-          ageRange: { min: 28, max: 40 },
-          income: { min: 100000, currency: 'USD' },
-          behaviors: ['premium_purchasers', 'experience_seekers', 'brand_loyal'],
-          interests: ['travel', 'fine_dining', 'fitness', 'investment', 'real_estate'],
-          lifestyle: ['urban_professional', 'health_conscious', 'career_focused']
-        },
-        size: 28300000,
-        markets: ['US', 'UK', 'DE', 'FR', 'JP'],
-        isFavorite: true,
-        usageCount: 234,
-        lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000),
-        createdBy: johnDoe.id
+      size: 42500000,
+      markets: ['US', 'UK', 'AU', 'CA', 'DE'],
+      isFavorite: true,
+      usageCount: 156,
+      lastUsed: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+      createdBy: adminUser.id
+    }
+  })
+
+  const audience2 = await prisma.audience.create({
+    data: {
+      id: '2',
+      orgId: acmeCorp.id,
+      name: 'Affluent Millennials',
+      description: 'High-income millennials aged 28-40 with disposable income. Quality-conscious consumers who value experiences and premium products.',
+      criteria: {
+        ageRange: { min: 28, max: 40 },
+        income: { min: 100000, currency: 'USD' },
+        behaviors: ['premium_purchasers', 'experience_seekers', 'brand_loyal'],
+        interests: ['travel', 'fine_dining', 'fitness', 'investment', 'real_estate'],
+        lifestyle: ['urban_professional', 'health_conscious', 'career_focused']
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Eco-Conscious Consumers',
-        description: 'Environmentally aware consumers who prioritize sustainability in purchasing decisions. Willing to pay premium for eco-friendly products.',
-        criteria: {
-          behaviors: ['sustainable_shoppers', 'ethical_consumers', 'recyclers'],
-          interests: ['climate_change', 'renewable_energy', 'organic_products', 'zero_waste'],
-          values: ['environmental_responsibility', 'social_impact', 'transparency'],
-          purchaseDrivers: ['sustainability_certifications', 'carbon_footprint', 'ethical_sourcing']
-        },
-        size: 35800000,
-        markets: ['US', 'UK', 'DE', 'NL', 'SE', 'DK', 'NO'],
-        isFavorite: true,
-        usageCount: 189,
-        lastUsed: new Date(now.getTime() - 8 * 60 * 60 * 1000),
-        createdBy: janeSmith.id
+      size: 28300000,
+      markets: ['US', 'UK', 'DE', 'FR', 'JP'],
+      isFavorite: true,
+      usageCount: 234,
+      lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+      createdBy: johnDoe.id
+    }
+  })
+
+  const audience3 = await prisma.audience.create({
+    data: {
+      id: '3',
+      orgId: acmeCorp.id,
+      name: 'Eco-Conscious Consumers',
+      description: 'Environmentally aware consumers who prioritize sustainability in purchasing decisions. Willing to pay premium for eco-friendly products.',
+      criteria: {
+        behaviors: ['sustainable_shoppers', 'ethical_consumers', 'recyclers'],
+        interests: ['climate_change', 'renewable_energy', 'organic_products', 'zero_waste'],
+        values: ['environmental_responsibility', 'social_impact', 'transparency'],
+        purchaseDrivers: ['sustainability_certifications', 'carbon_footprint', 'ethical_sourcing']
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Tech Early Adopters',
-        description: 'Technology enthusiasts who are first to try new products and services. Influential in shaping tech trends and opinions.',
-        criteria: {
-          behaviors: ['early_adopters', 'tech_influencers', 'gadget_collectors'],
-          interests: ['AI', 'VR_AR', 'smart_home', 'electric_vehicles', 'crypto'],
-          platforms: ['Reddit', 'Twitter', 'ProductHunt', 'HackerNews'],
-          purchaseDrivers: ['innovation', 'features', 'cutting_edge_tech']
-        },
-        size: 18500000,
-        markets: ['US', 'UK', 'JP', 'KR', 'DE', 'CN'],
-        isFavorite: false,
-        usageCount: 145,
-        lastUsed: new Date(now.getTime() - 24 * 60 * 60 * 1000),
-        createdBy: adminUser.id
+      size: 35800000,
+      markets: ['US', 'UK', 'DE', 'NL', 'SE', 'DK', 'NO'],
+      isFavorite: true,
+      usageCount: 189,
+      lastUsed: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+      createdBy: janeSmith.id
+    }
+  })
+
+  const audience4 = await prisma.audience.create({
+    data: {
+      id: '4',
+      orgId: acmeCorp.id,
+      name: 'Tech Early Adopters',
+      description: 'Technology enthusiasts who are first to try new products and services. Influential in shaping tech trends and opinions.',
+      criteria: {
+        behaviors: ['early_adopters', 'tech_influencers', 'gadget_collectors'],
+        interests: ['AI', 'VR_AR', 'smart_home', 'electric_vehicles', 'crypto'],
+        platforms: ['Reddit', 'Twitter', 'ProductHunt', 'HackerNews'],
+        purchaseDrivers: ['innovation', 'features', 'cutting_edge_tech']
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Health & Wellness Enthusiasts',
-        description: 'Consumers prioritizing physical and mental wellness. Regular exercisers, healthy eaters, and mindfulness practitioners.',
-        criteria: {
-          behaviors: ['regular_exercisers', 'healthy_eaters', 'supplement_users', 'meditation_practitioners'],
-          interests: ['fitness', 'nutrition', 'mental_health', 'yoga', 'running'],
-          purchaseDrivers: ['health_benefits', 'natural_ingredients', 'scientific_backing']
-        },
-        size: 52000000,
-        markets: ['US', 'UK', 'AU', 'CA', 'DE', 'NL'],
-        isFavorite: true,
-        usageCount: 267,
-        lastUsed: new Date(now.getTime() - 3 * 60 * 60 * 1000),
-        createdBy: johnDoe.id
+      size: 18500000,
+      markets: ['US', 'UK', 'JP', 'KR', 'DE', 'CN'],
+      isFavorite: false,
+      usageCount: 145,
+      lastUsed: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+      createdBy: adminUser.id
+    }
+  })
+
+  const audience5 = await prisma.audience.create({
+    data: {
+      id: '5',
+      orgId: acmeCorp.id,
+      name: 'Health & Wellness Enthusiasts',
+      description: 'Consumers prioritizing physical and mental wellness. Regular exercisers, healthy eaters, and mindfulness practitioners.',
+      criteria: {
+        behaviors: ['regular_exercisers', 'healthy_eaters', 'supplement_users', 'meditation_practitioners'],
+        interests: ['fitness', 'nutrition', 'mental_health', 'yoga', 'running'],
+        purchaseDrivers: ['health_benefits', 'natural_ingredients', 'scientific_backing']
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Remote Workers',
-        description: 'Professionals working from home or hybrid arrangements. High demand for productivity tools, home office equipment, and work-life balance solutions.',
-        criteria: {
-          employment: ['remote_full_time', 'hybrid', 'freelancer', 'digital_nomad'],
-          behaviors: ['home_office_setup', 'video_conferencing', 'productivity_app_users'],
-          interests: ['productivity', 'work_life_balance', 'home_improvement', 'coworking'],
-          purchaseDrivers: ['functionality', 'comfort', 'productivity_gains']
-        },
-        size: 68000000,
-        markets: ['US', 'UK', 'DE', 'NL', 'AU', 'CA', 'ES', 'PT'],
-        isFavorite: false,
-        usageCount: 98,
-        lastUsed: new Date(now.getTime() - 48 * 60 * 60 * 1000),
-        createdBy: janeSmith.id
+      size: 52000000,
+      markets: ['US', 'UK', 'AU', 'CA', 'DE', 'NL'],
+      isFavorite: true,
+      usageCount: 267,
+      lastUsed: new Date(now.getTime() - 3 * 60 * 60 * 1000),
+      createdBy: johnDoe.id
+    }
+  })
+
+  const audience6 = await prisma.audience.create({
+    data: {
+      id: '6',
+      orgId: acmeCorp.id,
+      name: 'Remote Workers',
+      description: 'Professionals working from home or hybrid arrangements. High demand for productivity tools, home office equipment, and work-life balance solutions.',
+      criteria: {
+        employment: ['remote_full_time', 'hybrid', 'freelancer', 'digital_nomad'],
+        behaviors: ['home_office_setup', 'video_conferencing', 'productivity_app_users'],
+        interests: ['productivity', 'work_life_balance', 'home_improvement', 'coworking'],
+        purchaseDrivers: ['functionality', 'comfort', 'productivity_gains']
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Luxury Seekers',
-        description: 'High-net-worth individuals interested in luxury goods and premium experiences. Value exclusivity, craftsmanship, and status.',
-        criteria: {
-          income: { min: 200000, currency: 'USD' },
-          behaviors: ['luxury_purchasers', 'exclusive_membership', 'premium_travel'],
-          interests: ['luxury_fashion', 'fine_watches', 'premium_cars', 'private_travel'],
-          purchaseDrivers: ['exclusivity', 'craftsmanship', 'heritage', 'status']
-        },
-        size: 8500000,
-        markets: ['US', 'UK', 'FR', 'IT', 'CH', 'AE', 'SG', 'HK'],
-        isFavorite: false,
-        usageCount: 67,
-        lastUsed: new Date(now.getTime() - 72 * 60 * 60 * 1000),
-        createdBy: adminUser.id
+      size: 68000000,
+      markets: ['US', 'UK', 'DE', 'NL', 'AU', 'CA', 'ES', 'PT'],
+      isFavorite: false,
+      usageCount: 98,
+      lastUsed: new Date(now.getTime() - 48 * 60 * 60 * 1000),
+      createdBy: janeSmith.id
+    }
+  })
+
+  const audience7 = await prisma.audience.create({
+    data: {
+      id: '7',
+      orgId: acmeCorp.id,
+      name: 'Luxury Seekers',
+      description: 'High-net-worth individuals interested in luxury goods and premium experiences. Value exclusivity, craftsmanship, and status.',
+      criteria: {
+        income: { min: 200000, currency: 'USD' },
+        behaviors: ['luxury_purchasers', 'exclusive_membership', 'premium_travel'],
+        interests: ['luxury_fashion', 'fine_watches', 'premium_cars', 'private_travel'],
+        purchaseDrivers: ['exclusivity', 'craftsmanship', 'heritage', 'status']
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Parents with Young Children',
-        description: 'Parents with children under 12. High focus on family-oriented products, education, and safety.',
-        criteria: {
-          familyStatus: 'parents_young_children',
-          childrenAges: { min: 0, max: 12 },
-          behaviors: ['family_oriented_shopping', 'safety_conscious', 'educational_content_consumers'],
-          interests: ['parenting', 'education', 'family_activities', 'child_development'],
-          purchaseDrivers: ['safety', 'educational_value', 'convenience', 'durability']
-        },
-        size: 45000000,
-        markets: ['US', 'UK', 'AU', 'CA', 'DE', 'FR'],
-        isFavorite: true,
-        usageCount: 178,
-        lastUsed: new Date(now.getTime() - 6 * 60 * 60 * 1000),
-        createdBy: johnDoe.id
+      size: 8500000,
+      markets: ['US', 'UK', 'FR', 'IT', 'CH', 'AE', 'SG', 'HK'],
+      isFavorite: false,
+      usageCount: 67,
+      lastUsed: new Date(now.getTime() - 72 * 60 * 60 * 1000),
+      createdBy: adminUser.id
+    }
+  })
+
+  const audience8 = await prisma.audience.create({
+    data: {
+      id: '8',
+      orgId: acmeCorp.id,
+      name: 'Parents with Young Children',
+      description: 'Parents with children under 12. High focus on family-oriented products, education, and safety.',
+      criteria: {
+        familyStatus: 'parents_young_children',
+        childrenAges: { min: 0, max: 12 },
+        behaviors: ['family_oriented_shopping', 'safety_conscious', 'educational_content_consumers'],
+        interests: ['parenting', 'education', 'family_activities', 'child_development'],
+        purchaseDrivers: ['safety', 'educational_value', 'convenience', 'durability']
       },
-      {
-        orgId: techStartup.id,
-        name: 'SaaS Power Users',
-        description: 'Heavy users of SaaS applications across productivity, collaboration, and development tools. High willingness to pay for premium features.',
-        criteria: {
-          behaviors: ['multi_saas_users', 'power_users', 'feature_maximizers'],
-          interests: ['productivity', 'automation', 'integrations', 'team_collaboration'],
-          tools: ['Slack', 'Notion', 'Figma', 'GitHub', 'Asana'],
-          purchaseDrivers: ['efficiency', 'integrations', 'team_features']
-        },
-        size: 15000000,
-        markets: ['US', 'UK', 'DE', 'CA', 'AU', 'NL'],
-        isFavorite: true,
-        usageCount: 89,
-        lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000),
-        createdBy: bobWilson.id
+      size: 45000000,
+      markets: ['US', 'UK', 'AU', 'CA', 'DE', 'FR'],
+      isFavorite: true,
+      usageCount: 178,
+      lastUsed: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+      createdBy: johnDoe.id
+    }
+  })
+
+  const audience9 = await prisma.audience.create({
+    data: {
+      id: '9',
+      orgId: techStartup.id,
+      name: 'SaaS Power Users',
+      description: 'Heavy users of SaaS applications across productivity, collaboration, and development tools. High willingness to pay for premium features.',
+      criteria: {
+        behaviors: ['multi_saas_users', 'power_users', 'feature_maximizers'],
+        interests: ['productivity', 'automation', 'integrations', 'team_collaboration'],
+        tools: ['Slack', 'Notion', 'Figma', 'GitHub', 'Asana'],
+        purchaseDrivers: ['efficiency', 'integrations', 'team_features']
       },
-      {
-        orgId: techStartup.id,
-        name: 'Startup Founders',
-        description: 'Founders and co-founders of startups. High interest in growth tools, funding, and scaling strategies.',
-        criteria: {
-          role: ['founder', 'co_founder', 'ceo_startup'],
-          companyStage: ['pre_seed', 'seed', 'series_a', 'series_b'],
-          behaviors: ['networking', 'fundraising', 'growth_hacking'],
-          interests: ['venture_capital', 'scaling', 'hiring', 'product_market_fit'],
-          purchaseDrivers: ['roi', 'scalability', 'founder_friendly']
-        },
-        size: 2500000,
-        markets: ['US', 'UK', 'DE', 'IL', 'SG', 'IN'],
-        isFavorite: true,
-        usageCount: 56,
-        lastUsed: new Date(now.getTime() - 18 * 60 * 60 * 1000),
-        createdBy: bobWilson.id
+      size: 15000000,
+      markets: ['US', 'UK', 'DE', 'CA', 'AU', 'NL'],
+      isFavorite: true,
+      usageCount: 89,
+      lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+      createdBy: bobWilson.id
+    }
+  })
+
+  const audience10 = await prisma.audience.create({
+    data: {
+      id: '10',
+      orgId: techStartup.id,
+      name: 'Startup Founders',
+      description: 'Founders and co-founders of startups. High interest in growth tools, funding, and scaling strategies.',
+      criteria: {
+        role: ['founder', 'co_founder', 'ceo_startup'],
+        companyStage: ['pre_seed', 'seed', 'series_a', 'series_b'],
+        behaviors: ['networking', 'fundraising', 'growth_hacking'],
+        interests: ['venture_capital', 'scaling', 'hiring', 'product_market_fit'],
+        purchaseDrivers: ['roi', 'scalability', 'founder_friendly']
       },
-      {
-        orgId: enterpriseCo.id,
-        name: 'Enterprise Decision Makers',
-        description: 'C-level and senior executives at large enterprises. Key decision makers for B2B purchases and strategic initiatives.',
-        criteria: {
-          role: ['ceo', 'cfo', 'cto', 'cmo', 'vp', 'director'],
-          companySize: { min: 1000 },
-          behaviors: ['strategic_purchasers', 'vendor_evaluators', 'budget_holders'],
-          interests: ['digital_transformation', 'enterprise_software', 'risk_management'],
-          purchaseDrivers: ['reliability', 'security', 'support', 'compliance']
-        },
-        size: 5800000,
-        markets: ['US', 'UK', 'DE', 'FR', 'JP', 'AU'],
-        isFavorite: true,
-        usageCount: 234,
-        lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000),
-        createdBy: sarahEnterprise.id
-      }
-    ]
+      size: 2500000,
+      markets: ['US', 'UK', 'DE', 'IL', 'SG', 'IN'],
+      isFavorite: true,
+      usageCount: 56,
+      lastUsed: new Date(now.getTime() - 18 * 60 * 60 * 1000),
+      createdBy: bobWilson.id
+    }
+  })
+
+  const audience11 = await prisma.audience.create({
+    data: {
+      id: '11',
+      orgId: enterpriseCo.id,
+      name: 'Enterprise Decision Makers',
+      description: 'C-level and senior executives at large enterprises. Key decision makers for B2B purchases and strategic initiatives.',
+      criteria: {
+        role: ['ceo', 'cfo', 'cto', 'cmo', 'vp', 'director'],
+        companySize: { min: 1000 },
+        behaviors: ['strategic_purchasers', 'vendor_evaluators', 'budget_holders'],
+        interests: ['digital_transformation', 'enterprise_software', 'risk_management'],
+        purchaseDrivers: ['reliability', 'security', 'support', 'compliance']
+      },
+      size: 5800000,
+      markets: ['US', 'UK', 'DE', 'FR', 'JP', 'AU'],
+      isFavorite: true,
+      usageCount: 234,
+      lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+      createdBy: sarahEnterprise.id
+    }
   })
 
   // Get created audience IDs for use in crosstabs
@@ -1013,166 +1053,190 @@ async function main() {
   // ==================== DASHBOARDS ====================
   console.log('📊 Creating dashboards...')
 
-  await prisma.dashboard.createMany({
-    data: [
-      {
-        orgId: acmeCorp.id,
-        name: 'Brand Performance Overview',
-        description: 'Executive dashboard tracking key brand metrics across all tracked brands. Real-time health scores, market share trends, and competitive positioning.',
-        layout: JSON.stringify([
-          { i: 'brand-health', x: 0, y: 0, w: 4, h: 2 },
-          { i: 'market-share', x: 4, y: 0, w: 4, h: 2 },
-          { i: 'nps-trend', x: 8, y: 0, w: 4, h: 2 },
-          { i: 'awareness-funnel', x: 0, y: 2, w: 6, h: 3 },
-          { i: 'competitor-radar', x: 6, y: 2, w: 6, h: 3 },
-          { i: 'sentiment-timeline', x: 0, y: 5, w: 12, h: 2 }
-        ]),
-        widgets: JSON.stringify([
-          { id: 'brand-health', type: 'gauge', title: 'Overall Brand Health', metric: 'brandHealth', threshold: { warning: 70, danger: 50 } },
-          { id: 'market-share', type: 'pie', title: 'Market Share Distribution', metric: 'marketShare', showLegend: true },
-          { id: 'nps-trend', type: 'line', title: 'NPS Trend (12 Months)', metric: 'nps', period: '12m', showTrendline: true },
-          { id: 'awareness-funnel', type: 'funnel', title: 'Brand Funnel', stages: ['awareness', 'consideration', 'preference', 'loyalty'] },
-          { id: 'competitor-radar', type: 'radar', title: 'Competitive Positioning', metrics: ['awareness', 'consideration', 'preference', 'loyalty', 'nps'] },
-          { id: 'sentiment-timeline', type: 'area', title: 'Sentiment Over Time', metric: 'sentimentScore', showAnnotations: true }
-        ]),
-        status: 'PUBLISHED',
-        isPublic: false,
-        views: 1247,
-        createdBy: adminUser.id
-      },
-      {
-        orgId: acmeCorp.id,
-        name: 'Audience Insights Dashboard',
-        description: 'Deep dive into audience segments. Demographics, behavioral patterns, and engagement metrics across key consumer groups.',
-        layout: JSON.stringify([
-          { i: 'audience-sizes', x: 0, y: 0, w: 6, h: 2 },
-          { i: 'age-distribution', x: 6, y: 0, w: 6, h: 2 },
-          { i: 'engagement-heatmap', x: 0, y: 2, w: 8, h: 3 },
-          { i: 'platform-breakdown', x: 8, y: 2, w: 4, h: 3 },
-          { i: 'interest-treemap', x: 0, y: 5, w: 12, h: 3 }
-        ]),
-        widgets: JSON.stringify([
-          { id: 'audience-sizes', type: 'bar', title: 'Audience Sizes', dataSource: 'audiences', metric: 'size', sortBy: 'desc' },
-          { id: 'age-distribution', type: 'donut', title: 'Age Distribution', segments: ['18-24', '25-34', '35-44', '45-54', '55+'] },
-          { id: 'engagement-heatmap', type: 'heatmap', title: 'Engagement by Audience & Platform', xAxis: 'platform', yAxis: 'audience' },
-          { id: 'platform-breakdown', type: 'pie', title: 'Platform Preference', dataSource: 'platform_usage' },
-          { id: 'interest-treemap', type: 'treemap', title: 'Interest Categories', dataSource: 'interests', colorScale: 'category' }
-        ]),
-        status: 'PUBLISHED',
-        isPublic: false,
-        views: 892,
-        createdBy: johnDoe.id
-      },
-      {
-        orgId: acmeCorp.id,
-        name: 'Competitive Analysis Hub',
-        description: 'Monitor competitor brand performance. Side-by-side comparisons, trend analysis, and share of voice tracking.',
-        layout: JSON.stringify([
-          { i: 'competitor-table', x: 0, y: 0, w: 12, h: 3 },
-          { i: 'share-of-voice', x: 0, y: 3, w: 6, h: 2 },
-          { i: 'sentiment-comparison', x: 6, y: 3, w: 6, h: 2 },
-          { i: 'trend-lines', x: 0, y: 5, w: 12, h: 3 }
-        ]),
-        widgets: JSON.stringify([
-          { id: 'competitor-table', type: 'table', title: 'Competitor Scorecard', columns: ['brand', 'awareness', 'consideration', 'preference', 'nps', 'sentiment'] },
-          { id: 'share-of-voice', type: 'bar', title: 'Share of Voice', metric: 'sov', stacked: true },
-          { id: 'sentiment-comparison', type: 'bar', title: 'Sentiment Comparison', metric: 'sentiment', showBenchmark: true },
-          { id: 'trend-lines', type: 'line', title: 'Brand Health Trends (All Competitors)', multiSeries: true, period: '6m' }
-        ]),
-        status: 'PUBLISHED',
-        isPublic: false,
-        views: 756,
-        createdBy: janeSmith.id
-      },
-      {
-        orgId: acmeCorp.id,
-        name: 'Marketing Campaign Tracker',
-        description: 'Track campaign impact on brand metrics. Pre/post analysis, attribution modeling, and ROI calculations.',
-        layout: JSON.stringify([
-          { i: 'campaign-lift', x: 0, y: 0, w: 4, h: 2 },
-          { id: 'roi-metric', x: 4, y: 0, w: 4, h: 2 },
-          { i: 'reach-metric', x: 8, y: 0, w: 4, h: 2 },
-          { i: 'lift-analysis', x: 0, y: 2, w: 6, h: 3 },
-          { i: 'channel-performance', x: 6, y: 2, w: 6, h: 3 }
-        ]),
-        widgets: JSON.stringify([
-          { id: 'campaign-lift', type: 'metric', title: 'Brand Lift', value: '+12.5%', trend: 'up', comparison: 'vs. pre-campaign' },
-          { id: 'roi-metric', type: 'metric', title: 'Campaign ROI', value: '3.2x', trend: 'up', comparison: 'vs. target 2.5x' },
-          { id: 'reach-metric', type: 'metric', title: 'Total Reach', value: '45.2M', trend: 'up', comparison: '+15% vs. plan' },
-          { id: 'lift-analysis', type: 'bar', title: 'Metric Lift by Campaign', grouped: true, metrics: ['awareness', 'consideration', 'intent'] },
-          { id: 'channel-performance', type: 'bar', title: 'Performance by Channel', channels: ['TV', 'Digital', 'Social', 'OOH', 'Radio'] }
-        ]),
-        status: 'PUBLISHED',
-        isPublic: false,
-        views: 543,
-        createdBy: adminUser.id
-      },
-      {
-        orgId: acmeCorp.id,
-        name: 'Consumer Trends Monitor',
-        description: 'Track emerging consumer trends and behavioral shifts. Trend velocity, adoption curves, and predictive signals.',
-        layout: JSON.stringify([
-          { i: 'trending-topics', x: 0, y: 0, w: 6, h: 3 },
-          { i: 'adoption-curve', x: 6, y: 0, w: 6, h: 3 },
-          { i: 'sentiment-stream', x: 0, y: 3, w: 12, h: 2 },
-          { i: 'predictions', x: 0, y: 5, w: 12, h: 2 }
-        ]),
-        widgets: JSON.stringify([
-          { id: 'trending-topics', type: 'wordcloud', title: 'Trending Topics', dataSource: 'social_listening', timeframe: '7d' },
-          { id: 'adoption-curve', type: 'line', title: 'Trend Adoption Curves', multiSeries: true, showPhases: true },
-          { id: 'sentiment-stream', type: 'stream', title: 'Real-time Sentiment', refreshRate: '5m' },
-          { id: 'predictions', type: 'cards', title: 'Trend Predictions', showConfidence: true, count: 4 }
-        ]),
-        status: 'DRAFT',
-        isPublic: false,
-        views: 234,
-        createdBy: janeSmith.id
-      },
-      {
-        orgId: techStartup.id,
-        name: 'Startup Market Overview',
-        description: 'Key metrics for startup market analysis. Market sizing, growth rates, and competitive landscape.',
-        layout: JSON.stringify([
-          { i: 'market-size', x: 0, y: 0, w: 4, h: 2 },
-          { i: 'growth-rate', x: 4, y: 0, w: 4, h: 2 },
-          { i: 'competition-index', x: 8, y: 0, w: 4, h: 2 },
-          { i: 'market-map', x: 0, y: 2, w: 12, h: 4 }
-        ]),
-        widgets: JSON.stringify([
-          { id: 'market-size', type: 'metric', title: 'TAM', value: '$4.2B', trend: 'up', yoy: '+18%' },
-          { id: 'growth-rate', type: 'metric', title: 'Market Growth', value: '23%', trend: 'up', comparison: 'CAGR' },
-          { id: 'competition-index', type: 'gauge', title: 'Competition Intensity', value: 72, max: 100 },
-          { id: 'market-map', type: 'scatter', title: 'Competitive Landscape', xAxis: 'market_share', yAxis: 'growth_rate', bubbleSize: 'revenue' }
-        ]),
-        status: 'PUBLISHED',
-        isPublic: false,
-        views: 189,
-        createdBy: bobWilson.id
-      },
-      {
-        orgId: enterpriseCo.id,
-        name: 'Enterprise Analytics Hub',
-        description: 'Comprehensive enterprise analytics dashboard with drill-down capabilities and custom reporting.',
-        layout: JSON.stringify([
-          { i: 'kpi-row', x: 0, y: 0, w: 12, h: 1 },
-          { i: 'revenue-trend', x: 0, y: 1, w: 8, h: 3 },
-          { i: 'segment-pie', x: 8, y: 1, w: 4, h: 3 },
-          { i: 'regional-map', x: 0, y: 4, w: 6, h: 3 },
-          { i: 'product-table', x: 6, y: 4, w: 6, h: 3 }
-        ]),
-        widgets: JSON.stringify([
-          { id: 'kpi-row', type: 'kpi-strip', metrics: ['revenue', 'users', 'retention', 'nps'], comparison: 'yoy' },
-          { id: 'revenue-trend', type: 'area', title: 'Revenue Trend', metric: 'revenue', period: '24m', showForecast: true },
-          { id: 'segment-pie', type: 'pie', title: 'Revenue by Segment', dataSource: 'segments' },
-          { id: 'regional-map', type: 'choropleth', title: 'Performance by Region', metric: 'revenue', colorScale: 'sequential' },
-          { id: 'product-table', type: 'table', title: 'Product Performance', sortable: true, exportable: true }
-        ]),
-        status: 'PUBLISHED',
-        isPublic: false,
-        views: 2341,
-        createdBy: sarahEnterprise.id
-      }
-    ]
+  // Create dashboards with explicit IDs for reliable API access
+  await prisma.dashboard.create({
+    data: {
+      id: '1',
+      orgId: acmeCorp.id,
+      name: 'Brand Performance Overview',
+      description: 'Executive dashboard tracking key brand metrics across all tracked brands. Real-time health scores, market share trends, and competitive positioning.',
+      layout: JSON.stringify([
+        { i: 'brand-health', x: 0, y: 0, w: 4, h: 2 },
+        { i: 'market-share', x: 4, y: 0, w: 4, h: 2 },
+        { i: 'nps-trend', x: 8, y: 0, w: 4, h: 2 },
+        { i: 'awareness-funnel', x: 0, y: 2, w: 6, h: 3 },
+        { i: 'competitor-radar', x: 6, y: 2, w: 6, h: 3 },
+        { i: 'sentiment-timeline', x: 0, y: 5, w: 12, h: 2 }
+      ]),
+      widgets: JSON.stringify([
+        { id: 'brand-health', type: 'gauge', title: 'Overall Brand Health', metric: 'brandHealth', threshold: { warning: 70, danger: 50 } },
+        { id: 'market-share', type: 'pie', title: 'Market Share Distribution', metric: 'marketShare', showLegend: true },
+        { id: 'nps-trend', type: 'line', title: 'NPS Trend (12 Months)', metric: 'nps', period: '12m', showTrendline: true },
+        { id: 'awareness-funnel', type: 'funnel', title: 'Brand Funnel', stages: ['awareness', 'consideration', 'preference', 'loyalty'] },
+        { id: 'competitor-radar', type: 'radar', title: 'Competitive Positioning', metrics: ['awareness', 'consideration', 'preference', 'loyalty', 'nps'] },
+        { id: 'sentiment-timeline', type: 'area', title: 'Sentiment Over Time', metric: 'sentimentScore', showAnnotations: true }
+      ]),
+      status: 'PUBLISHED',
+      isPublic: false,
+      views: 1247,
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.dashboard.create({
+    data: {
+      id: '2',
+      orgId: acmeCorp.id,
+      name: 'Audience Insights Dashboard',
+      description: 'Deep dive into audience segments. Demographics, behavioral patterns, and engagement metrics across key consumer groups.',
+      layout: JSON.stringify([
+        { i: 'audience-sizes', x: 0, y: 0, w: 6, h: 2 },
+        { i: 'age-distribution', x: 6, y: 0, w: 6, h: 2 },
+        { i: 'engagement-heatmap', x: 0, y: 2, w: 8, h: 3 },
+        { i: 'platform-breakdown', x: 8, y: 2, w: 4, h: 3 },
+        { i: 'interest-treemap', x: 0, y: 5, w: 12, h: 3 }
+      ]),
+      widgets: JSON.stringify([
+        { id: 'audience-sizes', type: 'bar', title: 'Audience Sizes', dataSource: 'audiences', metric: 'size', sortBy: 'desc' },
+        { id: 'age-distribution', type: 'donut', title: 'Age Distribution', segments: ['18-24', '25-34', '35-44', '45-54', '55+'] },
+        { id: 'engagement-heatmap', type: 'heatmap', title: 'Engagement by Audience & Platform', xAxis: 'platform', yAxis: 'audience' },
+        { id: 'platform-breakdown', type: 'pie', title: 'Platform Preference', dataSource: 'platform_usage' },
+        { id: 'interest-treemap', type: 'treemap', title: 'Interest Categories', dataSource: 'interests', colorScale: 'category' }
+      ]),
+      status: 'PUBLISHED',
+      isPublic: false,
+      views: 892,
+      createdBy: johnDoe.id
+    }
+  })
+
+  await prisma.dashboard.create({
+    data: {
+      id: '3',
+      orgId: acmeCorp.id,
+      name: 'Competitive Analysis Hub',
+      description: 'Monitor competitor brand performance. Side-by-side comparisons, trend analysis, and share of voice tracking.',
+      layout: JSON.stringify([
+        { i: 'competitor-table', x: 0, y: 0, w: 12, h: 3 },
+        { i: 'share-of-voice', x: 0, y: 3, w: 6, h: 2 },
+        { i: 'sentiment-comparison', x: 6, y: 3, w: 6, h: 2 },
+        { i: 'trend-lines', x: 0, y: 5, w: 12, h: 3 }
+      ]),
+      widgets: JSON.stringify([
+        { id: 'competitor-table', type: 'table', title: 'Competitor Scorecard', columns: ['brand', 'awareness', 'consideration', 'preference', 'nps', 'sentiment'] },
+        { id: 'share-of-voice', type: 'bar', title: 'Share of Voice', metric: 'sov', stacked: true },
+        { id: 'sentiment-comparison', type: 'bar', title: 'Sentiment Comparison', metric: 'sentiment', showBenchmark: true },
+        { id: 'trend-lines', type: 'line', title: 'Brand Health Trends (All Competitors)', multiSeries: true, period: '6m' }
+      ]),
+      status: 'PUBLISHED',
+      isPublic: false,
+      views: 756,
+      createdBy: janeSmith.id
+    }
+  })
+
+  await prisma.dashboard.create({
+    data: {
+      id: '4',
+      orgId: acmeCorp.id,
+      name: 'Marketing Campaign Tracker',
+      description: 'Track campaign impact on brand metrics. Pre/post analysis, attribution modeling, and ROI calculations.',
+      layout: JSON.stringify([
+        { i: 'campaign-lift', x: 0, y: 0, w: 4, h: 2 },
+        { id: 'roi-metric', x: 4, y: 0, w: 4, h: 2 },
+        { i: 'reach-metric', x: 8, y: 0, w: 4, h: 2 },
+        { i: 'lift-analysis', x: 0, y: 2, w: 6, h: 3 },
+        { i: 'channel-performance', x: 6, y: 2, w: 6, h: 3 }
+      ]),
+      widgets: JSON.stringify([
+        { id: 'campaign-lift', type: 'metric', title: 'Brand Lift', value: '+12.5%', trend: 'up', comparison: 'vs. pre-campaign' },
+        { id: 'roi-metric', type: 'metric', title: 'Campaign ROI', value: '3.2x', trend: 'up', comparison: 'vs. target 2.5x' },
+        { id: 'reach-metric', type: 'metric', title: 'Total Reach', value: '45.2M', trend: 'up', comparison: '+15% vs. plan' },
+        { id: 'lift-analysis', type: 'bar', title: 'Metric Lift by Campaign', grouped: true, metrics: ['awareness', 'consideration', 'intent'] },
+        { id: 'channel-performance', type: 'bar', title: 'Performance by Channel', channels: ['TV', 'Digital', 'Social', 'OOH', 'Radio'] }
+      ]),
+      status: 'PUBLISHED',
+      isPublic: false,
+      views: 543,
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.dashboard.create({
+    data: {
+      id: '5',
+      orgId: acmeCorp.id,
+      name: 'Consumer Trends Monitor',
+      description: 'Track emerging consumer trends and behavioral shifts. Trend velocity, adoption curves, and predictive signals.',
+      layout: JSON.stringify([
+        { i: 'trending-topics', x: 0, y: 0, w: 6, h: 3 },
+        { i: 'adoption-curve', x: 6, y: 0, w: 6, h: 3 },
+        { i: 'sentiment-stream', x: 0, y: 3, w: 12, h: 2 },
+        { i: 'predictions', x: 0, y: 5, w: 12, h: 2 }
+      ]),
+      widgets: JSON.stringify([
+        { id: 'trending-topics', type: 'wordcloud', title: 'Trending Topics', dataSource: 'social_listening', timeframe: '7d' },
+        { id: 'adoption-curve', type: 'line', title: 'Trend Adoption Curves', multiSeries: true, showPhases: true },
+        { id: 'sentiment-stream', type: 'stream', title: 'Real-time Sentiment', refreshRate: '5m' },
+        { id: 'predictions', type: 'cards', title: 'Trend Predictions', showConfidence: true, count: 4 }
+      ]),
+      status: 'DRAFT',
+      isPublic: false,
+      views: 234,
+      createdBy: janeSmith.id
+    }
+  })
+
+  await prisma.dashboard.create({
+    data: {
+      id: '6',
+      orgId: techStartup.id,
+      name: 'Startup Market Overview',
+      description: 'Key metrics for startup market analysis. Market sizing, growth rates, and competitive landscape.',
+      layout: JSON.stringify([
+        { i: 'market-size', x: 0, y: 0, w: 4, h: 2 },
+        { i: 'growth-rate', x: 4, y: 0, w: 4, h: 2 },
+        { i: 'competition-index', x: 8, y: 0, w: 4, h: 2 },
+        { i: 'market-map', x: 0, y: 2, w: 12, h: 4 }
+      ]),
+      widgets: JSON.stringify([
+        { id: 'market-size', type: 'metric', title: 'TAM', value: '$4.2B', trend: 'up', yoy: '+18%' },
+        { id: 'growth-rate', type: 'metric', title: 'Market Growth', value: '23%', trend: 'up', comparison: 'CAGR' },
+        { id: 'competition-index', type: 'gauge', title: 'Competition Intensity', value: 72, max: 100 },
+        { id: 'market-map', type: 'scatter', title: 'Competitive Landscape', xAxis: 'market_share', yAxis: 'growth_rate', bubbleSize: 'revenue' }
+      ]),
+      status: 'PUBLISHED',
+      isPublic: false,
+      views: 189,
+      createdBy: bobWilson.id
+    }
+  })
+
+  await prisma.dashboard.create({
+    data: {
+      id: '7',
+      orgId: enterpriseCo.id,
+      name: 'Enterprise Analytics Hub',
+      description: 'Comprehensive enterprise analytics dashboard with drill-down capabilities and custom reporting.',
+      layout: JSON.stringify([
+        { i: 'kpi-row', x: 0, y: 0, w: 12, h: 1 },
+        { i: 'revenue-trend', x: 0, y: 1, w: 8, h: 3 },
+        { i: 'segment-pie', x: 8, y: 1, w: 4, h: 3 },
+        { i: 'regional-map', x: 0, y: 4, w: 6, h: 3 },
+        { i: 'product-table', x: 6, y: 4, w: 6, h: 3 }
+      ]),
+      widgets: JSON.stringify([
+        { id: 'kpi-row', type: 'kpi-strip', metrics: ['revenue', 'users', 'retention', 'nps'], comparison: 'yoy' },
+        { id: 'revenue-trend', type: 'area', title: 'Revenue Trend', metric: 'revenue', period: '24m', showForecast: true },
+        { id: 'segment-pie', type: 'pie', title: 'Revenue by Segment', dataSource: 'segments' },
+        { id: 'regional-map', type: 'choropleth', title: 'Performance by Region', metric: 'revenue', colorScale: 'sequential' },
+        { id: 'product-table', type: 'table', title: 'Product Performance', sortable: true, exportable: true }
+      ]),
+      status: 'PUBLISHED',
+      isPublic: false,
+      views: 2341,
+      createdBy: sarahEnterprise.id
+    }
   })
 
   // ==================== CROSSTABS ====================
@@ -1366,242 +1430,278 @@ async function main() {
   // ==================== CHARTS ====================
   console.log('📈 Creating charts...')
 
-  await prisma.chart.createMany({
-    data: [
-      {
-        orgId: acmeCorp.id,
-        name: 'Brand Health Trend Analysis',
-        description: 'Weekly brand health scores over the past 12 months with trend analysis and predictions',
-        type: 'LINE',
-        config: {
-          xAxis: { type: 'time', label: 'Date' },
-          yAxis: { type: 'linear', label: 'Brand Health Score', min: 0, max: 100 },
-          series: ['Nike', 'Adidas', 'Under Armour', 'Puma'],
-          colors: ['#FF6B35', '#004E89', '#1A936F', '#F4D35E'],
-          showLegend: true,
-          showTrendline: true,
-          annotations: [
-            { date: '2024-06-15', label: 'Nike Campaign Launch', type: 'event' },
-            { date: '2024-09-01', label: 'Holiday Season Start', type: 'period' }
-          ]
-        },
-        data: {
-          labels: Array.from({ length: 52 }, (_, i) => {
-            const d = new Date(now.getTime() - (51 - i) * 7 * 24 * 60 * 60 * 1000)
-            return d.toISOString().split('T')[0]
-          }),
-          datasets: [
-            { label: 'Nike', data: Array.from({ length: 52 }, () => 75 + Math.random() * 15) },
-            { label: 'Adidas', data: Array.from({ length: 52 }, () => 68 + Math.random() * 12) },
-            { label: 'Under Armour', data: Array.from({ length: 52 }, () => 55 + Math.random() * 15) },
-            { label: 'Puma', data: Array.from({ length: 52 }, () => 60 + Math.random() * 12) }
-          ]
-        },
-        status: 'PUBLISHED',
-        createdBy: adminUser.id
+  // Create charts with explicit IDs for reliable API access
+  await prisma.chart.create({
+    data: {
+      id: '1',
+      orgId: acmeCorp.id,
+      name: 'Brand Health Trend Analysis',
+      description: 'Weekly brand health scores over the past 12 months with trend analysis and predictions',
+      type: 'LINE',
+      config: {
+        xAxis: { type: 'time', label: 'Date' },
+        yAxis: { type: 'linear', label: 'Brand Health Score', min: 0, max: 100 },
+        series: ['Nike', 'Adidas', 'Under Armour', 'Puma'],
+        colors: ['#FF6B35', '#004E89', '#1A936F', '#F4D35E'],
+        showLegend: true,
+        showTrendline: true,
+        annotations: [
+          { date: '2024-06-15', label: 'Nike Campaign Launch', type: 'event' },
+          { date: '2024-09-01', label: 'Holiday Season Start', type: 'period' }
+        ]
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Market Share Distribution',
-        description: 'Current market share distribution across tracked brands in the sportswear category',
-        type: 'PIE',
-        config: {
-          showLabels: true,
-          showPercentages: true,
-          innerRadius: 0,
-          colors: ['#FF6B35', '#004E89', '#1A936F', '#F4D35E', '#88CCF1', '#D64045']
-        },
-        data: {
-          labels: ['Nike', 'Adidas', 'Under Armour', 'Puma', 'New Balance', 'Others'],
-          datasets: [{ data: [32.5, 22.8, 8.5, 12.2, 7.8, 16.2] }]
-        },
-        status: 'PUBLISHED',
-        createdBy: johnDoe.id
+      data: {
+        labels: Array.from({ length: 52 }, (_, i) => {
+          const d = new Date(now.getTime() - (51 - i) * 7 * 24 * 60 * 60 * 1000)
+          return d.toISOString().split('T')[0]
+        }),
+        datasets: [
+          { label: 'Nike', data: Array.from({ length: 52 }, () => 75 + Math.random() * 15) },
+          { label: 'Adidas', data: Array.from({ length: 52 }, () => 68 + Math.random() * 12) },
+          { label: 'Under Armour', data: Array.from({ length: 52 }, () => 55 + Math.random() * 15) },
+          { label: 'Puma', data: Array.from({ length: 52 }, () => 60 + Math.random() * 12) }
+        ]
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Audience Engagement Funnel',
-        description: 'Conversion funnel from awareness to purchase across all audiences',
-        type: 'FUNNEL',
-        config: {
-          stages: ['Awareness', 'Consideration', 'Preference', 'Intent', 'Purchase'],
-          colors: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
-          showConversionRates: true,
-          orientation: 'vertical'
-        },
-        data: {
-          values: [100, 68.5, 45.2, 28.5, 18.2],
-          conversions: [68.5, 66.0, 63.1, 63.9]
-        },
-        status: 'PUBLISHED',
-        createdBy: janeSmith.id
+      status: 'PUBLISHED',
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '2',
+      orgId: acmeCorp.id,
+      name: 'Market Share Distribution',
+      description: 'Current market share distribution across tracked brands in the sportswear category',
+      type: 'PIE',
+      config: {
+        showLabels: true,
+        showPercentages: true,
+        innerRadius: 0,
+        colors: ['#FF6B35', '#004E89', '#1A936F', '#F4D35E', '#88CCF1', '#D64045']
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Competitive Radar Chart',
-        description: 'Multi-dimensional competitive analysis across key brand metrics',
-        type: 'RADAR',
-        config: {
-          dimensions: ['Awareness', 'Consideration', 'Preference', 'Loyalty', 'NPS', 'Sentiment'],
-          maxValue: 100,
-          showArea: true,
-          opacity: 0.3
-        },
-        data: {
-          labels: ['Awareness', 'Consideration', 'Preference', 'Loyalty', 'NPS', 'Sentiment'],
-          datasets: [
-            { label: 'Nike', data: [85, 72, 65, 78, 62, 75], color: '#FF6B35' },
-            { label: 'Adidas', data: [78, 65, 58, 68, 52, 68], color: '#004E89' },
-            { label: 'Puma', data: [68, 55, 48, 58, 45, 62], color: '#1A936F' }
-          ]
-        },
-        status: 'PUBLISHED',
-        createdBy: adminUser.id
+      data: {
+        labels: ['Nike', 'Adidas', 'Under Armour', 'Puma', 'New Balance', 'Others'],
+        datasets: [{ data: [32.5, 22.8, 8.5, 12.2, 7.8, 16.2] }]
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Sentiment Heatmap by Platform',
-        description: 'Brand sentiment analysis across social media platforms and time',
-        type: 'HEATMAP',
-        config: {
-          xAxis: { label: 'Platform' },
-          yAxis: { label: 'Week' },
-          colorScale: { min: -1, max: 1, colors: ['#EF4444', '#F59E0B', '#10B981'] },
-          showValues: true
-        },
-        data: {
-          xLabels: ['Twitter', 'Instagram', 'Facebook', 'TikTok', 'YouTube', 'LinkedIn'],
-          yLabels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-          values: [
-            [0.65, 0.78, 0.52, 0.85, 0.72, 0.68],
-            [0.58, 0.82, 0.48, 0.88, 0.75, 0.72],
-            [0.72, 0.75, 0.55, 0.82, 0.78, 0.65],
-            [0.68, 0.85, 0.58, 0.92, 0.82, 0.70]
-          ]
-        },
-        status: 'PUBLISHED',
-        createdBy: johnDoe.id
+      status: 'PUBLISHED',
+      createdBy: johnDoe.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '3',
+      orgId: acmeCorp.id,
+      name: 'Audience Engagement Funnel',
+      description: 'Conversion funnel from awareness to purchase across all audiences',
+      type: 'FUNNEL',
+      config: {
+        stages: ['Awareness', 'Consideration', 'Preference', 'Intent', 'Purchase'],
+        colors: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+        showConversionRates: true,
+        orientation: 'vertical'
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Age Demographics Distribution',
-        description: 'Audience distribution by age group with brand preference overlay',
-        type: 'BAR',
-        config: {
-          orientation: 'vertical',
-          stacked: false,
-          grouped: true,
-          showLabels: true,
-          xAxis: { label: 'Age Group' },
-          yAxis: { label: 'Percentage' }
-        },
-        data: {
-          labels: ['18-24', '25-34', '35-44', '45-54', '55+'],
-          datasets: [
-            { label: 'Brand A Preference', data: [28.5, 35.2, 22.8, 18.5, 12.2], color: '#3B82F6' },
-            { label: 'Brand B Preference', data: [22.3, 28.5, 32.5, 25.8, 18.5], color: '#10B981' }
-          ]
-        },
-        status: 'PUBLISHED',
-        createdBy: janeSmith.id
+      data: {
+        values: [100, 68.5, 45.2, 28.5, 18.2],
+        conversions: [68.5, 66.0, 63.1, 63.9]
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'NPS Score Trend',
-        description: 'Net Promoter Score trend over time with industry benchmark',
-        type: 'AREA',
-        config: {
-          xAxis: { type: 'time', label: 'Month' },
-          yAxis: { label: 'NPS Score', min: -100, max: 100 },
-          fill: true,
-          showBenchmark: true,
-          benchmarkValue: 45,
-          gradient: true
-        },
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          datasets: [
-            { label: 'NPS', data: [52, 48, 55, 58, 52, 62, 65, 58, 68, 72, 68, 75], color: '#3B82F6' }
-          ],
-          benchmark: { label: 'Industry Average', value: 45 }
-        },
-        status: 'PUBLISHED',
-        createdBy: adminUser.id
+      status: 'PUBLISHED',
+      createdBy: janeSmith.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '4',
+      orgId: acmeCorp.id,
+      name: 'Competitive Radar Chart',
+      description: 'Multi-dimensional competitive analysis across key brand metrics',
+      type: 'RADAR',
+      config: {
+        dimensions: ['Awareness', 'Consideration', 'Preference', 'Loyalty', 'NPS', 'Sentiment'],
+        maxValue: 100,
+        showArea: true,
+        opacity: 0.3
       },
-      {
-        orgId: acmeCorp.id,
-        name: 'Interest Category Treemap',
-        description: 'Audience interest categories sized by engagement level',
-        type: 'TREEMAP',
-        config: {
-          colorScale: 'category',
-          showLabels: true,
-          showValues: true,
-          groupBy: 'category'
-        },
-        data: {
-          children: [
-            { name: 'Technology', value: 42500, children: [
-              { name: 'AI & ML', value: 15000 },
-              { name: 'Mobile', value: 12500 },
-              { name: 'Gaming', value: 15000 }
-            ]},
-            { name: 'Lifestyle', value: 38000, children: [
-              { name: 'Fitness', value: 18000 },
-              { name: 'Travel', value: 12000 },
-              { name: 'Food', value: 8000 }
-            ]},
-            { name: 'Entertainment', value: 35000, children: [
-              { name: 'Streaming', value: 20000 },
-              { name: 'Music', value: 10000 },
-              { name: 'Sports', value: 5000 }
-            ]}
-          ]
-        },
-        status: 'PUBLISHED',
-        createdBy: johnDoe.id
+      data: {
+        labels: ['Awareness', 'Consideration', 'Preference', 'Loyalty', 'NPS', 'Sentiment'],
+        datasets: [
+          { label: 'Nike', data: [85, 72, 65, 78, 62, 75], color: '#FF6B35' },
+          { label: 'Adidas', data: [78, 65, 58, 68, 52, 68], color: '#004E89' },
+          { label: 'Puma', data: [68, 55, 48, 58, 45, 62], color: '#1A936F' }
+        ]
       },
-      {
-        orgId: techStartup.id,
-        name: 'User Growth Trajectory',
-        description: 'Monthly active users growth with cohort retention overlay',
-        type: 'LINE',
-        config: {
-          xAxis: { type: 'time', label: 'Month' },
-          yAxis: { label: 'Users (thousands)', type: 'linear' },
-          showArea: true,
-          showDataPoints: true,
-          smoothing: 0.3
-        },
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          datasets: [
-            { label: 'MAU', data: [125, 142, 168, 195, 228, 265, 312, 358, 415, 478, 542, 628], color: '#8B5CF6' },
-            { label: 'DAU', data: [45, 52, 62, 75, 88, 102, 125, 145, 168, 195, 225, 262], color: '#10B981' }
-          ]
-        },
-        status: 'PUBLISHED',
-        createdBy: bobWilson.id
+      status: 'PUBLISHED',
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '5',
+      orgId: acmeCorp.id,
+      name: 'Sentiment Heatmap by Platform',
+      description: 'Brand sentiment analysis across social media platforms and time',
+      type: 'HEATMAP',
+      config: {
+        xAxis: { label: 'Platform' },
+        yAxis: { label: 'Week' },
+        colorScale: { min: -1, max: 1, colors: ['#EF4444', '#F59E0B', '#10B981'] },
+        showValues: true
       },
-      {
-        orgId: enterpriseCo.id,
-        name: 'Revenue by Region',
-        description: 'Quarterly revenue breakdown by geographic region',
-        type: 'DONUT',
-        config: {
-          innerRadius: 60,
-          showLabels: true,
-          showPercentages: true,
-          legend: { position: 'right' }
-        },
-        data: {
-          labels: ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Middle East & Africa'],
-          datasets: [{ data: [42.5, 28.2, 18.5, 6.8, 4.0] }]
-        },
-        status: 'PUBLISHED',
-        createdBy: sarahEnterprise.id
-      }
-    ]
+      data: {
+        xLabels: ['Twitter', 'Instagram', 'Facebook', 'TikTok', 'YouTube', 'LinkedIn'],
+        yLabels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        values: [
+          [0.65, 0.78, 0.52, 0.85, 0.72, 0.68],
+          [0.58, 0.82, 0.48, 0.88, 0.75, 0.72],
+          [0.72, 0.75, 0.55, 0.82, 0.78, 0.65],
+          [0.68, 0.85, 0.58, 0.92, 0.82, 0.70]
+        ]
+      },
+      status: 'PUBLISHED',
+      createdBy: johnDoe.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '6',
+      orgId: acmeCorp.id,
+      name: 'Age Demographics Distribution',
+      description: 'Audience distribution by age group with brand preference overlay',
+      type: 'BAR',
+      config: {
+        orientation: 'vertical',
+        stacked: false,
+        grouped: true,
+        showLabels: true,
+        xAxis: { label: 'Age Group' },
+        yAxis: { label: 'Percentage' }
+      },
+      data: {
+        labels: ['18-24', '25-34', '35-44', '45-54', '55+'],
+        datasets: [
+          { label: 'Brand A Preference', data: [28.5, 35.2, 22.8, 18.5, 12.2], color: '#3B82F6' },
+          { label: 'Brand B Preference', data: [22.3, 28.5, 32.5, 25.8, 18.5], color: '#10B981' }
+        ]
+      },
+      status: 'PUBLISHED',
+      createdBy: janeSmith.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '7',
+      orgId: acmeCorp.id,
+      name: 'NPS Score Trend',
+      description: 'Net Promoter Score trend over time with industry benchmark',
+      type: 'AREA',
+      config: {
+        xAxis: { type: 'time', label: 'Month' },
+        yAxis: { label: 'NPS Score', min: -100, max: 100 },
+        fill: true,
+        showBenchmark: true,
+        benchmarkValue: 45,
+        gradient: true
+      },
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+          { label: 'NPS', data: [52, 48, 55, 58, 52, 62, 65, 58, 68, 72, 68, 75], color: '#3B82F6' }
+        ],
+        benchmark: { label: 'Industry Average', value: 45 }
+      },
+      status: 'PUBLISHED',
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '8',
+      orgId: acmeCorp.id,
+      name: 'Interest Category Treemap',
+      description: 'Audience interest categories sized by engagement level',
+      type: 'TREEMAP',
+      config: {
+        colorScale: 'category',
+        showLabels: true,
+        showValues: true,
+        groupBy: 'category'
+      },
+      data: {
+        children: [
+          { name: 'Technology', value: 42500, children: [
+            { name: 'AI & ML', value: 15000 },
+            { name: 'Mobile', value: 12500 },
+            { name: 'Gaming', value: 15000 }
+          ]},
+          { name: 'Lifestyle', value: 38000, children: [
+            { name: 'Fitness', value: 18000 },
+            { name: 'Travel', value: 12000 },
+            { name: 'Food', value: 8000 }
+          ]},
+          { name: 'Entertainment', value: 35000, children: [
+            { name: 'Streaming', value: 20000 },
+            { name: 'Music', value: 10000 },
+            { name: 'Sports', value: 5000 }
+          ]}
+        ]
+      },
+      status: 'PUBLISHED',
+      createdBy: johnDoe.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '9',
+      orgId: techStartup.id,
+      name: 'User Growth Trajectory',
+      description: 'Monthly active users growth with cohort retention overlay',
+      type: 'LINE',
+      config: {
+        xAxis: { type: 'time', label: 'Month' },
+        yAxis: { label: 'Users (thousands)', type: 'linear' },
+        showArea: true,
+        showDataPoints: true,
+        smoothing: 0.3
+      },
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+          { label: 'MAU', data: [125, 142, 168, 195, 228, 265, 312, 358, 415, 478, 542, 628], color: '#8B5CF6' },
+          { label: 'DAU', data: [45, 52, 62, 75, 88, 102, 125, 145, 168, 195, 225, 262], color: '#10B981' }
+        ]
+      },
+      status: 'PUBLISHED',
+      createdBy: bobWilson.id
+    }
+  })
+
+  await prisma.chart.create({
+    data: {
+      id: '10',
+      orgId: enterpriseCo.id,
+      name: 'Revenue by Region',
+      description: 'Quarterly revenue breakdown by geographic region',
+      type: 'DONUT',
+      config: {
+        innerRadius: 60,
+        showLabels: true,
+        showPercentages: true,
+        legend: { position: 'right' }
+      },
+      data: {
+        labels: ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Middle East & Africa'],
+        datasets: [{ data: [42.5, 28.2, 18.5, 6.8, 4.0] }]
+      },
+      status: 'PUBLISHED',
+      createdBy: sarahEnterprise.id
+    }
   })
 
   // ==================== BRAND TRACKING ====================
@@ -1643,6 +1743,7 @@ async function main() {
   // Nike Brand Tracking - Strong, upward trend
   const nikeBrandTracking = await prisma.brandTracking.create({
     data: {
+      id: '1',
       orgId: acmeCorp.id,
       brandName: 'Nike',
       description: 'Global leader in athletic footwear and apparel. Tracking brand health, awareness, and competitive positioning across key demographics.',
@@ -1716,6 +1817,7 @@ async function main() {
   // Spotify Brand Tracking - Tech/Entertainment, stable with seasonal bumps
   const spotifyBrandTracking = await prisma.brandTracking.create({
     data: {
+      id: '2',
       orgId: acmeCorp.id,
       brandName: 'Spotify',
       description: 'Leading music streaming platform. Monitoring brand perception, user engagement metrics, and competitive landscape against Apple Music and YouTube Music.',
@@ -1788,6 +1890,7 @@ async function main() {
   // Tesla Brand Tracking - Innovative but volatile sentiment
   const teslaBrandTracking = await prisma.brandTracking.create({
     data: {
+      id: '3',
       orgId: acmeCorp.id,
       brandName: 'Tesla',
       description: 'Electric vehicle pioneer and clean energy company. Tracking brand perception, purchase intent, and sentiment across EV market segments.',
@@ -1862,6 +1965,7 @@ async function main() {
   // Patagonia Brand Tracking - Strong sustainability brand, upward trend
   const patagoniaBrandTracking = await prisma.brandTracking.create({
     data: {
+      id: '4',
       orgId: acmeCorp.id,
       brandName: 'Patagonia',
       description: 'Outdoor apparel company with strong sustainability positioning. Tracking brand perception among eco-conscious consumers and outdoor enthusiasts.',
@@ -1934,6 +2038,7 @@ async function main() {
   // Oatly Brand Tracking - Challenger brand, rapid growth
   const oatlyBrandTracking = await prisma.brandTracking.create({
     data: {
+      id: '5',
       orgId: acmeCorp.id,
       brandName: 'Oatly',
       description: 'Plant-based dairy alternative leader. Tracking brand disruption metrics, awareness growth, and competitive positioning in alt-milk category.',
@@ -2006,6 +2111,7 @@ async function main() {
   // Airbnb Brand Tracking - Travel recovery, strong brand
   const airbnbBrandTracking = await prisma.brandTracking.create({
     data: {
+      id: '6',
       orgId: techStartup.id,
       brandName: 'Airbnb',
       description: 'Travel accommodation marketplace. Tracking brand recovery post-pandemic, trust metrics, and competitive positioning against traditional hospitality.',
@@ -2078,6 +2184,7 @@ async function main() {
   // Peloton Brand Tracking - Declining trend, needs attention
   const pelotonBrandTracking = await prisma.brandTracking.create({
     data: {
+      id: '7',
       orgId: enterpriseCo.id,
       brandName: 'Peloton',
       description: 'Connected fitness platform. Monitoring brand health during market correction, subscriber retention, and competitive threats from traditional fitness.',
@@ -2150,6 +2257,7 @@ async function main() {
   // Notion Brand Tracking - B2B/Productivity, strong growth
   const notionBrandTracking = await prisma.brandTracking.create({
     data: {
+      id: '8',
       orgId: techStartup.id,
       brandName: 'Notion',
       description: 'All-in-one workspace for notes, docs, and project management. Tracking adoption metrics, enterprise penetration, and competitive positioning.',
