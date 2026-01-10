@@ -19,10 +19,72 @@ import {
   BarChart3,
   Users,
   TableIcon,
+  Download,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import ReactMarkdown from "react-markdown"
 import { SourcePreview } from "./source-preview"
+
+function exportBlockData(block: OutputBlock, format: "json" | "csv" = "json") {
+  let content = ""
+  let filename = `${block.type}-${block.id}-${new Date().toISOString().split("T")[0]}`
+  let mimeType = "application/json"
+
+  if (format === "json") {
+    content = JSON.stringify(
+      {
+        type: block.type,
+        title: block.title,
+        content: block.content,
+        exportedAt: new Date().toISOString(),
+      },
+      null,
+      2
+    )
+    filename += ".json"
+  } else if (format === "csv" && block.type === "table" && block.content?.headers && block.content?.rows) {
+    const headers = block.content.headers.join(",")
+    const rows = block.content.rows.map((row: string[]) => row.join(",")).join("\n")
+    content = `${headers}\n${rows}`
+    filename += ".csv"
+    mimeType = "text/csv"
+  }
+
+  const blob = new Blob([content], { type: mimeType })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+function BlockExportButton({ block, showCsv = false }: { block: OutputBlock; showCsv?: boolean }) {
+  return (
+    <div className="flex items-center gap-1 ml-auto">
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+        onClick={() => exportBlockData(block, "json")}
+      >
+        <Download className="h-3 w-3 mr-1" />
+        JSON
+      </Button>
+      {showCsv && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+          onClick={() => exportBlockData(block, "csv")}
+        >
+          <Download className="h-3 w-3 mr-1" />
+          CSV
+        </Button>
+      )}
+    </div>
+  )
+}
 
 interface Citation {
   id?: string
@@ -62,6 +124,7 @@ function ChartBlock({ block }: { block: OutputBlock }) {
       <div className="flex items-center gap-2 mb-4">
         <BarChart3 className="h-4 w-4 text-accent" />
         <h4 className="text-sm font-medium">{block.title}</h4>
+        <BlockExportButton block={block} />
       </div>
       <div className="flex items-center gap-4 mb-4">
         {content.series.map((series: any) => (
@@ -111,6 +174,7 @@ function PersonaBlock({ block }: { block: OutputBlock }) {
             {content.age} | {content.income} | {content.location}
           </p>
         </div>
+        <BlockExportButton block={block} />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
@@ -161,6 +225,7 @@ function TableBlock({ block }: { block: OutputBlock }) {
       <div className="flex items-center gap-2 mb-4">
         <TableIcon className="h-4 w-4 text-accent" />
         <h4 className="text-sm font-medium">{block.title}</h4>
+        <BlockExportButton block={block} showCsv />
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
@@ -201,6 +266,7 @@ function ComparisonBlock({ block }: { block: OutputBlock }) {
           <path d="M16 3h5v5M8 3H3v5M3 16v5h5M21 16v5h-5M12 8v8M8 12h8" />
         </svg>
         <h4 className="text-sm font-medium">{block.title}</h4>
+        <BlockExportButton block={block} />
       </div>
       <div className="grid grid-cols-2 gap-4">
         {content.items.map((item: any, index: number) => (
@@ -235,7 +301,8 @@ function SlidesBlock({ block }: { block: OutputBlock }) {
           <path d="M8 21h8M12 17v4" />
         </svg>
         <h4 className="text-sm font-medium">{block.title}</h4>
-        <Badge variant="secondary" className="text-[10px] ml-auto">{content.slides.length} slides</Badge>
+        <Badge variant="secondary" className="text-[10px]">{content.slides.length} slides</Badge>
+        <BlockExportButton block={block} />
       </div>
       <div className="space-y-2">
         {content.slides.map((slide: any, index: number) => (
@@ -266,6 +333,7 @@ function ImageBlock({ block }: { block: OutputBlock }) {
           <path d="M21 15l-5-5L5 21" />
         </svg>
         <h4 className="text-sm font-medium">{block.title}</h4>
+        <BlockExportButton block={block} />
       </div>
       <div className="aspect-video rounded-lg bg-secondary/50 border border-dashed border-border flex items-center justify-center">
         <div className="text-center">
@@ -293,7 +361,8 @@ function CodeBlock({ block }: { block: OutputBlock }) {
           <polyline points="8,6 2,12 8,18" />
         </svg>
         <h4 className="text-sm font-medium">{block.title}</h4>
-        <Badge variant="secondary" className="text-[10px] ml-auto">{content?.format || 'json'}</Badge>
+        <Badge variant="secondary" className="text-[10px]">{content?.format || 'json'}</Badge>
+        <BlockExportButton block={block} />
       </div>
       <div className="rounded-lg bg-[#1e1e1e] p-4 overflow-x-auto">
         <pre className="text-xs text-green-400 font-mono">

@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, use } from "react"
+import { useState, useEffect, use } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   ArrowLeft,
   Download,
@@ -19,6 +20,7 @@ import {
   PieChart,
   Plus,
   Settings,
+  Loader2,
 } from "lucide-react"
 import Link from "next/link"
 import {
@@ -268,10 +270,97 @@ const ChartIcon = ({ type }: { type: "bar" | "line" | "pie" }) => {
   }
 }
 
+interface DashboardType {
+  id: string
+  name: string
+  description: string
+  charts: { id: string; name: string; type: "bar" | "line" | "pie" }[]
+  lastModified: string
+  views: number
+  createdBy: string
+  isPublic: boolean
+  category: string
+}
+
 export default function DashboardDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const [isExporting, setIsExporting] = useState(false)
-  const dashboard = dashboardData[id]
+  const [isLoading, setIsLoading] = useState(true)
+  const [dashboard, setDashboard] = useState<DashboardType | null>(null)
+
+  useEffect(() => {
+    async function fetchDashboard() {
+      setIsLoading(true)
+      try {
+        const response = await fetch(`/api/v1/dashboards/${id}`)
+        if (response.ok) {
+          const data = await response.json()
+          const apiDashboard = data.data || data
+          if (apiDashboard && apiDashboard.id) {
+            setDashboard({
+              id: apiDashboard.id,
+              name: apiDashboard.name,
+              description: apiDashboard.description || "",
+              charts: (apiDashboard.widgets || []).map((w: any, i: number) => ({
+                id: w.id || `chart-${i}`,
+                name: w.title || w.name || `Chart ${i + 1}`,
+                type: w.type || "bar",
+              })),
+              lastModified: apiDashboard.updatedAt ? formatTimeAgo(apiDashboard.updatedAt) : "Recently",
+              views: apiDashboard.views || 0,
+              createdBy: apiDashboard.createdByName || "Unknown",
+              isPublic: apiDashboard.isPublic || false,
+              category: apiDashboard.category || "Dashboard",
+            })
+          } else {
+            // Fall back to demo data
+            setDashboard(dashboardData[id] || null)
+          }
+        } else {
+          // Fall back to demo data
+          setDashboard(dashboardData[id] || null)
+        }
+      } catch (error) {
+        console.error('Failed to fetch dashboard:', error)
+        // Fall back to demo data
+        setDashboard(dashboardData[id] || null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchDashboard()
+  }, [id])
+
+  function formatTimeAgo(dateString: string): string {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffHours / 24)
+
+    if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+    if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+    return 'Just now'
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-6 p-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-10 w-10" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-48" />
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   if (!dashboard) {
     return (
@@ -303,8 +392,41 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
 
   const handleExport = async () => {
     setIsExporting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsExporting(false)
+    try {
+      const exportData = {
+        dashboard: {
+          id: dashboard.id,
+          name: dashboard.name,
+          description: dashboard.description,
+          category: dashboard.category,
+          isPublic: dashboard.isPublic,
+          createdBy: dashboard.createdBy,
+          exportedAt: new Date().toISOString(),
+        },
+        charts: dashboard.charts.map(chart => ({
+          id: chart.id,
+          name: chart.name,
+          type: chart.type,
+        })),
+        metadata: {
+          views: dashboard.views,
+          lastModified: dashboard.lastModified,
+        },
+      }
+
+      const content = JSON.stringify(exportData, null, 2)
+      const blob = new Blob([content], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `dashboard-${dashboard.id}-${new Date().toISOString().split('T')[0]}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Export failed:', error)
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   return (
@@ -337,7 +459,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
             Share
           </Button>
           <Button variant="outline" size="sm" className="bg-transparent" onClick={handleExport} disabled={isExporting}>
-            <Download className="h-4 w-4 mr-2" />
+            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
             {isExporting ? "Exporting..." : "Export"}
           </Button>
           <Button size="sm">
