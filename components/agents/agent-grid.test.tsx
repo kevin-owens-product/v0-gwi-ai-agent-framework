@@ -83,7 +83,7 @@ describe('AgentGrid', () => {
     expect(screen.getByText('Performs data analysis')).toBeInTheDocument()
   })
 
-  it('shows error message when fetch fails', async () => {
+  it('shows demo agents when fetch fails', async () => {
     server.use(
       http.get('/api/v1/agents', () => {
         return new HttpResponse(null, { status: 500 })
@@ -92,12 +92,33 @@ describe('AgentGrid', () => {
 
     render(<AgentGrid filter="all" />)
 
+    // Component falls back to demo agents on error
     await waitFor(() => {
-      expect(screen.getByText(/error loading agents/i)).toBeInTheDocument()
+      expect(screen.getByText('Audience Explorer')).toBeInTheDocument()
+    })
+    expect(screen.getByText('Persona Architect')).toBeInTheDocument()
+  })
+
+  it('shows empty state when no custom agents', async () => {
+    server.use(
+      http.get('/api/v1/agents', () => {
+        return HttpResponse.json({
+          data: [],
+          agents: [],
+          meta: { page: 1, limit: 20, total: 0, totalPages: 0 },
+        })
+      })
+    )
+
+    // Use "custom" filter - this doesn't fall back to demo data
+    render(<AgentGrid filter="custom" />)
+
+    await waitFor(() => {
+      expect(screen.getByText(/no agents found/i)).toBeInTheDocument()
     })
   })
 
-  it('shows empty state when no agents', async () => {
+  it('shows demo agents when no agents returned for all filter', async () => {
     server.use(
       http.get('/api/v1/agents', () => {
         return HttpResponse.json({
@@ -110,8 +131,9 @@ describe('AgentGrid', () => {
 
     render(<AgentGrid filter="all" />)
 
+    // Component falls back to demo agents for "all" filter
     await waitFor(() => {
-      expect(screen.getByText(/no agents found/i)).toBeInTheDocument()
+      expect(screen.getByText('Audience Explorer')).toBeInTheDocument()
     })
   })
 
