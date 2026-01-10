@@ -139,7 +139,32 @@ const statusColors = {
   archived: "bg-muted text-muted-foreground border-muted",
 }
 
-export function ReportsGrid() {
+// Type mapping from filter labels to internal types
+const typeFilterMap: Record<string, string> = {
+  "Presentation": "presentation",
+  "Dashboard": "dashboard",
+  "PDF Report": "pdf",
+  "Data Export": "export",
+  "Infographic": "infographic",
+}
+
+const statusFilterMap: Record<string, string> = {
+  "Published": "published",
+  "Draft": "draft",
+  "Archived": "archived",
+}
+
+interface ReportsGridProps {
+  searchQuery?: string
+  selectedTypes?: string[]
+  selectedStatuses?: string[]
+}
+
+export function ReportsGrid({
+  searchQuery = "",
+  selectedTypes = [],
+  selectedStatuses = [],
+}: ReportsGridProps) {
   const router = useRouter()
   const [reports, setReports] = useState<Report[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -175,6 +200,36 @@ export function ReportsGrid() {
     }
     fetchReports()
   }, [])
+
+  // Filter reports based on search, types, and statuses
+  const filteredReports = reports.filter((report) => {
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      if (!report.title.toLowerCase().includes(query) &&
+          !report.agent.toLowerCase().includes(query)) {
+        return false
+      }
+    }
+
+    // Type filter
+    if (selectedTypes.length > 0) {
+      const mappedTypes = selectedTypes.map((t) => typeFilterMap[t]).filter(Boolean)
+      if (!mappedTypes.includes(report.type)) {
+        return false
+      }
+    }
+
+    // Status filter
+    if (selectedStatuses.length > 0) {
+      const mappedStatuses = selectedStatuses.map((s) => statusFilterMap[s]).filter(Boolean)
+      if (!mappedStatuses.includes(report.status)) {
+        return false
+      }
+    }
+
+    return true
+  })
 
   const handleEditReport = (report: Report) => {
     router.push(`/dashboard/reports/${report.id}/edit`)
@@ -265,10 +320,24 @@ export function ReportsGrid() {
     )
   }
 
+  if (filteredReports.length === 0 && !isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+        <h3 className="text-lg font-medium mb-2">No reports found</h3>
+        <p className="text-muted-foreground max-w-md">
+          {searchQuery || selectedTypes.length > 0 || selectedStatuses.length > 0
+            ? "Try adjusting your search or filter criteria."
+            : "Create your first report to get started."}
+        </p>
+      </div>
+    )
+  }
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {reports.map((report) => {
+        {filteredReports.map((report) => {
           const TypeIcon = typeIcons[report.type as keyof typeof typeIcons]
           return (
             <Card

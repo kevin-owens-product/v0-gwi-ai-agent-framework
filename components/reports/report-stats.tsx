@@ -1,43 +1,113 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { FileText, Eye, Users, TrendingUp } from "lucide-react"
+import { FileText, Eye, Users, TrendingUp, Loader2 } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 
-const stats = [
-  {
-    label: "Total Reports",
-    value: "127",
-    change: "+12 this month",
-    changeType: "positive" as const,
-    icon: FileText,
-  },
-  {
-    label: "Total Views",
-    value: "8,432",
-    change: "+23% vs last month",
-    changeType: "positive" as const,
-    icon: Eye,
-  },
-  {
-    label: "Team Members",
-    value: "24",
-    change: "Active contributors",
-    changeType: "neutral" as const,
-    icon: Users,
-  },
-  {
-    label: "Avg. Engagement",
-    value: "4.2 min",
-    change: "+0.8 min vs last month",
-    changeType: "positive" as const,
-    icon: TrendingUp,
-  },
-]
+interface StatsData {
+  totalReports: number
+  totalViews: number
+  publishedCount: number
+  draftCount: number
+}
 
 export function ReportStats() {
+  const [stats, setStats] = useState<StatsData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const response = await fetch('/api/v1/reports?limit=100')
+        if (response.ok) {
+          const data = await response.json()
+          const reports = data.reports || []
+
+          // Calculate stats from reports
+          const totalReports = data.total || reports.length
+          const totalViews = reports.reduce((sum: number, r: any) => sum + (r.views || 0), 0)
+          const publishedCount = reports.filter((r: any) => r.status === 'PUBLISHED').length
+          const draftCount = reports.filter((r: any) => r.status === 'DRAFT').length
+
+          setStats({
+            totalReports,
+            totalViews,
+            publishedCount,
+            draftCount,
+          })
+        }
+      } catch (error) {
+        console.error('Failed to fetch stats:', error)
+        // Set default stats on error
+        setStats({
+          totalReports: 0,
+          totalViews: 0,
+          publishedCount: 0,
+          draftCount: 0,
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchStats()
+  }, [])
+
+  const statItems = [
+    {
+      label: "Total Reports",
+      value: stats?.totalReports.toString() || "0",
+      change: `${stats?.publishedCount || 0} published`,
+      changeType: "positive" as const,
+      icon: FileText,
+    },
+    {
+      label: "Total Views",
+      value: stats?.totalViews.toLocaleString() || "0",
+      change: "All time",
+      changeType: "neutral" as const,
+      icon: Eye,
+    },
+    {
+      label: "Published",
+      value: stats?.publishedCount.toString() || "0",
+      change: "Ready to share",
+      changeType: "positive" as const,
+      icon: Users,
+    },
+    {
+      label: "Drafts",
+      value: stats?.draftCount.toString() || "0",
+      change: "In progress",
+      changeType: "neutral" as const,
+      icon: TrendingUp,
+    },
+  ]
+
+  if (isLoading) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[1, 2, 3, 4].map((i) => (
+          <Card key={i}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-8 w-16" />
+                  <Skeleton className="h-3 w-24" />
+                </div>
+                <Skeleton className="h-11 w-11 rounded-lg" />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {stats.map((stat) => (
+      {statItems.map((stat) => (
         <Card key={stat.label}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">

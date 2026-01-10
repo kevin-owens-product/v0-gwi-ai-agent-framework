@@ -103,11 +103,20 @@ const audiences = [
 
 interface ReportBuilderProps {
   reportId?: string
+  templateId?: string
+  templateTitle?: string
+  templateDescription?: string
 }
 
-export function ReportBuilder({ reportId }: ReportBuilderProps) {
+export function ReportBuilder({
+  reportId,
+  templateId,
+  templateTitle,
+  templateDescription,
+}: ReportBuilderProps) {
   const router = useRouter()
   const isEditMode = !!reportId
+  const isTemplateMode = !!templateId
   const [step, setStep] = useState(1)
   const [isGenerating, setIsGenerating] = useState(false)
   const [isLoading, setIsLoading] = useState(isEditMode)
@@ -115,8 +124,8 @@ export function ReportBuilder({ reportId }: ReportBuilderProps) {
   const [generationComplete, setGenerationComplete] = useState(false)
   const [selectedType, setSelectedType] = useState("presentation")
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    title: templateTitle || "",
+    description: templateDescription || "",
     agent: "",
     prompt: "",
     dataSources: ["core"],
@@ -135,15 +144,17 @@ export function ReportBuilder({ reportId }: ReportBuilderProps) {
             const data = await response.json()
             const report = data.data || data
             if (report) {
+              // Map API fields correctly to form fields
+              const content = report.content || {}
               setFormData({
-                title: report.name || report.title || "",
+                title: report.title || "",
                 description: report.description || "",
-                agent: report.agent || "",
-                prompt: report.prompt || report.query || "",
-                dataSources: report.dataSources || ["core"],
-                markets: report.markets || ["United States", "United Kingdom"],
-                audiences: report.audiences || ["gen-z", "millennials"],
-                timeframe: report.timeframe || "q4-2024",
+                agent: report.agentId || content.agent || "",
+                prompt: content.prompt || content.query || "",
+                dataSources: content.dataSources || ["core"],
+                markets: content.markets || ["United States", "United Kingdom"],
+                audiences: content.audiences || ["gen-z", "millennials"],
+                timeframe: content.timeframe || "q4-2024",
               })
               setSelectedType(report.type?.toLowerCase() || "presentation")
             }
@@ -163,6 +174,14 @@ export function ReportBuilder({ reportId }: ReportBuilderProps) {
     setGenerationProgress(0)
     setGenerationComplete(false)
 
+    const typeMap: Record<string, string> = {
+      presentation: "PRESENTATION",
+      dashboard: "DASHBOARD",
+      pdf: "PDF",
+      export: "EXPORT",
+      infographic: "INFOGRAPHIC",
+    }
+
     const steps = [
       { progress: 15, label: "Analyzing data sources..." },
       { progress: 35, label: "Processing audience segments..." },
@@ -172,20 +191,62 @@ export function ReportBuilder({ reportId }: ReportBuilderProps) {
       { progress: 100, label: "Complete!" },
     ]
 
+    // Simulate generation progress
     for (const step of steps) {
-      await new Promise((resolve) => setTimeout(resolve, 800))
+      await new Promise((resolve) => setTimeout(resolve, 600))
       setGenerationProgress(step.progress)
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 500))
+    try {
+      const reportPayload = {
+        title: formData.title || "Untitled Report",
+        description: formData.description,
+        type: typeMap[selectedType] || "PRESENTATION",
+        content: {
+          agent: formData.agent,
+          prompt: formData.prompt,
+          dataSources: formData.dataSources,
+          markets: formData.markets,
+          audiences: formData.audiences,
+          timeframe: formData.timeframe,
+        },
+        agentId: formData.agent,
+      }
+
+      if (isEditMode && reportId) {
+        // Update existing report
+        const response = await fetch(`/api/v1/reports/${reportId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reportPayload),
+        })
+        if (!response.ok) {
+          throw new Error("Failed to update report")
+        }
+      } else {
+        // Create new report
+        const response = await fetch("/api/v1/reports", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reportPayload),
+        })
+        if (!response.ok) {
+          throw new Error("Failed to create report")
+        }
+      }
+    } catch (error) {
+      console.error("Error saving report:", error)
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 300))
     setIsGenerating(false)
     setGenerationComplete(true)
   }
 
   const handleViewReport = () => {
-    // Generate a report ID and navigate to it
-    const reportId = `report-${Date.now()}`
-    router.push(`/dashboard/reports/${reportId}`)
+    // Navigate to the report - use existing ID in edit mode
+    const targetId = isEditMode && reportId ? reportId : `report-${Date.now()}`
+    router.push(`/dashboard/reports/${targetId}`)
   }
 
   const handleDownloadReport = () => {
@@ -220,8 +281,16 @@ export function ReportBuilder({ reportId }: ReportBuilderProps) {
           </Link>
         </Button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold">{isEditMode ? "Edit Report" : "Create New Report"}</h1>
-          <p className="text-muted-foreground">{isEditMode ? "Modify your report settings" : "Generate insights powered by AI agents"}</p>
+          <h1 className="text-2xl font-bold">
+            {isEditMode ? "Edit Report" : isTemplateMode ? `Create ${templateTitle}` : "Create New Report"}
+          </h1>
+          <p className="text-muted-foreground">
+            {isEditMode
+              ? "Modify your report settings"
+              : isTemplateMode
+                ? "Customize your template and generate insights"
+                : "Generate insights powered by AI agents"}
+          </p>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           Step {step} of {totalSteps}
@@ -614,7 +683,9 @@ export function ReportBuilder({ reportId }: ReportBuilderProps) {
                   <div className="flex items-center gap-3 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                     <CheckCircle2 className="h-6 w-6 text-emerald-500" />
                     <div>
-                      <p className="font-medium text-emerald-500">Report Generated Successfully!</p>
+                      <p className="font-medium text-emerald-500">
+                        {isEditMode ? "Report Updated Successfully!" : "Report Generated Successfully!"}
+                      </p>
                       <p className="text-sm text-muted-foreground">Your {selectedType} is ready to view and download.</p>
                     </div>
                   </div>
@@ -648,12 +719,12 @@ export function ReportBuilder({ reportId }: ReportBuilderProps) {
                     {isGenerating ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generating...
+                        {isEditMode ? "Updating..." : "Generating..."}
                       </>
                     ) : (
                       <>
                         <Sparkles className="mr-2 h-4 w-4" />
-                        Generate Report
+                        {isEditMode ? "Update Report" : "Generate Report"}
                       </>
                     )}
                   </Button>
