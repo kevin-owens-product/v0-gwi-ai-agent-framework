@@ -84,6 +84,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { ChartRenderer, generateSampleData } from "@/components/charts"
+import { CommentsPanel } from "@/components/shared/comments-panel"
+import { VersionHistory } from "@/components/shared/version-history"
+import { History, MessageSquare } from "lucide-react"
 import type { ChartType } from "@/components/charts"
 
 // Mock dashboard data - 10 advanced examples
@@ -1113,6 +1116,28 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
           </div>
         </div>
       </Card>
+
+      {/* Comments and Version History */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className="p-6">
+          <CommentsPanel
+            resourceType="crosstab"
+            resourceId={id}
+            currentUserId="current-user"
+          />
+        </Card>
+        <Card className="p-6">
+          <VersionHistory
+            resourceType="crosstab"
+            resourceId={id}
+            resourceName={dashboard.name}
+            versions={[]}
+            onRestore={(versionId) => {
+              console.log("Restoring version:", versionId)
+            }}
+          />
+        </Card>
+      </div>
     </div>
   )
 }
