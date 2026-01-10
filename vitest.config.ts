@@ -28,22 +28,11 @@ export default defineConfig({
         'public/',
         'styles/',
       ],
-      // Thresholds disabled - current coverage is ~43%
-      // Needs more test refactoring to reach 80%
-      // thresholds: {
-      //   global: {
-      //     branches: 80,
-      //     functions: 80,
-      //     lines: 80,
-      //     statements: 80,
-      //   },
-      // },
     },
+    // Vitest 4: pool options are now top-level
     pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
+    forks: {
+      singleFork: true,
     },
   },
   resolve: {
