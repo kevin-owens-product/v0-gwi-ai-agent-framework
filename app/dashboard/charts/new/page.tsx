@@ -6,13 +6,15 @@ import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, BarChart3, LineChart, PieChart, Loader2 } from "lucide-react"
+import { ArrowLeft, BarChart3, LineChart, PieChart, Loader2, Circle, Activity, Target, Triangle, Grid3X3, GitBranch } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { ChartRenderer, generateSampleData } from "@/components/charts"
+import type { ChartType } from "@/components/charts"
 
 export default function NewChartPage() {
   const router = useRouter()
-  const [chartType, setChartType] = useState("bar")
+  const [chartType, setChartType] = useState<ChartType>("BAR")
   const [chartName, setChartName] = useState("")
   const [selectedAudience, setSelectedAudience] = useState("")
   const [selectedMetric, setSelectedMetric] = useState("")
@@ -33,7 +35,7 @@ export default function NewChartPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: chartName.trim(),
-          type: chartType.toUpperCase(),
+          type: chartType,
           config: {
             audienceId: selectedAudience,
             metric: selectedMetric,
@@ -73,33 +75,96 @@ export default function NewChartPage() {
           <Card className="p-6 space-y-4">
             <div>
               <Label>Chart Type</Label>
-              <div className="grid grid-cols-3 gap-3 mt-2">
+              <div className="grid grid-cols-5 gap-3 mt-2">
                 <button
-                  onClick={() => setChartType("bar")}
-                  className={`p-4 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
-                    chartType === "bar" ? "border-accent bg-accent" : ""
+                  onClick={() => setChartType("BAR")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "BAR" ? "border-primary bg-accent" : ""
                   }`}
                 >
-                  <BarChart3 className="h-6 w-6" />
-                  <span className="text-sm">Bar</span>
+                  <BarChart3 className="h-5 w-5" />
+                  <span className="text-xs">Bar</span>
                 </button>
                 <button
-                  onClick={() => setChartType("line")}
-                  className={`p-4 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
-                    chartType === "line" ? "border-accent bg-accent" : ""
+                  onClick={() => setChartType("LINE")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "LINE" ? "border-primary bg-accent" : ""
                   }`}
                 >
-                  <LineChart className="h-6 w-6" />
-                  <span className="text-sm">Line</span>
+                  <LineChart className="h-5 w-5" />
+                  <span className="text-xs">Line</span>
                 </button>
                 <button
-                  onClick={() => setChartType("pie")}
-                  className={`p-4 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
-                    chartType === "pie" ? "border-accent bg-accent" : ""
+                  onClick={() => setChartType("AREA")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "AREA" ? "border-primary bg-accent" : ""
                   }`}
                 >
-                  <PieChart className="h-6 w-6" />
-                  <span className="text-sm">Pie</span>
+                  <Activity className="h-5 w-5" />
+                  <span className="text-xs">Area</span>
+                </button>
+                <button
+                  onClick={() => setChartType("PIE")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "PIE" ? "border-primary bg-accent" : ""
+                  }`}
+                >
+                  <PieChart className="h-5 w-5" />
+                  <span className="text-xs">Pie</span>
+                </button>
+                <button
+                  onClick={() => setChartType("DONUT")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "DONUT" ? "border-primary bg-accent" : ""
+                  }`}
+                >
+                  <Circle className="h-5 w-5" />
+                  <span className="text-xs">Donut</span>
+                </button>
+                <button
+                  onClick={() => setChartType("RADAR")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "RADAR" ? "border-primary bg-accent" : ""
+                  }`}
+                >
+                  <Target className="h-5 w-5" />
+                  <span className="text-xs">Radar</span>
+                </button>
+                <button
+                  onClick={() => setChartType("SCATTER")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "SCATTER" ? "border-primary bg-accent" : ""
+                  }`}
+                >
+                  <Grid3X3 className="h-5 w-5" />
+                  <span className="text-xs">Scatter</span>
+                </button>
+                <button
+                  onClick={() => setChartType("FUNNEL")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "FUNNEL" ? "border-primary bg-accent" : ""
+                  }`}
+                >
+                  <Triangle className="h-5 w-5" />
+                  <span className="text-xs">Funnel</span>
+                </button>
+                <button
+                  onClick={() => setChartType("TREEMAP")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "TREEMAP" ? "border-primary bg-accent" : ""
+                  }`}
+                >
+                  <GitBranch className="h-5 w-5" />
+                  <span className="text-xs">Treemap</span>
+                </button>
+                <button
+                  onClick={() => setChartType("HEATMAP")}
+                  className={`p-3 border rounded-lg flex flex-col items-center gap-2 hover:bg-accent transition-colors ${
+                    chartType === "HEATMAP" ? "border-primary bg-accent" : ""
+                  }`}
+                >
+                  <Grid3X3 className="h-5 w-5" />
+                  <span className="text-xs">Heatmap</span>
                 </button>
               </div>
             </div>
@@ -140,8 +205,17 @@ export default function NewChartPage() {
 
           <Card className="p-6">
             <h3 className="font-semibold mb-4">Preview</h3>
-            <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-              <BarChart3 className="h-16 w-16 text-muted-foreground" />
+            <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+              <ChartRenderer
+                type={chartType}
+                data={generateSampleData(chartType, 6)}
+                config={{
+                  showLegend: true,
+                  showGrid: true,
+                  showTooltip: true,
+                  height: 280,
+                }}
+              />
             </div>
           </Card>
         </div>
