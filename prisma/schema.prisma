@@ -714,3 +714,26 @@ enum BrandTrackingStatus {
   PAUSED
   ARCHIVED
 }
+
+// ==================== TOOL MEMORY ====================
+
+model ToolMemory {
+  id          String    @id @default(cuid())
+  orgId       String
+  sessionId   String    // Workflow run or agent session
+  toolName    String
+  inputHash   String    // Hash of input params for deduplication
+  output      Json
+  resourceIds String[]  // IDs of created resources
+  executionTimeMs Int   @default(0)
+  tokensUsed  Int       @default(0)
+  success     Boolean   @default(true)
+  error       String?
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime?
+
+  @@index([orgId, sessionId])
+  @@index([toolName, inputHash])
+  @@index([sessionId, createdAt])
+  @@index([expiresAt])
+}

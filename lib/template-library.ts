@@ -1,3 +1,5 @@
+import type { TemplateToolAction, TemplateToolIntegration } from '@/types/tools'
+
 export interface PromptTemplate {
   id: string
   name: string
@@ -14,6 +16,13 @@ export interface PromptTemplate {
   }>
   author: string
   isGlobal: boolean
+  // Tool integration fields
+  toolIntegration?: TemplateToolIntegration
+}
+
+// Extended template type with tool integration
+export interface ToolEnabledTemplate extends PromptTemplate {
+  toolIntegration: TemplateToolIntegration
 }
 
 export const templateLibrary: PromptTemplate[] = [
@@ -31,6 +40,32 @@ export const templateLibrary: PromptTemplate[] = [
     ],
     author: "GWI Labs",
     isGlobal: true,
+    toolIntegration: {
+      suggestedTools: ["create_audience", "fetch_audience_data", "analyze_insights"],
+      preToolActions: [
+        {
+          toolName: "create_audience",
+          parameters: {
+            name: "Gen Z [MARKET]",
+            criteria: [
+              { dimension: "age", operator: "between", value: "[AGE_RANGE]" },
+              { dimension: "market", operator: "equals", value: "[MARKET]" },
+            ],
+          },
+          storeAs: "genZAudience",
+        },
+      ],
+      postToolActions: [
+        {
+          toolName: "analyze_insights",
+          parameters: {
+            dataType: "audience",
+            dataId: "{{genZAudience.audienceId}}",
+            focusAreas: ["trends", "recommendations"],
+          },
+        },
+      ],
+    },
   },
   {
     id: "millennial-persona-builder",
@@ -102,6 +137,52 @@ export const templateLibrary: PromptTemplate[] = [
     ],
     author: "GWI Labs",
     isGlobal: true,
+    toolIntegration: {
+      suggestedTools: ["create_audience", "generate_crosstab", "create_chart"],
+      preToolActions: [
+        {
+          toolName: "create_audience",
+          parameters: {
+            name: "[PRODUCT_CATEGORY] Consumers - [MARKET_1]",
+            criteria: [
+              { dimension: "market", operator: "equals", value: "[MARKET_1]" },
+              { dimension: "category_interest", operator: "contains", value: "[PRODUCT_CATEGORY]" },
+            ],
+          },
+          storeAs: "audience1",
+        },
+        {
+          toolName: "create_audience",
+          parameters: {
+            name: "[PRODUCT_CATEGORY] Consumers - [MARKET_2]",
+            criteria: [
+              { dimension: "market", operator: "equals", value: "[MARKET_2]" },
+              { dimension: "category_interest", operator: "contains", value: "[PRODUCT_CATEGORY]" },
+            ],
+          },
+          storeAs: "audience2",
+        },
+      ],
+      postToolActions: [
+        {
+          toolName: "generate_crosstab",
+          parameters: {
+            audiences: ["{{audience1.audienceId}}", "{{audience2.audienceId}}"],
+            metrics: ["purchase_behavior", "media_consumption", "brand_awareness", "price_sensitivity"],
+            name: "[MARKET_1] vs [MARKET_2] Comparison",
+          },
+          storeAs: "comparison",
+        },
+      ],
+      outputToTool: {
+        toolName: "create_chart",
+        parameterMapping: {
+          name: "[MARKET_1] vs [MARKET_2] Comparison Chart",
+          type: "BAR",
+          dataSource: "{{comparison.crosstabId}}",
+        },
+      },
+    },
   },
 
   // ANALYSIS TEMPLATES
@@ -346,4 +427,157 @@ export function searchTemplates(query: string): PromptTemplate[] {
 
 export function getTemplateById(id: string): PromptTemplate | undefined {
   return templateLibrary.find((t) => t.id === id)
+}
+
+// ==================== TOOL INTEGRATION FUNCTIONS ====================
+
+/**
+ * Get templates that have tool integration
+ */
+export function getToolEnabledTemplates(): ToolEnabledTemplate[] {
+  return templateLibrary.filter(
+    (t): t is ToolEnabledTemplate => t.toolIntegration !== undefined
+  )
+}
+
+/**
+ * Get templates with a specific suggested tool
+ */
+export function getTemplatesByTool(toolName: string): PromptTemplate[] {
+  return templateLibrary.filter(
+    t => t.toolIntegration?.suggestedTools?.includes(toolName)
+  )
+}
+
+/**
+ * Interpolate template variables in a string
+ * Replaces [VARIABLE_NAME] with the provided value
+ */
+export function interpolateVariables(
+  template: string,
+  variables: Record<string, unknown>
+): string {
+  return template.replace(/\[([A-Z_/]+)\]/g, (match, varName) => {
+    const value = variables[varName]
+    return value !== undefined ? String(value) : match
+  })
+}
+
+/**
+ * Prepare template parameters for tool execution
+ * Handles both [VARIABLE] and {{result.path}} syntax
+ */
+export function prepareToolParameters(
+  parameters: Record<string, unknown>,
+  templateVariables: Record<string, unknown>,
+  toolResults: Record<string, unknown>
+): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+
+  for (const [key, value] of Object.entries(parameters)) {
+    if (typeof value === 'string') {
+      // First interpolate template variables [VAR]
+      let processed = interpolateVariables(value, templateVariables)
+      // Then interpolate tool results {{result.path}}
+      processed = processed.replace(/\{\{([^}]+)\}\}/g, (match, path) => {
+        const resolved = getNestedValue(toolResults, path.trim())
+        return resolved !== undefined ? String(resolved) : match
+      })
+      result[key] = processed
+    } else if (Array.isArray(value)) {
+      result[key] = value.map(item => {
+        if (typeof item === 'string') {
+          let processed = interpolateVariables(item, templateVariables)
+          processed = processed.replace(/\{\{([^}]+)\}\}/g, (match, path) => {
+            const resolved = getNestedValue(toolResults, path.trim())
+            return resolved !== undefined ? String(resolved) : match
+          })
+          return processed
+        }
+        if (typeof item === 'object' && item !== null) {
+          return prepareToolParameters(item as Record<string, unknown>, templateVariables, toolResults)
+        }
+        return item
+      })
+    } else if (typeof value === 'object' && value !== null) {
+      result[key] = prepareToolParameters(value as Record<string, unknown>, templateVariables, toolResults)
+    } else {
+      result[key] = value
+    }
+  }
+
+  return result
+}
+
+/**
+ * Get nested value from object using dot notation
+ */
+function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
+  const parts = path.split('.')
+  let current: unknown = obj
+
+  for (const part of parts) {
+    if (current === null || current === undefined) {
+      return undefined
+    }
+    if (typeof current !== 'object') {
+      return undefined
+    }
+    current = (current as Record<string, unknown>)[part]
+  }
+
+  return current
+}
+
+/**
+ * Execute template with tool integration
+ */
+export interface TemplateExecutionResult {
+  interpolatedPrompt: string
+  preToolResults: Record<string, unknown>
+  postToolResults: Record<string, unknown>
+  outputToolResult?: unknown
+}
+
+/**
+ * Prepare a template for execution
+ * Returns the interpolated prompt and prepared tool actions
+ */
+export function prepareTemplateExecution(
+  template: PromptTemplate,
+  variables: Record<string, unknown>
+): {
+  prompt: string
+  preActions: Array<{ toolName: string; parameters: Record<string, unknown>; storeAs?: string }>
+  postActions: Array<{ toolName: string; parameters: Record<string, unknown>; storeAs?: string }>
+  outputAction?: { toolName: string; parameters: Record<string, unknown> }
+} {
+  const prompt = interpolateVariables(template.prompt, variables)
+
+  if (!template.toolIntegration) {
+    return { prompt, preActions: [], postActions: [] }
+  }
+
+  const preActions = (template.toolIntegration.preToolActions || []).map(action => ({
+    toolName: action.toolName,
+    parameters: prepareToolParameters(action.parameters, variables, {}),
+    storeAs: action.storeAs,
+  }))
+
+  // Post actions will be prepared later when we have pre-action results
+  const postActions = (template.toolIntegration.postToolActions || []).map(action => ({
+    toolName: action.toolName,
+    parameters: action.parameters, // Will be prepared with results
+    storeAs: action.storeAs,
+  }))
+
+  let outputAction
+  if (template.toolIntegration.outputToTool) {
+    outputAction = {
+      toolName: template.toolIntegration.outputToTool.toolName,
+      parameters: template.toolIntegration.outputToTool.parameterMapping,
+    }
+  }
+
+  return { prompt, preActions, postActions, outputAction }
 }
