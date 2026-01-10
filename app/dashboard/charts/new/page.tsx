@@ -33,10 +33,12 @@ export default function NewChartPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: chartName.trim(),
-          type: chartType,
-          audienceId: selectedAudience,
-          metric: selectedMetric,
-          timePeriod,
+          type: chartType.toUpperCase(),
+          config: {
+            audienceId: selectedAudience,
+            metric: selectedMetric,
+            timePeriod,
+          },
         }),
       })
       if (response.ok) {
