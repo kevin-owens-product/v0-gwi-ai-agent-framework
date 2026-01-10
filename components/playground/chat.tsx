@@ -462,7 +462,7 @@ function detectTopic(query: string): string {
 }
 
 export function PlaygroundChat() {
-  const { config, messages, setMessages, isStreaming, setIsStreaming, mode } = usePlayground()
+  const { config, messages, setMessages, isStreaming, setIsStreaming, mode, customAgent, activeVariables } = usePlayground()
   const [input, setInput] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [attachments, setAttachments] = useState<File[]>([])
