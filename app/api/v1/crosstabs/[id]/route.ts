@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
@@ -124,9 +125,14 @@ export async function PATCH(
       )
     }
 
+    const { filters, results, ...rest } = validationResult.data
     const crosstab = await prisma.crosstab.update({
       where: { id },
-      data: validationResult.data,
+      data: {
+        ...rest,
+        ...(filters !== undefined && { filters: filters as Prisma.InputJsonValue }),
+        ...(results !== undefined && { results: results as Prisma.InputJsonValue }),
+      },
     })
 
     await logAuditEvent(createAuditEventFromRequest(request, {

@@ -7,6 +7,7 @@ import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 
 const updateAudienceSchema = z.object({
   name: z.string().min(1).max(200).optional(),
@@ -127,9 +128,16 @@ export async function PATCH(
       )
     }
 
+    // Cast criteria to proper Prisma type if present
+    const updateData = {
+      ...validationResult.data,
+      ...(validationResult.data.criteria && {
+        criteria: validationResult.data.criteria as Prisma.InputJsonValue
+      })
+    }
     const audience = await prisma.audience.update({
       where: { id },
-      data: validationResult.data,
+      data: updateData,
     })
 
     await logAuditEvent(createAuditEventFromRequest(request, {

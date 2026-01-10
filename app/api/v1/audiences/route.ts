@@ -7,6 +7,7 @@ import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 
 const createAudienceSchema = z.object({
   name: z.string().min(1).max(200),
@@ -144,7 +145,7 @@ export async function POST(request: NextRequest) {
         orgId,
         name,
         description,
-        criteria: criteria || {},
+        criteria: (criteria || {}) as Prisma.InputJsonValue,
         size,
         markets: markets || [],
         createdBy: session.user.id,

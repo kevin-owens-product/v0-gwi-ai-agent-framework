@@ -8,6 +8,7 @@ import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage, checkUsageLimit } from '@/lib/billing'
 import { executeAgentWithContext, executeAgentWithTools } from '@/lib/llm'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 import type { ToolExecutionContext, ToolCallRecord, ResourceReference } from '@/types/tools'
 
 // Validation schema for running an agent
@@ -181,7 +182,7 @@ export async function POST(
           // Execute with tools enabled
           const toolContext: ToolExecutionContext = {
             orgId,
-            userId: session.user.id,
+            userId: session.user.id!,
             agentId: id,
             runId: agentRun.id,
             memory: memoryContext,
@@ -275,7 +276,7 @@ export async function POST(
             agentRunId: agentRun.id,
             type: agent.type.toLowerCase(),
             title: insightTitle,
-            data: result,
+            data: result as Prisma.InputJsonValue,
             confidenceScore: 0.9,
           },
         })
@@ -284,7 +285,7 @@ export async function POST(
           where: { id: agentRun.id },
           data: {
             status: 'COMPLETED',
-            output,
+            output: output as Prisma.InputJsonValue,
             tokensUsed,
             completedAt: new Date(),
           },

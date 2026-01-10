@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
@@ -141,9 +142,15 @@ export async function PUT(
       )
     }
 
+    const { metrics, trackingConfig, alertThresholds, ...rest } = validationResult.data
     const brandTracking = await prisma.brandTracking.update({
       where: { id },
-      data: validationResult.data,
+      data: {
+        ...rest,
+        ...(metrics !== undefined && { metrics: metrics as Prisma.InputJsonValue }),
+        ...(trackingConfig !== undefined && { trackingConfig: trackingConfig as Prisma.InputJsonValue }),
+        ...(alertThresholds !== undefined && { alertThresholds: alertThresholds as Prisma.InputJsonValue }),
+      },
     })
 
     await logAuditEvent(createAuditEventFromRequest(request, {

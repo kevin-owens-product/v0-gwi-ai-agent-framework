@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     // Fill in actual data
     agentRuns.forEach(run => {
       const hour = run.startedAt.getHours()
-      const key = `${hour}:00`
+      const _key = `${hour}:00`
       // Find the closest 4-hour bucket
       for (const bucketKey of Object.keys(hourlyData)) {
         const bucketHour = parseInt(bucketKey)

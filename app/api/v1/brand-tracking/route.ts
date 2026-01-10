@@ -7,6 +7,7 @@ import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 
 const createBrandTrackingSchema = z.object({
   brandName: z.string().min(1).max(200),
@@ -174,10 +175,10 @@ export async function POST(request: NextRequest) {
         industry,
         competitors: competitors || [],
         audiences: audiences || [],
-        metrics: metrics || {},
-        trackingConfig: trackingConfig || {},
+        metrics: (metrics || {}) as Prisma.InputJsonValue,
+        trackingConfig: (trackingConfig || {}) as Prisma.InputJsonValue,
         schedule,
-        alertThresholds: alertThresholds || {},
+        alertThresholds: (alertThresholds || {}) as Prisma.InputJsonValue,
         createdBy: session.user.id,
       },
     })

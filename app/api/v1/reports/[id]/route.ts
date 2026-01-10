@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
@@ -124,9 +125,17 @@ export async function PATCH(
       )
     }
 
+    const { title, description, type, status, content, thumbnail } = validationResult.data
     const report = await prisma.report.update({
       where: { id },
-      data: validationResult.data,
+      data: {
+        ...(title !== undefined && { title }),
+        ...(description !== undefined && { description }),
+        ...(type !== undefined && { type }),
+        ...(status !== undefined && { status }),
+        ...(content !== undefined && { content: content as Prisma.InputJsonValue }),
+        ...(thumbnail !== undefined && { thumbnail }),
+      },
     })
 
     await logAuditEvent(createAuditEventFromRequest(request, {

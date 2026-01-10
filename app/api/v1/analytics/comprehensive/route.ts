@@ -44,39 +44,39 @@ export async function GET(request: NextRequest) {
         _count: true,
       }),
 
-      // Workflow statistics
+      // Workflow statistics - uses startedAt
       prisma.workflowRun.groupBy({
         by: ['status'],
         where: {
           orgId,
-          createdAt: { gte: startDate },
+          startedAt: { gte: startDate },
         },
         _count: true,
         _avg: { tokensUsed: true },
       }),
 
-      // Usage statistics
-      prisma.usage.groupBy({
+      // Usage statistics - uses recordedAt
+      prisma.usageRecord.groupBy({
         by: ['metricType'],
         where: {
           orgId,
-          createdAt: { gte: startDate },
+          recordedAt: { gte: startDate },
         },
-        _sum: { value: true },
+        _sum: { quantity: true },
       }),
 
-      // Cost estimation
+      // Cost estimation - uses startedAt
       prisma.agentRun.aggregate({
         where: {
           orgId,
-          createdAt: { gte: startDate },
+          startedAt: { gte: startDate },
           status: 'COMPLETED',
         },
         _sum: { tokensUsed: true },
         _count: true,
       }),
 
-      // Insight statistics
+      // Insight statistics - uses createdAt
       prisma.insight.groupBy({
         by: ['type'],
         where: {
@@ -87,22 +87,22 @@ export async function GET(request: NextRequest) {
         _avg: { confidenceScore: true },
       }),
 
-      // Performance metrics
+      // Performance metrics - uses startedAt
       prisma.agentRun.aggregate({
         where: {
           orgId,
           status: 'COMPLETED',
-          createdAt: { gte: startDate },
+          startedAt: { gte: startDate },
         },
         _avg: { tokensUsed: true },
       }),
 
-      // User activity
+      // User activity - uses timestamp
       prisma.auditLog.groupBy({
         by: ['action'],
         where: {
           orgId,
-          createdAt: { gte: startDate },
+          timestamp: { gte: startDate },
         },
         _count: true,
       }),
@@ -116,19 +116,19 @@ export async function GET(request: NextRequest) {
       prisma.agentRun.count({
         where: {
           orgId,
-          createdAt: { gte: previousPeriodStart, lt: previousPeriodEnd },
+          startedAt: { gte: previousPeriodStart, lt: previousPeriodEnd },
         },
       }),
       prisma.workflowRun.count({
         where: {
           orgId,
-          createdAt: { gte: previousPeriodStart, lt: previousPeriodEnd },
+          startedAt: { gte: previousPeriodStart, lt: previousPeriodEnd },
         },
       }),
     ])
 
     const currentAgentRuns = costStats._count || 0
-    const currentWorkflowRuns = workflowStats.reduce((sum, s) => sum + s._count, 0)
+    const currentWorkflowRuns = workflowStats.reduce((sum: number, s: { _count: number }) => sum + s._count, 0)
 
     // Calculate growth rates
     const agentRunGrowth = previousAgentRuns > 0
@@ -142,6 +142,12 @@ export async function GET(request: NextRequest) {
     // Estimate costs (example: $0.01 per 1K tokens)
     const totalTokens = costStats._sum.tokensUsed || 0
     const estimatedCost = (totalTokens / 1000) * 0.01
+
+    type AgentStatType = { type: string; status: string; _count: number }
+    type WorkflowStatType = { status: string; _count: number; _avg: { tokensUsed: number | null } }
+    type UsageStatType = { metricType: string; _sum: { quantity: number | null } }
+    type InsightStatType = { type: string; _count: number; _avg: { confidenceScore: number | null } }
+    type ActivityType = { action: string; _count: number }
 
     const analytics = {
       overview: {
@@ -157,7 +163,7 @@ export async function GET(request: NextRequest) {
         workflowRunGrowth: workflowRunGrowth.toFixed(1),
       },
       agents: {
-        byType: agentStats.reduce((acc, stat) => {
+        byType: agentStats.reduce((acc: Record<string, { total: number; active: number; inactive: number }>, stat: AgentStatType) => {
           if (!acc[stat.type]) acc[stat.type] = { total: 0, active: 0, inactive: 0 }
           acc[stat.type].total += stat._count
           if (stat.status === 'ACTIVE') acc[stat.type].active += stat._count
@@ -166,7 +172,7 @@ export async function GET(request: NextRequest) {
         }, {} as Record<string, { total: number; active: number; inactive: number }>),
       },
       workflows: {
-        byStatus: workflowStats.reduce((acc, stat) => {
+        byStatus: workflowStats.reduce((acc: Record<string, { count: number; avgTokens: number }>, stat: WorkflowStatType) => {
           acc[stat.status] = {
             count: stat._count,
             avgTokens: stat._avg.tokensUsed || 0,
@@ -175,20 +181,20 @@ export async function GET(request: NextRequest) {
         }, {} as Record<string, { count: number; avgTokens: number }>),
       },
       usage: {
-        byMetric: usageStats.reduce((acc, stat) => {
-          acc[stat.metricType] = stat._sum.value || 0
+        byMetric: usageStats.reduce((acc: Record<string, number>, stat: UsageStatType) => {
+          acc[stat.metricType] = stat._sum.quantity || 0
           return acc
         }, {} as Record<string, number>),
       },
       insights: {
-        byType: insightStats.map(stat => ({
+        byType: insightStats.map((stat: InsightStatType) => ({
           type: stat.type,
           count: stat._count,
           avgConfidence: stat._avg.confidenceScore || 0,
         })),
       },
       activity: {
-        byAction: userActivity.map(act => ({
+        byAction: userActivity.map((act: ActivityType) => ({
           action: act.action,
           count: act._count,
         })),

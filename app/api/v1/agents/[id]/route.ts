@@ -7,6 +7,7 @@ import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 
 // Validation schema for updating an agent
 const updateAgentSchema = z.object({
@@ -146,10 +147,16 @@ export async function PATCH(
       )
     }
 
-    // Update agent
+    // Update agent - cast configuration to proper Prisma type
+    const updateData = {
+      ...validationResult.data,
+      ...(validationResult.data.configuration && {
+        configuration: validationResult.data.configuration as Prisma.InputJsonValue
+      })
+    }
     const agent = await prisma.agent.update({
       where: { id },
-      data: validationResult.data,
+      data: updateData,
       include: {
         creator: { select: { id: true, name: true, email: true } },
       },

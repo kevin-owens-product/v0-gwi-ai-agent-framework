@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
@@ -141,8 +142,8 @@ export async function POST(request: NextRequest) {
         name,
         description,
         type,
-        config: config || {},
-        data: data || null,
+        config: (config || {}) as Prisma.InputJsonValue,
+        data: (data || null) as Prisma.InputJsonValue,
         dataSource,
         createdBy: session.user.id,
       },

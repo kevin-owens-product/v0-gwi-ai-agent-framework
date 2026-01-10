@@ -32,7 +32,7 @@ interface InsightsResponse {
 // Helper to detect significant differences
 function detectDifferences(
   data: { metric: string; values: Record<string, number> }[],
-  audiences: string[]
+  _audiences: string[]
 ): Insight[] {
   const insights: Insight[] = []
 

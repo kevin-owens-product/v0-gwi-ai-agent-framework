@@ -8,6 +8,7 @@ import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { checkRateLimit, getRateLimitHeaders, getRateLimitIdentifier } from '@/lib/rate-limit'
 import { recordUsage } from '@/lib/billing'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 
 // Validation schema for creating an agent
 const createAgentSchema = z.object({
@@ -184,7 +185,7 @@ export async function POST(request: NextRequest) {
         name,
         description,
         type,
-        configuration: configuration || {},
+        configuration: (configuration || {}) as Prisma.InputJsonValue,
         createdBy: session.user.id,
       },
       include: {

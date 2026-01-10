@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
@@ -124,9 +125,14 @@ export async function PATCH(
       )
     }
 
+    const { layout, widgets, ...rest } = validationResult.data
     const dashboard = await prisma.dashboard.update({
       where: { id },
-      data: validationResult.data,
+      data: {
+        ...rest,
+        ...(layout !== undefined && { layout: layout as Prisma.InputJsonValue }),
+        ...(widgets !== undefined && { widgets: widgets as Prisma.InputJsonValue }),
+      },
     })
 
     await logAuditEvent(createAuditEventFromRequest(request, {

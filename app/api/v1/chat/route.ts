@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
@@ -89,13 +90,13 @@ function generateAgentResponse(
   // Detect topic from query
   const isAboutGenZ = queryLower.includes('gen z') || queryLower.includes('genz') || queryLower.includes('generation z')
   const isAboutSustainability = queryLower.includes('sustain') || queryLower.includes('eco') || queryLower.includes('green')
-  const isAboutBrand = queryLower.includes('brand') || queryLower.includes('perception') || queryLower.includes('competitor')
-  const isAboutTrends = queryLower.includes('trend') || queryLower.includes('culture') || queryLower.includes('movement')
+  const _isAboutBrand = queryLower.includes('brand') || queryLower.includes('perception') || queryLower.includes('competitor')
+  const _isAboutTrends = queryLower.includes('trend') || queryLower.includes('culture') || queryLower.includes('movement')
 
   // Build response based on agent type and query
   let response = ''
-  let citations = []
-  let outputBlocks = []
+  let citations: Array<{ id: string; source: string; confidence: number; type: string; excerpt: string }> = []
+  let outputBlocks: Array<{ id: string; type: string; title: string; content: Record<string, unknown> }> = []
 
   if (knowledge) {
     if (isAboutGenZ) {
@@ -290,8 +291,8 @@ export async function POST(request: NextRequest) {
         data: {
           agentId: customAgent.id,
           orgId,
-          input: { message, context },
-          output: { response, citations },
+          input: { message, context } as Prisma.InputJsonValue,
+          output: { response, citations } as Prisma.InputJsonValue,
           status: 'COMPLETED',
           completedAt: new Date(),
         },
@@ -306,8 +307,8 @@ export async function POST(request: NextRequest) {
           agentId: agentId || null,
           type: 'CONVERSATION',
           key: `chat-${Date.now()}`,
-          value: { message, response: response.substring(0, 500) },
-          metadata: { userId: session.user.id },
+          value: { message, response: response.substring(0, 500) } as Prisma.InputJsonValue,
+          metadata: { userId: session.user.id } as Prisma.InputJsonValue,
         },
       }).catch(console.error) // Don't fail the request if memory save fails
     }

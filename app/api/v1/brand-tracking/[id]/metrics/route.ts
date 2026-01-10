@@ -48,7 +48,7 @@ export async function GET(
 
     const { id } = await params
     const searchParams = request.nextUrl.searchParams
-    const metricType = searchParams.get('type') || 'all'
+    const _metricType = searchParams.get('type') || 'all'
     const days = parseInt(searchParams.get('days') || '30')
 
     const brandTracking = await prisma.brandTracking.findUnique({

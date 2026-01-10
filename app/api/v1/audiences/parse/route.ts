@@ -232,7 +232,7 @@ function estimateAudienceSize(attributes: ParsedAttribute[], markets: string[]):
 }
 
 // Generate suggestions for refining the audience
-function generateSuggestions(attributes: ParsedAttribute[], query: string): string[] {
+function generateSuggestions(attributes: ParsedAttribute[], _query: string): string[] {
   const suggestions: string[] = []
 
   // Suggest adding demographics if missing
