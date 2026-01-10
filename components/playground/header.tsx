@@ -10,7 +10,6 @@ import {
   Download,
   Share2,
   RotateCcw,
-  Save,
   Sparkles,
   Check,
   Copy,
@@ -20,7 +19,7 @@ import {
   PanelRightOpen,
   PanelRightClose,
   Workflow,
-  History,
+  HelpCircle,
 } from "lucide-react"
 import { usePlayground } from "@/app/dashboard/playground/page"
 import {
@@ -30,6 +29,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { WorkspaceManager } from "@/components/playground/workspace-manager"
 
 const agentNames: Record<string, string> = {
   "audience-explorer": "Audience Explorer",
@@ -41,21 +41,26 @@ const agentNames: Record<string, string> = {
 }
 
 export function PlaygroundHeader() {
-  const { config, messages, resetChat, contextPanelOpen, setContextPanelOpen, customAgent } = usePlayground()
-  const [showSaveDialog, setShowSaveDialog] = useState(false)
+  const { config, messages, resetChat, contextPanelOpen, setContextPanelOpen, customAgent, setShowWelcome, setConfig, setMessages } = usePlayground()
   const [showShareDialog, setShowShareDialog] = useState(false)
   const [showWorkflowDialog, setShowWorkflowDialog] = useState(false)
-  const [sessionName, setSessionName] = useState("")
-  const [saved, setSaved] = useState(false)
+  const [currentWorkspace, setCurrentWorkspace] = useState<string>()
   const [copied, setCopied] = useState(false)
 
-  const handleSave = () => {
-    setSaved(true)
-    setTimeout(() => {
-      setSaved(false)
-      setShowSaveDialog(false)
-      setSessionName("")
-    }, 1500)
+  const handleLoadWorkspace = (workspace: any) => {
+    // In production, load workspace data from API
+    setCurrentWorkspace(workspace.name)
+    // Would set config and messages here
+  }
+
+  const handleSaveWorkspace = (name: string, description?: string) => {
+    setCurrentWorkspace(name)
+    // In production, save to API
+  }
+
+  const handleCreateNew = () => {
+    setCurrentWorkspace(undefined)
+    resetChat()
   }
 
   const handleShare = () => {
@@ -143,41 +148,15 @@ export function PlaygroundHeader() {
             Reset
           </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-2 h-8 text-xs">
-                <History className="h-3.5 w-3.5" />
-                History
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64">
-              <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">Recent Sessions</div>
-              <DropdownMenuItem>
-                <div className="flex flex-col">
-                  <span className="text-sm">Gen Z Sustainability Analysis</span>
-                  <span className="text-xs text-muted-foreground">2 hours ago</span>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <div className="flex flex-col">
-                  <span className="text-sm">US vs UK Market Comparison</span>
-                  <span className="text-xs text-muted-foreground">Yesterday</span>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <div className="flex flex-col">
-                  <span className="text-sm">Brand Perception Deep Dive</span>
-                  <span className="text-xs text-muted-foreground">3 days ago</span>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View All History</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <WorkspaceManager
+            currentWorkspaceName={currentWorkspace}
+            onLoadWorkspace={handleLoadWorkspace}
+            onSaveWorkspace={handleSaveWorkspace}
+            onCreateNew={handleCreateNew}
+          />
 
-          <Button variant="ghost" size="sm" className="gap-2 h-8 text-xs" onClick={() => setShowSaveDialog(true)}>
-            <Save className="h-3.5 w-3.5" />
-            Save
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setShowWelcome(true)} title="Show tutorial">
+            <HelpCircle className="h-4 w-4" />
           </Button>
 
           <Button variant="ghost" size="sm" className="gap-2 h-8 text-xs" onClick={() => setShowWorkflowDialog(true)}>
@@ -225,42 +204,6 @@ export function PlaygroundHeader() {
           </Button>
         </div>
       </div>
-
-      {/* Save Dialog */}
-      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Save Session</DialogTitle>
-            <DialogDescription>Save this conversation to your session history for later reference.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 pt-4">
-            <div className="space-y-2">
-              <Label htmlFor="session-name">Session Name</Label>
-              <Input
-                id="session-name"
-                placeholder="e.g., Gen Z Research Analysis"
-                value={sessionName}
-                onChange={(e) => setSessionName(e.target.value)}
-              />
-            </div>
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowSaveDialog(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleSave} disabled={!sessionName.trim()}>
-                {saved ? (
-                  <>
-                    <Check className="h-4 w-4 mr-2" />
-                    Saved!
-                  </>
-                ) : (
-                  "Save Session"
-                )}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* Share Dialog */}
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>

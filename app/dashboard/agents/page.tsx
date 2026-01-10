@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { AgentGrid } from "@/components/agents/agent-grid"
 import { AgentFilters } from "@/components/agents/agent-filters"
+import { AgentMarketplace } from "@/components/agents/agent-marketplace"
+import { AgentPerformanceDashboard } from "@/components/agents/agent-performance-dashboard"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -33,20 +35,24 @@ export default function AgentsPage() {
           <TabsList className="bg-secondary">
             <TabsTrigger value="all">All Agents</TabsTrigger>
             <TabsTrigger value="custom">My Agents</TabsTrigger>
+            <TabsTrigger value="marketplace">Marketplace</TabsTrigger>
+            <TabsTrigger value="performance">Performance</TabsTrigger>
           </TabsList>
 
-          <div className="flex gap-2 w-full sm:w-auto">
-            <div className="relative flex-1 sm:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search agents..."
-                className="pl-10 bg-secondary"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+          {(activeTab === "all" || activeTab === "custom") && (
+            <div className="flex gap-2 w-full sm:w-auto">
+              <div className="relative flex-1 sm:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search agents..."
+                  className="pl-10 bg-secondary"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <AgentFilters />
             </div>
-            <AgentFilters />
-          </div>
+          )}
         </div>
 
         <TabsContent value="all" className="mt-0">
@@ -54,6 +60,12 @@ export default function AgentsPage() {
         </TabsContent>
         <TabsContent value="custom" className="mt-0">
           <AgentGrid filter="custom" search={search} />
+        </TabsContent>
+        <TabsContent value="marketplace" className="mt-0">
+          <AgentMarketplace />
+        </TabsContent>
+        <TabsContent value="performance" className="mt-0">
+          <AgentPerformanceDashboard />
         </TabsContent>
       </Tabs>
     </div>

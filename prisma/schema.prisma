@@ -35,6 +35,7 @@ model Organization {
   audiences     Audience[]
   memories      Memory[]
   charts        Chart[]
+  templates     Template[]
 }
 
 model OrganizationMember {
@@ -84,6 +85,7 @@ model User {
   apiKeys       ApiKey[]
   auditLogs     AuditLog[]
   agentsCreated Agent[]
+  templatesCreated Template[]
 }
 
 model Account {
@@ -608,4 +610,39 @@ enum ChartStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+// ==================== TEMPLATES ====================
+
+model Template {
+  id          String   @id @default(cuid())
+  orgId       String
+  name        String
+  description String?
+  category    TemplateCategory
+  prompt      String   @db.Text
+  tags        String[]
+  variables   Json     @default("[]") // variable definitions
+  isGlobal    Boolean  @default(false) // available to all organizations
+  isFavorite  Boolean  @default(false)
+  usageCount  Int      @default(0)
+  lastUsed    DateTime?
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator      User         @relation(fields: [createdBy], references: [id])
+
+  @@index([orgId])
+  @@index([category])
+  @@index([createdBy])
+  @@index([isGlobal])
+}
+
+enum TemplateCategory {
+  RESEARCH
+  ANALYSIS
+  BRIEFS
+  CUSTOM
 }
