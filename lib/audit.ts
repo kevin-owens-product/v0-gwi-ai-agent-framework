@@ -12,6 +12,7 @@ export type AuditAction =
   | 'invite'
   | 'join'
   | 'leave'
+  | 'analyze'
 
 export type AuditResourceType =
   | 'agent'
@@ -26,10 +27,15 @@ export type AuditResourceType =
   | 'workflow'
   | 'report'
   | 'brand_tracking'
+  | 'brand_tracking_snapshot'
   | 'dashboard'
   | 'audience'
   | 'crosstab'
   | 'chart'
+  | 'template'
+  | 'team_member'
+  | 'team_invitation'
+  | 'memory'
 
 export interface AuditEvent {
   orgId: string

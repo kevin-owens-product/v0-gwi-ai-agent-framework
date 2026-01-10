@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
@@ -24,7 +25,7 @@ async function getOrgId(request: NextRequest, userId: string): Promise<string | 
 }
 
 // Generate mock brand tracking metrics
-function generateBrandMetrics(brandName: string, competitors: any[]) {
+function generateBrandMetrics(_brandName: string, competitors: any[]) {
   const baseAwareness = 45 + Math.random() * 40
   const baseConsideration = baseAwareness * (0.4 + Math.random() * 0.3)
   const basePreference = baseConsideration * (0.5 + Math.random() * 0.3)
@@ -116,7 +117,7 @@ export async function POST(
         brandTrackingId: id,
         orgId,
         snapshotDate: new Date(),
-        metrics,
+        metrics: metrics as Prisma.InputJsonValue,
         brandHealth: metrics.brandHealth,
         marketShare: metrics.marketShare,
         sentimentScore: metrics.sentimentScore,
@@ -125,8 +126,8 @@ export async function POST(
         preference: metrics.preference,
         loyalty: metrics.loyalty,
         nps: metrics.nps,
-        competitorData: metrics.competitorData,
-        audienceBreakdown: metrics.audienceBreakdown,
+        competitorData: metrics.competitorData as Prisma.InputJsonValue,
+        audienceBreakdown: metrics.audienceBreakdown as Prisma.InputJsonValue,
         insights: metrics.insights,
       },
     })

@@ -104,11 +104,14 @@ export async function POST(request: NextRequest) {
       counter++
     }
 
+    // Extract userId before transaction for TypeScript
+    const userId = session.user!.id
+
     // Create organization and membership in a transaction
     const result = await prisma.$transaction(async (tx) => {
       // Update user name
       const user = await tx.user.update({
-        where: { id: session.user.id },
+        where: { id: userId },
         data: {
           name: `${firstName} ${lastName}`,
         },
@@ -131,7 +134,7 @@ export async function POST(request: NextRequest) {
       await tx.organizationMember.create({
         data: {
           orgId: organization.id,
-          userId: session.user.id,
+          userId,
           role: 'OWNER',
         },
       })
@@ -169,7 +172,7 @@ export async function POST(request: NextRequest) {
               type: (agentTypeMap[agentId] as any) || 'CUSTOM',
               status: 'ACTIVE',
               orgId: organization.id,
-              createdBy: session.user.id,
+              createdBy: userId,
               configuration: {},
             },
           })

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
@@ -124,9 +125,13 @@ export async function PATCH(
       )
     }
 
+    const { configuration, ...rest } = validationResult.data
     const workflow = await prisma.workflow.update({
       where: { id },
-      data: validationResult.data,
+      data: {
+        ...rest,
+        ...(configuration !== undefined && { configuration: configuration as Prisma.InputJsonValue }),
+      },
     })
 
     await logAuditEvent(createAuditEventFromRequest(request, {

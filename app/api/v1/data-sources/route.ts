@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
@@ -116,7 +117,7 @@ export async function POST(request: NextRequest) {
         orgId,
         name,
         type,
-        connectionConfig: connectionConfig || {},
+        connectionConfig: (connectionConfig || {}) as Prisma.InputJsonValue,
         status: 'PENDING',
       },
     })
@@ -187,9 +188,16 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Update data source
+    const { name, status, connectionConfig } = validation.data
     const dataSource = await prisma.dataSource.update({
       where: { id: dataSourceId },
-      data: validation.data,
+      data: {
+        ...(name !== undefined && { name }),
+        ...(status !== undefined && { status }),
+        ...(connectionConfig !== undefined && {
+          connectionConfig: connectionConfig as Prisma.InputJsonValue
+        }),
+      },
     })
 
     // Log audit event

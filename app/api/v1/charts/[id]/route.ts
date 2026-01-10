@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
@@ -119,9 +120,14 @@ export async function PATCH(
       )
     }
 
+    const { config, data, ...rest } = validationResult.data
     const chart = await prisma.chart.update({
       where: { id },
-      data: validationResult.data,
+      data: {
+        ...rest,
+        ...(config !== undefined && { config: config as Prisma.InputJsonValue }),
+        ...(data !== undefined && { data: data as Prisma.InputJsonValue }),
+      },
     })
 
     await logAuditEvent(createAuditEventFromRequest(request, {

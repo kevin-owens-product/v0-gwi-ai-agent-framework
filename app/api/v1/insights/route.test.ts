@@ -42,7 +42,7 @@ describe('GET /api/v1/insights', () => {
   })
 
   it('returns 401 when not authenticated', async () => {
-    vi.mocked(auth).mockResolvedValue(null)
+    vi.mocked(auth).mockResolvedValue(null as any)
 
     const request = new NextRequest('http://localhost/api/v1/insights')
     const response = await GET(request)
@@ -56,7 +56,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockResolvedValue([])
 
     const request = new NextRequest('http://localhost/api/v1/insights')
@@ -71,7 +71,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockResolvedValue([
       {
         ...mockMembership,
@@ -99,7 +99,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockResolvedValue([
       {
         ...mockMembership,
@@ -128,7 +128,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockResolvedValue([
       {
         ...mockMembership,
@@ -153,7 +153,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockResolvedValue([
       {
         ...mockMembership,
@@ -180,7 +180,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockResolvedValue([
       {
         ...mockMembership,
@@ -207,7 +207,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockResolvedValue([
       {
         ...mockMembership,
@@ -252,7 +252,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockResolvedValue([
       {
         ...mockMembership,
@@ -277,7 +277,7 @@ describe('GET /api/v1/insights', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(prisma.organizationMember.findMany).mockRejectedValue(
       new Error('Database connection failed')
     )

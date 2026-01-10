@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { z } from "zod"
 import { logAuditEvent, createAuditEventFromRequest } from "@/lib/audit"
-import { cookies } from "next/headers"
+import { cookies as _cookies } from "next/headers"
 import { getUserMembership } from "@/lib/tenant"
 import { hasPermission } from "@/lib/permissions"
 
@@ -30,7 +30,7 @@ interface RouteParams {
 }
 
 // GET /api/v1/templates/[id] - Get single template
-export async function GET(req: NextRequest, { params }: RouteParams) {
+export async function GET(_req: NextRequest, { params }: RouteParams) {
   try {
     const session = await auth()
     if (!session?.user?.id) {

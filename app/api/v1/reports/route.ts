@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
@@ -141,7 +142,7 @@ export async function POST(request: NextRequest) {
         title,
         description,
         type,
-        content: content || {},
+        content: (content || {}) as Prisma.InputJsonValue,
         thumbnail,
         agentId,
         createdBy: session.user.id,

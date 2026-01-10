@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { prisma as _prisma } from '@/lib/db'
 import { getOrgIdFromRequest } from '@/lib/shared-utils'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { name, type, config } = validation.data
+    const { name, type, config: _config } = validation.data
 
     // In production, create Integration record
     // For now, return success

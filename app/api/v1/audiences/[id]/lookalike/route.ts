@@ -238,7 +238,7 @@ export async function POST(
   try {
     const { id } = await params
     const body = await request.json()
-    const { selectedLookalikeId, name, markets = ["Global"] } = body
+    const { selectedLookalikeId: _selectedLookalikeId, name, markets = ["Global"] } = body
 
     // In production, this would create the audience in the database
     const newAudience = {

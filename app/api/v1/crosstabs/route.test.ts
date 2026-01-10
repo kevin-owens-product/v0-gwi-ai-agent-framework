@@ -31,7 +31,7 @@ vi.mock('@/lib/tenant', () => ({
 
 vi.mock('@/lib/audit', () => ({
   logAuditEvent: vi.fn(),
-  createAuditEventFromRequest: vi.fn((req, event) => event),
+  createAuditEventFromRequest: vi.fn((_req, event) => event),
 }))
 
 vi.mock('@/lib/billing', () => ({
@@ -62,7 +62,7 @@ describe('GET /api/v1/crosstabs', () => {
   })
 
   it('returns 401 when not authenticated', async () => {
-    vi.mocked(auth).mockResolvedValue(null)
+    vi.mocked(auth).mockResolvedValue(null as any)
 
     const request = new NextRequest('http://localhost/api/v1/crosstabs')
     const response = await GET(request)
@@ -76,7 +76,7 @@ describe('GET /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
 
     const request = new NextRequest('http://localhost/api/v1/crosstabs')
     const response = await GET(request)
@@ -90,7 +90,7 @@ describe('GET /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue(null)
 
     const request = new NextRequest('http://localhost/api/v1/crosstabs', {
@@ -107,7 +107,7 @@ describe('GET /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'VIEWER',
@@ -128,7 +128,7 @@ describe('GET /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'ADMIN',
@@ -164,7 +164,7 @@ describe('GET /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'MEMBER',
@@ -190,7 +190,7 @@ describe('GET /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'MEMBER',
@@ -220,7 +220,7 @@ describe('GET /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'MEMBER',
@@ -249,7 +249,7 @@ describe('POST /api/v1/crosstabs', () => {
   })
 
   it('returns 401 when not authenticated', async () => {
-    vi.mocked(auth).mockResolvedValue(null)
+    vi.mocked(auth).mockResolvedValue(null as any)
 
     const request = new NextRequest('http://localhost/api/v1/crosstabs', {
       method: 'POST',
@@ -264,7 +264,7 @@ describe('POST /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'ADMIN',
@@ -289,7 +289,7 @@ describe('POST /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'ADMIN',
@@ -327,7 +327,7 @@ describe('POST /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'VIEWER',
@@ -355,7 +355,7 @@ describe('POST /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'ADMIN',
@@ -387,7 +387,7 @@ describe('POST /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'ADMIN',
@@ -429,7 +429,7 @@ describe('POST /api/v1/crosstabs', () => {
     vi.mocked(auth).mockResolvedValue({
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
-    })
+    } as any)
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'ADMIN',

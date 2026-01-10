@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
@@ -137,8 +138,8 @@ export async function POST(request: NextRequest) {
         orgId,
         name,
         description,
-        layout: layout || [],
-        widgets: widgets || [],
+        layout: (layout || []) as Prisma.InputJsonValue,
+        widgets: (widgets || []) as Prisma.InputJsonValue,
         isPublic: isPublic || false,
         createdBy: session.user.id,
       },

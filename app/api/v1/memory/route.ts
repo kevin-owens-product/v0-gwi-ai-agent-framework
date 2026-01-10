@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
@@ -16,7 +17,7 @@ const createMemorySchema = z.object({
   expiresAt: z.string().datetime().optional(),
 })
 
-const updateMemorySchema = z.object({
+const _updateMemorySchema = z.object({
   value: z.unknown().optional(),
   metadata: z.record(z.unknown()).optional(),
   expiresAt: z.string().datetime().optional(),
@@ -152,8 +153,8 @@ export async function POST(request: NextRequest) {
         },
       },
       update: {
-        value: value as any,
-        metadata: metadata || {},
+        value: value as Prisma.InputJsonValue,
+        metadata: (metadata || {}) as Prisma.InputJsonValue,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
       },
       create: {
@@ -161,8 +162,8 @@ export async function POST(request: NextRequest) {
         agentId: agentId || null,
         type,
         key,
-        value: value as any,
-        metadata: metadata || {},
+        value: value as Prisma.InputJsonValue,
+        metadata: (metadata || {}) as Prisma.InputJsonValue,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
       },
     })

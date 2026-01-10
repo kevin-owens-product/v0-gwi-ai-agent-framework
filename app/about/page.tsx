@@ -141,7 +141,7 @@ export default function AboutPage() {
               <div className="relative">
                 <div className="absolute left-8 top-0 bottom-0 w-px bg-border" />
                 <div className="space-y-8">
-                  {milestones.map((milestone, index) => (
+                  {milestones.map((milestone, _index) => (
                     <div key={milestone.year} className="relative flex gap-6">
                       <div className="w-16 h-16 rounded-full bg-primary/10 border-4 border-background flex items-center justify-center flex-shrink-0 z-10">
                         <span className="font-bold text-primary">{milestone.year}</span>
