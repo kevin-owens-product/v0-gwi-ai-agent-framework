@@ -5,6 +5,14 @@ import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
+import { sendInvitationEmail } from '@/lib/email'
+import { randomBytes } from 'crypto'
+import { z } from 'zod'
+
+const inviteTeamMemberSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  role: z.enum(['OWNER', 'ADMIN', 'MEMBER', 'VIEWER']).optional().default('MEMBER'),
+})
 
 // Helper to get org ID from header or cookies
 async function getOrgId(request: NextRequest, userId: string): Promise<string | null> {
@@ -80,6 +88,130 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ members: membersWithActivity })
   } catch (error) {
     console.error('GET /api/v1/team error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+
+// POST /api/v1/team - Invite team member
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const orgId = await getOrgId(request, session.user.id)
+    if (!orgId) {
+      return NextResponse.json({ error: 'No organization found' }, { status: 404 })
+    }
+
+    const membership = await getUserMembership(session.user.id, orgId)
+    if (!membership) {
+      return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
+    }
+
+    if (!hasPermission(membership.role, 'team:write')) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
+    }
+
+    const body = await request.json()
+    const validationResult = inviteTeamMemberSchema.safeParse(body)
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: validationResult.error.errors },
+        { status: 400 }
+      )
+    }
+
+    const { email, role } = validationResult.data
+    const normalizedEmail = email.toLowerCase()
+
+    // Get organization details
+    const organization = await prisma.organization.findUnique({
+      where: { id: orgId },
+      select: { id: true, name: true },
+    })
+
+    if (!organization) {
+      return NextResponse.json({ error: 'Organization not found' }, { status: 404 })
+    }
+
+    // Check if user is already a member
+    const existingUser = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+      select: { id: true },
+    })
+
+    if (existingUser) {
+      const existingMembership = await prisma.organizationMember.findFirst({
+        where: { userId: existingUser.id, orgId },
+      })
+
+      if (existingMembership) {
+        return NextResponse.json(
+          { error: 'User is already a member of this organization' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Generate invitation token
+    const inviteToken = randomBytes(32).toString('hex')
+    const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+
+    // Store invitation (reusing VerificationToken model)
+    await prisma.verificationToken.create({
+      data: {
+        identifier: `invite:${normalizedEmail}:${orgId}`,
+        token: inviteToken,
+        expires,
+      },
+    })
+
+    // Get inviter name
+    const inviter = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true },
+    })
+
+    // Build invitation URL
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+    const inviteUrl = `${baseUrl}/accept-invitation?token=${inviteToken}`
+
+    // Send invitation email
+    try {
+      await sendInvitationEmail({
+        to: normalizedEmail,
+        inviterName: inviter?.name || 'A team member',
+        organizationName: organization.name,
+        inviteUrl,
+        role,
+      })
+    } catch (emailError) {
+      console.error('Failed to send invitation email:', emailError)
+      return NextResponse.json(
+        { error: 'Failed to send invitation email' },
+        { status: 500 }
+      )
+    }
+
+    // Log audit event
+    await logAuditEvent(createAuditEventFromRequest(request, {
+      orgId,
+      userId: session.user.id,
+      action: 'create',
+      resourceType: 'team_invitation',
+      resourceId: inviteToken,
+      metadata: { email: normalizedEmail, role },
+    }))
+
+    return NextResponse.json({
+      success: true,
+      message: 'Invitation sent successfully',
+    })
+  } catch (error) {
+    console.error('POST /api/v1/team error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
