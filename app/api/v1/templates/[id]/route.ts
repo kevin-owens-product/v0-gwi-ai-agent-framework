@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { prisma } from "@/lib/prisma"
+import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/db"
 import { z } from "zod"
-import { logAuditEvent } from "@/lib/audit-logger"
+import { logAuditEvent, createAuditEventFromRequest } from "@/lib/audit"
+import { cookies } from "next/headers"
+import { getUserMembership } from "@/lib/tenant"
+import { hasPermission } from "@/lib/permissions"
 
 const updateTemplateSchema = z.object({
   name: z.string().min(1).max(200).optional(),
@@ -29,8 +32,8 @@ interface RouteParams {
 // GET /api/v1/templates/[id] - Get single template
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getServerSession()
-    if (!session?.user) {
+    const session = await auth()
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -72,8 +75,8 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 // PATCH /api/v1/templates/[id] - Update template
 export async function PATCH(req: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getServerSession()
-    if (!session?.user) {
+    const session = await auth()
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -91,8 +94,8 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 
     // Check if user can update (creator or has permission)
     if (template.createdBy !== session.user.id) {
-      const hasPermission = await checkPermission(session.user.id, template.orgId, "templates:write")
-      if (!hasPermission) {
+      const membership = await getUserMembership(session.user.id, template.orgId)
+      if (!membership || !hasPermission(membership.role, 'dashboards:write')) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 })
       }
     }
@@ -119,16 +122,16 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
       },
     })
 
-    await logAuditEvent({
-      userId: session.user.id,
+    await logAuditEvent(createAuditEventFromRequest(req, {
       orgId: template.orgId,
+      userId: session.user.id,
       action: "update",
       resourceType: "template",
       resourceId: id,
       metadata: { changes: validated },
-    })
+    }))
 
-    return NextResponse.json({ data: updated })
+    return NextResponse.json(updated)
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors }, { status: 400 })
@@ -141,8 +144,8 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 // DELETE /api/v1/templates/[id] - Delete template
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getServerSession()
-    if (!session?.user) {
+    const session = await auth()
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -158,8 +161,8 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 
     // Check if user can delete (creator or has delete permission)
     if (template.createdBy !== session.user.id) {
-      const hasPermission = await checkPermission(session.user.id, template.orgId, "templates:delete")
-      if (!hasPermission) {
+      const membership = await getUserMembership(session.user.id, template.orgId)
+      if (!membership || !hasPermission(membership.role, 'dashboards:delete')) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 })
       }
     }
@@ -168,23 +171,18 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
       where: { id },
     })
 
-    await logAuditEvent({
-      userId: session.user.id,
+    await logAuditEvent(createAuditEventFromRequest(req, {
       orgId: template.orgId,
+      userId: session.user.id,
       action: "delete",
       resourceType: "template",
       resourceId: id,
       metadata: { name: template.name },
-    })
+    }))
 
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error("Error deleting template:", error)
     return NextResponse.json({ error: "Failed to delete template" }, { status: 500 })
   }
-}
-
-async function checkPermission(userId: string, orgId: string, permission: string): Promise<boolean> {
-  // In production, check actual permissions
-  return true
 }

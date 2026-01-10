@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { prisma } from "@/lib/prisma"
+import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/db"
 import { z } from "zod"
-import { logAuditEvent } from "@/lib/audit-logger"
-import { recordUsage } from "@/lib/usage-tracker"
+import { logAuditEvent, createAuditEventFromRequest } from "@/lib/audit"
+import { recordUsage } from "@/lib/billing"
+import { cookies } from "next/headers"
+import { getUserMembership } from "@/lib/tenant"
+import { hasPermission } from "@/lib/permissions"
 
 const createTemplateSchema = z.object({
   name: z.string().min(1).max(200),
@@ -20,18 +23,42 @@ const createTemplateSchema = z.object({
   })).optional(),
 })
 
+async function getOrgId(request: NextRequest, userId: string): Promise<string | null> {
+  const headerOrgId = request.headers.get('x-organization-id')
+  if (headerOrgId) return headerOrgId
+
+  const cookieStore = await cookies()
+  const memberships = await prisma.organizationMember.findMany({
+    where: { userId },
+    include: { organization: true },
+    orderBy: { joinedAt: 'asc' },
+  })
+
+  if (memberships.length === 0) return null
+
+  return cookieStore.get('currentOrgId')?.value || memberships[0].organization.id
+}
+
 // GET /api/v1/templates - List templates
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession()
-    if (!session?.user) {
+    const session = await auth()
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Get organization from header or user's first org
-    const orgId = req.headers.get("x-organization-id") || session.user.organizations?.[0]?.id
+    const orgId = await getOrgId(req, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: "No organization found" }, { status: 400 })
+      return NextResponse.json({ error: "No organization found" }, { status: 404 })
+    }
+
+    const membership = await getUserMembership(session.user.id, orgId)
+    if (!membership) {
+      return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
+    }
+
+    if (!hasPermission(membership.role, 'dashboards:read')) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
     const { searchParams } = new URL(req.url)
@@ -91,10 +118,11 @@ export async function GET(req: NextRequest) {
       prisma.template.count({ where }),
     ])
 
-    await recordUsage(orgId, "API_CALLS")
+    recordUsage(orgId, "API_CALLS", 1).catch(console.error)
 
     return NextResponse.json({
       templates,
+      data: templates,
       total,
       meta: {
         page,
@@ -111,20 +139,23 @@ export async function GET(req: NextRequest) {
 // POST /api/v1/templates - Create template
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession()
-    if (!session?.user) {
+    const session = await auth()
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const orgId = req.headers.get("x-organization-id") || session.user.organizations?.[0]?.id
+    const orgId = await getOrgId(req, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: "No organization found" }, { status: 400 })
+      return NextResponse.json({ error: "No organization found" }, { status: 404 })
     }
 
-    // Check permissions
-    const hasPermission = await checkPermission(session.user.id, orgId, "templates:write")
-    if (!hasPermission) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+    const membership = await getUserMembership(session.user.id, orgId)
+    if (!membership) {
+      return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
+    }
+
+    if (!hasPermission(membership.role, 'dashboards:write')) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
     const body = await req.json()
@@ -155,18 +186,18 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    await logAuditEvent({
-      userId: session.user.id,
+    await logAuditEvent(createAuditEventFromRequest(req, {
       orgId,
+      userId: session.user.id,
       action: "create",
       resourceType: "template",
       resourceId: template.id,
       metadata: { name: template.name, category: template.category },
-    })
+    }))
 
-    await recordUsage(orgId, "API_CALLS")
+    recordUsage(orgId, "API_CALLS", 1).catch(console.error)
 
-    return NextResponse.json({ data: template }, { status: 201 })
+    return NextResponse.json(template, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors }, { status: 400 })
@@ -174,10 +205,4 @@ export async function POST(req: NextRequest) {
     console.error("Error creating template:", error)
     return NextResponse.json({ error: "Failed to create template" }, { status: 500 })
   }
-}
-
-async function checkPermission(userId: string, orgId: string, permission: string): Promise<boolean> {
-  // In production, check actual permissions
-  // For now, allow all authenticated users
-  return true
 }
