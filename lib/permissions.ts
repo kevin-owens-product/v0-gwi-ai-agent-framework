@@ -36,6 +36,11 @@ export const PERMISSIONS = {
   'charts:write': 'Create and edit charts',
   'charts:delete': 'Delete charts',
 
+  // Brand Tracking
+  'brand-tracking:read': 'View brand tracking',
+  'brand-tracking:write': 'Create and edit brand tracking',
+  'brand-tracking:delete': 'Delete brand tracking',
+
   // Memory
   'memory:read': 'View memory/context',
   'memory:write': 'Create and edit memory',
@@ -82,6 +87,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'crosstabs:read', 'crosstabs:write', 'crosstabs:delete',
     'audiences:read', 'audiences:write', 'audiences:delete',
     'charts:read', 'charts:write', 'charts:delete',
+    'brand-tracking:read', 'brand-tracking:write', 'brand-tracking:delete',
     'memory:read', 'memory:write', 'memory:delete',
     'insights:read', 'insights:export',
     'data_sources:read', 'data_sources:write', 'data_sources:delete',
@@ -97,6 +103,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'crosstabs:read', 'crosstabs:write',
     'audiences:read', 'audiences:write',
     'charts:read', 'charts:write',
+    'brand-tracking:read', 'brand-tracking:write',
     'memory:read', 'memory:write',
     'insights:read',
     'data_sources:read',
@@ -110,6 +117,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'crosstabs:read',
     'audiences:read',
     'charts:read',
+    'brand-tracking:read',
     'memory:read',
     'insights:read',
   ],
