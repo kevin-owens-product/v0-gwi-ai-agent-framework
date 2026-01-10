@@ -1,4 +1,4 @@
-import { PrismaClient, Role, PlanTier, AgentType, AgentStatus, AgentRunStatus, DataSourceType, DataSourceStatus, UsageMetric, SubscriptionStatus, InvitationStatus, BrandTrackingStatus } from '@prisma/client'
+import { PrismaClient, Role, PlanTier, AgentType, AgentStatus, AgentRunStatus, DataSourceType, DataSourceStatus, UsageMetric, SubscriptionStatus, InvitationStatus, BrandTrackingStatus, ReportType, ReportStatus } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 
@@ -31,6 +31,8 @@ async function main() {
   await prisma.invitation.deleteMany()
   await prisma.billingSubscription.deleteMany()
   await prisma.sSOConfiguration.deleteMany()
+  await prisma.report.deleteMany()
+  await prisma.chart.deleteMany()
   await prisma.crosstab.deleteMany()
   await prisma.dashboard.deleteMany()
   await prisma.audience.deleteMany()
@@ -2337,6 +2339,302 @@ async function main() {
   await prisma.brandTracking.update({ where: { id: pelotonBrandTracking.id }, data: { snapshotCount: 65 } })
   await prisma.brandTracking.update({ where: { id: notionBrandTracking.id }, data: { snapshotCount: 32 } })
 
+  // ==================== REPORTS ====================
+  console.log('📄 Creating reports...')
+
+  // Create 10 advanced reports with explicit IDs for reliable API access
+  await prisma.report.create({
+    data: {
+      id: '1',
+      orgId: acmeCorp.id,
+      title: 'Q4 2024 Brand Performance Summary',
+      description: 'Comprehensive quarterly analysis of brand health metrics, market share trends, and competitive positioning across all tracked brands.',
+      type: ReportType.PRESENTATION,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        slides: [
+          { type: 'title', title: 'Q4 2024 Brand Performance', subtitle: 'Executive Summary' },
+          { type: 'metrics', title: 'Key Highlights', data: { brandHealth: 82.5, nps: 62, marketShare: 28.5, yoyGrowth: 12.3 } },
+          { type: 'chart', title: 'Brand Health Trend', chartType: 'line', dataSource: 'brand_tracking' },
+          { type: 'comparison', title: 'Competitive Analysis', brands: ['Nike', 'Adidas', 'Puma', 'Under Armour'] },
+          { type: 'insights', title: 'Key Takeaways', bullets: ['Strong brand awareness growth in Gen Z', 'NPS improved 8 points YoY', 'Market share gains in premium segment'] },
+          { type: 'recommendations', title: 'Strategic Recommendations', items: ['Double down on digital marketing', 'Expand sustainability messaging', 'Target emerging markets'] }
+        ],
+        metadata: { generatedAt: now.toISOString(), period: 'Q4 2024', author: 'AI Research Agent' }
+      },
+      thumbnail: '/thumbnails/q4-brand-performance.png',
+      agentId: marketResearchAgent.id,
+      views: 342,
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '2',
+      orgId: acmeCorp.id,
+      title: 'Gen Z Consumer Insights Deep Dive',
+      description: 'In-depth analysis of Gen Z consumer behavior, preferences, and brand affinities across digital platforms.',
+      type: ReportType.PDF,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        sections: [
+          { title: 'Executive Summary', content: 'Gen Z represents a $360B market opportunity with unique consumption patterns...' },
+          { title: 'Digital Platform Usage', data: { tiktok: 85.2, instagram: 92.1, youtube: 95.8, snapchat: 78.5 } },
+          { title: 'Brand Preferences', insights: ['Authenticity over perfection', 'Values-driven purchasing', 'Peer influence critical'] },
+          { title: 'Purchase Drivers', factors: ['Sustainability', 'Social proof', 'Brand purpose', 'Digital experience'] },
+          { title: 'Media Consumption', patterns: { streaming: 4.2, socialMedia: 3.5, gaming: 2.8, podcasts: 1.5 } },
+          { title: 'Recommendations', actions: ['Invest in TikTok presence', 'Emphasize sustainability', 'Leverage influencer partnerships'] }
+        ],
+        charts: ['platform_usage', 'purchase_drivers', 'media_consumption'],
+        pageCount: 24,
+        metadata: { generatedAt: now.toISOString(), audienceSegment: 'Gen Z', sampleSize: 15420 }
+      },
+      thumbnail: '/thumbnails/genz-insights.png',
+      agentId: audienceAnalysisAgent.id,
+      views: 567,
+      createdBy: johnDoe.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '3',
+      orgId: acmeCorp.id,
+      title: 'Competitive Landscape Analysis 2024',
+      description: 'Strategic analysis of competitive positioning, market share dynamics, and emerging threats in the sportswear industry.',
+      type: ReportType.PRESENTATION,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        slides: [
+          { type: 'title', title: 'Competitive Landscape 2024', subtitle: 'Market Intelligence Report' },
+          { type: 'marketMap', title: 'Market Positioning', quadrants: ['Leaders', 'Challengers', 'Niche Players', 'Emerging'] },
+          { type: 'shareOfVoice', title: 'Share of Voice Analysis', platforms: ['Social', 'Search', 'Media'] },
+          { type: 'swot', title: 'Competitive SWOT', competitors: ['Adidas', 'Under Armour', 'Puma'] },
+          { type: 'trends', title: 'Market Trends', items: ['DTC acceleration', 'Sustainability focus', 'Athleisure growth'] },
+          { type: 'threats', title: 'Emerging Threats', competitors: ['On Running', 'Hoka', 'Allbirds'] }
+        ],
+        metadata: { generatedAt: now.toISOString(), industry: 'Sportswear', competitorsAnalyzed: 12 }
+      },
+      thumbnail: '/thumbnails/competitive-landscape.png',
+      agentId: marketResearchAgent.id,
+      views: 423,
+      createdBy: janeSmith.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '4',
+      orgId: acmeCorp.id,
+      title: 'Brand Health Dashboard - Weekly Snapshot',
+      description: 'Real-time dashboard showing key brand health indicators with week-over-week comparisons.',
+      type: ReportType.DASHBOARD,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        widgets: [
+          { type: 'kpi', title: 'Brand Health Score', value: 84.2, change: 2.3, trend: 'up' },
+          { type: 'kpi', title: 'Net Promoter Score', value: 62, change: 5, trend: 'up' },
+          { type: 'kpi', title: 'Market Share', value: 28.5, change: 0.8, trend: 'up' },
+          { type: 'kpi', title: 'Sentiment Score', value: 0.78, change: 0.05, trend: 'up' },
+          { type: 'chart', title: 'Weekly Trend', chartType: 'line', period: '4w' },
+          { type: 'chart', title: 'Competitor Comparison', chartType: 'bar', competitors: 5 },
+          { type: 'table', title: 'Top Performing Segments', rows: 5 },
+          { type: 'alerts', title: 'Attention Required', items: ['NPS drop in 45-54 segment', 'Competitor campaign detected'] }
+        ],
+        refreshRate: '1h',
+        lastUpdated: now.toISOString(),
+        metadata: { period: 'Weekly', brands: ['Nike'] }
+      },
+      thumbnail: '/thumbnails/brand-health-dashboard.png',
+      views: 1245,
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '5',
+      orgId: acmeCorp.id,
+      title: 'Sustainability Perception Study',
+      description: 'Consumer perception analysis of brand sustainability initiatives and their impact on purchase intent.',
+      type: ReportType.PDF,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        sections: [
+          { title: 'Research Overview', methodology: 'Mixed methods: Survey (n=5,000) + Social listening' },
+          { title: 'Key Findings', highlights: ['72% consider sustainability in purchases', 'Greenwashing concerns rising', 'Transparency is critical'] },
+          { title: 'Brand Rankings', data: { patagonia: 92, nike: 68, adidas: 72, underArmour: 45 } },
+          { title: 'Consumer Segments', segments: ['Eco-Warriors', 'Conscious Consumers', 'Skeptics', 'Indifferent'] },
+          { title: 'Impact on Purchase', correlation: 0.68, priceElasticity: 0.23 },
+          { title: 'Recommendations', actions: ['Increase transparency', 'Third-party certifications', 'Circular economy initiatives'] }
+        ],
+        appendix: { methodology: true, rawData: true, bibliography: true },
+        pageCount: 36,
+        metadata: { studyPeriod: 'Sep-Oct 2024', markets: ['US', 'UK', 'DE', 'FR'] }
+      },
+      thumbnail: '/thumbnails/sustainability-study.png',
+      agentId: audienceAnalysisAgent.id,
+      views: 289,
+      createdBy: janeSmith.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '6',
+      orgId: acmeCorp.id,
+      title: 'Social Media Performance Infographic',
+      description: 'Visual summary of social media performance metrics across all platforms.',
+      type: ReportType.INFOGRAPHIC,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        sections: [
+          { type: 'header', title: 'Social Media Performance', period: 'Q4 2024' },
+          { type: 'platform_stats', platforms: [
+            { name: 'Instagram', followers: '12.5M', engagement: '4.2%', growth: '+15%' },
+            { name: 'TikTok', followers: '8.2M', engagement: '8.5%', growth: '+45%' },
+            { name: 'Twitter', followers: '5.8M', engagement: '2.1%', growth: '+8%' },
+            { name: 'YouTube', subscribers: '3.2M', avgViews: '450K', growth: '+22%' }
+          ]},
+          { type: 'top_content', posts: ['Behind the scenes campaign video', 'Athlete partnership announcement', 'Sustainability milestone'] },
+          { type: 'sentiment', positive: 78, neutral: 15, negative: 7 },
+          { type: 'comparison', vsCompetitors: '+23% engagement', vsIndustry: '+35% growth' }
+        ],
+        dimensions: { width: 1200, height: 2400 },
+        colorScheme: 'brand',
+        metadata: { generatedAt: now.toISOString(), platforms: 4 }
+      },
+      thumbnail: '/thumbnails/social-infographic.png',
+      views: 876,
+      createdBy: johnDoe.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '7',
+      orgId: techStartup.id,
+      title: 'Market Entry Analysis - APAC Region',
+      description: 'Strategic analysis for market expansion into Asia-Pacific markets including market sizing, competitive landscape, and entry strategies.',
+      type: ReportType.PRESENTATION,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        slides: [
+          { type: 'title', title: 'APAC Market Entry Strategy', subtitle: 'Expansion Opportunity Assessment' },
+          { type: 'marketSize', title: 'Market Opportunity', tam: '$42B', sam: '$8.5B', som: '$1.2B' },
+          { type: 'countryAnalysis', title: 'Priority Markets', countries: ['Japan', 'South Korea', 'Singapore', 'Australia'] },
+          { type: 'competitive', title: 'Local Competition', players: ['Local Champion A', 'Global Player B', 'Regional C'] },
+          { type: 'entryModes', title: 'Entry Strategies', options: ['Direct entry', 'Partnership', 'Acquisition'] },
+          { type: 'timeline', title: 'Implementation Roadmap', phases: ['Research', 'Pilot', 'Scale'] },
+          { type: 'financials', title: 'Investment Requirements', capex: '$5M', timeline: '18 months', roi: '3.2x' }
+        ],
+        metadata: { generatedAt: now.toISOString(), region: 'APAC', markets: 4 }
+      },
+      thumbnail: '/thumbnails/apac-analysis.png',
+      agentId: startupResearchAgent.id,
+      views: 156,
+      createdBy: bobWilson.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '8',
+      orgId: techStartup.id,
+      title: 'User Acquisition Cost Analysis',
+      description: 'Detailed breakdown of customer acquisition costs by channel with optimization recommendations.',
+      type: ReportType.PDF,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        sections: [
+          { title: 'Executive Summary', cac: 45.80, ltv: 285, ltvCacRatio: 6.2 },
+          { title: 'Channel Performance', channels: [
+            { name: 'Paid Social', cac: 52.30, volume: 3500, quality: 'High' },
+            { name: 'Organic Search', cac: 12.40, volume: 2200, quality: 'Very High' },
+            { name: 'Paid Search', cac: 68.90, volume: 1800, quality: 'Medium' },
+            { name: 'Referral', cac: 8.50, volume: 1200, quality: 'Very High' },
+            { name: 'Content Marketing', cac: 22.10, volume: 950, quality: 'High' }
+          ]},
+          { title: 'Cohort Analysis', retention: { m1: 85, m3: 62, m6: 48, m12: 35 } },
+          { title: 'Optimization Opportunities', savings: '$125K/quarter', actions: ['Reduce paid search spend', 'Scale referral program', 'Invest in content'] },
+          { title: 'Benchmarks', industry: { avgCac: 65, topQuartile: 38 } }
+        ],
+        pageCount: 18,
+        metadata: { period: 'Q4 2024', currency: 'USD' }
+      },
+      thumbnail: '/thumbnails/cac-analysis.png',
+      views: 234,
+      createdBy: bobWilson.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '9',
+      orgId: enterpriseCo.id,
+      title: 'Enterprise Brand Audit 2024',
+      description: 'Comprehensive brand audit covering brand equity, perception, and strategic positioning across enterprise segments.',
+      type: ReportType.PDF,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        sections: [
+          { title: 'Brand Equity Assessment', score: 78.5, components: { awareness: 85, loyalty: 72, quality: 82, associations: 75 } },
+          { title: 'Stakeholder Perception', segments: [
+            { name: 'C-Suite', perception: 82, priorities: ['Reliability', 'Innovation', 'ROI'] },
+            { name: 'IT Decision Makers', perception: 78, priorities: ['Security', 'Integration', 'Support'] },
+            { name: 'End Users', perception: 71, priorities: ['Ease of use', 'Performance', 'Features'] }
+          ]},
+          { title: 'Competitive Position', rank: 3, totalMarket: 12, gapToLeader: 8.5 },
+          { title: 'Brand Architecture', recommendation: 'Endorsed brand strategy', rationale: 'Leverage corporate equity while enabling product differentiation' },
+          { title: 'Action Plan', initiatives: ['Thought leadership program', 'Customer advocacy', 'Visual identity refresh'] }
+        ],
+        appendices: ['Research methodology', 'Detailed survey results', 'Competitive profiles'],
+        pageCount: 52,
+        metadata: { auditScope: 'Global', segments: 5, respondents: 2500 }
+      },
+      thumbnail: '/thumbnails/brand-audit.png',
+      agentId: enterpriseAnalysisAgent.id,
+      views: 412,
+      createdBy: sarahEnterprise.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: '10',
+      orgId: enterpriseCo.id,
+      title: 'Quarterly Business Review Export',
+      description: 'Exportable data package containing all key metrics and insights for quarterly business review.',
+      type: ReportType.EXPORT,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        datasets: [
+          { name: 'brand_metrics', format: 'csv', rows: 1250, columns: 18 },
+          { name: 'audience_segments', format: 'csv', rows: 85, columns: 24 },
+          { name: 'competitive_data', format: 'csv', rows: 420, columns: 15 },
+          { name: 'campaign_performance', format: 'csv', rows: 36, columns: 22 },
+          { name: 'financial_summary', format: 'xlsx', sheets: 4 }
+        ],
+        visualizations: [
+          { name: 'executive_dashboard', format: 'png', dimensions: '1920x1080' },
+          { name: 'trend_charts', format: 'svg', count: 8 },
+          { name: 'infographics', format: 'pdf', pages: 4 }
+        ],
+        documentation: {
+          dataDict: true,
+          methodology: true,
+          changelog: true
+        },
+        exportedAt: now.toISOString(),
+        metadata: { period: 'Q4 2024', dataPoints: 125000, formats: ['CSV', 'XLSX', 'PNG', 'SVG', 'PDF'] }
+      },
+      thumbnail: '/thumbnails/qbr-export.png',
+      views: 189,
+      createdBy: sarahEnterprise.id
+    }
+  })
+
   // ==================== SUMMARY ====================
   console.log('\n✅ Database seeding completed!')
   console.log('\n📊 Summary:')
@@ -2350,6 +2648,8 @@ async function main() {
   console.log('   Audiences: 11')
   console.log('   Crosstabs: 9')
   console.log('   Dashboards: 7')
+  console.log('   Charts: 10')
+  console.log('   Reports: 10')
   console.log('   Audit Logs: 10')
   console.log('   Usage Records: 150+')
   console.log('   Billing Subscriptions: 3')
