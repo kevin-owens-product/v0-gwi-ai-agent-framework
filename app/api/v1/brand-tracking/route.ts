@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
     }
 
-    if (!hasPermission(membership.role, 'dashboards:read')) {
+    if (!hasPermission(membership.role, 'brand-tracking:read')) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
     }
 
-    if (!hasPermission(membership.role, 'dashboards:write')) {
+    if (!hasPermission(membership.role, 'brand-tracking:write')) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 

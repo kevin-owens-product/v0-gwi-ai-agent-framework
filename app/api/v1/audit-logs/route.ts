@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
     }
 
-    if (!hasPermission(membership.role, 'auditLogs:read')) {
+    if (!hasPermission(membership.role, 'audit:read')) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
