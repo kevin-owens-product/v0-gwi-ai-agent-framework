@@ -6,12 +6,15 @@ import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage, checkUsageLimit } from '@/lib/billing'
-import { executeAgentWithContext } from '@/lib/llm'
+import { executeAgentWithContext, executeAgentWithTools } from '@/lib/llm'
 import { z } from 'zod'
+import type { ToolExecutionContext, ToolCallRecord, ResourceReference } from '@/types/tools'
 
 // Validation schema for running an agent
 const runAgentSchema = z.object({
   input: z.record(z.unknown()),
+  enableTools: z.boolean().optional(),
+  allowedTools: z.array(z.string()).optional(),
 })
 
 // Helper to get org ID from header or cookies
@@ -100,14 +103,19 @@ export async function POST(
       )
     }
 
-    const { input } = validationResult.data
+    const { input, enableTools, allowedTools } = validationResult.data
+
+    // Check if tools should be enabled from agent config or request
+    const config = (agent.configuration as Record<string, unknown>) || {}
+    const toolsEnabled = enableTools ?? (config.enableTools as boolean) ?? false
+    const configuredTools = allowedTools ?? (config.tools as string[]) ?? undefined
 
     // Create agent run
     const agentRun = await prisma.agentRun.create({
       data: {
         agentId: id,
         orgId,
-        input,
+        input: { ...input, toolsEnabled, configuredTools },
         status: 'PENDING',
       },
     })
@@ -135,7 +143,6 @@ export async function POST(
         })
 
         const startTime = Date.now()
-        const config = (agent.configuration as Record<string, unknown>) || {}
 
         // Build the prompt from input
         const userMessage = typeof input === 'object' && input !== null
@@ -161,33 +168,87 @@ export async function POST(
         const memoryContext = memoryItems.map(item => ({
           key: item.key,
           value: item.value,
+          type: item.type,
           createdAt: item.createdAt,
         }))
 
-        // Execute with real LLM
-        const llmResult = await executeAgentWithContext({
-          agentType: agent.type,
-          agentName: agent.name,
-          userInput: userMessage,
-          systemPrompt: config.systemPrompt as string | undefined,
-          memoryContext,
-          config: {
-            temperature: config.temperature as number | undefined,
-            maxTokens: config.maxTokens as number | undefined,
-            model: config.model as string | undefined,
-            provider: config.provider as 'anthropic' | 'openai' | 'gwi-spark' | undefined,
-          },
-        })
+        let result: Record<string, unknown>
+        let tokensUsed: number
+        let toolCalls: ToolCallRecord[] = []
+        let resourcesCreated: ResourceReference[] = []
+
+        if (toolsEnabled) {
+          // Execute with tools enabled
+          const toolContext: ToolExecutionContext = {
+            orgId,
+            userId: session.user.id,
+            agentId: id,
+            runId: agentRun.id,
+            memory: memoryContext,
+          }
+
+          const toolResult = await executeAgentWithTools({
+            agentType: agent.type,
+            agentName: agent.name,
+            userInput: userMessage,
+            systemPrompt: config.systemPrompt as string | undefined,
+            memoryContext,
+            toolContext,
+            enabledTools: configuredTools,
+            maxToolCalls: (config.maxToolCalls as number) || 10,
+            config: {
+              temperature: config.temperature as number | undefined,
+              maxTokens: config.maxTokens as number | undefined,
+              model: config.model as string | undefined,
+            },
+          })
+
+          result = {
+            response: toolResult.response,
+            metadata: toolResult.metadata || {},
+            source: toolResult.provider,
+            model: toolResult.model,
+            confidence: 0.9,
+            toolCalls: toolResult.toolCalls.map(tc => ({
+              toolName: tc.toolName,
+              input: tc.input,
+              success: tc.result.success,
+              data: tc.result.data,
+              error: tc.result.error,
+              executionTimeMs: tc.result.metadata?.executionTimeMs,
+            })),
+            resourcesCreated: toolResult.resourcesCreated,
+          }
+          tokensUsed = toolResult.tokensUsed
+          toolCalls = toolResult.toolCalls
+          resourcesCreated = toolResult.resourcesCreated
+        } else {
+          // Execute without tools (original behavior)
+          const llmResult = await executeAgentWithContext({
+            agentType: agent.type,
+            agentName: agent.name,
+            userInput: userMessage,
+            systemPrompt: config.systemPrompt as string | undefined,
+            memoryContext,
+            config: {
+              temperature: config.temperature as number | undefined,
+              maxTokens: config.maxTokens as number | undefined,
+              model: config.model as string | undefined,
+              provider: config.provider as 'anthropic' | 'openai' | 'gwi-spark' | undefined,
+            },
+          })
+
+          result = {
+            response: llmResult.response,
+            metadata: llmResult.metadata || {},
+            source: llmResult.provider,
+            model: llmResult.model,
+            confidence: 0.9,
+          }
+          tokensUsed = llmResult.tokensUsed
+        }
 
         const processingTime = Date.now() - startTime
-
-        const result = {
-          response: llmResult.response,
-          metadata: llmResult.metadata || {},
-          source: llmResult.provider,
-          model: llmResult.model,
-          confidence: 0.9,
-        }
 
         const output = {
           agentId: id,
@@ -197,11 +258,15 @@ export async function POST(
           processingTimeMs: processingTime,
           input,
           result,
-          tokensUsed: llmResult.tokensUsed,
+          tokensUsed,
+          toolsEnabled,
+          toolCallCount: toolCalls.length,
+          resourcesCreated: resourcesCreated.map(r => ({ type: r.type, id: r.id, name: r.name })),
         }
 
         // Extract title for the insight
-        const insightTitle = `${agent.name}: ${llmResult.response.split('\n')[0].replace(/^#+ /, '').substring(0, 100)}`
+        const responseText = result.response as string
+        const insightTitle = `${agent.name}: ${responseText.split('\n')[0].replace(/^#+ /, '').substring(0, 100)}`
 
         // Create insight from the run
         await prisma.insight.create({
@@ -220,13 +285,13 @@ export async function POST(
           data: {
             status: 'COMPLETED',
             output,
-            tokensUsed: llmResult.tokensUsed,
+            tokensUsed,
             completedAt: new Date(),
           },
         })
 
         // Record token usage
-        await recordUsage(orgId, 'TOKENS_CONSUMED', llmResult.tokensUsed)
+        await recordUsage(orgId, 'TOKENS_CONSUMED', tokensUsed)
       } catch (error) {
         console.error('Agent execution error:', error)
         await prisma.agentRun.update({

@@ -1,4 +1,11 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
+import { auth } from '@/lib/auth'
+import { prisma } from '@/lib/db'
+import { cookies } from 'next/headers'
+import { getUserMembership } from '@/lib/tenant'
+import { hasPermission } from '@/lib/permissions'
+import { executeTool } from '@/lib/tool-registry'
+import type { ToolExecutionContext } from '@/types/tools'
 
 // Automated Insights Detection Engine for Cross-tabs
 // Analyzes data patterns and generates actionable insights
@@ -197,64 +204,97 @@ function generateSummary(insights: Insight[], audienceCount: number, metricCount
   return parts.join(" ")
 }
 
+// Helper to get org ID from header or cookies
+async function getOrgId(request: NextRequest, userId: string): Promise<string | null> {
+  const headerOrgId = request.headers.get('x-organization-id')
+  if (headerOrgId) return headerOrgId
+
+  const cookieStore = await cookies()
+  const memberships = await prisma.organizationMember.findMany({
+    where: { userId },
+    include: { organization: true },
+    orderBy: { joinedAt: 'asc' },
+  })
+
+  if (memberships.length === 0) return null
+  return cookieStore.get('currentOrgId')?.value || memberships[0].organization.id
+}
+
+// GET - Retrieve existing insights or generate statistical insights
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params
+    const session = await auth()
 
-    // Mock crosstab data - in production this would come from the database
-    const crosstabData: Record<string, {
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const orgId = await getOrgId(request, session.user.id)
+    if (!orgId) {
+      return NextResponse.json({ error: 'No organization found' }, { status: 404 })
+    }
+
+    // Get crosstab from database
+    const crosstab = await prisma.crosstab.findFirst({
+      where: { id, orgId },
+    })
+
+    if (!crosstab) {
+      return NextResponse.json({ error: 'Crosstab not found' }, { status: 404 })
+    }
+
+    // Parse results or generate mock data
+    let crosstabData: {
       audiences: string[]
       data: { metric: string; values: Record<string, number> }[]
-    }> = {
-      "1": {
-        audiences: ["Gen Z (18-24)", "Millennials (25-40)", "Gen X (41-56)", "Boomers (57-75)"],
-        data: [
-          { metric: "TikTok", values: { "Gen Z (18-24)": 87, "Millennials (25-40)": 52, "Gen X (41-56)": 24, "Boomers (57-75)": 8 } },
-          { metric: "Instagram", values: { "Gen Z (18-24)": 82, "Millennials (25-40)": 71, "Gen X (41-56)": 48, "Boomers (57-75)": 28 } },
-          { metric: "Facebook", values: { "Gen Z (18-24)": 42, "Millennials (25-40)": 68, "Gen X (41-56)": 78, "Boomers (57-75)": 72 } },
-          { metric: "YouTube", values: { "Gen Z (18-24)": 91, "Millennials (25-40)": 85, "Gen X (41-56)": 76, "Boomers (57-75)": 62 } },
-          { metric: "LinkedIn", values: { "Gen Z (18-24)": 28, "Millennials (25-40)": 52, "Gen X (41-56)": 48, "Boomers (57-75)": 35 } },
-          { metric: "Twitter/X", values: { "Gen Z (18-24)": 38, "Millennials (25-40)": 42, "Gen X (41-56)": 35, "Boomers (57-75)": 22 } },
-          { metric: "Snapchat", values: { "Gen Z (18-24)": 72, "Millennials (25-40)": 35, "Gen X (41-56)": 12, "Boomers (57-75)": 4 } },
-          { metric: "Pinterest", values: { "Gen Z (18-24)": 45, "Millennials (25-40)": 48, "Gen X (41-56)": 42, "Boomers (57-75)": 38 } },
-        ],
-      },
-      "2": {
-        audiences: ["Under $50K", "$50K-$100K", "$100K-$150K", "$150K-$250K", "$250K+"],
-        data: [
-          { metric: "E-commerce", values: { "Under $50K": 72, "$50K-$100K": 78, "$100K-$150K": 82, "$150K-$250K": 85, "$250K+": 79 } },
-          { metric: "In-Store Retail", values: { "Under $50K": 68, "$50K-$100K": 62, "$100K-$150K": 58, "$150K-$250K": 55, "$250K+": 62 } },
-          { metric: "Mobile Apps", values: { "Under $50K": 58, "$50K-$100K": 65, "$100K-$150K": 72, "$150K-$250K": 75, "$250K+": 71 } },
-          { metric: "Social Commerce", values: { "Under $50K": 42, "$50K-$100K": 45, "$100K-$150K": 38, "$150K-$250K": 32, "$250K+": 28 } },
-          { metric: "Subscription Services", values: { "Under $50K": 35, "$50K-$100K": 52, "$100K-$150K": 68, "$150K-$250K": 78, "$250K+": 82 } },
-          { metric: "Direct-to-Consumer", values: { "Under $50K": 28, "$50K-$100K": 42, "$100K-$150K": 55, "$150K-$250K": 65, "$250K+": 72 } },
-          { metric: "Luxury Retail", values: { "Under $50K": 8, "$50K-$100K": 18, "$100K-$150K": 35, "$150K-$250K": 58, "$250K+": 78 } },
-          { metric: "Resale/Second-hand", values: { "Under $50K": 48, "$50K-$100K": 42, "$100K-$150K": 35, "$150K-$250K": 28, "$250K+": 22 } },
-        ],
-      },
     }
 
-    // Get crosstab data (fallback to generic data if not found)
-    const crosstab = crosstabData[id] || {
-      audiences: ["Segment A", "Segment B", "Segment C", "Segment D"],
-      data: [
-        { metric: "Metric 1", values: { "Segment A": 75, "Segment B": 45, "Segment C": 62, "Segment D": 38 } },
-        { metric: "Metric 2", values: { "Segment A": 42, "Segment B": 78, "Segment C": 55, "Segment D": 68 } },
-        { metric: "Metric 3", values: { "Segment A": 88, "Segment B": 32, "Segment C": 71, "Segment D": 45 } },
-        { metric: "Metric 4", values: { "Segment A": 55, "Segment B": 62, "Segment C": 48, "Segment D": 82 } },
-      ],
+    if (crosstab.results) {
+      const results = crosstab.results as { rows?: { metric: string; [key: string]: unknown }[] }
+      const audiences = crosstab.audiences
+
+      // Fetch audience names
+      const audienceDetails = await prisma.audience.findMany({
+        where: { id: { in: audiences } },
+        select: { id: true, name: true },
+      })
+      const audienceNameMap = new Map(audienceDetails.map(a => [a.id, a.name]))
+      const audienceNames = audiences.map(id => audienceNameMap.get(id) || id)
+
+      // Transform results to expected format
+      const data = (results.rows || []).map(row => {
+        const values: Record<string, number> = {}
+        for (const audienceId of audiences) {
+          const audienceData = row[audienceId] as { value?: number } | undefined
+          values[audienceNameMap.get(audienceId) || audienceId] = audienceData?.value || 0
+        }
+        return { metric: row.metric as string, values }
+      })
+
+      crosstabData = { audiences: audienceNames, data }
+    } else {
+      // Fallback mock data
+      crosstabData = {
+        audiences: ["Segment A", "Segment B", "Segment C", "Segment D"],
+        data: [
+          { metric: "Metric 1", values: { "Segment A": 75, "Segment B": 45, "Segment C": 62, "Segment D": 38 } },
+          { metric: "Metric 2", values: { "Segment A": 42, "Segment B": 78, "Segment C": 55, "Segment D": 68 } },
+          { metric: "Metric 3", values: { "Segment A": 88, "Segment B": 32, "Segment C": 71, "Segment D": 45 } },
+          { metric: "Metric 4", values: { "Segment A": 55, "Segment B": 62, "Segment C": 48, "Segment D": 82 } },
+        ],
+      }
     }
 
-    // Generate insights
+    // Generate insights using statistical analysis
     const allInsights: Insight[] = []
-
-    allInsights.push(...detectDifferences(crosstab.data, crosstab.audiences))
-    allInsights.push(...detectHighest(crosstab.data))
-    allInsights.push(...detectOutliers(crosstab.data))
-    allInsights.push(...detectAudiencePatterns(crosstab.data, crosstab.audiences))
+    allInsights.push(...detectDifferences(crosstabData.data, crosstabData.audiences))
+    allInsights.push(...detectHighest(crosstabData.data))
+    allInsights.push(...detectOutliers(crosstabData.data))
+    allInsights.push(...detectAudiencePatterns(crosstabData.data, crosstabData.audiences))
 
     // Sort by priority and limit
     const sortedInsights = allInsights
@@ -267,8 +307,8 @@ export async function GET(
     // Generate summary
     const summary = generateSummary(
       sortedInsights,
-      crosstab.audiences.length,
-      crosstab.data.length
+      crosstabData.audiences.length,
+      crosstabData.data.length
     )
 
     const response: InsightsResponse = {
@@ -285,6 +325,65 @@ export async function GET(
     console.error("Insights generation error:", error)
     return NextResponse.json(
       { error: "Failed to generate insights" },
+      { status: 500 }
+    )
+  }
+}
+
+// POST - Generate AI-powered insights using the analyze_insights tool
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const session = await auth()
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const orgId = await getOrgId(request, session.user.id)
+    if (!orgId) {
+      return NextResponse.json({ error: 'No organization found' }, { status: 404 })
+    }
+
+    const membership = await getUserMembership(session.user.id, orgId)
+    if (!membership || !hasPermission(membership.role, 'crosstabs:write')) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
+    }
+
+    // Get optional focus areas from request body
+    const body = await request.json().catch(() => ({}))
+    const focusAreas = body.focusAreas || ['trends', 'anomalies', 'key_differentiators', 'recommendations']
+
+    // Build tool execution context
+    const toolContext: ToolExecutionContext = {
+      orgId,
+      userId: session.user.id,
+      runId: `crosstab-insights-${id}-${Date.now()}`,
+    }
+
+    // Execute the analyze_insights tool
+    const result = await executeTool('analyze_insights', {
+      dataType: 'crosstab',
+      dataId: id,
+      focusAreas,
+    }, toolContext)
+
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: 400 })
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: result.data,
+      metadata: result.metadata,
+    })
+  } catch (error) {
+    console.error("AI insights generation error:", error)
+    return NextResponse.json(
+      { error: "Failed to generate AI insights" },
       { status: 500 }
     )
   }
