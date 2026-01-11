@@ -43,7 +43,7 @@ export function Footer() {
               </div>
               <span className="text-lg font-semibold text-foreground">GWI Insights</span>
             </Link>
-            <p className="text-sm text-muted-foreground">AI-powered human intelligence for enterprise teams.</p>
+            <p className="text-sm text-muted-foreground">Real-world, human-sourced data powering smarter business decisions since 2009.</p>
           </div>
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
@@ -67,7 +67,7 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">© 2025 GWI. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link
-              href="https://twitter.com/gwi"
+              href="https://twitter.com/GWI_Data"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -75,7 +75,7 @@ export function Footer() {
               Twitter
             </Link>
             <Link
-              href="https://linkedin.com/company/gwi"
+              href="https://linkedin.com/company/gwidotcom"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -83,12 +83,12 @@ export function Footer() {
               LinkedIn
             </Link>
             <Link
-              href="https://github.com/gwi"
+              href="https://www.gwi.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              GitHub
+              GWI.com
             </Link>
           </div>
         </div>

@@ -39,19 +39,19 @@ const contactOptions = [
 
 const offices = [
   {
-    city: "London",
-    address: "123 Tech Hub, Shoreditch, London EC2A 4BX",
-    phone: "+44 20 1234 5678",
+    city: "London (HQ)",
+    address: "25 Farringdon Street, London EC4A 4AB",
+    phone: "+44 20 7731 1614",
   },
   {
     city: "New York",
-    address: "456 Innovation Ave, Manhattan, NY 10001",
-    phone: "+1 212 555 0123",
+    address: "45 W 25th St, 8th Floor, New York, NY 10010",
+    phone: "+1 646 600 6867",
   },
   {
-    city: "Singapore",
-    address: "789 Data Center, Marina Bay, Singapore 018956",
-    phone: "+65 6789 0123",
+    city: "Athens",
+    address: "Athens, Greece",
+    phone: "+30 210 300 0000",
   },
 ]
 
