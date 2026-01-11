@@ -1062,22 +1062,22 @@ async function main() {
       orgId: acmeCorp.id,
       name: 'Brand Performance Overview',
       description: 'Executive dashboard tracking key brand metrics across all tracked brands. Real-time health scores, market share trends, and competitive positioning.',
-      layout: JSON.stringify([
+      layout: [
         { i: 'brand-health', x: 0, y: 0, w: 4, h: 2 },
         { i: 'market-share', x: 4, y: 0, w: 4, h: 2 },
         { i: 'nps-trend', x: 8, y: 0, w: 4, h: 2 },
         { i: 'awareness-funnel', x: 0, y: 2, w: 6, h: 3 },
         { i: 'competitor-radar', x: 6, y: 2, w: 6, h: 3 },
         { i: 'sentiment-timeline', x: 0, y: 5, w: 12, h: 2 }
-      ]),
-      widgets: JSON.stringify([
+      ],
+      widgets: [
         { id: 'brand-health', type: 'gauge', title: 'Overall Brand Health', metric: 'brandHealth', threshold: { warning: 70, danger: 50 } },
         { id: 'market-share', type: 'pie', title: 'Market Share Distribution', metric: 'marketShare', showLegend: true },
         { id: 'nps-trend', type: 'line', title: 'NPS Trend (12 Months)', metric: 'nps', period: '12m', showTrendline: true },
         { id: 'awareness-funnel', type: 'funnel', title: 'Brand Funnel', stages: ['awareness', 'consideration', 'preference', 'loyalty'] },
         { id: 'competitor-radar', type: 'radar', title: 'Competitive Positioning', metrics: ['awareness', 'consideration', 'preference', 'loyalty', 'nps'] },
         { id: 'sentiment-timeline', type: 'area', title: 'Sentiment Over Time', metric: 'sentimentScore', showAnnotations: true }
-      ]),
+      ],
       status: 'PUBLISHED',
       isPublic: false,
       views: 1247,
@@ -1091,20 +1091,20 @@ async function main() {
       orgId: acmeCorp.id,
       name: 'Audience Insights Dashboard',
       description: 'Deep dive into audience segments. Demographics, behavioral patterns, and engagement metrics across key consumer groups.',
-      layout: JSON.stringify([
+      layout: [
         { i: 'audience-sizes', x: 0, y: 0, w: 6, h: 2 },
         { i: 'age-distribution', x: 6, y: 0, w: 6, h: 2 },
         { i: 'engagement-heatmap', x: 0, y: 2, w: 8, h: 3 },
         { i: 'platform-breakdown', x: 8, y: 2, w: 4, h: 3 },
         { i: 'interest-treemap', x: 0, y: 5, w: 12, h: 3 }
-      ]),
-      widgets: JSON.stringify([
+      ],
+      widgets: [
         { id: 'audience-sizes', type: 'bar', title: 'Audience Sizes', dataSource: 'audiences', metric: 'size', sortBy: 'desc' },
         { id: 'age-distribution', type: 'donut', title: 'Age Distribution', segments: ['18-24', '25-34', '35-44', '45-54', '55+'] },
         { id: 'engagement-heatmap', type: 'heatmap', title: 'Engagement by Audience & Platform', xAxis: 'platform', yAxis: 'audience' },
         { id: 'platform-breakdown', type: 'pie', title: 'Platform Preference', dataSource: 'platform_usage' },
         { id: 'interest-treemap', type: 'treemap', title: 'Interest Categories', dataSource: 'interests', colorScale: 'category' }
-      ]),
+      ],
       status: 'PUBLISHED',
       isPublic: false,
       views: 892,
@@ -1118,18 +1118,18 @@ async function main() {
       orgId: acmeCorp.id,
       name: 'Competitive Analysis Hub',
       description: 'Monitor competitor brand performance. Side-by-side comparisons, trend analysis, and share of voice tracking.',
-      layout: JSON.stringify([
+      layout: [
         { i: 'competitor-table', x: 0, y: 0, w: 12, h: 3 },
         { i: 'share-of-voice', x: 0, y: 3, w: 6, h: 2 },
         { i: 'sentiment-comparison', x: 6, y: 3, w: 6, h: 2 },
         { i: 'trend-lines', x: 0, y: 5, w: 12, h: 3 }
-      ]),
-      widgets: JSON.stringify([
+      ],
+      widgets: [
         { id: 'competitor-table', type: 'table', title: 'Competitor Scorecard', columns: ['brand', 'awareness', 'consideration', 'preference', 'nps', 'sentiment'] },
         { id: 'share-of-voice', type: 'bar', title: 'Share of Voice', metric: 'sov', stacked: true },
         { id: 'sentiment-comparison', type: 'bar', title: 'Sentiment Comparison', metric: 'sentiment', showBenchmark: true },
         { id: 'trend-lines', type: 'line', title: 'Brand Health Trends (All Competitors)', multiSeries: true, period: '6m' }
-      ]),
+      ],
       status: 'PUBLISHED',
       isPublic: false,
       views: 756,
@@ -1143,20 +1143,20 @@ async function main() {
       orgId: acmeCorp.id,
       name: 'Marketing Campaign Tracker',
       description: 'Track campaign impact on brand metrics. Pre/post analysis, attribution modeling, and ROI calculations.',
-      layout: JSON.stringify([
+      layout: [
         { i: 'campaign-lift', x: 0, y: 0, w: 4, h: 2 },
         { id: 'roi-metric', x: 4, y: 0, w: 4, h: 2 },
         { i: 'reach-metric', x: 8, y: 0, w: 4, h: 2 },
         { i: 'lift-analysis', x: 0, y: 2, w: 6, h: 3 },
         { i: 'channel-performance', x: 6, y: 2, w: 6, h: 3 }
-      ]),
-      widgets: JSON.stringify([
+      ],
+      widgets: [
         { id: 'campaign-lift', type: 'metric', title: 'Brand Lift', value: '+12.5%', trend: 'up', comparison: 'vs. pre-campaign' },
         { id: 'roi-metric', type: 'metric', title: 'Campaign ROI', value: '3.2x', trend: 'up', comparison: 'vs. target 2.5x' },
         { id: 'reach-metric', type: 'metric', title: 'Total Reach', value: '45.2M', trend: 'up', comparison: '+15% vs. plan' },
         { id: 'lift-analysis', type: 'bar', title: 'Metric Lift by Campaign', grouped: true, metrics: ['awareness', 'consideration', 'intent'] },
         { id: 'channel-performance', type: 'bar', title: 'Performance by Channel', channels: ['TV', 'Digital', 'Social', 'OOH', 'Radio'] }
-      ]),
+      ],
       status: 'PUBLISHED',
       isPublic: false,
       views: 543,
@@ -1170,18 +1170,18 @@ async function main() {
       orgId: acmeCorp.id,
       name: 'Consumer Trends Monitor',
       description: 'Track emerging consumer trends and behavioral shifts. Trend velocity, adoption curves, and predictive signals.',
-      layout: JSON.stringify([
+      layout: [
         { i: 'trending-topics', x: 0, y: 0, w: 6, h: 3 },
         { i: 'adoption-curve', x: 6, y: 0, w: 6, h: 3 },
         { i: 'sentiment-stream', x: 0, y: 3, w: 12, h: 2 },
         { i: 'predictions', x: 0, y: 5, w: 12, h: 2 }
-      ]),
-      widgets: JSON.stringify([
+      ],
+      widgets: [
         { id: 'trending-topics', type: 'wordcloud', title: 'Trending Topics', dataSource: 'social_listening', timeframe: '7d' },
         { id: 'adoption-curve', type: 'line', title: 'Trend Adoption Curves', multiSeries: true, showPhases: true },
         { id: 'sentiment-stream', type: 'stream', title: 'Real-time Sentiment', refreshRate: '5m' },
         { id: 'predictions', type: 'cards', title: 'Trend Predictions', showConfidence: true, count: 4 }
-      ]),
+      ],
       status: 'DRAFT',
       isPublic: false,
       views: 234,
@@ -1195,18 +1195,18 @@ async function main() {
       orgId: techStartup.id,
       name: 'Startup Market Overview',
       description: 'Key metrics for startup market analysis. Market sizing, growth rates, and competitive landscape.',
-      layout: JSON.stringify([
+      layout: [
         { i: 'market-size', x: 0, y: 0, w: 4, h: 2 },
         { i: 'growth-rate', x: 4, y: 0, w: 4, h: 2 },
         { i: 'competition-index', x: 8, y: 0, w: 4, h: 2 },
         { i: 'market-map', x: 0, y: 2, w: 12, h: 4 }
-      ]),
-      widgets: JSON.stringify([
+      ],
+      widgets: [
         { id: 'market-size', type: 'metric', title: 'TAM', value: '$4.2B', trend: 'up', yoy: '+18%' },
         { id: 'growth-rate', type: 'metric', title: 'Market Growth', value: '23%', trend: 'up', comparison: 'CAGR' },
         { id: 'competition-index', type: 'gauge', title: 'Competition Intensity', value: 72, max: 100 },
         { id: 'market-map', type: 'scatter', title: 'Competitive Landscape', xAxis: 'market_share', yAxis: 'growth_rate', bubbleSize: 'revenue' }
-      ]),
+      ],
       status: 'PUBLISHED',
       isPublic: false,
       views: 189,
@@ -1220,20 +1220,20 @@ async function main() {
       orgId: enterpriseCo.id,
       name: 'Enterprise Analytics Hub',
       description: 'Comprehensive enterprise analytics dashboard with drill-down capabilities and custom reporting.',
-      layout: JSON.stringify([
+      layout: [
         { i: 'kpi-row', x: 0, y: 0, w: 12, h: 1 },
         { i: 'revenue-trend', x: 0, y: 1, w: 8, h: 3 },
         { i: 'segment-pie', x: 8, y: 1, w: 4, h: 3 },
         { i: 'regional-map', x: 0, y: 4, w: 6, h: 3 },
         { i: 'product-table', x: 6, y: 4, w: 6, h: 3 }
-      ]),
-      widgets: JSON.stringify([
+      ],
+      widgets: [
         { id: 'kpi-row', type: 'kpi-strip', metrics: ['revenue', 'users', 'retention', 'nps'], comparison: 'yoy' },
         { id: 'revenue-trend', type: 'area', title: 'Revenue Trend', metric: 'revenue', period: '24m', showForecast: true },
         { id: 'segment-pie', type: 'pie', title: 'Revenue by Segment', dataSource: 'segments' },
         { id: 'regional-map', type: 'choropleth', title: 'Performance by Region', metric: 'revenue', colorScale: 'sequential' },
         { id: 'product-table', type: 'table', title: 'Product Performance', sortable: true, exportable: true }
-      ]),
+      ],
       status: 'PUBLISHED',
       isPublic: false,
       views: 2341,
