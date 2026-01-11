@@ -92,7 +92,10 @@ export function ChartRenderer({
     )
   }
 
-  if (!data || data.length === 0) {
+  // Ensure data is a valid array
+  const chartData = Array.isArray(data) ? data : []
+
+  if (chartData.length === 0) {
     return (
       <div className={`flex items-center justify-center text-muted-foreground ${className}`} style={{ height }}>
         No data available
@@ -101,7 +104,7 @@ export function ChartRenderer({
   }
 
   const commonProps = {
-    data,
+    data: chartData,
     margin: { top: 20, right: 30, left: 20, bottom: 20 },
   }
 
@@ -116,7 +119,7 @@ export function ChartRenderer({
             {showTooltip && <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />}
             {showLegend && <Legend />}
             <Bar dataKey={dataKey} fill={colors[0]} radius={[4, 4, 0, 0]}>
-              {data.map((_, index) => (
+              {chartData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
               ))}
             </Bar>
@@ -153,7 +156,7 @@ export function ChartRenderer({
             {showTooltip && <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />}
             {showLegend && <Legend />}
             <Pie
-              data={data}
+              data={chartData}
               cx="50%"
               cy="50%"
               labelLine={false}
@@ -162,7 +165,7 @@ export function ChartRenderer({
               fill={colors[0]}
               dataKey={dataKey}
             >
-              {data.map((_, index) => (
+              {chartData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
               ))}
             </Pie>
@@ -175,7 +178,7 @@ export function ChartRenderer({
             {showTooltip && <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />}
             {showLegend && <Legend />}
             <Pie
-              data={data}
+              data={chartData}
               cx="50%"
               cy="50%"
               labelLine={false}
@@ -185,7 +188,7 @@ export function ChartRenderer({
               fill={colors[0]}
               dataKey={dataKey}
             >
-              {data.map((_, index) => (
+              {chartData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
               ))}
             </Pie>
@@ -194,7 +197,7 @@ export function ChartRenderer({
 
       case "RADAR":
         return (
-          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
             <PolarGrid />
             <PolarAngleAxis dataKey={xAxisKey} className="text-xs" />
             <PolarRadiusAxis />
@@ -212,7 +215,7 @@ export function ChartRenderer({
             <YAxis dataKey={dataKey} type="number" name={dataKey} className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
             {showTooltip && <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />}
             {showLegend && <Legend />}
-            <Scatter name="Data" data={data} fill={colors[0]} />
+            <Scatter name="Data" data={chartData} fill={colors[0]} />
           </ScatterChart>
         )
 
@@ -221,8 +224,8 @@ export function ChartRenderer({
           <FunnelChart>
             {showTooltip && <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />}
             {showLegend && <Legend />}
-            <Funnel dataKey={dataKey} data={data} isAnimationActive>
-              {data.map((_, index) => (
+            <Funnel dataKey={dataKey} data={chartData} isAnimationActive>
+              {chartData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
               ))}
               <LabelList position="right" fill="#000" stroke="none" dataKey={xAxisKey} />
@@ -233,13 +236,13 @@ export function ChartRenderer({
       case "TREEMAP":
         return (
           <Treemap
-            data={data}
+            data={chartData}
             dataKey={dataKey}
             aspectRatio={4 / 3}
             stroke="#fff"
             fill={colors[0]}
           >
-            {data.map((_, index) => (
+            {chartData.map((_, index) => (
               <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
             ))}
           </Treemap>
@@ -255,8 +258,8 @@ export function ChartRenderer({
             {showTooltip && <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />}
             {showLegend && <Legend />}
             <Bar dataKey={dataKey} fill={colors[0]}>
-              {data.map((entry, index) => {
-                const intensity = (entry[dataKey] as number) / Math.max(...data.map(d => d[dataKey] as number))
+              {chartData.map((entry, index) => {
+                const intensity = (entry[dataKey] as number) / Math.max(...chartData.map(d => d[dataKey] as number))
                 return <Cell key={`cell-${index}`} fill={`rgba(136, 132, 216, ${0.3 + intensity * 0.7})`} />
               })}
             </Bar>
