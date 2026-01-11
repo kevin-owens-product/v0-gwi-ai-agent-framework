@@ -21,11 +21,11 @@ export function ReportStats() {
       try {
         const response = await fetch('/api/v1/reports?limit=100')
         if (response.ok) {
-          const data = await response.json()
-          const reports = Array.isArray(data.reports) ? data.reports : []
+          const responseData = await response.json()
+          const reports = Array.isArray(responseData.data) ? responseData.data : []
 
-          // Calculate stats from reports
-          const totalReports = data.total || reports.length
+          // Calculate stats from reports - use meta.total for accurate count
+          const totalReports = responseData.meta?.total ?? responseData.total ?? reports.length
           const totalViews = reports.reduce((sum: number, r: any) => sum + (r.views || 0), 0)
           const publishedCount = reports.filter((r: any) => r.status === 'PUBLISHED').length
           const draftCount = reports.filter((r: any) => r.status === 'DRAFT').length

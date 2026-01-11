@@ -7,16 +7,7 @@ import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
-import { z } from 'zod'
-
-const createReportSchema = z.object({
-  title: z.string().min(1).max(200),
-  description: z.string().optional(),
-  type: z.enum(['PRESENTATION', 'DASHBOARD', 'PDF', 'EXPORT', 'INFOGRAPHIC']),
-  content: z.record(z.unknown()).optional(),
-  thumbnail: z.string().optional(),
-  agentId: z.string().optional(),
-})
+import { createReportSchema } from '@/lib/schemas/report'
 
 async function getOrgId(request: NextRequest, userId: string): Promise<string | null> {
   const headerOrgId = request.headers.get('x-organization-id')
@@ -87,7 +78,6 @@ export async function GET(request: NextRequest) {
     recordUsage(orgId, 'API_CALLS', 1).catch(console.error)
 
     return NextResponse.json({
-      reports,
       data: reports,
       total,
       meta: {

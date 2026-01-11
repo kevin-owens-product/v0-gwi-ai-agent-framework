@@ -45,6 +45,9 @@ export type { DataSource, DataSourceType, DataSourceStatus } from './use-data-so
 export { useInsights, useInsight } from './use-insights'
 export type { Insight, InsightType } from './use-insights'
 
+// Reports
+export { useReportForm } from './use-report-form'
+
 // Utilities
 export { useDebounce } from './use-debounce'
 export { useLocalStorage } from './use-local-storage'
