@@ -22,7 +22,7 @@ export function ReportStats() {
         const response = await fetch('/api/v1/reports?limit=100')
         if (response.ok) {
           const data = await response.json()
-          const reports = data.reports || []
+          const reports = Array.isArray(data.reports) ? data.reports : []
 
           // Calculate stats from reports
           const totalReports = data.total || reports.length
@@ -35,6 +35,14 @@ export function ReportStats() {
             totalViews,
             publishedCount,
             draftCount,
+          })
+        } else {
+          // Set default stats on error response
+          setStats({
+            totalReports: 0,
+            totalViews: 0,
+            publishedCount: 0,
+            draftCount: 0,
           })
         }
       } catch (error) {

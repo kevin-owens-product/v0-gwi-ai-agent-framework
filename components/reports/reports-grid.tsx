@@ -182,7 +182,7 @@ export function ReportsGrid({
         const response = await fetch('/api/v1/reports')
         if (response.ok) {
           const data = await response.json()
-          const apiReports = data.reports || []
+          const apiReports = Array.isArray(data.reports) ? data.reports : []
           if (apiReports.length > 0) {
             setReports(apiReports.map(mapApiReportToUI))
           } else {
