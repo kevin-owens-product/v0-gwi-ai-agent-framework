@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -152,6 +153,38 @@ const statusFilterMap: Record<string, string> = {
   "Published": "published",
   "Draft": "draft",
   "Archived": "archived",
+}
+
+// Thumbnail component with error handling
+function ReportThumbnail({ src, alt, type }: { src: string; alt: string; type: string }) {
+  const [imgSrc, setImgSrc] = useState(src || "/placeholder.svg")
+  const [hasError, setHasError] = useState(false)
+
+  const TypeIcon = typeIcons[type as keyof typeof typeIcons] || FileText
+
+  if (hasError || !imgSrc || imgSrc === "/placeholder.svg") {
+    // Render a styled placeholder with icon instead of broken image
+    return (
+      <div className="h-full w-full flex flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50">
+        <TypeIcon className="h-12 w-12 text-muted-foreground/50 mb-2" />
+        <span className="text-xs text-muted-foreground/50 capitalize">{type} Report</span>
+      </div>
+    )
+  }
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      fill
+      className="object-cover transition-transform group-hover:scale-105"
+      onError={() => {
+        setHasError(true)
+        setImgSrc("/placeholder.svg")
+      }}
+      unoptimized
+    />
+  )
 }
 
 interface ReportsGridProps {
@@ -347,10 +380,10 @@ export function ReportsGrid({
               onMouseLeave={() => setHoveredId(null)}
             >
               <div className="relative aspect-video overflow-hidden bg-muted">
-                <img
-                  src={report.thumbnail || "/placeholder.svg"}
+                <ReportThumbnail
+                  src={report.thumbnail}
                   alt={report.title}
-                  className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                  type={report.type}
                 />
                 <div
                   className={`absolute inset-0 bg-black/60 flex items-center justify-center gap-2 transition-opacity ${
