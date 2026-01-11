@@ -37,12 +37,12 @@ const values = [
 ]
 
 const team = [
-  { name: "Sarah Chen", role: "CEO & Co-founder", image: "/professional-woman-ceo.png" },
-  { name: "Marcus Williams", role: "CTO & Co-founder", image: "/professional-cto-headshot.png" },
-  { name: "Elena Rodriguez", role: "VP of Product", image: "/professional-woman-vp-headshot.png" },
-  { name: "David Park", role: "VP of Engineering", image: "/professional-man-engineer-headshot.jpg" },
-  { name: "Aisha Patel", role: "Head of AI Research", image: "/professional-woman-researcher.png" },
-  { name: "James Morrison", role: "VP of Sales", image: "/professional-man-sales-headshot.jpg" },
+  { name: "Tom Smith", role: "CEO & Founder", image: "/placeholder-user.jpg" },
+  { name: "Misha Williams", role: "Chief Operating Officer", image: "/placeholder-user.jpg" },
+  { name: "Nick Dearden", role: "Chief Technology Officer", image: "/placeholder-user.jpg" },
+  { name: "Kevin Owens", role: "Chief Product Officer", image: "/placeholder-user.jpg" },
+  { name: "Jason Mander", role: "Chief Insight Officer", image: "/placeholder-user.jpg" },
+  { name: "Birthe Emmerich", role: "Chief Marketing Officer", image: "/placeholder-user.jpg" },
 ]
 
 const milestones = [

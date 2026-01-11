@@ -2362,7 +2362,7 @@ async function main() {
         ],
         metadata: { generatedAt: now.toISOString(), period: 'Q4 2024', author: 'AI Research Agent' }
       },
-      thumbnail: '/thumbnails/q4-brand-performance.png',
+      thumbnail: '/key-findings-chart-with-statistics.jpg',
       agentId: marketResearchAgent.id,
       views: 342,
       createdBy: adminUser.id
@@ -2390,7 +2390,7 @@ async function main() {
         pageCount: 24,
         metadata: { generatedAt: now.toISOString(), audienceSegment: 'Gen Z', sampleSize: 15420 }
       },
-      thumbnail: '/thumbnails/genz-insights.png',
+      thumbnail: '/gen-z-consumer-behavior-infographic.jpg',
       agentId: audienceAnalysisAgent.id,
       views: 567,
       createdBy: johnDoe.id
@@ -2416,7 +2416,7 @@ async function main() {
         ],
         metadata: { generatedAt: now.toISOString(), industry: 'Sportswear', competitorsAnalyzed: 12 }
       },
-      thumbnail: '/thumbnails/competitive-landscape.png',
+      thumbnail: '/presentation-slides.png',
       agentId: marketResearchAgent.id,
       views: 423,
       createdBy: janeSmith.id
@@ -2446,7 +2446,7 @@ async function main() {
         lastUpdated: now.toISOString(),
         metadata: { period: 'Weekly', brands: ['Nike'] }
       },
-      thumbnail: '/thumbnails/brand-health-dashboard.png',
+      thumbnail: '/analytics-dashboard.png',
       views: 1245,
       createdBy: adminUser.id
     }
@@ -2473,7 +2473,7 @@ async function main() {
         pageCount: 36,
         metadata: { studyPeriod: 'Sep-Oct 2024', markets: ['US', 'UK', 'DE', 'FR'] }
       },
-      thumbnail: '/thumbnails/sustainability-study.png',
+      thumbnail: '/pdf-report-document.jpg',
       agentId: audienceAnalysisAgent.id,
       views: 289,
       createdBy: janeSmith.id
@@ -2505,7 +2505,7 @@ async function main() {
         colorScheme: 'brand',
         metadata: { generatedAt: now.toISOString(), platforms: 4 }
       },
-      thumbnail: '/thumbnails/social-infographic.png',
+      thumbnail: '/infographic-sports-audience.jpg',
       views: 876,
       createdBy: johnDoe.id
     }
@@ -2531,7 +2531,7 @@ async function main() {
         ],
         metadata: { generatedAt: now.toISOString(), region: 'APAC', markets: 4 }
       },
-      thumbnail: '/thumbnails/apac-analysis.png',
+      thumbnail: '/executive-summary-slide-with-key-metrics.jpg',
       agentId: startupResearchAgent.id,
       views: 156,
       createdBy: bobWilson.id
@@ -2563,7 +2563,7 @@ async function main() {
         pageCount: 18,
         metadata: { period: 'Q4 2024', currency: 'USD' }
       },
-      thumbnail: '/thumbnails/cac-analysis.png',
+      thumbnail: '/key-findings-chart.jpg',
       views: 234,
       createdBy: bobWilson.id
     }
@@ -2593,7 +2593,7 @@ async function main() {
         pageCount: 52,
         metadata: { auditScope: 'Global', segments: 5, respondents: 2500 }
       },
-      thumbnail: '/thumbnails/brand-audit.png',
+      thumbnail: '/audience-segments-diagram.jpg',
       agentId: enterpriseAnalysisAgent.id,
       views: 412,
       createdBy: sarahEnterprise.id
@@ -2629,7 +2629,7 @@ async function main() {
         exportedAt: now.toISOString(),
         metadata: { period: 'Q4 2024', dataPoints: 125000, formats: ['CSV', 'XLSX', 'PNG', 'SVG', 'PDF'] }
       },
-      thumbnail: '/thumbnails/qbr-export.png',
+      thumbnail: '/data-export-spreadsheet.jpg',
       views: 189,
       createdBy: sarahEnterprise.id
     }
