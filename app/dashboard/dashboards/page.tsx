@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, LayoutDashboard, Eye, Share2, Download, Loader2 } from "lucide-react"
+import { Plus, LayoutDashboard, Eye, Share2, Download } from "lucide-react"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"

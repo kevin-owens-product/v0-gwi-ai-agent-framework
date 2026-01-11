@@ -90,8 +90,6 @@ function generateAgentResponse(
   // Detect topic from query
   const isAboutGenZ = queryLower.includes('gen z') || queryLower.includes('genz') || queryLower.includes('generation z')
   const isAboutSustainability = queryLower.includes('sustain') || queryLower.includes('eco') || queryLower.includes('green')
-  const _isAboutBrand = queryLower.includes('brand') || queryLower.includes('perception') || queryLower.includes('competitor')
-  const _isAboutTrends = queryLower.includes('trend') || queryLower.includes('culture') || queryLower.includes('movement')
 
   // Build response based on agent type and query
   let response = ''

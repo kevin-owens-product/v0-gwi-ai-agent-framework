@@ -439,7 +439,7 @@ export async function executeWorkflow(
   }
 
   // Start from the specified step or the first step
-  let currentStepId = startStepId || steps[0]?.id
+  let currentStepId: string | undefined = startStepId || steps[0]?.id
 
   while (currentStepId) {
     const step = stepMap.get(currentStepId)

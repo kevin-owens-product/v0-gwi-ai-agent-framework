@@ -18,12 +18,8 @@ import {
   Calculator,
   Filter,
   BarChart3,
-  Download,
-  Settings,
   Share2,
-  RefreshCw,
   Sparkles,
-  ChevronRight,
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -73,16 +69,16 @@ const SAMPLE_VARIABLES: FieldVariable[] = [
 ]
 
 function CrosstabAnalysisContent() {
-  const router = useRouter()
+  const _router = useRouter()
   const searchParams = useSearchParams()
-  const crosstabId = searchParams.get("id")
+  const _crosstabId = searchParams.get("id")
 
   const [activeTab, setActiveTab] = useState<"grid" | "calculated" | "filters" | "visualize">("grid")
   const [data, setData] = useState<CrosstabRow[]>(SAMPLE_DATA)
   const [columns, setColumns] = useState<CrosstabColumn[]>(SAMPLE_COLUMNS)
   const [calculatedFields, setCalculatedFields] = useState<CalculatedField[]>([])
   const [activeFilters, setActiveFilters] = useState<FilterGroup[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [_isLoading, _setIsLoading] = useState(false)
 
   // Handle cell click
   const handleCellClick = useCallback((cell: { rowId: string; columnKey: string }, value: number | null) => {
@@ -303,7 +299,7 @@ function CrosstabAnalysisContent() {
               }}
               initialData={data.slice(0, 6).map(row => ({
                 name: row.metric,
-                value: Math.round(Object.values(row.values).reduce((a, b) => a + (b || 0), 0) / columns.length),
+                value: Math.round(Object.values(row.values).reduce((a: number, b) => a + (b || 0), 0) / columns.length),
               }))}
               onSave={(config, chartData) => {
                 toast.success("Chart saved!")

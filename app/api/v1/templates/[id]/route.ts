@@ -105,7 +105,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
       data: {
         ...(validated.name && { name: validated.name }),
         ...(validated.description !== undefined && { description: validated.description }),
-        ...(validated.category && { category: validated.category.toUpperCase() }),
+        ...(validated.category && { category: validated.category.toUpperCase() as 'RESEARCH' | 'ANALYSIS' | 'BRIEFS' | 'CUSTOM' }),
         ...(validated.prompt && { prompt: validated.prompt }),
         ...(validated.tags && { tags: validated.tags }),
         ...(validated.variables && { variables: validated.variables }),

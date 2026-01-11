@@ -106,7 +106,7 @@ export default function AppearanceSettingsPage() {
                   }`}
                   style={{
                     backgroundColor: color.color,
-                    ringColor: color.color,
+                    ['--tw-ring-color' as string]: color.color,
                   }}
                   title={color.label}
                 />

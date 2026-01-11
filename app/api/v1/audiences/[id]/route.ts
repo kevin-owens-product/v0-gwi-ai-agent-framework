@@ -129,15 +129,13 @@ export async function PATCH(
     }
 
     // Cast criteria to proper Prisma type if present
-    const updateData = {
-      ...validationResult.data,
-      ...(validationResult.data.criteria && {
-        criteria: validationResult.data.criteria as Prisma.InputJsonValue
-      })
-    }
+    const { criteria, ...restData } = validationResult.data
     const audience = await prisma.audience.update({
       where: { id },
-      data: updateData,
+      data: {
+        ...restData,
+        ...(criteria && { criteria: criteria as Prisma.InputJsonValue }),
+      },
     })
 
     await logAuditEvent(createAuditEventFromRequest(request, {

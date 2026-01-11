@@ -195,13 +195,13 @@ export async function GET(request: Request) {
     // Transform based on include options
     const transformed = paginated.map((c) => ({
       ...c,
-      data: includeData ? c.data : undefined,
-      insights: includeInsights ? c.insights : undefined,
+      ...(includeData ? { data: c.data } : {}),
+      ...(includeInsights ? { insights: c.insights } : {}),
     }))
 
     const response: ApiResponse<CrosstabV2[]> = {
       success: true,
-      data: transformed,
+      data: transformed as CrosstabV2[],
       meta: {
         page,
         limit,

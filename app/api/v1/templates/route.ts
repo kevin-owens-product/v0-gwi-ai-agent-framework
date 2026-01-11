@@ -166,7 +166,7 @@ export async function POST(req: NextRequest) {
         orgId,
         name: validated.name,
         description: validated.description,
-        category: validated.category.toUpperCase(),
+        category: validated.category.toUpperCase() as 'RESEARCH' | 'ANALYSIS' | 'BRIEFS' | 'CUSTOM',
         prompt: validated.prompt,
         tags: validated.tags || [],
         variables: validated.variables || [],

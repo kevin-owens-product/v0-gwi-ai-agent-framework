@@ -3,9 +3,8 @@
 import { useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AdvancedDashboardBuilder } from "@/components/dashboard/advanced-dashboard-builder"
-import { ExportManager, ExportData } from "@/components/export/export-manager"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Save, Share2 } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 

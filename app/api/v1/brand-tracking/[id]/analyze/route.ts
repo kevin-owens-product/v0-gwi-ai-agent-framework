@@ -178,12 +178,13 @@ export async function POST(
       const current = brandTracking.snapshots[0]
       const previous = brandTracking.snapshots[1]
 
-      const calculateTrend = (curr: number | null, prev: number | null) => {
+      const calculateTrend = (curr: number | null, prev: number | null): { change: number; direction: 'up' | 'down' | 'stable' } | null => {
         if (curr === null || prev === null) return null
         const change = curr - prev
+        const direction: 'up' | 'down' | 'stable' = change > 0.5 ? 'up' : change < -0.5 ? 'down' : 'stable'
         return {
           change: Math.round(change * 10) / 10,
-          direction: change > 0.5 ? 'up' : change < -0.5 ? 'down' : 'stable' as const,
+          direction,
         }
       }
 

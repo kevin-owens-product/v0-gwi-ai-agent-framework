@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
@@ -94,7 +95,7 @@ async function executeWorkflowWithSteps(
       where: { id: runId },
       data: {
         status: result.success ? 'COMPLETED' : 'FAILED',
-        output,
+        output: JSON.parse(JSON.stringify(output)) as Prisma.InputJsonValue,
         completedAt: new Date(),
         errorMessage: result.success ? null : result.results.find(r => !r.success)?.error,
       },
@@ -250,7 +251,7 @@ export async function POST(
       data: {
         workflowId: id,
         orgId,
-        input: input || {},
+        input: (input || {}) as Prisma.InputJsonValue,
         status: 'PENDING',
       },
     })
@@ -283,7 +284,7 @@ export async function POST(
           workflow,
           workflowRun.id,
           orgId,
-          session.user.id,
+          session.user!.id!,
           input || {}
         )
         return
@@ -326,7 +327,7 @@ export async function POST(
             data: {
               agentId,
               orgId,
-              input: combinedOutput,
+              input: JSON.parse(JSON.stringify(combinedOutput)) as Prisma.InputJsonValue,
               status: 'RUNNING',
             },
           })
@@ -403,7 +404,7 @@ export async function POST(
               where: { id: agentRun.id },
               data: {
                 status: 'COMPLETED',
-                output: agentOutput,
+                output: JSON.parse(JSON.stringify(agentOutput)) as Prisma.InputJsonValue,
                 tokensUsed: llmResult.tokensUsed,
                 completedAt: new Date(),
               },
@@ -425,7 +426,7 @@ export async function POST(
             })
 
             // Continue with next agent or fail workflow depending on configuration
-            if (config.stopOnError !== false) {
+            if (workflowConfig.stopOnError !== false) {
               throw agentError
             }
           }
@@ -435,7 +436,7 @@ export async function POST(
           where: { id: workflowRun.id },
           data: {
             status: 'COMPLETED',
-            output: combinedOutput,
+            output: JSON.parse(JSON.stringify(combinedOutput)) as Prisma.InputJsonValue,
             completedAt: new Date(),
           },
         })
@@ -457,7 +458,7 @@ export async function POST(
       // Send email notification
       try {
         const user = await prisma.user.findUnique({
-          where: { id: session.user.id },
+          where: { id: session.user!.id },
           select: { email: true, name: true },
         })
 

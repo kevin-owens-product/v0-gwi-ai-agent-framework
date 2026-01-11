@@ -56,7 +56,7 @@ export interface ChartRendererProps {
 }
 
 // Default color palette
-const DEFAULT_COLORS = [
+const _DEFAULT_COLORS = [
   "hsl(var(--chart-1))",
   "hsl(var(--chart-2))",
   "hsl(var(--chart-3))",

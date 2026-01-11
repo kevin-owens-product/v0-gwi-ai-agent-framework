@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, BarChart3, TrendingUp, Eye, Share2, LineChart, PieChart } from "lucide-react"
+import { Plus, BarChart3, TrendingUp, Eye, Share2 } from "lucide-react"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"

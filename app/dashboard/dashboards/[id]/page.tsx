@@ -86,7 +86,6 @@ import {
 import { ChartRenderer, generateSampleData } from "@/components/charts"
 import { CommentsPanel } from "@/components/shared/comments-panel"
 import { VersionHistory } from "@/components/shared/version-history"
-import { History, MessageSquare } from "lucide-react"
 import type { ChartType } from "@/components/charts"
 
 // Mock dashboard data - 10 advanced examples

@@ -54,7 +54,6 @@ export async function GET(_request: NextRequest) {
     // Fill in actual data
     agentRuns.forEach(run => {
       const hour = run.startedAt.getHours()
-      const _key = `${hour}:00`
       // Find the closest 4-hour bucket
       for (const bucketKey of Object.keys(hourlyData)) {
         const bucketHour = parseInt(bucketKey)

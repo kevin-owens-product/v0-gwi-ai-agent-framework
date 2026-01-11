@@ -26,7 +26,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Plus, Copy, Eye, EyeOff, Trash2, Key, Loader2, Check, AlertCircle } from "lucide-react"
+import { Plus, Copy, Trash2, Key, Loader2, Check, AlertCircle } from "lucide-react"
 import { toast } from "sonner"
 
 interface ApiKey {

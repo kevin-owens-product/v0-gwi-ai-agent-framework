@@ -23,7 +23,6 @@ import {
   ChevronDown,
   SlidersHorizontal,
   X,
-  Save,
   Sparkles,
 } from "lucide-react"
 import Link from "next/link"
@@ -53,17 +52,10 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import {
   Select,
@@ -76,7 +68,6 @@ import {
   AdvancedCrosstabGrid,
   CrosstabRow,
   CrosstabColumn,
-  CrosstabConfig,
 } from "@/components/crosstabs/advanced-crosstab-grid"
 import {
   AdvancedFilters,
@@ -86,7 +77,6 @@ import {
 } from "@/components/crosstabs/advanced-filters"
 import { CommentsPanel } from "@/components/shared/comments-panel"
 import { VersionHistory } from "@/components/shared/version-history"
-import { History, MessageSquare } from "lucide-react"
 
 // Mock crosstab data - 10 advanced examples
 const crosstabData: Record<string, {

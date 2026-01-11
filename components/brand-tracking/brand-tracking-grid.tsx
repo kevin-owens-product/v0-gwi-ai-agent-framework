@@ -24,8 +24,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {
-  TrendingUp,
-  TrendingDown,
   MoreVertical,
   Eye,
   Edit,
@@ -144,7 +142,7 @@ export function BrandTrackingGrid() {
   const router = useRouter()
   const [brandTrackings, setBrandTrackings] = useState<BrandTracking[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [_hoveredId, setHoveredId] = useState<string | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<BrandTracking | null>(null)
 

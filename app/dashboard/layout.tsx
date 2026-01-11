@@ -43,9 +43,24 @@ export default async function DashboardLayout({
     ? memberships.find(m => m.organization.id === currentOrgId) || memberships[0]
     : memberships[0]
 
+  const org = currentMembership.organization
   return (
     <OrganizationProvider
-      organization={currentMembership.organization}
+      organization={{
+        id: org.id,
+        name: org.name,
+        slug: org.slug,
+        planTier: org.planTier,
+        settings: org.settings && typeof org.settings === 'object' && !Array.isArray(org.settings)
+          ? org.settings as Record<string, unknown>
+          : undefined,
+        subscription: org.subscription ? {
+          id: org.subscription.id,
+          status: org.subscription.status,
+          planId: org.subscription.planId,
+          currentPeriodEnd: org.subscription.currentPeriodEnd?.toISOString(),
+        } : null,
+      }}
       membership={{
         id: currentMembership.id,
         role: currentMembership.role,

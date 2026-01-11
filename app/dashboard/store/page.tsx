@@ -26,7 +26,6 @@ import {
   iconMap,
   installAgent,
   isAgentInstalled,
-  type StoreAgent,
 } from "@/lib/store-agents"
 
 const categories = [
