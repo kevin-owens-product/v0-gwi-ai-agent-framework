@@ -1,8 +1,8 @@
 const stats = [
-  { value: "2.8B", label: "Consumers represented" },
-  { value: "3", label: "LLM providers supported" },
-  { value: "99.9%", label: "Platform uptime with circuit breakers" },
-  { value: "5000+", label: "Integrations via Zapier & webhooks" },
+  { value: "3B", label: "Consumers represented" },
+  { value: "50+", label: "Markets worldwide" },
+  { value: "200K+", label: "Profiling data points" },
+  { value: "750+", label: "Team members globally" },
 ]
 
 export function StatsSection() {

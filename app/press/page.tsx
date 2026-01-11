@@ -7,19 +7,19 @@ import { Footer } from "@/components/landing/footer"
 export default function PressPage() {
   const pressReleases = [
     {
-      title: "GWI Insights Raises $50M Series B to Scale AI-Powered Consumer Intelligence",
-      date: "January 2, 2025",
-      excerpt: "Funding will accelerate product development and global expansion.",
+      title: "GWI Launches Agent Framework for AI-Powered Consumer Research",
+      date: "January 15, 2025",
+      excerpt: "New framework enables autonomous AI agents to deliver strategic consumer insights at scale.",
     },
     {
-      title: "GWI Insights Launches Inbox Agents for Automated Insights Delivery",
+      title: "GWI Spark Integrates with ChatGPT for Real-Time Consumer Insights",
       date: "December 10, 2024",
-      excerpt: "New feature enables teams to scale insights operations 10x faster.",
+      excerpt: "Integration brings GWI's consumer data directly into ChatGPT conversations.",
     },
     {
-      title: "GWI Insights Named Leader in Forrester Wave for AI Research Platforms",
-      date: "November 15, 2024",
-      excerpt: "Recognition for innovation in AI-powered consumer insights.",
+      title: "GWI Completes $179.9M Series B Funding Led by Permira",
+      date: "March 22, 2022",
+      excerpt: "Investment brings total funding to $220M, accelerating global expansion and AI capabilities.",
     },
   ]
 

@@ -7,10 +7,10 @@ import Link from "next/link"
 import Image from "next/image"
 
 const stats = [
-  { label: "Enterprise Clients", value: "500+" },
-  { label: "Countries", value: "50+" },
-  { label: "Data Points", value: "2B+" },
-  { label: "Team Members", value: "200+" },
+  { label: "Enterprise Clients", value: "2,000+" },
+  { label: "Markets", value: "50+" },
+  { label: "Consumers Represented", value: "3B" },
+  { label: "Team Members", value: "750+" },
 ]
 
 const values = [
@@ -46,11 +46,11 @@ const team = [
 ]
 
 const milestones = [
-  { year: "2015", title: "Founded", description: "GWI started as a consumer research platform" },
-  { year: "2018", title: "Series A", description: "Raised $15M to expand data collection" },
-  { year: "2020", title: "AI Launch", description: "Introduced AI-powered insights assistant" },
-  { year: "2023", title: "Series C", description: "Raised $100M at $1B+ valuation" },
-  { year: "2024", title: "Agent Framework", description: "Launched the GWI Agent Framework" },
+  { year: "2009", title: "Founded", description: "Tom Smith founded GWI (GlobalWebIndex) in London" },
+  { year: "2014", title: "Global Expansion", description: "Expanded research to 40+ markets worldwide" },
+  { year: "2019", title: "Series A", description: "Raised funding led by Stripes Group" },
+  { year: "2022", title: "Series B", description: "Raised $179.9M led by Permira, total funding $220M" },
+  { year: "2024", title: "AI & Agent Framework", description: "Launched GWI Spark AI assistant and Agent Framework" },
 ]
 
 export default function AboutPage() {
@@ -93,16 +93,17 @@ export default function AboutPage() {
                 <h2 className="text-3xl font-bold mb-6">Our Story</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    GWI was founded in 2015 with a simple belief: understanding consumers shouldn't require weeks of
-                    research and millions in budget. We set out to democratize consumer insights.
+                    GWI was founded in 2009 by Tom Smith with a vision to understand the digital consumer. From our
+                    headquarters in London, we've grown to become the world's leading audience research company.
                   </p>
                   <p>
-                    Over the years, we've built the world's largest consumer research dataset, surveying millions of
-                    consumers across 50+ countries. But data alone isn't enough.
+                    Today, we represent 3 billion consumers across 50+ markets worldwide. Our quarterly research
+                    surveys provide over 200,000+ profiling points, giving brands unprecedented insight into their
+                    audiences' behaviors, attitudes, and interests.
                   </p>
                   <p>
-                    That's why we created the GWI Agent Framework — AI agents that don't just answer questions, but
-                    think strategically, verify their sources, and deliver insights you can trust.
+                    With GWI Spark and our Agent Framework, we're pioneering the future where AI is trained on
+                    human truth—real-world, human-sourced data powering smarter business decisions.
                   </p>
                 </div>
               </div>
