@@ -32,6 +32,7 @@
     "ci": "npm run type-check && npm run lint && npm run test:coverage && npm run build"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
     "@auth/prisma-adapter": "^2.7.4",
     "@hookform/resolvers": "^3.10.0",
     "@prisma/client": "5.22.0",

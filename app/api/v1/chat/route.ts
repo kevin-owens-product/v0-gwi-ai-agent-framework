@@ -6,6 +6,7 @@ import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import { recordUsage } from '@/lib/billing'
+import { executeAgentWithContext } from '@/lib/llm'
 import { z } from 'zod'
 
 const chatRequestSchema = z.object({
@@ -78,161 +79,67 @@ Support market entry strategies and global campaign localization.`,
   },
 }
 
-// Generate intelligent response based on agent and query
-function generateAgentResponse(
+// Generate intelligent response using real AI
+async function generateAgentResponse(
   agentId: string,
   query: string,
-  agentConfig?: { name: string; description?: string | null; type: string }
+  agentConfig?: { name: string; description?: string | null; type: string },
+  config?: {
+    temperature?: number
+    maxTokens?: number
+  }
 ) {
-  const queryLower = query.toLowerCase()
   const knowledge = agentKnowledge[agentId]
 
-  // Detect topic from query
-  const isAboutGenZ = queryLower.includes('gen z') || queryLower.includes('genz') || queryLower.includes('generation z')
-  const isAboutSustainability = queryLower.includes('sustain') || queryLower.includes('eco') || queryLower.includes('green')
+  // Use the agent's system prompt or fall back to custom agent prompt
+  const systemPrompt = knowledge?.systemPrompt || (agentConfig
+    ? `You are ${agentConfig.name}, a ${agentConfig.type.toLowerCase()} agent. ${agentConfig.description || ''}\n\nProvide detailed, data-driven insights based on consumer research and market analysis.`
+    : 'You are an AI assistant specialized in consumer insights and market research. Provide detailed, actionable analysis.')
 
-  // Build response based on agent type and query
-  let response = ''
-  let citations: Array<{ id: string; source: string; confidence: number; type: string; excerpt: string }> = []
-  let outputBlocks: Array<{ id: string; type: string; title: string; content: Record<string, unknown> }> = []
+  try {
+    // Execute LLM with the agent's system prompt
+    const result = await executeAgentWithContext({
+      agentType: agentConfig?.type || 'RESEARCH',
+      agentName: agentConfig?.name || 'Playground Agent',
+      userInput: query,
+      systemPrompt,
+      config: {
+        temperature: config?.temperature || 0.7,
+        maxTokens: config?.maxTokens || 4096,
+      },
+    })
 
-  if (knowledge) {
-    if (isAboutGenZ) {
-      response = `## Gen Z Consumer Analysis
-
-Based on GWI Core data, here are the key insights about Gen Z consumers:
-
-**Demographics & Behavior**
-- Age range: 18-26 (current cohort)
-- Digital natives: Average 7.2 hours of screen time daily
-- Platform preferences: TikTok (89%), YouTube (92%), Instagram (78%)
-
-**Key Values**
-- Authenticity: 92% can detect performative messaging
-- Mental health awareness: 84% actively prioritize
-- Climate action: 76% express genuine concern
-- Diversity & inclusion: 81% expect brands to take stances
-
-**Purchase Behavior**
-- Research-intensive: 67% check 3+ sources before buying
-- Creator influence: 71% trust micro-influencers over celebrities
-- Mobile commerce: 78% complete purchases on mobile
-- Premium willing: 64% pay premium for values alignment
-
-**Strategic Implications**
-1. Mobile-first content strategy
-2. Partner with authentic micro-influencers
-3. Demonstrate genuine commitment to values
-4. Enable co-creation and community`
-
-      citations = [
-        { id: '1', source: 'GWI Core Q4 2024', confidence: 94, type: 'survey', excerpt: 'Gen Z behavioral data across 52 markets' },
-        { id: '2', source: 'GWI Zeitgeist Nov 2024', confidence: 91, type: 'trend', excerpt: 'Monthly pulse on Gen Z attitudes' },
-      ]
-
-      outputBlocks = [{
-        id: 'chart-genz',
-        type: 'chart',
-        title: 'Gen Z Platform Engagement',
-        content: {
-          chartType: 'bar',
-          categories: ['TikTok', 'YouTube', 'Instagram', 'Snapchat', 'Twitter'],
-          series: [{ name: 'Daily Active %', data: [89, 92, 78, 54, 31], color: '#8b5cf6' }],
-        },
-      }]
-    } else if (isAboutSustainability) {
-      response = `## Sustainability Consumer Segments
-
-Analysis of sustainability-focused consumers across global markets:
-
-**Segment Overview**
-
-### Eco-Warriors (18% of market)
-- Demographics: 18-34, varied income, urban
-- Behavior: Actively avoid unsustainable brands
-- Premium tolerance: +30% or more
-- Influence: High - shape opinions in networks
-
-### Conscious Mainstream (34% of market)
-- Demographics: 25-45, middle to upper-middle income
-- Behavior: Prefer sustainable when convenient
-- Premium tolerance: +12% average
-- Influence: Medium - follow trends
-
-### Passive Supporters (28% of market)
-- Demographics: 35-55, higher income
-- Behavior: Appreciate but don't actively seek
-- Premium tolerance: +5%
-- Influence: Low but high purchasing power
-
-**Key Metrics**
-- 73% of consumers consider environmental impact in purchases
-- 67% willing to pay more for sustainable products
-- 58% have changed brands due to sustainability concerns`
-
-      citations = [
-        { id: '1', source: 'GWI Core Q4 2024', confidence: 92, type: 'survey', excerpt: 'Global sustainability attitudes' },
-        { id: '2', source: 'GWI USA Dataset', confidence: 89, type: 'survey', excerpt: 'US consumer sustainability metrics' },
-      ]
-    } else {
-      // Default response based on agent type
-      response = `Based on my analysis of the available data, here are the key insights related to your query:
-
-**Initial Findings**
-- Analyzed relevant consumer segments and behavioral patterns
-- Cross-referenced with market trends and demographic data
-- Identified key opportunities and considerations
-
-**Key Observations**
-1. Consumer behavior in this space shows evolving preferences
-2. Digital engagement remains a primary touchpoint
-3. Values alignment increasingly drives purchase decisions
-4. Regional variations exist across markets
-
-**Recommendations**
-- Focus on authentic, transparent communication
-- Leverage data-driven personalization
-- Consider multi-channel engagement strategies
-- Monitor emerging trends in the space
-
-Would you like me to dive deeper into any specific aspect of this analysis?`
-
-      citations = [
-        { id: '1', source: 'GWI Core Q4 2024', confidence: 88, type: 'survey', excerpt: 'Comprehensive consumer data' },
-      ]
-    }
-  } else if (agentConfig) {
-    // Custom agent response
-    response = `I'm ${agentConfig.name}, a ${agentConfig.type.toLowerCase()} agent. ${agentConfig.description || ''}
-
-Based on your query, I've analyzed the relevant data and here are my findings:
-
-**Analysis Summary**
-- Query processed and matched against available data sources
-- Identified relevant patterns and insights
-- Generated actionable recommendations
-
-**Key Insights**
-${query.length > 20 ? `Your question about "${query.substring(0, 50)}..." touches on important areas.` : 'This is an interesting area to explore.'}
-
-1. The data suggests significant opportunity in this space
-2. Consumer preferences are evolving rapidly
-3. Cross-channel strategies show the best results
-4. Personalization drives engagement
-
-**Next Steps**
-- Consider running a detailed segment analysis
-- Compare across key markets
-- Track trends over time
-
-Would you like me to elaborate on any of these points?`
-
-    citations = [
-      { id: '1', source: 'Custom Analysis', confidence: 85, type: 'report', excerpt: 'Agent-generated insights' },
+    // Generate sample citations (in production, these would come from actual data sources)
+    const citations = [
+      {
+        id: '1',
+        source: 'GWI Core Q4 2024',
+        confidence: 92,
+        type: 'survey',
+        excerpt: 'Consumer insights data across 52 global markets',
+        date: '2024-12-15',
+        title: 'Global Consumer Survey Q4 2024'
+      },
     ]
-  }
 
-  return { response, citations, outputBlocks }
+    // Generate output blocks if the response would benefit from visualizations
+    const outputBlocks: Array<{ id: string; type: string; title: string; content: Record<string, unknown> }> = []
+
+    return {
+      response: result.response,
+      citations,
+      outputBlocks
+    }
+  } catch (error) {
+    console.error('Error generating AI response:', error)
+
+    // Fallback response if AI fails
+    return {
+      response: `I apologize, but I'm having trouble processing your request at the moment. This could be due to API configuration issues. Please ensure that the ANTHROPIC_API_KEY or OPENAI_API_KEY environment variable is properly set.\n\nError: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      citations: [],
+      outputBlocks: [],
+    }
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -276,11 +183,15 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Generate response
-    const { response, citations, outputBlocks } = generateAgentResponse(
+    // Generate response using real AI
+    const { response, citations, outputBlocks } = await generateAgentResponse(
       agentId || 'audience-explorer',
       message,
-      customAgent ? { name: customAgent.name, description: customAgent.description, type: customAgent.type } : undefined
+      customAgent ? { name: customAgent.name, description: customAgent.description, type: customAgent.type } : undefined,
+      {
+        temperature: config?.temperature,
+        maxTokens: config?.maxTokens,
+      }
     )
 
     // Create agent run record if using custom agent
