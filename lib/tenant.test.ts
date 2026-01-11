@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { createUser, createOrganization as createOrgFactory, createMembership, createBillingSubscription } from '@/tests/factories'
+import { createOrganization as createOrgFactory, createMembership } from '@/tests/factories'
 
 // Mock Prisma
 vi.mock('./db', () => ({

@@ -29,10 +29,11 @@ export default defineConfig({
         'styles/',
       ],
     },
-    // Vitest 4: pool options are now top-level
     pool: 'forks',
-    forks: {
-      singleFork: true,
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
     },
   },
   resolve: {
