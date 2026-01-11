@@ -158,7 +158,7 @@ export function ReportViewer({ id }: { id: string }) {
     fetchReport()
   }, [id])
 
-  // Get report data with fallbacks
+  // Get report data with fallbacks - ensure arrays are always arrays
   const reportData = {
     id: report?.id || id,
     title: report?.title || "Report",
@@ -169,11 +169,11 @@ export function ReportViewer({ id }: { id: string }) {
     updatedAt: report?.updatedAt || new Date().toISOString(),
     views: report?.views || 0,
     agent: report?.agentId || "AI Agent",
-    slides: report?.content?.slides || defaultReportData.slides,
-    citations: report?.content?.citations || defaultReportData.citations,
-    comments: report?.content?.comments || defaultReportData.comments,
-    versions: report?.content?.versions || defaultReportData.versions,
-    activity: report?.content?.activity || defaultReportData.activity,
+    slides: Array.isArray(report?.content?.slides) ? report.content.slides : defaultReportData.slides,
+    citations: Array.isArray(report?.content?.citations) ? report.content.citations : defaultReportData.citations,
+    comments: Array.isArray(report?.content?.comments) ? report.content.comments : defaultReportData.comments,
+    versions: Array.isArray(report?.content?.versions) ? report.content.versions : defaultReportData.versions,
+    activity: Array.isArray(report?.content?.activity) ? report.content.activity : defaultReportData.activity,
     author: {
       name: "User",
       avatar: "",

@@ -151,16 +151,16 @@ export function ReportBuilder({
           const data = await response.json()
           const report = data.data || data
           if (report) {
-            // Map API fields correctly to form fields
+            // Map API fields correctly to form fields - ensure arrays are always arrays
             const content = report.content || {}
             setFormData({
               title: report.title || "",
               description: report.description || "",
               agent: report.agentId || content.agent || "",
               prompt: content.prompt || content.query || "",
-              dataSources: content.dataSources || ["core"],
-              markets: content.markets || ["United States", "United Kingdom"],
-              audiences: content.audiences || ["gen-z", "millennials"],
+              dataSources: Array.isArray(content.dataSources) ? content.dataSources : ["core"],
+              markets: Array.isArray(content.markets) ? content.markets : ["United States", "United Kingdom"],
+              audiences: Array.isArray(content.audiences) ? content.audiences : ["gen-z", "millennials"],
               timeframe: content.timeframe || "q4-2024",
             })
             setSelectedType(report.type?.toLowerCase() || "presentation")
