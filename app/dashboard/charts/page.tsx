@@ -198,7 +198,7 @@ function ChartsGrid({ charts }: { charts: Chart[] }) {
             <div className="aspect-video bg-muted rounded-lg mb-3 overflow-hidden">
               <ChartRenderer
                 type={chart.type}
-                data={chart.data || generateSampleData(chart.type, 6)}
+                data={chart.data || generateSampleData(chart.type, 6, chart.id)}
                 config={{ showLegend: false, showGrid: false, height: 140 }}
               />
             </div>
