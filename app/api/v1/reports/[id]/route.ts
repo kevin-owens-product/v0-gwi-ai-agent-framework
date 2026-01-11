@@ -7,16 +7,7 @@ import { getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
-import { z } from 'zod'
-
-const updateReportSchema = z.object({
-  title: z.string().min(1).max(200).optional(),
-  description: z.string().optional(),
-  type: z.enum(['PRESENTATION', 'DASHBOARD', 'PDF', 'EXPORT', 'INFOGRAPHIC']).optional(),
-  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
-  content: z.record(z.unknown()).optional(),
-  thumbnail: z.string().optional(),
-})
+import { updateReportSchema } from '@/lib/schemas/report'
 
 async function getOrgId(request: NextRequest, userId: string): Promise<string | null> {
   const headerOrgId = request.headers.get('x-organization-id')
