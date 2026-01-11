@@ -285,24 +285,62 @@ export function ChartRenderer({
 }
 
 // Helper function to generate sample data for previews
-export function generateSampleData(type: ChartType, count: number = 6): ChartDataPoint[] {
+// Uses deterministic values to avoid hydration mismatches between server and client
+export function generateSampleData(type: ChartType, count: number = 6, seed?: string): ChartDataPoint[] {
   const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
   const categories = ["Social Media", "Email", "Search", "Display", "Video", "Referral"]
+
+  // Generate a hash from the seed for deterministic but varied values
+  const hashSeed = (str: string): number => {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i)
+      hash = ((hash << 5) - hash) + char
+      hash = hash & hash
+    }
+    return Math.abs(hash)
+  }
+
+  const seedOffset = seed ? hashSeed(seed) : 0
+
+  // Deterministic values based on position to avoid hydration issues
+  const getValueForIndex = (index: number, chartType: ChartType): number => {
+    // Use different base patterns for different chart types to make them look varied
+    const patterns: Record<string, number[]> = {
+      BAR: [65, 82, 45, 78, 92, 58, 73, 88, 52, 69, 85, 61],
+      LINE: [42, 58, 65, 72, 68, 85, 92, 88, 78, 95, 82, 89],
+      AREA: [55, 62, 48, 75, 82, 68, 91, 85, 72, 88, 79, 94],
+      PIE: [35, 25, 20, 12, 5, 3],
+      DONUT: [30, 28, 22, 12, 5, 3],
+      FUNNEL: [100, 85, 65, 45, 30, 20],
+      TREEMAP: [45, 38, 32, 28, 22, 18],
+      RADAR: [72, 85, 68, 92, 78, 55, 88, 62, 75, 82, 69, 91],
+      SCATTER: [45, 72, 38, 85, 52, 68, 91, 35, 78, 62, 88, 55],
+      HEATMAP: [88, 65, 78, 52, 92, 45, 72, 85, 58, 95, 68, 82],
+    }
+    const pattern = patterns[chartType] || patterns.BAR
+    // Apply seed offset to get varied but deterministic values
+    const adjustedIndex = (index + seedOffset) % pattern.length
+    const baseValue = pattern[adjustedIndex]
+    // Add slight variation based on seed without breaking determinism
+    const variation = seed ? ((seedOffset + index) % 20) - 10 : 0
+    return Math.max(5, Math.min(100, baseValue + variation))
+  }
 
   switch (type) {
     case "PIE":
     case "DONUT":
     case "FUNNEL":
     case "TREEMAP":
-      return categories.slice(0, count).map((name) => ({
+      return categories.slice(0, count).map((name, index) => ({
         name,
-        value: Math.floor(Math.random() * 100) + 20,
+        value: getValueForIndex(index, type),
       }))
 
     default:
-      return labels.slice(0, count).map((name) => ({
+      return labels.slice(0, count).map((name, index) => ({
         name,
-        value: Math.floor(Math.random() * 100) + 20,
+        value: getValueForIndex(index, type),
       }))
   }
 }

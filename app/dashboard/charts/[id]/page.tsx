@@ -454,7 +454,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
             <div className="aspect-video bg-muted rounded-lg overflow-hidden">
               <ChartRenderer
                 type={chart.type}
-                data={chart.data || generateSampleData(chart.type, 8)}
+                data={chart.data || generateSampleData(chart.type, 8, chart.id)}
                 config={{
                   showLegend: true,
                   showGrid: true,
