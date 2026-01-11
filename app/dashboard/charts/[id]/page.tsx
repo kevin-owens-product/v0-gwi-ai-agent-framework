@@ -224,7 +224,13 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
         const response = await fetch(`/api/v1/charts/${id}`)
         if (response.ok) {
           const data = await response.json()
-          setChart(data.chart || data)
+          const apiChart = data.data || data
+          if (apiChart && apiChart.id) {
+            setChart(apiChart)
+          } else {
+            // Fallback to demo data
+            setChart(demoCharts[id] || null)
+          }
         } else {
           // Fallback to demo data
           setChart(demoCharts[id] || null)
