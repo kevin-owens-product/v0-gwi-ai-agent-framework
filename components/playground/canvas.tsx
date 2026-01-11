@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Users, GripVertical, Maximize2, Download, MoreHorizontal, Plus, Sparkles } from "lucide-react"
-import { usePlayground } from "@/app/dashboard/playground/page"
+import { Users, GripVertical, Maximize2, Download, MoreHorizontal, Plus, Sparkles, BarChart3, Table as TableIcon } from "lucide-react"
+import { usePlayground, type OutputBlock } from "@/app/dashboard/playground/page"
 import { cn } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
@@ -17,7 +17,20 @@ interface CanvasBlock {
   size: { width: number; height: number }
 }
 
-// Canvas starts empty - blocks are added when users interact with the chat or add them manually
+// Convert OutputBlock from chat to CanvasBlock format
+function outputBlockToCanvasBlock(outputBlock: OutputBlock, index: number): CanvasBlock {
+  return {
+    id: outputBlock.id,
+    type: outputBlock.type as CanvasBlock["type"],
+    title: outputBlock.title || `${outputBlock.type} output`,
+    data: outputBlock.content,
+    position: { x: (index % 3) * 300, y: Math.floor(index / 3) * 250 },
+    size: {
+      width: outputBlock.type === 'table' || outputBlock.type === 'comparison' ? 2 : 1,
+      height: outputBlock.type === 'persona' ? 2 : 1
+    },
+  }
+}
 
 function PersonaBlock({ block }: { block: CanvasBlock }) {
   return (
@@ -113,18 +126,43 @@ function InsightBlock({ block }: { block: CanvasBlock }) {
 }
 
 function ComparisonBlock({ block }: { block: CanvasBlock }) {
+  // Handle different comparison data formats
+  if (block.data.items) {
+    // New format with items array
+    return (
+      <div className="h-full overflow-auto">
+        <div className="space-y-3">
+          {block.data.items.map((item: any) => (
+            <div key={item.name} className="border border-border rounded-lg p-3">
+              <h4 className="font-medium text-foreground text-sm mb-2">{item.name}</h4>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {Object.entries(item.metrics || {}).map(([key, value]) => (
+                  <div key={key} className="flex justify-between">
+                    <span className="text-muted-foreground">{key}:</span>
+                    <span className="font-medium text-foreground">{value as string}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Original format with markets and metrics
   return (
     <div className="h-full">
       <div className="grid grid-cols-3 gap-2 text-xs mb-3">
         <div />
-        {block.data.markets.map((market: string) => (
+        {block.data.markets?.map((market: string) => (
           <div key={market} className="text-center font-medium text-muted-foreground">
             {market}
           </div>
         ))}
       </div>
       <div className="space-y-2">
-        {block.data.metrics.map((metric: any) => (
+        {block.data.metrics?.map((metric: any) => (
           <div key={metric.name} className="grid grid-cols-3 gap-2 items-center">
             <span className="text-xs text-muted-foreground">{metric.name}</span>
             {metric.values.map((value: number, idx: number) => (
@@ -145,17 +183,64 @@ function ComparisonBlock({ block }: { block: CanvasBlock }) {
   )
 }
 
+function TableBlock({ block }: { block: CanvasBlock }) {
+  const headers = block.data.headers || []
+  const rows = block.data.rows || []
+
+  return (
+    <div className="h-full overflow-auto">
+      <table className="w-full text-xs">
+        <thead>
+          <tr className="border-b border-border">
+            {headers.map((header: string, idx: number) => (
+              <th key={idx} className="text-left py-2 px-2 font-medium text-muted-foreground">
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row: string[], rowIdx: number) => (
+            <tr key={rowIdx} className="border-b border-border/50 hover:bg-secondary/30">
+              {row.map((cell: string, cellIdx: number) => (
+                <td key={cellIdx} className="py-2 px-2 text-foreground">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 export function PlaygroundCanvas() {
-  const { selectedBlocks, setSelectedBlocks } = usePlayground()
-  const [blocks, setBlocks] = useState<CanvasBlock[]>([])
-  const [hoveredBlock, setHoveredBlock] = useState<string | null>(null)
+  const { selectedBlocks, setSelectedBlocks, messages, addOutput } = usePlayground()
+  const [, setHoveredBlock] = useState<string | null>(null)
+  const [removedBlockIds, setRemovedBlockIds] = useState<Set<string>>(new Set())
+
+  // Extract all output blocks from messages and convert to canvas blocks
+  const blocks = useMemo(() => {
+    const allOutputBlocks: OutputBlock[] = []
+    messages.forEach((message) => {
+      if (message.outputBlocks) {
+        message.outputBlocks.forEach((block) => {
+          if (!removedBlockIds.has(block.id)) {
+            allOutputBlocks.push(block)
+          }
+        })
+      }
+    })
+    return allOutputBlocks.map((block, index) => outputBlockToCanvasBlock(block, index))
+  }, [messages, removedBlockIds])
 
   const toggleSelect = (blockId: string) => {
     setSelectedBlocks((prev) => (prev.includes(blockId) ? prev.filter((id) => id !== blockId) : [...prev, blockId]))
   }
 
   const removeBlock = (blockId: string) => {
-    setBlocks(blocks.filter((b) => b.id !== blockId))
+    setRemovedBlockIds((prev) => new Set([...prev, blockId]))
     setSelectedBlocks((prev) => prev.filter((id) => id !== blockId))
   }
 
@@ -169,6 +254,8 @@ export function PlaygroundCanvas() {
         return <InsightBlock block={block} />
       case "comparison":
         return <ComparisonBlock block={block} />
+      case "table":
+        return <TableBlock block={block} />
       default:
         return null
     }
@@ -186,6 +273,35 @@ export function PlaygroundCanvas() {
             <p className="text-sm text-muted-foreground mb-4">
               Use the chat to ask questions and generate insights. Output blocks like charts, personas, and comparisons will appear here for you to visualize and export.
             </p>
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs"
+                onClick={() => addOutput("chart")}
+              >
+                <BarChart3 className="h-3 w-3 mr-1" />
+                Add Chart
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs"
+                onClick={() => addOutput("table")}
+              >
+                <TableIcon className="h-3 w-3 mr-1" />
+                Add Table
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs"
+                onClick={() => addOutput("persona")}
+              >
+                <Users className="h-3 w-3 mr-1" />
+                Add Persona
+              </Button>
+            </div>
             <p className="text-xs text-muted-foreground">
               Or use the toolbar to add blocks manually.
             </p>
@@ -248,16 +364,38 @@ export function PlaygroundCanvas() {
           ))}
 
           {/* Add Block Card */}
-          <Card className="flex items-center justify-center border-dashed border-2 border-border hover:border-muted-foreground/50 transition-colors cursor-pointer group">
-            <div className="text-center">
-              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mx-auto mb-2 group-hover:bg-accent/10 transition-colors">
-                <Plus className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
-              </div>
-              <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-                Add Block
-              </p>
-            </div>
-          </Card>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Card className="flex items-center justify-center border-dashed border-2 border-border hover:border-muted-foreground/50 transition-colors cursor-pointer group">
+                <div className="text-center">
+                  <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mx-auto mb-2 group-hover:bg-accent/10 transition-colors">
+                    <Plus className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
+                  </div>
+                  <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                    Add Block
+                  </p>
+                </div>
+              </Card>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center">
+              <DropdownMenuItem onClick={() => addOutput("chart")}>
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Chart
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => addOutput("table")}>
+                <TableIcon className="h-4 w-4 mr-2" />
+                Table
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => addOutput("persona")}>
+                <Users className="h-4 w-4 mr-2" />
+                Persona
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => addOutput("comparison")}>
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Comparison
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )}
     </div>
