@@ -2,9 +2,10 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, ArrowLeft, Eye, TrendingUp, Users, Globe, Lightbulb, CheckCircle2 } from "lucide-react"
+import { ArrowRight, ArrowLeft, Brain, Users, Globe, Globe2, UserCircle, BookOpen, CheckCircle2, Eye } from "lucide-react"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
+import { insightsAgents } from "@/lib/solution-agents"
 
 export default function InsightsPage() {
   return (
@@ -85,165 +86,56 @@ export default function InsightsPage() {
 
           <div className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Recommended Agents for Insights Teams</h2>
+              <h2 className="text-3xl font-bold mb-4">Insights AI Agents</h2>
               <p className="text-muted-foreground">AI agents designed to accelerate insights discovery</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-blue-500/10">
-                    <Users className="h-5 w-5 text-blue-500" />
-                  </div>
-                  <h3 className="font-semibold">Audience Explorer</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Deep-dive into audience demographics, psychographics, and behavioral patterns
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Segment analysis</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Cohort comparison</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Attitude mapping</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-purple-500/10">
-                    <Lightbulb className="h-5 w-5 text-purple-500" />
-                  </div>
-                  <h3 className="font-semibold">Motivation Decoder</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Uncovers the underlying motivations, values, and emotional drivers behind behavior
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Need state analysis</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Value hierarchy</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Decision triggers</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-green-500/10">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
-                  </div>
-                  <h3 className="font-semibold">Culture Tracker</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Identifies emerging cultural trends and shifts in consumer attitudes
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Trend detection</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Sentiment shifts</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Cultural moments</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-orange-500/10">
-                    <Globe className="h-5 w-5 text-orange-500" />
-                  </div>
-                  <h3 className="font-semibold">Global Perspective Agent</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Compares behaviors and attitudes across markets and cultures
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Cross-market analysis</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Cultural nuances</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Regional insights</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-pink-500/10">
-                    <Users className="h-5 w-5 text-pink-500" />
-                  </div>
-                  <h3 className="font-semibold">Persona Architect</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Builds rich, data-backed personas with behavioral and emotional depth
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Persona profiles</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Journey mapping</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Needs analysis</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-cyan-500/10">
-                    <Eye className="h-5 w-5 text-cyan-500" />
-                  </div>
-                  <h3 className="font-semibold">Storytelling Agent</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Transforms data into compelling narratives with executive summaries
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Narrative structure</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Key takeaways</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Action recommendations</span>
-                  </li>
-                </ul>
-              </Card>
+              {insightsAgents.map((agent) => {
+                const iconMap: Record<string, React.ReactNode> = {
+                  Users: <Users className="h-5 w-5 text-blue-500" />,
+                  Brain: <Brain className="h-5 w-5 text-purple-500" />,
+                  Globe: <Globe className="h-5 w-5 text-green-500" />,
+                  Globe2: <Globe2 className="h-5 w-5 text-orange-500" />,
+                  UserCircle: <UserCircle className="h-5 w-5 text-pink-500" />,
+                  BookOpen: <BookOpen className="h-5 w-5 text-cyan-500" />,
+                }
+                const colorMap: Record<string, string> = {
+                  Users: "bg-blue-500/10",
+                  Brain: "bg-purple-500/10",
+                  Globe: "bg-green-500/10",
+                  Globe2: "bg-orange-500/10",
+                  UserCircle: "bg-pink-500/10",
+                  BookOpen: "bg-cyan-500/10",
+                }
+                return (
+                  <Link key={agent.id} href={`/dashboard/agents/${agent.id}`}>
+                    <Card className="p-6 hover:border-accent/50 transition-colors h-full cursor-pointer">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={`p-2 rounded-lg ${colorMap[agent.icon] || 'bg-blue-500/10'}`}>
+                          {iconMap[agent.icon] || <Brain className="h-5 w-5 text-blue-500" />}
+                        </div>
+                        <h3 className="font-semibold">{agent.name}</h3>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        {agent.description}
+                      </p>
+                      <ul className="space-y-2 text-sm">
+                        {agent.capabilities.slice(0, 3).map((cap, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
+                            <span className="line-clamp-1">{cap}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-4 pt-4 border-t">
+                        <span className="text-sm text-accent flex items-center gap-1">
+                          Open Agent <ArrowRight className="h-3 w-3" />
+                        </span>
+                      </div>
+                    </Card>
+                  </Link>
+                )
+              })}
             </div>
           </div>
 
@@ -294,7 +186,7 @@ export default function InsightsPage() {
                 </p>
                 <div className="flex gap-2">
                   <Badge variant="secondary">Storytelling Agent</Badge>
-                  <Badge variant="secondary">Report Builder</Badge>
+                  <Badge variant="secondary">Global Perspective</Badge>
                 </div>
               </Card>
             </div>

@@ -2,9 +2,10 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, ArrowLeft, TrendingUp, Users, Target, BarChart3, Brain, Zap, CheckCircle2 } from "lucide-react"
+import { ArrowRight, ArrowLeft, TrendingUp, Users, Target, BarChart3, Brain, Zap, CheckCircle2, MessageSquare, BookOpen } from "lucide-react"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
+import { salesAgents } from "@/lib/solution-agents"
 
 export default function SalesPage() {
   return (
@@ -83,165 +84,56 @@ export default function SalesPage() {
 
           <div className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Recommended Agents for Sales</h2>
+              <h2 className="text-3xl font-bold mb-4">Sales AI Agents</h2>
               <p className="text-muted-foreground">AI agents designed to accelerate your sales process</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-blue-500/10">
-                    <Users className="h-5 w-5 text-blue-500" />
-                  </div>
-                  <h3 className="font-semibold">Buyer Persona Agent</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Generates detailed ICP profiles with motivations, pain points, and decision criteria
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Psychographic analysis</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Buying behavior patterns</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Objection mapping</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-purple-500/10">
-                    <Brain className="h-5 w-5 text-purple-500" />
-                  </div>
-                  <h3 className="font-semibold">Message Personalization Agent</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Crafts personalized outreach based on prospect values and preferences
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Tone matching</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Value proposition alignment</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>A/B testing optimization</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-green-500/10">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
-                  </div>
-                  <h3 className="font-semibold">Deal Intelligence Agent</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Predicts deal outcomes and suggests next-best actions
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Win probability scoring</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Objection prediction</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Timing recommendations</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-orange-500/10">
-                    <BarChart3 className="h-5 w-5 text-orange-500" />
-                  </div>
-                  <h3 className="font-semibold">Competitive Intelligence Agent</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Analyzes competitor positioning and creates battle cards
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Feature comparison</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Pricing analysis</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Win/loss insights</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-pink-500/10">
-                    <Target className="h-5 w-5 text-pink-500" />
-                  </div>
-                  <h3 className="font-semibold">Account Scoring Agent</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Prioritizes accounts based on fit, intent, and conversion likelihood
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>ICP alignment scoring</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Buying intent signals</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Revenue potential estimation</span>
-                  </li>
-                </ul>
-              </Card>
-
-              <Card className="p-6 hover:border-accent/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-cyan-500/10">
-                    <Zap className="h-5 w-5 text-cyan-500" />
-                  </div>
-                  <h3 className="font-semibold">Sales Enablement Agent</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Generates pitch decks, case studies, and sales collateral
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>Personalized pitch decks</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>ROI calculators</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>One-pagers</span>
-                  </li>
-                </ul>
-              </Card>
+              {salesAgents.map((agent) => {
+                const iconMap: Record<string, React.ReactNode> = {
+                  Users: <Users className="h-5 w-5 text-blue-500" />,
+                  MessageSquare: <MessageSquare className="h-5 w-5 text-purple-500" />,
+                  TrendingUp: <TrendingUp className="h-5 w-5 text-green-500" />,
+                  Target: <Target className="h-5 w-5 text-orange-500" />,
+                  BarChart3: <BarChart3 className="h-5 w-5 text-pink-500" />,
+                  BookOpen: <BookOpen className="h-5 w-5 text-cyan-500" />,
+                }
+                const colorMap: Record<string, string> = {
+                  Users: "bg-blue-500/10",
+                  MessageSquare: "bg-purple-500/10",
+                  TrendingUp: "bg-green-500/10",
+                  Target: "bg-orange-500/10",
+                  BarChart3: "bg-pink-500/10",
+                  BookOpen: "bg-cyan-500/10",
+                }
+                return (
+                  <Link key={agent.id} href={`/dashboard/agents/${agent.id}`}>
+                    <Card className="p-6 hover:border-accent/50 transition-colors h-full cursor-pointer">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={`p-2 rounded-lg ${colorMap[agent.icon] || 'bg-blue-500/10'}`}>
+                          {iconMap[agent.icon] || <Brain className="h-5 w-5 text-blue-500" />}
+                        </div>
+                        <h3 className="font-semibold">{agent.name}</h3>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        {agent.description}
+                      </p>
+                      <ul className="space-y-2 text-sm">
+                        {agent.capabilities.slice(0, 3).map((cap, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
+                            <span className="line-clamp-1">{cap}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-4 pt-4 border-t">
+                        <span className="text-sm text-accent flex items-center gap-1">
+                          Open Agent <ArrowRight className="h-3 w-3" />
+                        </span>
+                      </div>
+                    </Card>
+                  </Link>
+                )
+              })}
             </div>
           </div>
 
@@ -258,8 +150,8 @@ export default function SalesPage() {
                   points
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Audience Explorer</Badge>
-                  <Badge variant="secondary">Persona Architect</Badge>
+                  <Badge variant="secondary">Buyer Persona</Badge>
+                  <Badge variant="secondary">Competitive Intelligence</Badge>
                 </div>
               </Card>
 
@@ -269,8 +161,8 @@ export default function SalesPage() {
                   Generates personalized email sequences based on prospect segment, industry, and behavior
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Motivation Decoder</Badge>
-                  <Badge variant="secondary">Message Agent</Badge>
+                  <Badge variant="secondary">Message Personalization</Badge>
+                  <Badge variant="secondary">Deal Intelligence</Badge>
                 </div>
               </Card>
 
@@ -281,7 +173,7 @@ export default function SalesPage() {
                 </p>
                 <div className="flex gap-2">
                   <Badge variant="secondary">Deal Intelligence</Badge>
-                  <Badge variant="secondary">Competitive Intel</Badge>
+                  <Badge variant="secondary">Account Scoring</Badge>
                 </div>
               </Card>
 
@@ -292,7 +184,7 @@ export default function SalesPage() {
                 </p>
                 <div className="flex gap-2">
                   <Badge variant="secondary">Account Scoring</Badge>
-                  <Badge variant="secondary">Global Perspective</Badge>
+                  <Badge variant="secondary">Sales Enablement</Badge>
                 </div>
               </Card>
             </div>
