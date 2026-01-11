@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useMemo, use, useCallback } from "react"
+import { useState, useMemo, use, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import {
   ArrowLeft,
@@ -362,9 +363,106 @@ const sampleSavedFilters: SavedFilter[] = [
   },
 ]
 
+// Type for crosstab data
+interface CrosstabData {
+  id: string
+  name: string
+  audiences: string[]
+  metrics: string[]
+  lastModified: string
+  views: number
+  createdBy: string
+  description: string
+  dataSource: string
+  category?: string
+  data: { metric: string; category?: string; values: Record<string, number> }[]
+}
+
+// Transform API response to frontend format
+function transformApiCrosstab(apiData: any): CrosstabData | null {
+  if (!apiData) return null
+
+  // API returns: results.rows = [{ segment: 'name', metric1: val, metric2: val, ... }]
+  // Frontend expects: data = [{ metric: 'name', values: { audience1: val, audience2: val, ... } }]
+
+  const results = apiData.results || {}
+  const rows = Array.isArray(results.rows) ? results.rows : []
+  const metrics = Array.isArray(apiData.metrics) ? apiData.metrics : []
+
+  // Build audiences list from the first row's keys (excluding 'segment' and metric-like keys)
+  let audiences: string[] = []
+  if (rows.length > 0) {
+    // Get column names that aren't metrics - these are the audience/segment names
+    const firstRow = rows[0]
+    audiences = Object.keys(firstRow).filter(key => key !== 'segment' && !metrics.includes(key))
+
+    // If no audiences found from row keys, check if row values have audience-keyed values
+    if (audiences.length === 0 && firstRow.segment) {
+      // The data is structured with segment as the row identifier
+      // and metric values as columns - need to transpose
+      audiences = rows.map((r: any) => r.segment).filter(Boolean)
+    }
+  }
+
+  // If audiences is still empty, use the API's audiences field
+  if (audiences.length === 0 && Array.isArray(apiData.audiences)) {
+    audiences = apiData.audiences
+  }
+
+  // Transform the data structure
+  let data: { metric: string; category?: string; values: Record<string, number> }[] = []
+
+  if (rows.length > 0 && metrics.length > 0) {
+    // Transpose: rows are segments, columns are metrics -> rows are metrics, columns are segments
+    data = metrics.map(metric => {
+      const values: Record<string, number> = {}
+      rows.forEach((row: any) => {
+        const segmentName = row.segment || row.name || 'Unknown'
+        if (row[metric] !== undefined) {
+          values[segmentName] = row[metric]
+        }
+      })
+      return { metric, values }
+    })
+
+    // Update audiences to be the segment names from rows
+    if (rows.length > 0 && rows[0].segment) {
+      audiences = rows.map((r: any) => r.segment).filter(Boolean)
+    }
+  }
+
+  return {
+    id: apiData.id,
+    name: apiData.name,
+    audiences,
+    metrics,
+    lastModified: apiData.updatedAt ? formatTimeAgo(apiData.updatedAt) : 'Recently',
+    views: apiData.views || 0,
+    createdBy: apiData.createdByName || 'Unknown',
+    description: apiData.description || '',
+    dataSource: apiData.dataSource || 'GWI Core',
+    category: apiData.category,
+    data,
+  }
+}
+
+function formatTimeAgo(dateString: string): string {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+  const diffDays = Math.floor(diffHours / 24)
+
+  if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+  if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+  return 'Just now'
+}
+
 export default function CrosstabDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
+  const [crosstab, setCrosstab] = useState<CrosstabData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [isExporting, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -380,7 +478,40 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
   const [valueRange, setValueRange] = useState<[number, number]>([0, 100])
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
 
-  const crosstab = crosstabData[id]
+  // Fetch crosstab data from API
+  useEffect(() => {
+    async function fetchCrosstab() {
+      try {
+        const response = await fetch(`/api/v1/crosstabs/${id}`)
+        if (response.ok) {
+          const data = await response.json()
+          const apiCrosstab = data.data || data
+          if (apiCrosstab && apiCrosstab.id) {
+            const transformed = transformApiCrosstab(apiCrosstab)
+            if (transformed && transformed.data.length > 0) {
+              setCrosstab(transformed)
+            } else {
+              // Fallback to demo data
+              setCrosstab(crosstabData[id] || null)
+            }
+          } else {
+            // Fallback to demo data
+            setCrosstab(crosstabData[id] || null)
+          }
+        } else {
+          // Fallback to demo data
+          setCrosstab(crosstabData[id] || null)
+        }
+      } catch (error) {
+        console.error('Failed to fetch crosstab:', error)
+        // Fallback to demo data
+        setCrosstab(crosstabData[id] || null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchCrosstab()
+  }, [id])
 
   // Initialize selected audiences and metrics
   useMemo(() => {
@@ -568,6 +699,27 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
     setCategoryFilter("all")
     setActiveFilters([])
   }, [crosstab])
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-6 p-6">
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard/crosstabs">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+        </div>
+        <div className="grid gap-6">
+          <Skeleton className="h-96 rounded-lg" />
+        </div>
+      </div>
+    )
+  }
 
   if (!crosstab) {
     return (
