@@ -24,7 +24,6 @@ import type {
   WorkflowTransformStepConfig,
   WorkflowParallelStepConfig,
   ToolExecutionContext,
-  ToolResult,
   ResourceReference,
 } from '@/types/tools'
 
@@ -484,7 +483,7 @@ export async function executeWorkflow(
     }
 
     // Move to next step
-    currentStepId = result.nextStepId as string | undefined
+    currentStepId = result.nextStepId
   }
 
   return {
@@ -523,7 +522,7 @@ function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
  */
 function evaluateExpression(expression: string, variables: Record<string, unknown>): boolean {
   // Replace template variables with actual values
-  let resolved = expression.replace(/\{\{([^}]+)\}\}/g, (match, path) => {
+  let resolved = expression.replace(/\{\{([^}]+)\}\}/g, (_, path) => {
     const value = getNestedValue(variables, path.trim())
     if (typeof value === 'string') {
       return `"${value}"`

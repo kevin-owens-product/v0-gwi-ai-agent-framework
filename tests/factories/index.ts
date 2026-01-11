@@ -15,7 +15,7 @@ export type InvitationStatus = 'PENDING' | 'ACCEPTED' | 'EXPIRED' | 'REVOKED'
 /**
  * Factory for creating mock User objects
  */
-export function createUser(overrides: Partial<ReturnType<typeof createUser>> = {}) {
+export function createUser(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     email: faker.internet.email().toLowerCase(),
@@ -32,7 +32,7 @@ export function createUser(overrides: Partial<ReturnType<typeof createUser>> = {
 /**
  * Factory for creating mock Organization objects
  */
-export function createOrganization(overrides: Partial<ReturnType<typeof createOrganization>> = {}) {
+export function createOrganization(overrides: Record<string, unknown> = {}) {
   const name = faker.company.name()
   return {
     id: faker.string.uuid(),
@@ -49,7 +49,7 @@ export function createOrganization(overrides: Partial<ReturnType<typeof createOr
 /**
  * Factory for creating mock OrganizationMember objects
  */
-export function createMembership(overrides: Partial<ReturnType<typeof createMembership>> = {}) {
+export function createMembership(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
@@ -64,7 +64,7 @@ export function createMembership(overrides: Partial<ReturnType<typeof createMemb
 /**
  * Factory for creating mock Account objects (OAuth)
  */
-export function createAccount(overrides: Partial<ReturnType<typeof createAccount>> = {}) {
+export function createAccount(overrides: Record<string, unknown> = {}) {
   const provider = faker.helpers.arrayElement(['google', 'microsoft-entra-id'])
   return {
     id: faker.string.uuid(),
@@ -86,7 +86,7 @@ export function createAccount(overrides: Partial<ReturnType<typeof createAccount
 /**
  * Factory for creating mock Session objects
  */
-export function createSession(overrides: Partial<ReturnType<typeof createSession>> = {}) {
+export function createSession(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     sessionToken: faker.string.uuid(),
@@ -101,7 +101,7 @@ export function createSession(overrides: Partial<ReturnType<typeof createSession
 /**
  * Factory for creating mock VerificationToken objects
  */
-export function createVerificationToken(overrides: Partial<ReturnType<typeof createVerificationToken>> = {}) {
+export function createVerificationToken(overrides: Record<string, unknown> = {}) {
   return {
     identifier: faker.internet.email().toLowerCase(),
     token: faker.string.hexadecimal({ length: 64, casing: 'lower' }),
@@ -113,7 +113,7 @@ export function createVerificationToken(overrides: Partial<ReturnType<typeof cre
 /**
  * Factory for creating mock SSOConfiguration objects
  */
-export function createSSOConfiguration(overrides: Partial<ReturnType<typeof createSSOConfiguration>> = {}) {
+export function createSSOConfiguration(overrides: Record<string, unknown> = {}) {
   const provider = faker.helpers.arrayElement(['saml', 'oidc'])
   return {
     id: faker.string.uuid(),
@@ -130,7 +130,7 @@ export function createSSOConfiguration(overrides: Partial<ReturnType<typeof crea
 /**
  * Factory for creating mock Agent objects
  */
-export function createAgent(overrides: Partial<ReturnType<typeof createAgent>> = {}) {
+export function createAgent(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
@@ -153,7 +153,7 @@ export function createAgent(overrides: Partial<ReturnType<typeof createAgent>> =
 /**
  * Factory for creating mock Agent with full details (includes relations)
  */
-export function createAgentWithDetails(overrides: Partial<ReturnType<typeof createAgentWithDetails>> = {}) {
+export function createAgentWithDetails(overrides: Record<string, unknown> = {}) {
   const agent = createAgent(overrides)
   return {
     ...agent,
@@ -172,7 +172,7 @@ export function createAgentWithDetails(overrides: Partial<ReturnType<typeof crea
 /**
  * Factory for creating mock AgentRun objects
  */
-export function createAgentRun(overrides: Partial<ReturnType<typeof createAgentRun>> = {}) {
+export function createAgentRun(overrides: Record<string, unknown> = {}) {
   const status = overrides.status || faker.helpers.arrayElement(['PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED'] as const)
   const completedStatuses = ['COMPLETED', 'FAILED', 'CANCELLED']
   return {
@@ -193,7 +193,7 @@ export function createAgentRun(overrides: Partial<ReturnType<typeof createAgentR
 /**
  * Factory for creating mock Insight objects
  */
-export function createInsight(overrides: Partial<ReturnType<typeof createInsight>> = {}) {
+export function createInsight(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
@@ -216,7 +216,7 @@ export function createInsight(overrides: Partial<ReturnType<typeof createInsight
 /**
  * Factory for creating mock DataSource objects
  */
-export function createDataSource(overrides: Partial<ReturnType<typeof createDataSource>> = {}) {
+export function createDataSource(overrides: Record<string, unknown> = {}) {
   const type = overrides.type || faker.helpers.arrayElement(['API', 'DATABASE', 'FILE_UPLOAD', 'WEBHOOK', 'INTEGRATION'] as const)
   return {
     id: faker.string.uuid(),
@@ -240,7 +240,7 @@ export function createDataSource(overrides: Partial<ReturnType<typeof createData
 /**
  * Factory for creating mock AuditLog objects
  */
-export function createAuditLog(overrides: Partial<ReturnType<typeof createAuditLog>> = {}) {
+export function createAuditLog(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
@@ -259,7 +259,7 @@ export function createAuditLog(overrides: Partial<ReturnType<typeof createAuditL
 /**
  * Factory for creating mock AuditLog with user details
  */
-export function createAuditLogWithUser(overrides: Partial<ReturnType<typeof createAuditLogWithUser>> = {}) {
+export function createAuditLogWithUser(overrides: Record<string, unknown> = {}) {
   const log = createAuditLog(overrides)
   return {
     ...log,
@@ -275,7 +275,7 @@ export function createAuditLogWithUser(overrides: Partial<ReturnType<typeof crea
 /**
  * Factory for creating mock UsageRecord objects
  */
-export function createUsageRecord(overrides: Partial<ReturnType<typeof createUsageRecord>> = {}) {
+export function createUsageRecord(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
@@ -289,7 +289,7 @@ export function createUsageRecord(overrides: Partial<ReturnType<typeof createUsa
 /**
  * Factory for creating mock BillingSubscription objects
  */
-export function createBillingSubscription(overrides: Partial<ReturnType<typeof createBillingSubscription>> = {}) {
+export function createBillingSubscription(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
@@ -308,7 +308,7 @@ export function createBillingSubscription(overrides: Partial<ReturnType<typeof c
 /**
  * Factory for creating mock ApiKey objects
  */
-export function createApiKey(overrides: Partial<ReturnType<typeof createApiKey>> = {}) {
+export function createApiKey(overrides: Record<string, unknown> = {}) {
   const planPrefix = faker.helpers.arrayElement(['starter', 'professional', 'enterprise'])
   return {
     id: faker.string.uuid(),
@@ -329,7 +329,7 @@ export function createApiKey(overrides: Partial<ReturnType<typeof createApiKey>>
 /**
  * Factory for creating mock Invitation objects
  */
-export function createInvitation(overrides: Partial<ReturnType<typeof createInvitation>> = {}) {
+export function createInvitation(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     orgId: faker.string.uuid(),
@@ -346,7 +346,7 @@ export function createInvitation(overrides: Partial<ReturnType<typeof createInvi
 /**
  * Factory for creating mock OrganizationContext (for hooks)
  */
-export function createOrganizationContext(overrides: Partial<ReturnType<typeof createOrganizationContext>> = {}) {
+export function createOrganizationContext(overrides: Record<string, unknown> = {}) {
   return {
     id: faker.string.uuid(),
     name: faker.company.name(),

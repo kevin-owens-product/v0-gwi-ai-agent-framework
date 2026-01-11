@@ -1,4 +1,4 @@
-import type { TemplateToolAction, TemplateToolIntegration } from '@/types/tools'
+import type { TemplateToolIntegration } from '@/types/tools'
 
 export interface PromptTemplate {
   id: string

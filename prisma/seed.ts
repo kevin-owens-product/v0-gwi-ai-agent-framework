@@ -358,7 +358,7 @@ async function main() {
     }
   })
 
-  const runningRun = await prisma.agentRun.create({
+  const _runningRun = await prisma.agentRun.create({
     data: {
       agentId: weeklyReportAgent.id,
       orgId: acmeCorp.id,
@@ -369,7 +369,7 @@ async function main() {
     }
   })
 
-  const failedRun = await prisma.agentRun.create({
+  const _failedRun = await prisma.agentRun.create({
     data: {
       agentId: socialMonitorAgent.id,
       orgId: acmeCorp.id,
@@ -382,7 +382,7 @@ async function main() {
     }
   })
 
-  const pendingRun = await prisma.agentRun.create({
+  const _pendingRun = await prisma.agentRun.create({
     data: {
       agentId: customAgent.id,
       orgId: acmeCorp.id,
@@ -814,7 +814,7 @@ async function main() {
   console.log('👥 Creating audiences...')
 
   // Create audiences with explicit IDs for reliable API access
-  const audience1 = await prisma.audience.create({
+  const _audience1 = await prisma.audience.create({
     data: {
       id: '1',
       orgId: acmeCorp.id,
@@ -836,7 +836,7 @@ async function main() {
     }
   })
 
-  const audience2 = await prisma.audience.create({
+  const _audience2 = await prisma.audience.create({
     data: {
       id: '2',
       orgId: acmeCorp.id,
@@ -858,7 +858,7 @@ async function main() {
     }
   })
 
-  const audience3 = await prisma.audience.create({
+  const _audience3 = await prisma.audience.create({
     data: {
       id: '3',
       orgId: acmeCorp.id,
@@ -879,7 +879,7 @@ async function main() {
     }
   })
 
-  const audience4 = await prisma.audience.create({
+  const _audience4 = await prisma.audience.create({
     data: {
       id: '4',
       orgId: acmeCorp.id,
@@ -900,7 +900,7 @@ async function main() {
     }
   })
 
-  const audience5 = await prisma.audience.create({
+  const _audience5 = await prisma.audience.create({
     data: {
       id: '5',
       orgId: acmeCorp.id,
@@ -920,7 +920,7 @@ async function main() {
     }
   })
 
-  const audience6 = await prisma.audience.create({
+  const _audience6 = await prisma.audience.create({
     data: {
       id: '6',
       orgId: acmeCorp.id,
@@ -941,7 +941,7 @@ async function main() {
     }
   })
 
-  const audience7 = await prisma.audience.create({
+  const _audience7 = await prisma.audience.create({
     data: {
       id: '7',
       orgId: acmeCorp.id,
@@ -962,7 +962,7 @@ async function main() {
     }
   })
 
-  const audience8 = await prisma.audience.create({
+  const _audience8 = await prisma.audience.create({
     data: {
       id: '8',
       orgId: acmeCorp.id,
@@ -984,7 +984,7 @@ async function main() {
     }
   })
 
-  const audience9 = await prisma.audience.create({
+  const _audience9 = await prisma.audience.create({
     data: {
       id: '9',
       orgId: techStartup.id,
@@ -1005,7 +1005,7 @@ async function main() {
     }
   })
 
-  const audience10 = await prisma.audience.create({
+  const _audience10 = await prisma.audience.create({
     data: {
       id: '10',
       orgId: techStartup.id,
@@ -1027,7 +1027,7 @@ async function main() {
     }
   })
 
-  const audience11 = await prisma.audience.create({
+  const _audience11 = await prisma.audience.create({
     data: {
       id: '11',
       orgId: enterpriseCo.id,
@@ -1715,7 +1715,7 @@ async function main() {
     baseHealth: number,
     baseNps: number,
     dayIndex: number,
-    totalDays: number,
+    _totalDays: number,
     trend: 'up' | 'down' | 'stable'
   ) {
     // Add realistic progression based on trend

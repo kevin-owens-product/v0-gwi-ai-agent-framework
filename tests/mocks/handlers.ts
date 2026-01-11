@@ -2,7 +2,6 @@ import { http, HttpResponse } from 'msw'
 import {
   createUser,
   createOrganization,
-  createAgent,
   createAgentWithDetails,
   createAgentRun,
   createInsight,

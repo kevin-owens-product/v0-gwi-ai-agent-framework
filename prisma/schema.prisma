@@ -134,10 +134,11 @@ model VerificationToken {
 model SSOConfiguration {
   id           String  @id @default(cuid())
   orgId        String  @unique
-  provider     String  // 'saml' | 'oidc'
+  provider     String  // 'saml' | 'oidc' | 'azure_ad'
   metadataUrl  String?
   clientId     String?
   clientSecret String?
+  settings     Json    @default("{}")
   enabled      Boolean @default(false)
 
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)

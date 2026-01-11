@@ -10,7 +10,7 @@
  */
 
 import { prisma } from '@/lib/db'
-import { GWI_TOOLS, getToolByName } from '@/lib/gwi-tools'
+import { GWI_TOOLS } from '@/lib/gwi-tools'
 import { findCachedToolResult, cacheToolResult } from '@/lib/tool-memory'
 import type {
   GWITool,
@@ -314,6 +314,7 @@ class ToolRegistryClass {
           resourceId: toolName,
           metadata: {
             toolName,
+            params,
             success: result.success,
             executionTimeMs: Date.now() - startTime,
             agentId: context.agentId,
