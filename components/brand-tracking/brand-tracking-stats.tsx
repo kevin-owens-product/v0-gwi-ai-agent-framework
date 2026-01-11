@@ -122,7 +122,7 @@ export function BrandTrackingStats() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Total Snapshots</p>
-              <p className="text-2xl font-bold">{stats?.totalSnapshots.toLocaleString() || 0}</p>
+              <p className="text-2xl font-bold">{stats?.totalSnapshots?.toLocaleString() ?? 0}</p>
               <p className="text-xs text-emerald-500 mt-1">+8 this week</p>
             </div>
             <div className="h-12 w-12 rounded-full bg-emerald-500/10 flex items-center justify-center">
@@ -137,8 +137,8 @@ export function BrandTrackingStats() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Avg Brand Health</p>
-              <p className="text-2xl font-bold">{stats?.avgBrandHealth.toFixed(1) || 0}</p>
-              <p className="text-xs text-emerald-500 mt-1">+{stats?.healthTrend.toFixed(1) || 0} points</p>
+              <p className="text-2xl font-bold">{typeof stats?.avgBrandHealth === 'number' ? stats.avgBrandHealth.toFixed(1) : 0}</p>
+              <p className="text-xs text-emerald-500 mt-1">+{typeof stats?.healthTrend === 'number' ? stats.healthTrend.toFixed(1) : 0} points</p>
             </div>
             <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center">
               <TrendingUp className="h-6 w-6 text-blue-500" />
