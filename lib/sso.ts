@@ -8,6 +8,7 @@
  */
 
 import { prisma } from './db'
+import { Prisma } from '@prisma/client'
 
 export interface SAMLConfig {
   entryPoint: string
@@ -214,7 +215,7 @@ export async function enableSSO(params: {
     data: {
       orgId: params.orgId,
       provider: params.provider,
-      settings: params.settings,
+      settings: JSON.parse(JSON.stringify(params.settings)) as Prisma.InputJsonValue,
       enabled: true,
     },
   })

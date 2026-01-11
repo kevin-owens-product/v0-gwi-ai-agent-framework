@@ -10,6 +10,7 @@
  */
 
 import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import { GWI_TOOLS } from '@/lib/gwi-tools'
 import { findCachedToolResult, cacheToolResult } from '@/lib/tool-memory'
 import type {
@@ -312,7 +313,7 @@ class ToolRegistryClass {
           action: 'tool_execute',
           resourceType: 'tool',
           resourceId: toolName,
-          metadata: {
+          metadata: JSON.parse(JSON.stringify({
             toolName,
             params,
             success: result.success,
@@ -322,7 +323,7 @@ class ToolRegistryClass {
             runId: context.runId,
             resourcesCreated: result.metadata?.resourcesCreated?.map(r => r.id),
             error: result.error,
-          },
+          })) as Prisma.InputJsonValue,
         },
       })
     } catch (error) {

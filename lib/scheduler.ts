@@ -12,6 +12,7 @@ import { prisma } from './db'
 import { executeAgentWithContext } from './llm'
 import { recordUsage } from './billing'
 import { sendEmail } from './email'
+import { Prisma } from '@prisma/client'
 
 interface JobContext {
   jobId: string
@@ -88,11 +89,11 @@ export async function executeBrandTrackingSnapshots() {
 
   for (const brand of brandTracking) {
     try {
-      const config = brand.configuration as Record<string, unknown> | null
+      const config = brand.trackingConfig as Record<string, unknown> | null
       const snapshotFrequency = (config?.snapshotFrequency as string) || 'daily'
 
       // Check if snapshot is due
-      const lastSnapshot = await prisma.brandSnapshot.findFirst({
+      const lastSnapshot = await prisma.brandTrackingSnapshot.findFirst({
         where: { brandTrackingId: brand.id },
         orderBy: { createdAt: 'desc' },
       })
@@ -101,10 +102,10 @@ export async function executeBrandTrackingSnapshots() {
         continue
       }
 
-      console.log(`[Scheduler] Creating snapshot for: ${brand.name}`)
+      console.log(`[Scheduler] Creating snapshot for: ${brand.brandName}`)
 
       // Create snapshot (simplified metrics)
-      await prisma.brandSnapshot.create({
+      await prisma.brandTrackingSnapshot.create({
         data: {
           brandTrackingId: brand.id,
           orgId: brand.orgId,
@@ -280,7 +281,7 @@ async function executeWorkflowRun(workflowId: string, runId: string, orgId: stri
         data: {
           agentId,
           orgId,
-          input: combinedOutput,
+          input: JSON.parse(JSON.stringify(combinedOutput)) as Prisma.InputJsonValue,
           status: 'RUNNING',
         },
       })
@@ -319,7 +320,7 @@ async function executeWorkflowRun(workflowId: string, runId: string, orgId: stri
           where: { id: agentRun.id },
           data: {
             status: 'COMPLETED',
-            output: agentOutput,
+            output: JSON.parse(JSON.stringify(agentOutput)) as Prisma.InputJsonValue,
             tokensUsed: llmResult.tokensUsed,
             completedAt: new Date(),
           },
@@ -343,7 +344,7 @@ async function executeWorkflowRun(workflowId: string, runId: string, orgId: stri
       where: { id: runId },
       data: {
         status: 'COMPLETED',
-        output: combinedOutput,
+        output: JSON.parse(JSON.stringify(combinedOutput)) as Prisma.InputJsonValue,
         completedAt: new Date(),
       },
     })

@@ -173,7 +173,7 @@ export function createAgentWithDetails(overrides: Record<string, unknown> = {}) 
  * Factory for creating mock AgentRun objects
  */
 export function createAgentRun(overrides: Record<string, unknown> = {}) {
-  const status = overrides.status || faker.helpers.arrayElement(['PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED'] as const)
+  const status = (overrides.status as string) || faker.helpers.arrayElement(['PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED'] as const)
   const completedStatuses = ['COMPLETED', 'FAILED', 'CANCELLED']
   return {
     id: faker.string.uuid(),

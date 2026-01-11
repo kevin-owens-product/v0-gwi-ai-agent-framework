@@ -17,7 +17,8 @@ const createMemorySchema = z.object({
   expiresAt: z.string().datetime().optional(),
 })
 
-const _updateMemorySchema = z.object({
+// Schema for PATCH endpoint (used in [id]/route.ts)
+export const updateMemorySchema = z.object({
   value: z.unknown().optional(),
   metadata: z.record(z.unknown()).optional(),
   expiresAt: z.string().datetime().optional(),

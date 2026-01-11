@@ -136,9 +136,9 @@ export async function GET(request: Request) {
     const sortBy = searchParams.get("sort_by") || "updatedAt"
     const sortOrder = searchParams.get("sort_order") || "desc"
 
-    // Include options
-    const includeMetrics = searchParams.get("include_metrics") === "true"
-    const includeHistory = searchParams.get("include_history") === "true"
+    // Include options (reserved for future use)
+    // const includeMetrics = searchParams.get("include_metrics") === "true"
+    // const includeHistory = searchParams.get("include_history") === "true"
 
     // Filter audiences
     let filtered = [...audiencesDB]

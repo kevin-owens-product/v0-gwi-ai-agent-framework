@@ -22,9 +22,9 @@ interface AudienceProfile {
   id: string
   name: string
   size: string
-  demographics: { label: string; value: string }[]
-  behaviors: string[]
-  interests: string[]
+  demographics?: { label: string; value: string }[]
+  behaviors?: string[]
+  interests?: string[]
 }
 
 interface AudienceComparisonProps {

@@ -20,16 +20,12 @@ import {
   Star,
   Users,
   Download,
-  TrendingUp,
   Shield,
   Clock,
   CheckCircle2,
   Globe,
-  Building2,
   Sparkles,
-  Filter,
   Heart,
-  Eye,
   Copy,
 } from "lucide-react"
 import { cn } from "@/lib/utils"

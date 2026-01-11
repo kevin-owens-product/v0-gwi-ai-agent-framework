@@ -102,7 +102,7 @@ const initialProjects: Project[] = [
 ]
 
 export default function ProjectsPage() {
-  const router = useRouter()
+  const _router = useRouter()
   const [projects, setProjects] = useState<Project[]>(initialProjects)
   const [searchQuery, setSearchQuery] = useState("")
   const [isCreateOpen, setIsCreateOpen] = useState(false)

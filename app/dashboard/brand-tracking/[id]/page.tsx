@@ -54,7 +54,7 @@ const statusColors = {
 }
 
 // Generate demo snapshots for visualization when no real data exists
-function generateDemoSnapshots(brandName: string) {
+function generateDemoSnapshots(_brandName: string) {
   const snapshots = []
   const now = new Date()
 

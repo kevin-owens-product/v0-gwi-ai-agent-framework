@@ -8,13 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   ArrowLeft,
   Play,
-  Copy,
   Users,
   Clock,
   Zap,
   BookOpen,
-  Code,
-  Settings,
   Trash2,
   Loader2,
   AlertCircle,

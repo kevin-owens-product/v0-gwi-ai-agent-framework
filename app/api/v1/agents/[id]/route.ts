@@ -148,15 +148,13 @@ export async function PATCH(
     }
 
     // Update agent - cast configuration to proper Prisma type
-    const updateData = {
-      ...validationResult.data,
-      ...(validationResult.data.configuration && {
-        configuration: validationResult.data.configuration as Prisma.InputJsonValue
-      })
-    }
+    const { configuration, ...restData } = validationResult.data
     const agent = await prisma.agent.update({
       where: { id },
-      data: updateData,
+      data: {
+        ...restData,
+        ...(configuration && { configuration: configuration as Prisma.InputJsonValue }),
+      },
       include: {
         creator: { select: { id: true, name: true, email: true } },
       },

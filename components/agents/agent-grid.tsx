@@ -6,11 +6,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Users,
-  Lightbulb,
   Target,
-  TrendingUp,
   PieChart,
-  Globe,
   Play,
   Settings,
   Brain,
@@ -183,7 +180,7 @@ export function AgentGrid({ filter, search }: { filter: string; search?: string 
   const [agents, setAgents] = useState<Agent[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [usingDemoData, setUsingDemoData] = useState(false)
+  const [_usingDemoData, setUsingDemoData] = useState(false)
 
   useEffect(() => {
     async function fetchAgents() {

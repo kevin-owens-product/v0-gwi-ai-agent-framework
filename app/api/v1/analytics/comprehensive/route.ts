@@ -52,7 +52,6 @@ export async function GET(request: NextRequest) {
           startedAt: { gte: startDate },
         },
         _count: true,
-        _avg: { tokensUsed: true },
       }),
 
       // Usage statistics - uses recordedAt
@@ -144,7 +143,7 @@ export async function GET(request: NextRequest) {
     const estimatedCost = (totalTokens / 1000) * 0.01
 
     type AgentStatType = { type: string; status: string; _count: number }
-    type WorkflowStatType = { status: string; _count: number; _avg: { tokensUsed: number | null } }
+    type WorkflowStatType = { status: string; _count: number }
     type UsageStatType = { metricType: string; _sum: { quantity: number | null } }
     type InsightStatType = { type: string; _count: number; _avg: { confidenceScore: number | null } }
     type ActivityType = { action: string; _count: number }
@@ -172,13 +171,12 @@ export async function GET(request: NextRequest) {
         }, {} as Record<string, { total: number; active: number; inactive: number }>),
       },
       workflows: {
-        byStatus: workflowStats.reduce((acc: Record<string, { count: number; avgTokens: number }>, stat: WorkflowStatType) => {
+        byStatus: workflowStats.reduce((acc: Record<string, { count: number }>, stat: WorkflowStatType) => {
           acc[stat.status] = {
             count: stat._count,
-            avgTokens: stat._avg.tokensUsed || 0,
           }
           return acc
-        }, {} as Record<string, { count: number; avgTokens: number }>),
+        }, {} as Record<string, { count: number }>),
       },
       usage: {
         byMetric: usageStats.reduce((acc: Record<string, number>, stat: UsageStatType) => {

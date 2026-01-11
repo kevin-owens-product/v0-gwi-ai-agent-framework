@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,7 +17,6 @@ const passwordRequirements = [
 ]
 
 function ResetPasswordForm() {
-  const _router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get("token")
 

@@ -20,7 +20,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet"
 import {
   Popover,
@@ -44,8 +43,6 @@ import { Separator } from "@/components/ui/separator"
 import { ChartRenderer, ChartType, ChartDataPoint, generateSampleData } from "./chart-renderer"
 import { cn } from "@/lib/utils"
 import {
-  Settings,
-  Palette,
   Database,
   BarChart3,
   LineChart,
@@ -55,27 +52,17 @@ import {
   GitBranch,
   Binary,
   Eye,
-  EyeOff,
   Plus,
   Trash2,
-  Edit2,
-  Copy,
   Download,
   RefreshCw,
-  Maximize2,
   ZoomIn,
   ZoomOut,
-  Move,
   Grid,
-  Type,
-  Filter,
-  SortAsc,
   Layers,
   Save,
-  Undo2,
   ChevronDown,
   ChevronRight,
-  HelpCircle,
   X,
 } from "lucide-react"
 

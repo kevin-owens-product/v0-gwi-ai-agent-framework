@@ -2,12 +2,10 @@
 
 import { useState, useMemo } from "react"
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { Users, CircleDot, Plus, Minus } from "lucide-react"
+import { Users, CircleDot, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Audience {

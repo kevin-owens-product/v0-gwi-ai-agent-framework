@@ -182,7 +182,7 @@ export async function POST(
           // Execute with tools enabled
           const toolContext: ToolExecutionContext = {
             orgId,
-            userId: session.user.id!,
+            userId: session.user!.id!,
             agentId: id,
             runId: agentRun.id,
             memory: memoryContext,
