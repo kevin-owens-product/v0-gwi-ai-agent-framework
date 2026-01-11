@@ -64,13 +64,13 @@ export function LandingHeader() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Features
               </Link>
-              <Link href="#agents" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/#agents" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Agents
               </Link>
-              <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Pricing
               </Link>
               <Link href="/docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -126,13 +126,13 @@ export function LandingHeader() {
                 Innovation
               </Link>
             </div>
-            <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="/#features" className="text-sm text-muted-foreground hover:text-foreground">
               Features
             </Link>
-            <Link href="#agents" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="/#agents" className="text-sm text-muted-foreground hover:text-foreground">
               Agents
             </Link>
-            <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="/#pricing" className="text-sm text-muted-foreground hover:text-foreground">
               Pricing
             </Link>
             <Link href="/docs" className="text-sm text-muted-foreground hover:text-foreground">
