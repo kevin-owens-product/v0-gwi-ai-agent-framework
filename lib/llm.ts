@@ -189,7 +189,7 @@ async function executeWithOpenAI(
     throw new Error('OPENAI_API_KEY not configured')
   }
 
-  const model = options.model || 'gpt-4-turbo-preview'
+  const model = options.model || 'gpt-4o'
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
