@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   ArrowLeft,
   Download,
@@ -22,6 +23,11 @@ import {
   Copy,
   Check,
   Trash2,
+  Sparkles,
+  Clock,
+  Activity,
+  Heart,
+  Tv,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -42,6 +48,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
+// Import new advanced audience components
+import { AudiencePersona } from "@/components/audiences/audience-persona"
+import { DayInTheLife } from "@/components/audiences/day-in-the-life"
+import { HabitsBehaviors } from "@/components/audiences/habits-behaviors"
+import { MediaConsumption } from "@/components/audiences/media-consumption"
+import { BrandAffinities } from "@/components/audiences/brand-affinities"
+
 // Mock audience data - 10 advanced examples
 const audienceData: Record<string, {
   id: string
@@ -54,6 +67,7 @@ const audienceData: Record<string, {
   demographics: { label: string; value: string }[]
   behaviors: string[]
   interests: string[]
+  criteria?: Record<string, unknown>
 }> = {
   "1": {
     id: "1",
@@ -89,6 +103,7 @@ const audienceData: Record<string, {
       "Outdoor recreation & nature",
       "Wellness & mindfulness",
     ],
+    criteria: { age: "25-40", income: "$65,000 - $120,000" },
   },
   "2": {
     id: "2",
@@ -124,6 +139,7 @@ const audienceData: Record<string, {
       "Smart home automation",
       "Space technology",
     ],
+    criteria: { age: "28-45", income: "$120,000+" },
   },
   "3": {
     id: "3",
@@ -159,6 +175,7 @@ const audienceData: Record<string, {
       "Personal branding",
       "Entrepreneurship",
     ],
+    criteria: { age: "16-25", income: "$25,000 - $75,000" },
   },
   "4": {
     id: "4",
@@ -194,6 +211,7 @@ const audienceData: Record<string, {
       "Wellness retreats & spas",
       "Cultural experiences & events",
     ],
+    criteria: { age: "35-55", income: "$200,000+" },
   },
   "5": {
     id: "5",
@@ -229,6 +247,7 @@ const audienceData: Record<string, {
       "Wearable technology",
       "Preventive healthcare",
     ],
+    criteria: { age: "30-50", income: "$150,000+" },
   },
   "6": {
     id: "6",
@@ -264,6 +283,7 @@ const audienceData: Record<string, {
       "Children's extracurriculars",
       "Financial planning for family",
     ],
+    criteria: { age: "32-48", income: "$85,000 - $175,000" },
   },
   "7": {
     id: "7",
@@ -299,6 +319,7 @@ const audienceData: Record<string, {
       "Photography & content creation",
       "Language learning",
     ],
+    criteria: { age: "26-42", income: "$75,000 - $200,000" },
   },
   "8": {
     id: "8",
@@ -334,6 +355,7 @@ const audienceData: Record<string, {
       "Gaming merchandise & collectibles",
       "Anime & gaming crossovers",
     ],
+    criteria: { age: "16-35", income: "$40,000 - $100,000" },
   },
   "9": {
     id: "9",
@@ -369,6 +391,7 @@ const audienceData: Record<string, {
       "K-beauty & J-beauty trends",
       "DIY beauty & wellness",
     ],
+    criteria: { age: "22-45", income: "$55,000 - $130,000" },
   },
   "10": {
     id: "10",
@@ -404,6 +427,7 @@ const audienceData: Record<string, {
       "Early retirement planning",
       "Financial independence community",
     ],
+    criteria: { age: "25-45", income: "$80,000 - $250,000" },
   },
 }
 
@@ -418,6 +442,7 @@ interface AudienceType {
   demographics: { label: string; value: string }[]
   behaviors: string[]
   interests: string[]
+  criteria?: Record<string, unknown>
 }
 
 export default function AudienceDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -451,6 +476,7 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
               demographics: criteria.demographics || [],
               behaviors: criteria.behaviors || [],
               interests: criteria.interests || [],
+              criteria,
             })
           } else {
             setAudience(audienceData[id] || null)
@@ -711,105 +737,183 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Demographics */}
-          <Card className="p-6">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Demographics
-            </h3>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {audience.demographics.map((demo) => (
-                <div key={demo.label} className="p-3 bg-muted rounded-lg">
-                  <p className="text-sm text-muted-foreground">{demo.label}</p>
-                  <p className="font-semibold">{demo.value}</p>
+      {/* Main Tabs for Audience Insights */}
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="w-full justify-start mb-4 flex-wrap h-auto gap-1">
+          <TabsTrigger value="overview" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="persona" className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4" />
+            Persona
+          </TabsTrigger>
+          <TabsTrigger value="day-in-life" className="flex items-center gap-2">
+            <Clock className="h-4 w-4" />
+            Day in the Life
+          </TabsTrigger>
+          <TabsTrigger value="habits" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Habits & Behaviors
+          </TabsTrigger>
+          <TabsTrigger value="media" className="flex items-center gap-2">
+            <Tv className="h-4 w-4" />
+            Media Consumption
+          </TabsTrigger>
+          <TabsTrigger value="brands" className="flex items-center gap-2">
+            <Heart className="h-4 w-4" />
+            Brand Affinities
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Overview Tab - Original Content */}
+        <TabsContent value="overview">
+          <div className="grid gap-6 lg:grid-cols-3">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Demographics */}
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Demographics
+                </h3>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {audience.demographics.map((demo) => (
+                    <div key={demo.label} className="p-3 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground">{demo.label}</p>
+                      <p className="font-semibold">{demo.value}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </Card>
+              </Card>
 
-          {/* Behaviors */}
-          <Card className="p-6">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Key Behaviors
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {audience.behaviors.map((behavior) => (
-                <Badge key={behavior} variant="secondary" className="text-sm py-1.5">
-                  {behavior}
-                </Badge>
-              ))}
-            </div>
-          </Card>
-
-          {/* Interests */}
-          <Card className="p-6">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <Target className="h-5 w-5" />
-              Interests
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {audience.interests.map((interest) => (
-                <Badge key={interest} variant="outline" className="text-sm py-1.5">
-                  {interest}
-                </Badge>
-              ))}
-            </div>
-          </Card>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <Card className="p-6 space-y-4">
-            <h3 className="font-semibold">Audience Summary</h3>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-muted-foreground">Size</p>
-                <p className="text-2xl font-bold">{audience.size}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Markets</p>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {audience.markets.map((market) => (
-                    <Badge key={market} variant="secondary">
-                      {market}
+              {/* Behaviors */}
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Key Behaviors
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {audience.behaviors.map((behavior) => (
+                    <Badge key={behavior} variant="secondary" className="text-sm py-1.5">
+                      {behavior}
                     </Badge>
                   ))}
                 </div>
-              </div>
-            </div>
-          </Card>
+              </Card>
 
-          <Card className="p-6 space-y-4">
-            <h3 className="font-semibold">Quick Actions</h3>
-            <div className="space-y-2">
-              <Link href={`/dashboard/charts/new?audience=${audience.id}`}>
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Create Chart
-                </Button>
-              </Link>
-              <Link href={`/dashboard/crosstabs/new?audience=${audience.id}`}>
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <Users className="h-4 w-4 mr-2" />
-                  Compare Audiences
-                </Button>
-              </Link>
-              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleExport} disabled={isExporting}>
-                {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-                Export Profile
-              </Button>
-              <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleCopyLink}>
-                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-                {copied ? "Copied!" : "Copy Link"}
-              </Button>
+              {/* Interests */}
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Interests
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {audience.interests.map((interest) => (
+                    <Badge key={interest} variant="outline" className="text-sm py-1.5">
+                      {interest}
+                    </Badge>
+                  ))}
+                </div>
+              </Card>
             </div>
-          </Card>
-        </div>
-      </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              <Card className="p-6 space-y-4">
+                <h3 className="font-semibold">Audience Summary</h3>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Size</p>
+                    <p className="text-2xl font-bold">{audience.size}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Markets</p>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {audience.markets.map((market) => (
+                        <Badge key={market} variant="secondary">
+                          {market}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 space-y-4">
+                <h3 className="font-semibold">Quick Actions</h3>
+                <div className="space-y-2">
+                  <Link href={`/dashboard/charts/new?audience=${audience.id}`}>
+                    <Button variant="outline" className="w-full justify-start bg-transparent">
+                      <BarChart3 className="h-4 w-4 mr-2" />
+                      Create Chart
+                    </Button>
+                  </Link>
+                  <Link href={`/dashboard/crosstabs/new?audience=${audience.id}`}>
+                    <Button variant="outline" className="w-full justify-start bg-transparent">
+                      <Users className="h-4 w-4 mr-2" />
+                      Compare Audiences
+                    </Button>
+                  </Link>
+                  <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleExport} disabled={isExporting}>
+                    {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+                    Export Profile
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleCopyLink}>
+                    {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                    {copied ? "Copied!" : "Copy Link"}
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* Persona Tab */}
+        <TabsContent value="persona">
+          <AudiencePersona
+            audienceId={audience.id}
+            audienceName={audience.name}
+            audienceCriteria={audience.criteria}
+          />
+        </TabsContent>
+
+        {/* Day in the Life Tab */}
+        <TabsContent value="day-in-life">
+          <DayInTheLife
+            audienceId={audience.id}
+            audienceName={audience.name}
+            audienceCriteria={audience.criteria}
+          />
+        </TabsContent>
+
+        {/* Habits & Behaviors Tab */}
+        <TabsContent value="habits">
+          <HabitsBehaviors
+            audienceId={audience.id}
+            audienceName={audience.name}
+            audienceCriteria={audience.criteria}
+          />
+        </TabsContent>
+
+        {/* Media Consumption Tab */}
+        <TabsContent value="media">
+          <MediaConsumption
+            audienceId={audience.id}
+            audienceName={audience.name}
+            audienceCriteria={audience.criteria}
+          />
+        </TabsContent>
+
+        {/* Brand Affinities Tab */}
+        <TabsContent value="brands">
+          <BrandAffinities
+            audienceId={audience.id}
+            audienceName={audience.name}
+            audienceCriteria={audience.criteria}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
