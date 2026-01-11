@@ -7,6 +7,10 @@ import { LiveActivityFeed } from "@/components/dashboard/live-activity-feed"
 import { AgentOrchestrator } from "@/components/dashboard/agent-orchestrator"
 import { InsightsPanel } from "@/components/dashboard/insights-panel"
 import { PerformanceCharts } from "@/components/dashboard/performance-charts"
+import { RecentWorkflows } from "@/components/dashboard/recent-workflows"
+import { RecentReports } from "@/components/dashboard/recent-reports"
+import { ProjectsOverview } from "@/components/dashboard/projects-overview"
+import { PlatformOverview } from "@/components/dashboard/platform-overview"
 
 async function getDashboardData(orgId: string) {
   const now = new Date()
@@ -185,13 +189,23 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           <div className="xl:col-span-2 space-y-6">
             <PerformanceCharts />
+            <RecentWorkflows />
+          </div>
+          <div className="space-y-6">
+            <ProjectsOverview />
+            <AgentOrchestrator />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2 space-y-6">
             <LiveActivityFeed activities={demoActivities} />
           </div>
           <div className="space-y-6">
-            <AgentOrchestrator />
+            <RecentReports />
             <InsightsPanel />
           </div>
         </div>
+        <PlatformOverview />
       </div>
     )
   }
@@ -213,13 +227,23 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           <div className="xl:col-span-2 space-y-6">
             <PerformanceCharts />
+            <RecentWorkflows />
+          </div>
+          <div className="space-y-6">
+            <ProjectsOverview />
+            <AgentOrchestrator />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2 space-y-6">
             <LiveActivityFeed activities={demoActivities} />
           </div>
           <div className="space-y-6">
-            <AgentOrchestrator />
+            <RecentReports />
             <InsightsPanel />
           </div>
         </div>
+        <PlatformOverview />
       </div>
     )
   }
@@ -249,13 +273,25 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 space-y-6">
           <PerformanceCharts orgId={currentOrgId} />
+          <RecentWorkflows />
+        </div>
+        <div className="space-y-6">
+          <ProjectsOverview />
+          <AgentOrchestrator orgId={currentOrgId} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2 space-y-6">
           <LiveActivityFeed activities={formattedActivities} />
         </div>
         <div className="space-y-6">
-          <AgentOrchestrator orgId={currentOrgId} />
+          <RecentReports />
           <InsightsPanel orgId={currentOrgId} />
         </div>
       </div>
+
+      <PlatformOverview />
     </div>
   )
 }
