@@ -510,6 +510,12 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
           const apiDashboard = data.data || data
           if (apiDashboard && apiDashboard.id) {
             const widgetsArray = Array.isArray(apiDashboard.widgets) ? apiDashboard.widgets : []
+            // Valid chart types for validation
+            const validChartTypes: ChartType[] = ["BAR", "LINE", "PIE", "DONUT", "AREA", "SCATTER", "HEATMAP", "TREEMAP", "FUNNEL", "RADAR", "METRIC"]
+            const getValidChartType = (type: string | undefined): ChartType => {
+              const upperType = (type || "").toUpperCase()
+              return validChartTypes.includes(upperType as ChartType) ? (upperType as ChartType) : "BAR"
+            }
             setDashboard({
               id: apiDashboard.id,
               name: apiDashboard.name,
@@ -517,7 +523,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
               charts: widgetsArray.map((w: any, i: number) => ({
                 id: w.id || `chart-${i}`,
                 name: w.title || w.name || `Chart ${i + 1}`,
-                type: (w.type?.toUpperCase() || "BAR") as ChartType,
+                type: getValidChartType(w.type),
                 category: w.category || "General",
                 dataSource: w.dataSource || "Unknown",
               })),
