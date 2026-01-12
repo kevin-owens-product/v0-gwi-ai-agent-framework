@@ -245,14 +245,20 @@ export function AdvancedChartRenderer({
   }, [colors, colorPalette])
 
   // Get chart data - use template data if available, otherwise use provided data
+  // Always ensure we return a valid array to prevent Recharts errors
   const chartData = useMemo(() => {
+    // If template is specified, always use template data
     if (template) {
-      return generateAdvancedSampleData(type, template)
+      const templateData = generateAdvancedSampleData(type, template)
+      return Array.isArray(templateData) ? templateData : []
     }
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      return generateAdvancedSampleData(type)
+    // Validate provided data is a non-empty array
+    if (data && Array.isArray(data) && data.length > 0) {
+      return data
     }
-    return data
+    // Fall back to generated sample data
+    const sampleData = generateAdvancedSampleData(type)
+    return Array.isArray(sampleData) ? sampleData : []
   }, [data, type, template])
 
   // Handle data point click
@@ -296,7 +302,7 @@ export function AdvancedChartRenderer({
     )
   }
 
-  if (!chartData || chartData.length === 0) {
+  if (!chartData || !Array.isArray(chartData) || chartData.length === 0) {
     return (
       <div
         className={cn("flex flex-col items-center justify-center text-muted-foreground", className)}
