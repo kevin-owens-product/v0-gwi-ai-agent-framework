@@ -1,6 +1,35 @@
+/**
+ * AgentBuilder Component
+ *
+ * A comprehensive form interface for creating and configuring custom AI agents.
+ * Provides multi-section configuration including basic info, system prompts, data sources,
+ * output formats, and advanced settings with real-time validation and draft saving.
+ *
+ * Features:
+ * - Multi-step form with validation
+ * - Real-time draft saving
+ * - Tag management
+ * - Data source selection
+ * - Output format configuration
+ * - Advanced AI settings (temperature, tokens, memory)
+ * - Example prompt management
+ * - Event tracking for analytics
+ *
+ * @component
+ * @module components/agents/agent-builder
+ *
+ * @example
+ * ```tsx
+ * <AgentBuilder />
+ * ```
+ *
+ * @see Agent
+ * @see useAgents
+ */
+
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,11 +42,17 @@ import { ArrowLeft, Save, Play, Plus, X, Sparkles, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useAgentTracking, useFormTracking, usePageViewTracking } from "@/hooks/useEventTracking"
 
+/**
+ * Available agent types with specific capabilities
+ */
 type AgentType = 'RESEARCH' | 'ANALYSIS' | 'REPORTING' | 'MONITORING' | 'CUSTOM'
 
 export function AgentBuilder() {
   const router = useRouter()
+
+  // Form state
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [type, setType] = useState<AgentType>("CUSTOM")
@@ -32,9 +67,23 @@ export function AgentBuilder() {
   const [dataSources, setDataSources] = useState<string[]>(["GWI Core"])
   const [outputFormats, setOutputFormats] = useState<string[]>(["Markdown"])
 
+  // UI state
   const [isCreating, setIsCreating] = useState(false)
   const [isSavingDraft, setIsSavingDraft] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Event tracking hooks
+  usePageViewTracking({ pageName: 'Agent Builder' })
+  const { trackAgentCreate, trackAgentError } = useAgentTracking()
+  const { onFieldChange: trackFieldChange } = useFormTracking('agent-builder-form')
+
+  /**
+   * Track form start on first interaction
+   */
+  useEffect(() => {
+    const handler = trackFieldChange('_init')
+    handler({})
+  }, [trackFieldChange])
 
   const addTag = () => {
     if (newTag && !tags.includes(newTag)) {
@@ -86,11 +135,18 @@ export function AgentBuilder() {
     return Object.keys(newErrors).length === 0
   }
 
+  /**
+   * Handles agent creation with tracking and error handling
+   *
+   * @param asDraft - Whether to save as draft or publish
+   */
   const handleCreate = async (asDraft: boolean = false) => {
     if (!validateForm()) return
 
     const setLoading = asDraft ? setIsSavingDraft : setIsCreating
     setLoading(true)
+
+    const startTime = Date.now()
 
     try {
       const configuration = {
@@ -122,11 +178,38 @@ export function AgentBuilder() {
       }
 
       const data = await response.json()
+      const duration = Date.now() - startTime
+
+      // Track successful creation
+      trackAgentCreate(data.id, {
+        agentType: type,
+        isDraft: asDraft,
+        promptLength: systemPrompt.length,
+        dataSourcesCount: dataSources.length,
+        outputFormatsCount: outputFormats.length,
+        tagsCount: tags.length,
+        examplePromptsCount: examplePrompts.filter(p => p.trim()).length,
+        hasDescription: !!description,
+        duration,
+        temperature: parseFloat(temperature),
+        maxTokens,
+        enableMemory,
+        requireCitations,
+      })
+
       toast.success(asDraft ? 'Agent draft saved' : 'Agent created successfully')
       router.push(`/dashboard/agents/${data.id}`)
     } catch (err) {
       console.error('Failed to create agent:', err)
-      toast.error(err instanceof Error ? err.message : 'Failed to create agent')
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create agent'
+
+      // Track error
+      trackAgentError('new-agent', errorMessage, {
+        agentType: type,
+        isDraft: asDraft,
+      })
+
+      toast.error(errorMessage)
     } finally {
       setLoading(false)
     }
