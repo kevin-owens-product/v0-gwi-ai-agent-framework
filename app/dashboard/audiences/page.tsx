@@ -35,14 +35,150 @@ interface Audience {
 
 // Demo audiences for fallback
 const demoAudiences: Audience[] = [
-  { id: "1", name: "Eco-Conscious Millennials", description: "Sustainability-focused consumers with strong environmental values", size: "1.2M", markets: ["US", "UK", "DE", "FR", "NL"], lastUsed: "2 hours ago", demographics: [{ label: "Age", value: "25-40" }], behaviors: ["eco_shopping"], interests: ["sustainability"] },
-  { id: "2", name: "Tech Early Adopters", description: "High-income innovation enthusiasts first to adopt new technologies", size: "850K", markets: ["US", "JP", "KR", "DE", "UK"], lastUsed: "1 day ago", demographics: [{ label: "Income", value: "$100K+" }], behaviors: ["early_adopter"], interests: ["technology"] },
-  { id: "3", name: "Gen Z Content Creators", description: "Digital-native creators building personal brands across platforms", size: "2.1M", markets: ["Global"], lastUsed: "3 days ago", demographics: [{ label: "Age", value: "18-24" }], behaviors: ["content_creation"], interests: ["social_media"] },
-  { id: "4", name: "Luxury Experience Seekers", description: "Affluent consumers prioritizing premium experiences over goods", size: "680K", markets: ["US", "UK", "UAE", "SG", "HK"], lastUsed: "5 hours ago", demographics: [{ label: "Income", value: "$150K+" }], behaviors: ["luxury_travel"], interests: ["experiences"] },
-  { id: "5", name: "Health-Optimized Professionals", description: "Career-focused individuals investing in health optimization", size: "920K", markets: ["US", "UK", "AU", "CA", "DE"], lastUsed: "1 day ago", demographics: [{ label: "Age", value: "30-45" }], behaviors: ["wellness_focus"], interests: ["health", "fitness"] },
-  { id: "6", name: "Suburban Family Decision Makers", description: "Parents controlling majority of family purchasing decisions", size: "3.4M", markets: ["US", "UK", "CA", "AU"], lastUsed: "6 hours ago", demographics: [{ label: "Life Stage", value: "Parents" }], behaviors: ["family_shopping"], interests: ["family"] },
-  { id: "7", name: "Urban Foodies", description: "City dwellers passionate about culinary experiences and food trends", size: "1.8M", markets: ["US", "UK", "FR", "IT", "JP"], lastUsed: "4 hours ago", demographics: [{ label: "Location", value: "Urban" }], behaviors: ["dining_out"], interests: ["food", "restaurants"] },
-  { id: "8", name: "Remote Work Pioneers", description: "Professionals who have fully embraced remote and hybrid work", size: "2.5M", markets: ["US", "UK", "DE", "NL", "AU"], lastUsed: "12 hours ago", demographics: [{ label: "Work Style", value: "Remote" }], behaviors: ["remote_work"], interests: ["productivity", "work_life_balance"] },
+  {
+    id: "1",
+    name: "Eco-Conscious Millennials",
+    description: "Sustainability-focused consumers with strong environmental values",
+    size: "1.2M",
+    markets: ["US", "UK", "DE", "FR", "NL"],
+    lastUsed: "2 hours ago",
+    demographics: [
+      { label: "Age Range", value: "25-40" },
+      { label: "Gender", value: "52% Female" },
+      { label: "Income", value: "$65K-$120K" },
+      { label: "Education", value: "Bachelor's+" },
+      { label: "Location", value: "Urban Metro" },
+      { label: "HH Size", value: "2.3 avg" },
+    ],
+    behaviors: ["eco_shopping", "sustainable_brands", "recycling"],
+    interests: ["sustainability", "organic_food", "renewable_energy"],
+  },
+  {
+    id: "2",
+    name: "Tech Early Adopters",
+    description: "High-income innovation enthusiasts first to adopt new technologies",
+    size: "850K",
+    markets: ["US", "JP", "KR", "DE", "UK"],
+    lastUsed: "1 day ago",
+    demographics: [
+      { label: "Age Range", value: "28-45" },
+      { label: "Gender", value: "62% Male" },
+      { label: "Income", value: "$120K+" },
+      { label: "Education", value: "Graduate+" },
+      { label: "Location", value: "Tech Hubs" },
+      { label: "Occupation", value: "Tech/Finance" },
+    ],
+    behaviors: ["early_adopter", "beta_testing", "tech_influencer"],
+    interests: ["technology", "AI", "gadgets", "crypto"],
+  },
+  {
+    id: "3",
+    name: "Gen Z Content Creators",
+    description: "Digital-native creators building personal brands across platforms",
+    size: "2.1M",
+    markets: ["Global"],
+    lastUsed: "3 days ago",
+    demographics: [
+      { label: "Age Range", value: "18-24" },
+      { label: "Gender", value: "55% Female" },
+      { label: "Income", value: "$25K-$75K" },
+      { label: "Education", value: "In School/Recent Grad" },
+      { label: "Location", value: "Global Urban" },
+      { label: "Platform", value: "4.2 avg platforms" },
+    ],
+    behaviors: ["content_creation", "social_media_active", "trend_setting"],
+    interests: ["social_media", "video_editing", "fashion", "music"],
+  },
+  {
+    id: "4",
+    name: "Luxury Experience Seekers",
+    description: "Affluent consumers prioritizing premium experiences over goods",
+    size: "680K",
+    markets: ["US", "UK", "UAE", "SG", "HK"],
+    lastUsed: "5 hours ago",
+    demographics: [
+      { label: "Age Range", value: "35-55" },
+      { label: "Gender", value: "48% Female" },
+      { label: "Income", value: "$200K+" },
+      { label: "Education", value: "Graduate+" },
+      { label: "Location", value: "Major Cities" },
+      { label: "Net Worth", value: "$1M+" },
+    ],
+    behaviors: ["luxury_travel", "fine_dining", "exclusive_memberships"],
+    interests: ["experiences", "travel", "art", "wine"],
+  },
+  {
+    id: "5",
+    name: "Health-Optimized Professionals",
+    description: "Career-focused individuals investing in health optimization",
+    size: "920K",
+    markets: ["US", "UK", "AU", "CA", "DE"],
+    lastUsed: "1 day ago",
+    demographics: [
+      { label: "Age Range", value: "30-50" },
+      { label: "Gender", value: "58% Male" },
+      { label: "Income", value: "$150K+" },
+      { label: "Education", value: "Bachelor's+" },
+      { label: "Location", value: "Urban Professional" },
+      { label: "Work Style", value: "High-Performance" },
+    ],
+    behaviors: ["wellness_focus", "biohacking", "fitness_tracking"],
+    interests: ["health", "fitness", "supplements", "sleep_optimization"],
+  },
+  {
+    id: "6",
+    name: "Suburban Family Decision Makers",
+    description: "Parents controlling majority of family purchasing decisions",
+    size: "3.4M",
+    markets: ["US", "UK", "CA", "AU"],
+    lastUsed: "6 hours ago",
+    demographics: [
+      { label: "Age Range", value: "32-48" },
+      { label: "Gender", value: "68% Female" },
+      { label: "Income", value: "$85K-$175K" },
+      { label: "Education", value: "Bachelor's+" },
+      { label: "Location", value: "Suburban" },
+      { label: "Children", value: "2.1 avg" },
+    ],
+    behaviors: ["family_shopping", "price_comparison", "bulk_buying"],
+    interests: ["family", "education", "home_improvement", "meal_planning"],
+  },
+  {
+    id: "7",
+    name: "Urban Foodies",
+    description: "City dwellers passionate about culinary experiences and food trends",
+    size: "1.8M",
+    markets: ["US", "UK", "FR", "IT", "JP"],
+    lastUsed: "4 hours ago",
+    demographics: [
+      { label: "Age Range", value: "26-42" },
+      { label: "Gender", value: "54% Female" },
+      { label: "Income", value: "$70K-$140K" },
+      { label: "Education", value: "Bachelor's+" },
+      { label: "Location", value: "Urban Centers" },
+      { label: "Dining Out", value: "4+ times/week" },
+    ],
+    behaviors: ["dining_out", "food_photography", "restaurant_reviews"],
+    interests: ["food", "restaurants", "cooking", "wine", "travel"],
+  },
+  {
+    id: "8",
+    name: "Remote Work Pioneers",
+    description: "Professionals who have fully embraced remote and hybrid work",
+    size: "2.5M",
+    markets: ["US", "UK", "DE", "NL", "AU"],
+    lastUsed: "12 hours ago",
+    demographics: [
+      { label: "Age Range", value: "28-45" },
+      { label: "Gender", value: "51% Male" },
+      { label: "Income", value: "$80K-$180K" },
+      { label: "Education", value: "Bachelor's+" },
+      { label: "Location", value: "Flexible/Variable" },
+      { label: "Work Type", value: "Remote/Hybrid" },
+    ],
+    behaviors: ["remote_work", "digital_nomad", "coworking"],
+    interests: ["productivity", "work_life_balance", "travel", "home_office"],
+  },
 ]
 
 function formatTimeAgo(dateString: string): string {
@@ -63,8 +199,88 @@ function formatSize(size: number): string {
   return size.toString()
 }
 
+// Generate default demographics based on audience name/description for better UX
+function generateDefaultDemographics(name: string, description: string): { label: string; value: string }[] {
+  const nameLower = name.toLowerCase()
+  const descLower = description.toLowerCase()
+  const demographics: { label: string; value: string }[] = []
+
+  // Age Range inference
+  if (nameLower.includes('gen z') || descLower.includes('gen z') || nameLower.includes('18-24')) {
+    demographics.push({ label: "Age Range", value: "18-24" })
+  } else if (nameLower.includes('millennial') || descLower.includes('millennial') || nameLower.includes('25-40')) {
+    demographics.push({ label: "Age Range", value: "25-40" })
+  } else if (nameLower.includes('gen x') || descLower.includes('gen x')) {
+    demographics.push({ label: "Age Range", value: "41-56" })
+  } else if (nameLower.includes('boomer') || descLower.includes('boomer') || nameLower.includes('senior')) {
+    demographics.push({ label: "Age Range", value: "55+" })
+  } else if (nameLower.includes('young') || descLower.includes('young')) {
+    demographics.push({ label: "Age Range", value: "18-35" })
+  } else {
+    demographics.push({ label: "Age Range", value: "25-54" })
+  }
+
+  // Gender inference
+  if (nameLower.includes('mom') || nameLower.includes('mother') || nameLower.includes('women') || nameLower.includes('female')) {
+    demographics.push({ label: "Gender", value: "Primarily Female" })
+  } else if (nameLower.includes('dad') || nameLower.includes('father') || nameLower.includes('men') || nameLower.includes('male')) {
+    demographics.push({ label: "Gender", value: "Primarily Male" })
+  } else {
+    demographics.push({ label: "Gender", value: "Balanced" })
+  }
+
+  // Income inference
+  if (nameLower.includes('luxury') || nameLower.includes('affluent') || nameLower.includes('premium') || descLower.includes('high-income')) {
+    demographics.push({ label: "Income", value: "$150K+" })
+  } else if (nameLower.includes('budget') || descLower.includes('budget') || descLower.includes('value-conscious')) {
+    demographics.push({ label: "Income", value: "$35K-$65K" })
+  } else if (nameLower.includes('professional') || descLower.includes('professional')) {
+    demographics.push({ label: "Income", value: "$85K-$150K" })
+  } else {
+    demographics.push({ label: "Income", value: "$50K-$100K" })
+  }
+
+  // Education inference
+  if (nameLower.includes('professional') || nameLower.includes('executive') || descLower.includes('graduate')) {
+    demographics.push({ label: "Education", value: "Graduate+" })
+  } else if (nameLower.includes('student') || descLower.includes('student')) {
+    demographics.push({ label: "Education", value: "In School" })
+  } else {
+    demographics.push({ label: "Education", value: "Bachelor's+" })
+  }
+
+  // Location inference
+  if (nameLower.includes('urban') || descLower.includes('city') || descLower.includes('urban')) {
+    demographics.push({ label: "Location", value: "Urban" })
+  } else if (nameLower.includes('suburban') || descLower.includes('suburban')) {
+    demographics.push({ label: "Location", value: "Suburban" })
+  } else if (nameLower.includes('rural') || descLower.includes('rural')) {
+    demographics.push({ label: "Location", value: "Rural" })
+  } else {
+    demographics.push({ label: "Location", value: "Mixed" })
+  }
+
+  // Life stage inference
+  if (nameLower.includes('parent') || nameLower.includes('family') || nameLower.includes('mom') || nameLower.includes('dad')) {
+    demographics.push({ label: "Life Stage", value: "Parents" })
+  } else if (nameLower.includes('retire') || descLower.includes('retire')) {
+    demographics.push({ label: "Life Stage", value: "Pre-Retiree/Retiree" })
+  } else if (nameLower.includes('young professional') || descLower.includes('early career')) {
+    demographics.push({ label: "Life Stage", value: "Early Career" })
+  }
+
+  return demographics
+}
+
 function mapApiAudience(apiAudience: any): Audience {
   const criteria = apiAudience.criteria || {}
+  const existingDemographics = criteria.demographics || []
+
+  // Use existing demographics if available, otherwise generate defaults
+  const demographics = existingDemographics.length > 0
+    ? existingDemographics
+    : generateDefaultDemographics(apiAudience.name || '', apiAudience.description || '')
+
   return {
     id: apiAudience.id,
     name: apiAudience.name,
@@ -72,7 +288,7 @@ function mapApiAudience(apiAudience: any): Audience {
     size: formatSize(apiAudience.size || 0),
     markets: criteria.markets || ['Global'],
     lastUsed: formatTimeAgo(apiAudience.updatedAt),
-    demographics: criteria.demographics || [],
+    demographics,
     behaviors: criteria.behaviors || [],
     interests: criteria.interests || [],
   }
