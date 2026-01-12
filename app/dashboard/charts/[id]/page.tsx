@@ -384,7 +384,12 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
           const data = await response.json()
           const apiChart = data.data || data
           if (apiChart && apiChart.id) {
-            setChart(apiChart)
+            // Ensure data and insights are arrays
+            setChart({
+              ...apiChart,
+              data: Array.isArray(apiChart.data) ? apiChart.data : undefined,
+              insights: Array.isArray(apiChart.insights) ? apiChart.insights : [],
+            })
           } else {
             setChart(demoCharts[id] || null)
           }
@@ -698,170 +703,51 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
             )}
           </div>
 
-          {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-4">
-            <div className={cn("grid gap-4", isFullscreen ? "" : "lg:grid-cols-4")}>
-              {/* Main Chart Area */}
-              <div className={cn(isFullscreen ? "" : "lg:col-span-3")}>
-                {/* Quick Filters Bar */}
-                <Card className="mb-4">
-                  <CardContent className="p-3">
-                    <div className="flex flex-wrap items-center gap-4">
-                      <div className="flex items-center gap-2">
-                        <Label className="text-xs text-muted-foreground">Period:</Label>
-                        <Select value={selectedTimePeriod} onValueChange={setSelectedTimePeriod}>
-                          <SelectTrigger className="h-8 w-[140px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {timePeriodOptions.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Label className="text-xs text-muted-foreground">Segment:</Label>
-                        <Select value={selectedSegment} onValueChange={setSelectedSegment}>
-                          <SelectTrigger className="h-8 w-[160px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {segmentOptions.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <Separator orientation="vertical" className="h-6" />
-                      <div className="flex items-center gap-2">
-                        <Switch id="benchmark" checked={showBenchmark} onCheckedChange={setShowBenchmark} />
-                        <Label htmlFor="benchmark" className="text-xs">Show Benchmark</Label>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Switch id="ci" checked={showConfidenceInterval} onCheckedChange={setShowConfidenceInterval} />
-                        <Label htmlFor="ci" className="text-xs">Confidence Interval</Label>
-                      </div>
-                      {comparisonMode && (
-                        <>
-                          <Separator orientation="vertical" className="h-6" />
-                          <div className="flex items-center gap-2">
-                            <Label className="text-xs text-muted-foreground">Compare to:</Label>
-                            <Select value={comparisonPeriod} onValueChange={setComparisonPeriod}>
-                              <SelectTrigger className="h-8 w-[160px]">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="previous">Previous Period</SelectItem>
-                                <SelectItem value="yoy">Year over Year</SelectItem>
-                                <SelectItem value="benchmark">Industry Benchmark</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Chart or Table */}
-                <Card>
-                  <CardContent className="p-6">
-                    {dataViewMode === "chart" ? (
-                      <div className={cn("bg-gradient-to-br from-muted/30 to-muted/10 rounded-lg overflow-hidden", isFullscreen ? "min-h-[calc(100vh-300px)]" : "min-h-[450px]")}>
-                        <AdvancedChartRenderer
-                          type={chart.type}
-                          data={chartData}
-                          config={{
-                            showLegend: true,
-                            showGrid: true,
-                            showTooltip: true,
-                            showBenchmark: showBenchmark,
-                            showChange: true,
-                            height: isFullscreen ? 600 : 450,
-                            animate: true,
-                            formatter: "percentage",
-                          }}
-                          template={chart.template}
-                        />
-                      </div>
-                    ) : (
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                          <thead>
-                            <tr className="border-b">
-                              {chartData[0] && Object.keys(chartData[0]).map(key => (
-                                <th
-                                  key={key}
-                                  className="p-3 text-left font-medium cursor-pointer hover:bg-muted/50"
-                                  onClick={() => handleSort(key)}
-                                >
-                                  <div className="flex items-center gap-1">
-                                    {key}
-                                    {sortColumn === key && (
-                                      sortDirection === "asc" ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />
-                                    )}
-                                  </div>
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {sortedData.map((row, i) => (
-                              <tr key={i} className="border-b hover:bg-muted/30">
-                                {Object.entries(row).map(([key, value], j) => (
-                                  <td key={j} className="p-3">
-                                    {typeof value === "number" ? value.toLocaleString() : String(value)}
-                                    {typeof value === "number" && key.toLowerCase().includes("change") && (
-                                      <span className={cn("ml-1", Number(value) > 0 ? "text-green-500" : Number(value) < 0 ? "text-red-500" : "")}>
-                                        {Number(value) > 0 ? <ArrowUpRight className="h-3 w-3 inline" /> : Number(value) < 0 ? <ArrowDownRight className="h-3 w-3 inline" /> : null}
-                                      </span>
-                                    )}
-                                  </td>
-                                ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+      <div className={cn("grid gap-6", isFullscreen ? "" : "lg:grid-cols-3")}>
+        {/* Main Chart */}
+        <div className={cn(isFullscreen ? "" : "lg:col-span-2")}>
+          <Card className="overflow-hidden">
+            <CardContent className="p-6">
+              <div className={cn("bg-gradient-to-br from-muted/30 to-muted/10 rounded-lg overflow-hidden", isFullscreen ? "min-h-[600px]" : "min-h-[400px]")}>
+                <AdvancedChartRenderer
+                  type={chart.type}
+                  data={Array.isArray(chart.data) && chart.data.length > 0 ? chart.data : generateAdvancedSampleData(chart.type, chart.template)}
+                  config={{
+                    showLegend: true,
+                    showGrid: true,
+                    showTooltip: true,
+                    showBenchmark: true,
+                    showChange: true,
+                    height: isFullscreen ? 600 : 400,
+                    animate: true,
+                    formatter: "percentage",
+                  }}
+                  template={chart.template}
+                />
               </div>
 
-              {/* Sidebar */}
-              {!isFullscreen && (
-                <div className="space-y-4">
-                  {/* AI Summary */}
-                  <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm flex items-center gap-2">
-                        <Zap className="h-4 w-4 text-yellow-500" />
-                        AI Summary
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {aiSummary ? (
-                        <div className="text-xs text-muted-foreground prose prose-xs max-w-none">
-                          <div className="whitespace-pre-wrap">{aiSummary}</div>
-                          <Button variant="ghost" size="sm" className="mt-2 w-full" onClick={() => setAiSummary(null)}>
-                            <RefreshCw className="h-3 w-3 mr-1" /> Regenerate
-                          </Button>
-                        </div>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full"
-                          onClick={handleGenerateAISummary}
-                          disabled={isGeneratingSummary}
-                        >
-                          {isGeneratingSummary ? (
-                            <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Generating...</>
-                          ) : (
-                            <><Sparkles className="h-3 w-3 mr-1" /> Generate Summary</>
-                          )}
-                        </Button>
+        {/* Sidebar */}
+        {!isFullscreen && (
+          <div className="space-y-6">
+            {/* Key Insights */}
+            {Array.isArray(chart.insights) && chart.insights.length > 0 && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    Key Insights
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {chart.insights.map((insight, index) => (
+                    <div
+                      key={index}
+                      className={cn(
+                        "p-3 rounded-lg border-l-4",
+                        insight.type === "increase" && "bg-green-500/10 border-green-500",
+                        insight.type === "decrease" && "bg-red-500/10 border-red-500",
+                        insight.type === "neutral" && "bg-muted border-muted-foreground",
+                        insight.type === "highlight" && "bg-primary/10 border-primary"
                       )}
                     </CardContent>
                   </Card>
