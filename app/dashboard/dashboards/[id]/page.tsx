@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo, use, useCallback } from "react"
+import { useState, useEffect, useMemo, use, useCallback, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -9,6 +9,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Separator } from "@/components/ui/separator"
+import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
+import { Progress } from "@/components/ui/progress"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   ArrowLeft,
   Download,
@@ -39,6 +52,42 @@ import {
   PieChart,
   LineChart,
   Activity,
+  Star,
+  StarOff,
+  Link2,
+  Mail,
+  Clock,
+  Maximize2,
+  Minimize2,
+  MoreVertical,
+  Bell,
+  BellOff,
+  AlertTriangle,
+  TrendingDown,
+  ArrowUpRight,
+  ArrowDownRight,
+  FileJson,
+  FileText,
+  FileImage,
+  Table,
+  Tag,
+  Hash,
+  Globe,
+  Lock,
+  UserPlus,
+  Settings,
+  Zap,
+  History,
+  Shield,
+  ExternalLink,
+  ChevronRight,
+  Play,
+  Pause,
+  Timer,
+  Info,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -48,6 +97,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
@@ -60,6 +113,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
   Sheet,
   SheetContent,
   SheetHeader,
@@ -67,6 +128,17 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { ChartRenderer, generateSampleData } from "@/components/charts"
 import { CommentsPanel } from "@/components/shared/comments-panel"
 import { VersionHistory } from "@/components/shared/version-history"
@@ -83,6 +155,7 @@ const dashboardData: Record<string, {
   createdBy: string
   isPublic: boolean
   category: string
+  tags?: string[]
 }> = {
   "1": {
     id: "1",
@@ -105,6 +178,7 @@ const dashboardData: Record<string, {
     createdBy: "Sarah Chen",
     isPublic: false,
     category: "Campaign Analytics",
+    tags: ["Q4", "Campaign", "Performance", "Marketing"],
   },
   "2": {
     id: "2",
@@ -129,6 +203,7 @@ const dashboardData: Record<string, {
     createdBy: "Marcus Johnson",
     isPublic: true,
     category: "Market Research",
+    tags: ["2024", "Consumer", "Global", "Trends"],
   },
   "3": {
     id: "3",
@@ -149,6 +224,7 @@ const dashboardData: Record<string, {
     createdBy: "Emily Thompson",
     isPublic: true,
     category: "Brand Intelligence",
+    tags: ["Brand", "Competitive", "Health", "Tracking"],
   },
   "4": {
     id: "4",
@@ -170,6 +246,7 @@ const dashboardData: Record<string, {
     createdBy: "Alex Rivera",
     isPublic: true,
     category: "Audience Intelligence",
+    tags: ["Gen Z", "Youth", "Insights", "Audience"],
   },
   "5": {
     id: "5",
@@ -192,6 +269,7 @@ const dashboardData: Record<string, {
     createdBy: "Victoria Wells",
     isPublic: false,
     category: "Commerce Analytics",
+    tags: ["E-commerce", "Funnel", "Revenue", "Analytics"],
   },
   "6": {
     id: "6",
@@ -212,6 +290,7 @@ const dashboardData: Record<string, {
     createdBy: "Kevin Zhang",
     isPublic: false,
     category: "Media Planning",
+    tags: ["Media", "Budget", "Optimization", "Planning"],
   },
   "7": {
     id: "7",
@@ -233,6 +312,7 @@ const dashboardData: Record<string, {
     createdBy: "Dr. James Park",
     isPublic: true,
     category: "ESG & Sustainability",
+    tags: ["ESG", "Sustainability", "Green", "Environment"],
   },
   "8": {
     id: "8",
@@ -255,6 +335,7 @@ const dashboardData: Record<string, {
     createdBy: "Isabella Martinez",
     isPublic: true,
     category: "Entertainment",
+    tags: ["Streaming", "Entertainment", "Media", "Content"],
   },
   "9": {
     id: "9",
@@ -276,6 +357,7 @@ const dashboardData: Record<string, {
     createdBy: "David Chen",
     isPublic: false,
     category: "Financial Services",
+    tags: ["Finance", "Banking", "Fintech", "Investment"],
   },
   "10": {
     id: "10",
@@ -298,8 +380,39 @@ const dashboardData: Record<string, {
     createdBy: "Noah Williams",
     isPublic: true,
     category: "Health & Wellness",
+    tags: ["Health", "Wellness", "Fitness", "Medical"],
   },
 }
+
+// Mock related dashboards
+const relatedDashboardsData = [
+  { id: "r1", name: "Weekly Campaign Snapshot", views: 1234, charts: 6, category: "Campaign Analytics" },
+  { id: "r2", name: "Audience Demographics Deep Dive", views: 892, charts: 8, category: "Audience Intelligence" },
+  { id: "r3", name: "Content Performance Tracker", views: 2156, charts: 10, category: "Content Analytics" },
+]
+
+// Mock collaborators
+const mockCollaborators = [
+  { id: "u1", name: "Sarah Chen", email: "sarah.chen@company.com", avatar: "", role: "owner", initials: "SC" },
+  { id: "u2", name: "Alex Rivera", email: "alex.rivera@company.com", avatar: "", role: "editor", initials: "AR" },
+  { id: "u3", name: "Emily Thompson", email: "emily.t@company.com", avatar: "", role: "viewer", initials: "ET" },
+]
+
+// Mock activity data
+const mockActivityData = [
+  { id: "a1", user: "Sarah Chen", action: "edited", target: "Chart: Multi-Channel Engagement", time: "10 min ago" },
+  { id: "a2", user: "Alex Rivera", action: "commented on", target: "ROI Analysis section", time: "25 min ago" },
+  { id: "a3", user: "Emily Thompson", action: "viewed", target: "dashboard", time: "1 hour ago" },
+  { id: "a4", user: "Marcus Johnson", action: "exported", target: "dashboard as PDF", time: "2 hours ago" },
+  { id: "a5", user: "Sarah Chen", action: "added", target: "new chart: Budget Allocation", time: "3 hours ago" },
+]
+
+// Mock alerts
+const mockAlerts = [
+  { id: "al1", name: "High Traffic Alert", condition: "Views > 1000/day", status: "active", triggered: false },
+  { id: "al2", name: "Data Staleness Warning", condition: "Data age > 24h", status: "active", triggered: true },
+  { id: "al3", name: "Error Rate Spike", condition: "Errors > 5%", status: "inactive", triggered: false },
+]
 
 const CHART_TYPE_ICONS: Record<string, React.ReactNode> = {
   BAR: <BarChart3 className="h-4 w-4" />,
@@ -342,9 +455,11 @@ interface DashboardType {
   createdBy: string
   isPublic: boolean
   category: string
+  tags?: string[]
 }
 
 type LayoutView = "grid" | "list" | "compact"
+type ExportFormat = "json" | "pdf" | "png" | "csv"
 
 export default function DashboardDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -363,6 +478,27 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set())
   const [selectedDataSources, setSelectedDataSources] = useState<Set<string>>(new Set())
   const [layoutView, setLayoutView] = useState<LayoutView>("grid")
+
+  // New feature states
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [showShareDialog, setShowShareDialog] = useState(false)
+  const [showExportDialog, setShowExportDialog] = useState(false)
+  const [showAlertDialog, setShowAlertDialog] = useState(false)
+  const [showTagsDialog, setShowTagsDialog] = useState(false)
+  const [shareEmail, setShareEmail] = useState("")
+  const [shareRole, setShareRole] = useState("viewer")
+  const [collaborators, setCollaborators] = useState(mockCollaborators)
+  const [dashboardTags, setDashboardTags] = useState<string[]>([])
+  const [newTag, setNewTag] = useState("")
+  const [expandedChart, setExpandedChart] = useState<string | null>(null)
+  const [autoRefresh, setAutoRefresh] = useState(false)
+  const [refreshInterval, setRefreshInterval] = useState("5")
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
+  const [alerts, setAlerts] = useState(mockAlerts)
+  const [newAlertName, setNewAlertName] = useState("")
+  const [newAlertCondition, setNewAlertCondition] = useState("")
+  const [activeTab, setActiveTab] = useState("charts")
+  const refreshTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     async function fetchDashboard() {
@@ -390,25 +526,53 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
               createdBy: apiDashboard.createdByName || "Unknown",
               isPublic: apiDashboard.isPublic || false,
               category: apiDashboard.category || "Dashboard",
+              tags: apiDashboard.tags || [],
             })
+            setDashboardTags(apiDashboard.tags || [])
           } else {
             // Fall back to demo data
-            setDashboard(dashboardData[id] || null)
+            const demoData = dashboardData[id]
+            setDashboard(demoData || null)
+            setDashboardTags(demoData?.tags || [])
           }
         } else {
           // Fall back to demo data
-          setDashboard(dashboardData[id] || null)
+          const demoData = dashboardData[id]
+          setDashboard(demoData || null)
+          setDashboardTags(demoData?.tags || [])
         }
       } catch (error) {
         console.error('Failed to fetch dashboard:', error)
         // Fall back to demo data
-        setDashboard(dashboardData[id] || null)
+        const demoData = dashboardData[id]
+        setDashboard(demoData || null)
+        setDashboardTags(demoData?.tags || [])
       } finally {
         setIsLoading(false)
       }
     }
     fetchDashboard()
+
+    // Load favorite state from localStorage
+    const favorites = JSON.parse(localStorage.getItem('dashboard-favorites') || '[]')
+    setIsFavorite(favorites.includes(id))
   }, [id])
+
+  // Auto-refresh effect
+  useEffect(() => {
+    if (autoRefresh && refreshInterval) {
+      const intervalMs = parseInt(refreshInterval) * 60 * 1000
+      refreshTimerRef.current = setInterval(() => {
+        setLastRefresh(new Date())
+        // In real app, this would refetch dashboard data
+      }, intervalMs)
+    }
+    return () => {
+      if (refreshTimerRef.current) {
+        clearInterval(refreshTimerRef.current)
+      }
+    }
+  }, [autoRefresh, refreshInterval])
 
   // Get unique categories and data sources
   const { categories, dataSources, chartTypes } = useMemo(() => {
@@ -488,6 +652,79 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
     return 'Just now'
   }
 
+  // Toggle favorite
+  const handleToggleFavorite = useCallback(() => {
+    const favorites = JSON.parse(localStorage.getItem('dashboard-favorites') || '[]')
+    if (isFavorite) {
+      const newFavorites = favorites.filter((fav: string) => fav !== id)
+      localStorage.setItem('dashboard-favorites', JSON.stringify(newFavorites))
+    } else {
+      favorites.push(id)
+      localStorage.setItem('dashboard-favorites', JSON.stringify(favorites))
+    }
+    setIsFavorite(!isFavorite)
+  }, [id, isFavorite])
+
+  // Add collaborator
+  const handleAddCollaborator = useCallback(() => {
+    if (!shareEmail) return
+    const newCollaborator = {
+      id: `u${Date.now()}`,
+      name: shareEmail.split('@')[0],
+      email: shareEmail,
+      avatar: "",
+      role: shareRole,
+      initials: shareEmail.substring(0, 2).toUpperCase(),
+    }
+    setCollaborators([...collaborators, newCollaborator])
+    setShareEmail("")
+  }, [shareEmail, shareRole, collaborators])
+
+  // Remove collaborator
+  const handleRemoveCollaborator = useCallback((collaboratorId: string) => {
+    setCollaborators(collaborators.filter(c => c.id !== collaboratorId))
+  }, [collaborators])
+
+  // Add tag
+  const handleAddTag = useCallback(() => {
+    if (!newTag || dashboardTags.includes(newTag)) return
+    setDashboardTags([...dashboardTags, newTag])
+    setNewTag("")
+  }, [newTag, dashboardTags])
+
+  // Remove tag
+  const handleRemoveTag = useCallback((tag: string) => {
+    setDashboardTags(dashboardTags.filter(t => t !== tag))
+  }, [dashboardTags])
+
+  // Add alert
+  const handleAddAlert = useCallback(() => {
+    if (!newAlertName || !newAlertCondition) return
+    const newAlert = {
+      id: `al${Date.now()}`,
+      name: newAlertName,
+      condition: newAlertCondition,
+      status: "active" as const,
+      triggered: false,
+    }
+    setAlerts([...alerts, newAlert])
+    setNewAlertName("")
+    setNewAlertCondition("")
+  }, [newAlertName, newAlertCondition, alerts])
+
+  // Toggle alert status
+  const handleToggleAlert = useCallback((alertId: string) => {
+    setAlerts(alerts.map(a =>
+      a.id === alertId ? { ...a, status: a.status === "active" ? "inactive" : "active" } : a
+    ))
+  }, [alerts])
+
+  // Manual refresh
+  const handleManualRefresh = useCallback(() => {
+    setLastRefresh(new Date())
+    // In real app, this would refetch dashboard data
+  }, [])
+
   if (isLoading) {
     return (
       <div className="flex-1 space-y-6 p-6">
@@ -535,7 +772,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
     )
   }
 
-  const handleExport = async () => {
+  const handleExport = async (format: ExportFormat = "json") => {
     setIsExporting(true)
     try {
       const exportData = {
@@ -546,6 +783,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
           category: dashboard.category,
           isPublic: dashboard.isPublic,
           createdBy: dashboard.createdBy,
+          tags: dashboardTags,
           exportedAt: new Date().toISOString(),
         },
         charts: filteredCharts.map(chart => ({
@@ -569,14 +807,61 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
         },
       }
 
-      const content = JSON.stringify(exportData, null, 2)
-      const blob = new Blob([content], { type: 'application/json' })
+      let content: string
+      let mimeType: string
+      let extension: string
+
+      switch (format) {
+        case "csv":
+          // Export charts as CSV
+          const csvHeaders = ["ID", "Name", "Type", "Category", "Data Source"]
+          const csvRows = filteredCharts.map(chart =>
+            [chart.id, chart.name, chart.type, chart.category || "", chart.dataSource || ""].join(",")
+          )
+          content = [csvHeaders.join(","), ...csvRows].join("\n")
+          mimeType = "text/csv"
+          extension = "csv"
+          break
+        case "pdf":
+          // For PDF, we'll create an HTML representation (in a real app, use a PDF library)
+          content = `
+<!DOCTYPE html>
+<html>
+<head><title>${dashboard.name}</title></head>
+<body>
+<h1>${dashboard.name}</h1>
+<p>${dashboard.description}</p>
+<h2>Charts (${filteredCharts.length})</h2>
+<ul>
+${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
+</ul>
+<p>Exported: ${new Date().toISOString()}</p>
+</body>
+</html>`
+          mimeType = "text/html"
+          extension = "html"
+          break
+        case "png":
+          // For PNG export, we'd use html2canvas or similar in a real app
+          // Here we'll export metadata as JSON for demonstration
+          content = JSON.stringify({ ...exportData, note: "PNG export requires canvas rendering" }, null, 2)
+          mimeType = "application/json"
+          extension = "json"
+          break
+        default:
+          content = JSON.stringify(exportData, null, 2)
+          mimeType = "application/json"
+          extension = "json"
+      }
+
+      const blob = new Blob([content], { type: mimeType })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `dashboard-${dashboard.id}-${new Date().toISOString().split('T')[0]}.json`
+      a.download = `dashboard-${dashboard.id}-${new Date().toISOString().split('T')[0]}.${extension}`
       a.click()
       URL.revokeObjectURL(url)
+      setShowExportDialog(false)
     } catch (error) {
       console.error('Export failed:', error)
     } finally {
@@ -637,493 +922,1193 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
   }
 
   return (
-    <div className="flex-1 space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard/dashboards">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold">{dashboard.name}</h1>
-              {dashboard.isPublic && (
-                <Badge variant="secondary">Public</Badge>
-              )}
-            </div>
-            <p className="text-muted-foreground mt-1">{dashboard.description}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          {/* Filter Button */}
-          <Sheet open={showFilterPanel} onOpenChange={setShowFilterPanel}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="sm" className="bg-transparent relative">
-                <SlidersHorizontal className="h-4 w-4 mr-2" />
-                Filters
-                {activeFilterCount > 0 && (
-                  <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                    {activeFilterCount}
+    <TooltipProvider>
+      <div className="flex-1 space-y-6 p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard/dashboards">
+              <Button variant="ghost" size="icon">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold">{dashboard.name}</h1>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={handleToggleFavorite}
+                    >
+                      {isFavorite ? (
+                        <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                      ) : (
+                        <StarOff className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {isFavorite ? "Remove from favorites" : "Add to favorites"}
+                  </TooltipContent>
+                </Tooltip>
+                {dashboard.isPublic ? (
+                  <Badge variant="secondary" className="gap-1">
+                    <Globe className="h-3 w-3" />
+                    Public
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="gap-1">
+                    <Lock className="h-3 w-3" />
+                    Private
                   </Badge>
                 )}
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="w-[400px] sm:w-[450px] overflow-y-auto">
-              <SheetHeader>
-                <SheetTitle className="flex items-center justify-between">
-                  <span>Filter Charts</span>
-                  {activeFilterCount > 0 && (
-                    <Button variant="ghost" size="sm" onClick={handleClearFilters}>
-                      <X className="h-4 w-4 mr-1" />
-                      Clear All
-                    </Button>
+              </div>
+              <p className="text-muted-foreground mt-1">{dashboard.description}</p>
+              {/* Tags */}
+              <div className="flex items-center gap-2 mt-2">
+                {dashboardTags.map(tag => (
+                  <Badge key={tag} variant="outline" className="gap-1 text-xs">
+                    <Tag className="h-3 w-3" />
+                    {tag}
+                  </Badge>
+                ))}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 px-2 text-xs"
+                  onClick={() => setShowTagsDialog(true)}
+                >
+                  <Plus className="h-3 w-3 mr-1" />
+                  Add Tag
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* Auto Refresh Control */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className={`bg-transparent ${autoRefresh ? 'text-green-600' : ''}`}>
+                  {autoRefresh ? (
+                    <Play className="h-4 w-4 mr-2" />
+                  ) : (
+                    <Pause className="h-4 w-4 mr-2" />
                   )}
-                </SheetTitle>
-                <SheetDescription>
-                  Filter and search through dashboard charts
-                </SheetDescription>
-              </SheetHeader>
-
-              <div className="mt-6 space-y-6">
-                {/* Search */}
-                <div className="space-y-2">
-                  <Label>Search Charts</Label>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search by name or category..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-9"
-                    />
-                    {searchQuery && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6"
-                        onClick={() => setSearchQuery("")}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Chart Types */}
-                <div className="space-y-3">
+                  {autoRefresh ? 'Auto-refresh ON' : 'Auto-refresh'}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-64" align="end">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label>Chart Types</Label>
-                    {selectedChartTypes.size > 0 && (
-                      <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedChartTypes(new Set())}>
-                        Clear
+                    <Label>Auto-refresh</Label>
+                    <Switch checked={autoRefresh} onCheckedChange={setAutoRefresh} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Refresh interval</Label>
+                    <Select value={refreshInterval} onValueChange={setRefreshInterval}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Every 1 minute</SelectItem>
+                        <SelectItem value="5">Every 5 minutes</SelectItem>
+                        <SelectItem value="15">Every 15 minutes</SelectItem>
+                        <SelectItem value="30">Every 30 minutes</SelectItem>
+                        <SelectItem value="60">Every hour</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Last refreshed: {lastRefresh.toLocaleTimeString()}
+                  </div>
+                  <Button size="sm" className="w-full" onClick={handleManualRefresh}>
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Refresh Now
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            {/* Filter Button */}
+            <Sheet open={showFilterPanel} onOpenChange={setShowFilterPanel}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="bg-transparent relative">
+                  <SlidersHorizontal className="h-4 w-4 mr-2" />
+                  Filters
+                  {activeFilterCount > 0 && (
+                    <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                      {activeFilterCount}
+                    </Badge>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-[400px] sm:w-[450px] overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center justify-between">
+                    <span>Filter Charts</span>
+                    {activeFilterCount > 0 && (
+                      <Button variant="ghost" size="sm" onClick={handleClearFilters}>
+                        <X className="h-4 w-4 mr-1" />
+                        Clear All
                       </Button>
                     )}
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {chartTypes.map(type => (
-                      <Button
-                        key={type}
-                        variant={selectedChartTypes.has(type) ? "secondary" : "outline"}
-                        size="sm"
-                        className="h-8"
-                        onClick={() => {
-                          const newSet = new Set(selectedChartTypes)
-                          if (newSet.has(type)) {
-                            newSet.delete(type)
-                          } else {
-                            newSet.add(type)
-                          }
-                          setSelectedChartTypes(newSet)
-                        }}
-                      >
-                        {CHART_TYPE_ICONS[type]}
-                        <span className="ml-1">{formatChartTypeName(type)}</span>
-                      </Button>
-                    ))}
-                  </div>
-                </div>
+                  </SheetTitle>
+                  <SheetDescription>
+                    Filter and search through dashboard charts
+                  </SheetDescription>
+                </SheetHeader>
 
-                {/* Categories */}
-                {categories.length > 0 && (
+                <div className="mt-6 space-y-6">
+                  {/* Search */}
+                  <div className="space-y-2">
+                    <Label>Search Charts</Label>
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search by name or category..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9"
+                      />
+                      {searchQuery && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6"
+                          onClick={() => setSearchQuery("")}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Chart Types */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label>Categories</Label>
-                      {selectedCategories.size > 0 && (
-                        <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedCategories(new Set())}>
+                      <Label>Chart Types</Label>
+                      {selectedChartTypes.size > 0 && (
+                        <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedChartTypes(new Set())}>
                           Clear
                         </Button>
                       )}
                     </div>
-                    <ScrollArea className="h-48">
+                    <div className="flex flex-wrap gap-2">
+                      {chartTypes.map(type => (
+                        <Button
+                          key={type}
+                          variant={selectedChartTypes.has(type) ? "secondary" : "outline"}
+                          size="sm"
+                          className="h-8"
+                          onClick={() => {
+                            const newSet = new Set(selectedChartTypes)
+                            if (newSet.has(type)) {
+                              newSet.delete(type)
+                            } else {
+                              newSet.add(type)
+                            }
+                            setSelectedChartTypes(newSet)
+                          }}
+                        >
+                          {CHART_TYPE_ICONS[type]}
+                          <span className="ml-1">{formatChartTypeName(type)}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Categories */}
+                  {categories.length > 0 && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <Label>Categories</Label>
+                        {selectedCategories.size > 0 && (
+                          <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedCategories(new Set())}>
+                            Clear
+                          </Button>
+                        )}
+                      </div>
+                      <ScrollArea className="h-48">
+                        <div className="space-y-2">
+                          {categories.map(category => (
+                            <label
+                              key={category}
+                              className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted cursor-pointer"
+                            >
+                              <Checkbox
+                                checked={selectedCategories.has(category)}
+                                onCheckedChange={(checked) => {
+                                  const newSet = new Set(selectedCategories)
+                                  if (checked) {
+                                    newSet.add(category)
+                                  } else {
+                                    newSet.delete(category)
+                                  }
+                                  setSelectedCategories(newSet)
+                                }}
+                              />
+                              <span>{category}</span>
+                              <Badge variant="outline" className="ml-auto text-xs">
+                                {dashboard.charts.filter(c => c.category === category).length}
+                              </Badge>
+                            </label>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </div>
+                  )}
+
+                  {/* Data Sources */}
+                  {dataSources.length > 0 && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <Label>Data Sources</Label>
+                        {selectedDataSources.size > 0 && (
+                          <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedDataSources(new Set())}>
+                            Clear
+                          </Button>
+                        )}
+                      </div>
                       <div className="space-y-2">
-                        {categories.map(category => (
+                        {dataSources.map(source => (
                           <label
-                            key={category}
+                            key={source}
                             className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted cursor-pointer"
                           >
                             <Checkbox
-                              checked={selectedCategories.has(category)}
+                              checked={selectedDataSources.has(source)}
                               onCheckedChange={(checked) => {
-                                const newSet = new Set(selectedCategories)
+                                const newSet = new Set(selectedDataSources)
                                 if (checked) {
-                                  newSet.add(category)
+                                  newSet.add(source)
                                 } else {
-                                  newSet.delete(category)
+                                  newSet.delete(source)
                                 }
-                                setSelectedCategories(newSet)
+                                setSelectedDataSources(newSet)
                               }}
                             />
-                            <span>{category}</span>
+                            <span>{source}</span>
                             <Badge variant="outline" className="ml-auto text-xs">
-                              {dashboard.charts.filter(c => c.category === category).length}
+                              {dashboard.charts.filter(c => c.dataSource === source).length}
                             </Badge>
                           </label>
                         ))}
                       </div>
-                    </ScrollArea>
-                  </div>
-                )}
+                    </div>
+                  )}
 
-                {/* Data Sources */}
-                {dataSources.length > 0 && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Label>Data Sources</Label>
-                      {selectedDataSources.size > 0 && (
-                        <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedDataSources(new Set())}>
-                          Clear
-                        </Button>
+                  {/* Results summary */}
+                  <div className="pt-4 border-t">
+                    <p className="text-sm text-muted-foreground">
+                      Showing {filteredCharts.length} of {dashboard.charts.length} charts
+                    </p>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <Button variant="outline" size="sm" className="bg-transparent">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Chart
+            </Button>
+            <Button variant="outline" size="sm" className="bg-transparent" onClick={() => setShowShareDialog(true)}>
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </Button>
+            <Button variant="outline" size="sm" className="bg-transparent" onClick={() => setShowExportDialog(true)}>
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+            <Link href={`/dashboard/dashboards/builder?id=${dashboard.id}`}>
+              <Button size="sm">
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleDuplicate}>
+                  <Copy className="h-4 w-4 mr-2" />
+                  Duplicate
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleCopyLink}>
+                  {copied ? <Check className="h-4 w-4 mr-2" /> : <Link2 className="h-4 w-4 mr-2" />}
+                  {copied ? "Copied!" : "Copy Link"}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowAlertDialog(true)}>
+                  <Bell className="h-4 w-4 mr-2" />
+                  Manage Alerts
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowTagsDialog(true)}>
+                  <Tag className="h-4 w-4 mr-2" />
+                  Manage Tags
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+
+        {/* Meta info and toolbar */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              <span>Modified {dashboard.lastModified}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Eye className="h-4 w-4" />
+              <span>{dashboard.views.toLocaleString()} views</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Users className="h-4 w-4" />
+              <span>Created by {dashboard.createdBy}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <BarChart3 className="h-4 w-4" />
+              <span>{filteredCharts.length} of {dashboard.charts.length} charts</span>
+            </div>
+            {collaborators.length > 1 && (
+              <div className="flex items-center gap-1">
+                <div className="flex -space-x-2">
+                  {collaborators.slice(0, 3).map((c) => (
+                    <Avatar key={c.id} className="h-6 w-6 border-2 border-background">
+                      <AvatarImage src={c.avatar} />
+                      <AvatarFallback className="text-xs">{c.initials}</AvatarFallback>
+                    </Avatar>
+                  ))}
+                </div>
+                {collaborators.length > 3 && (
+                  <span className="text-xs">+{collaborators.length - 3}</span>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Quick search */}
+            <div className="relative">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search charts..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-8 h-8 w-48"
+              />
+            </div>
+
+            {/* Layout toggle */}
+            <div className="flex items-center border rounded-md">
+              <Button
+                variant={layoutView === "grid" ? "secondary" : "ghost"}
+                size="sm"
+                className="h-8 px-2 rounded-r-none"
+                onClick={() => setLayoutView("grid")}
+              >
+                <Grid3X3 className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={layoutView === "list" ? "secondary" : "ghost"}
+                size="sm"
+                className="h-8 px-2 rounded-none border-x"
+                onClick={() => setLayoutView("list")}
+              >
+                <Rows3 className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={layoutView === "compact" ? "secondary" : "ghost"}
+                size="sm"
+                className="h-8 px-2 rounded-l-none"
+                onClick={() => setLayoutView("compact")}
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Active filters badges */}
+        {activeFilterCount > 0 && (
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm text-muted-foreground">Active filters:</span>
+            {searchQuery && (
+              <Badge variant="secondary" className="flex items-center gap-1">
+                Search: "{searchQuery}"
+                <X className="h-3 w-3 cursor-pointer" onClick={() => setSearchQuery("")} />
+              </Badge>
+            )}
+            {selectedChartTypes.size > 0 && (
+              <Badge variant="secondary" className="flex items-center gap-1">
+                {selectedChartTypes.size} chart type{selectedChartTypes.size > 1 ? 's' : ''}
+                <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedChartTypes(new Set())} />
+              </Badge>
+            )}
+            {selectedCategories.size > 0 && (
+              <Badge variant="secondary" className="flex items-center gap-1">
+                {selectedCategories.size} categor{selectedCategories.size > 1 ? 'ies' : 'y'}
+                <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedCategories(new Set())} />
+              </Badge>
+            )}
+            {selectedDataSources.size > 0 && (
+              <Badge variant="secondary" className="flex items-center gap-1">
+                {selectedDataSources.size} data source{selectedDataSources.size > 1 ? 's' : ''}
+                <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedDataSources(new Set())} />
+              </Badge>
+            )}
+            <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={handleClearFilters}>
+              Clear all
+            </Button>
+          </div>
+        )}
+
+        {/* Main Content Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="charts" className="gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Charts ({filteredCharts.length})
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="gap-2">
+              <Activity className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="activity" className="gap-2">
+              <History className="h-4 w-4" />
+              Activity
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="gap-2">
+              <Settings className="h-4 w-4" />
+              Settings
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Charts Tab */}
+          <TabsContent value="charts" className="space-y-6">
+            {/* Charts Grid */}
+            {filteredCharts.length > 0 ? (
+              <div className={getLayoutGridClass()}>
+                {filteredCharts.map((chart) => (
+                  <Card
+                    key={chart.id}
+                    className={`p-4 hover:bg-accent/50 transition-colors cursor-pointer group relative ${
+                      layoutView === "list" ? "flex items-center gap-4" : ""
+                    } ${expandedChart === chart.id ? "col-span-2 row-span-2" : ""}`}
+                  >
+                    {/* Chart Actions */}
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 bg-background/80 backdrop-blur-sm">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => setExpandedChart(expandedChart === chart.id ? null : chart.id)}>
+                            {expandedChart === chart.id ? (
+                              <>
+                                <Minimize2 className="h-4 w-4 mr-2" />
+                                Minimize
+                              </>
+                            ) : (
+                              <>
+                                <Maximize2 className="h-4 w-4 mr-2" />
+                                Expand
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <RefreshCw className="h-4 w-4 mr-2" />
+                            Refresh Data
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Download className="h-4 w-4 mr-2" />
+                            Export Chart
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <ExternalLink className="h-4 w-4 mr-2" />
+                            Open in Editor
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="text-destructive">
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Remove from Dashboard
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+
+                    <div className={`bg-muted rounded-lg overflow-hidden ${
+                      layoutView === "list" ? "w-48 h-24" :
+                      layoutView === "compact" ? "aspect-square" :
+                      expandedChart === chart.id ? "aspect-video mb-3 h-64" : "aspect-video mb-3"
+                    }`}>
+                      <ChartRenderer
+                        type={chart.type}
+                        data={generateSampleData(chart.type, 6)}
+                        config={{
+                          showLegend: expandedChart === chart.id,
+                          showGrid: expandedChart === chart.id,
+                          showTooltip: true,
+                          height: layoutView === "list" ? 96 : layoutView === "compact" ? 100 : expandedChart === chart.id ? 256 : 120,
+                        }}
+                      />
+                    </div>
+                    <div className={layoutView === "list" ? "flex-1" : ""}>
+                      <h3 className={`font-medium ${layoutView === "compact" ? "text-xs truncate" : "text-sm"}`}>
+                        {chart.name}
+                      </h3>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="outline" className="text-xs">
+                          {CHART_TYPE_ICONS[chart.type]}
+                          <span className="ml-1">{formatChartTypeName(chart.type)}</span>
+                        </Badge>
+                        {chart.category && layoutView !== "compact" && (
+                          <Badge variant="secondary" className="text-xs">
+                            {chart.category}
+                          </Badge>
+                        )}
+                      </div>
+                      {chart.dataSource && layoutView === "list" && (
+                        <p className="text-xs text-muted-foreground mt-1">Source: {chart.dataSource}</p>
                       )}
                     </div>
-                    <div className="space-y-2">
-                      {dataSources.map(source => (
-                        <label
-                          key={source}
-                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted cursor-pointer"
-                        >
-                          <Checkbox
-                            checked={selectedDataSources.has(source)}
-                            onCheckedChange={(checked) => {
-                              const newSet = new Set(selectedDataSources)
-                              if (checked) {
-                                newSet.add(source)
-                              } else {
-                                newSet.delete(source)
-                              }
-                              setSelectedDataSources(newSet)
-                            }}
-                          />
-                          <span>{source}</span>
-                          <Badge variant="outline" className="ml-auto text-xs">
-                            {dashboard.charts.filter(c => c.dataSource === source).length}
-                          </Badge>
-                        </label>
-                      ))}
+                  </Card>
+                ))}
+
+                {/* Add Chart Card */}
+                <Link href="/dashboard/charts/new">
+                  <Card className={`p-4 border-dashed hover:bg-accent/50 transition-colors cursor-pointer h-full ${
+                    layoutView === "list" ? "flex items-center justify-center" : ""
+                  }`}>
+                    <div className={`flex items-center justify-center ${
+                      layoutView === "list" ? "" :
+                      layoutView === "compact" ? "aspect-square" : "aspect-video rounded-lg mb-3"
+                    }`}>
+                      <div className="text-center">
+                        <Plus className={`text-muted-foreground mx-auto mb-2 ${
+                          layoutView === "compact" ? "h-6 w-6" : "h-8 w-8"
+                        }`} />
+                        <p className={`text-muted-foreground ${layoutView === "compact" ? "text-xs" : "text-sm"}`}>
+                          Add Chart
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              </div>
+            ) : (
+              <Card className="p-12 text-center">
+                <Filter className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No charts match your filters</h3>
+                <p className="text-muted-foreground mb-4">
+                  Try adjusting your filters or search query to see more charts.
+                </p>
+                <Button onClick={handleClearFilters}>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Clear Filters
+                </Button>
+              </Card>
+            )}
+
+            {/* AI Insights Panel */}
+            <Card className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold">Dashboard Insights</h3>
+              </div>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <h4 className="font-medium text-sm mb-2">Chart Distribution</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {chartTypes.length} chart types used across {categories.length} categories.
+                    Most common: {chartTypes.length > 0 ? formatChartTypeName(chartTypes[0]) : 'N/A'} charts.
+                  </p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <h4 className="font-medium text-sm mb-2">Data Sources</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {dataSources.length} data source{dataSources.length !== 1 ? 's' : ''} powering this dashboard.
+                    {dataSources.length > 0 && ` Primary: ${dataSources[0]}.`}
+                  </p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <h4 className="font-medium text-sm mb-2">Current View</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {filteredCharts.length} of {dashboard.charts.length} charts displayed
+                    {activeFilterCount > 0 ? ` with ${activeFilterCount} active filter${activeFilterCount !== 1 ? 's' : ''}.` : '.'}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
+
+          {/* Analytics Tab */}
+          <TabsContent value="analytics" className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Views</p>
+                    <p className="text-3xl font-bold">{dashboard.views.toLocaleString()}</p>
+                  </div>
+                  <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                    <Eye className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                </div>
+                <div className="flex items-center mt-2 text-sm text-green-600">
+                  <TrendingUp className="h-4 w-4 mr-1" />
+                  +12% from last week
+                </div>
+              </Card>
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Unique Viewers</p>
+                    <p className="text-3xl font-bold">{Math.floor(dashboard.views * 0.6).toLocaleString()}</p>
+                  </div>
+                  <div className="h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                    <Users className="h-6 w-6 text-green-600 dark:text-green-400" />
+                  </div>
+                </div>
+                <div className="flex items-center mt-2 text-sm text-green-600">
+                  <TrendingUp className="h-4 w-4 mr-1" />
+                  +8% from last week
+                </div>
+              </Card>
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Avg. Time on Page</p>
+                    <p className="text-3xl font-bold">4:32</p>
+                  </div>
+                  <div className="h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                    <Timer className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                  </div>
+                </div>
+                <div className="flex items-center mt-2 text-sm text-red-600">
+                  <TrendingDown className="h-4 w-4 mr-1" />
+                  -5% from last week
+                </div>
+              </Card>
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Exports</p>
+                    <p className="text-3xl font-bold">156</p>
+                  </div>
+                  <div className="h-12 w-12 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
+                    <Download className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                  </div>
+                </div>
+                <div className="flex items-center mt-2 text-sm text-green-600">
+                  <TrendingUp className="h-4 w-4 mr-1" />
+                  +23% from last week
+                </div>
+              </Card>
+            </div>
+
+            {/* Views over time chart placeholder */}
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4">Views Over Time</h3>
+              <div className="h-64 bg-muted rounded-lg flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  <LineChart className="h-12 w-12 mx-auto mb-2" />
+                  <p>View analytics chart coming soon</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Popular Charts */}
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4">Most Viewed Charts</h3>
+              <div className="space-y-4">
+                {dashboard.charts.slice(0, 5).map((chart, index) => (
+                  <div key={chart.id} className="flex items-center gap-4">
+                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center font-medium">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">{chart.name}</p>
+                      <p className="text-xs text-muted-foreground">{chart.category}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium text-sm">{Math.floor(Math.random() * 500 + 100)} views</p>
+                      <p className="text-xs text-muted-foreground">{Math.floor(Math.random() * 50 + 10)} interactions</p>
                     </div>
                   </div>
-                )}
-
-                {/* Results summary */}
-                <div className="pt-4 border-t">
-                  <p className="text-sm text-muted-foreground">
-                    Showing {filteredCharts.length} of {dashboard.charts.length} charts
-                  </p>
-                </div>
+                ))}
               </div>
-            </SheetContent>
-          </Sheet>
+            </Card>
+          </TabsContent>
 
-          <Button variant="outline" size="sm" className="bg-transparent">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Chart
-          </Button>
-          <Button variant="outline" size="sm" className="bg-transparent">
-            <Share2 className="h-4 w-4 mr-2" />
-            Share
-          </Button>
-          <Button variant="outline" size="sm" className="bg-transparent" onClick={handleExport} disabled={isExporting}>
-            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-            {isExporting ? "Exporting..." : "Export"}
-          </Button>
-          <Link href={`/dashboard/dashboards/builder?id=${dashboard.id}`}>
-            <Button size="sm">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
-          </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleCopyLink}>
-                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-                {copied ? "Copied!" : "Copy Link"}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* Activity Tab */}
+          <TabsContent value="activity" className="space-y-6">
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4">Recent Activity</h3>
+              <div className="space-y-4">
+                {mockActivityData.map((activity) => (
+                  <div key={activity.id} className="flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="text-xs">{activity.user.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <p className="text-sm">
+                        <span className="font-medium">{activity.user}</span>{' '}
+                        <span className="text-muted-foreground">{activity.action}</span>{' '}
+                        <span className="font-medium">{activity.target}</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
 
-          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Dashboard</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete "{dashboard.name}"? This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                  {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </div>
-
-      {/* Meta info and toolbar */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Calendar className="h-4 w-4" />
-            <span>Modified {dashboard.lastModified}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Eye className="h-4 w-4" />
-            <span>{dashboard.views} views</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Users className="h-4 w-4" />
-            <span>Created by {dashboard.createdBy}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <BarChart3 className="h-4 w-4" />
-            <span>{filteredCharts.length} of {dashboard.charts.length} charts</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {/* Quick search */}
-          <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search charts..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 h-8 w-48"
-            />
-          </div>
-
-          {/* Layout toggle */}
-          <div className="flex items-center border rounded-md">
-            <Button
-              variant={layoutView === "grid" ? "secondary" : "ghost"}
-              size="sm"
-              className="h-8 px-2 rounded-r-none"
-              onClick={() => setLayoutView("grid")}
-            >
-              <Grid3X3 className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={layoutView === "list" ? "secondary" : "ghost"}
-              size="sm"
-              className="h-8 px-2 rounded-none border-x"
-              onClick={() => setLayoutView("list")}
-            >
-              <Rows3 className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={layoutView === "compact" ? "secondary" : "ghost"}
-              size="sm"
-              className="h-8 px-2 rounded-l-none"
-              onClick={() => setLayoutView("compact")}
-            >
-              <LayoutGrid className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Active filters badges */}
-      {activeFilterCount > 0 && (
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm text-muted-foreground">Active filters:</span>
-          {searchQuery && (
-            <Badge variant="secondary" className="flex items-center gap-1">
-              Search: "{searchQuery}"
-              <X className="h-3 w-3 cursor-pointer" onClick={() => setSearchQuery("")} />
-            </Badge>
-          )}
-          {selectedChartTypes.size > 0 && (
-            <Badge variant="secondary" className="flex items-center gap-1">
-              {selectedChartTypes.size} chart type{selectedChartTypes.size > 1 ? 's' : ''}
-              <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedChartTypes(new Set())} />
-            </Badge>
-          )}
-          {selectedCategories.size > 0 && (
-            <Badge variant="secondary" className="flex items-center gap-1">
-              {selectedCategories.size} categor{selectedCategories.size > 1 ? 'ies' : 'y'}
-              <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedCategories(new Set())} />
-            </Badge>
-          )}
-          {selectedDataSources.size > 0 && (
-            <Badge variant="secondary" className="flex items-center gap-1">
-              {selectedDataSources.size} data source{selectedDataSources.size > 1 ? 's' : ''}
-              <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedDataSources(new Set())} />
-            </Badge>
-          )}
-          <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={handleClearFilters}>
-            Clear all
-          </Button>
-        </div>
-      )}
-
-      {/* Charts Grid */}
-      {filteredCharts.length > 0 ? (
-        <div className={getLayoutGridClass()}>
-          {filteredCharts.map((chart) => (
-            <Card
-              key={chart.id}
-              className={`p-4 hover:bg-accent/50 transition-colors cursor-pointer ${
-                layoutView === "list" ? "flex items-center gap-4" : ""
-              }`}
-            >
-              <div className={`bg-muted rounded-lg overflow-hidden ${
-                layoutView === "list" ? "w-48 h-24" :
-                layoutView === "compact" ? "aspect-square" : "aspect-video mb-3"
-              }`}>
-                <ChartRenderer
-                  type={chart.type}
-                  data={generateSampleData(chart.type, 6)}
-                  config={{
-                    showLegend: false,
-                    showGrid: false,
-                    showTooltip: true,
-                    height: layoutView === "list" ? 96 : layoutView === "compact" ? 100 : 120,
+            {/* Comments and Version History */}
+            <div className="grid gap-6 lg:grid-cols-2">
+              <Card className="p-6">
+                <CommentsPanel
+                  resourceType="dashboard"
+                  resourceId={id}
+                  currentUserId="current-user"
+                />
+              </Card>
+              <Card className="p-6">
+                <VersionHistory
+                  resourceType="dashboard"
+                  resourceId={id}
+                  resourceName={dashboard.name}
+                  versions={[]}
+                  onRestore={(versionId) => {
+                    console.log("Restoring version:", versionId)
                   }}
                 />
-              </div>
-              <div className={layoutView === "list" ? "flex-1" : ""}>
-                <h3 className={`font-medium ${layoutView === "compact" ? "text-xs truncate" : "text-sm"}`}>
-                  {chart.name}
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Settings Tab */}
+          <TabsContent value="settings" className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* General Settings */}
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Settings className="h-5 w-5" />
+                  General Settings
                 </h3>
-                <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="outline" className="text-xs">
-                    {CHART_TYPE_ICONS[chart.type]}
-                    <span className="ml-1">{formatChartTypeName(chart.type)}</span>
-                  </Badge>
-                  {chart.category && layoutView !== "compact" && (
-                    <Badge variant="secondary" className="text-xs">
-                      {chart.category}
-                    </Badge>
-                  )}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label>Public Dashboard</Label>
+                      <p className="text-xs text-muted-foreground">Allow anyone with the link to view</p>
+                    </div>
+                    <Switch checked={dashboard.isPublic} />
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label>Allow Comments</Label>
+                      <p className="text-xs text-muted-foreground">Enable commenting on this dashboard</p>
+                    </div>
+                    <Switch defaultChecked />
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label>Show in Search</Label>
+                      <p className="text-xs text-muted-foreground">Include in organization search results</p>
+                    </div>
+                    <Switch defaultChecked />
+                  </div>
                 </div>
-                {chart.dataSource && layoutView === "list" && (
-                  <p className="text-xs text-muted-foreground mt-1">Source: {chart.dataSource}</p>
+              </Card>
+
+              {/* Alerts Management */}
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Bell className="h-5 w-5" />
+                  Alerts & Notifications
+                </h3>
+                <div className="space-y-4">
+                  {alerts.map((alert) => (
+                    <div key={alert.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                      <div className="flex items-center gap-3">
+                        {alert.triggered ? (
+                          <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                        ) : (
+                          <Bell className="h-4 w-4 text-muted-foreground" />
+                        )}
+                        <div>
+                          <p className="font-medium text-sm">{alert.name}</p>
+                          <p className="text-xs text-muted-foreground">{alert.condition}</p>
+                        </div>
+                      </div>
+                      <Switch
+                        checked={alert.status === "active"}
+                        onCheckedChange={() => handleToggleAlert(alert.id)}
+                      />
+                    </div>
+                  ))}
+                  <Button variant="outline" className="w-full" onClick={() => setShowAlertDialog(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Alert
+                  </Button>
+                </div>
+              </Card>
+
+              {/* Collaborators */}
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Collaborators
+                </h3>
+                <div className="space-y-3">
+                  {collaborators.map((collab) => (
+                    <div key={collab.id} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={collab.avatar} />
+                          <AvatarFallback>{collab.initials}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-sm">{collab.name}</p>
+                          <p className="text-xs text-muted-foreground">{collab.email}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={collab.role === "owner" ? "default" : "secondary"} className="capitalize">
+                          {collab.role}
+                        </Badge>
+                        {collab.role !== "owner" && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7"
+                            onClick={() => handleRemoveCollaborator(collab.id)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <Button variant="outline" className="w-full" onClick={() => setShowShareDialog(true)}>
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Invite Collaborator
+                  </Button>
+                </div>
+              </Card>
+
+              {/* Related Dashboards */}
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <LayoutDashboard className="h-5 w-5" />
+                  Related Dashboards
+                </h3>
+                <div className="space-y-3">
+                  {relatedDashboardsData.map((related) => (
+                    <Link key={related.id} href={`/dashboard/dashboards/${related.id}`}>
+                      <div className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors cursor-pointer">
+                        <div>
+                          <p className="font-medium text-sm">{related.name}</p>
+                          <p className="text-xs text-muted-foreground">{related.category}</p>
+                        </div>
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                          <span>{related.charts} charts</span>
+                          <span>{related.views} views</span>
+                          <ChevronRight className="h-4 w-4" />
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        {/* Share Dialog */}
+        <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Share Dashboard</DialogTitle>
+              <DialogDescription>
+                Invite people to view or collaborate on this dashboard
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Enter email address"
+                  value={shareEmail}
+                  onChange={(e) => setShareEmail(e.target.value)}
+                  className="flex-1"
+                />
+                <Select value={shareRole} onValueChange={setShareRole}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="viewer">Viewer</SelectItem>
+                    <SelectItem value="editor">Editor</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button onClick={handleAddCollaborator}>
+                  <UserPlus className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-3">
+                <Label>People with access</Label>
+                {collaborators.map((collab) => (
+                  <div key={collab.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={collab.avatar} />
+                        <AvatarFallback>{collab.initials}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium text-sm">{collab.name}</p>
+                        <p className="text-xs text-muted-foreground">{collab.email}</p>
+                      </div>
+                    </div>
+                    <Badge variant={collab.role === "owner" ? "default" : "secondary"} className="capitalize">
+                      {collab.role}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+
+              <Separator />
+
+              <div className="space-y-3">
+                <Label>Link sharing</Label>
+                <div className="flex gap-2">
+                  <Input value={typeof window !== 'undefined' ? window.location.href : ''} readOnly className="flex-1" />
+                  <Button variant="outline" onClick={handleCopyLink}>
+                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium">Public access</p>
+                    <p className="text-xs text-muted-foreground">Anyone with the link can view</p>
+                  </div>
+                  <Switch checked={dashboard.isPublic} />
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Export Dialog */}
+        <Dialog open={showExportDialog} onOpenChange={setShowExportDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Export Dashboard</DialogTitle>
+              <DialogDescription>
+                Choose an export format for your dashboard
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-4"
+                onClick={() => handleExport("json")}
+                disabled={isExporting}
+              >
+                <FileJson className="h-8 w-8 mr-4 text-blue-500" />
+                <div className="text-left">
+                  <p className="font-medium">JSON</p>
+                  <p className="text-xs text-muted-foreground">Full data export with all metadata</p>
+                </div>
+              </Button>
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-4"
+                onClick={() => handleExport("csv")}
+                disabled={isExporting}
+              >
+                <Table className="h-8 w-8 mr-4 text-green-500" />
+                <div className="text-left">
+                  <p className="font-medium">CSV</p>
+                  <p className="text-xs text-muted-foreground">Chart data in spreadsheet format</p>
+                </div>
+              </Button>
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-4"
+                onClick={() => handleExport("pdf")}
+                disabled={isExporting}
+              >
+                <FileText className="h-8 w-8 mr-4 text-red-500" />
+                <div className="text-left">
+                  <p className="font-medium">PDF / HTML</p>
+                  <p className="text-xs text-muted-foreground">Printable report format</p>
+                </div>
+              </Button>
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-4"
+                onClick={() => handleExport("png")}
+                disabled={isExporting}
+              >
+                <FileImage className="h-8 w-8 mr-4 text-purple-500" />
+                <div className="text-left">
+                  <p className="font-medium">PNG Image</p>
+                  <p className="text-xs text-muted-foreground">Screenshot of the dashboard</p>
+                </div>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Tags Dialog */}
+        <Dialog open={showTagsDialog} onOpenChange={setShowTagsDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Manage Tags</DialogTitle>
+              <DialogDescription>
+                Add tags to organize and find your dashboard easily
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Add a new tag..."
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
+                />
+                <Button onClick={handleAddTag}>
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {dashboardTags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="gap-1 pr-1">
+                    <Tag className="h-3 w-3" />
+                    {tag}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-4 w-4 ml-1 hover:bg-destructive/20"
+                      onClick={() => handleRemoveTag(tag)}
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </Badge>
+                ))}
+                {dashboardTags.length === 0 && (
+                  <p className="text-sm text-muted-foreground">No tags added yet</p>
                 )}
               </div>
-            </Card>
-          ))}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowTagsDialog(false)}>
+                Done
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-          {/* Add Chart Card */}
-          <Link href="/dashboard/charts/new">
-            <Card className={`p-4 border-dashed hover:bg-accent/50 transition-colors cursor-pointer h-full ${
-              layoutView === "list" ? "flex items-center justify-center" : ""
-            }`}>
-              <div className={`flex items-center justify-center ${
-                layoutView === "list" ? "" :
-                layoutView === "compact" ? "aspect-square" : "aspect-video rounded-lg mb-3"
-              }`}>
-                <div className="text-center">
-                  <Plus className={`text-muted-foreground mx-auto mb-2 ${
-                    layoutView === "compact" ? "h-6 w-6" : "h-8 w-8"
-                  }`} />
-                  <p className={`text-muted-foreground ${layoutView === "compact" ? "text-xs" : "text-sm"}`}>
-                    Add Chart
-                  </p>
-                </div>
+        {/* Alerts Dialog */}
+        <Dialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Manage Alerts</DialogTitle>
+              <DialogDescription>
+                Set up notifications for dashboard metrics
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-3">
+                <Label>Create New Alert</Label>
+                <Input
+                  placeholder="Alert name..."
+                  value={newAlertName}
+                  onChange={(e) => setNewAlertName(e.target.value)}
+                />
+                <Input
+                  placeholder="Condition (e.g., Views > 1000/day)"
+                  value={newAlertCondition}
+                  onChange={(e) => setNewAlertCondition(e.target.value)}
+                />
+                <Button onClick={handleAddAlert} disabled={!newAlertName || !newAlertCondition}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Alert
+                </Button>
               </div>
-            </Card>
-          </Link>
-        </div>
-      ) : (
-        <Card className="p-12 text-center">
-          <Filter className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No charts match your filters</h3>
-          <p className="text-muted-foreground mb-4">
-            Try adjusting your filters or search query to see more charts.
-          </p>
-          <Button onClick={handleClearFilters}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Clear Filters
-          </Button>
-        </Card>
-      )}
 
-      {/* AI Insights Panel */}
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Dashboard Insights</h3>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="p-4 rounded-lg bg-muted/50">
-            <h4 className="font-medium text-sm mb-2">Chart Distribution</h4>
-            <p className="text-sm text-muted-foreground">
-              {chartTypes.length} chart types used across {categories.length} categories.
-              Most common: {chartTypes.length > 0 ? formatChartTypeName(chartTypes[0]) : 'N/A'} charts.
-            </p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/50">
-            <h4 className="font-medium text-sm mb-2">Data Sources</h4>
-            <p className="text-sm text-muted-foreground">
-              {dataSources.length} data source{dataSources.length !== 1 ? 's' : ''} powering this dashboard.
-              {dataSources.length > 0 && ` Primary: ${dataSources[0]}.`}
-            </p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/50">
-            <h4 className="font-medium text-sm mb-2">Current View</h4>
-            <p className="text-sm text-muted-foreground">
-              {filteredCharts.length} of {dashboard.charts.length} charts displayed
-              {activeFilterCount > 0 ? ` with ${activeFilterCount} active filter${activeFilterCount !== 1 ? 's' : ''}.` : '.'}
-            </p>
-          </div>
-        </div>
-      </Card>
+              <Separator />
 
-      {/* Comments and Version History */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="p-6">
-          <CommentsPanel
-            resourceType="crosstab"
-            resourceId={id}
-            currentUserId="current-user"
-          />
-        </Card>
-        <Card className="p-6">
-          <VersionHistory
-            resourceType="crosstab"
-            resourceId={id}
-            resourceName={dashboard.name}
-            versions={[]}
-            onRestore={(versionId) => {
-              console.log("Restoring version:", versionId)
-            }}
-          />
-        </Card>
+              <div className="space-y-3">
+                <Label>Active Alerts</Label>
+                {alerts.map((alert) => (
+                  <div key={alert.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div className="flex items-center gap-3">
+                      {alert.triggered ? (
+                        <AlertCircle className="h-4 w-4 text-yellow-500" />
+                      ) : alert.status === "active" ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <div>
+                        <p className="font-medium text-sm">{alert.name}</p>
+                        <p className="text-xs text-muted-foreground">{alert.condition}</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={alert.status === "active"}
+                      onCheckedChange={() => handleToggleAlert(alert.id)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowAlertDialog(false)}>
+                Done
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Dashboard</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{dashboard.name}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }
