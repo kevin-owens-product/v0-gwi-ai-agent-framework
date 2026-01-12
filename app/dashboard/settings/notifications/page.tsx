@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2 } from "lucide-react"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 const notificationSettings = [
   {
@@ -128,6 +129,7 @@ export default function NotificationsSettingsPage() {
 
   return (
     <div className="p-6 max-w-3xl">
+      <PageTracker pageName="Settings - Notifications" />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Notification Preferences</h1>
         <p className="text-muted-foreground">Choose how and when you want to be notified</p>

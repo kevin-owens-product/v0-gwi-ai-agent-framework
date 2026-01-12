@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Search, Plus, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { agentCountsByCategory } from "@/lib/solution-agents"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 export default function AgentsPage() {
   const [search, setSearch] = useState("")
@@ -19,6 +20,7 @@ export default function AgentsPage() {
 
   return (
     <div className="space-y-6">
+      <PageTracker pageName="Agents List" metadata={{ activeTab }} />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Agent Library</h1>

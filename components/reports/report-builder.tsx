@@ -1,5 +1,46 @@
+/**
+ * ReportBuilder Component
+ *
+ * A multi-step wizard for creating and customizing research reports. Guides users
+ * through report configuration including type selection, agent assignment, data sources,
+ * audiences, and generation settings.
+ *
+ * Features:
+ * - Multi-step wizard interface
+ * - Report type selection (presentation, dashboard, PDF, export, infographic)
+ * - AI agent selection for content generation
+ * - Data source and market selection
+ * - Audience targeting
+ * - Real-time generation progress
+ * - Template support
+ * - Draft saving and editing
+ * - Event tracking for analytics
+ *
+ * @component
+ * @module components/reports/report-builder
+ *
+ * @example
+ * ```tsx
+ * // Create new report
+ * <ReportBuilder />
+ *
+ * // Edit existing report
+ * <ReportBuilder reportId="report-123" />
+ *
+ * // From template
+ * <ReportBuilder
+ *   templateId="template-456"
+ *   templateTitle="Market Analysis"
+ * />
+ * ```
+ *
+ * @see Report
+ * @see useReportForm
+ */
+
 "use client"
 
+import { useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Controller } from "react-hook-form"
@@ -39,6 +80,7 @@ import {
   AUDIENCE_OPTIONS,
   TIMEFRAME_OPTIONS,
 } from "@/lib/schemas/report"
+import { useReportTracking, usePageViewTracking } from "@/hooks/useEventTracking"
 
 const reportTypeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   presentation: Presentation,
@@ -63,6 +105,15 @@ export function ReportBuilder({
 }: ReportBuilderProps) {
   const router = useRouter()
   const isTemplateMode = !!templateId
+
+  // Event tracking
+  usePageViewTracking({
+    pageName: 'Report Builder',
+    reportId,
+    templateId,
+    isEditMode: !!reportId,
+  })
+  const { trackReportCreate } = useReportTracking()
 
   const {
     form,
@@ -92,6 +143,22 @@ export function ReportBuilder({
   const watchedDataSources = watch("dataSources")
   const watchedMarkets = watch("markets")
   const watchedAudiences = watch("audiences")
+
+  /**
+   * Track report creation when generation completes
+   */
+  useEffect(() => {
+    if (generationComplete && reportId) {
+      trackReportCreate(reportId, {
+        reportType: watchedType,
+        dataSourcesCount: watchedDataSources?.length || 0,
+        marketsCount: watchedMarkets?.length || 0,
+        audiencesCount: watchedAudiences?.length || 0,
+        fromTemplate: isTemplateMode,
+        templateId,
+      })
+    }
+  }, [generationComplete, reportId, watchedType, watchedDataSources, watchedMarkets, watchedAudiences, isTemplateMode, templateId, trackReportCreate])
 
   const handleDownloadReport = () => {
     const title = form.getValues("title")

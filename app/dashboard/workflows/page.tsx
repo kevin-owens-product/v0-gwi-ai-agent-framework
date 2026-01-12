@@ -4,10 +4,12 @@ import { WorkflowList } from "@/components/workflows/workflow-list"
 import { WorkflowFilters } from "@/components/workflows/workflow-filters"
 import { Plus, Search } from "lucide-react"
 import Link from "next/link"
+import { WorkflowsPageTracker } from "./page-client"
 
 export default function WorkflowsPage() {
   return (
     <div className="space-y-6">
+      <WorkflowsPageTracker />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Workflows</h1>

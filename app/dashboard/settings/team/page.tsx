@@ -37,6 +37,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Plus, MoreVertical, Mail, UserMinus, Shield, Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface TeamMember {
   id: string
@@ -229,6 +230,7 @@ export default function TeamSettingsPage() {
 
   return (
     <div className="p-6 max-w-5xl">
+      <PageTracker pageName="Settings - Team" metadata={{ totalMembers: members.length, pendingInvitations: invitations.length }} />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Team Management</h1>
         <p className="text-muted-foreground">Manage team members and their permissions</p>

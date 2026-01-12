@@ -24,6 +24,7 @@ import {
   Filter,
 } from "lucide-react"
 import Link from "next/link"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface Insight {
   id: string
@@ -111,6 +112,7 @@ export default function InsightsPage() {
 
   return (
     <div className="space-y-6">
+      <PageTracker pageName="Insights List" metadata={{ typeFilter, searchQuery: !!searchQuery }} />
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold mb-2">Insights</h1>

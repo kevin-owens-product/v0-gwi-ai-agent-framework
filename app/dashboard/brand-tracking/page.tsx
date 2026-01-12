@@ -2,10 +2,12 @@ import { BrandTrackingHeader } from "@/components/brand-tracking/brand-tracking-
 import { BrandTrackingStats } from "@/components/brand-tracking/brand-tracking-stats"
 import { BrandTrackingGrid } from "@/components/brand-tracking/brand-tracking-grid"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { BrandTrackingPageTracker } from "./page-client"
 
 export default function BrandTrackingPage() {
   return (
     <div className="space-y-6">
+      <BrandTrackingPageTracker />
       <BrandTrackingHeader />
       <BrandTrackingStats />
 

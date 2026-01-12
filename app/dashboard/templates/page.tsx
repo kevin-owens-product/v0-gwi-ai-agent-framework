@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 const templates = [
   {
@@ -229,6 +230,7 @@ export default function TemplatesPage() {
 
   return (
     <div className="space-y-6">
+      <PageTracker pageName="Templates List" metadata={{ selectedCategory, searchQuery: !!searchQuery }} />
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

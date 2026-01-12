@@ -12,6 +12,7 @@ import { PlaygroundToolbar } from "@/components/playground/toolbar"
 import { PlaygroundContextPanel } from "@/components/playground/context-panel"
 import { WelcomeWizard } from "@/components/playground/welcome-wizard"
 import { getStoreAgent, installAgent, type StoreAgent } from "@/lib/store-agents"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 export interface PlaygroundConfig {
   selectedAgent: string
@@ -438,8 +439,10 @@ export default function PlaygroundPage() {
   }
 
   return (
-    <PlaygroundContext.Provider
-      value={{
+    <>
+      <PageTracker pageName="Playground" metadata={{ mode, selectedAgent: config.selectedAgent, hasCustomAgent: !!customAgent }} />
+      <PlaygroundContext.Provider
+        value={{
         config,
         setConfig,
         messages,
@@ -490,5 +493,6 @@ export default function PlaygroundPage() {
         {contextPanelOpen && <PlaygroundContextPanel />}
       </div>
     </PlaygroundContext.Provider>
+    </>
   )
 }

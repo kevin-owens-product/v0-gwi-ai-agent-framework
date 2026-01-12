@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface Audience {
   id: string
@@ -85,6 +86,7 @@ export default function AudiencesPage() {
   const [showAIBuilder, setShowAIBuilder] = useState(false)
   const [showComparison, setShowComparison] = useState(false)
   const [selectedAudience, setSelectedAudience] = useState<Audience | null>(null)
+  const [activeTab, setActiveTab] = useState("all")
 
   useEffect(() => {
     async function fetchAudiences() {
@@ -161,6 +163,7 @@ export default function AudiencesPage() {
 
   return (
     <div className="flex-1 space-y-6 p-6">
+      <PageTracker pageName="Audiences List" metadata={{ activeTab, searchQuery: !!searchQuery }} />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -241,7 +244,7 @@ export default function AudiencesPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="all" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
           <TabsTrigger value="all">All Audiences</TabsTrigger>
           <TabsTrigger value="recent">Recently Used</TabsTrigger>

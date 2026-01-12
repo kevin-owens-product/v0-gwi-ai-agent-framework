@@ -4,10 +4,12 @@ import { UsageCharts } from "@/components/analytics/usage-charts"
 import { AgentPerformance } from "@/components/analytics/agent-performance"
 import { TopQueries } from "@/components/analytics/top-queries"
 import { TeamActivity } from "@/components/analytics/team-activity"
+import { AnalyticsPageTracker } from "./page-client"
 
 export default function AnalyticsPage() {
   return (
     <div className="flex-1 space-y-6 p-6">
+      <AnalyticsPageTracker />
       <AnalyticsHeader />
       <AnalyticsOverview />
       <div className="grid gap-6 lg:grid-cols-2">
