@@ -522,7 +522,7 @@ function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
  */
 function evaluateExpression(expression: string, variables: Record<string, unknown>): boolean {
   // Replace template variables with actual values
-  let resolved = expression.replace(/\{\{([^}]+)\}\}/g, (_, path) => {
+  const resolved = expression.replace(/\{\{([^}]+)\}\}/g, (_, path) => {
     const value = getNestedValue(variables, path.trim())
     if (typeof value === 'string') {
       return `"${value}"`
