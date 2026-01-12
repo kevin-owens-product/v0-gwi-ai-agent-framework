@@ -31,7 +31,7 @@ Sentry.init({
     'SIGINT',
   ],
 
-  beforeSend(event, hint) {
+  beforeSend(event, _hint) {
     // Don't send events in development
     if (process.env.NODE_ENV === 'development') {
       return null;
@@ -49,9 +49,10 @@ Sentry.init({
       // Remove sensitive query parameters
       if (event.request.query_string) {
         const sensitiveParams = ['token', 'api_key', 'password', 'secret'];
+        const queryString = event.request.query_string;
         sensitiveParams.forEach(param => {
-          if (event.request.query_string?.includes(param)) {
-            event.request.query_string = '[REDACTED]';
+          if (typeof queryString === 'string' && queryString.includes(param)) {
+            event.request!.query_string = '[REDACTED]';
           }
         });
       }

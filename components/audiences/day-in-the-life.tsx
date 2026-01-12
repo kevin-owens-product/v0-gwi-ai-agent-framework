@@ -3,10 +3,9 @@
 import { useState, useEffect, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Tooltip,
   TooltipContent,
@@ -46,8 +45,6 @@ import {
   MapPin,
   Zap,
   Target,
-  TrendingUp,
-  Radio,
   Headphones,
   Laptop,
   Gamepad2,
@@ -56,9 +53,6 @@ import {
   Bed,
   Bath,
   ChefHat,
-  GraduationCap,
-  ShoppingBag,
-  CreditCard,
   Newspaper,
   Instagram,
   Youtube,
@@ -182,7 +176,7 @@ const categoryColors: Record<string, string> = {
 // Generate day profile based on audience criteria
 function generateDayProfile(
   audienceId: string,
-  criteria?: Record<string, unknown>,
+  _criteria?: Record<string, unknown>,
   dayType: "weekday" | "weekend" = "weekday"
 ): DayProfile {
   const seed = audienceId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
@@ -311,14 +305,14 @@ function generateDayProfile(
     ...(isHealthy ? [{
       id: "8",
       time: "5:00 PM",
-      timeSlot: "afternoon",
+      timeSlot: "afternoon" as const,
       activity: "Exercise",
       description: "Hit the gym, go for a run, or workout at home",
       duration: 60,
       location: "gym" as const,
       category: "health" as const,
       mood: "energized" as const,
-      devices: ["smartwatch", "smartphone"] as const,
+      devices: ["smartwatch", "smartphone"] as DailyActivity["devices"],
       touchpoints: ["Fitness app", "Spotify", "Health tracking"],
       icon: "exercise",
     }] : []),
@@ -597,7 +591,7 @@ function generateDayProfile(
 
 export function DayInTheLife({
   audienceId,
-  audienceName,
+  audienceName: _audienceName,
   audienceCriteria,
   className,
 }: DayInTheLifeProps) {

@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Tooltip,
   TooltipContent,
@@ -21,26 +20,14 @@ import {
   Headphones,
   Music,
   Film,
-  BookOpen,
   Gamepad2,
   Globe,
-  MessageSquare,
-  Heart,
-  ThumbsUp,
-  Share2,
   Clock,
-  TrendingUp,
-  Star,
   Loader2,
   Play,
-  Pause,
   Volume2,
-  Wifi,
   Podcast,
-  Rss,
-  Camera,
   Video,
-  Mail,
   Bell,
   Instagram,
   Youtube,
@@ -121,7 +108,7 @@ const channelIcons: Record<string, React.ReactNode> = {
 }
 
 // Generate media consumption data
-function generateMediaData(audienceId: string, criteria?: Record<string, unknown>) {
+function generateMediaData(audienceId: string, _criteria?: Record<string, unknown>) {
   const seed = audienceId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
   const random = (index: number) => ((seed * (index + 1)) % 100) / 100
 
@@ -334,7 +321,7 @@ function generateMediaData(audienceId: string, criteria?: Record<string, unknown
 
 export function MediaConsumption({
   audienceId,
-  audienceName,
+  audienceName: _audienceName,
   audienceCriteria,
   className,
 }: MediaConsumptionProps) {

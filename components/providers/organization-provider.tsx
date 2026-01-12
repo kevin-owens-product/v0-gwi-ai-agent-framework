@@ -62,7 +62,7 @@ export function OrganizationProvider({
   organizations,
   user,
 }: OrganizationProviderProps) {
-  const [currentOrgId, setCurrentOrgId] = useState(initialOrganization.id)
+  const [_currentOrgId, setCurrentOrgId] = useState(initialOrganization.id)
 
   const setCurrentOrganization = useCallback(async (orgId: string) => {
     // Set cookie for server-side persistence

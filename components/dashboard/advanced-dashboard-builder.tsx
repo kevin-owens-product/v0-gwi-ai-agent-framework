@@ -41,21 +41,17 @@ import {
   Trash2,
   Copy,
   Maximize2,
-  Minimize2,
   MoreHorizontal,
   Edit2,
   Lock,
   Unlock,
-  Eye,
   EyeOff,
   Layers,
   LayoutGrid,
   Save,
   Download,
-  Share2,
   Undo2,
   Redo2,
-  RefreshCw,
   ChevronDown,
   ChevronUp,
   BarChart3,
@@ -67,12 +63,8 @@ import {
   Image as ImageIcon,
   Target,
   TrendingUp,
-  Users,
   Activity,
-  Palette,
   Type,
-  Move,
-  X,
 } from "lucide-react"
 
 // Widget Types
@@ -133,7 +125,7 @@ interface AdvancedDashboardBuilderProps {
   className?: string
 }
 
-const GRID_SIZE = 20
+const _GRID_SIZE = 20
 const MIN_WIDGET_SIZE = 2
 const DEFAULT_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4"]
 
@@ -146,7 +138,7 @@ const widgetTypeIcons: Record<WidgetType, React.ReactNode> = {
   kpi: <TrendingUp className="h-4 w-4" />,
 }
 
-const chartTypeIcons: Partial<Record<ChartType, React.ReactNode>> = {
+const _chartTypeIcons: Partial<Record<ChartType, React.ReactNode>> = {
   BAR: <BarChart3 className="h-4 w-4" />,
   LINE: <LineChart className="h-4 w-4" />,
   PIE: <PieChart className="h-4 w-4" />,

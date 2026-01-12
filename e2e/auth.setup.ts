@@ -50,17 +50,17 @@ setup('authenticate', async ({ page }) => {
  * Optional: Additional setup for specific test scenarios
  */
 setup.describe('Additional auth scenarios', () => {
-  setup.skip(({ }, testInfo) => {
+  setup.skip(() => {
     // Skip these optional setups unless explicitly enabled
     return !process.env.RUN_FULL_AUTH_SETUP
   })
 
-  setup('create test organization', async ({ page }) => {
+  setup('create test organization', async () => {
     // This would create a test organization for integration tests
     // Requires authenticated context
   })
 
-  setup('seed test data', async ({ page }) => {
+  setup('seed test data', async () => {
     // This would seed test data for specific test scenarios
     // Useful for integration tests that need specific data
   })

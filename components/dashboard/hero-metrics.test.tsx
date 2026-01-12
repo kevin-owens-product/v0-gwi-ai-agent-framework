@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
 
 // Mock the HeroMetrics component structure
 describe('HeroMetrics Component', () => {

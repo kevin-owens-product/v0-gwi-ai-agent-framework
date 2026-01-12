@@ -259,7 +259,7 @@ function SolutionAreaSection({
 }
 
 export function PlaygroundSidebar() {
-  const { config, setConfig, setMessages, resetChat, customAgent, setCustomAgent } = usePlayground()
+  const { config, setConfig, setMessages, resetChat: _resetChat, customAgent, setCustomAgent } = usePlayground()
   const [collapsed, setCollapsed] = useState(false)
   const [sessions, setSessions] = useState(sessionHistory)
   const [installedStoreAgents, setInstalledStoreAgents] = useState<StoreAgent[]>([])
@@ -433,7 +433,7 @@ export function PlaygroundSidebar() {
     setSessions(sessions.filter((s) => s.id !== sessionId))
   }
 
-  const selectedAgent = agents.find((a) => a.id === config.selectedAgent)
+  const _selectedAgent = agents.find((a) => a.id === config.selectedAgent)
 
   return (
     <div

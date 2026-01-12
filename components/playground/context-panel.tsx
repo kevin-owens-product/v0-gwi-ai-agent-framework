@@ -73,7 +73,7 @@ const demoDataSources: DataSource[] = [
 ]
 
 export function PlaygroundContextPanel() {
-  const { setContextPanelOpen, activeVariables, setActiveVariables, config, messages } = usePlayground()
+  const { setContextPanelOpen, activeVariables, setActiveVariables: _setActiveVariables, config, messages } = usePlayground()
   const [dataSources, setDataSources] = useState<DataSource[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [sessionStart] = useState(Date.now())

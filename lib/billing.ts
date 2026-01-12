@@ -14,7 +14,7 @@ function getStripe(): Stripe {
   }
 
   _stripe = new Stripe(apiKey, {
-    apiVersion: '2024-06-20',
+    apiVersion: '2025-02-24.acacia',
   })
 
   return _stripe

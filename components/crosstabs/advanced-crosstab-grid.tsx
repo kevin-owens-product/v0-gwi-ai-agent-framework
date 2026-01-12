@@ -15,7 +15,6 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -29,14 +28,10 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
   DropdownMenuCheckboxItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
   Select,
@@ -51,11 +46,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -76,40 +66,23 @@ import {
   Settings2,
   TrendingUp,
   TrendingDown,
-  Minus,
-  Filter,
   Download,
   Copy,
   Palette,
   Eye,
-  EyeOff,
-  Lock,
-  Unlock,
   Edit2,
   Plus,
   X,
-  Check,
-  RefreshCw,
   ChevronRight,
   ChevronDown,
-  GripVertical,
   Maximize2,
   Minimize2,
   BarChart3,
   PieChart,
   LineChart,
   Calculator,
-  Sigma,
-  Hash,
-  Percent,
   Target,
-  Layers,
   Search,
-  AlertTriangle,
-  Info,
-  ExternalLink,
-  MoreHorizontal,
-  Sparkles,
   ZoomIn,
 } from "lucide-react"
 
@@ -242,11 +215,10 @@ export function AdvancedCrosstabGrid({
   onCellClick,
   onCellEdit,
   onDrillDown,
-  onExport,
   onConfigChange,
   className,
 }: AdvancedCrosstabGridProps) {
-  const [columns, setColumns] = useState(initialColumns)
+  const [columns, _setColumns] = useState(initialColumns)
   const [data, setData] = useState(initialData)
   const [config, setConfig] = useState<CrosstabConfig>({ ...DEFAULT_CONFIG, ...initialConfig })
   const [conditionalFormats, setConditionalFormats] = useState(initialFormats || DEFAULT_FORMATS)
@@ -265,7 +237,7 @@ export function AdvancedCrosstabGrid({
   const [showDrillDownModal, setShowDrillDownModal] = useState(false)
   const [drillDownData, setDrillDownData] = useState<{ cell: CellSelection; row: CrosstabRow } | null>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [columnWidths, setColumnWidths] = useState<Record<string, number>>({})
+  const [columnWidths, _setColumnWidths] = useState<Record<string, number>>({})
 
   const tableRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)

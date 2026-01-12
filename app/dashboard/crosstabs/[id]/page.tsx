@@ -414,7 +414,7 @@ function transformApiCrosstab(apiData: any): CrosstabData | null {
 
   if (rows.length > 0 && metrics.length > 0) {
     // Transpose: rows are segments, columns are metrics -> rows are metrics, columns are segments
-    data = metrics.map(metric => {
+    data = metrics.map((metric: string) => {
       const values: Record<string, number> = {}
       rows.forEach((row: any) => {
         const segmentName = row.segment || row.name || 'Unknown'

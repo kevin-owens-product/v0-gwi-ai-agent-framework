@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Lightbulb, Rocket, Zap, Users, TrendingUp, Brain, ArrowRight, CheckCircle2, Layers, Shield } from "lucide-react"
+import { Lightbulb, Rocket, Zap, Users, Brain, ArrowRight, CheckCircle2, Layers, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

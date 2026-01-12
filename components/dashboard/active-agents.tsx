@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Users, Lightbulb, Target, TrendingUp, PieChart, Bot, Loader2 } from "lucide-react"
+import { Users, Lightbulb, Target, PieChart, Bot, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 interface Agent {

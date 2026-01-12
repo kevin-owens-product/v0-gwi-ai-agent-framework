@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useCallback, Suspense } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AdvancedCrosstabGrid, CrosstabRow, CrosstabColumn } from "@/components/crosstabs/advanced-crosstab-grid"
 import { CalculatedFieldsManager, CalculatedField, FieldVariable } from "@/components/crosstabs/calculated-fields"
@@ -69,16 +68,15 @@ const SAMPLE_VARIABLES: FieldVariable[] = [
 ]
 
 function CrosstabAnalysisContent() {
-  const _router = useRouter()
   const searchParams = useSearchParams()
+  // crosstabId can be used for API calls when backend is ready
   const _crosstabId = searchParams.get("id")
 
   const [activeTab, setActiveTab] = useState<"grid" | "calculated" | "filters" | "visualize">("grid")
   const [data, setData] = useState<CrosstabRow[]>(SAMPLE_DATA)
-  const [columns, setColumns] = useState<CrosstabColumn[]>(SAMPLE_COLUMNS)
+  const [columns] = useState<CrosstabColumn[]>(SAMPLE_COLUMNS)
   const [calculatedFields, setCalculatedFields] = useState<CalculatedField[]>([])
   const [activeFilters, setActiveFilters] = useState<FilterGroup[]>([])
-  const [_isLoading, _setIsLoading] = useState(false)
 
   // Handle cell click
   const handleCellClick = useCallback((cell: { rowId: string; columnKey: string }, value: number | null) => {
@@ -147,7 +145,7 @@ function CrosstabAnalysisContent() {
   }, [])
 
   // Handle filters apply
-  const handleFiltersApply = useCallback((filters: FilterGroup[]) => {
+  const handleFiltersApply = useCallback((_filters: FilterGroup[]) => {
     // Apply filters to data (simplified implementation)
     toast.success("Filters applied")
   }, [])
@@ -301,7 +299,7 @@ function CrosstabAnalysisContent() {
                 name: row.metric,
                 value: Math.round(Object.values(row.values).reduce((a: number, b) => a + (b || 0), 0) / columns.length),
               }))}
-              onSave={(config, chartData) => {
+              onSave={(_config, _chartData) => {
                 toast.success("Chart saved!")
               }}
               onExport={(format) => {

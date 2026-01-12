@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
+import type { SolutionAgent as _SolutionAgent } from './solution-agents'
 import {
-  SolutionAgent,
   salesAgents,
   insightsAgents,
   adSalesAgents,

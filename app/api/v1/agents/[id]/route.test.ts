@@ -30,7 +30,7 @@ describe('Agent Detail API - /api/v1/agents/[id]', () => {
     })
 
     it('should handle non-existent agent', () => {
-      const agentId = 'non-existent-id'
+      const _agentId = 'non-existent-id'
       const found = false
 
       expect(found).toBe(false)

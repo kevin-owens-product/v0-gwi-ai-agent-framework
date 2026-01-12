@@ -27,12 +27,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -158,7 +152,7 @@ const DEFAULT_CONFIG: ChartConfig = {
 export function InteractiveChartEditor({
   initialConfig,
   initialData,
-  availableColumns = [],
+  availableColumns: _availableColumns = [],
   onSave,
   onExport,
   className,
@@ -168,7 +162,7 @@ export function InteractiveChartEditor({
     ...initialConfig,
     data: initialData || generateSampleData(initialConfig?.type || "BAR", 6),
   })
-  const [editingDataPoint, setEditingDataPoint] = useState<number | null>(null)
+  const [_editingDataPoint, setEditingDataPoint] = useState<number | null>(null)
   const [showDataEditor, setShowDataEditor] = useState(false)
   const [previewMode, setPreviewMode] = useState(false)
   const [selectedColorPreset, setSelectedColorPreset] = useState("Default")
@@ -214,7 +208,7 @@ export function InteractiveChartEditor({
   // Update data point
   const updateDataPoint = useCallback((index: number, updates: Partial<ChartDataPoint>) => {
     const newData = [...config.data]
-    newData[index] = { ...newData[index], ...updates }
+    newData[index] = { ...newData[index], ...updates } as ChartDataPoint
     updateConfig({ data: newData })
   }, [config.data, updateConfig])
 

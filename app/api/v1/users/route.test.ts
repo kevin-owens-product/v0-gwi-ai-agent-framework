@@ -130,9 +130,13 @@ describe('Users API - /api/v1/users', () => {
     })
 
     it('should prevent role escalation', () => {
+      // Helper function to check if a role can escalate others
+      const canRoleEscalate = (role: string) => role === 'owner'
+
       const currentRole = 'member'
-      const requestedRole = 'admin'
-      const canEscalate = currentRole === 'owner'
+      // Attempting to escalate to admin role
+      const _requestedRole = 'admin'
+      const canEscalate = canRoleEscalate(currentRole)
 
       expect(canEscalate).toBe(false)
     })

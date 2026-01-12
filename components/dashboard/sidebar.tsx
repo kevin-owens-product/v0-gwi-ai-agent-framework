@@ -209,7 +209,7 @@ export function DashboardSidebar() {
                             )}
                           >
                             <item.icon className="h-4 w-4" />
-                            {item.badge && (
+                            {'badge' in item && item.badge && (
                               <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-medium text-accent-foreground">
                                 {item.badge}
                               </span>
@@ -234,7 +234,7 @@ export function DashboardSidebar() {
                       >
                         <item.icon className="h-4 w-4 shrink-0" />
                         <span className="truncate">{item.name}</span>
-                        {item.badge && (
+                        {'badge' in item && item.badge && (
                           <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] font-medium text-accent-foreground">
                             {item.badge}
                           </span>
