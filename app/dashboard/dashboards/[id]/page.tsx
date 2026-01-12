@@ -40,6 +40,7 @@ import {
   Target,
   PieChart,
   LineChart,
+  Activity,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -328,6 +329,7 @@ const CHART_TYPE_ICONS: Record<string, React.ReactNode> = {
   FUNNEL: <Filter className="h-4 w-4" />,
   HEATMAP: <Grid3X3 className="h-4 w-4" />,
   TREEMAP: <LayoutGrid className="h-4 w-4" />,
+  METRIC: <Activity className="h-4 w-4" />,
 }
 
 function formatChartTypeName(type: ChartType): string {
@@ -342,6 +344,7 @@ function formatChartTypeName(type: ChartType): string {
     TREEMAP: "Treemap",
     FUNNEL: "Funnel",
     RADAR: "Radar",
+    METRIC: "Metric",
   }
   return typeMap[type] || type
 }
@@ -395,7 +398,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
               charts: widgetsArray.map((w: any, i: number) => ({
                 id: w.id || `chart-${i}`,
                 name: w.title || w.name || `Chart ${i + 1}`,
-                type: w.type || "BAR",
+                type: (w.type?.toUpperCase() || "BAR") as ChartType,
                 category: w.category || "General",
                 dataSource: w.dataSource || "Unknown",
               })),
