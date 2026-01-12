@@ -12,6 +12,7 @@ import { PlaygroundToolbar } from "@/components/playground/toolbar"
 import { PlaygroundContextPanel } from "@/components/playground/context-panel"
 import { WelcomeWizard } from "@/components/playground/welcome-wizard"
 import { getStoreAgent, installAgent, type StoreAgent } from "@/lib/store-agents"
+import { getAgentById, type SolutionAgent } from "@/lib/solution-agents"
 import { PageTracker } from "@/components/tracking/PageTracker"
 
 export interface PlaygroundConfig {
