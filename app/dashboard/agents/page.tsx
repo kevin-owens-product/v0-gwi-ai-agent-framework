@@ -5,15 +5,17 @@ import { AgentGrid } from "@/components/agents/agent-grid"
 import { AgentFilters } from "@/components/agents/agent-filters"
 import { AgentMarketplace } from "@/components/agents/agent-marketplace"
 import { AgentPerformanceDashboard } from "@/components/agents/agent-performance-dashboard"
+import { SolutionAgentsGrid } from "@/components/solution-agents-grid"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, Plus } from "lucide-react"
+import { Search, Plus, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { agentCountsByCategory } from "@/lib/solution-agents"
 
 export default function AgentsPage() {
   const [search, setSearch] = useState("")
-  const [activeTab, setActiveTab] = useState("all")
+  const [activeTab, setActiveTab] = useState("solutions")
 
   return (
     <div className="space-y-6">
@@ -33,6 +35,10 @@ export default function AgentsPage() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <TabsList className="bg-secondary">
+            <TabsTrigger value="solutions" className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              Solution Agents ({agentCountsByCategory.total})
+            </TabsTrigger>
             <TabsTrigger value="all">All Agents</TabsTrigger>
             <TabsTrigger value="custom">My Agents</TabsTrigger>
             <TabsTrigger value="marketplace">Marketplace</TabsTrigger>
@@ -55,6 +61,9 @@ export default function AgentsPage() {
           )}
         </div>
 
+        <TabsContent value="solutions" className="mt-0">
+          <SolutionAgentsGrid showSearch={true} showTabs={true} />
+        </TabsContent>
         <TabsContent value="all" className="mt-0">
           <AgentGrid filter="all" search={search} />
         </TabsContent>

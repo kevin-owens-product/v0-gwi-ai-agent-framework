@@ -1,51 +1,13 @@
 import Link from "next/link"
-import { Search, BarChart3, Users, Globe, TrendingUp, FileText, ArrowRight, CheckCircle2 } from "lucide-react"
+import { Search, BarChart3, Users, Globe, TrendingUp, FileText, ArrowRight, CheckCircle2, Map, ClipboardList, Activity, Eye, PieChart, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
+import { marketResearchAgents } from "@/lib/solution-agents"
 
 export default function MarketResearchPage() {
-  const agents = [
-    {
-      name: "Market Mapper",
-      icon: Globe,
-      description: "Analyze market size, segmentation, and competitive dynamics across regions",
-      capabilities: ["Market sizing", "Segment analysis", "Regional mapping", "Growth forecasting"],
-    },
-    {
-      name: "Survey Analyzer",
-      icon: BarChart3,
-      description: "Process and synthesize survey data into actionable insights and narratives",
-      capabilities: ["Data processing", "Pattern detection", "Insight extraction", "Report generation"],
-    },
-    {
-      name: "Trend Tracker",
-      icon: TrendingUp,
-      description: "Monitor behavioral shifts, cultural movements, and emerging patterns",
-      capabilities: ["Trend identification", "Momentum tracking", "Early signal detection", "Impact assessment"],
-    },
-    {
-      name: "Competitive Intelligence",
-      icon: Search,
-      description: "Track competitor strategies, positioning, and market movements",
-      capabilities: ["Competitor monitoring", "Strategy analysis", "Share tracking", "Threat assessment"],
-    },
-    {
-      name: "Report Writer",
-      icon: FileText,
-      description: "Generate comprehensive research reports with charts, narratives, and recommendations",
-      capabilities: ["Report structuring", "Data visualization", "Narrative generation", "Executive summaries"],
-    },
-    {
-      name: "Segment Profiler",
-      icon: Users,
-      description: "Build detailed profiles of consumer segments with needs, behaviors, and attitudes",
-      capabilities: ["Demographic analysis", "Psychographic profiling", "Need identification", "Persona creation"],
-    },
-  ]
-
   const workflows = [
     {
       name: "Market Sizing Study",
@@ -136,32 +98,49 @@ export default function MarketResearchPage() {
 
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Recommended AI Agents</h2>
+            <h2 className="text-3xl font-bold mb-4">Market Research AI Agents</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
               Specialized agents designed to accelerate every phase of the research process.
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {agents.map((agent, i) => (
-                <Card key={i} className="p-6 border-border/40 hover:border-primary/50 transition-colors">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-lg bg-primary/10">
-                      <agent.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-2">{agent.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">{agent.description}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {agent.capabilities.map((cap, j) => (
-                          <Badge key={j} variant="secondary" className="text-xs">
-                            {cap}
-                          </Badge>
-                        ))}
+              {marketResearchAgents.map((agent) => {
+                const iconMap: Record<string, React.ReactNode> = {
+                  Map: <Map className="h-6 w-6 text-primary" />,
+                  ClipboardList: <ClipboardList className="h-6 w-6 text-primary" />,
+                  Activity: <Activity className="h-6 w-6 text-primary" />,
+                  Eye: <Eye className="h-6 w-6 text-primary" />,
+                  FileText: <FileText className="h-6 w-6 text-primary" />,
+                  PieChart: <PieChart className="h-6 w-6 text-primary" />,
+                }
+                return (
+                  <Link key={agent.id} href={`/dashboard/agents/${agent.id}`}>
+                    <Card className="p-6 border-border/40 hover:border-primary/50 transition-colors h-full cursor-pointer">
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 rounded-lg bg-primary/10">
+                          {iconMap[agent.icon] || <Brain className="h-6 w-6 text-primary" />}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold mb-2">{agent.name}</h3>
+                          <p className="text-sm text-muted-foreground mb-4">{agent.description}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {agent.capabilities.slice(0, 4).map((cap, j) => (
+                              <Badge key={j} variant="secondary" className="text-xs">
+                                {cap}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="mt-4">
+                            <span className="text-sm text-primary flex items-center gap-1">
+                              Open Agent <ArrowRight className="h-3 w-3" />
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+                    </Card>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>
@@ -195,7 +174,7 @@ export default function MarketResearchPage() {
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" asChild>
-                <Link href="/signup">
+                <Link href="/dashboard">
                   Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

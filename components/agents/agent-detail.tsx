@@ -22,6 +22,34 @@ import {
   CheckCircle,
   XCircle,
   Pause,
+  UserCircle,
+  Globe,
+  Globe2,
+  Heart,
+  MessageSquare,
+  TrendingUp,
+  BarChart3,
+  Package,
+  Calendar,
+  Presentation,
+  Settings,
+  PenTool,
+  LineChart,
+  MessageCircle,
+  Search,
+  ListOrdered,
+  DollarSign,
+  Rocket,
+  Map,
+  ClipboardList,
+  Activity,
+  Eye,
+  Lightbulb,
+  Layers,
+  Shield,
+  Sparkles,
+  Database,
+  ArrowRight,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -37,6 +65,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
+import { getAgentById, getRelatedAgents, type SolutionAgent } from "@/lib/solution-agents"
 
 interface AgentRun {
   id: string
@@ -66,6 +95,43 @@ interface Agent {
   }
 }
 
+// Icon mapping for solution agents
+const iconMap: { [key: string]: React.ElementType } = {
+  Users,
+  UserCircle,
+  Brain,
+  Globe,
+  Globe2,
+  Heart,
+  Target,
+  MessageSquare,
+  TrendingUp,
+  BarChart3,
+  BookOpen,
+  Package,
+  Calendar,
+  Presentation,
+  Settings,
+  FileText,
+  PenTool,
+  LineChart,
+  MessageCircle,
+  Search,
+  ListOrdered,
+  CheckCircle,
+  DollarSign,
+  Rocket,
+  Map,
+  ClipboardList,
+  Activity,
+  Eye,
+  PieChart,
+  Lightbulb,
+  Zap,
+  Layers,
+  Shield
+}
+
 // Map agent types to icons and colors
 const typeConfig: Record<string, { icon: typeof Users; color: string }> = {
   RESEARCH: { icon: Users, color: "bg-chart-1/20 text-chart-1" },
@@ -73,6 +139,18 @@ const typeConfig: Record<string, { icon: typeof Users; color: string }> = {
   REPORTING: { icon: FileText, color: "bg-chart-3/20 text-chart-3" },
   MONITORING: { icon: Target, color: "bg-chart-4/20 text-chart-4" },
   CUSTOM: { icon: Brain, color: "bg-chart-5/20 text-chart-5" },
+}
+
+// Color schemes for solution areas
+const solutionColors: { [key: string]: { bg: string; text: string; border: string } } = {
+  core: { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30" },
+  sales: { bg: "bg-blue-500/20", text: "text-blue-400", border: "border-blue-500/30" },
+  insights: { bg: "bg-cyan-500/20", text: "text-cyan-400", border: "border-cyan-500/30" },
+  "ad-sales": { bg: "bg-orange-500/20", text: "text-orange-400", border: "border-orange-500/30" },
+  marketing: { bg: "bg-pink-500/20", text: "text-pink-400", border: "border-pink-500/30" },
+  "product-development": { bg: "bg-green-500/20", text: "text-green-400", border: "border-green-500/30" },
+  "market-research": { bg: "bg-indigo-500/20", text: "text-indigo-400", border: "border-indigo-500/30" },
+  innovation: { bg: "bg-amber-500/20", text: "text-amber-400", border: "border-amber-500/30" }
 }
 
 const statusColors: Record<string, string> = {
@@ -110,6 +188,273 @@ function formatDuration(startedAt: string, completedAt: string | null): string {
   return `${Math.round(diffMs / 60000)}m`
 }
 
+// Component for solution agent detail view
+function SolutionAgentDetail({ agent }: { agent: SolutionAgent }) {
+  const colors = solutionColors[agent.solutionAreaSlug] || solutionColors.core
+  const IconComponent = iconMap[agent.icon] || Sparkles
+  const relatedAgents = getRelatedAgents(agent.id, 4)
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+        <div className="flex items-start gap-4">
+          <Link href="/dashboard/agents">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <div className={`w-16 h-16 rounded-2xl ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}>
+            <IconComponent className="h-8 w-8" />
+          </div>
+          <div>
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-2xl font-bold text-foreground">{agent.name}</h1>
+              <Badge className="bg-emerald-500/10 text-emerald-400">
+                active
+              </Badge>
+              <Badge variant="outline" className={`${colors.text} ${colors.border}`}>
+                {agent.solutionArea}
+              </Badge>
+            </div>
+            <p className="text-muted-foreground mt-2 max-w-2xl">
+              {agent.description}
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              {agent.tags.map((tag, idx) => (
+                <Badge key={idx} variant="secondary" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 ml-12 lg:ml-0">
+          <Link href={`/dashboard/playground?agent=${agent.id}`}>
+            <Button className="gap-2">
+              <Play className="h-4 w-4" />
+              Start Chat
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {[
+          { label: "Data Sources", value: agent.dataConnections.length.toString(), icon: Database },
+          { label: "Capabilities", value: agent.capabilities.length.toString(), icon: Zap },
+          { label: "Output Formats", value: agent.outputFormats.length.toString(), icon: FileText },
+          { label: "Example Prompts", value: agent.examplePrompts.length.toString(), icon: MessageSquare },
+        ].map((stat) => (
+          <Card key={stat.label} className="bg-card border-border">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+                <stat.icon className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
+                <p className="text-lg font-bold text-foreground">{stat.value}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Tabs */}
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="bg-secondary">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="capabilities">Capabilities</TabsTrigger>
+          <TabsTrigger value="prompts">Example Prompts</TabsTrigger>
+          <TabsTrigger value="related">Related Agents</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+              <Card className="bg-card border-border">
+                <CardHeader>
+                  <CardTitle>About This Agent</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose prose-sm prose-invert max-w-none">
+                    <p className="text-muted-foreground whitespace-pre-line">
+                      {agent.description}
+                    </p>
+                    <h4 className="text-foreground mt-4">System Prompt</h4>
+                    <div className="rounded-lg bg-secondary p-4 text-sm text-muted-foreground whitespace-pre-line">
+                      {agent.systemPrompt}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card border-border">
+                <CardHeader>
+                  <CardTitle>Key Capabilities</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {agent.capabilities.map((capability, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <CheckCircle className="h-5 w-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                        <span className="text-muted-foreground">{capability}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="space-y-6">
+              <Card className="bg-card border-border">
+                <CardHeader>
+                  <CardTitle>Agent Details</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Solution Area</p>
+                    <p className="text-sm font-medium">{agent.solutionArea}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Status</p>
+                    <p className="text-sm font-medium text-emerald-400">Active</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Data Connections</p>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {agent.dataConnections.map((dc, idx) => (
+                        <Badge key={idx} variant="outline" className="text-xs">
+                          {dc}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Output Formats</p>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {agent.outputFormats.map((format, idx) => (
+                        <Badge key={idx} variant="secondary" className="text-xs">
+                          {format}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card border-border">
+                <CardHeader>
+                  <CardTitle>Quick Start</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Try one of these example prompts to get started:
+                  </p>
+                  {agent.examplePrompts.slice(0, 2).map((prompt, idx) => (
+                    <Link
+                      key={idx}
+                      href={`/dashboard/playground?agent=${agent.id}&prompt=${encodeURIComponent(prompt)}`}
+                      className="block p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors text-sm text-muted-foreground"
+                    >
+                      "{prompt}"
+                    </Link>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="capabilities" className="space-y-4">
+          <Card className="bg-card border-border">
+            <CardHeader>
+              <CardTitle>Full Capability List</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {agent.capabilities.map((capability, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-4 rounded-lg border border-border bg-secondary/30">
+                    <div className={`w-8 h-8 rounded-lg ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}>
+                      {idx + 1}
+                    </div>
+                    <div>
+                      <p className="text-foreground">{capability}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="prompts" className="space-y-4">
+          <Card className="bg-card border-border">
+            <CardHeader>
+              <CardTitle>Example Prompts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Click on any prompt to start a conversation with this agent.
+              </p>
+              <div className="space-y-3">
+                {agent.examplePrompts.map((prompt, idx) => (
+                  <Link
+                    key={idx}
+                    href={`/dashboard/playground?agent=${agent.id}&prompt=${encodeURIComponent(prompt)}`}
+                    className="flex items-center justify-between p-4 rounded-lg border border-border bg-secondary/30 hover:bg-secondary transition-colors group"
+                  >
+                    <span className="text-foreground">{prompt}</span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="related" className="space-y-4">
+          <Card className="bg-card border-border">
+            <CardHeader>
+              <CardTitle>Related Agents</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Agents with similar capabilities or from the same solution area.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {relatedAgents.map((relatedAgent) => {
+                  const relatedColors = solutionColors[relatedAgent.solutionAreaSlug] || solutionColors.core
+                  const RelatedIcon = iconMap[relatedAgent.icon] || Sparkles
+                  return (
+                    <Link
+                      key={relatedAgent.id}
+                      href={`/dashboard/agents/${relatedAgent.id}`}
+                      className="flex items-start gap-3 p-4 rounded-lg border border-border bg-secondary/30 hover:bg-secondary transition-colors"
+                    >
+                      <div className={`w-10 h-10 rounded-lg ${relatedColors.bg} ${relatedColors.text} flex items-center justify-center flex-shrink-0`}>
+                        <RelatedIcon className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-foreground">{relatedAgent.name}</p>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{relatedAgent.description}</p>
+                        <Badge variant="outline" className={`mt-2 text-xs ${relatedColors.text} ${relatedColors.border}`}>
+                          {relatedAgent.solutionArea}
+                        </Badge>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
+
 export function AgentDetail({ id }: { id: string }) {
   const router = useRouter()
   const [agent, setAgent] = useState<Agent | null>(null)
@@ -118,7 +463,16 @@ export function AgentDetail({ id }: { id: string }) {
   const [isUpdating, setIsUpdating] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
+  // Check if this is a solution agent first
+  const solutionAgent = getAgentById(id)
+
   useEffect(() => {
+    // If it's a solution agent, skip API call
+    if (solutionAgent) {
+      setIsLoading(false)
+      return
+    }
+
     async function fetchAgent() {
       setIsLoading(true)
       setError(null)
@@ -139,7 +493,7 @@ export function AgentDetail({ id }: { id: string }) {
     }
 
     fetchAgent()
-  }, [id])
+  }, [id, solutionAgent])
 
   const handleStatusChange = async (newStatus: 'ACTIVE' | 'PAUSED' | 'ARCHIVED') => {
     if (!agent) return
@@ -190,6 +544,11 @@ export function AgentDetail({ id }: { id: string }) {
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     )
+  }
+
+  // Render solution agent detail if found
+  if (solutionAgent) {
+    return <SolutionAgentDetail agent={solutionAgent} />
   }
 
   if (error || !agent) {
