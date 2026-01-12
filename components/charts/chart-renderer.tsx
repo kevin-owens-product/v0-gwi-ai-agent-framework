@@ -28,9 +28,9 @@ import {
   LabelList,
   Treemap,
 } from "recharts"
-import { Loader2 } from "lucide-react"
+import { Loader2, Activity } from "lucide-react"
 
-export type ChartType = "BAR" | "LINE" | "PIE" | "DONUT" | "AREA" | "SCATTER" | "HEATMAP" | "TREEMAP" | "FUNNEL" | "RADAR"
+export type ChartType = "BAR" | "LINE" | "PIE" | "DONUT" | "AREA" | "SCATTER" | "HEATMAP" | "TREEMAP" | "FUNNEL" | "RADAR" | "METRIC"
 
 export interface ChartDataPoint {
   name: string
@@ -266,6 +266,18 @@ export function ChartRenderer({
           </BarChart>
         )
 
+      case "METRIC":
+        // Metric displays a single KPI value prominently
+        const metricValue = chartData[0]?.value ?? 0
+        const metricName = chartData[0]?.name ?? "Metric"
+        return (
+          <div className="flex flex-col items-center justify-center h-full p-4">
+            <Activity className="h-8 w-8 text-primary mb-2" />
+            <span className="text-3xl font-bold">{metricValue}</span>
+            <span className="text-sm text-muted-foreground">{metricName}</span>
+          </div>
+        )
+
       default:
         return (
           <div className="flex items-center justify-center text-muted-foreground" style={{ height }}>
@@ -317,6 +329,7 @@ export function generateSampleData(type: ChartType, count: number = 6, seed?: st
       RADAR: [72, 85, 68, 92, 78, 55, 88, 62, 75, 82, 69, 91],
       SCATTER: [45, 72, 38, 85, 52, 68, 91, 35, 78, 62, 88, 55],
       HEATMAP: [88, 65, 78, 52, 92, 45, 72, 85, 58, 95, 68, 82],
+      METRIC: [85],
     }
     const pattern = patterns[chartType] || patterns.BAR
     // Apply seed offset to get varied but deterministic values
@@ -336,6 +349,10 @@ export function generateSampleData(type: ChartType, count: number = 6, seed?: st
         name,
         value: getValueForIndex(index, type),
       }))
+
+    case "METRIC":
+      // Metrics only need a single data point
+      return [{ name: "Value", value: getValueForIndex(0, type) }]
 
     default:
       return labels.slice(0, count).map((name, index) => ({
