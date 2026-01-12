@@ -61,6 +61,8 @@ interface CustomAgent {
   description: string | null
   isStoreAgent?: boolean
   storeAgent?: StoreAgent
+  isSolutionAgent?: boolean
+  solutionAgent?: SolutionAgent
 }
 
 interface PlaygroundContextType {
@@ -214,6 +216,30 @@ export default function PlaygroundPage() {
         return
       }
 
+      // Check if it's a solution agent
+      const solutionAgent = getAgentById(agentIdFromUrl)
+      if (solutionAgent) {
+        setCustomAgent({
+          id: solutionAgent.id,
+          name: solutionAgent.name,
+          description: solutionAgent.description,
+          isSolutionAgent: true,
+          solutionAgent: solutionAgent,
+        })
+        setConfig((prev) => ({ ...prev, selectedAgent: solutionAgent.id }))
+        // Create greeting from solution agent's example prompts
+        const greeting = `Hello! I'm the ${solutionAgent.name}. ${solutionAgent.description}\n\nHere are some things I can help you with:\n${solutionAgent.capabilities.slice(0, 3).map(c => `• ${c}`).join('\n')}\n\nTry asking me something like: "${solutionAgent.examplePrompts[0]}"`
+        setMessages([
+          {
+            id: Date.now().toString(),
+            role: "assistant",
+            content: greeting,
+            status: "complete",
+          },
+        ])
+        return
+      }
+
       // Then check if it's a store agent
       const storeAgent = getStoreAgent(agentIdFromUrl)
       if (storeAgent) {
@@ -263,18 +289,27 @@ export default function PlaygroundPage() {
   const resetChat = () => {
     let greeting = agents["audience-explorer"]?.greeting || "Hello! How can I help you today?"
 
-    // Check for store agent first
-    if (customAgent?.isStoreAgent && customAgent.storeAgent) {
+    // Check for solution agent first
+    if (customAgent?.isSolutionAgent && customAgent.solutionAgent) {
+      const sa = customAgent.solutionAgent
+      greeting = `Hello! I'm the ${sa.name}. ${sa.description}\n\nHere are some things I can help you with:\n${sa.capabilities.slice(0, 3).map(c => `• ${c}`).join('\n')}\n\nTry asking me something like: "${sa.examplePrompts[0]}"`
+    } else if (customAgent?.isStoreAgent && customAgent.storeAgent) {
       greeting = customAgent.storeAgent.greeting
     } else if (customAgent) {
       greeting = `Hello! I'm ${customAgent.name}. ${customAgent.description || "How can I help you today?"}`
     } else if (agents[config.selectedAgent]) {
       greeting = agents[config.selectedAgent].greeting
     } else {
-      // Check if selected agent is a store agent
-      const storeAgent = getStoreAgent(config.selectedAgent)
-      if (storeAgent) {
-        greeting = storeAgent.greeting
+      // Check if selected agent is a solution agent
+      const solutionAgent = getAgentById(config.selectedAgent)
+      if (solutionAgent) {
+        greeting = `Hello! I'm the ${solutionAgent.name}. ${solutionAgent.description}\n\nHere are some things I can help you with:\n${solutionAgent.capabilities.slice(0, 3).map(c => `• ${c}`).join('\n')}\n\nTry asking me something like: "${solutionAgent.examplePrompts[0]}"`
+      } else {
+        // Check if selected agent is a store agent
+        const storeAgent = getStoreAgent(config.selectedAgent)
+        if (storeAgent) {
+          greeting = storeAgent.greeting
+        }
       }
     }
 

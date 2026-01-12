@@ -17,18 +17,46 @@ import {
   Trash2,
   Sparkles,
   Globe,
+  Globe2,
   Heart,
   TrendingUp,
   Search,
   Bot,
   Store,
   Star,
+  Brain,
+  Target,
+  MessageSquare,
+  BarChart3,
+  BookOpen,
+  Package,
+  Calendar,
+  Presentation,
+  FileText,
+  PenTool,
+  LineChart,
+  MessageCircle,
+  ListOrdered,
+  CheckCircle,
+  DollarSign,
+  Rocket,
+  Map,
+  ClipboardList,
+  Activity,
+  Eye,
+  PieChart,
+  Lightbulb,
+  Zap,
+  Layers,
+  Shield,
+  UserCircle,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { usePlayground } from "@/app/dashboard/playground/page"
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { getInstalledAgents, iconMap, type StoreAgent, uninstallAgent } from "@/lib/store-agents"
+import { allSolutionAgents, solutionAreas, getAgentById, type SolutionAgent } from "@/lib/solution-agents"
 
 const agents = [
   {
@@ -88,6 +116,55 @@ const dataSources = [
   { id: "custom-data", name: "Custom Upload", description: "Your uploaded data", records: "—" },
 ]
 
+// Icon map for solution agents
+const solutionIconMap: Record<string, React.ElementType> = {
+  Users,
+  UserCircle,
+  Brain,
+  Globe,
+  Globe2,
+  Heart,
+  Target,
+  MessageSquare,
+  TrendingUp,
+  BarChart3,
+  BookOpen,
+  Package,
+  Calendar,
+  Presentation,
+  Settings,
+  FileText,
+  PenTool,
+  LineChart,
+  MessageCircle,
+  Search,
+  ListOrdered,
+  CheckCircle,
+  DollarSign,
+  Rocket,
+  Map,
+  ClipboardList,
+  Activity,
+  Eye,
+  PieChart,
+  Lightbulb,
+  Zap,
+  Layers,
+  Shield,
+}
+
+// Color map for solution areas
+const solutionColorMap: Record<string, string> = {
+  core: "text-purple-500",
+  sales: "text-blue-500",
+  insights: "text-cyan-500",
+  "ad-sales": "text-orange-500",
+  marketing: "text-pink-500",
+  "product-development": "text-green-500",
+  "market-research": "text-indigo-500",
+  innovation: "text-amber-500",
+}
+
 const sessionHistory = [
   {
     id: "1",
@@ -114,6 +191,72 @@ const sessionHistory = [
     agent: "culture-tracker",
   },
 ]
+
+// Expandable Solution Area Component
+function SolutionAreaSection({
+  area,
+  agents,
+  selectedAgent,
+  onSelect,
+}: {
+  area: typeof solutionAreas[0]
+  agents: SolutionAgent[]
+  selectedAgent: string
+  onSelect: (agent: SolutionAgent) => void
+}) {
+  const [expanded, setExpanded] = useState(false)
+  const color = solutionColorMap[area.slug] || "text-primary"
+
+  return (
+    <div>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-secondary/50 transition-colors text-left"
+      >
+        <span className={cn("text-sm font-medium", color)}>{area.name}</span>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="text-[10px] h-4 px-1.5">{area.agentCount}</Badge>
+          <ChevronRight className={cn("h-4 w-4 transition-transform text-muted-foreground", expanded && "rotate-90")} />
+        </div>
+      </button>
+      {expanded && (
+        <div className="space-y-1.5 mt-1.5 ml-2">
+          {agents.map((solutionAgent) => {
+            const IconComponent = solutionIconMap[solutionAgent.icon] || Sparkles
+            const isSelected = selectedAgent === solutionAgent.id
+            return (
+              <button
+                key={solutionAgent.id}
+                onClick={() => onSelect(solutionAgent)}
+                className={cn(
+                  "w-full text-left p-2.5 rounded-lg border transition-all",
+                  isSelected
+                    ? "border-primary bg-primary/10"
+                    : "border-border hover:border-muted-foreground/30",
+                )}
+              >
+                <div className="flex items-start gap-2.5">
+                  <div
+                    className={cn(
+                      "w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0",
+                      isSelected ? "bg-primary/20" : "bg-secondary",
+                    )}
+                  >
+                    <IconComponent className={cn("h-3.5 w-3.5", color)} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-foreground line-clamp-1">{solutionAgent.name}</p>
+                    <p className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">{solutionAgent.description}</p>
+                  </div>
+                </div>
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function PlaygroundSidebar() {
   const { config, setConfig, setMessages, resetChat, customAgent, setCustomAgent } = usePlayground()
@@ -174,6 +317,28 @@ export function PlaygroundSidebar() {
       return
     }
 
+    // Check if it's a solution agent
+    const solutionAgent = getAgentById(agentId)
+    if (solutionAgent) {
+      setCustomAgent({
+        id: solutionAgent.id,
+        name: solutionAgent.name,
+        description: solutionAgent.description,
+        isSolutionAgent: true,
+        solutionAgent: solutionAgent,
+      })
+      const greeting = `Hello! I'm the ${solutionAgent.name}. ${solutionAgent.description}\n\nHere are some things I can help you with:\n${solutionAgent.capabilities.slice(0, 3).map(c => `• ${c}`).join('\n')}\n\nTry asking me something like: "${solutionAgent.examplePrompts[0]}"`
+      setMessages([
+        {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: greeting,
+          status: "complete",
+        },
+      ])
+      return
+    }
+
     // Check if it's an installed store agent
     const storeAgent = installedStoreAgents.find(a => a.id === agentId)
     if (storeAgent) {
@@ -193,6 +358,26 @@ export function PlaygroundSidebar() {
         },
       ])
     }
+  }
+
+  const handleSolutionAgentSelect = (solutionAgent: SolutionAgent) => {
+    setConfig((prev) => ({ ...prev, selectedAgent: solutionAgent.id }))
+    setCustomAgent({
+      id: solutionAgent.id,
+      name: solutionAgent.name,
+      description: solutionAgent.description,
+      isSolutionAgent: true,
+      solutionAgent: solutionAgent,
+    })
+    const greeting = `Hello! I'm the ${solutionAgent.name}. ${solutionAgent.description}\n\nHere are some things I can help you with:\n${solutionAgent.capabilities.slice(0, 3).map(c => `• ${c}`).join('\n')}\n\nTry asking me something like: "${solutionAgent.examplePrompts[0]}"`
+    setMessages([
+      {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: greeting,
+        status: "complete",
+      },
+    ])
   }
 
   const handleStoreAgentSelect = (storeAgent: StoreAgent) => {
@@ -460,9 +645,37 @@ export function PlaygroundSidebar() {
                 </div>
               </div>
 
+              {/* Solution Agents by Area */}
+              <div className="mt-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles className="h-3.5 w-3.5 text-primary" />
+                  <Label className="text-xs text-muted-foreground">Solution Agents ({allSolutionAgents.length})</Label>
+                </div>
+                <div className="space-y-3">
+                  {solutionAreas.map((area) => {
+                    const areaAgents = allSolutionAgents.filter(a => a.solutionAreaSlug === area.slug)
+                    return (
+                      <SolutionAreaSection
+                        key={area.slug}
+                        area={area}
+                        agents={areaAgents}
+                        selectedAgent={config.selectedAgent}
+                        onSelect={handleSolutionAgentSelect}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+
               {/* Browse Store Link */}
+              <Link href="/dashboard/agents" className="block mt-4">
+                <Button variant="outline" size="sm" className="w-full text-xs bg-transparent gap-2">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Browse All Agents
+                </Button>
+              </Link>
               <Link href="/dashboard/store" className="block">
-                <Button variant="outline" size="sm" className="w-full mt-3 text-xs bg-transparent gap-2">
+                <Button variant="outline" size="sm" className="w-full mt-2 text-xs bg-transparent gap-2">
                   <Store className="h-3.5 w-3.5" />
                   Browse Agent Store
                 </Button>
