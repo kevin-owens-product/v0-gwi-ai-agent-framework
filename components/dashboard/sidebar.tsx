@@ -26,7 +26,6 @@ import {
   Users,
   Table2,
   PieChart,
-  UsersRound,
   Target,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -65,7 +64,6 @@ const navGroups = [
       { name: "Charts", href: "/dashboard/charts", icon: BarChart3, description: "Data visualizations" },
       { name: "Crosstabs", href: "/dashboard/crosstabs", icon: Table2, description: "Compare audiences" },
       { name: "Dashboards", href: "/dashboard/dashboards", icon: PieChart, description: "Combined insights" },
-      { name: "Teams", href: "/dashboard/teams", icon: UsersRound, description: "Manage team members" },
     ],
   },
   {
