@@ -354,7 +354,12 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
           const data = await response.json()
           const apiChart = data.data || data
           if (apiChart && apiChart.id) {
-            setChart(apiChart)
+            // Ensure data and insights are arrays
+            setChart({
+              ...apiChart,
+              data: Array.isArray(apiChart.data) ? apiChart.data : undefined,
+              insights: Array.isArray(apiChart.insights) ? apiChart.insights : [],
+            })
           } else {
             setChart(demoCharts[id] || null)
           }
@@ -615,7 +620,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
               <div className={cn("bg-gradient-to-br from-muted/30 to-muted/10 rounded-lg overflow-hidden", isFullscreen ? "min-h-[600px]" : "min-h-[400px]")}>
                 <AdvancedChartRenderer
                   type={chart.type}
-                  data={chart.data || generateAdvancedSampleData(chart.type, chart.template)}
+                  data={Array.isArray(chart.data) && chart.data.length > 0 ? chart.data : generateAdvancedSampleData(chart.type, chart.template)}
                   config={{
                     showLegend: true,
                     showGrid: true,
@@ -637,7 +642,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
         {!isFullscreen && (
           <div className="space-y-6">
             {/* Key Insights */}
-            {chart.insights && chart.insights.length > 0 && (
+            {Array.isArray(chart.insights) && chart.insights.length > 0 && (
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center gap-2">
