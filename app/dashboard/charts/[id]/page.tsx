@@ -703,55 +703,36 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
             )}
           </div>
 
-      <div className={cn("grid gap-6", isFullscreen ? "" : "lg:grid-cols-3")}>
-        {/* Main Chart */}
-        <div className={cn(isFullscreen ? "" : "lg:col-span-2")}>
-          <Card className="overflow-hidden">
-            <CardContent className="p-6">
-              <div className={cn("bg-gradient-to-br from-muted/30 to-muted/10 rounded-lg overflow-hidden", isFullscreen ? "min-h-[600px]" : "min-h-[400px]")}>
-                <AdvancedChartRenderer
-                  type={chart.type}
-                  data={Array.isArray(chart.data) && chart.data.length > 0 ? chart.data : generateAdvancedSampleData(chart.type, chart.template)}
-                  config={{
-                    showLegend: true,
-                    showGrid: true,
-                    showTooltip: true,
-                    showBenchmark: true,
-                    showChange: true,
-                    height: isFullscreen ? 600 : 400,
-                    animate: true,
-                    formatter: "percentage",
-                  }}
-                  template={chart.template}
-                />
+          <TabsContent value="overview" className="space-y-4">
+            <div className={cn("grid gap-6", isFullscreen ? "" : "lg:grid-cols-3")}>
+              {/* Main Chart */}
+              <div className={cn(isFullscreen ? "" : "lg:col-span-2")}>
+                <Card className="overflow-hidden">
+                  <CardContent className="p-6">
+                    <div className={cn("bg-gradient-to-br from-muted/30 to-muted/10 rounded-lg overflow-hidden", isFullscreen ? "min-h-[600px]" : "min-h-[400px]")}>
+                      <AdvancedChartRenderer
+                        type={chart.type}
+                        data={Array.isArray(chart.data) && chart.data.length > 0 ? chart.data : generateAdvancedSampleData(chart.type, chart.template)}
+                        config={{
+                          showLegend: true,
+                          showGrid: true,
+                          showTooltip: true,
+                          showBenchmark: true,
+                          showChange: true,
+                          height: isFullscreen ? 600 : 400,
+                          animate: true,
+                          formatter: "percentage",
+                        }}
+                        template={chart.template}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
 
-        {/* Sidebar */}
-        {!isFullscreen && (
-          <div className="space-y-6">
-            {/* Key Insights */}
-            {Array.isArray(chart.insights) && chart.insights.length > 0 && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-primary" />
-                    Key Insights
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {chart.insights.map((insight, index) => (
-                    <div
-                      key={index}
-                      className={cn(
-                        "p-3 rounded-lg border-l-4",
-                        insight.type === "increase" && "bg-green-500/10 border-green-500",
-                        insight.type === "decrease" && "bg-red-500/10 border-red-500",
-                        insight.type === "neutral" && "bg-muted border-muted-foreground",
-                        insight.type === "highlight" && "bg-primary/10 border-primary"
-                      )}
-                    </CardContent>
-                  </Card>
-
+              {/* Sidebar */}
+              {!isFullscreen && (
+                <div className="space-y-6">
                   {/* Key Insights */}
                   {chart.insights && chart.insights.length > 0 && (
                     <Card>
