@@ -738,3 +738,335 @@ model ToolMemory {
   @@index([sessionId, createdAt])
   @@index([expiresAt])
 }
+
+// ==================== SUPER ADMIN PORTAL ====================
+
+model SuperAdmin {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  name          String
+  passwordHash  String
+  role          SuperAdminRole  @default(ADMIN)
+  permissions   String[]        @default([])
+  isActive      Boolean         @default(true)
+  lastLoginAt   DateTime?
+  lastLoginIp   String?
+  twoFactorSecret String?
+  twoFactorEnabled Boolean      @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  auditLogs     PlatformAuditLog[]
+  sessions      SuperAdminSession[]
+
+  @@index([email])
+  @@index([role])
+}
+
+enum SuperAdminRole {
+  SUPER_ADMIN    // Full platform access
+  ADMIN          // Standard admin access
+  SUPPORT        // Customer success/support
+  ANALYST        // Read-only analytics access
+}
+
+model SuperAdminSession {
+  id            String   @id @default(cuid())
+  adminId       String
+  token         String   @unique
+  ipAddress     String?
+  userAgent     String?
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+
+  admin SuperAdmin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([token])
+}
+
+model FeatureFlag {
+  id            String            @id @default(cuid())
+  key           String            @unique
+  name          String
+  description   String?
+  type          FeatureFlagType   @default(BOOLEAN)
+  defaultValue  Json              @default("false")
+  isEnabled     Boolean           @default(false)
+  rolloutPercentage Int           @default(0)    // 0-100 for gradual rollout
+  allowedOrgs   String[]          @default([])   // Specific org IDs that have access
+  blockedOrgs   String[]          @default([])   // Org IDs explicitly blocked
+  allowedPlans  PlanTier[]        @default([])   // Plan tiers that have access
+  metadata      Json              @default("{}")
+  createdBy     String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([key])
+  @@index([isEnabled])
+}
+
+enum FeatureFlagType {
+  BOOLEAN
+  STRING
+  NUMBER
+  JSON
+}
+
+model SystemRule {
+  id            String          @id @default(cuid())
+  name          String
+  description   String?
+  type          SystemRuleType
+  conditions    Json            @default("{}") // Rule conditions
+  actions       Json            @default("{}") // Actions to take when rule triggers
+  isActive      Boolean         @default(true)
+  priority      Int             @default(0)    // Higher priority rules execute first
+  appliesTo     String[]        @default([])   // Specific org IDs, empty = all
+  excludeOrgs   String[]        @default([])   // Org IDs excluded from rule
+  metadata      Json            @default("{}")
+  triggerCount  Int             @default(0)
+  lastTriggered DateTime?
+  createdBy     String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+  @@index([priority])
+}
+
+enum SystemRuleType {
+  RATE_LIMIT       // Rate limiting rules
+  CONTENT_POLICY   // Content moderation rules
+  SECURITY         // Security-related rules
+  BILLING          // Billing/payment rules
+  USAGE            // Usage limit rules
+  COMPLIANCE       // Compliance rules (GDPR, etc.)
+  NOTIFICATION     // Notification trigger rules
+  AUTO_SUSPEND     // Auto-suspension rules
+}
+
+model UserBan {
+  id            String        @id @default(cuid())
+  userId        String
+  orgId         String?       // If null, user is banned platform-wide
+  reason        String
+  bannedBy      String        // Super admin ID
+  banType       BanType       @default(TEMPORARY)
+  expiresAt     DateTime?     // Null for permanent bans
+  appealStatus  AppealStatus  @default(NONE)
+  appealNotes   String?
+  metadata      Json          @default("{}")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([orgId])
+  @@index([banType])
+  @@index([expiresAt])
+}
+
+enum BanType {
+  TEMPORARY
+  PERMANENT
+  SHADOW        // User can still access but actions are limited
+}
+
+enum AppealStatus {
+  NONE
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model SupportTicket {
+  id            String              @id @default(cuid())
+  ticketNumber  String              @unique
+  orgId         String
+  userId        String?
+  subject       String
+  description   String              @db.Text
+  category      TicketCategory
+  priority      TicketPriority      @default(MEDIUM)
+  status        TicketStatus        @default(OPEN)
+  assignedTo    String?             // Super admin ID
+  tags          String[]            @default([])
+  metadata      Json                @default("{}")
+  resolvedAt    DateTime?
+  firstResponseAt DateTime?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  responses     TicketResponse[]
+
+  @@index([orgId])
+  @@index([userId])
+  @@index([status])
+  @@index([priority])
+  @@index([assignedTo])
+  @@index([ticketNumber])
+}
+
+enum TicketCategory {
+  BILLING
+  TECHNICAL
+  FEATURE_REQUEST
+  BUG_REPORT
+  ACCOUNT
+  SECURITY
+  OTHER
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_ON_CUSTOMER
+  WAITING_ON_INTERNAL
+  RESOLVED
+  CLOSED
+}
+
+model TicketResponse {
+  id            String   @id @default(cuid())
+  ticketId      String
+  responderId   String   // User ID or Super admin ID
+  responderType String   // 'user' | 'admin'
+  message       String   @db.Text
+  isInternal    Boolean  @default(false) // Internal notes not visible to customer
+  attachments   Json     @default("[]")
+  createdAt     DateTime @default(now())
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@index([responderId])
+}
+
+model TenantHealthScore {
+  id                String   @id @default(cuid())
+  orgId             String
+  overallScore      Float    // 0-100
+  engagementScore   Float    // User engagement metrics
+  usageScore        Float    // Feature utilization
+  healthIndicators  Json     @default("{}") // Detailed breakdown
+  riskLevel         RiskLevel @default(HEALTHY)
+  churnProbability  Float?   // 0-1 probability of churn
+  recommendations   String[] @default([])
+  calculatedAt      DateTime @default(now())
+
+  @@index([orgId])
+  @@index([riskLevel])
+  @@index([calculatedAt])
+}
+
+enum RiskLevel {
+  HEALTHY
+  AT_RISK
+  CRITICAL
+}
+
+model PlatformAuditLog {
+  id            String   @id @default(cuid())
+  adminId       String?
+  action        String
+  resourceType  String
+  resourceId    String?
+  targetOrgId   String?  // If action affects a specific org
+  targetUserId  String?  // If action affects a specific user
+  details       Json     @default("{}")
+  ipAddress     String?
+  userAgent     String?
+  timestamp     DateTime @default(now())
+
+  admin SuperAdmin? @relation(fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([action])
+  @@index([resourceType])
+  @@index([targetOrgId])
+  @@index([targetUserId])
+  @@index([timestamp])
+}
+
+model SystemNotification {
+  id            String                    @id @default(cuid())
+  title         String
+  message       String                    @db.Text
+  type          NotificationType
+  targetType    NotificationTargetType    @default(ALL)
+  targetOrgs    String[]                  @default([])  // Specific org IDs
+  targetPlans   PlanTier[]                @default([])  // Specific plan tiers
+  isActive      Boolean                   @default(true)
+  scheduledFor  DateTime?
+  expiresAt     DateTime?
+  metadata      Json                      @default("{}")
+  createdBy     String?
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+  @@index([scheduledFor])
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  ALERT
+  MAINTENANCE
+  FEATURE
+  PROMOTION
+}
+
+enum NotificationTargetType {
+  ALL
+  SPECIFIC_ORGS
+  SPECIFIC_PLANS
+}
+
+model SystemConfig {
+  id            String   @id @default(cuid())
+  key           String   @unique
+  value         Json
+  description   String?
+  category      String   @default("general")
+  isPublic      Boolean  @default(false) // Can be accessed by non-admins
+  updatedBy     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([key])
+  @@index([category])
+}
+
+model OrganizationSuspension {
+  id            String            @id @default(cuid())
+  orgId         String
+  reason        String
+  suspendedBy   String            // Super admin ID
+  suspensionType SuspensionType   @default(FULL)
+  expiresAt     DateTime?         // Null for indefinite
+  isActive      Boolean           @default(true)
+  notes         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([orgId])
+  @@index([isActive])
+  @@index([expiresAt])
+}
+
+enum SuspensionType {
+  FULL           // Complete suspension - no access
+  PARTIAL        // Limited functionality
+  BILLING_HOLD   // Suspended due to billing issues
+  INVESTIGATION  // Under investigation
+}
