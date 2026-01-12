@@ -263,7 +263,7 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Brand Health</p>
                 <p className="text-2xl font-bold">{latestSnapshot?.brandHealth?.toFixed(1) || 'N/A'}</p>
-                {healthTrend !== null && (
+                {typeof healthTrend === 'number' && (
                   <p className={`text-xs mt-1 flex items-center gap-1 ${healthTrend >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                     {healthTrend >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                     {healthTrend >= 0 ? '+' : ''}{healthTrend.toFixed(1)}
@@ -281,7 +281,7 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Awareness</p>
                 <p className="text-2xl font-bold">{latestSnapshot?.awareness?.toFixed(1) || 'N/A'}%</p>
-                {awarenessTrend !== null && (
+                {typeof awarenessTrend === 'number' && (
                   <p className={`text-xs mt-1 flex items-center gap-1 ${awarenessTrend >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                     {awarenessTrend >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                     {awarenessTrend >= 0 ? '+' : ''}{awarenessTrend.toFixed(1)}%

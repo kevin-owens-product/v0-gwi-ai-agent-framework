@@ -603,11 +603,11 @@ export function AdvancedCrosstabGrid({
                     <div className="space-y-1 text-xs">
                       <p className="font-medium">{col.label}</p>
                       <p>{row.metric}: {value !== null ? `${value}%` : "N/A"}</p>
-                      {stats && (
+                      {stats && typeof stats.mean === 'number' && (
                         <>
                           <Separator className="my-1" />
                           <p>Mean: {stats.mean.toFixed(1)}%</p>
-                          <p>Range: {stats.min.toFixed(1)} - {stats.max.toFixed(1)}%</p>
+                          <p>Range: {typeof stats.min === 'number' ? stats.min.toFixed(1) : 'N/A'} - {typeof stats.max === 'number' ? stats.max.toFixed(1) : 'N/A'}%</p>
                           {significant && <p className="text-green-600">Statistically significant</p>}
                         </>
                       )}
@@ -934,13 +934,13 @@ export function AdvancedCrosstabGrid({
                           {config.showStatistics && stats && (
                             <>
                               <TableCell className="text-center font-mono text-xs bg-muted/20">
-                                {stats.mean.toFixed(config.decimalPlaces)}%
+                                {typeof stats.mean === 'number' ? stats.mean.toFixed(config.decimalPlaces) : 'N/A'}%
                               </TableCell>
                               <TableCell className="text-center font-mono text-xs bg-muted/20 text-red-600">
-                                {stats.min.toFixed(config.decimalPlaces)}%
+                                {typeof stats.min === 'number' ? stats.min.toFixed(config.decimalPlaces) : 'N/A'}%
                               </TableCell>
                               <TableCell className="text-center font-mono text-xs bg-muted/20 text-green-600">
-                                {stats.max.toFixed(config.decimalPlaces)}%
+                                {typeof stats.max === 'number' ? stats.max.toFixed(config.decimalPlaces) : 'N/A'}%
                               </TableCell>
                             </>
                           )}
@@ -1234,7 +1234,7 @@ export function AdvancedCrosstabGrid({
                     <Card className="p-4">
                       <h4 className="text-sm font-medium text-muted-foreground">Average</h4>
                       <p className="text-3xl font-bold">
-                        {statistics[drillDownData.row.id]?.mean.toFixed(1)}%
+                        {typeof statistics[drillDownData.row.id]?.mean === 'number' ? statistics[drillDownData.row.id].mean.toFixed(1) : 'N/A'}%
                       </p>
                     </Card>
                   </div>
