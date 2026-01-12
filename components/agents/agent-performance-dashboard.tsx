@@ -100,9 +100,9 @@ const performanceData: AgentPerformance[] = [
 
 const overallStats = {
   totalRuns: performanceData.reduce((sum, agent) => sum + agent.totalRuns, 0),
-  avgSuccessRate: (performanceData.reduce((sum, agent) => sum + agent.successRate, 0) / performanceData.length).toFixed(1),
-  totalCost: performanceData.reduce((sum, agent) => sum + agent.totalRuns * agent.costPerRun, 0).toFixed(2),
-  avgResponseTime: (performanceData.reduce((sum, agent) => sum + agent.avgDuration, 0) / performanceData.length).toFixed(1),
+  avgSuccessRate: performanceData.length > 0 ? (performanceData.reduce((sum, agent) => sum + agent.successRate, 0) / performanceData.length).toFixed(1) : '0.0',
+  totalCost: performanceData.reduce((sum, agent) => sum + agent.totalRuns * (agent.costPerRun ?? 0), 0).toFixed(2),
+  avgResponseTime: performanceData.length > 0 ? (performanceData.reduce((sum, agent) => sum + agent.avgDuration, 0) / performanceData.length).toFixed(1) : '0.0',
 }
 
 export function AgentPerformanceDashboard() {
@@ -251,7 +251,7 @@ export function AgentPerformanceDashboard() {
                   <p className="text-xs text-muted-foreground mb-1">Cost/Run</p>
                   <div className="flex items-center gap-1">
                     <DollarSign className="h-3.5 w-3.5 text-muted-foreground" />
-                    <p className="text-sm font-medium">${agent.costPerRun.toFixed(3)}</p>
+                    <p className="text-sm font-medium">${typeof agent.costPerRun === 'number' ? agent.costPerRun.toFixed(3) : '0.000'}</p>
                   </div>
                 </div>
               </div>
