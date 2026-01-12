@@ -66,7 +66,7 @@ describe('Resilience Utilities', () => {
     })
 
     it('should open circuit after threshold', () => {
-      let failures = 5
+      const failures = 5
       const threshold = 5
       const isOpen = failures >= threshold
 
@@ -74,7 +74,7 @@ describe('Resilience Utilities', () => {
     })
 
     it('should close circuit after success', () => {
-      let failures = 0
+      const failures = 0
       const threshold = 5
       const isOpen = failures >= threshold
 

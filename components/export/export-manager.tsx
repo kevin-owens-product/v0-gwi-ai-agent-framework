@@ -296,7 +296,7 @@ export function ExportManager({
   const exportToHTML = useCallback(() => {
     const columns = data.columns?.filter(c => selectedColumns.has(c.key)) || []
 
-    let html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">

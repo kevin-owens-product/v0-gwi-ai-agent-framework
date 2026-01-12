@@ -343,7 +343,7 @@ export function CalculatedFieldsManager({
       const index = (val: number, base: number) => (val / base) * 100
 
       // Evaluate (this is simplified - in production, use a proper expression parser)
-      // eslint-disable-next-line no-new-func
+       
       const result = new Function("avg", "sum", "round", "index", `return ${expression}`)(avg, sum, round, index)
       return typeof result === "number" && !isNaN(result) ? result : null
     } catch {

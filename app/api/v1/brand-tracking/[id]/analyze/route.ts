@@ -173,7 +173,7 @@ export async function POST(
     }
 
     // Calculate trend data if we have multiple snapshots
-    let trends: Record<string, { change: number; direction: 'up' | 'down' | 'stable' }> = {}
+    const trends: Record<string, { change: number; direction: 'up' | 'down' | 'stable' }> = {}
     if (brandTracking.snapshots.length >= 2) {
       const current = brandTracking.snapshots[0]
       const previous = brandTracking.snapshots[1]
