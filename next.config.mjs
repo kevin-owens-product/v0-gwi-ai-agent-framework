@@ -1,3 +1,5 @@
+import { withSentryConfig } from "@sentry/nextjs";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -6,7 +8,39 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
- 
 }
 
-export default nextConfig
+// Sentry configuration options
+const sentryWebpackPluginOptions = {
+  // For all available options, see:
+  // https://github.com/getsentry/sentry-webpack-plugin#options
+
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+
+  // Only upload source maps in production
+  silent: !process.env.CI,
+
+  // Automatically tree-shake Sentry logger statements for smaller bundle size
+  disableLogger: true,
+
+  // Hides source maps from generated client bundles
+  hideSourceMaps: true,
+
+  // Upload source maps for better error tracking
+  widenClientFileUpload: true,
+
+  // Transpiles SDK to be compatible with IE11 if needed
+  transpileClientSDK: true,
+
+  // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers
+  tunnelRoute: "/monitoring",
+
+  // Automatically annotate React components to show their full name in breadcrumbs and session replay
+  reactComponentAnnotation: {
+    enabled: true,
+  },
+};
+
+// Make sure adding Sentry options is the last code to run before exporting
+export default withSentryConfig(nextConfig, sentryWebpackPluginOptions);

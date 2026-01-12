@@ -28,6 +28,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Plus, Copy, Trash2, Key, Loader2, Check, AlertCircle } from "lucide-react"
 import { toast } from "sonner"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface ApiKey {
   id: string
@@ -165,6 +166,7 @@ export default function ApiKeysSettingsPage() {
 
   return (
     <div className="p-6 max-w-4xl">
+      <PageTracker pageName="Settings - API Keys" metadata={{ totalKeys: apiKeys.length }} />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">API Keys</h1>
         <p className="text-muted-foreground">Manage API keys for programmatic access</p>

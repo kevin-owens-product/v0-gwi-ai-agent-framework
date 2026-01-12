@@ -27,6 +27,7 @@ import {
   installAgent,
   isAgentInstalled,
 } from "@/lib/store-agents"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 const categories = [
   { id: "all", label: "All Agents", count: 11 },
@@ -111,6 +112,7 @@ export default function AgentStorePage() {
 
   return (
     <div className="space-y-8">
+      <PageTracker pageName="Agent Store" metadata={{ selectedCategory, sortBy, searchQuery: !!searchQuery }} />
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold mb-2">Agent Store</h1>

@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChartRenderer, generateSampleData } from "@/components/charts"
 import type { ChartType } from "@/components/charts"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface Dashboard {
   id: string
@@ -54,6 +55,7 @@ export default function DashboardsPage() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState({ total: 0, views: 0, shared: 0, exports: 0 })
+  const [activeTab, setActiveTab] = useState("all")
 
   useEffect(() => {
     async function fetchDashboards() {
@@ -97,6 +99,7 @@ export default function DashboardsPage() {
 
   return (
     <div className="flex-1 space-y-6 p-6">
+      <PageTracker pageName="Dashboards List" metadata={{ activeTab }} />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Dashboards</h1>
@@ -157,7 +160,7 @@ export default function DashboardsPage() {
         </Card>
       </div>
 
-      <Tabs defaultValue="all" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
           <TabsTrigger value="all">All Dashboards</TabsTrigger>
           <TabsTrigger value="recent">Recent</TabsTrigger>

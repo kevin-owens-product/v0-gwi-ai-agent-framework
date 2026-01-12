@@ -1,3 +1,32 @@
+/**
+ * ReportViewer Component
+ *
+ * Interactive viewer for research reports with slide navigation, comments, sharing,
+ * export capabilities, and collaboration features. Supports multiple report types
+ * including presentations, dashboards, PDFs, and infographics.
+ *
+ * Features:
+ * - Slide-by-slide navigation with thumbnails
+ * - Fullscreen presentation mode
+ * - Export to multiple formats (PDF, PowerPoint, Image, JSON)
+ * - Sharing via email, link, or collaboration invite
+ * - Real-time comments and collaboration
+ * - Version history and change tracking
+ * - Regeneration and editing capabilities
+ * - Event tracking for views, exports, and shares
+ *
+ * @component
+ * @module components/reports/report-viewer
+ *
+ * @example
+ * ```tsx
+ * <ReportViewer reportId="report-123" />
+ * ```
+ *
+ * @see Report
+ * @see ReportBuilder
+ */
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -53,6 +82,7 @@ import {
   Send,
   Loader2,
 } from "lucide-react"
+import { useReportTracking, usePageViewTracking } from "@/hooks/useEventTracking"
 
 // Map slide types to appropriate thumbnail images
 const slideTypeThumbnails: Record<string, string> = {

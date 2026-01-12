@@ -1,6 +1,35 @@
+/**
+ * WorkflowBuilder Component
+ *
+ * A comprehensive interface for creating and configuring automated research workflows.
+ * Allows users to chain multiple AI agents together in a pipeline, configure scheduling,
+ * set output destinations, and manage workflow execution settings.
+ *
+ * Features:
+ * - Drag-and-drop agent pipeline builder
+ * - Multi-step workflow configuration
+ * - Agent selection from marketplace
+ * - Schedule configuration (manual, hourly, daily, weekly, monthly)
+ * - Output destination management
+ * - Real-time pipeline preview
+ * - Draft saving and workflow execution
+ * - Event tracking for analytics
+ *
+ * @component
+ * @module components/workflows/workflow-builder
+ *
+ * @example
+ * ```tsx
+ * <WorkflowBuilder />
+ * ```
+ *
+ * @see Workflow
+ * @see Agent
+ */
+
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -26,6 +55,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { useWorkflowTracking, useFormTracking, usePageViewTracking } from "@/hooks/useEventTracking"
 
 const availableAgents = [
   { id: "audience-explorer", name: "Audience Explorer", icon: Users, color: "bg-chart-1/20 text-chart-1" },
@@ -40,17 +70,27 @@ const availableAgents = [
   { id: "motivation-decoder", name: "Motivation Decoder", icon: Lightbulb, color: "bg-chart-2/20 text-chart-2" },
 ]
 
+/**
+ * Configuration for a single workflow step
+ */
 interface WorkflowStep {
+  /** Unique identifier for the step */
   id: string
+  /** ID of the agent to execute in this step */
   agentId: string
+  /** Step-specific configuration */
   config: {
+    /** Data sources available to the agent */
     dataSources: string[]
+    /** Format for agent output */
     outputFormat: string
+    /** Optional custom prompt for this step */
     customPrompt: string
   }
 }
 
 export function WorkflowBuilder() {
+  // Form state
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [steps, setSteps] = useState<WorkflowStep[]>([
@@ -63,25 +103,73 @@ export function WorkflowBuilder() {
   const [schedule, setSchedule] = useState("manual")
   const [enableNotifications, setEnableNotifications] = useState(true)
 
+  // Event tracking hooks
+  usePageViewTracking({ pageName: 'Workflow Builder' })
+  const { trackWorkflowCreate, trackWorkflowStepAdd } = useWorkflowTracking()
+  const { onFieldChange: trackFieldChange } = useFormTracking('workflow-builder-form')
+
+  /**
+   * Track form start on first interaction
+   */
+  useEffect(() => {
+    const handler = trackFieldChange('_init')
+    handler({})
+  }, [trackFieldChange])
+
+  /**
+   * Adds a new step to the workflow pipeline
+   */
   const addStep = () => {
-    setSteps([
-      ...steps,
-      {
-        id: Date.now().toString(),
-        agentId: "",
-        config: { dataSources: ["gwi-core"], outputFormat: "markdown", customPrompt: "" },
-      },
-    ])
+    const newStep = {
+      id: Date.now().toString(),
+      agentId: "",
+      config: { dataSources: ["gwi-core"], outputFormat: "markdown", customPrompt: "" },
+    }
+    setSteps([...steps, newStep])
+
+    // Track step addition
+    trackWorkflowStepAdd('new-workflow', {
+      stepCount: steps.length + 1,
+      stepIndex: steps.length,
+    })
   }
 
+  /**
+   * Removes a step from the workflow pipeline
+   * @param id - ID of the step to remove
+   */
   const removeStep = (id: string) => {
     if (steps.length > 1) {
       setSteps(steps.filter((s) => s.id !== id))
     }
   }
 
+  /**
+   * Updates the agent assigned to a workflow step
+   * @param id - ID of the step to update
+   * @param agentId - ID of the new agent
+   */
   const updateStep = (id: string, agentId: string) => {
     setSteps(steps.map((s) => (s.id === id ? { ...s, agentId } : s)))
+  }
+
+  /**
+   * Handles workflow creation with tracking
+   * @param isDraft - Whether to save as draft or execute
+   */
+  const handleCreate = (isDraft: boolean) => {
+    // Track workflow creation
+    trackWorkflowCreate('new-workflow', {
+      stepCount: steps.length,
+      agentsUsed: steps.filter(s => s.agentId).map(s => s.agentId),
+      schedule,
+      enableNotifications,
+      isDraft,
+      hasDescription: !!description,
+    })
+
+    // TODO: Implement actual API call
+    console.log('Creating workflow:', { name, description, steps, schedule, enableNotifications, isDraft })
   }
 
   return (
@@ -100,11 +188,18 @@ export function WorkflowBuilder() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="gap-2 bg-transparent">
+          <Button
+            variant="outline"
+            className="gap-2 bg-transparent"
+            onClick={() => handleCreate(true)}
+          >
             <Save className="h-4 w-4" />
             Save Draft
           </Button>
-          <Button className="gap-2">
+          <Button
+            className="gap-2"
+            onClick={() => handleCreate(false)}
+          >
             <Play className="h-4 w-4" />
             Create & Run
           </Button>

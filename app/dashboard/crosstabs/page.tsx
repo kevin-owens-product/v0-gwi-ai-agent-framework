@@ -7,6 +7,7 @@ import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface Crosstab {
   id: string
@@ -53,6 +54,7 @@ export default function CrosstabsPage() {
   const [crosstabs, setCrosstabs] = useState<Crosstab[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState({ total: 0, views: 0, exports: 0, usedToday: 0 })
+  const [activeTab, setActiveTab] = useState("all")
 
   useEffect(() => {
     async function fetchCrosstabs() {
@@ -96,6 +98,7 @@ export default function CrosstabsPage() {
 
   return (
     <div className="flex-1 space-y-6 p-6">
+      <PageTracker pageName="Crosstabs List" metadata={{ activeTab }} />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Crosstabs</h1>
@@ -156,7 +159,7 @@ export default function CrosstabsPage() {
         </Card>
       </div>
 
-      <Tabs defaultValue="all" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
           <TabsTrigger value="all">All Crosstabs</TabsTrigger>
           <TabsTrigger value="recent">Recent</TabsTrigger>

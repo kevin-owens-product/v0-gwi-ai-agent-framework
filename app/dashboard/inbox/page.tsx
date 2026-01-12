@@ -59,6 +59,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 const inboxAgents = [
   {
@@ -338,6 +339,7 @@ export default function InboxPage() {
 
   return (
     <div className="space-y-6">
+      <PageTracker pageName="Inbox" metadata={{ selectedTab, searchQuery: !!searchQuery }} />
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
