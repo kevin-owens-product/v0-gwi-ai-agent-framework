@@ -87,8 +87,8 @@ export default function AuditLogPage() {
   const [filters, setFilters] = useState<AuditFilters>({ actions: [], resourceTypes: [] })
   const [isLoading, setIsLoading] = useState(true)
   const [page, setPage] = useState(0)
-  const [selectedAction, setSelectedAction] = useState<string>("")
-  const [selectedResource, setSelectedResource] = useState<string>("")
+  const [selectedAction, setSelectedAction] = useState<string>("all")
+  const [selectedResource, setSelectedResource] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const limit = 20
 
@@ -98,8 +98,8 @@ export default function AuditLogPage() {
       const params = new URLSearchParams()
       params.append('limit', limit.toString())
       params.append('offset', (page * limit).toString())
-      if (selectedAction) params.append('action', selectedAction)
-      if (selectedResource) params.append('resourceType', selectedResource)
+      if (selectedAction && selectedAction !== "all") params.append('action', selectedAction)
+      if (selectedResource && selectedResource !== "all") params.append('resourceType', selectedResource)
 
       const response = await fetch(`/api/v1/audit-logs?${params.toString()}`)
       if (response.ok) {
@@ -199,7 +199,7 @@ export default function AuditLogPage() {
                 <SelectValue placeholder="All Actions" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Actions</SelectItem>
+                <SelectItem value="all">All Actions</SelectItem>
                 {filters.actions.map((action) => (
                   <SelectItem key={action} value={action}>
                     {action.charAt(0).toUpperCase() + action.slice(1)}
@@ -212,7 +212,7 @@ export default function AuditLogPage() {
                 <SelectValue placeholder="All Resources" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Resources</SelectItem>
+                <SelectItem value="all">All Resources</SelectItem>
                 {filters.resourceTypes.map((type) => (
                   <SelectItem key={type} value={type}>
                     {type.replace(/_/g, ' ').charAt(0).toUpperCase() + type.replace(/_/g, ' ').slice(1)}
