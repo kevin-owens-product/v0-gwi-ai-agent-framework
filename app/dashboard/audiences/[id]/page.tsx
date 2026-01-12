@@ -445,79 +445,6 @@ interface AudienceType {
   criteria?: Record<string, unknown>
 }
 
-// Generate default demographics based on audience name/description for better UX
-function generateDefaultDemographics(name: string, description: string): { label: string; value: string }[] {
-  const nameLower = name.toLowerCase()
-  const descLower = description.toLowerCase()
-  const demographics: { label: string; value: string }[] = []
-
-  // Age Range inference
-  if (nameLower.includes('gen z') || descLower.includes('gen z') || nameLower.includes('18-24')) {
-    demographics.push({ label: "Age Range", value: "18-24" })
-  } else if (nameLower.includes('millennial') || descLower.includes('millennial') || nameLower.includes('25-40')) {
-    demographics.push({ label: "Age Range", value: "25-40" })
-  } else if (nameLower.includes('gen x') || descLower.includes('gen x')) {
-    demographics.push({ label: "Age Range", value: "41-56" })
-  } else if (nameLower.includes('boomer') || descLower.includes('boomer') || nameLower.includes('senior')) {
-    demographics.push({ label: "Age Range", value: "55+" })
-  } else if (nameLower.includes('young') || descLower.includes('young')) {
-    demographics.push({ label: "Age Range", value: "18-35" })
-  } else {
-    demographics.push({ label: "Age Range", value: "25-54" })
-  }
-
-  // Gender inference
-  if (nameLower.includes('mom') || nameLower.includes('mother') || nameLower.includes('women') || nameLower.includes('female')) {
-    demographics.push({ label: "Gender", value: "Primarily Female" })
-  } else if (nameLower.includes('dad') || nameLower.includes('father') || nameLower.includes('men') || nameLower.includes('male')) {
-    demographics.push({ label: "Gender", value: "Primarily Male" })
-  } else {
-    demographics.push({ label: "Gender", value: "Balanced" })
-  }
-
-  // Income inference
-  if (nameLower.includes('luxury') || nameLower.includes('affluent') || nameLower.includes('premium') || descLower.includes('high-income')) {
-    demographics.push({ label: "Income", value: "$150K+" })
-  } else if (nameLower.includes('budget') || descLower.includes('budget') || descLower.includes('value-conscious')) {
-    demographics.push({ label: "Income", value: "$35K-$65K" })
-  } else if (nameLower.includes('professional') || descLower.includes('professional')) {
-    demographics.push({ label: "Income", value: "$85K-$150K" })
-  } else {
-    demographics.push({ label: "Income", value: "$50K-$100K" })
-  }
-
-  // Education inference
-  if (nameLower.includes('professional') || nameLower.includes('executive') || descLower.includes('graduate')) {
-    demographics.push({ label: "Education", value: "Graduate+" })
-  } else if (nameLower.includes('student') || descLower.includes('student')) {
-    demographics.push({ label: "Education", value: "In School" })
-  } else {
-    demographics.push({ label: "Education", value: "Bachelor's+" })
-  }
-
-  // Location inference
-  if (nameLower.includes('urban') || descLower.includes('city') || descLower.includes('urban')) {
-    demographics.push({ label: "Location", value: "Urban" })
-  } else if (nameLower.includes('suburban') || descLower.includes('suburban')) {
-    demographics.push({ label: "Location", value: "Suburban" })
-  } else if (nameLower.includes('rural') || descLower.includes('rural')) {
-    demographics.push({ label: "Location", value: "Rural" })
-  } else {
-    demographics.push({ label: "Location", value: "Mixed" })
-  }
-
-  // Life stage inference
-  if (nameLower.includes('parent') || nameLower.includes('family') || nameLower.includes('mom') || nameLower.includes('dad')) {
-    demographics.push({ label: "Life Stage", value: "Parents" })
-  } else if (nameLower.includes('retire') || descLower.includes('retire')) {
-    demographics.push({ label: "Life Stage", value: "Pre-Retiree/Retiree" })
-  } else if (nameLower.includes('young professional') || descLower.includes('early career')) {
-    demographics.push({ label: "Life Stage", value: "Early Career" })
-  }
-
-  return demographics
-}
-
 export default function AudienceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
@@ -538,11 +465,6 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
           const apiAudience = data.data || data
           if (apiAudience && apiAudience.id) {
             const criteria = apiAudience.criteria || {}
-            const existingDemographics = criteria.demographics || []
-            // Use existing demographics if available, otherwise generate defaults
-            const demographics = existingDemographics.length > 0
-              ? existingDemographics
-              : generateDefaultDemographics(apiAudience.name || '', apiAudience.description || '')
             setAudience({
               id: apiAudience.id,
               name: apiAudience.name,
@@ -551,7 +473,7 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
               markets: criteria.markets || ["Global"],
               lastUsed: formatTimeAgo(apiAudience.updatedAt),
               createdBy: apiAudience.createdByName || "Unknown",
-              demographics,
+              demographics: criteria.demographics || [],
               behaviors: criteria.behaviors || [],
               interests: criteria.interests || [],
               criteria,
