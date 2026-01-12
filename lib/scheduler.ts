@@ -11,10 +11,10 @@
 import { prisma } from './db'
 import { executeAgentWithContext } from './llm'
 import { recordUsage } from './billing'
-import { sendEmail } from './email'
 import { Prisma } from '@prisma/client'
 
-interface JobContext {
+// JobContext interface for future use when job scheduling is expanded
+interface _JobContext {
   jobId: string
   jobType: string
   runAt: Date

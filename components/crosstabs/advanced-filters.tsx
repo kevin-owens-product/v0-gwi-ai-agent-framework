@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -24,7 +24,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-  DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu"
 import {
   Select,
@@ -43,7 +42,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { cn } from "@/lib/utils"
 import {
   Filter,
@@ -54,21 +52,14 @@ import {
   ChevronRight,
   Search,
   Save,
-  Copy,
-  RefreshCw,
   Check,
-  Sparkles,
   Calendar,
   Hash,
   Type,
   ToggleLeft,
   Layers,
-  Clock,
   Star,
-  MoreHorizontal,
-  Edit2,
   ArrowUpDown,
-  Target,
 } from "lucide-react"
 
 // Types
@@ -216,7 +207,6 @@ export function AdvancedFilters({
   savedFilters = [],
   onFiltersChange,
   onFilterSave,
-  onFilterDelete,
   onFilterApply,
   className,
 }: AdvancedFiltersProps) {
@@ -759,7 +749,7 @@ export function AdvancedFilters({
                   <CardContent className="pt-0 px-4 pb-4">
                     {/* Conditions */}
                     <div className="space-y-2">
-                      {group.conditions.map((condition, condIndex) => {
+                      {group.conditions.map((condition, _condIndex) => {
                         const field = fields.find(f => f.id === condition.fieldId)
                         if (!field) return null
 

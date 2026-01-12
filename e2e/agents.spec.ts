@@ -22,7 +22,7 @@ test.describe('Agents', () => {
 // These tests require authentication
 test.describe('Agents (Authenticated)', () => {
   // Skip if no auth credentials
-  test.skip(({ }, testInfo) => !process.env.TEST_USER_EMAIL)
+  test.skip(() => !process.env.TEST_USER_EMAIL)
 
   test.describe('Agent List', () => {
     test.use({ storageState: '.playwright/.auth/user.json' })
@@ -134,7 +134,7 @@ test.describe('Agent Playground', () => {
   })
 
   test.describe('Authenticated', () => {
-    test.skip(({ }, testInfo) => !process.env.TEST_USER_EMAIL)
+    test.skip(() => !process.env.TEST_USER_EMAIL)
     test.use({ storageState: '.playwright/.auth/user.json' })
 
     test('displays playground page', async ({ page }) => {

@@ -15,7 +15,6 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -29,14 +28,10 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
   DropdownMenuCheckboxItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
   Select,
@@ -51,11 +46,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -76,40 +66,23 @@ import {
   Settings2,
   TrendingUp,
   TrendingDown,
-  Minus,
-  Filter,
   Download,
   Copy,
   Palette,
   Eye,
-  EyeOff,
-  Lock,
-  Unlock,
   Edit2,
   Plus,
   X,
-  Check,
-  RefreshCw,
   ChevronRight,
   ChevronDown,
-  GripVertical,
   Maximize2,
   Minimize2,
   BarChart3,
   PieChart,
   LineChart,
   Calculator,
-  Sigma,
-  Hash,
-  Percent,
   Target,
-  Layers,
   Search,
-  AlertTriangle,
-  Info,
-  ExternalLink,
-  MoreHorizontal,
-  Sparkles,
   ZoomIn,
 } from "lucide-react"
 
@@ -242,11 +215,10 @@ export function AdvancedCrosstabGrid({
   onCellClick,
   onCellEdit,
   onDrillDown,
-  onExport,
   onConfigChange,
   className,
 }: AdvancedCrosstabGridProps) {
-  const [columns, setColumns] = useState(initialColumns)
+  const [columns, _setColumns] = useState(initialColumns)
   const [data, setData] = useState(initialData)
   const [config, setConfig] = useState<CrosstabConfig>({ ...DEFAULT_CONFIG, ...initialConfig })
   const [conditionalFormats, setConditionalFormats] = useState(initialFormats || DEFAULT_FORMATS)
@@ -265,7 +237,7 @@ export function AdvancedCrosstabGrid({
   const [showDrillDownModal, setShowDrillDownModal] = useState(false)
   const [drillDownData, setDrillDownData] = useState<{ cell: CellSelection; row: CrosstabRow } | null>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [columnWidths, setColumnWidths] = useState<Record<string, number>>({})
+  const [columnWidths, _setColumnWidths] = useState<Record<string, number>>({})
 
   const tableRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -631,11 +603,11 @@ export function AdvancedCrosstabGrid({
                     <div className="space-y-1 text-xs">
                       <p className="font-medium">{col.label}</p>
                       <p>{row.metric}: {value !== null ? `${value}%` : "N/A"}</p>
-                      {stats && (
+                      {stats && typeof stats.mean === 'number' && (
                         <>
                           <Separator className="my-1" />
                           <p>Mean: {stats.mean.toFixed(1)}%</p>
-                          <p>Range: {stats.min.toFixed(1)} - {stats.max.toFixed(1)}%</p>
+                          <p>Range: {typeof stats.min === 'number' ? stats.min.toFixed(1) : 'N/A'} - {typeof stats.max === 'number' ? stats.max.toFixed(1) : 'N/A'}%</p>
                           {significant && <p className="text-green-600">Statistically significant</p>}
                         </>
                       )}
@@ -962,13 +934,13 @@ export function AdvancedCrosstabGrid({
                           {config.showStatistics && stats && (
                             <>
                               <TableCell className="text-center font-mono text-xs bg-muted/20">
-                                {stats.mean.toFixed(config.decimalPlaces)}%
+                                {typeof stats.mean === 'number' ? stats.mean.toFixed(config.decimalPlaces) : 'N/A'}%
                               </TableCell>
                               <TableCell className="text-center font-mono text-xs bg-muted/20 text-red-600">
-                                {stats.min.toFixed(config.decimalPlaces)}%
+                                {typeof stats.min === 'number' ? stats.min.toFixed(config.decimalPlaces) : 'N/A'}%
                               </TableCell>
                               <TableCell className="text-center font-mono text-xs bg-muted/20 text-green-600">
-                                {stats.max.toFixed(config.decimalPlaces)}%
+                                {typeof stats.max === 'number' ? stats.max.toFixed(config.decimalPlaces) : 'N/A'}%
                               </TableCell>
                             </>
                           )}
@@ -1262,7 +1234,7 @@ export function AdvancedCrosstabGrid({
                     <Card className="p-4">
                       <h4 className="text-sm font-medium text-muted-foreground">Average</h4>
                       <p className="text-3xl font-bold">
-                        {statistics[drillDownData.row.id]?.mean.toFixed(1)}%
+                        {typeof statistics[drillDownData.row.id]?.mean === 'number' ? statistics[drillDownData.row.id].mean.toFixed(1) : 'N/A'}%
                       </p>
                     </Card>
                   </div>

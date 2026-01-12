@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Tooltip,
   TooltipContent,
@@ -134,7 +133,7 @@ const interestIcons: Record<string, React.ReactNode> = {
 // Generate persona based on audience criteria
 function generatePersonaFromCriteria(
   audienceId: string,
-  audienceName: string,
+  _audienceName: string,
   criteria?: Record<string, unknown>
 ): PersonaProfile {
   // Use deterministic randomization based on audienceId for consistency

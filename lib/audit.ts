@@ -1,4 +1,5 @@
 import { prisma } from './db'
+import { Prisma } from '@prisma/client'
 
 export type AuditAction =
   | 'create'
@@ -57,7 +58,7 @@ export async function logAuditEvent(event: AuditEvent) {
         action: event.action,
         resourceType: event.resourceType,
         resourceId: event.resourceId,
-        metadata: event.metadata || {},
+        metadata: (event.metadata || {}) as Prisma.InputJsonValue,
         ipAddress: event.ipAddress,
         userAgent: event.userAgent,
       }
@@ -143,7 +144,7 @@ export async function logBatchAuditEvents(events: AuditEvent[]) {
         action: event.action,
         resourceType: event.resourceType,
         resourceId: event.resourceId,
-        metadata: event.metadata || {},
+        metadata: (event.metadata || {}) as Prisma.InputJsonValue,
         ipAddress: event.ipAddress,
         userAgent: event.userAgent,
       }))

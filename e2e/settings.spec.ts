@@ -31,7 +31,7 @@ test.describe('Settings', () => {
 
 // Authenticated settings tests
 test.describe('Settings (Authenticated)', () => {
-  test.skip(({ }, testInfo) => !process.env.TEST_USER_EMAIL)
+  test.skip(() => !process.env.TEST_USER_EMAIL)
   test.use({ storageState: '.playwright/.auth/user.json' })
 
   test.describe('General Settings', () => {

@@ -330,6 +330,7 @@ function formatChartType(type: AdvancedChartType): string {
     METRIC: "Metric",
     SPARKLINE: "Sparkline",
     COMPARISON_BAR: "Comparison",
+    METRIC: "Metric",
   }
   return typeMap[type] || type
 }

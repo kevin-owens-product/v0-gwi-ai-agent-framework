@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { FileText, Eye, Users, TrendingUp, Loader2 } from "lucide-react"
+import { FileText, Eye, Users, TrendingUp } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCurrentOrganization } from "@/components/providers/organization-provider"
 

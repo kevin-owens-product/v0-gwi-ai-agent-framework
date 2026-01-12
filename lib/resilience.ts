@@ -47,7 +47,9 @@ class CircuitBreaker {
       return result
     } catch (error) {
       this.onFailure()
-      if (fallback && this.state === CircuitState.OPEN) {
+      // After onFailure, state may have changed to OPEN
+      // Use getState() to bypass TypeScript's control flow narrowing
+      if (fallback && this.getState() === CircuitState.OPEN) {
         console.warn('[CircuitBreaker] Execution failed, using fallback')
         return fallback()
       }

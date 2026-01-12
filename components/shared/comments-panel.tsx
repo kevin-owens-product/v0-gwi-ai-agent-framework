@@ -19,7 +19,6 @@ import {
   Reply,
   Trash2,
   Pin,
-  Edit2,
   AtSign,
   Clock,
   Check,
@@ -102,8 +101,8 @@ const mockComments: Comment[] = [
 ]
 
 export function CommentsPanel({
-  resourceType,
-  resourceId,
+  resourceType: _resourceType,
+  resourceId: _resourceId,
   currentUserId,
   className,
 }: CommentsPanelProps) {

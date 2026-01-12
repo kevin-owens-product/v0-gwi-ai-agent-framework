@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react"
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
   Select,
@@ -11,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { TrendingUp, TrendingDown, Minus, Calendar, RefreshCw, AlertTriangle } from "lucide-react"
+import { TrendingUp, TrendingDown, Minus, AlertTriangle } from "lucide-react"
 import {
   LineChart,
   Line,
@@ -46,7 +45,7 @@ interface TrendTrackingProps {
 }
 
 // Generate mock trend data
-function generateTrendData(audiences: string[], metrics: string[]): TrendDataPoint[] {
+function generateTrendData(audiences: string[], _metrics: string[]): TrendDataPoint[] {
   const periods = ["Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024", "Q1 2025"]
   const data: TrendDataPoint[] = []
 

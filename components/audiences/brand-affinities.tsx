@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Tooltip,
   TooltipContent,
@@ -34,7 +33,6 @@ import {
   Target,
   Loader2,
   ChevronRight,
-  ExternalLink,
   BarChart3,
   Zap,
   Crown,
@@ -77,7 +75,7 @@ interface BrandAffinitiesProps {
   className?: string
 }
 
-const categoryIcons: Record<string, React.ReactNode> = {
+const _categoryIcons: Record<string, React.ReactNode> = {
   "Technology": <Smartphone className="h-5 w-5" />,
   "Automotive": <Car className="h-5 w-5" />,
   "Food & Beverage": <Coffee className="h-5 w-5" />,
@@ -97,7 +95,7 @@ const trendIcons: Record<string, React.ReactNode> = {
 }
 
 // Generate brand affinity data
-function generateBrandData(audienceId: string, criteria?: Record<string, unknown>) {
+function generateBrandData(audienceId: string, _criteria?: Record<string, unknown>) {
   const seed = audienceId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
   const random = (index: number) => ((seed * (index + 1)) % 100) / 100
 
@@ -446,7 +444,7 @@ function generateBrandData(audienceId: string, criteria?: Record<string, unknown
 
 export function BrandAffinities({
   audienceId,
-  audienceName,
+  audienceName: _audienceName,
   audienceCriteria,
   className,
 }: BrandAffinitiesProps) {

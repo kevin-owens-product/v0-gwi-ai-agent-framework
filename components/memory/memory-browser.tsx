@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Download, Trash2, Eye, Calendar, Tag, User, Loader2, RefreshCw, Plus } from "lucide-react"
+import { Search, Download, Trash2, Eye, Calendar, Tag, User, Loader2, RefreshCw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   AlertDialog,

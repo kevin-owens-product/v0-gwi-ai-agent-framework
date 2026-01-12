@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Slider } from "@/components/ui/slider"
 import {
   ArrowLeft,
   Download,
@@ -30,7 +29,6 @@ import {
   Search,
   X,
   SlidersHorizontal,
-  ChevronDown,
   Grid3X3,
   Rows3,
   LayoutGrid,
@@ -49,9 +47,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
   DropdownMenuSeparator,
-  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
@@ -71,19 +67,6 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { ChartRenderer, generateSampleData } from "@/components/charts"
 import { CommentsPanel } from "@/components/shared/comments-panel"
 import { VersionHistory } from "@/components/shared/version-history"

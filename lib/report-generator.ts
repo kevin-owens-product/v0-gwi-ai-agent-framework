@@ -11,6 +11,7 @@
 
 import { prisma } from './db'
 import { executeLLM } from './llm'
+import { Prisma } from '@prisma/client'
 
 export type ReportFormat = 'PDF' | 'POWERPOINT' | 'EXCEL' | 'CSV' | 'HTML'
 
@@ -102,11 +103,11 @@ async function generateReportContent(report: Record<string, unknown>): Promise<R
     where: {
       orgId: report.orgId as string,
       status: 'COMPLETED',
-      createdAt: {
+      startedAt: {
         gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
       },
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { startedAt: 'desc' },
     take: 10,
   })
 
@@ -240,10 +241,10 @@ async function generatePDFReport(
     where: { id: report.id as string },
     data: {
       content: {
-        sections,
+        sections: sections as unknown as Prisma.InputJsonValue[],
         generatedAt: new Date().toISOString(),
         format: 'PDF',
-      },
+      } as Prisma.InputJsonValue,
     },
   })
 
@@ -270,10 +271,10 @@ async function generatePowerPointReport(
     where: { id: report.id as string },
     data: {
       content: {
-        sections,
+        sections: sections as unknown as Prisma.InputJsonValue[],
         generatedAt: new Date().toISOString(),
         format: 'POWERPOINT',
-      },
+      } as Prisma.InputJsonValue,
     },
   })
 
@@ -300,10 +301,10 @@ async function generateExcelReport(
     where: { id: report.id as string },
     data: {
       content: {
-        sections,
+        sections: sections as unknown as Prisma.InputJsonValue[],
         generatedAt: new Date().toISOString(),
         format: 'EXCEL',
-      },
+      } as Prisma.InputJsonValue,
     },
   })
 
@@ -329,10 +330,10 @@ async function generateCSVReport(
     where: { id: report.id as string },
     data: {
       content: {
-        sections,
+        sections: sections as unknown as Prisma.InputJsonValue[],
         generatedAt: new Date().toISOString(),
         format: 'CSV',
-      },
+      } as Prisma.InputJsonValue,
     },
   })
 
@@ -386,11 +387,11 @@ async function generateHTMLReport(
     where: { id: report.id as string },
     data: {
       content: {
-        sections,
+        sections: sections as unknown as Prisma.InputJsonValue[],
         html,
         generatedAt: new Date().toISOString(),
         format: 'HTML',
-      },
+      } as Prisma.InputJsonValue,
     },
   })
 

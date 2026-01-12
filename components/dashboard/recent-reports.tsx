@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { FileText, ArrowRight, Loader2, Download, Eye, Clock } from "lucide-react"
+import { FileText, ArrowRight, Loader2, Eye, Clock } from "lucide-react"
 import Link from "next/link"
 
 interface Report {

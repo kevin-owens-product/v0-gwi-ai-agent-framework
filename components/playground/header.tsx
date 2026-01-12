@@ -26,7 +26,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { WorkspaceManager } from "@/components/playground/workspace-manager"
@@ -41,7 +40,7 @@ const agentNames: Record<string, string> = {
 }
 
 export function PlaygroundHeader() {
-  const { config, messages, resetChat, contextPanelOpen, setContextPanelOpen, customAgent, setShowWelcome, setConfig, setMessages } = usePlayground()
+  const { config, messages, resetChat, contextPanelOpen, setContextPanelOpen, customAgent, setShowWelcome, setConfig: _setConfig, setMessages: _setMessages } = usePlayground()
   const [showShareDialog, setShowShareDialog] = useState(false)
   const [showWorkflowDialog, setShowWorkflowDialog] = useState(false)
   const [currentWorkspace, setCurrentWorkspace] = useState<string>()
@@ -53,7 +52,7 @@ export function PlaygroundHeader() {
     // Would set config and messages here
   }
 
-  const handleSaveWorkspace = (name: string, description?: string) => {
+  const handleSaveWorkspace = (name: string, _description?: string) => {
     setCurrentWorkspace(name)
     // In production, save to API
   }

@@ -1,5 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { NextRequest } from 'next/server'
+import { describe, it, expect, vi } from 'vitest'
 
 // Mock dependencies
 vi.mock('@/lib/auth')

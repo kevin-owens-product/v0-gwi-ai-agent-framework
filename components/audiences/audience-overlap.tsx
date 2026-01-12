@@ -34,7 +34,7 @@ function calculateOverlap(audienceIds: string[], audiences: Audience[]): Overlap
 
   // Generate mock overlap data
   const selectedAudiences = audiences.filter(a => audienceIds.includes(a.id))
-  const totalSize = selectedAudiences.reduce((sum, a) => sum + a.size, 0)
+  const _totalSize = selectedAudiences.reduce((sum, a) => sum + a.size, 0)
 
   // Pairwise overlaps
   for (let i = 0; i < audienceIds.length; i++) {

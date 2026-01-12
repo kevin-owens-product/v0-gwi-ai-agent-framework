@@ -22,9 +22,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
   Select,
@@ -34,7 +31,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { cn } from "@/lib/utils"
@@ -46,30 +42,13 @@ import {
   FileJson,
   File,
   Loader2,
-  Check,
-  X,
   Settings,
-  Palette,
-  Layout,
   Clock,
-  Mail,
-  Calendar,
-  Link,
   Copy,
-  Share2,
-  ExternalLink,
-  Printer,
-  Send,
-  HardDrive,
-  Cloud,
-  RefreshCw,
   ChevronDown,
   Eye,
   AlertCircle,
   CheckCircle2,
-  Columns,
-  Rows,
-  MoreHorizontal,
 } from "lucide-react"
 
 // Export format types
@@ -205,13 +184,13 @@ export function ExportManager({
   const [isExporting, setIsExporting] = useState(false)
   const [exportProgress, setExportProgress] = useState(0)
   const [exportHistory, setExportHistory] = useState<ExportHistoryItem[]>([])
-  const [previewMode, setPreviewMode] = useState(false)
+  const [_previewMode, setPreviewMode] = useState(false)
   const [activeTab, setActiveTab] = useState<"format" | "options" | "schedule" | "history">("format")
   const [selectedColumns, setSelectedColumns] = useState<Set<string>>(
     new Set(data.columns?.map(c => c.key) || [])
   )
 
-  const exportRef = useRef<HTMLDivElement>(null)
+  const _exportRef = useRef<HTMLDivElement>(null)
 
   // Update options
   const updateOptions = useCallback((updates: Partial<ExportOptions>) => {

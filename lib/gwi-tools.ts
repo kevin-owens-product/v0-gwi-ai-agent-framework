@@ -11,6 +11,7 @@
  */
 
 import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import type {
   GWITool,
   ToolExecutionContext,
@@ -101,7 +102,7 @@ export const createAudienceTool: GWITool = {
           orgId: context.orgId,
           name,
           description: description || `Audience created by agent`,
-          criteria: { filters: criteria },
+          criteria: { filters: criteria } as unknown as Prisma.InputJsonValue,
           size: estimatedSize,
           markets: markets || [],
           createdBy: context.userId,
@@ -346,7 +347,7 @@ export const generateCrosstabTool: GWITool = {
           description: `Comparison of ${metrics.length} metrics across ${audiences.length} audiences`,
           audiences,
           metrics,
-          results: { rows, generatedAt: new Date().toISOString() },
+          results: { rows, generatedAt: new Date().toISOString() } as Prisma.InputJsonValue,
           createdBy: context.userId,
         },
       })
@@ -542,8 +543,8 @@ export const createChartTool: GWITool = {
           name,
           description: `Auto-generated ${type} chart from ${dataSourceType || 'data'}`,
           type: type as 'BAR' | 'LINE' | 'PIE' | 'DONUT' | 'AREA' | 'SCATTER' | 'HEATMAP' | 'TREEMAP' | 'FUNNEL' | 'RADAR',
-          config: configuration || {},
-          data: chartData,
+          config: (configuration || {}) as Prisma.InputJsonValue,
+          data: chartData as Prisma.InputJsonValue,
           dataSource,
           status: 'PUBLISHED',
           createdBy: context.userId,
@@ -626,7 +627,7 @@ export const updateDashboardTool: GWITool = {
           throw new Error(`Dashboard not found: ${dashboardId}`)
         }
 
-        const existingWidgets = Array.isArray(dashboard.widgets) ? (dashboard.widgets as DashboardWidget[]) : []
+        const existingWidgets = Array.isArray(dashboard.widgets) ? (dashboard.widgets as unknown as DashboardWidget[]) : []
         const mergedWidgets = [...existingWidgets]
 
         // Add position to new widgets
@@ -648,7 +649,7 @@ export const updateDashboardTool: GWITool = {
         dashboard = await prisma.dashboard.update({
           where: { id: dashboardId },
           data: {
-            widgets: mergedWidgets,
+            widgets: mergedWidgets as unknown as Prisma.InputJsonValue,
             updatedAt: new Date(),
           },
         })
@@ -668,7 +669,7 @@ export const updateDashboardTool: GWITool = {
             orgId: context.orgId,
             name: name || `Dashboard ${new Date().toLocaleDateString()}`,
             description: 'Auto-generated dashboard',
-            widgets: newWidgets,
+            widgets: newWidgets as unknown as Prisma.InputJsonValue,
             layout: [],
             status: 'PUBLISHED',
             createdBy: context.userId,
@@ -691,7 +692,7 @@ export const updateDashboardTool: GWITool = {
       data: result,
       metadata: {
         executionTimeMs,
-        resourcesCreated: dashboardId
+        resourcesCreated: (params as { dashboardId?: string }).dashboardId
           ? []
           : [{ type: 'dashboard', id: result.dashboardId, name: result.name }],
       },
@@ -954,7 +955,7 @@ export const analyzeInsightsTool: GWITool = {
             sourceName,
             insights,
             analyzedAt: new Date().toISOString(),
-          },
+          } as unknown as Prisma.InputJsonValue,
           confidenceScore: insights.reduce((sum, i) => sum + i.confidence, 0) / insights.length,
         },
       })
