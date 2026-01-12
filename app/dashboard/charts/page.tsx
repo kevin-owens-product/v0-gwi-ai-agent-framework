@@ -203,11 +203,7 @@ export default function ChartsPage() {
   useEffect(() => {
     async function fetchCharts() {
       try {
-        const response = await fetch("/api/v1/charts", {
-          headers: {
-            "x-organization-id": "demo-org",
-          },
-        })
+        const response = await fetch("/api/v1/charts")
         if (response.ok) {
           const data = await response.json()
           const chartsData = data.charts || data.data || []
