@@ -230,6 +230,7 @@ function formatChartType(type: ChartType): string {
     TREEMAP: "Treemap",
     FUNNEL: "Funnel Chart",
     RADAR: "Radar Chart",
+    METRIC: "Metric",
   }
   return typeMap[type] || type
 }

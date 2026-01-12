@@ -15,13 +15,10 @@ import {
 } from "@/components/ui/dialog"
 import {
   History,
-  Clock,
-  User,
   ArrowLeftRight,
   RotateCcw,
   ChevronDown,
   ChevronUp,
-  FileText,
   Plus,
   Minus,
   Edit3,
@@ -59,7 +56,7 @@ interface VersionHistoryProps {
 }
 
 // Mock version data generator
-function generateMockVersions(resourceId: string, resourceName: string): Version[] {
+function generateMockVersions(_resourceId: string, resourceName: string): Version[] {
   const users = [
     { name: "Sarah Chen", email: "sarah@example.com" },
     { name: "Marcus Johnson", email: "marcus@example.com" },
@@ -107,7 +104,7 @@ function generateMockVersions(resourceId: string, resourceName: string): Version
 }
 
 export function VersionHistory({
-  resourceType,
+  resourceType: _resourceType,
   resourceId,
   resourceName,
   versions: providedVersions,
@@ -211,7 +208,7 @@ export function VersionHistory({
 
         {/* Version items */}
         <div className="space-y-4">
-          {versions.map((version, index) => (
+          {versions.map((version, _index) => (
             <div key={version.id} className="relative pl-12">
               {/* Timeline dot */}
               <div

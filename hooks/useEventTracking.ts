@@ -163,7 +163,7 @@ export function useEventTracking() {
  */
 export function usePageViewTracking(metadata?: EventMetadata) {
   const pathname = usePathname();
-  const previousPathname = useRef<string>();
+  const previousPathname = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     // Track page view

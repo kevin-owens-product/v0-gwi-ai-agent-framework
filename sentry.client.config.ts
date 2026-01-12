@@ -56,7 +56,7 @@ Sentry.init({
   ],
 
   // Filter out localhost and development URLs
-  beforeSend(event, hint) {
+  beforeSend(event, _hint) {
     // Don't send events in development
     if (process.env.NODE_ENV === 'development') {
       return null;

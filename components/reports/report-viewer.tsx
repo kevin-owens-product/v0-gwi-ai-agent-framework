@@ -82,7 +82,6 @@ import {
   Send,
   Loader2,
 } from "lucide-react"
-import { useReportTracking, usePageViewTracking } from "@/hooks/useEventTracking"
 
 // Map slide types to appropriate thumbnail images
 const slideTypeThumbnails: Record<string, string> = {
@@ -203,7 +202,7 @@ export function ReportViewer({ id }: { id: string }) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [newComment, setNewComment] = useState("")
-  const [editingSlide, setEditingSlide] = useState<number | null>(null)
+  const [_editingSlide, _setEditingSlide] = useState<number | null>(null)
 
   // Fetch report data
   useEffect(() => {
@@ -468,7 +467,7 @@ export function ReportViewer({ id }: { id: string }) {
 
           {/* Slide thumbnails */}
           <div className="flex gap-2 overflow-x-auto pb-2 shrink-0">
-            {reportData.slides.map((slide, index) => (
+            {reportData.slides.map((slide: any, index: number) => (
               <button
                 key={slide.id || index}
                 onClick={() => setCurrentSlide(index)}
@@ -488,7 +487,7 @@ export function ReportViewer({ id }: { id: string }) {
                     {index + 1}. {slide.title}
                   </span>
                 </div>
-                {reportData.comments.some((c) => c.slide === slide.id) && (
+                {reportData.comments.some((c: any) => c.slide === slide.id) && (
                   <div className="absolute top-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
                     <MessageSquare className="h-2.5 w-2.5 text-primary-foreground" />
                   </div>
@@ -572,7 +571,7 @@ export function ReportViewer({ id }: { id: string }) {
               <div>
                 <h3 className="font-medium mb-2">Recent Activity</h3>
                 <div className="space-y-3">
-                  {reportData.activity.slice(0, 4).map((item, index) => (
+                  {reportData.activity.slice(0, 4).map((item: any, index: number) => (
                     <div key={index} className="flex items-center gap-3 text-sm">
                       <Avatar className="h-6 w-6">
                         <AvatarFallback className="text-xs">{item.user[0]}</AvatarFallback>
@@ -589,7 +588,7 @@ export function ReportViewer({ id }: { id: string }) {
 
             <TabsContent value="comments" className="flex-1 flex flex-col m-0 overflow-hidden">
               <div className="flex-1 p-4 space-y-4 overflow-auto">
-                {reportData.comments.map((comment) => (
+                {reportData.comments.map((comment: any) => (
                   <div key={comment.id} className="space-y-2">
                     <div className="flex items-start gap-3">
                       <Avatar className="h-8 w-8">
@@ -634,7 +633,7 @@ export function ReportViewer({ id }: { id: string }) {
 
             <TabsContent value="citations" className="flex-1 p-4 space-y-4 m-0 overflow-auto">
               <p className="text-sm text-muted-foreground">This report is backed by verified GWI data sources.</p>
-              {reportData.citations.map((citation, index) => (
+              {reportData.citations.map((citation: any, index: number) => (
                 <Card key={index} className="cursor-pointer hover:bg-accent/50 transition-colors">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -658,7 +657,7 @@ export function ReportViewer({ id }: { id: string }) {
 
             <TabsContent value="versions" className="flex-1 p-4 space-y-4 m-0 overflow-auto">
               <p className="text-sm text-muted-foreground">Version history for this report.</p>
-              {reportData.versions.map((version, index) => (
+              {reportData.versions.map((version: any, index: number) => (
                 <div
                   key={version.id}
                   className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"

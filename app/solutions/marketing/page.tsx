@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Users, TrendingUp, Target, Sparkles, MessageSquare, ArrowRight, CheckCircle2, PenTool, LineChart, MessageCircle, Brain } from "lucide-react"
+import { Users, TrendingUp, Target, ArrowRight, CheckCircle2, PenTool, LineChart, MessageCircle, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

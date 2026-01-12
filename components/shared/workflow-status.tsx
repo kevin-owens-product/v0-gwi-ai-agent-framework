@@ -118,17 +118,17 @@ export function WorkflowStatusBadge({ status, className }: WorkflowStatusBadgePr
 }
 
 export function WorkflowStatusManager({
-  resourceType,
-  resourceId,
+  resourceType: _resourceType,
+  resourceId: _resourceId,
   resourceName,
   currentStatus,
   reviewers,
   dueDate,
   history,
   onStatusChange,
-  onAddReviewer,
-  onRemoveReviewer,
-  onSetDueDate,
+  onAddReviewer: _onAddReviewer,
+  onRemoveReviewer: _onRemoveReviewer,
+  onSetDueDate: _onSetDueDate,
   className,
 }: WorkflowStatusManagerProps) {
   const [showStatusDialog, setShowStatusDialog] = useState(false)
@@ -175,7 +175,7 @@ export function WorkflowStatusManager({
   }
 
   const approvedCount = reviewers.filter(r => r.status === "approved").length
-  const pendingCount = reviewers.filter(r => r.status === "pending").length
+  const _pendingCount = reviewers.filter(r => r.status === "pending").length
 
   const isDueSoon = dueDate && new Date(dueDate).getTime() - Date.now() < 24 * 60 * 60 * 1000
   const isOverdue = dueDate && new Date(dueDate) < new Date()
@@ -292,7 +292,7 @@ export function WorkflowStatusManager({
       <Card className="p-4 space-y-3">
         <span className="text-sm font-medium">History</span>
         <div className="space-y-2">
-          {history.slice(0, 5).map((item, index) => (
+          {history.slice(0, 5).map((item, _index) => (
             <div key={item.id} className="flex items-start gap-2 text-sm">
               <div className="mt-1">
                 {statusConfig[item.status].icon}

@@ -10,7 +10,7 @@ describe('Resilience Utilities', () => {
       let attempts = 0
       const maxAttempts = 3
 
-      const operation = () => {
+      const _operation = () => {
         attempts++
         if (attempts < maxAttempts) {
           throw new Error('Temporary failure')
@@ -186,7 +186,7 @@ describe('Resilience Utilities', () => {
     it('should implement token bucket', () => {
       let tokens = 10
       const maxTokens = 10
-      const refillRate = 1
+      const _refillRate = 1 // tokens per second (unused in this test)
 
       tokens--
       expect(tokens).toBeLessThan(maxTokens)

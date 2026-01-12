@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Search, BarChart3, Users, Globe, TrendingUp, FileText, ArrowRight, CheckCircle2, Map, ClipboardList, Activity, Eye, PieChart, Brain } from "lucide-react"
+import { FileText, ArrowRight, CheckCircle2, Map, ClipboardList, Activity, Eye, PieChart, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

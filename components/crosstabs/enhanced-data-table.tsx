@@ -20,7 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
-import { ArrowUpDown, ArrowUp, ArrowDown, Settings2, TrendingUp, TrendingDown, Minus } from "lucide-react"
+import { ArrowUpDown, ArrowUp, ArrowDown, Settings2, TrendingUp, TrendingDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface CrosstabData {
@@ -179,7 +179,7 @@ export function EnhancedDataTable({
   }
 
   // Sparkline component
-  const Sparkline = ({ values, metric }: { values: number[]; metric: string }) => {
+  const Sparkline = ({ values }: { values: number[] }) => {
     const max = Math.max(...values)
     const min = Math.min(...values)
     const range = max - min || 1
@@ -355,7 +355,7 @@ export function EnhancedDataTable({
                   >
                     <TableCell className="font-medium">{row.metric}</TableCell>
                     <TableCell className="text-center">
-                      <Sparkline values={rowValues} metric={row.metric} />
+                      <Sparkline values={rowValues} />
                     </TableCell>
                     {visibleAudiences.map((audience) => {
                       const value = row.values[audience] || 0

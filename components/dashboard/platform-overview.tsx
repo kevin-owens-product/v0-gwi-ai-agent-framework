@@ -12,10 +12,8 @@ import {
   Workflow,
   Bot,
   LayoutTemplate,
-  Store,
   FileText,
   Plug,
-  Brain,
   ArrowRight,
   Folder,
 } from "lucide-react"

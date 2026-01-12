@@ -45,7 +45,7 @@ interface WorkflowData {
   runsCount?: number
 }
 
-const runStatusConfig = {
+const _runStatusConfig = {
   completed: { icon: CheckCircle2, color: "text-chart-5", bg: "bg-chart-5/10" },
   COMPLETED: { icon: CheckCircle2, color: "text-chart-5", bg: "bg-chart-5/10" },
   failed: { icon: AlertCircle, color: "text-destructive", bg: "bg-destructive/10" },

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ErrorBoundary, ErrorFallback, withErrorBoundary } from './error-boundary'
 
@@ -78,7 +78,7 @@ describe('ErrorBoundary', () => {
       return <div>No error</div>
     }
 
-    const { rerender } = render(
+    const { rerender: _rerender } = render(
       <ErrorBoundary>
         <ControlledError />
       </ErrorBoundary>

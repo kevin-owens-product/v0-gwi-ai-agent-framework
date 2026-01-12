@@ -348,10 +348,10 @@ describe('useAgents', () => {
 
       let runResult
       await act(async () => {
-        runResult = await result.current.runAgent('agent-1', { query: 'Test query' })
+        runResult = await result.current.runAgent('agent-1', { input: { query: 'Test query' } })
       })
 
-      expect(capturedBody.query).toBe('Test query')
+      expect(capturedBody.input.query).toBe('Test query')
       expect(runResult).toEqual({ runId: 'run-1', status: 'PENDING' })
     })
   })

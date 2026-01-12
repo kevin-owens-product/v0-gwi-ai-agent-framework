@@ -292,7 +292,7 @@ export function WorkflowList() {
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className={`w-12 h-12 rounded-xl ${status.bg} flex items-center justify-center flex-shrink-0`}>
-                    <status.icon className={`h-6 w-6 ${status.color} ${status.spin ? "animate-spin" : ""}`} />
+                    <status.icon className={`h-6 w-6 ${status.color} ${'spin' in status && status.spin ? "animate-spin" : ""}`} />
                   </div>
 
                   <div className="flex-1 min-w-0">

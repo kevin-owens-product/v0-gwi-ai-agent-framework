@@ -12,7 +12,7 @@ export default function DashboardBuilderPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const dashboardId = searchParams.get("id")
-  const [isSaving, setIsSaving] = useState(false)
+  const [_isSaving, setIsSaving] = useState(false)
 
   // Handle save
   const handleSave = useCallback(async (state: any) => {

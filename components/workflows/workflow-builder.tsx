@@ -248,7 +248,7 @@ export function WorkflowBuilder() {
             <CardContent>
               <div className="space-y-4">
                 {steps.map((step, index) => {
-                  const agent = availableAgents.find((a) => a.id === step.agentId)
+                  const _agent = availableAgents.find((a) => a.id === step.agentId)
                   return (
                     <div key={step.id} className="relative">
                       {index > 0 && <div className="absolute -top-4 left-6 w-px h-4 bg-border" />}
@@ -335,7 +335,7 @@ export function WorkflowBuilder() {
                     <div className="px-3 py-1.5 rounded-lg bg-accent/20 text-accent text-sm font-medium">Input</div>
                     {steps
                       .filter((s) => s.agentId)
-                      .map((step, index) => {
+                      .map((step, _index) => {
                         const agent = availableAgents.find((a) => a.id === step.agentId)
                         if (!agent) return null
                         return (

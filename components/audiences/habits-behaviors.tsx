@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Tooltip,
   TooltipContent,
@@ -15,44 +14,23 @@ import {
 import {
   Activity,
   ShoppingCart,
-  CreditCard,
   Heart,
-  Coffee,
-  Dumbbell,
-  Utensils,
-  Moon,
   Smartphone,
-  Globe,
-  MessageSquare,
   TrendingUp,
   TrendingDown,
   Minus,
   Clock,
-  Calendar,
   Target,
-  Repeat,
   Zap,
   CheckCircle2,
   XCircle,
   Loader2,
   ChevronRight,
   Sparkles,
-  BookOpen,
-  Car,
-  Plane,
-  Home,
   Users,
   DollarSign,
-  Percent,
-  BarChart3,
-  PieChart,
   Award,
   Leaf,
-  Recycle,
-  Sun,
-  Wifi,
-  Shield,
-  Lock,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -119,7 +97,7 @@ const trendIcons: Record<string, React.ReactNode> = {
 }
 
 // Generate habits based on audience
-function generateHabitData(audienceId: string, criteria?: Record<string, unknown>) {
+function generateHabitData(audienceId: string, _criteria?: Record<string, unknown>) {
   const seed = audienceId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
   const random = (index: number) => ((seed * (index + 1)) % 100) / 100
 
@@ -505,7 +483,7 @@ function generateHabitData(audienceId: string, criteria?: Record<string, unknown
 
 export function HabitsBehaviors({
   audienceId,
-  audienceName,
+  audienceName: _audienceName,
   audienceCriteria,
   className,
 }: HabitsBehaviorsProps) {

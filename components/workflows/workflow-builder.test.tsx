@@ -174,7 +174,7 @@ describe('WorkflowBuilder Component', () => {
     })
 
     it('should support AND logic', () => {
-      const conditions = [
+      const _conditions = [
         { field: 'status', operator: 'equals', value: 'success' },
         { field: 'count', operator: 'greater_than', value: 100 }
       ]
@@ -186,7 +186,7 @@ describe('WorkflowBuilder Component', () => {
     })
 
     it('should support OR logic', () => {
-      const conditions = [
+      const _conditions = [
         { field: 'priority', operator: 'equals', value: 'high' },
         { field: 'urgent', operator: 'equals', value: true }
       ]
@@ -212,7 +212,7 @@ describe('WorkflowBuilder Component', () => {
 
     it('should interpolate variables in templates', () => {
       const template = 'Analyze {{audience}} in {{market}}'
-      const variables = { audience: 'Gen Z', market: 'US' }
+      const _variables = { audience: 'Gen Z', market: 'US' }
 
       expect(template).toContain('{{audience}}')
       expect(template).toContain('{{market}}')
@@ -346,7 +346,7 @@ describe('WorkflowBuilder Component', () => {
       ]
 
       // Simple detection: if any step appears as both from and to
-      const hasCircular = connections.some(c1 =>
+      const _hasCircular = connections.some(c1 =>
         connections.some(c2 => c1.from === c2.to && c1.to === c2.from)
       )
 
