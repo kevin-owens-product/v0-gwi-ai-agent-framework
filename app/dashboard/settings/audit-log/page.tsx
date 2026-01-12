@@ -30,6 +30,7 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { toast } from "sonner"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface AuditLog {
   id: string
@@ -167,6 +168,7 @@ export default function AuditLogPage() {
 
   return (
     <div className="p-6 max-w-5xl">
+      <PageTracker pageName="Settings - Audit Log" metadata={{ total, currentPage: page, selectedAction, selectedResource }} />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Audit Log</h1>
         <p className="text-muted-foreground">Track all actions and changes in your organization</p>

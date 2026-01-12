@@ -20,6 +20,7 @@ import {
   Zap,
 } from "lucide-react"
 import Link from "next/link"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 const quickLinks = [
   {
@@ -167,6 +168,7 @@ export default function HelpPage() {
 
   return (
     <div className="space-y-8">
+      <PageTracker pageName="Help Center" metadata={{ searchQuery: !!searchQuery }} />
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">How can we help?</h1>

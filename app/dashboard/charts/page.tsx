@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChartRenderer, generateSampleData } from "@/components/charts"
 import type { ChartType } from "@/components/charts"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface Chart {
   id: string
@@ -40,6 +41,7 @@ export default function ChartsPage() {
   const [charts, setCharts] = useState<Chart[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState({ total: 0, views: 0, shares: 0, exports: 0 })
+  const [activeTab, setActiveTab] = useState("all")
 
   useEffect(() => {
     async function fetchCharts() {
@@ -80,6 +82,7 @@ export default function ChartsPage() {
 
   return (
     <div className="flex-1 space-y-6 p-6">
+      <PageTracker pageName="Charts List" metadata={{ activeTab }} />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -143,7 +146,7 @@ export default function ChartsPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="all" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
           <TabsTrigger value="all">All Charts</TabsTrigger>
           <TabsTrigger value="recent">Recent</TabsTrigger>

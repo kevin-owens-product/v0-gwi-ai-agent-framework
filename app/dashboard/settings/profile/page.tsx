@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Camera } from "lucide-react"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 export default function ProfileSettingsPage() {
   const [isSaving, setIsSaving] = useState(false)
@@ -20,6 +21,7 @@ export default function ProfileSettingsPage() {
 
   return (
     <div className="p-6 max-w-3xl">
+      <PageTracker pageName="Settings - Profile" />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Profile Settings</h1>
         <p className="text-muted-foreground">Manage your personal information</p>

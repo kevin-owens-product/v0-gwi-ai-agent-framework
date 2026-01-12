@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2 } from "lucide-react"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false)
@@ -20,6 +21,7 @@ export default function SettingsPage() {
 
   return (
     <div className="p-6 max-w-3xl">
+      <PageTracker pageName="Settings" />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">General Settings</h1>
         <p className="text-muted-foreground">Manage your organization&apos;s settings and preferences</p>

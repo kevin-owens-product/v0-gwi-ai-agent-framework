@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Check, CreditCard, Download, Zap, ArrowUpRight } from "lucide-react"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 const invoices = [
   { id: "INV-001", date: "Dec 1, 2024", amount: "$2,499.00", status: "Paid" },
@@ -17,6 +18,7 @@ const invoices = [
 export default function BillingSettingsPage() {
   return (
     <div className="p-6 max-w-4xl">
+      <PageTracker pageName="Settings - Billing" />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Billing & Subscription</h1>
         <p className="text-muted-foreground">Manage your subscription and payment methods</p>

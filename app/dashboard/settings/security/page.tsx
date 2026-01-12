@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Shield, Smartphone, Monitor, Globe, AlertTriangle } from "lucide-react"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 const sessions = [
   {
@@ -51,6 +52,7 @@ export default function SecuritySettingsPage() {
 
   return (
     <div className="p-6 max-w-3xl">
+      <PageTracker pageName="Settings - Security" metadata={{ twoFactorEnabled }} />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Security Settings</h1>
         <p className="text-muted-foreground">Manage your account security and active sessions</p>

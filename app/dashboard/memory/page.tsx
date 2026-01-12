@@ -3,10 +3,12 @@ import { MemoryBrowser } from "@/components/memory/memory-browser"
 import { MemoryStats } from "@/components/memory/memory-stats"
 import { Button } from "@/components/ui/button"
 import { Settings, Trash2 } from "lucide-react"
+import { MemoryPageTracker } from "./page-client"
 
 export default function MemoryPage() {
   return (
     <div className="space-y-6">
+      <MemoryPageTracker />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Memory & Context</h1>

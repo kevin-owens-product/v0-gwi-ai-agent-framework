@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Sun, Moon, Monitor, Loader2 } from "lucide-react"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 const themes = [
   {
@@ -49,6 +50,7 @@ export default function AppearanceSettingsPage() {
 
   return (
     <div className="p-6 max-w-3xl">
+      <PageTracker pageName="Settings - Appearance" metadata={{ theme, accentColor }} />
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Appearance</h1>
         <p className="text-muted-foreground">Customize how GWI Agents looks on your device</p>

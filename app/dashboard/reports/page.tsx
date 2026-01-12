@@ -8,17 +8,20 @@ import { ReportStats } from "@/components/reports/report-stats"
 import { ReportTemplates } from "@/components/reports/report-templates"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 export default function ReportsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
+  const [activeTab, setActiveTab] = useState("all")
 
   return (
     <div className="flex-1 space-y-6 p-6">
+      <PageTracker pageName="Reports List" metadata={{ activeTab }} />
       <ReportsHeader />
       <ReportStats />
-      <Tabs defaultValue="all" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
           <TabsTrigger value="all">All Reports</TabsTrigger>
           <TabsTrigger value="templates">Templates</TabsTrigger>

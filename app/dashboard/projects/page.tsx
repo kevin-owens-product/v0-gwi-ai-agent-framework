@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Plus, Search, Folder, Calendar, Users, MoreHorizontal, Bot, FileText, Workflow, Archive, Edit, Trash2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 interface Project {
   id: string
@@ -193,6 +194,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-6">
+      <PageTracker pageName="Projects List" metadata={{ searchQuery: !!searchQuery, totalProjects: projects.length }} />
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Projects</h1>

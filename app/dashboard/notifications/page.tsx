@@ -21,6 +21,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { PageTracker } from "@/components/tracking/PageTracker"
 
 type Notification = {
   id: string
@@ -165,6 +166,7 @@ export default function NotificationsPage() {
 
   return (
     <div className="space-y-6">
+      <PageTracker pageName="Notifications" metadata={{ unreadCount }} />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
