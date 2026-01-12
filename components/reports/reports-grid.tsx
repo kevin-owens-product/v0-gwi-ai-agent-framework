@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useCurrentOrganization } from "@/components/providers/organization-provider"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -199,6 +200,7 @@ export function ReportsGrid({
   selectedStatuses = [],
 }: ReportsGridProps) {
   const router = useRouter()
+  const org = useCurrentOrganization()
   const [reports, setReports] = useState<Report[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
@@ -212,7 +214,9 @@ export function ReportsGrid({
   useEffect(() => {
     async function fetchReports() {
       try {
-        const response = await fetch('/api/v1/reports')
+        const response = await fetch('/api/v1/reports', {
+          headers: { 'x-organization-id': org.id },
+        })
         if (response.ok) {
           const responseData = await response.json()
           const apiReports = Array.isArray(responseData.data) ? responseData.data : []
@@ -232,7 +236,7 @@ export function ReportsGrid({
       }
     }
     fetchReports()
-  }, [])
+  }, [org.id])
 
   // Filter reports based on search, types, and statuses
   const filteredReports = reports.filter((report) => {
@@ -292,7 +296,10 @@ export function ReportsGrid({
       }
       const response = await fetch('/api/v1/reports', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-organization-id': org.id,
+        },
         body: JSON.stringify({
           title: `${report.title} (Copy)`,
           type: typeMap[report.type] || 'PDF',
@@ -335,7 +342,10 @@ export function ReportsGrid({
   const confirmDelete = async () => {
     if (reportToDelete) {
       try {
-        await fetch(`/api/v1/reports/${reportToDelete.id}`, { method: 'DELETE' })
+        await fetch(`/api/v1/reports/${reportToDelete.id}`, {
+          method: 'DELETE',
+          headers: { 'x-organization-id': org.id },
+        })
       } catch (error) {
         console.error('Failed to delete report:', error)
       }

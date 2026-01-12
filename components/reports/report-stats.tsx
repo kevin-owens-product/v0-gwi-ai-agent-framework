@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileText, Eye, Users, TrendingUp, Loader2 } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useCurrentOrganization } from "@/components/providers/organization-provider"
 
 interface StatsData {
   totalReports: number
@@ -15,11 +16,14 @@ interface StatsData {
 export function ReportStats() {
   const [stats, setStats] = useState<StatsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const org = useCurrentOrganization()
 
   useEffect(() => {
     async function fetchStats() {
       try {
-        const response = await fetch('/api/v1/reports?limit=100')
+        const response = await fetch('/api/v1/reports?limit=100', {
+          headers: { 'x-organization-id': org.id },
+        })
         if (response.ok) {
           const responseData = await response.json()
           const reports = Array.isArray(responseData.data) ? responseData.data : []
@@ -59,7 +63,7 @@ export function ReportStats() {
       }
     }
     fetchStats()
-  }, [])
+  }, [org.id])
 
   const statItems = [
     {
