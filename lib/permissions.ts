@@ -92,6 +92,47 @@ export const PERMISSIONS = {
 
   // Admin
   'admin:*': 'Full admin access',
+
+  // ==================== HIERARCHY PERMISSIONS ====================
+
+  // Hierarchy Management
+  'hierarchy:read': 'View organization hierarchy',
+  'hierarchy:write': 'Create and edit child organizations',
+  'hierarchy:delete': 'Delete child organizations',
+  'hierarchy:move': 'Move organizations within hierarchy',
+  'hierarchy:manage': 'Full hierarchy management',
+
+  // Cross-Organization Relationships
+  'relationships:read': 'View organization relationships',
+  'relationships:write': 'Create organization relationships',
+  'relationships:delete': 'Remove organization relationships',
+  'relationships:approve': 'Approve incoming relationship requests',
+  'relationships:manage': 'Full relationship management',
+
+  // Resource Sharing
+  'sharing:read': 'View shared resources',
+  'sharing:write': 'Share resources with other organizations',
+  'sharing:delete': 'Revoke shared resource access',
+  'sharing:manage': 'Full sharing management',
+
+  // Child Organization Access
+  'children:read': 'View child organization data',
+  'children:write': 'Modify child organization data',
+  'children:admin': 'Administer child organizations',
+
+  // Billing Hierarchy
+  'billing:children:read': 'View child organization billing',
+  'billing:children:manage': 'Manage child organization billing',
+  'billing:consolidated': 'Access consolidated billing across hierarchy',
+
+  // Hierarchy Templates
+  'templates:hierarchy:read': 'View hierarchy templates',
+  'templates:hierarchy:write': 'Create hierarchy templates',
+  'templates:hierarchy:apply': 'Apply hierarchy templates',
+
+  // Cross-Org Invitations
+  'invitations:cross-org:send': 'Send cross-organization invitations',
+  'invitations:cross-org:manage': 'Manage cross-organization invitations',
 } as const
 
 export type Permission = keyof typeof PERMISSIONS
@@ -117,6 +158,13 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'integrations:read', 'integrations:write', 'integrations:delete',
     'settings:read', 'settings:manage',
     'audit:read',
+    // Hierarchy permissions for ADMIN
+    'hierarchy:read', 'hierarchy:write',
+    'relationships:read', 'relationships:write', 'relationships:approve',
+    'sharing:read', 'sharing:write',
+    'children:read', 'children:write',
+    'templates:hierarchy:read',
+    'invitations:cross-org:send',
   ],
   MEMBER: [
     'agents:read', 'agents:write', 'agents:execute',
@@ -135,6 +183,12 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'apiKeys:read',
     'analytics:read',
     'integrations:read',
+    // Hierarchy permissions for MEMBER
+    'hierarchy:read',
+    'relationships:read',
+    'sharing:read',
+    'children:read',
+    'templates:hierarchy:read',
   ],
   VIEWER: [
     'agents:read',
@@ -148,6 +202,9 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'memory:read',
     'insights:read',
     'analytics:read',
+    // Hierarchy permissions for VIEWER
+    'hierarchy:read',
+    'sharing:read',
   ],
 }
 
@@ -198,4 +255,153 @@ export function canManageRole(managerRole: string, targetRole: string): boolean 
   const targetLevel = roleHierarchy[targetRole] || 0
 
   return managerLevel > targetLevel
+}
+
+// ==================== HIERARCHY PERMISSION HELPERS ====================
+
+/**
+ * Check if a role can manage hierarchy (create/edit child orgs)
+ */
+export function canManageHierarchy(role: string): boolean {
+  return hasPermission(role, 'hierarchy:manage') || hasPermission(role, 'hierarchy:write')
+}
+
+/**
+ * Check if a role can manage relationships
+ */
+export function canManageRelationships(role: string): boolean {
+  return hasPermission(role, 'relationships:manage') || hasPermission(role, 'relationships:write')
+}
+
+/**
+ * Check if a role can share resources
+ */
+export function canShareResources(role: string): boolean {
+  return hasPermission(role, 'sharing:manage') || hasPermission(role, 'sharing:write')
+}
+
+/**
+ * Check if a role can access child organization data
+ */
+export function canAccessChildOrgs(role: string): boolean {
+  return hasPermission(role, 'children:admin') || hasPermission(role, 'children:write') || hasPermission(role, 'children:read')
+}
+
+/**
+ * Check if a role can administer child organizations
+ */
+export function canAdministerChildOrgs(role: string): boolean {
+  return hasPermission(role, 'children:admin') || role === 'OWNER'
+}
+
+/**
+ * Get the effective role when accessing a child organization
+ * Parents typically get admin-level access to children
+ */
+export function getEffectiveRoleForChild(parentRole: string): string | null {
+  if (parentRole === 'OWNER') return 'ADMIN'
+  if (parentRole === 'ADMIN') return 'ADMIN'
+  if (parentRole === 'MEMBER') return 'VIEWER'
+  return null
+}
+
+/**
+ * Get the effective role when accessing through a relationship
+ */
+export function getEffectiveRoleForRelationship(
+  memberRole: string,
+  relationshipType: string,
+  accessLevel: string
+): string | null {
+  // Only OWNER/ADMIN get access through relationships
+  if (memberRole !== 'OWNER' && memberRole !== 'ADMIN') {
+    return null
+  }
+
+  const relationshipRoles: Record<string, Record<string, string | null>> = {
+    OWNERSHIP: {
+      NONE: null,
+      READ_ONLY: 'VIEWER',
+      FULL_ACCESS: 'ADMIN',
+      INHERIT: 'ADMIN',
+    },
+    MANAGEMENT: {
+      NONE: null,
+      READ_ONLY: 'VIEWER',
+      FULL_ACCESS: 'MEMBER',
+      INHERIT: 'MEMBER',
+    },
+    PARTNERSHIP: {
+      NONE: null,
+      READ_ONLY: 'VIEWER',
+      FULL_ACCESS: 'VIEWER',
+      INHERIT: 'VIEWER',
+    },
+    LICENSING: {
+      NONE: null,
+      READ_ONLY: 'VIEWER',
+      FULL_ACCESS: 'MEMBER',
+      INHERIT: 'VIEWER',
+    },
+    RESELLER: {
+      NONE: null,
+      READ_ONLY: 'VIEWER',
+      FULL_ACCESS: 'MEMBER',
+      INHERIT: 'MEMBER',
+    },
+    WHITE_LABEL: {
+      NONE: null,
+      READ_ONLY: 'VIEWER',
+      FULL_ACCESS: 'ADMIN',
+      INHERIT: 'ADMIN',
+    },
+    DATA_SHARING: {
+      NONE: null,
+      READ_ONLY: 'VIEWER',
+      FULL_ACCESS: 'VIEWER',
+      INHERIT: 'VIEWER',
+    },
+    CONSORTIUM: {
+      NONE: null,
+      READ_ONLY: 'VIEWER',
+      FULL_ACCESS: 'VIEWER',
+      INHERIT: 'VIEWER',
+    },
+  }
+
+  return relationshipRoles[relationshipType]?.[accessLevel] || null
+}
+
+/**
+ * Check if an organization type can have child organizations
+ */
+export function orgTypeCanHaveChildren(orgType: string): boolean {
+  const typesWithChildren = [
+    'AGENCY',
+    'HOLDING_COMPANY',
+    'BRAND',
+    'DIVISION',
+    'FRANCHISE',
+    'RESELLER',
+    'REGIONAL',
+  ]
+  return typesWithChildren.includes(orgType)
+}
+
+/**
+ * Get recommended child organization types for a given parent type
+ */
+export function getRecommendedChildTypes(orgType: string): string[] {
+  const recommendations: Record<string, string[]> = {
+    AGENCY: ['CLIENT', 'BRAND'],
+    HOLDING_COMPANY: ['SUBSIDIARY', 'PORTFOLIO_COMPANY', 'BRAND'],
+    BRAND: ['SUB_BRAND', 'REGIONAL'],
+    DIVISION: ['DEPARTMENT'],
+    FRANCHISE: ['FRANCHISEE'],
+    RESELLER: ['CLIENT'],
+    REGIONAL: ['STANDARD', 'BRAND'],
+    SUBSIDIARY: ['DIVISION', 'DEPARTMENT'],
+  }
+
+  return recommendations[orgType] || ['STANDARD']
 }
