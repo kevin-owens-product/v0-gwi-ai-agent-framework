@@ -62,7 +62,7 @@ export async function GET(
           select: {
             id: true,
             name: true,
-            isActive: true,
+            status: true,
             createdAt: true,
           },
           orderBy: { createdAt: "desc" },

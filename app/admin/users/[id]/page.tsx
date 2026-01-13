@@ -84,7 +84,7 @@ interface AuditLog {
   action: string
   resourceType: string
   details: Record<string, unknown>
-  createdAt: string
+  timestamp: string
 }
 
 interface User {
@@ -599,7 +599,7 @@ export default function UserDetailPage() {
                           {log.resourceType}
                         </TableCell>
                         <TableCell className="text-muted-foreground">
-                          {new Date(log.createdAt).toLocaleString()}
+                          {new Date(log.timestamp).toLocaleString()}
                         </TableCell>
                       </TableRow>
                     ))}

@@ -51,7 +51,7 @@ export async function GET(
         resourceType: "system_rule",
         resourceId: id,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { timestamp: "desc" },
       take: 10,
     })
 

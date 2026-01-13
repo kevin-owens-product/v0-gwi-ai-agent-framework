@@ -56,7 +56,7 @@ interface AuditLog {
   resourceId: string | null
   details: Record<string, unknown>
   ipAddress: string | null
-  createdAt: string
+  timestamp: string
 }
 
 interface Admin {
@@ -508,7 +508,7 @@ export default function AdminDetailPage() {
                           {log.ipAddress || "-"}
                         </TableCell>
                         <TableCell className="text-muted-foreground">
-                          {new Date(log.createdAt).toLocaleString()}
+                          {new Date(log.timestamp).toLocaleString()}
                         </TableCell>
                       </TableRow>
                     ))}

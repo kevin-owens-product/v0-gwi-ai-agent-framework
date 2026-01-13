@@ -98,7 +98,7 @@ export async function GET(
     // Get audit log entries for this user
     const auditLogs = await prisma.platformAuditLog.findMany({
       where: { targetUserId: id },
-      orderBy: { createdAt: "desc" },
+      orderBy: { timestamp: "desc" },
       take: 10,
     })
 

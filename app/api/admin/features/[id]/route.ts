@@ -51,7 +51,7 @@ export async function GET(
         resourceType: "feature_flag",
         resourceId: id,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { timestamp: "desc" },
       take: 10,
     })
 
