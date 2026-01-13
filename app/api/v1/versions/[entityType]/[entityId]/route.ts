@@ -26,6 +26,8 @@ async function getOrgId(request: NextRequest, userId: string): Promise<string | 
   return cookieStore.get('currentOrgId')?.value || memberships[0].organization.id
 }
 
+import type { Permission } from '@/lib/permissions'
+
 // Valid entity types
 const VALID_ENTITY_TYPES: VersionedEntityType[] = [
   'audience',
@@ -36,6 +38,17 @@ const VALID_ENTITY_TYPES: VersionedEntityType[] = [
   'dashboard',
   'brand_tracking',
 ]
+
+// Map entity types to permission keys
+const ENTITY_TYPE_PERMISSIONS: Record<VersionedEntityType, Permission> = {
+  audience: 'audiences:read',
+  crosstab: 'crosstabs:read',
+  insight: 'insights:read',
+  chart: 'charts:read',
+  report: 'reports:read',
+  dashboard: 'dashboards:read',
+  brand_tracking: 'brand-tracking:read',
+}
 
 // GET /api/v1/versions/[entityType]/[entityId] - Get version history
 export async function GET(
@@ -68,7 +81,7 @@ export async function GET(
     }
 
     // Check permission based on entity type
-    const permissionKey = `${entityType}:read` as const
+    const permissionKey = ENTITY_TYPE_PERMISSIONS[entityType as VersionedEntityType]
     if (!hasPermission(membership.role, permissionKey)) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
