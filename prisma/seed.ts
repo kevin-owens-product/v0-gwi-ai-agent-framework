@@ -2666,6 +2666,10 @@ async function main() {
   console.log('📄 Creating reports...')
 
   // Create 20 advanced reports organized by solution area with explicit IDs for reliable API access
+  // Each report has content formatted for the ReportViewer component:
+  // - slides: array of {id, title, thumbnail, content}
+  // - citations: array of {source, confidence, dataPoints, markets}
+  // - comments, versions, activity: arrays for collaboration features
 
   // ============================================================================
   // CORE SOLUTION AREA REPORTS (3 reports)
@@ -2682,17 +2686,26 @@ async function main() {
         agent: 'Audience Explorer Agent',
         solutionArea: 'Core',
         slides: [
-          { type: 'title', title: 'Global Audience Segmentation', subtitle: '2024 Analysis Report' },
-          { type: 'overview', title: 'Executive Summary', keyFindings: ['12 distinct audience segments identified', '2.8B addressable consumers', '35% growth in digital-first segment'] },
-          { type: 'segments', title: 'Primary Segments', data: [
-            { name: 'Digital Natives', size: '485M', growth: '+18%', engagement: 'Very High' },
-            { name: 'Value Seekers', size: '620M', growth: '+8%', engagement: 'Medium' },
-            { name: 'Premium Aspirers', size: '340M', growth: '+22%', engagement: 'High' },
-            { name: 'Eco-Conscious', size: '280M', growth: '+45%', engagement: 'High' }
-          ]},
-          { type: 'demographics', title: 'Demographic Distribution', charts: ['age_breakdown', 'income_levels', 'geographic_spread'] },
-          { type: 'behaviors', title: 'Behavioral Insights', patterns: ['Mobile-first browsing', 'Social commerce adoption', 'Subscription fatigue', 'Privacy awareness'] },
-          { type: 'recommendations', title: 'Strategic Actions', items: ['Prioritize Digital Natives for new product launches', 'Develop value messaging for price-sensitive segments', 'Invest in sustainability messaging'] }
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'This analysis identifies 12 distinct audience segments across 52 global markets, representing 2.8B addressable consumers with 35% growth in the digital-first segment.' },
+          { id: 2, title: 'Primary Segments Overview', thumbnail: '/audience-segmentation-pie-chart.jpg', content: 'Digital Natives (485M, +18% growth, Very High engagement), Value Seekers (620M, +8% growth), Premium Aspirers (340M, +22% growth), and Eco-Conscious consumers (280M, +45% growth).' },
+          { id: 3, title: 'Demographic Distribution', thumbnail: '/audience-segments-diagram.jpg', content: 'Age breakdown shows 35% Gen Z, 32% Millennials, 22% Gen X, 11% Boomers. Income distribution skews middle-to-upper with geographic concentration in urban centers.' },
+          { id: 4, title: 'Behavioral Insights', thumbnail: '/gen-z-consumer-behavior-infographic.jpg', content: 'Key patterns identified: Mobile-first browsing (78%), Social commerce adoption (45%), Subscription fatigue emerging (32% considering cancellations), and Privacy awareness driving decisions (68%).' },
+          { id: 5, title: 'Digital Natives Deep Dive', thumbnail: '/trend-analysis-line-graph.jpg', content: 'This segment shows highest engagement rates (8.2% avg), prefers short-form video content, makes purchase decisions within 24 hours, and values authenticity over polish.' },
+          { id: 6, title: 'Value Seekers Analysis', thumbnail: '/key-findings-chart-with-statistics.jpg', content: 'Price-sensitive but quality-conscious. 72% compare prices across 3+ platforms. Loyalty programs drive 45% of repeat purchases. Responds best to value-based messaging.' },
+          { id: 7, title: 'Market Opportunities', thumbnail: '/key-findings-chart.jpg', content: 'Emerging opportunities in sustainable products (+45% YoY), personalized experiences (3.2x conversion lift), and community-driven brands (highest NPS scores).' },
+          { id: 8, title: 'Strategic Recommendations', thumbnail: '/recommendations-bullet-points-slide.jpg', content: 'Prioritize Digital Natives for new launches, develop value messaging for price-sensitive segments, invest in sustainability storytelling, and build community touchpoints.' }
+        ],
+        citations: [
+          { source: 'GWI Core Survey Q4 2024', confidence: 98, dataPoints: 24, markets: 52 },
+          { source: 'GWI USA Deep Dive', confidence: 96, dataPoints: 18, markets: 1 },
+          { source: 'GWI Zeitgeist Trends', confidence: 94, dataPoints: 15, markets: 15 }
+        ],
+        comments: [],
+        versions: [
+          { version: '1.0', date: now.toISOString(), author: 'AI Research Agent', changes: 'Initial report generation' }
+        ],
+        activity: [
+          { action: 'Report generated', user: 'Audience Explorer Agent', timestamp: now.toISOString() }
         ],
         dataSources: ['GWI Core', 'GWI USA', 'GWI Zeitgeist'],
         markets: ['United States', 'United Kingdom', 'Germany', 'France', 'Japan'],
@@ -2716,28 +2729,21 @@ async function main() {
       content: {
         agent: 'Persona Architect Agent',
         solutionArea: 'Core',
-        widgets: [
-          { type: 'comparison_header', title: 'Generation Comparison Dashboard', generations: ['Millennials (25-40)', 'Gen Z (16-24)'] },
-          { type: 'kpi_row', metrics: [
-            { label: 'Total Addressable', millennial: '1.8B', genZ: '2.1B' },
-            { label: 'Avg. Spend/Year', millennial: '$4,200', genZ: '$2,800' },
-            { label: 'Brand Loyalty Index', millennial: 72, genZ: 58 }
-          ]},
-          { type: 'chart', title: 'Platform Preferences', chartType: 'grouped_bar', data: {
-            platforms: ['TikTok', 'Instagram', 'YouTube', 'Facebook', 'Twitter'],
-            millennial: [35, 78, 82, 68, 42],
-            genZ: [89, 85, 92, 22, 28]
-          }},
-          { type: 'chart', title: 'Purchase Drivers', chartType: 'radar', categories: ['Price', 'Quality', 'Brand Values', 'Convenience', 'Sustainability', 'Social Proof'] },
-          { type: 'insights', title: 'Key Differentiators', items: [
-            'Gen Z 3x more likely to discover brands on TikTok',
-            'Millennials show 40% higher brand loyalty',
-            'Both prioritize sustainability but Gen Z acts on it more'
-          ]},
-          { type: 'table', title: 'Top Brand Affinities', columns: ['Brand', 'Millennial Affinity', 'Gen Z Affinity', 'Gap'] }
+        slides: [
+          { id: 1, title: 'Generation Comparison Overview', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Comparing Millennials (25-40, 1.8B population, $4,200 avg spend) with Gen Z (16-24, 2.1B population, $2,800 avg spend). Brand Loyalty Index: Millennials 72, Gen Z 58.' },
+          { id: 2, title: 'Platform Preferences', thumbnail: '/media-consumption-bar-chart.jpg', content: 'TikTok: Gen Z 89% vs Millennials 35%. Instagram: Gen Z 85% vs Millennials 78%. YouTube: Gen Z 92% vs Millennials 82%. Facebook: Gen Z 22% vs Millennials 68%.' },
+          { id: 3, title: 'Purchase Drivers Analysis', thumbnail: '/audience-segmentation-pie-chart.jpg', content: 'Gen Z prioritizes: Social Proof (82%), Sustainability (78%), Brand Values (75%). Millennials prioritize: Quality (85%), Convenience (78%), Price (72%).' },
+          { id: 4, title: 'Content Consumption Patterns', thumbnail: '/gen-z-consumer-behavior-infographic.jpg', content: 'Gen Z: 4.5 hrs daily on social, prefers <60s videos, 3x more likely to discover brands on TikTok. Millennials: 2.8 hrs daily, prefers longer content, uses search for discovery.' },
+          { id: 5, title: 'Brand Relationship Dynamics', thumbnail: '/trend-analysis-line-graph.jpg', content: 'Millennials show 40% higher brand loyalty but Gen Z influences 65% of household purchases. Gen Z expects brand activism; Millennials value reliability.' },
+          { id: 6, title: 'Key Differentiators Summary', thumbnail: '/key-findings-chart.jpg', content: 'Critical differences: Trust sources (peers vs experts), purchase speed (impulse vs research), value expression (public vs private), platform loyalty (fluid vs sticky).' }
         ],
-        refreshRate: '24h',
-        lastUpdated: now.toISOString(),
+        citations: [
+          { source: 'GWI Core Generational Study', confidence: 97, dataPoints: 32, markets: 45 },
+          { source: 'GWI Zeitgeist Q4 2024', confidence: 95, dataPoints: 22, markets: 15 }
+        ],
+        comments: [],
+        versions: [{ version: '1.0', date: now.toISOString(), author: 'Persona Architect Agent', changes: 'Initial generation' }],
+        activity: [{ action: 'Dashboard created', user: 'Persona Architect Agent', timestamp: now.toISOString() }],
         metadata: { period: 'Q4 2024', respondents: 125000 }
       },
       thumbnail: '/analytics-dashboard.png',
@@ -2758,22 +2764,24 @@ async function main() {
       content: {
         agent: 'Culture Tracker Agent',
         solutionArea: 'Core',
-        sections: [
-          { title: 'Executive Summary', content: 'Consumer values are undergoing rapid transformation, driven by economic uncertainty, climate concerns, and technological disruption.' },
-          { title: 'Top Cultural Shifts', trends: [
-            { name: 'Conscious Consumption', impact: 'High', growth: '+28%', description: 'Consumers increasingly evaluate purchases through ethical and environmental lens' },
-            { name: 'Digital Wellness', impact: 'Medium', growth: '+35%', description: 'Growing awareness of screen time and desire for digital-physical balance' },
-            { name: 'Community Over Individualism', impact: 'High', growth: '+22%', description: 'Shift from personal branding to collective experiences and local connections' },
-            { name: 'Authenticity Imperative', impact: 'Very High', growth: '+40%', description: 'Rejection of polished marketing in favor of genuine brand communication' }
-          ]},
-          { title: 'Regional Variations', markets: [
-            { region: 'North America', primaryTrend: 'Digital Wellness', uniqueFactor: 'Political polarization affecting brand choices' },
-            { region: 'Europe', primaryTrend: 'Conscious Consumption', uniqueFactor: 'Regulatory pressure driving sustainability' },
-            { region: 'APAC', primaryTrend: 'Community Focus', uniqueFactor: 'Rising nationalism influencing local brand preference' }
-          ]},
-          { title: 'Implications for Brands', recommendations: ['Lead with purpose, not product', 'Embrace imperfection in content', 'Build community touchpoints', 'Demonstrate measurable impact'] },
-          { title: 'Methodology', details: 'Social listening analysis of 2.5M conversations, survey of 50,000 respondents across 15 markets' }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Consumer values are undergoing rapid transformation driven by economic uncertainty, climate concerns, and technological disruption. Four major cultural shifts identified.' },
+          { id: 2, title: 'Conscious Consumption (+28%)', thumbnail: '/trend-analysis-line-graph.jpg', content: 'Consumers increasingly evaluate purchases through ethical and environmental lens. 72% research brand practices before purchase. Impact: High. Growth: +28% YoY.' },
+          { id: 3, title: 'Digital Wellness (+35%)', thumbnail: '/gen-z-consumer-behavior-infographic.jpg', content: 'Growing awareness of screen time and desire for digital-physical balance. 45% actively reducing social media use. Impact: Medium. Growth: +35% YoY.' },
+          { id: 4, title: 'Community Over Individualism (+22%)', thumbnail: '/audience-segments-diagram.jpg', content: 'Shift from personal branding to collective experiences and local connections. Local brand preference up 22%. Community-based purchases increasing.' },
+          { id: 5, title: 'Authenticity Imperative (+40%)', thumbnail: '/key-findings-chart-with-statistics.jpg', content: 'Rejection of polished marketing in favor of genuine brand communication. UGC trust 3x higher than branded content. Impact: Very High. Growth: +40%.' },
+          { id: 6, title: 'Regional Variations', thumbnail: '/presentation-slides.png', content: 'North America: Digital Wellness focus. Europe: Conscious Consumption leadership. APAC: Community and local brand preference. Each region shows unique cultural drivers.' },
+          { id: 7, title: 'Implications for Brands', thumbnail: '/key-findings-chart.jpg', content: 'Lead with purpose not product. Embrace imperfection in content. Build community touchpoints. Demonstrate measurable impact. Authenticity is non-negotiable.' },
+          { id: 8, title: 'Methodology & Sources', thumbnail: '/data-export-spreadsheet.jpg', content: 'Social listening analysis of 2.5M conversations across 15 markets. Survey of 50,000 respondents. Confidence level: 95%. Data collected Sep-Nov 2024.' }
         ],
+        citations: [
+          { source: 'GWI Core Values Tracker', confidence: 96, dataPoints: 28, markets: 15 },
+          { source: 'Social Listening Analysis', confidence: 92, dataPoints: 45, markets: 15 },
+          { source: 'GWI Zeitgeist Cultural Pulse', confidence: 94, dataPoints: 18, markets: 12 }
+        ],
+        comments: [],
+        versions: [{ version: '1.0', date: now.toISOString(), author: 'Culture Tracker Agent', changes: 'Initial report' }],
+        activity: [{ action: 'Report generated', user: 'Culture Tracker Agent', timestamp: now.toISOString() }],
         pageCount: 42,
         metadata: { generatedAt: now.toISOString(), markets: 15, conversationsAnalyzed: 2500000 }
       },
@@ -2799,13 +2807,20 @@ async function main() {
         agent: 'Buyer Persona Agent',
         solutionArea: 'Sales',
         slides: [
-          { type: 'title', title: 'Enterprise Buyer Personas', subtitle: 'Data-Driven Sales Intelligence' },
-          { type: 'persona', name: 'The Strategic CTO', demographics: { age: '42-55', company: 'Enterprise 1000+', budget: '$500K+' }, motivations: ['Digital transformation', 'Cost optimization', 'Competitive advantage'], painPoints: ['Legacy system integration', 'Change management', 'Vendor lock-in'], channels: ['LinkedIn', 'Industry events', 'Peer referrals'] },
-          { type: 'persona', name: 'The Pragmatic VP Engineering', demographics: { age: '35-48', company: 'Mid-market', budget: '$100K-500K' }, motivations: ['Team productivity', 'Technical excellence', 'Scalability'], painPoints: ['Resource constraints', 'Technical debt', 'Talent retention'], channels: ['Technical blogs', 'GitHub', 'Dev conferences'] },
-          { type: 'persona', name: 'The Innovation Director', demographics: { age: '38-52', company: 'Fortune 500', budget: '$1M+' }, motivations: ['Market disruption', 'Emerging tech adoption', 'Strategic partnerships'], painPoints: ['ROI demonstration', 'Internal politics', 'Speed to market'], channels: ['Executive networks', 'Thought leadership', 'Advisory boards'] },
-          { type: 'journey', title: 'Buyer Journey Map', stages: ['Awareness', 'Consideration', 'Evaluation', 'Decision', 'Implementation'] },
-          { type: 'tactics', title: 'Engagement Strategies', items: ['Lead with business outcomes', 'Provide technical depth on request', 'Leverage peer testimonials', 'Offer proof-of-concept programs'] }
+          { id: 1, title: 'Enterprise Buyer Personas Overview', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Three key enterprise buyer personas identified through analysis of 8,500 B2B decision makers. Each persona has distinct motivations, pain points, and preferred engagement channels.' },
+          { id: 2, title: 'The Strategic CTO', thumbnail: '/audience-segments-diagram.jpg', content: 'Age: 42-55. Company: Enterprise 1000+. Budget: $500K+. Motivated by digital transformation, cost optimization, competitive advantage. Pain points: Legacy integration, change management, vendor lock-in.' },
+          { id: 3, title: 'The Pragmatic VP Engineering', thumbnail: '/key-findings-chart-with-statistics.jpg', content: 'Age: 35-48. Company: Mid-market. Budget: $100K-500K. Motivated by team productivity, technical excellence, scalability. Pain points: Resource constraints, technical debt, talent retention.' },
+          { id: 4, title: 'The Innovation Director', thumbnail: '/trend-analysis-line-graph.jpg', content: 'Age: 38-52. Company: Fortune 500. Budget: $1M+. Motivated by market disruption, emerging tech, strategic partnerships. Pain points: ROI demonstration, internal politics, speed to market.' },
+          { id: 5, title: 'Buyer Journey Map', thumbnail: '/gen-z-consumer-behavior-infographic.jpg', content: 'Five stages identified: Awareness (content marketing, events), Consideration (demos, case studies), Evaluation (POC, technical review), Decision (procurement, legal), Implementation (onboarding, success).' },
+          { id: 6, title: 'Engagement Strategies', thumbnail: '/recommendations-bullet-points-slide.jpg', content: 'Lead with business outcomes not features. Provide technical depth on request. Leverage peer testimonials and references. Offer proof-of-concept programs. Match content to journey stage.' }
         ],
+        citations: [
+          { source: 'GWI B2B Decision Maker Study', confidence: 96, dataPoints: 28, markets: 8 },
+          { source: 'Enterprise Tech Buyer Survey', confidence: 94, dataPoints: 18, markets: 5 }
+        ],
+        comments: [],
+        versions: [{ version: '1.0', date: now.toISOString(), author: 'Buyer Persona Agent', changes: 'Initial personas' }],
+        activity: [{ action: 'Report generated', user: 'Buyer Persona Agent', timestamp: now.toISOString() }],
         metadata: { generatedAt: now.toISOString(), personasResearched: 3, respondents: 8500 }
       },
       thumbnail: '/presentation-slides.png',
@@ -2826,16 +2841,21 @@ async function main() {
       content: {
         agent: 'Competitive Intelligence Agent',
         solutionArea: 'Sales',
-        sections: [
-          { title: 'Competitive Overview', summary: 'Analysis of top 5 competitors by market share, positioning, and recent activity' },
-          { title: 'Competitor A - Market Leader', marketShare: '32%', positioning: 'Enterprise-first, premium pricing', strengths: ['Brand recognition', 'Ecosystem lock-in', 'Global support'], weaknesses: ['Slow innovation', 'Complex pricing', 'Poor mid-market fit'], winStrategy: 'Emphasize agility and TCO advantages', objectionHandlers: [
-            { objection: 'You\'re not as established', response: 'Our modern architecture delivers 40% faster implementation with dedicated support' },
-            { objection: 'Integration concerns', response: 'Pre-built connectors for 200+ enterprise systems, plus open API' }
-          ]},
-          { title: 'Competitor B - Challenger', marketShare: '18%', positioning: 'Price disruptor', strengths: ['Aggressive pricing', 'Simple deployment'], weaknesses: ['Limited features', 'Support issues', 'Scalability concerns'], winStrategy: 'Focus on total cost of ownership and enterprise readiness' },
-          { title: 'Win/Loss Analysis', data: { wins: { vsCompA: 42, vsCompB: 68 }, losses: { vsCompA: 31, vsCompB: 22 }, primaryWinReasons: ['Product capabilities', 'Customer success', 'Pricing transparency'], primaryLossReasons: ['Incumbent relationship', 'Budget constraints', 'Feature gaps'] }},
-          { title: 'Talk Tracks', scenarios: ['Initial discovery', 'Technical evaluation', 'Procurement negotiation'] }
+        slides: [
+          { id: 1, title: 'Competitive Landscape Overview', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Analysis of top 5 competitors by market share, positioning, and recent activity. Win rate analysis based on 340 deals. Key differentiators and positioning strategies identified.' },
+          { id: 2, title: 'Competitor A - Market Leader (32%)', thumbnail: '/audience-segments-diagram.jpg', content: 'Positioning: Enterprise-first, premium pricing. Strengths: Brand recognition, ecosystem lock-in, global support. Weaknesses: Slow innovation, complex pricing, poor mid-market fit.' },
+          { id: 3, title: 'Win Strategy vs Competitor A', thumbnail: '/key-findings-chart.jpg', content: 'Emphasize agility and TCO advantages. Counter "not established" objection with 40% faster implementation stats. Address integration concerns with 200+ pre-built connectors.' },
+          { id: 4, title: 'Competitor B - Challenger (18%)', thumbnail: '/trend-analysis-line-graph.jpg', content: 'Positioning: Price disruptor. Strengths: Aggressive pricing, simple deployment. Weaknesses: Limited features, support issues, scalability concerns. Win strategy: Focus on TCO and enterprise readiness.' },
+          { id: 5, title: 'Win/Loss Analysis', thumbnail: '/key-findings-chart-with-statistics.jpg', content: 'Win rate vs Comp A: 58% (42 wins, 31 losses). Win rate vs Comp B: 76% (68 wins, 22 losses). Top win reasons: Product capabilities, customer success, pricing transparency.' },
+          { id: 6, title: 'Talk Tracks & Objection Handling', thumbnail: '/recommendations-bullet-points-slide.jpg', content: 'Three key scenarios covered: Initial discovery, technical evaluation, procurement negotiation. Common objections mapped to proven responses with success metrics.' }
         ],
+        citations: [
+          { source: 'Internal Win/Loss Database', confidence: 98, dataPoints: 340, markets: 12 },
+          { source: 'Competitive Intelligence Platform', confidence: 92, dataPoints: 45, markets: 8 }
+        ],
+        comments: [],
+        versions: [{ version: '1.0', date: now.toISOString(), author: 'Competitive Intelligence Agent', changes: 'Initial battlecard' }],
+        activity: [{ action: 'Battlecard created', user: 'Competitive Intelligence Agent', timestamp: now.toISOString() }],
         pageCount: 28,
         metadata: { generatedAt: now.toISOString(), competitorsAnalyzed: 5, dealsAnalyzed: 340 }
       },
@@ -2857,20 +2877,20 @@ async function main() {
       content: {
         agent: 'Account Scoring Agent',
         solutionArea: 'Sales',
-        widgets: [
-          { type: 'score_distribution', title: 'Account Score Distribution', buckets: ['Hot (80+)', 'Warm (60-79)', 'Nurture (40-59)', 'Cold (<40)'], counts: [45, 128, 234, 412] },
-          { type: 'top_accounts', title: 'Priority Accounts', columns: ['Account', 'Score', 'Signals', 'Next Action'], rows: 25 },
-          { type: 'scoring_factors', title: 'Score Components', factors: [
-            { name: 'Firmographic Fit', weight: 30, description: 'Company size, industry, tech stack' },
-            { name: 'Intent Signals', weight: 35, description: 'Website visits, content engagement, search behavior' },
-            { name: 'Engagement Level', weight: 25, description: 'Email opens, meeting attendance, demo requests' },
-            { name: 'Relationship Strength', weight: 10, description: 'Executive connections, past interactions' }
-          ]},
-          { type: 'trends', title: 'Score Movement', chartType: 'waterfall', period: '30d' },
-          { type: 'alerts', title: 'Score Alerts', items: ['12 accounts moved to Hot this week', '3 engaged accounts showing buying signals', '5 accounts at risk of churning'] }
+        slides: [
+          { id: 1, title: 'Account Score Distribution', thumbnail: '/analytics-dashboard.png', content: '819 accounts scored. Distribution: Hot (80+): 45 accounts, Warm (60-79): 128 accounts, Nurture (40-59): 234 accounts, Cold (<40): 412 accounts. Focus on Hot tier for immediate outreach.' },
+          { id: 2, title: 'Scoring Model Components', thumbnail: '/audience-segmentation-pie-chart.jpg', content: 'Four weighted factors: Firmographic Fit (30%) - company size, industry, tech stack. Intent Signals (35%) - website visits, content engagement. Engagement Level (25%) - email opens, demos. Relationship Strength (10%).' },
+          { id: 3, title: 'Top Priority Accounts', thumbnail: '/key-findings-chart-with-statistics.jpg', content: 'Top 25 accounts identified with scores 85+. Key signals: Multiple stakeholder engagement, pricing page visits, competitor research, demo requests in last 30 days.' },
+          { id: 4, title: 'Score Movement Trends', thumbnail: '/trend-analysis-line-graph.jpg', content: '12 accounts moved to Hot this week. 3 engaged accounts showing strong buying signals. 5 accounts flagged at risk of churning. Weekly trend shows 15% improvement in Hot tier.' },
+          { id: 5, title: 'Recommended Actions', thumbnail: '/recommendations-bullet-points-slide.jpg', content: 'Immediate: Contact 12 newly Hot accounts. This week: Re-engage 5 at-risk accounts. Priority: Schedule demos for 3 high-intent accounts showing competitor research activity.' }
         ],
-        filters: ['Industry', 'Region', 'Account Owner', 'Score Range'],
-        lastUpdated: now.toISOString(),
+        citations: [
+          { source: 'CRM & Intent Data Integration', confidence: 94, dataPoints: 52, markets: 3 },
+          { source: 'Website Analytics', confidence: 96, dataPoints: 28, markets: 1 }
+        ],
+        comments: [],
+        versions: [{ version: '2.3', date: now.toISOString(), author: 'Account Scoring Agent', changes: 'Model refinement' }],
+        activity: [{ action: 'Dashboard refreshed', user: 'Account Scoring Agent', timestamp: now.toISOString() }],
         metadata: { accountsScored: 819, modelVersion: '2.3' }
       },
       thumbnail: '/analytics-dashboard.png',
@@ -2894,24 +2914,20 @@ async function main() {
         agent: 'Motivation Decoder Agent',
         solutionArea: 'Insights',
         slides: [
-          { type: 'title', title: 'Sustainability Motivations', subtitle: 'Understanding the Green Consumer' },
-          { type: 'overview', title: 'Key Findings', stats: { careAboutSustainability: '78%', willingToPayMore: '62%', switchedBrands: '45%', skepticalOfClaims: '55%' }},
-          { type: 'motivations', title: 'Primary Drivers', ranked: [
-            { motivation: 'Environmental concern', strength: 85, segment: 'All ages' },
-            { motivation: 'Health & wellness connection', strength: 72, segment: 'Parents, 35-54' },
-            { motivation: 'Social signaling', strength: 68, segment: 'Gen Z, Urban' },
-            { motivation: 'Cost savings (long-term)', strength: 58, segment: 'Value-conscious' },
-            { motivation: 'Quality perception', strength: 52, segment: 'Premium buyers' }
-          ]},
-          { type: 'barriers', title: 'Purchase Barriers', items: ['Price premium perception', 'Greenwashing skepticism', 'Convenience trade-offs', 'Lack of clear information'] },
-          { type: 'segments', title: 'Attitude Segments', data: [
-            { segment: 'Eco-Champions', size: '18%', behavior: 'Active seekers, premium payers' },
-            { segment: 'Considerers', size: '35%', behavior: 'Open but price-sensitive' },
-            { segment: 'Skeptics', size: '28%', behavior: 'Need proof, distrust claims' },
-            { segment: 'Indifferent', size: '19%', behavior: 'Other priorities dominate' }
-          ]},
-          { type: 'implications', title: 'Strategic Implications', recommendations: ['Lead with proof, not promises', 'Make sustainable choice the easy choice', 'Connect sustainability to personal benefit'] }
+          { id: 1, title: 'Sustainability: The Green Consumer', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Key findings: 78% care about sustainability, 62% willing to pay more, 45% have switched brands, but 55% are skeptical of claims. Complex motivations require nuanced approach.' },
+          { id: 2, title: 'Primary Motivation Drivers', thumbnail: '/key-findings-chart-with-statistics.jpg', content: 'Ranked by strength: Environmental concern (85%, all ages), Health & wellness connection (72%, parents 35-54), Social signaling (68%, Gen Z urban), Cost savings long-term (58%), Quality perception (52%).' },
+          { id: 3, title: 'Purchase Barriers Analysis', thumbnail: '/trend-analysis-line-graph.jpg', content: 'Four key barriers identified: Price premium perception (68% cite as concern), Greenwashing skepticism (55% distrust claims), Convenience trade-offs (42%), Lack of clear information (38%).' },
+          { id: 4, title: 'Consumer Attitude Segments', thumbnail: '/audience-segmentation-pie-chart.jpg', content: 'Eco-Champions (18%): Active seekers, premium payers. Considerers (35%): Open but price-sensitive. Skeptics (28%): Need proof, distrust claims. Indifferent (19%): Other priorities dominate.' },
+          { id: 5, title: 'Segment Deep Dive: Eco-Champions', thumbnail: '/gen-z-consumer-behavior-infographic.jpg', content: 'Most valuable segment. 3x higher LTV. Research extensively before purchase. Influence others. Willing to pay 25%+ premium. Respond to certification and transparency.' },
+          { id: 6, title: 'Strategic Implications', thumbnail: '/recommendations-bullet-points-slide.jpg', content: 'Lead with proof not promises. Make sustainable choice the easy choice. Connect sustainability to personal benefit. Target Considerers for growth. Build trust with Skeptics through transparency.' }
         ],
+        citations: [
+          { source: 'GWI Sustainability Study 2024', confidence: 97, dataPoints: 35, markets: 5 },
+          { source: 'Consumer Values Tracker', confidence: 95, dataPoints: 28, markets: 5 }
+        ],
+        comments: [],
+        versions: [{ version: '1.0', date: now.toISOString(), author: 'Motivation Decoder Agent', changes: 'Initial analysis' }],
+        activity: [{ action: 'Report generated', user: 'Motivation Decoder Agent', timestamp: now.toISOString() }],
         metadata: { generatedAt: now.toISOString(), respondents: 42000, markets: ['US', 'UK', 'DE', 'FR', 'JP'] }
       },
       thumbnail: '/presentation-slides.png',
@@ -2932,24 +2948,21 @@ async function main() {
       content: {
         agent: 'Global Perspective Agent',
         solutionArea: 'Insights',
-        widgets: [
-          { type: 'market_overview', title: 'Market Comparison', markets: [
-            { name: 'United States', population: '331M', digitalPenetration: '92%', ecommerceShare: '21%' },
-            { name: 'United Kingdom', population: '67M', digitalPenetration: '95%', ecommerceShare: '28%' },
-            { name: 'Germany', population: '83M', digitalPenetration: '91%', ecommerceShare: '18%' }
-          ]},
-          { type: 'chart', title: 'Brand Awareness Comparison', chartType: 'grouped_bar', metrics: ['Aided Awareness', 'Unaided Awareness', 'Consideration', 'Preference'] },
-          { type: 'chart', title: 'Channel Preferences', chartType: 'stacked_bar', channels: ['Social', 'Search', 'Email', 'TV', 'OOH'] },
-          { type: 'heatmap', title: 'Cultural Factors Matrix', factors: ['Price Sensitivity', 'Brand Loyalty', 'Sustainability Focus', 'Digital Adoption', 'Privacy Concerns'] },
-          { type: 'insights', title: 'Key Differentiators', items: [
-            'US: Highest brand switching, lowest loyalty',
-            'UK: Most advanced in social commerce',
-            'Germany: Strongest privacy concerns, data reluctance'
-          ]},
-          { type: 'recommendations', title: 'Localization Needs', items: ['Adjust pricing strategy by market', 'Customize messaging for cultural values', 'Adapt channel mix significantly'] }
+        slides: [
+          { id: 1, title: 'Three Market Comparison', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'US: 331M pop, 92% digital, 21% e-commerce. UK: 67M pop, 95% digital, 28% e-commerce. Germany: 83M pop, 91% digital, 18% e-commerce. Each market requires distinct strategy.' },
+          { id: 2, title: 'Brand Awareness Comparison', thumbnail: '/media-consumption-bar-chart.jpg', content: 'Aided awareness highest in UK (82%), followed by US (78%), Germany (72%). Unaided awareness shows similar pattern. Consideration-to-preference conversion best in Germany despite lower awareness.' },
+          { id: 3, title: 'Channel Preferences by Market', thumbnail: '/audience-segmentation-pie-chart.jpg', content: 'US: Social-first (42%), Search (28%), Email (15%). UK: Social (38%), Email (25%), Search (22%). Germany: Search (35%), Email (30%), Social (20%). TV remains stronger in Germany.' },
+          { id: 4, title: 'Cultural Factors Matrix', thumbnail: '/trend-analysis-line-graph.jpg', content: 'Price Sensitivity: Germany highest. Brand Loyalty: Germany highest. Sustainability: Germany leads. Digital Adoption: UK leads. Privacy Concerns: Germany significantly highest (85% vs 58% US).' },
+          { id: 5, title: 'Key Market Differentiators', thumbnail: '/key-findings-chart.jpg', content: 'US: Highest brand switching, lowest loyalty, most responsive to influencers. UK: Most advanced social commerce, highest mobile shopping. Germany: Strongest privacy concerns, preference for established brands.' },
+          { id: 6, title: 'Localization Recommendations', thumbnail: '/recommendations-bullet-points-slide.jpg', content: 'Adjust pricing strategy by market (Germany most price-sensitive). Customize messaging for cultural values. Adapt channel mix significantly. Privacy-first approach essential for Germany.' }
         ],
-        refreshRate: 'weekly',
-        lastUpdated: now.toISOString(),
+        citations: [
+          { source: 'GWI Core Multi-Market Study', confidence: 97, dataPoints: 45, markets: 3 },
+          { source: 'Regional Consumer Pulse', confidence: 94, dataPoints: 32, markets: 3 }
+        ],
+        comments: [],
+        versions: [{ version: '1.0', date: now.toISOString(), author: 'Global Perspective Agent', changes: 'Initial comparison' }],
+        activity: [{ action: 'Dashboard created', user: 'Global Perspective Agent', timestamp: now.toISOString() }],
         metadata: { marketsCompared: 3, metricsTracked: 45 }
       },
       thumbnail: '/analytics-dashboard.png',
@@ -2974,22 +2987,30 @@ async function main() {
         agent: 'Audience Packager Agent',
         solutionArea: 'Ad Sales',
         slides: [
-          { type: 'title', title: 'Tech Enthusiasts Audience Package', subtitle: 'Premium Targeting Opportunity' },
-          { type: 'audience_overview', title: 'Audience Profile', stats: { totalReach: '45M', avgAge: 32, maleSkew: '62%', incomeIndex: 142 }},
-          { type: 'composition', title: 'Segment Breakdown', segments: [
-            { name: 'Early Adopters', share: '28%', value: 'Highest engagement, premium CPM' },
-            { name: 'Tech Professionals', share: '35%', value: 'B2B crossover potential' },
-            { name: 'Gaming Enthusiasts', share: '22%', value: 'High frequency, younger demo' },
-            { name: 'Smart Home Owners', share: '15%', value: 'High HHI, purchase intent' }
-          ]},
-          { type: 'behaviors', title: 'Key Behaviors', items: ['4.2 devices owned on average', '3x more likely to pre-order products', '85% research online before purchase', '68% active in tech communities'] },
-          { type: 'activation', title: 'Recommended Tactics', channels: [
-            { channel: 'Programmatic Display', reach: '38M', cpm: '$12.50', performance: 'High viewability' },
-            { channel: 'Connected TV', reach: '22M', cpm: '$28.00', performance: 'Premium completion rates' },
-            { channel: 'Native Content', reach: '15M', cpm: '$18.00', performance: 'Highest engagement' }
-          ]},
-          { type: 'pricing', title: 'Package Options', tiers: ['Standard ($50K min)', 'Premium ($150K min)', 'Exclusive ($500K min)'] }
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'This premium audience package targets 45M tech enthusiasts globally. Key highlights: 62% male skew, average age 32, income index 142 (42% above average). This audience shows 3x higher engagement with tech products and 85% research online before purchase.' },
+          { id: 2, title: 'Audience Composition', thumbnail: '/audience-segmentation-pie-chart.jpg', content: 'Segment breakdown: Early Adopters (28%) - highest engagement, premium CPM potential. Tech Professionals (35%) - strong B2B crossover opportunity. Gaming Enthusiasts (22%) - high frequency, younger demographic. Smart Home Owners (15%) - highest household income, strong purchase intent.' },
+          { id: 3, title: 'Behavioral Insights', thumbnail: '/behavioral-data-visualization.jpg', content: 'Key behaviors driving engagement: 4.2 devices owned on average per household. 3x more likely to pre-order new products. 68% actively participate in tech communities and forums. 92% use ad blockers, requiring native content strategies.' },
+          { id: 4, title: 'Platform Preferences', thumbnail: '/platform-usage-chart.jpg', content: 'Primary platforms: YouTube (78% weekly usage), Reddit (62%), Twitter/X (54%), LinkedIn (48% for tech professionals). Peak engagement times: weekday evenings 7-10pm, weekend mornings 9am-12pm.' },
+          { id: 5, title: 'Activation Channels', thumbnail: '/channel-performance-dashboard.jpg', content: 'Recommended channels: Programmatic Display - 38M reach, $12.50 CPM, high viewability. Connected TV - 22M reach, $28.00 CPM, premium completion rates. Native Content - 15M reach, $18.00 CPM, highest engagement.' },
+          { id: 6, title: 'Creative Best Practices', thumbnail: '/creative-examples-grid.jpg', content: 'Top-performing creative approaches: Product demos with specs (4.2% CTR). Expert reviews and unboxing content (3.8% CTR). Comparison charts and benchmarks (3.5% CTR). Avoid: generic lifestyle imagery, emotional appeals without substance.' },
+          { id: 7, title: 'Package Options', thumbnail: '/pricing-tiers-comparison.jpg', content: 'Standard Package ($50K min): Core targeting, standard placements. Premium Package ($150K min): Enhanced targeting, premium inventory, basic reporting. Exclusive Package ($500K min): Custom segments, first-look inventory, dedicated support, advanced analytics.' },
+          { id: 8, title: 'Next Steps', thumbnail: '/call-to-action-slide.jpg', content: 'Recommended actions: 1) Schedule custom audience analysis call. 2) Review competitive landscape in tech category. 3) Develop A/B test plan for creative approaches. 4) Set up tracking and measurement framework.' }
         ],
+        citations: [
+          { source: 'GWI Core Q4 2024 - Tech Interest Segments', confidence: 97, dataPoints: 32, markets: 48 },
+          { source: 'GWI USA Tech Deep Dive 2024', confidence: 96, dataPoints: 28, markets: 1 },
+          { source: 'Platform Partner Data (Anonymized)', confidence: 92, dataPoints: 45, markets: 12 }
+        ],
+        comments: [],
+        versions: [
+          { version: '1.0', date: now.toISOString(), author: 'Audience Packager Agent', changes: 'Initial package generation' }
+        ],
+        activity: [
+          { action: 'Package created', user: 'Audience Packager Agent', timestamp: now.toISOString() },
+          { action: 'Audience data refreshed', user: 'System', timestamp: new Date(now.getTime() - 86400000).toISOString() }
+        ],
+        dataSources: ['GWI Core', 'GWI USA', 'Platform APIs'],
+        markets: ['United States', 'United Kingdom', 'Germany', 'Canada', 'Australia'],
         metadata: { generatedAt: now.toISOString(), audienceSize: 45000000, dataFreshness: 'Monthly' }
       },
       thumbnail: '/presentation-slides.png',
@@ -3010,25 +3031,31 @@ async function main() {
       content: {
         agent: 'Media Planner Agent',
         solutionArea: 'Ad Sales',
-        sections: [
-          { title: 'Executive Summary', summary: 'Q1 2025 presents unique opportunities with post-holiday engagement recovery and major cultural moments.' },
-          { title: 'Market Context', factors: ['Economic uncertainty driving value-seeking', 'Privacy changes impacting targeting', 'CTV adoption accelerating', 'Retail media networks maturing'] },
-          { title: 'Budget Allocation', recommendation: {
-            digital: { share: '65%', channels: ['Programmatic 40%', 'Social 35%', 'Search 25%'] },
-            traditional: { share: '25%', channels: ['CTV/Streaming 60%', 'Audio 25%', 'OOH 15%'] },
-            emerging: { share: '10%', channels: ['Retail Media', 'Gaming', 'Influencer'] }
-          }},
-          { title: 'Timing Strategy', calendar: [
-            { period: 'Early January', focus: 'Resolution/wellness messaging', intensity: 'High' },
-            { period: 'Late January', focus: 'Value propositions', intensity: 'Medium' },
-            { period: 'February', focus: 'Valentine\'s + brand building', intensity: 'High' },
-            { period: 'March', focus: 'Spring transition, consideration', intensity: 'Medium' }
-          ]},
-          { title: 'Measurement Framework', kpis: ['Brand lift', 'Attention metrics', 'Conversion attribution', 'Incremental reach'] },
-          { title: 'Risk Factors', risks: ['Cookie deprecation timeline', 'Economic downturn impact', 'Political ad competition'] }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Q1 2025 presents unique opportunities with post-holiday engagement recovery and major cultural moments. Recommended budget allocation: 65% digital, 25% traditional, 10% emerging channels. Key focus: value messaging in January, brand building through February, consideration in March.' },
+          { id: 2, title: 'Market Context', thumbnail: '/market-trends-analysis.jpg', content: 'Four key factors shaping Q1 2025: Economic uncertainty driving value-seeking behavior across demographics. Privacy changes continuing to impact targeting precision. CTV adoption accelerating faster than projected (+18% YoY). Retail media networks reaching maturity with standardized measurement.' },
+          { id: 3, title: 'Budget Allocation Strategy', thumbnail: '/budget-allocation-pie-chart.jpg', content: 'Digital (65%): Programmatic 40%, Social 35%, Search 25%. Traditional (25%): CTV/Streaming 60%, Audio 25%, OOH 15%. Emerging (10%): Retail Media 50%, Gaming 30%, Influencer 20%. Total recommended budget: $2.4M for full impact.' },
+          { id: 4, title: 'January Strategy', thumbnail: '/monthly-calendar-planning.jpg', content: 'Early January (1-15): Resolution and wellness messaging, high intensity spend. Post-holiday mindset receptive to self-improvement. Late January (16-31): Transition to value propositions, medium intensity. Consumers recovering from holiday spending, seeking deals.' },
+          { id: 5, title: 'February Strategy', thumbnail: '/monthly-calendar-planning.jpg', content: 'February 1-14: Valentine\'s focused campaigns for relevant categories. High emotional engagement period. February 15-28: Brand building focus, storytelling content. Presidents Day sales opportunity. Consider sports tentpoles (Super Bowl, NBA All-Star).' },
+          { id: 6, title: 'March Strategy', thumbnail: '/monthly-calendar-planning.jpg', content: 'Early March: Spring transition messaging, consideration phase. Mid-March: March Madness integration opportunities. Late March: Q1 close-out, conversion focus. Spring break travel consideration window opens.' },
+          { id: 7, title: 'Measurement Framework', thumbnail: '/measurement-kpi-dashboard.jpg', content: 'Primary KPIs: Brand lift (target +8%), attention metrics (target 12s dwell time), conversion attribution (last-touch + multi-touch), incremental reach (target 15% new audiences). Measurement partners: Nielsen, DoubleVerify, IAS.' },
+          { id: 8, title: 'Risk Factors & Mitigation', thumbnail: '/risk-assessment-matrix.jpg', content: 'Key risks: Cookie deprecation timeline uncertainty (mitigation: first-party data investment). Economic downturn impact on consumer spending (mitigation: value messaging flexibility). Political ad competition in February-March (mitigation: early inventory locks).' }
         ],
-        pageCount: 35,
-        metadata: { generatedAt: now.toISOString(), planningPeriod: 'Q1 2025', markets: ['US'] }
+        citations: [
+          { source: 'GWI Consumer Trends Q4 2024', confidence: 95, dataPoints: 38, markets: 24 },
+          { source: 'eMarketer Ad Spend Forecast 2025', confidence: 88, dataPoints: 15, markets: 1 },
+          { source: 'Nielsen Media Planning Benchmarks', confidence: 94, dataPoints: 42, markets: 8 }
+        ],
+        comments: [],
+        versions: [
+          { version: '0.9', date: now.toISOString(), author: 'Media Planner Agent', changes: 'Draft for review' }
+        ],
+        activity: [
+          { action: 'Draft created', user: 'Media Planner Agent', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'GWI Zeitgeist', 'eMarketer', 'Nielsen'],
+        markets: ['United States'],
+        metadata: { generatedAt: now.toISOString(), planningPeriod: 'Q1 2025', pageCount: 35 }
       },
       thumbnail: '/pdf-report-document.jpg',
       views: 0,
@@ -3048,19 +3075,30 @@ async function main() {
         agent: 'Pitch Generator Agent',
         solutionArea: 'Ad Sales',
         slides: [
-          { type: 'title', title: 'Reaching Auto Intenders', subtitle: 'Your Audience Awaits' },
-          { type: 'opportunity', title: 'Market Opportunity', stats: { autoIntenders: '28M', avgResearchTime: '89 days', touchpointsBeforePurchase: 24 }},
-          { type: 'audience', title: 'Our Auto Audience', profiles: [
-            { segment: 'Luxury Seekers', size: '4.2M', income: '$150K+', motivation: 'Status, technology' },
-            { segment: 'Family First', size: '8.5M', income: '$75-150K', motivation: 'Safety, space, value' },
-            { segment: 'Eco-Drivers', size: '6.8M', income: '$80K+', motivation: 'Sustainability, innovation' },
-            { segment: 'Performance Fans', size: '3.1M', income: '$100K+', motivation: 'Power, design, brand' }
-          ]},
-          { type: 'capabilities', title: 'Targeting Capabilities', features: ['In-market signals', 'Dealership proximity', 'Competitive conquesting', 'Lifecycle targeting'] },
-          { type: 'case_study', title: 'Success Story', client: 'Major OEM', results: { brandLift: '+18%', dealerTraffic: '+32%', costPerVisit: '-24%' }},
-          { type: 'packages', title: 'Partnership Options', tiers: ['Awareness Package', 'Consideration Package', 'Full Funnel Package'] },
-          { type: 'cta', title: 'Next Steps', actions: ['Custom audience analysis', 'Competitive share of voice', 'Campaign simulation'] }
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Reach 28M auto intenders through our premium data platform. Average research journey: 89 days with 24 touchpoints before purchase. Our data identifies consumers at every stage of the funnel with 94% accuracy in predicting purchase intent within 90 days.' },
+          { id: 2, title: 'Market Opportunity', thumbnail: '/market-opportunity-chart.jpg', content: 'The automotive advertising market represents $45B annually in the US alone. Key opportunity: 72% of car buyers start their research online, but only 34% of auto ad spend is digital. Bridge this gap with data-driven targeting and measurement.' },
+          { id: 3, title: 'Auto Intender Segments', thumbnail: '/audience-segmentation-pie-chart.jpg', content: 'Four primary segments: Luxury Seekers (4.2M, $150K+ income, motivated by status and technology). Family First (8.5M, $75-150K income, prioritize safety and space). Eco-Drivers (6.8M, $80K+ income, sustainability-focused). Performance Fans (3.1M, $100K+ income, value power and design).' },
+          { id: 4, title: 'Targeting Capabilities', thumbnail: '/targeting-capabilities-infographic.jpg', content: 'Advanced targeting options: In-market signals (browsing behavior, dealer site visits). Dealership proximity (geo-fencing active shoppers). Competitive conquesting (targeting competitor owners). Lifecycle targeting (lease end, service history triggers).' },
+          { id: 5, title: 'Case Study: Major OEM', thumbnail: '/case-study-results.jpg', content: 'Client: Top 5 US Automotive Manufacturer. Challenge: Increase dealer traffic for new EV launch. Solution: Multi-channel campaign targeting Eco-Drivers + Tech Enthusiasts. Results: +18% brand lift, +32% dealer traffic, -24% cost per dealer visit vs. benchmark.' },
+          { id: 6, title: 'Partnership Options', thumbnail: '/pricing-tiers-comparison.jpg', content: 'Three partnership tiers: Awareness Package - broad reach, video-first, brand metrics. Consideration Package - mid-funnel targeting, dealer locator integration, leads. Full Funnel Package - end-to-end journey, attribution to sale, dedicated success team.' },
+          { id: 7, title: 'Measurement & Attribution', thumbnail: '/measurement-kpi-dashboard.jpg', content: 'Comprehensive measurement: Digital attribution (multi-touch, view-through). Dealer visit tracking (foot traffic attribution). Sales match (integration with OEM CRM). Brand studies (pre/post awareness, consideration, preference).' },
+          { id: 8, title: 'Next Steps', thumbnail: '/call-to-action-slide.jpg', content: 'Recommended next steps: 1) Custom audience analysis for your specific models. 2) Competitive share of voice audit. 3) Campaign simulation with projected outcomes. 4) Pilot program proposal with success metrics.' }
         ],
+        citations: [
+          { source: 'GWI Core Q4 2024 - Auto Interest', confidence: 96, dataPoints: 28, markets: 32 },
+          { source: 'GWI USA Automotive Deep Dive', confidence: 98, dataPoints: 45, markets: 1 },
+          { source: 'Internal Campaign Performance Data', confidence: 99, dataPoints: 125, markets: 5 }
+        ],
+        comments: [],
+        versions: [
+          { version: '1.2', date: now.toISOString(), author: 'Pitch Generator Agent', changes: 'Updated case study results' }
+        ],
+        activity: [
+          { action: 'Pitch deck created', user: 'Pitch Generator Agent', timestamp: new Date(now.getTime() - 604800000).toISOString() },
+          { action: 'Case study updated', user: 'Sales Team', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'GWI USA', 'Internal Performance Data'],
+        markets: ['United States', 'Canada', 'United Kingdom', 'Germany', 'Australia'],
         metadata: { generatedAt: now.toISOString(), category: 'Automotive', proposalValue: '$2.5M' }
       },
       thumbnail: '/presentation-slides.png',
@@ -3084,24 +3122,31 @@ async function main() {
       content: {
         agent: 'Performance Predictor Agent',
         solutionArea: 'Marketing',
-        widgets: [
-          { type: 'forecast_summary', title: 'Campaign Forecast', predictions: { expectedROAS: 4.2, confidenceInterval: '3.8-4.6', budgetEfficiency: 'High' }},
-          { type: 'chart', title: 'Daily Performance Projection', chartType: 'area', metrics: ['Impressions', 'Clicks', 'Conversions'], period: '45 days' },
-          { type: 'channel_forecast', title: 'Channel Performance', channels: [
-            { name: 'Paid Social', projectedROAS: 3.8, trend: 'stable', confidence: '85%' },
-            { name: 'Paid Search', projectedROAS: 5.2, trend: 'up', confidence: '90%' },
-            { name: 'Display', projectedROAS: 2.4, trend: 'down', confidence: '75%' },
-            { name: 'Email', projectedROAS: 8.5, trend: 'up', confidence: '92%' }
-          ]},
-          { type: 'scenarios', title: 'What-If Scenarios', options: [
-            { scenario: 'Increase budget 20%', impact: '+15% revenue, ROAS drops to 3.9' },
-            { scenario: 'Shift to email', impact: '+8% revenue, ROAS improves to 4.5' },
-            { scenario: 'Cut display', impact: 'Flat revenue, ROAS improves to 4.8' }
-          ]},
-          { type: 'risks', title: 'Risk Factors', items: ['Competitor promotion activity', 'Inventory constraints', 'Economic headwinds'] },
-          { type: 'recommendations', title: 'Optimization Actions', items: ['Front-load budget in first 2 weeks', 'Reserve 15% for real-time optimization', 'A/B test creative variations'] }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Holiday campaign forecast shows strong potential with expected ROAS of 4.2 (confidence interval 3.8-4.6). Budget efficiency rated HIGH based on historical patterns. Key recommendation: front-load budget in first 2 weeks, reserve 15% for real-time optimization.' },
+          { id: 2, title: 'Daily Performance Projection', thumbnail: '/performance-forecast-chart.jpg', content: 'Projected daily metrics over 45-day campaign period: Peak performance expected Nov 24-27 (Black Friday weekend) and Dec 15-22 (last shipping windows). Impressions trending +18% vs. last year. Click-through rate stable at 2.3%. Conversion rate projected at 3.8%.' },
+          { id: 3, title: 'Channel Performance Forecast', thumbnail: '/channel-performance-dashboard.jpg', content: 'Channel projections: Paid Social - ROAS 3.8, stable trend, 85% confidence. Paid Search - ROAS 5.2, upward trend, 90% confidence. Display - ROAS 2.4, downward trend, 75% confidence. Email - ROAS 8.5, upward trend, 92% confidence.' },
+          { id: 4, title: 'What-If Scenarios', thumbnail: '/scenario-analysis-chart.jpg', content: 'Scenario modeling results: Increase budget 20% → +15% revenue but ROAS drops to 3.9. Shift 15% budget to email → +8% revenue with ROAS improvement to 4.5. Cut display spend by 50% → Flat revenue but ROAS improves to 4.8.' },
+          { id: 5, title: 'Competitive Context', thumbnail: '/competitive-analysis-chart.jpg', content: 'Competitive landscape analysis: Major competitors increasing holiday spend by 12% on average. Share of voice expected to compress by 8% without budget adjustment. Key competitive windows: Black Friday (highest competition), mid-December (opportunity as competitors pull back).' },
+          { id: 6, title: 'Risk Assessment', thumbnail: '/risk-assessment-matrix.jpg', content: 'Key risk factors: Competitor promotion activity (impact: HIGH, likelihood: 65%). Inventory constraints (impact: MEDIUM, likelihood: 40%). Economic headwinds affecting consumer spending (impact: MEDIUM, likelihood: 55%). Mitigation strategies included in appendix.' },
+          { id: 7, title: 'Optimization Recommendations', thumbnail: '/optimization-recommendations.jpg', content: 'Top optimization actions: 1) Front-load 40% of budget in first 2 weeks to capture early shoppers. 2) Reserve 15% budget for real-time optimization based on performance signals. 3) A/B test 3 creative variations per channel. 4) Set up automated bidding rules for peak periods.' },
+          { id: 8, title: 'Measurement Plan', thumbnail: '/measurement-kpi-dashboard.jpg', content: 'KPI tracking framework: Primary metrics - ROAS, revenue, conversion rate. Secondary metrics - CTR, CPA, new customer acquisition. Reporting cadence: Daily dashboard, weekly deep-dive, post-campaign analysis. Attribution model: Data-driven multi-touch.' }
         ],
-        lastUpdated: now.toISOString(),
+        citations: [
+          { source: 'GWI Consumer Trends - Holiday Shopping 2024', confidence: 96, dataPoints: 42, markets: 18 },
+          { source: 'Historical Campaign Performance (3 years)', confidence: 99, dataPoints: 156, markets: 5 },
+          { source: 'Competitive Intelligence Platform', confidence: 88, dataPoints: 28, markets: 3 }
+        ],
+        comments: [],
+        versions: [
+          { version: '2.0', date: now.toISOString(), author: 'Performance Predictor Agent', changes: 'Updated with latest market data' }
+        ],
+        activity: [
+          { action: 'Forecast generated', user: 'Performance Predictor Agent', timestamp: new Date(now.getTime() - 172800000).toISOString() },
+          { action: 'Scenarios updated', user: 'Marketing Team', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'Google Analytics', 'Internal CRM', 'Competitive Intel'],
+        markets: ['United States', 'Canada', 'United Kingdom'],
         metadata: { campaignPeriod: 'Nov 15 - Dec 31', totalBudget: '$2.4M', historicalDataYears: 3 }
       },
       thumbnail: '/analytics-dashboard.png',
@@ -3122,32 +3167,31 @@ async function main() {
       content: {
         agent: 'Trend Forecaster Agent',
         solutionArea: 'Marketing',
-        sections: [
-          { type: 'header', title: 'TikTok vs Instagram', subtitle: '2024 Platform Showdown' },
-          { type: 'stats_comparison', metrics: [
-            { metric: 'Monthly Active Users', tiktok: '1.5B', instagram: '2.0B' },
-            { metric: 'Avg. Time Spent/Day', tiktok: '95 min', instagram: '53 min' },
-            { metric: 'Engagement Rate', tiktok: '5.96%', instagram: '0.83%' },
-            { metric: 'Content Reach', tiktok: '118%', instagram: '13.5%' }
-          ]},
-          { type: 'audience_split', data: {
-            tiktok: { genZ: '60%', millennial: '26%', genX: '14%' },
-            instagram: { genZ: '31%', millennial: '35%', genX: '34%' }
-          }},
-          { type: 'trending_formats', platforms: [
-            { platform: 'TikTok', trends: ['Long-form (3+ min)', 'Storytimes', 'Educational content', 'Duets/Stitches'] },
-            { platform: 'Instagram', trends: ['Reels (15-30 sec)', 'Carousel posts', 'Stories with polls', 'Broadcast channels'] }
-          ]},
-          { type: 'brand_implications', insights: [
-            'TikTok: Best for awareness and virality',
-            'Instagram: Best for consideration and conversion',
-            'Both: Authenticity beats production value'
-          ]},
-          { type: 'predictions', title: '2025 Outlook', items: ['TikTok Shop growth', 'Instagram pivoting to creators', 'Both pushing AI content tools'] }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'TikTok vs Instagram platform comparison reveals distinct strengths: TikTok leads in engagement (5.96% vs 0.83%) and time spent (95 min vs 53 min daily). Instagram maintains larger user base (2.0B vs 1.5B MAU) and stronger commerce integration. Strategy: Use both for different funnel stages.' },
+          { id: 2, title: 'Platform Metrics Comparison', thumbnail: '/platform-comparison-chart.jpg', content: 'Key metrics head-to-head: Monthly Active Users - TikTok 1.5B, Instagram 2.0B. Average Time Spent/Day - TikTok 95 min, Instagram 53 min. Average Engagement Rate - TikTok 5.96%, Instagram 0.83%. Content Reach (% of followers) - TikTok 118%, Instagram 13.5%.' },
+          { id: 3, title: 'Audience Demographics', thumbnail: '/demographic-breakdown-chart.jpg', content: 'Generational split by platform: TikTok - Gen Z 60%, Millennial 26%, Gen X+ 14%. Instagram - Gen Z 31%, Millennial 35%, Gen X+ 34%. Key insight: TikTok skews younger but Gen X adoption growing fastest (+42% YoY). Instagram more balanced across age groups.' },
+          { id: 4, title: 'Trending Content Formats', thumbnail: '/content-formats-comparison.jpg', content: 'Hot formats by platform: TikTok - Long-form video (3+ min) emerging, Storytimes and narrative content, Educational how-tos, Duets and Stitches for engagement. Instagram - Short Reels (15-30 sec), Carousel posts for education, Interactive Stories, Broadcast channels for community.' },
+          { id: 5, title: 'Algorithm Insights', thumbnail: '/algorithm-analysis-chart.jpg', content: 'Algorithm behavior differences: TikTok - Discovery-focused, content can go viral regardless of follower count, watch time is king. Instagram - Relationship-focused, prioritizes accounts users engage with, pushing Reels to compete but still rewards existing audience.' },
+          { id: 6, title: 'Brand Performance Benchmarks', thumbnail: '/brand-performance-benchmarks.jpg', content: 'Brand content performance: Average engagement rate - TikTok 4.2%, Instagram 1.2%. Video completion rate - TikTok 68%, Instagram Reels 42%. Cost per engagement - TikTok $0.08, Instagram $0.15. Best performing categories: Entertainment, Beauty, Food on both platforms.' },
+          { id: 7, title: 'Strategic Implications', thumbnail: '/strategic-recommendations.jpg', content: 'Brand strategy recommendations: TikTok best for - awareness, virality, reaching younger demos, trend participation. Instagram best for - consideration, conversion, community building, direct commerce. Both platforms - prioritize authenticity over production value, embrace creator partnerships.' },
+          { id: 8, title: '2025 Platform Outlook', thumbnail: '/future-trends-forecast.jpg', content: 'Key predictions for 2025: TikTok Shop expansion in Western markets, potential US regulatory challenges. Instagram doubling down on creators, enhanced AI content tools. Both platforms integrating more shopping features. Recommendation: Build presence on both, test and learn approach.' }
         ],
-        dimensions: { width: 1200, height: 2800 },
-        colorScheme: 'gradient',
-        metadata: { generatedAt: now.toISOString(), dataSource: 'GWI Zeitgeist + Platform APIs' }
+        citations: [
+          { source: 'GWI Social Media Report 2024', confidence: 98, dataPoints: 52, markets: 48 },
+          { source: 'GWI Zeitgeist - Platform Trends', confidence: 95, dataPoints: 38, markets: 24 },
+          { source: 'Platform Official Reporting', confidence: 92, dataPoints: 24, markets: 1 }
+        ],
+        comments: [],
+        versions: [
+          { version: '1.0', date: now.toISOString(), author: 'Trend Forecaster Agent', changes: 'Initial analysis' }
+        ],
+        activity: [
+          { action: 'Analysis generated', user: 'Trend Forecaster Agent', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'GWI Zeitgeist', 'Platform APIs'],
+        markets: ['Global', 'United States', 'United Kingdom', 'Germany', 'Brazil'],
+        metadata: { generatedAt: now.toISOString(), dataSource: 'GWI Zeitgeist + Platform APIs', dimensions: { width: 1200, height: 2800 } }
       },
       thumbnail: '/analytics-dashboard.png',
       views: 2156,
@@ -3166,30 +3210,31 @@ async function main() {
       content: {
         agent: 'Content Creator Agent',
         solutionArea: 'Marketing',
-        sections: [
-          { title: 'Executive Summary', summary: 'Gen Z demands authenticity, entertainment, and value. This framework provides a systematic approach to content that converts.' },
-          { title: 'Gen Z Content Preferences', insights: [
-            { preference: 'Authentic over polished', evidence: '72% prefer user-generated style content' },
-            { preference: 'Entertainment first', evidence: '85% want to be entertained, even by brands' },
-            { preference: 'Values alignment', evidence: '68% research brand values before purchase' },
-            { preference: 'Interactive experiences', evidence: '3x engagement on polls, quizzes, challenges' }
-          ]},
-          { title: 'Content Pillars Framework', pillars: [
-            { pillar: 'Educational', share: '25%', purpose: 'Build authority, provide value', formats: ['How-tos', 'Explainers', 'Tips'] },
-            { pillar: 'Entertainment', share: '35%', purpose: 'Drive reach and engagement', formats: ['Trends', 'Humor', 'Challenges'] },
-            { pillar: 'Community', share: '25%', purpose: 'Build connection and loyalty', formats: ['UGC', 'Collabs', 'Behind-scenes'] },
-            { pillar: 'Conversion', share: '15%', purpose: 'Drive business outcomes', formats: ['Social proof', 'Offers', 'Product demos'] }
-          ]},
-          { title: 'Platform Strategy', platforms: [
-            { platform: 'TikTok', focus: 'Entertainment + Education', frequency: '1-2x daily', bestTimes: ['7-9am', '7-11pm'] },
-            { platform: 'Instagram', focus: 'Community + Conversion', frequency: '1x daily + stories', bestTimes: ['11am-1pm', '7-9pm'] },
-            { platform: 'YouTube', focus: 'Education (long-form)', frequency: '2x weekly', bestTimes: ['Thursday-Saturday'] }
-          ]},
-          { title: 'Measurement Framework', kpis: ['Engagement rate by pillar', 'Share/save ratio', 'Comment sentiment', 'Profile visits', 'Conversion attribution'] },
-          { title: 'Implementation Roadmap', phases: ['Audit current content', 'Develop pillar themes', 'Create content calendar', 'Test and optimize'] }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Gen Z demands authenticity, entertainment, and value. This framework provides a systematic approach to content that converts. Key insight: 72% prefer user-generated style content over polished brand productions. 85% want to be entertained, even by brands they follow.' },
+          { id: 2, title: 'Gen Z Content Preferences', thumbnail: '/gen-z-preferences-chart.jpg', content: 'Four pillars of Gen Z content preferences: Authentic over polished - 72% prefer UGC-style content. Entertainment first - 85% want entertainment from brands. Values alignment - 68% research brand values before purchase. Interactive experiences - 3x engagement on polls, quizzes, challenges.' },
+          { id: 3, title: 'Content Pillars Framework', thumbnail: '/content-pillars-diagram.jpg', content: 'Recommended content mix: Educational (25%) - how-tos, explainers, tips that build authority. Entertainment (35%) - trends, humor, challenges that drive reach. Community (25%) - UGC, collabs, behind-scenes that build loyalty. Conversion (15%) - social proof, offers, demos that drive sales.' },
+          { id: 4, title: 'Platform-Specific Strategy', thumbnail: '/platform-strategy-chart.jpg', content: 'Tailored approach by platform: TikTok - Entertainment + Education focus, 1-2x daily posting, peak times 7-9am and 7-11pm. Instagram - Community + Conversion focus, 1x daily + stories, peak times 11am-1pm and 7-9pm. YouTube - Education long-form, 2x weekly, Thursday-Saturday optimal.' },
+          { id: 5, title: 'Creator Authenticity Guidelines', thumbnail: '/authenticity-guidelines.jpg', content: 'Authenticity best practices: Use real employees and customers, not actors. Embrace imperfection - slightly raw performs better. Show the process, not just the product. Respond to comments genuinely. Take stands on issues aligned with values. Admit mistakes publicly.' },
+          { id: 6, title: 'Measurement Framework', thumbnail: '/measurement-kpi-dashboard.jpg', content: 'KPIs by content pillar: Engagement rate by pillar type. Share/save ratio (indicates value). Comment sentiment analysis. Profile visit conversion rate. Full attribution to purchase when possible. Benchmark: 4%+ engagement rate, 2%+ share rate.' },
+          { id: 7, title: 'Implementation Roadmap', thumbnail: '/implementation-roadmap.jpg', content: 'Four-phase implementation: Phase 1 - Audit current content against framework. Phase 2 - Develop pillar themes and content templates. Phase 3 - Create 30-day content calendar with balanced mix. Phase 4 - Test, measure, and optimize based on performance.' },
+          { id: 8, title: 'Resources & Next Steps', thumbnail: '/next-steps-checklist.jpg', content: 'Recommended resources: Content creation tools (CapCut, Canva). Trend monitoring (TrendTok, SparkToro). Analytics (native + Sprout Social). Next steps: 1) Complete content audit. 2) Define 3 themes per pillar. 3) Identify 5 creator partners. 4) Build first content calendar.' }
         ],
-        pageCount: 32,
-        metadata: { generatedAt: now.toISOString(), targetAudience: 'Gen Z (16-24)', contentTypes: 12 }
+        citations: [
+          { source: 'GWI Gen Z Report 2024', confidence: 97, dataPoints: 48, markets: 32 },
+          { source: 'GWI Social Media Behaviors', confidence: 95, dataPoints: 35, markets: 24 },
+          { source: 'Platform Best Practices Guides', confidence: 88, dataPoints: 18, markets: 1 }
+        ],
+        comments: [],
+        versions: [
+          { version: '0.8', date: now.toISOString(), author: 'Content Creator Agent', changes: 'Initial draft for review' }
+        ],
+        activity: [
+          { action: 'Framework drafted', user: 'Content Creator Agent', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'GWI Zeitgeist', 'Platform Analytics'],
+        markets: ['United States', 'United Kingdom', 'Australia', 'Canada'],
+        metadata: { generatedAt: now.toISOString(), targetAudience: 'Gen Z (16-24)', pageCount: 32 }
       },
       thumbnail: '/pdf-report-document.jpg',
       views: 0,
@@ -3212,15 +3257,29 @@ async function main() {
         agent: 'Opportunity Scout Agent',
         solutionArea: 'Product Development',
         slides: [
-          { type: 'title', title: 'Product Opportunity Landscape', subtitle: '2025 Innovation Roadmap' },
-          { type: 'methodology', title: 'How We Found Opportunities', steps: ['Analyzed 500K consumer conversations', 'Surveyed 25K consumers on unmet needs', 'Mapped competitive white spaces', 'Assessed technology readiness'] },
-          { type: 'opportunity', rank: 1, title: 'AI-Powered Personal Finance', score: 92, tam: '$18B', competition: 'Fragmented', unmetNeed: '68% want automated financial optimization', barriers: ['Trust', 'Regulation'], timeToMarket: '12-18 months' },
-          { type: 'opportunity', rank: 2, title: 'Sustainable Subscription Boxes', score: 87, tam: '$8B', competition: 'Growing', unmetNeed: '54% want curated eco-friendly products', barriers: ['Unit economics', 'Supply chain'], timeToMarket: '6-12 months' },
-          { type: 'opportunity', rank: 3, title: 'Mental Wellness Gaming', score: 84, tam: '$12B', competition: 'Emerging', unmetNeed: '71% of Gen Z want mental health support in games', barriers: ['Clinical validation', 'Stigma'], timeToMarket: '18-24 months' },
-          { type: 'opportunity', rank: 4, title: 'Hyper-Local Community Platforms', score: 81, tam: '$5B', competition: 'Low', unmetNeed: '62% feel disconnected from local community', barriers: ['Network effects', 'Monetization'], timeToMarket: '12-18 months' },
-          { type: 'matrix', title: 'Opportunity Matrix', axes: ['Market Attractiveness', 'Strategic Fit'] },
-          { type: 'recommendations', title: 'Recommended Actions', items: ['Deep dive on top 2 opportunities', 'Consumer co-creation sessions', 'MVP scoping and feasibility'] }
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Analysis of 45 product opportunities identified 4 high-potential areas for 2025. Top opportunity: AI-Powered Personal Finance (score: 92/100, TAM: $18B). Methodology combined 500K consumer conversations, 25K survey responses, and competitive white space mapping.' },
+          { id: 2, title: 'Research Methodology', thumbnail: '/methodology-diagram.jpg', content: 'Four-stage opportunity identification: 1) Analyzed 500K consumer conversations across social and reviews. 2) Surveyed 25K consumers on unmet needs and willingness to pay. 3) Mapped competitive white spaces in each category. 4) Assessed technology readiness and barriers to entry.' },
+          { id: 3, title: 'Opportunity #1: AI Personal Finance', thumbnail: '/opportunity-scorecard.jpg', content: 'AI-Powered Personal Finance - Score: 92/100. TAM: $18B and growing 24% annually. Competition: Fragmented, no dominant player. Unmet need: 68% want automated financial optimization. Barriers: Trust building, regulatory compliance. Time to market: 12-18 months with right team.' },
+          { id: 4, title: 'Opportunity #2: Sustainable Subscriptions', thumbnail: '/opportunity-scorecard.jpg', content: 'Sustainable Subscription Boxes - Score: 87/100. TAM: $8B with 15% growth. Competition: Growing but differentiation possible. Unmet need: 54% want curated eco-friendly products. Barriers: Unit economics, supply chain complexity. Time to market: 6-12 months.' },
+          { id: 5, title: 'Opportunity #3: Mental Wellness Gaming', thumbnail: '/opportunity-scorecard.jpg', content: 'Mental Wellness Gaming - Score: 84/100. TAM: $12B in mental wellness + gaming crossover. Competition: Emerging, few serious players. Unmet need: 71% of Gen Z want mental health support in games. Barriers: Clinical validation, stigma reduction. Time to market: 18-24 months.' },
+          { id: 6, title: 'Opportunity #4: Local Community Platforms', thumbnail: '/opportunity-scorecard.jpg', content: 'Hyper-Local Community Platforms - Score: 81/100. TAM: $5B in local social/commerce. Competition: Low, Nextdoor dominant but disliked. Unmet need: 62% feel disconnected from local community. Barriers: Network effects, monetization model. Time to market: 12-18 months.' },
+          { id: 7, title: 'Opportunity Matrix', thumbnail: '/opportunity-matrix-chart.jpg', content: 'Strategic fit analysis: AI Finance and Mental Wellness Gaming show highest market attractiveness and strategic fit. Sustainable Subscriptions offers fastest time to market. Local Community requires most capital for network effects. Recommendation: Pursue AI Finance as primary, Mental Wellness as secondary.' },
+          { id: 8, title: 'Recommended Next Steps', thumbnail: '/next-steps-checklist.jpg', content: 'Recommended actions: 1) Deep dive research on top 2 opportunities. 2) Consumer co-creation sessions for concept validation. 3) MVP scoping and technical feasibility assessment. 4) Financial modeling and investment requirements. 5) Go/no-go decision within 6 weeks.' }
         ],
+        citations: [
+          { source: 'GWI Consumer Trends 2024', confidence: 96, dataPoints: 58, markets: 32 },
+          { source: 'GWI Custom Survey - Product Needs', confidence: 98, dataPoints: 25000, markets: 8 },
+          { source: 'Competitive Intelligence Database', confidence: 91, dataPoints: 45, markets: 12 }
+        ],
+        comments: [],
+        versions: [
+          { version: '1.0', date: now.toISOString(), author: 'Opportunity Scout Agent', changes: 'Initial opportunity analysis' }
+        ],
+        activity: [
+          { action: 'Analysis completed', user: 'Opportunity Scout Agent', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'GWI Custom', 'Social Listening', 'Competitive Intel'],
+        markets: ['United States', 'United Kingdom', 'Germany', 'Japan', 'Australia'],
         metadata: { generatedAt: now.toISOString(), opportunitiesEvaluated: 45, dataPoints: 125000 }
       },
       thumbnail: '/presentation-slides.png',
@@ -3241,22 +3300,31 @@ async function main() {
       content: {
         agent: 'Feature Prioritizer Agent',
         solutionArea: 'Product Development',
-        widgets: [
-          { type: 'matrix', title: 'Prioritization Matrix', axes: { x: 'Implementation Effort', y: 'User Value' }, quadrants: ['Quick Wins', 'Strategic Bets', 'Fill-ins', 'Deprioritize'] },
-          { type: 'feature_list', title: 'Ranked Features', features: [
-            { name: 'Offline Mode', score: 94, userDemand: 'Very High', effort: 'Medium', priority: 'P0' },
-            { name: 'Social Sharing', score: 88, userDemand: 'High', effort: 'Low', priority: 'P0' },
-            { name: 'Dark Mode', score: 85, userDemand: 'High', effort: 'Low', priority: 'P1' },
-            { name: 'Biometric Login', score: 82, userDemand: 'High', effort: 'Medium', priority: 'P1' },
-            { name: 'Custom Notifications', score: 78, userDemand: 'Medium', effort: 'Medium', priority: 'P2' },
-            { name: 'AR Features', score: 65, userDemand: 'Medium', effort: 'High', priority: 'P3' }
-          ]},
-          { type: 'chart', title: 'User Request Volume', chartType: 'bar', period: '6 months' },
-          { type: 'comparison', title: 'Competitive Gap Analysis', features: ['Offline', 'Social', 'Personalization'], vsCompetitors: 3 },
-          { type: 'impact', title: 'Projected Impact', metrics: { retentionLift: '+12%', npsImprovement: '+8 pts', conversionIncrease: '+15%' }},
-          { type: 'roadmap', title: 'Suggested Roadmap', quarters: ['Q1: Offline + Social', 'Q2: Dark Mode + Biometric', 'Q3: Notifications', 'Q4: AR Exploration'] }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Feature prioritization analysis of 28 candidate features for mobile app roadmap. Top P0 features: Offline Mode (score: 94) and Social Sharing (score: 88). Expected impact: +12% retention, +8 NPS points, +15% conversion if P0 and P1 features shipped in H1.' },
+          { id: 2, title: 'Prioritization Matrix', thumbnail: '/prioritization-matrix-chart.jpg', content: 'Feature placement by value vs. effort: Quick Wins (high value, low effort) - Social Sharing, Dark Mode. Strategic Bets (high value, high effort) - Offline Mode, Biometric Login. Fill-ins (low value, low effort) - Custom Notifications. Deprioritize (low value, high effort) - AR Features.' },
+          { id: 3, title: 'P0 Features: Must Have', thumbnail: '/feature-detail-card.jpg', content: 'P0 Priority Features: Offline Mode - Score 94, user demand VERY HIGH, effort MEDIUM. Critical for users with inconsistent connectivity (38% of base). Social Sharing - Score 88, user demand HIGH, effort LOW. Drives organic acquisition, requested by 45% of users in feedback.' },
+          { id: 4, title: 'P1 Features: Should Have', thumbnail: '/feature-detail-card.jpg', content: 'P1 Priority Features: Dark Mode - Score 85, user demand HIGH, effort LOW. #3 most requested feature, industry standard. Biometric Login - Score 82, user demand HIGH, effort MEDIUM. Security expectation for 67% of users, reduces login friction by 3x.' },
+          { id: 5, title: 'P2-P3 Features: Future Consideration', thumbnail: '/feature-detail-card.jpg', content: 'Lower priority features: Custom Notifications (P2) - Score 78, nice-to-have personalization. AR Features (P3) - Score 65, innovative but low current demand, high technical complexity. Recommendation: Revisit AR in 6 months as technology matures.' },
+          { id: 6, title: 'User Request Analysis', thumbnail: '/user-request-volume-chart.jpg', content: 'User feedback analysis (15,000 data points): Offline Mode - 2,340 requests, trending up. Social Sharing - 1,890 requests, steady. Dark Mode - 1,650 requests, seasonal spikes. Biometric - 1,420 requests, growing with security concerns. Data from support tickets, app reviews, surveys.' },
+          { id: 7, title: 'Competitive Gap Analysis', thumbnail: '/competitive-gap-chart.jpg', content: 'Feature comparison vs. top 3 competitors: Offline Mode - 2 of 3 competitors have it. Social Sharing - 3 of 3 competitors have it (gap!). Dark Mode - 3 of 3 competitors have it (gap!). Personalization - 1 of 3 competitors advanced. Closing Social and Dark Mode gaps is urgent.' },
+          { id: 8, title: 'Recommended Roadmap', thumbnail: '/roadmap-timeline.jpg', content: 'Suggested development timeline: Q1 - Offline Mode + Social Sharing (P0 features). Q2 - Dark Mode + Biometric Login (P1 features). Q3 - Custom Notifications (P2). Q4 - AR Features exploration/prototype. Expected outcomes: Feature parity by Q2, differentiation by Q4.' }
         ],
-        lastUpdated: now.toISOString(),
+        citations: [
+          { source: 'User Feedback Database', confidence: 99, dataPoints: 15000, markets: 1 },
+          { source: 'App Store Reviews Analysis', confidence: 94, dataPoints: 8500, markets: 12 },
+          { source: 'Competitive Feature Audit', confidence: 96, dataPoints: 84, markets: 5 }
+        ],
+        comments: [],
+        versions: [
+          { version: '1.1', date: now.toISOString(), author: 'Feature Prioritizer Agent', changes: 'Updated with Q4 feedback data' }
+        ],
+        activity: [
+          { action: 'Matrix generated', user: 'Feature Prioritizer Agent', timestamp: new Date(now.getTime() - 259200000).toISOString() },
+          { action: 'Feedback data refreshed', user: 'Product Team', timestamp: now.toISOString() }
+        ],
+        dataSources: ['User Feedback', 'App Reviews', 'Support Tickets', 'Competitive Intel'],
+        markets: ['United States', 'United Kingdom', 'Germany', 'France', 'Japan'],
         metadata: { featuresEvaluated: 28, userFeedbackPoints: 15000, competitorsAnalyzed: 5 }
       },
       thumbnail: '/analytics-dashboard.png',
@@ -3280,30 +3348,31 @@ async function main() {
       content: {
         agent: 'Market Mapper Agent',
         solutionArea: 'Market Research',
-        sections: [
-          { title: 'Executive Summary', highlights: ['$12.5T global market', '8.2% CAGR through 2028', 'Digital transformation driving growth', 'Regulatory complexity increasing'] },
-          { title: 'Market Sizing', data: {
-            global: { size: '$12.5T', growth: '8.2%', keyDrivers: ['Digital adoption', 'Emerging markets', 'Wealth transfer'] },
-            byRegion: [
-              { region: 'North America', size: '$4.8T', share: '38%', growth: '6.5%' },
-              { region: 'Europe', size: '$3.2T', share: '26%', growth: '5.8%' },
-              { region: 'Asia Pacific', size: '$3.5T', share: '28%', growth: '12.5%' },
-              { region: 'Rest of World', size: '$1.0T', share: '8%', growth: '9.2%' }
-            ]
-          }},
-          { title: 'Segmentation', segments: [
-            { segment: 'Retail Banking', size: '$4.2T', trend: 'Consolidating', opportunity: 'Digital-only banks' },
-            { segment: 'Wealth Management', size: '$3.1T', trend: 'Growing', opportunity: 'Robo-advisory, democratization' },
-            { segment: 'Insurance', size: '$2.8T', trend: 'Transforming', opportunity: 'InsurTech, usage-based' },
-            { segment: 'Payments', size: '$2.4T', trend: 'Disrupting', opportunity: 'Embedded finance, BNPL' }
-          ]},
-          { title: 'Competitive Landscape', tiers: ['Global Leaders', 'Regional Champions', 'Specialists', 'Disruptors'] },
-          { title: 'Consumer Trends', insights: ['Trust in traditional institutions declining', 'Demand for personalization rising', 'ESG investing mainstream', 'Mobile-first expectation'] },
-          { title: 'Strategic Implications', recommendations: ['Accelerate digital transformation', 'Partner with fintechs', 'Invest in data capabilities', 'Focus on customer experience'] }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Global financial services market valued at $12.5T with 8.2% CAGR through 2028. Key drivers: digital transformation, emerging market growth, and generational wealth transfer. Digital-first players capturing share from traditional institutions. Regulatory complexity increasing across all regions.' },
+          { id: 2, title: 'Global Market Sizing', thumbnail: '/market-size-chart.jpg', content: 'Market breakdown by region: North America - $4.8T (38% share), 6.5% growth. Europe - $3.2T (26% share), 5.8% growth. Asia Pacific - $3.5T (28% share), 12.5% growth - fastest growing region. Rest of World - $1.0T (8% share), 9.2% growth. APAC expected to surpass North America by 2030.' },
+          { id: 3, title: 'Segment Analysis: Retail Banking', thumbnail: '/segment-analysis-chart.jpg', content: 'Retail Banking segment: $4.2T market size. Trend: Consolidating as digital banks gain share. Opportunity: Digital-only banks capturing 15% of new accounts. Traditional banks losing 2-3% market share annually. Winners: Those investing in mobile experience and personalization.' },
+          { id: 4, title: 'Segment Analysis: Wealth Management', thumbnail: '/segment-analysis-chart.jpg', content: 'Wealth Management segment: $3.1T market size. Trend: Growing with wealth transfer to millennials. Opportunity: Robo-advisory democratizing access, $2.4T in robo AUM by 2025. Key shift: Self-directed investing up 45% since 2020. Winners: Hybrid models combining digital + human advice.' },
+          { id: 5, title: 'Segment Analysis: Insurance & Payments', thumbnail: '/segment-analysis-chart.jpg', content: 'Insurance: $2.8T market, transforming via InsurTech. Usage-based models growing 28% annually. Embedded insurance emerging in e-commerce. Payments: $2.4T market, disruption accelerating. BNPL captured 5% of e-commerce. Embedded finance reshaping who offers financial services.' },
+          { id: 6, title: 'Competitive Landscape', thumbnail: '/competitive-landscape-map.jpg', content: 'Four competitive tiers: Global Leaders - JPMorgan, HSBC, diversified and tech-investing. Regional Champions - strong in home markets, digital laggards. Specialists - focused players like Stripe, Robinhood winning niches. Disruptors - neobanks, fintechs attacking specific pain points. Tier blurring as everyone becomes fintech.' },
+          { id: 7, title: 'Consumer Trends Shaping the Market', thumbnail: '/consumer-trends-chart.jpg', content: 'Four megatrends: Trust in traditional institutions declining - 42% trust banks less than 5 years ago. Personalization demand rising - 68% expect tailored products. ESG investing mainstream - 54% consider sustainability in financial decisions. Mobile-first expectation - 78% prefer mobile app as primary channel.' },
+          { id: 8, title: 'Strategic Implications', thumbnail: '/strategic-recommendations.jpg', content: 'Recommendations for market participants: 1) Accelerate digital transformation - table stakes for survival. 2) Partner with fintechs rather than build everything in-house. 3) Invest heavily in data and analytics capabilities. 4) Redesign around customer experience, not products. 5) Prepare for embedded finance disruption.' }
         ],
-        appendices: ['Methodology', 'Data sources', 'Company profiles'],
-        pageCount: 68,
-        metadata: { generatedAt: now.toISOString(), industry: 'Financial Services', dataPoints: 250000 }
+        citations: [
+          { source: 'GWI Financial Services Report 2024', confidence: 97, dataPoints: 85, markets: 48 },
+          { source: 'GWI USA Financial Attitudes', confidence: 98, dataPoints: 42, markets: 1 },
+          { source: 'Industry Financial Reports (Public)', confidence: 95, dataPoints: 128, markets: 24 }
+        ],
+        comments: [],
+        versions: [
+          { version: '1.0', date: now.toISOString(), author: 'Market Mapper Agent', changes: 'Initial market analysis' }
+        ],
+        activity: [
+          { action: 'Report generated', user: 'Market Mapper Agent', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'GWI USA', 'Public Filings', 'Industry Reports'],
+        markets: ['Global', 'United States', 'United Kingdom', 'Germany', 'Japan', 'China', 'Brazil'],
+        metadata: { generatedAt: now.toISOString(), industry: 'Financial Services', pageCount: 68, dataPoints: 250000 }
       },
       thumbnail: '/pdf-report-document.jpg',
       agentId: enterpriseAnalysisAgent.id,
@@ -3323,27 +3392,32 @@ async function main() {
       content: {
         agent: 'Survey Analyzer Agent',
         solutionArea: 'Market Research',
-        datasets: [
-          { name: 'raw_responses', format: 'csv', rows: 8500, columns: 45, description: 'Individual survey responses' },
-          { name: 'cross_tabs', format: 'xlsx', sheets: 12, description: 'Cross-tabulations by demographics' },
-          { name: 'significance_tests', format: 'csv', rows: 250, columns: 8, description: 'Statistical significance results' },
-          { name: 'open_ends_coded', format: 'csv', rows: 3200, columns: 5, description: 'Coded open-ended responses' },
-          { name: 'weighting_scheme', format: 'xlsx', sheets: 2, description: 'Sample weighting methodology' }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Brand perception study completed with 8,500 respondents across US, UK, and Germany. Key finding: Brand awareness at 67% (+4% vs. last wave), but consideration lagging at 34% (-2%). Perception gap identified between brand promise and delivery on customer service. Detailed data export available.' },
+          { id: 2, title: 'Methodology Overview', thumbnail: '/methodology-diagram.jpg', content: 'Study specifications: Sample size 8,500 respondents. Methodology: Online panel with quota sampling. Field dates: September 1-15, 2024. Markets: US (n=4,000), UK (n=2,500), DE (n=2,000). Confidence level: 95%. Margin of error: ±1.1%. Weighting applied to match census demographics.' },
+          { id: 3, title: 'Brand Funnel Results', thumbnail: '/brand-funnel-chart.jpg', content: 'Funnel metrics vs. prior wave: Awareness 67% (+4 pts) - marketing investment paying off. Familiarity 52% (+2 pts) - steady improvement. Consideration 34% (-2 pts) - concern area, investigate drivers. Preference 18% (flat) - holding steady. Usage 12% (+1 pt) - slight growth.' },
+          { id: 4, title: 'Perceptual Mapping', thumbnail: '/perceptual-map-chart.jpg', content: 'Brand positioning vs. competitors: Strong association with Innovation (82% agree) and Quality (78% agree). Weak association with Value (41% agree) and Customer Service (38% agree). Nearest competitor positioned closer to Value. Opportunity: Close service perception gap to improve consideration.' },
+          { id: 5, title: 'Segment Analysis', thumbnail: '/segment-breakdown-chart.jpg', content: 'Performance by segment: Premium Seekers - highest awareness (78%) and preference (28%). Value Hunters - lowest consideration (22%), price barrier. Young Professionals - highest growth potential, 45% unfamiliar with brand. Loyalists - strong NPS (+52) but small segment (8% of market).' },
+          { id: 6, title: 'Verbatim Themes', thumbnail: '/word-cloud-visualization.jpg', content: 'Open-ended response analysis (3,200 coded responses): Positive themes - Product quality (42%), Innovation (38%), Design (31%). Negative themes - Price (45%), Wait times (28%), Support experience (24%). Emerging theme: Sustainability increasingly mentioned (+15% vs. last wave).' },
+          { id: 7, title: 'Data Export Contents', thumbnail: '/data-export-list.jpg', content: 'Available data exports: raw_responses.csv - 8,500 rows, 45 columns, individual responses. cross_tabs.xlsx - 12 sheets, demographics breakdowns. significance_tests.csv - statistical testing results. open_ends_coded.csv - 3,200 coded verbatims. weighting_scheme.xlsx - methodology documentation.' },
+          { id: 8, title: 'Recommended Actions', thumbnail: '/recommendations-checklist.jpg', content: 'Strategic recommendations: 1) Address service perception gap - priority investigation into support experience. 2) Develop value-tier messaging for price-sensitive segments. 3) Increase familiarity among Young Professionals with targeted campaign. 4) Leverage sustainability messaging - growing importance. 5) Track consideration closely in next wave.' }
         ],
-        visualizations: [
-          { name: 'brand_funnel', format: 'png', description: 'Awareness-consideration-preference funnel' },
-          { name: 'perception_map', format: 'svg', description: 'Perceptual mapping of brands' },
-          { name: 'segment_profiles', format: 'pdf', pages: 8, description: 'Detailed segment profiles' }
+        citations: [
+          { source: 'GWI Custom Survey - Brand Perception Q3 2024', confidence: 99, dataPoints: 8500, markets: 3 },
+          { source: 'Previous Wave Comparison Data', confidence: 98, dataPoints: 8200, markets: 3 },
+          { source: 'Category Benchmark Database', confidence: 94, dataPoints: 45, markets: 3 }
         ],
-        methodology: {
-          sampleSize: 8500,
-          methodology: 'Online panel',
-          fieldDates: 'Sep 1-15, 2024',
-          markets: ['US', 'UK', 'DE'],
-          confidenceLevel: '95%',
-          marginOfError: '±1.1%'
-        },
-        metadata: { generatedAt: now.toISOString(), studyType: 'Brand Tracking', wave: 'Q3 2024' }
+        comments: [],
+        versions: [
+          { version: '1.0', date: now.toISOString(), author: 'Survey Analyzer Agent', changes: 'Initial data export and analysis' }
+        ],
+        activity: [
+          { action: 'Survey data processed', user: 'Survey Analyzer Agent', timestamp: new Date(now.getTime() - 1209600000).toISOString() },
+          { action: 'Report archived', user: 'Research Team', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Custom Survey', 'Historical Tracking Data'],
+        markets: ['United States', 'United Kingdom', 'Germany'],
+        metadata: { generatedAt: now.toISOString(), studyType: 'Brand Tracking', wave: 'Q3 2024', sampleSize: 8500, marginOfError: '±1.1%' }
       },
       thumbnail: '/analytics-dashboard.png',
       agentId: enterpriseAnalysisAgent.id,
@@ -3367,19 +3441,29 @@ async function main() {
         agent: 'Trend Synthesizer Agent',
         solutionArea: 'Innovation',
         slides: [
-          { type: 'title', title: 'AI & Consumer Tech Trends', subtitle: 'What\'s Next for 2025' },
-          { type: 'trend', rank: 1, name: 'Generative AI Goes Mainstream', maturity: 'Emerging', timeframe: '12-18 months', consumerAdoption: '42%', implications: ['Content creation democratized', 'Search behavior changing', 'Trust/authenticity concerns'] },
-          { type: 'trend', rank: 2, name: 'Ambient Computing', maturity: 'Early', timeframe: '24-36 months', consumerAdoption: '18%', implications: ['Screenless interactions', 'Privacy redefined', 'Always-on engagement'] },
-          { type: 'trend', rank: 3, name: 'Spatial Computing (AR/VR)', maturity: 'Emerging', timeframe: '18-24 months', consumerAdoption: '24%', implications: ['Immersive commerce', 'Virtual experiences', 'New content formats'] },
-          { type: 'trend', rank: 4, name: 'Decentralized Identity', maturity: 'Early', timeframe: '36-48 months', consumerAdoption: '8%', implications: ['User data ownership', 'Portable digital identity', 'New trust models'] },
-          { type: 'synthesis', title: 'Converging Trends', insight: 'AI + Ambient + Spatial = Seamless, personalized, immersive consumer experiences' },
-          { type: 'implications', title: 'Business Implications', areas: [
-            { area: 'Marketing', impact: 'AI-generated personalization at scale, new immersive formats' },
-            { area: 'Product', impact: 'Voice/gesture interfaces, spatial features, AI assistants' },
-            { area: 'Operations', impact: 'AI automation, predictive everything, digital twins' }
-          ]},
-          { type: 'actions', title: 'Recommended Actions', items: ['Establish AI governance framework', 'Experiment with spatial content', 'Develop voice strategy', 'Monitor decentralization signals'] }
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Analysis of 28 emerging technology trends identifies 4 transformational shifts for 2025. Generative AI leads with 42% consumer adoption and accelerating. Key synthesis: AI + Ambient Computing + Spatial Tech = seamless, personalized, immersive consumer experiences. Action required within 12-18 months.' },
+          { id: 2, title: 'Trend #1: Generative AI Mainstream', thumbnail: '/trend-analysis-chart.jpg', content: 'Generative AI adoption metrics: 42% of consumers have used generative AI tools. Maturity: Emerging, crossing into mainstream. Timeline: 12-18 months to ubiquity. Implications: Content creation democratized, search behavior fundamentally changing, trust and authenticity becoming critical differentiators.' },
+          { id: 3, title: 'Trend #2: Ambient Computing', thumbnail: '/trend-analysis-chart.jpg', content: 'Ambient Computing evolution: 18% current consumer adoption, growing rapidly. Maturity: Early stage, significant infrastructure investment ongoing. Timeline: 24-36 months for mainstream. Implications: Screenless interactions becoming normalized, privacy expectations being redefined, always-on engagement opportunities.' },
+          { id: 4, title: 'Trend #3: Spatial Computing', thumbnail: '/trend-analysis-chart.jpg', content: 'Spatial Computing (AR/VR) status: 24% consumer adoption, Apple Vision Pro catalyzing interest. Maturity: Emerging, hardware improving rapidly. Timeline: 18-24 months for consumer tipping point. Implications: Immersive commerce experiences, virtual product trials, entirely new content formats required.' },
+          { id: 5, title: 'Trend #4: Decentralized Identity', thumbnail: '/trend-analysis-chart.jpg', content: 'Decentralized Identity movement: 8% current awareness/adoption, niche but growing. Maturity: Early stage, regulatory tailwinds building. Timeline: 36-48 months for meaningful adoption. Implications: User data ownership shifting, portable digital identity emerging, new trust models required.' },
+          { id: 6, title: 'Trend Convergence Analysis', thumbnail: '/trend-convergence-diagram.jpg', content: 'Converging trend synthesis: AI + Ambient + Spatial technologies are not independent - they combine to create seamless, personalized, immersive consumer experiences. Example: AI-powered voice assistant (ambient) helps you virtually try on clothes (spatial) with personalized recommendations (AI). Winners will integrate across all three.' },
+          { id: 7, title: 'Business Impact Assessment', thumbnail: '/business-impact-matrix.jpg', content: 'Implications by function: Marketing - AI-generated personalization at scale, new immersive ad formats. Product - Voice and gesture interfaces, spatial features, embedded AI assistants. Operations - AI automation of routine tasks, predictive everything, digital twins for planning.' },
+          { id: 8, title: 'Strategic Recommendations', thumbnail: '/strategic-recommendations.jpg', content: 'Priority actions for 2025: 1) Establish AI governance framework immediately. 2) Begin experimenting with spatial content and commerce. 3) Develop voice interface strategy for key touchpoints. 4) Monitor decentralization signals for strategic timing. 5) Allocate 10-15% of innovation budget to convergence experiments.' }
         ],
+        citations: [
+          { source: 'GWI Tech Consumer Trends 2024', confidence: 96, dataPoints: 62, markets: 38 },
+          { source: 'GWI Zeitgeist - AI Adoption Tracker', confidence: 98, dataPoints: 28, markets: 24 },
+          { source: 'Technology Industry Analysis (150 sources)', confidence: 88, dataPoints: 150, markets: 1 }
+        ],
+        comments: [],
+        versions: [
+          { version: '1.0', date: now.toISOString(), author: 'Trend Synthesizer Agent', changes: 'Initial trend synthesis' }
+        ],
+        activity: [
+          { action: 'Trend analysis completed', user: 'Trend Synthesizer Agent', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'GWI Zeitgeist', 'Tech Industry Sources', 'Patent Filings'],
+        markets: ['Global', 'United States', 'China', 'United Kingdom', 'Germany', 'Japan'],
         metadata: { generatedAt: now.toISOString(), trendsAnalyzed: 28, sourcesReviewed: 150 }
       },
       thumbnail: '/presentation-slides.png',
@@ -3400,23 +3484,31 @@ async function main() {
       content: {
         agent: 'Innovation Validator Agent',
         solutionArea: 'Innovation',
-        sections: [
-          { title: 'Study Overview', purpose: 'Validate 5 smart home concepts with target consumers', methodology: 'Concept testing (n=2,500) + Qualitative deep dives (n=45)' },
-          { title: 'Concept A: AI Home Manager', scores: { desirability: 78, feasibility: 65, viability: 72 }, totalScore: 72, verdict: 'Proceed with refinement', feedback: ['Strong interest in automation', 'Privacy concerns significant', 'Price sensitivity high'] },
-          { title: 'Concept B: Predictive Energy System', scores: { desirability: 82, feasibility: 58, viability: 68 }, totalScore: 69, verdict: 'Technical validation needed', feedback: ['Sustainability appeal strong', 'ROI must be clear', 'Installation concerns'] },
-          { title: 'Concept C: Family Wellness Hub', scores: { desirability: 85, feasibility: 72, viability: 75 }, totalScore: 77, verdict: 'Strong candidate - accelerate', feedback: ['High emotional resonance', 'Trust in health data critical', 'Integration with existing devices wanted'] },
-          { title: 'Concept D: Smart Security Companion', scores: { desirability: 71, feasibility: 80, viability: 70 }, totalScore: 74, verdict: 'Proceed - differentiation needed', feedback: ['Crowded market', 'AI features differentiate', 'Subscription resistance'] },
-          { title: 'Concept E: Elderly Care Monitor', scores: { desirability: 88, feasibility: 68, viability: 62 }, totalScore: 73, verdict: 'Pivot business model', feedback: ['Strongest emotional need', 'B2B2C opportunity', 'Regulatory complexity'] },
-          { title: 'Recommendations', actions: [
-            'Fast-track Concept C (Family Wellness Hub)',
-            'Conduct technical deep-dive on Concept B',
-            'Explore B2B model for Concept E',
-            'Park Concepts A and D for future consideration'
-          ]},
-          { title: 'Next Steps', timeline: ['Week 1-2: Concept C business case', 'Week 3-4: Prototype development', 'Week 5-8: Beta testing'] }
+        slides: [
+          { id: 1, title: 'Executive Summary', thumbnail: '/executive-summary-slide-with-key-metrics.jpg', content: 'Validation study of 5 smart home concepts with 2,545 respondents. Top performer: Family Wellness Hub (score 77/100) - recommend accelerating. Strong runner-up: Smart Security Companion (score 74/100). Concept E (Elderly Care) shows highest emotional need but requires business model pivot to B2B2C.' },
+          { id: 2, title: 'Study Methodology', thumbnail: '/methodology-diagram.jpg', content: 'Research approach: Quantitative concept testing with n=2,500 representative consumers. Qualitative deep dives with n=45 target users. Evaluation framework: Desirability (would they want it), Feasibility (can we build it), Viability (can we profit from it). Each dimension scored 0-100.' },
+          { id: 3, title: 'Concept A: AI Home Manager', thumbnail: '/concept-scorecard.jpg', content: 'AI Home Manager - Total Score: 72/100. Desirability: 78, Feasibility: 65, Viability: 72. Verdict: Proceed with refinement. Key feedback: Strong interest in automation, but significant privacy concerns. Price sensitivity high - must demonstrate clear value. Recommendation: Address privacy prominently, develop ROI calculator.' },
+          { id: 4, title: 'Concept B: Predictive Energy System', thumbnail: '/concept-scorecard.jpg', content: 'Predictive Energy System - Total Score: 69/100. Desirability: 82, Feasibility: 58, Viability: 68. Verdict: Technical validation needed. Key feedback: Sustainability appeal very strong with target audience. ROI must be crystal clear for purchase decision. Installation complexity concerns. Recommendation: Partner with installers, simplify setup.' },
+          { id: 5, title: 'Concept C: Family Wellness Hub', thumbnail: '/concept-scorecard.jpg', content: 'Family Wellness Hub - Total Score: 77/100 (HIGHEST). Desirability: 85, Feasibility: 72, Viability: 75. Verdict: Strong candidate - accelerate. Key feedback: High emotional resonance with parents. Trust in health data handling is critical differentiator. Integration with existing devices strongly desired. Recommendation: Fast-track development.' },
+          { id: 6, title: 'Concept D: Smart Security Companion', thumbnail: '/concept-scorecard.jpg', content: 'Smart Security Companion - Total Score: 74/100. Desirability: 71, Feasibility: 80, Viability: 70. Verdict: Proceed but differentiation needed. Key feedback: Crowded market with established players. AI features are key differentiator from Ring/Nest. Subscription model resistance significant. Recommendation: Lead with AI, consider hardware-only model.' },
+          { id: 7, title: 'Concept E: Elderly Care Monitor', thumbnail: '/concept-scorecard.jpg', content: 'Elderly Care Monitor - Total Score: 73/100. Desirability: 88 (HIGHEST), Feasibility: 68, Viability: 62. Verdict: Pivot business model. Key feedback: Strongest emotional need score across all concepts. Adult children highly motivated buyers. B2B2C opportunity via healthcare providers, senior living facilities. Recommendation: Explore enterprise partnerships.' },
+          { id: 8, title: 'Recommended Actions & Timeline', thumbnail: '/action-plan-timeline.jpg', content: 'Priority actions: 1) Fast-track Concept C (Family Wellness Hub) - begin business case immediately. 2) Conduct technical deep-dive on Concept B energy system feasibility. 3) Explore B2B partnerships for Concept E elderly care. 4) Park Concepts A and D for future consideration. Timeline: Concept C business case (weeks 1-2), prototype (weeks 3-4), beta test (weeks 5-8).' }
         ],
-        pageCount: 48,
-        metadata: { generatedAt: now.toISOString(), conceptsTested: 5, respondents: 2545 }
+        citations: [
+          { source: 'GWI Smart Home Consumer Study 2024', confidence: 97, dataPoints: 48, markets: 8 },
+          { source: 'Custom Concept Testing Survey', confidence: 99, dataPoints: 2545, markets: 3 },
+          { source: 'Qualitative Deep Dive Interviews', confidence: 92, dataPoints: 45, markets: 2 }
+        ],
+        comments: [],
+        versions: [
+          { version: '0.9', date: now.toISOString(), author: 'Innovation Validator Agent', changes: 'Draft for stakeholder review' }
+        ],
+        activity: [
+          { action: 'Validation study completed', user: 'Innovation Validator Agent', timestamp: now.toISOString() }
+        ],
+        dataSources: ['GWI Core', 'Custom Survey', 'Qualitative Research'],
+        markets: ['United States', 'United Kingdom', 'Germany'],
+        metadata: { generatedAt: now.toISOString(), conceptsTested: 5, respondents: 2545, pageCount: 48 }
       },
       thumbnail: '/pdf-report-document.jpg',
       agentId: startupResearchAgent.id,
