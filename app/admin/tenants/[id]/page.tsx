@@ -85,10 +85,7 @@ interface Suspension {
   createdAt: string
   isActive: boolean
   expiresAt: string | null
-  suspendedByAdmin: {
-    name: string
-    email: string
-  } | null
+  suspendedBy: string // Super admin ID
 }
 
 interface HealthScore {
@@ -659,8 +656,8 @@ export default function TenantDetailPage() {
                         <TableCell className="max-w-[200px] truncate">
                           {suspension.reason}
                         </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {suspension.suspendedByAdmin?.name || "Unknown"}
+                        <TableCell className="font-mono text-xs text-muted-foreground">
+                          {suspension.suspendedBy.slice(0, 8)}...
                         </TableCell>
                         <TableCell className="text-muted-foreground">
                           {new Date(suspension.createdAt).toLocaleDateString()}

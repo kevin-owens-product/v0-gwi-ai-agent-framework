@@ -65,8 +65,9 @@ interface Membership {
 
 interface Session {
   id: string
-  createdAt: string
   expires: string
+  ipAddress: string | null
+  userAgent: string | null
 }
 
 interface Ban {
@@ -75,10 +76,7 @@ interface Ban {
   banType: string
   createdAt: string
   expiresAt: string | null
-  bannedByAdmin: {
-    name: string
-    email: string
-  } | null
+  bannedBy: string // Super admin ID
 }
 
 interface AuditLog {
@@ -105,7 +103,7 @@ interface User {
     sessions: number
   }
   stats: {
-    recentSessions: number
+    activeSessions: number
     agentRunsLast30Days: number
   }
   auditLogs: AuditLog[]
@@ -318,11 +316,11 @@ export default function UserDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Recent Logins (30d)</CardTitle>
+                <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{user.stats.recentSessions}</div>
+                <div className="text-2xl font-bold">{user.stats.activeSessions}</div>
               </CardContent>
             </Card>
             <Card>
@@ -492,8 +490,8 @@ export default function UserDetailPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Session ID</TableHead>
-                      <TableHead>Created</TableHead>
                       <TableHead>Expires</TableHead>
+                      <TableHead>IP Address</TableHead>
                       <TableHead>Status</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -506,10 +504,10 @@ export default function UserDetailPage() {
                             {session.id.slice(0, 8)}...
                           </TableCell>
                           <TableCell className="text-muted-foreground">
-                            {new Date(session.createdAt).toLocaleString()}
+                            {new Date(session.expires).toLocaleString()}
                           </TableCell>
                           <TableCell className="text-muted-foreground">
-                            {new Date(session.expires).toLocaleString()}
+                            {session.ipAddress || "Unknown"}
                           </TableCell>
                           <TableCell>
                             <Badge variant={isExpired ? "secondary" : "default"}>
@@ -556,8 +554,8 @@ export default function UserDetailPage() {
                         <TableCell className="max-w-[200px] truncate">
                           {ban.reason}
                         </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {ban.bannedByAdmin?.name || "Unknown"}
+                        <TableCell className="font-mono text-xs text-muted-foreground">
+                          {ban.bannedBy.slice(0, 8)}...
                         </TableCell>
                         <TableCell className="text-muted-foreground">
                           {new Date(ban.createdAt).toLocaleDateString()}
