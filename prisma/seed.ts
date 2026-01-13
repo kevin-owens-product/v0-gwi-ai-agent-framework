@@ -20,10 +20,19 @@ async function main() {
   // Clean existing data (in reverse order of dependencies)
   console.log('🧹 Cleaning existing data...')
 
-  // Clean super admin data
+  // Clean super admin portal data
   await prisma.platformAuditLog.deleteMany()
   await prisma.superAdminSession.deleteMany()
   await prisma.superAdmin.deleteMany()
+  await prisma.featureFlag.deleteMany()
+  await prisma.systemRule.deleteMany()
+  await prisma.ticketResponse.deleteMany()
+  await prisma.supportTicket.deleteMany()
+  await prisma.tenantHealthScore.deleteMany()
+  await prisma.systemNotification.deleteMany()
+  await prisma.systemConfig.deleteMany()
+  await prisma.organizationSuspension.deleteMany()
+  await prisma.userBan.deleteMany()
 
   await prisma.brandTrackingSnapshot.deleteMany()
   await prisma.brandTracking.deleteMany()
@@ -168,6 +177,99 @@ async function main() {
     }
   })
 
+  // Additional users for comprehensive testing
+  const bannedUser = await prisma.user.create({
+    data: {
+      email: 'banned@example.com',
+      name: 'Banned User',
+      passwordHash: defaultPassword,
+      emailVerified: new Date(),
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=banned'
+    }
+  })
+
+  const suspiciousUser = await prisma.user.create({
+    data: {
+      email: 'suspicious@example.com',
+      name: 'Suspicious Account',
+      passwordHash: defaultPassword,
+      emailVerified: null, // Unverified
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=suspicious'
+    }
+  })
+
+  const inactiveUser = await prisma.user.create({
+    data: {
+      email: 'inactive@oldcompany.com',
+      name: 'Inactive User',
+      passwordHash: defaultPassword,
+      emailVerified: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // Verified 1 year ago
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=inactive'
+    }
+  })
+
+  const trialUser = await prisma.user.create({
+    data: {
+      email: 'trial@startup.io',
+      name: 'Trial User',
+      passwordHash: defaultPassword,
+      emailVerified: new Date(),
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=trial'
+    }
+  })
+
+  const enterpriseUser2 = await prisma.user.create({
+    data: {
+      email: 'mike@enterprise.co',
+      name: 'Mike Enterprise',
+      passwordHash: defaultPassword,
+      emailVerified: new Date(),
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=mike'
+    }
+  })
+
+  // ==================== ADDITIONAL ORGANIZATIONS ====================
+  console.log('🏢 Creating additional organizations for testing...')
+
+  const suspendedOrg = await prisma.organization.create({
+    data: {
+      name: 'Suspended Corp',
+      slug: 'suspended-corp',
+      planTier: PlanTier.PROFESSIONAL,
+      settings: {
+        theme: 'light',
+        timezone: 'America/Chicago',
+        features: {}
+      }
+    }
+  })
+
+  const billingIssueOrg = await prisma.organization.create({
+    data: {
+      name: 'Billing Issue Inc',
+      slug: 'billing-issue-inc',
+      planTier: PlanTier.STARTER,
+      settings: {
+        theme: 'dark',
+        timezone: 'America/New_York',
+        features: {}
+      }
+    }
+  })
+
+  const trialOrg = await prisma.organization.create({
+    data: {
+      name: 'Trial Company',
+      slug: 'trial-company',
+      planTier: PlanTier.STARTER,
+      settings: {
+        theme: 'system',
+        timezone: 'Europe/Berlin',
+        features: {}
+      }
+    }
+  })
+
   // ==================== ORGANIZATION MEMBERSHIPS ====================
   console.log('🔗 Creating organization memberships...')
 
@@ -195,6 +297,29 @@ async function main() {
     data: [
       { orgId: enterpriseCo.id, userId: sarahEnterprise.id, role: Role.OWNER },
       { orgId: enterpriseCo.id, userId: demoUser.id, role: Role.VIEWER },
+      { orgId: enterpriseCo.id, userId: enterpriseUser2.id, role: Role.ADMIN },
+    ]
+  })
+
+  // Suspended Corp memberships
+  await prisma.organizationMember.createMany({
+    data: [
+      { orgId: suspendedOrg.id, userId: bannedUser.id, role: Role.OWNER },
+      { orgId: suspendedOrg.id, userId: suspiciousUser.id, role: Role.MEMBER },
+    ]
+  })
+
+  // Billing Issue Inc memberships
+  await prisma.organizationMember.createMany({
+    data: [
+      { orgId: billingIssueOrg.id, userId: inactiveUser.id, role: Role.OWNER },
+    ]
+  })
+
+  // Trial Company memberships
+  await prisma.organizationMember.createMany({
+    data: [
+      { orgId: trialOrg.id, userId: trialUser.id, role: Role.OWNER },
     ]
   })
 
@@ -2735,10 +2860,801 @@ async function main() {
     }
   })
 
+  // ==================== FEATURE FLAGS ====================
+  console.log('🚩 Creating feature flags...')
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'ai_insights_v2',
+      name: 'AI Insights V2',
+      description: 'Next-generation AI-powered insights with deeper analysis capabilities',
+      type: 'BOOLEAN',
+      defaultValue: false,
+      isEnabled: true,
+      rolloutPercentage: 75,
+      allowedPlans: ['PROFESSIONAL', 'ENTERPRISE'],
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'brand_tracking_realtime',
+      name: 'Real-time Brand Tracking',
+      description: 'Enable real-time brand health monitoring and alerts',
+      type: 'BOOLEAN',
+      defaultValue: false,
+      isEnabled: true,
+      rolloutPercentage: 50,
+      allowedPlans: ['ENTERPRISE'],
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'advanced_crosstabs',
+      name: 'Advanced Crosstab Analysis',
+      description: 'Multi-dimensional crosstab analysis with statistical significance testing',
+      type: 'BOOLEAN',
+      defaultValue: false,
+      isEnabled: true,
+      rolloutPercentage: 100,
+      allowedPlans: ['PROFESSIONAL', 'ENTERPRISE'],
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'custom_agents',
+      name: 'Custom Agent Builder',
+      description: 'Allow users to create custom AI agents with specialized prompts',
+      type: 'BOOLEAN',
+      defaultValue: false,
+      isEnabled: false,
+      rolloutPercentage: 0,
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'api_rate_limit',
+      name: 'API Rate Limit',
+      description: 'Requests per minute limit for API access',
+      type: 'NUMBER',
+      defaultValue: 100,
+      isEnabled: true,
+      rolloutPercentage: 100,
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'export_formats',
+      name: 'Export Formats',
+      description: 'Available export formats for reports and data',
+      type: 'JSON',
+      defaultValue: ['pdf', 'csv', 'xlsx'],
+      isEnabled: true,
+      rolloutPercentage: 100,
+    }
+  })
+
+  // ==================== SYSTEM RULES ====================
+  console.log('📋 Creating system rules...')
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'API Rate Limiting',
+      description: 'Enforce API rate limits based on plan tier',
+      type: 'RATE_LIMIT',
+      conditions: {
+        metric: 'api_calls_per_minute',
+        limits: { STARTER: 50, PROFESSIONAL: 200, ENTERPRISE: 1000 }
+      },
+      actions: {
+        type: 'throttle',
+        message: 'Rate limit exceeded. Please wait before making more requests.'
+      },
+      isActive: true,
+      priority: 100,
+      triggerCount: 1247,
+      lastTriggered: new Date(now.getTime() - 5 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Token Usage Alert',
+      description: 'Alert when organization approaches token usage limit',
+      type: 'USAGE',
+      conditions: {
+        metric: 'monthly_token_usage',
+        threshold: 0.8,
+        comparison: 'greater_than_percentage_of_limit'
+      },
+      actions: {
+        type: 'notification',
+        recipients: ['org_admins'],
+        template: 'usage_warning'
+      },
+      isActive: true,
+      priority: 80,
+      triggerCount: 89,
+      lastTriggered: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Auto-Suspend Inactive Trials',
+      description: 'Automatically suspend trial accounts after 14 days of inactivity',
+      type: 'AUTO_SUSPEND',
+      conditions: {
+        accountType: 'trial',
+        inactivityDays: 14,
+        excludeWithPaymentMethod: true
+      },
+      actions: {
+        type: 'suspend',
+        suspensionType: 'PARTIAL',
+        notifyUser: true,
+        template: 'trial_inactive_suspension'
+      },
+      isActive: true,
+      priority: 50,
+      triggerCount: 23,
+      lastTriggered: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Content Policy Enforcement',
+      description: 'Block inappropriate content in AI-generated outputs',
+      type: 'CONTENT_POLICY',
+      conditions: {
+        scanTypes: ['ai_output', 'user_input', 'report_content'],
+        categories: ['hate_speech', 'violence', 'adult_content', 'pii']
+      },
+      actions: {
+        type: 'block_and_log',
+        alertAdmins: true,
+        userMessage: 'Content policy violation detected. This content cannot be processed.'
+      },
+      isActive: true,
+      priority: 200,
+      triggerCount: 7,
+      lastTriggered: new Date(now.getTime() - 72 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Failed Payment Auto-Action',
+      description: 'Handle failed payment attempts and subscription issues',
+      type: 'BILLING',
+      conditions: {
+        event: 'payment_failed',
+        retryCount: 3,
+        daysSinceFailure: 7
+      },
+      actions: {
+        type: 'downgrade',
+        targetPlan: 'STARTER',
+        notifyUser: true,
+        gracePeriodDays: 3
+      },
+      isActive: true,
+      priority: 90,
+      triggerCount: 12,
+      lastTriggered: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  // ==================== SUPPORT TICKETS ====================
+  console.log('🎫 Creating support tickets...')
+
+  const ticket1 = await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00001',
+      orgId: acmeCorp.id,
+      userId: johnDoe.id,
+      subject: 'Cannot export large crosstab to PDF',
+      description: 'When I try to export a crosstab with more than 50 rows to PDF, the export fails with a timeout error. This is blocking our quarterly report delivery.',
+      category: 'TECHNICAL',
+      priority: 'HIGH',
+      status: 'IN_PROGRESS',
+      tags: ['export', 'pdf', 'crosstab', 'performance'],
+      firstResponseAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.ticketResponse.create({
+    data: {
+      ticketId: ticket1.id,
+      responderId: 'support-agent-1',
+      responderType: 'admin',
+      message: 'Thank you for reporting this issue. I\'ve escalated this to our engineering team. As a workaround, you can try exporting in CSV format and converting to PDF using a third-party tool. We\'ll update you once we have a fix.',
+      isInternal: false,
+    }
+  })
+
+  await prisma.ticketResponse.create({
+    data: {
+      ticketId: ticket1.id,
+      responderId: 'support-agent-1',
+      responderType: 'admin',
+      message: 'Engineering confirmed this is a memory issue with large exports. Fix scheduled for next release (v2.4.1).',
+      isInternal: true,
+    }
+  })
+
+  const ticket2 = await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00002',
+      orgId: techStartup.id,
+      userId: bobWilson.id,
+      subject: 'Request for API rate limit increase',
+      description: 'Our team has grown significantly and we\'re hitting our API rate limits during peak hours. We\'d like to request a rate limit increase from 200 to 500 requests per minute.',
+      category: 'FEATURE_REQUEST',
+      priority: 'MEDIUM',
+      status: 'WAITING_ON_INTERNAL',
+      tags: ['api', 'rate-limit', 'upgrade'],
+      firstResponseAt: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.ticketResponse.create({
+    data: {
+      ticketId: ticket2.id,
+      responderId: 'support-agent-2',
+      responderType: 'admin',
+      message: 'I understand your need for higher rate limits. I\'ve forwarded this to our sales team to discuss upgrade options that would better suit your growing needs.',
+      isInternal: false,
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00003',
+      orgId: acmeCorp.id,
+      userId: janeSmith.id,
+      subject: 'Billing discrepancy on last invoice',
+      description: 'Our last invoice shows charges for 15 team seats but we only have 12 active users. Please review and adjust.',
+      category: 'BILLING',
+      priority: 'MEDIUM',
+      status: 'OPEN',
+      tags: ['billing', 'invoice', 'seats'],
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00004',
+      orgId: enterpriseCo.id,
+      userId: sarahEnterprise.id,
+      subject: 'SSO integration not working after domain change',
+      description: 'We recently changed our company domain from old-company.com to enterprise-co.com. Now SSO authentication is failing for all users.',
+      category: 'TECHNICAL',
+      priority: 'URGENT',
+      status: 'IN_PROGRESS',
+      tags: ['sso', 'authentication', 'domain'],
+      firstResponseAt: new Date(now.getTime() - 30 * 60 * 1000),
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00005',
+      orgId: techStartup.id,
+      subject: 'Feature suggestion: Slack integration',
+      description: 'It would be great to have native Slack integration for receiving alerts and sharing insights directly to our team channels.',
+      category: 'FEATURE_REQUEST',
+      priority: 'LOW',
+      status: 'OPEN',
+      tags: ['integration', 'slack', 'notifications'],
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00006',
+      orgId: acmeCorp.id,
+      userId: adminUser.id,
+      subject: 'Security audit request',
+      description: 'Our compliance team needs the latest SOC 2 report and security documentation for our annual vendor review.',
+      category: 'SECURITY',
+      priority: 'MEDIUM',
+      status: 'RESOLVED',
+      tags: ['security', 'compliance', 'soc2'],
+      resolvedAt: new Date(now.getTime() - 48 * 60 * 60 * 1000),
+      firstResponseAt: new Date(now.getTime() - 72 * 60 * 60 * 1000),
+    }
+  })
+
+  // ==================== TENANT HEALTH SCORES ====================
+  console.log('💚 Creating tenant health scores...')
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: acmeCorp.id,
+      overallScore: 87,
+      engagementScore: 92,
+      usageScore: 82,
+      healthIndicators: {
+        dailyActiveUsers: 45,
+        weeklyAgentRuns: 234,
+        featureAdoption: 0.78,
+        supportTickets: 2,
+        nps: 72
+      },
+      riskLevel: 'HEALTHY',
+      churnProbability: 0.05,
+      recommendations: ['Consider upgrading to Enterprise for advanced features', 'Enable brand tracking for competitive insights'],
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: techStartup.id,
+      overallScore: 64,
+      engagementScore: 58,
+      usageScore: 70,
+      healthIndicators: {
+        dailyActiveUsers: 8,
+        weeklyAgentRuns: 45,
+        featureAdoption: 0.45,
+        supportTickets: 3,
+        nps: 45
+      },
+      riskLevel: 'AT_RISK',
+      churnProbability: 0.35,
+      recommendations: ['Schedule customer success call', 'Offer training session on advanced features', 'Consider temporary rate limit increase'],
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: enterpriseCo.id,
+      overallScore: 95,
+      engagementScore: 98,
+      usageScore: 92,
+      healthIndicators: {
+        dailyActiveUsers: 127,
+        weeklyAgentRuns: 1456,
+        featureAdoption: 0.94,
+        supportTickets: 1,
+        nps: 89
+      },
+      riskLevel: 'HEALTHY',
+      churnProbability: 0.02,
+      recommendations: ['Potential case study candidate', 'Consider for beta program'],
+    }
+  })
+
+  // ==================== SYSTEM NOTIFICATIONS ====================
+  console.log('📢 Creating system notifications...')
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'Scheduled Maintenance',
+      message: 'We will be performing scheduled maintenance on Saturday, January 18th from 2:00 AM to 4:00 AM UTC. During this time, the platform may experience brief interruptions.',
+      type: 'MAINTENANCE',
+      targetType: 'ALL',
+      isActive: true,
+      scheduledFor: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000),
+      expiresAt: new Date(now.getTime() + 6 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'New Feature: AI Insights V2',
+      message: 'We\'re excited to announce AI Insights V2 with deeper analysis capabilities, trend predictions, and automated recommendations. Available now for Professional and Enterprise plans!',
+      type: 'FEATURE',
+      targetType: 'SPECIFIC_PLANS',
+      targetPlans: ['PROFESSIONAL', 'ENTERPRISE'],
+      isActive: true,
+    }
+  })
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'API Deprecation Notice',
+      message: 'The v1 API endpoints for audience creation will be deprecated on March 1st, 2025. Please migrate to the v2 API. See documentation for migration guide.',
+      type: 'WARNING',
+      targetType: 'ALL',
+      isActive: true,
+      expiresAt: new Date('2025-03-01'),
+    }
+  })
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'Special Offer: Upgrade to Enterprise',
+      message: 'For a limited time, get 20% off your first year of Enterprise plan. Contact sales to learn more.',
+      type: 'PROMOTION',
+      targetType: 'SPECIFIC_PLANS',
+      targetPlans: ['STARTER', 'PROFESSIONAL'],
+      isActive: true,
+      expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  // ==================== PLATFORM AUDIT LOGS ====================
+  console.log('📝 Creating platform audit logs...')
+
+  const superAdmin = await prisma.superAdmin.findFirst({ where: { email: 'superadmin@gwi.com' } })
+  const platformAdmin = await prisma.superAdmin.findFirst({ where: { email: 'admin@gwi.com' } })
+
+  if (superAdmin && platformAdmin) {
+    await prisma.platformAuditLog.createMany({
+      data: [
+        {
+          adminId: superAdmin.id,
+          action: 'login',
+          resourceType: 'super_admin',
+          resourceId: superAdmin.id,
+          details: { email: 'superadmin@gwi.com' },
+          ipAddress: '192.168.1.100',
+          userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
+          timestamp: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'update_feature_flag',
+          resourceType: 'feature_flag',
+          resourceId: 'ai_insights_v2',
+          details: { field: 'rolloutPercentage', oldValue: 50, newValue: 75 },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+        },
+        {
+          adminId: superAdmin.id,
+          action: 'view_tenant',
+          resourceType: 'organization',
+          targetOrgId: acmeCorp.id,
+          details: { reason: 'Support escalation review' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'respond_ticket',
+          resourceType: 'support_ticket',
+          resourceId: ticket1.id,
+          details: { ticketNumber: 'TKT-202501-00001' },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+        },
+        {
+          adminId: superAdmin.id,
+          action: 'create_system_rule',
+          resourceType: 'system_rule',
+          details: { ruleName: 'API Rate Limiting' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'calculate_health_score',
+          resourceType: 'tenant_health',
+          targetOrgId: techStartup.id,
+          details: { score: 64, riskLevel: 'AT_RISK' },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 48 * 60 * 60 * 1000),
+        },
+        {
+          action: 'login_failed',
+          resourceType: 'super_admin',
+          details: { email: 'unknown@hacker.com', reason: 'invalid_credentials' },
+          ipAddress: '45.33.32.156',
+          userAgent: 'curl/7.64.1',
+          timestamp: new Date(now.getTime() - 72 * 60 * 60 * 1000),
+        },
+        {
+          adminId: superAdmin.id,
+          action: 'create_notification',
+          resourceType: 'system_notification',
+          details: { title: 'Scheduled Maintenance', type: 'MAINTENANCE' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 96 * 60 * 60 * 1000),
+        },
+      ]
+    })
+  }
+
+  // ==================== SYSTEM CONFIG ====================
+  console.log('⚙️ Creating system configuration...')
+
+  await prisma.systemConfig.createMany({
+    data: [
+      {
+        key: 'platform.maintenance_mode',
+        value: false,
+        description: 'Enable maintenance mode to block all user access',
+        category: 'platform',
+        isPublic: true,
+      },
+      {
+        key: 'platform.signup_enabled',
+        value: true,
+        description: 'Allow new user registrations',
+        category: 'platform',
+        isPublic: true,
+      },
+      {
+        key: 'ai.default_model',
+        value: 'claude-3-sonnet',
+        description: 'Default AI model for agent operations',
+        category: 'ai',
+        isPublic: false,
+      },
+      {
+        key: 'ai.max_tokens_per_request',
+        value: 4096,
+        description: 'Maximum tokens per AI request',
+        category: 'ai',
+        isPublic: false,
+      },
+      {
+        key: 'billing.trial_days',
+        value: 14,
+        description: 'Number of days for free trial',
+        category: 'billing',
+        isPublic: true,
+      },
+      {
+        key: 'billing.grace_period_days',
+        value: 7,
+        description: 'Grace period after payment failure',
+        category: 'billing',
+        isPublic: false,
+      },
+      {
+        key: 'security.max_login_attempts',
+        value: 5,
+        description: 'Max failed login attempts before lockout',
+        category: 'security',
+        isPublic: false,
+      },
+      {
+        key: 'security.session_timeout_hours',
+        value: 24,
+        description: 'Session timeout in hours',
+        category: 'security',
+        isPublic: false,
+      },
+    ]
+  })
+
+  // ==================== USER BANS ====================
+  console.log('🚫 Creating user bans...')
+
+  if (superAdmin && platformAdmin) {
+    // Platform-wide permanent ban
+    await prisma.userBan.create({
+      data: {
+        userId: bannedUser.id,
+        orgId: null, // Platform-wide ban
+        reason: 'Multiple violations of terms of service including sharing credentials and automated scraping.',
+        bannedBy: superAdmin.id,
+        banType: 'PERMANENT',
+        expiresAt: null,
+        appealStatus: 'REJECTED',
+        appealNotes: 'Appeal denied on 2025-01-05. User showed no willingness to comply with ToS.',
+        metadata: {
+          previousWarnings: 3,
+          incidentIds: ['INC-2024-001', 'INC-2024-012', 'INC-2025-003'],
+          ipAddresses: ['45.33.32.156', '192.168.1.200']
+        }
+      }
+    })
+
+    // Temporary ban with pending appeal
+    await prisma.userBan.create({
+      data: {
+        userId: suspiciousUser.id,
+        orgId: null,
+        reason: 'Suspicious activity detected - unusual API request patterns suggesting automated usage.',
+        bannedBy: platformAdmin.id,
+        banType: 'TEMPORARY',
+        expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+        appealStatus: 'PENDING',
+        appealNotes: 'User claims their API integration had a bug. Under review.',
+        metadata: {
+          detectedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          requestsPerMinute: 500,
+          normalRate: 50
+        }
+      }
+    })
+
+    // Shadow ban for spam behavior
+    await prisma.userBan.create({
+      data: {
+        userId: inactiveUser.id,
+        orgId: billingIssueOrg.id, // Org-specific ban
+        reason: 'Account flagged for promotional spam in shared workspaces.',
+        bannedBy: platformAdmin.id,
+        banType: 'SHADOW',
+        expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        appealStatus: 'NONE',
+        metadata: {
+          spamCount: 15,
+          affectedWorkspaces: ['marketing-insights', 'q4-planning']
+        }
+      }
+    })
+  }
+
+  // ==================== ORGANIZATION SUSPENSIONS ====================
+  console.log('⛔ Creating organization suspensions...')
+
+  if (superAdmin && platformAdmin) {
+    // Full suspension for ToS violation
+    await prisma.organizationSuspension.create({
+      data: {
+        orgId: suspendedOrg.id,
+        reason: 'Severe terms of service violation: Automated data harvesting detected across multiple endpoints.',
+        suspendedBy: superAdmin.id,
+        suspensionType: 'FULL',
+        expiresAt: null, // Indefinite
+        isActive: true,
+        notes: 'Owner contacted via email on 2025-01-10. No response. Legal review pending.'
+      }
+    })
+
+    // Billing hold suspension
+    await prisma.organizationSuspension.create({
+      data: {
+        orgId: billingIssueOrg.id,
+        reason: 'Failed payment after 3 retry attempts. Invoice #INV-2025-0042 overdue by 14 days.',
+        suspendedBy: platformAdmin.id,
+        suspensionType: 'BILLING_HOLD',
+        expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000), // Grace period
+        isActive: true,
+        notes: 'Customer support ticket TKT-202501-00010 opened. Awaiting updated payment method.'
+      }
+    })
+
+    // Investigation suspension (not active - was resolved)
+    await prisma.organizationSuspension.create({
+      data: {
+        orgId: techStartup.id,
+        reason: 'Security incident reported - potential unauthorized access to admin credentials.',
+        suspendedBy: superAdmin.id,
+        suspensionType: 'INVESTIGATION',
+        expiresAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000), // Expired 5 days ago
+        isActive: false,
+        notes: 'Investigation concluded: False alarm. User forgot their password and triggered security alerts. Suspension lifted on 2025-01-08.'
+      }
+    })
+
+    // Add more audit logs for bans and suspensions
+    await prisma.platformAuditLog.createMany({
+      data: [
+        {
+          adminId: superAdmin.id,
+          action: 'ban_user',
+          resourceType: 'user',
+          targetUserId: bannedUser.id,
+          details: { banType: 'PERMANENT', reason: 'Multiple ToS violations' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'ban_user',
+          resourceType: 'user',
+          targetUserId: suspiciousUser.id,
+          details: { banType: 'TEMPORARY', reason: 'Suspicious activity' },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: superAdmin.id,
+          action: 'suspend_org',
+          resourceType: 'organization',
+          targetOrgId: suspendedOrg.id,
+          details: { suspensionType: 'FULL', reason: 'ToS violation' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'suspend_org',
+          resourceType: 'organization',
+          targetOrgId: billingIssueOrg.id,
+          details: { suspensionType: 'BILLING_HOLD', reason: 'Failed payment' },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: superAdmin.id,
+          action: 'lift_suspension',
+          resourceType: 'organization',
+          targetOrgId: techStartup.id,
+          details: { previousType: 'INVESTIGATION', reason: 'Investigation completed - false alarm' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'impersonate_user',
+          resourceType: 'user',
+          targetUserId: trialUser.id,
+          details: { reason: 'Customer support - helping with onboarding' },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        },
+      ]
+    })
+  }
+
+  // ==================== ADDITIONAL TENANT HEALTH SCORES ====================
+  console.log('💚 Creating additional tenant health scores...')
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: suspendedOrg.id,
+      overallScore: 12,
+      engagementScore: 5,
+      usageScore: 19,
+      healthIndicators: {
+        dailyActiveUsers: 0,
+        weeklyAgentRuns: 0,
+        featureAdoption: 0.1,
+        supportTickets: 5,
+        nps: -50
+      },
+      riskLevel: 'CRITICAL',
+      churnProbability: 0.95,
+      recommendations: ['Account suspended - resolve ToS violation', 'Legal review required'],
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: billingIssueOrg.id,
+      overallScore: 35,
+      engagementScore: 28,
+      usageScore: 42,
+      healthIndicators: {
+        dailyActiveUsers: 2,
+        weeklyAgentRuns: 12,
+        featureAdoption: 0.25,
+        supportTickets: 2,
+        nps: 20
+      },
+      riskLevel: 'CRITICAL',
+      churnProbability: 0.72,
+      recommendations: ['Resolve billing issue immediately', 'Offer payment plan option', 'Customer success outreach required'],
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: trialOrg.id,
+      overallScore: 58,
+      engagementScore: 65,
+      usageScore: 51,
+      healthIndicators: {
+        dailyActiveUsers: 3,
+        weeklyAgentRuns: 28,
+        featureAdoption: 0.52,
+        supportTickets: 1,
+        nps: 55
+      },
+      riskLevel: 'AT_RISK',
+      churnProbability: 0.45,
+      recommendations: ['Trial ending soon - send conversion offer', 'Schedule demo of premium features', 'Assign customer success manager'],
+    }
+  })
+
   console.log('\n📊 Summary:')
-  console.log('   Organizations: 3')
-  console.log('   Users: 7')
-  console.log('   Organization Memberships: 10')
+  console.log('   Organizations: 6')
+  console.log('   Users: 12')
+  console.log('   Organization Memberships: 16')
   console.log('   Agents: 7')
   console.log('   Agent Runs: 15+')
   console.log('   Data Sources: 7')
@@ -2756,7 +3672,19 @@ async function main() {
   console.log('   SSO Configurations: 1')
   console.log('   Brand Trackings: 8 (Nike, Spotify, Tesla, Patagonia, Oatly, Airbnb, Peloton, Notion)')
   console.log('   Brand Tracking Snapshots: 378+ (52+45+78+36+28+42+65+32 weekly snapshots)')
+  console.log('')
+  console.log('   === Admin Portal Data ===')
   console.log('   Super Admins: 5')
+  console.log('   Feature Flags: 6')
+  console.log('   System Rules: 5')
+  console.log('   Support Tickets: 6')
+  console.log('   Ticket Responses: 4')
+  console.log('   Tenant Health Scores: 6')
+  console.log('   System Notifications: 4')
+  console.log('   Platform Audit Logs: 14')
+  console.log('   System Config: 8')
+  console.log('   User Bans: 3')
+  console.log('   Organization Suspensions: 3')
 
   console.log('\n🔑 Test Credentials:')
   console.log('')

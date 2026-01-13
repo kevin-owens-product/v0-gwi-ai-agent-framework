@@ -30,37 +30,40 @@ function formatRelativeTime(date: Date): string {
   return date.toLocaleDateString()
 }
 
-// Demo reports shown when API returns empty or errors
-const demoReports: Report[] = [
-  {
-    id: "1",
-    title: "Q4 2024 Consumer Trends Report",
-    status: "published",
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    type: "trends",
-  },
-  {
-    id: "2",
-    title: "Gen Z Brand Perception Analysis",
-    status: "published",
-    createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
-    type: "analysis",
-  },
-  {
-    id: "3",
-    title: "Competitive Landscape Overview",
-    status: "generating",
-    createdAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-    type: "competitive",
-  },
-  {
-    id: "4",
-    title: "Market Expansion Feasibility Study",
-    status: "draft",
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-    type: "research",
-  },
-]
+// Generate demo reports with relative timestamps (called after mount to avoid hydration mismatch)
+function getDemoReports(): Report[] {
+  const now = Date.now()
+  return [
+    {
+      id: "1",
+      title: "Q4 2024 Consumer Trends Report",
+      status: "published",
+      createdAt: new Date(now - 2 * 60 * 60 * 1000).toISOString(),
+      type: "trends",
+    },
+    {
+      id: "2",
+      title: "Gen Z Brand Perception Analysis",
+      status: "published",
+      createdAt: new Date(now - 8 * 60 * 60 * 1000).toISOString(),
+      type: "analysis",
+    },
+    {
+      id: "3",
+      title: "Competitive Landscape Overview",
+      status: "generating",
+      createdAt: new Date(now - 30 * 60 * 1000).toISOString(),
+      type: "competitive",
+    },
+    {
+      id: "4",
+      title: "Market Expansion Feasibility Study",
+      status: "draft",
+      createdAt: new Date(now - 24 * 60 * 60 * 1000).toISOString(),
+      type: "research",
+    },
+  ]
+}
 
 const statusStyles = {
   published: { badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20", icon: Eye },
@@ -77,14 +80,14 @@ export function RecentReports() {
       try {
         const response = await fetch("/api/v1/reports?limit=4")
         if (!response.ok) {
-          setReports(demoReports)
+          setReports(getDemoReports())
           return
         }
         const data = await response.json()
         const fetchedReports = data.reports || data.data || []
 
         if (fetchedReports.length === 0) {
-          setReports(demoReports)
+          setReports(getDemoReports())
         } else {
           const transformedReports: Report[] = fetchedReports.slice(0, 4).map((r: any) => ({
             id: r.id,
@@ -97,7 +100,7 @@ export function RecentReports() {
           setReports(transformedReports)
         }
       } catch (err) {
-        setReports(demoReports)
+        setReports(getDemoReports())
       } finally {
         setIsLoading(false)
       }

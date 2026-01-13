@@ -165,32 +165,36 @@ const solutionColorMap: Record<string, string> = {
   innovation: "text-amber-500",
 }
 
-const sessionHistory = [
-  {
-    id: "1",
-    name: "Gen Z Sustainability Analysis",
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    agent: "audience-explorer",
-  },
-  {
-    id: "2",
-    name: "US vs UK Market Comparison",
-    timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
-    agent: "global-perspective",
-  },
-  {
-    id: "3",
-    name: "Brand Perception Deep Dive",
-    timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    agent: "brand-analyst",
-  },
-  {
-    id: "4",
-    name: "Q1 Trend Forecast",
-    timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-    agent: "culture-tracker",
-  },
-]
+// Generate session history with relative timestamps (called lazily to avoid hydration mismatch)
+function getSessionHistory() {
+  const now = Date.now()
+  return [
+    {
+      id: "1",
+      name: "Gen Z Sustainability Analysis",
+      timestamp: new Date(now - 2 * 60 * 60 * 1000),
+      agent: "audience-explorer",
+    },
+    {
+      id: "2",
+      name: "US vs UK Market Comparison",
+      timestamp: new Date(now - 24 * 60 * 60 * 1000),
+      agent: "global-perspective",
+    },
+    {
+      id: "3",
+      name: "Brand Perception Deep Dive",
+      timestamp: new Date(now - 2 * 24 * 60 * 60 * 1000),
+      agent: "brand-analyst",
+    },
+    {
+      id: "4",
+      name: "Q1 Trend Forecast",
+      timestamp: new Date(now - 3 * 24 * 60 * 60 * 1000),
+      agent: "culture-tracker",
+    },
+  ]
+}
 
 // Expandable Solution Area Component
 function SolutionAreaSection({
@@ -261,7 +265,7 @@ function SolutionAreaSection({
 export function PlaygroundSidebar() {
   const { config, setConfig, setMessages, resetChat: _resetChat, customAgent, setCustomAgent } = usePlayground()
   const [collapsed, setCollapsed] = useState(false)
-  const [sessions, setSessions] = useState(sessionHistory)
+  const [sessions, setSessions] = useState(() => getSessionHistory())
   const [installedStoreAgents, setInstalledStoreAgents] = useState<StoreAgent[]>([])
 
   // Load installed agents on mount and listen for changes

@@ -31,41 +31,44 @@ function formatRelativeTime(date: Date): string {
   return date.toLocaleDateString()
 }
 
-// Demo projects shown when API returns empty or errors
-const demoProjects: Project[] = [
-  {
-    id: "gen-z-sustainability",
-    name: "Gen Z Sustainability",
-    status: "active",
-    progress: 68,
-    color: "bg-emerald-500",
-    lastUpdated: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: "q4-campaign",
-    name: "Q4 Campaign",
-    status: "active",
-    progress: 45,
-    color: "bg-blue-500",
-    lastUpdated: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: "market-expansion",
-    name: "Market Expansion",
-    status: "on_hold",
-    progress: 25,
-    color: "bg-amber-500",
-    lastUpdated: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: "brand-refresh",
-    name: "Brand Refresh 2024",
-    status: "completed",
-    progress: 100,
-    color: "bg-violet-500",
-    lastUpdated: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
-  },
-]
+// Generate demo projects with relative timestamps (called after mount to avoid hydration mismatch)
+function getDemoProjects(): Project[] {
+  const now = Date.now()
+  return [
+    {
+      id: "gen-z-sustainability",
+      name: "Gen Z Sustainability",
+      status: "active",
+      progress: 68,
+      color: "bg-emerald-500",
+      lastUpdated: new Date(now - 1 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "q4-campaign",
+      name: "Q4 Campaign",
+      status: "active",
+      progress: 45,
+      color: "bg-blue-500",
+      lastUpdated: new Date(now - 3 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "market-expansion",
+      name: "Market Expansion",
+      status: "on_hold",
+      progress: 25,
+      color: "bg-amber-500",
+      lastUpdated: new Date(now - 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "brand-refresh",
+      name: "Brand Refresh 2024",
+      status: "completed",
+      progress: 100,
+      color: "bg-violet-500",
+      lastUpdated: new Date(now - 48 * 60 * 60 * 1000).toISOString(),
+    },
+  ]
+}
 
 const statusConfig = {
   active: { icon: Clock, color: "text-blue-400", bg: "bg-blue-500/10", label: "Active" },
@@ -82,14 +85,14 @@ export function ProjectsOverview() {
       try {
         const response = await fetch("/api/v1/projects?limit=4")
         if (!response.ok) {
-          setProjects(demoProjects)
+          setProjects(getDemoProjects())
           return
         }
         const data = await response.json()
         const fetchedProjects = data.projects || data.data || []
 
         if (fetchedProjects.length === 0) {
-          setProjects(demoProjects)
+          setProjects(getDemoProjects())
         } else {
           const colors = ["bg-emerald-500", "bg-blue-500", "bg-amber-500", "bg-violet-500", "bg-rose-500"]
           const transformedProjects: Project[] = fetchedProjects.slice(0, 4).map((p: any, i: number) => ({
@@ -104,7 +107,7 @@ export function ProjectsOverview() {
           setProjects(transformedProjects)
         }
       } catch (err) {
-        setProjects(demoProjects)
+        setProjects(getDemoProjects())
       } finally {
         setIsLoading(false)
       }
