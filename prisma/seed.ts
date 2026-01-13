@@ -2938,6 +2938,107 @@ async function main() {
     }
   })
 
+  await prisma.featureFlag.create({
+    data: {
+      key: 'dark_mode',
+      name: 'Dark Mode Theme',
+      description: 'Enable dark mode UI theme for all users',
+      type: 'BOOLEAN',
+      defaultValue: true,
+      isEnabled: true,
+      rolloutPercentage: 100,
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'multi_language_support',
+      name: 'Multi-Language Support',
+      description: 'Enable support for multiple languages in reports and UI',
+      type: 'JSON',
+      defaultValue: ['en', 'es', 'fr', 'de'],
+      isEnabled: true,
+      rolloutPercentage: 80,
+      allowedPlans: ['PROFESSIONAL', 'ENTERPRISE'],
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'advanced_permissions',
+      name: 'Advanced Permission System',
+      description: 'Granular role-based access control with custom permissions',
+      type: 'BOOLEAN',
+      defaultValue: false,
+      isEnabled: true,
+      rolloutPercentage: 60,
+      allowedPlans: ['ENTERPRISE'],
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'webhook_notifications',
+      name: 'Webhook Notifications',
+      description: 'Send real-time webhook notifications for events',
+      type: 'BOOLEAN',
+      defaultValue: false,
+      isEnabled: true,
+      rolloutPercentage: 90,
+      allowedPlans: ['PROFESSIONAL', 'ENTERPRISE'],
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'data_retention_days',
+      name: 'Data Retention Period',
+      description: 'Number of days to retain historical data',
+      type: 'NUMBER',
+      defaultValue: 365,
+      isEnabled: true,
+      rolloutPercentage: 100,
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'ai_model_selection',
+      name: 'AI Model Selection',
+      description: 'Allow users to select different AI models for analysis',
+      type: 'JSON',
+      defaultValue: { default: 'gpt-4', available: ['gpt-4', 'gpt-3.5-turbo', 'claude-3'] },
+      isEnabled: false,
+      rolloutPercentage: 0,
+      allowedPlans: ['ENTERPRISE'],
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'scheduled_reports',
+      name: 'Scheduled Reports',
+      description: 'Enable automatic scheduled report generation and delivery',
+      type: 'BOOLEAN',
+      defaultValue: false,
+      isEnabled: true,
+      rolloutPercentage: 75,
+      allowedPlans: ['PROFESSIONAL', 'ENTERPRISE'],
+    }
+  })
+
+  await prisma.featureFlag.create({
+    data: {
+      key: 'bulk_data_import',
+      name: 'Bulk Data Import',
+      description: 'Allow importing large datasets in bulk via CSV/Excel',
+      type: 'BOOLEAN',
+      defaultValue: true,
+      isEnabled: true,
+      rolloutPercentage: 100,
+    }
+  })
+
   // ==================== SYSTEM RULES ====================
   console.log('📋 Creating system rules...')
 
@@ -3047,6 +3148,165 @@ async function main() {
       priority: 90,
       triggerCount: 12,
       lastTriggered: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'GDPR Data Deletion',
+      description: 'Automatically process GDPR data deletion requests',
+      type: 'COMPLIANCE',
+      conditions: {
+        requestType: 'gdpr_deletion',
+        verificationRequired: true,
+        cooldownPeriod: 30
+      },
+      actions: {
+        type: 'schedule_deletion',
+        notifyUser: true,
+        notifyDPO: true,
+        retentionExemptions: ['legal_hold', 'audit_logs']
+      },
+      isActive: true,
+      priority: 150,
+      triggerCount: 34,
+      lastTriggered: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Suspicious Login Detection',
+      description: 'Detect and block suspicious login attempts',
+      type: 'SECURITY',
+      conditions: {
+        triggers: ['new_device', 'unusual_location', 'multiple_failed_attempts'],
+        failedAttemptThreshold: 5,
+        locationChangeRadius: 500
+      },
+      actions: {
+        type: 'require_verification',
+        methods: ['email', 'sms'],
+        lockoutDuration: 30,
+        notifyUser: true
+      },
+      isActive: true,
+      priority: 250,
+      triggerCount: 156,
+      lastTriggered: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Storage Quota Enforcement',
+      description: 'Enforce storage quotas based on plan tier',
+      type: 'USAGE',
+      conditions: {
+        metric: 'storage_used_gb',
+        limits: { STARTER: 10, PROFESSIONAL: 100, ENTERPRISE: 1000 },
+        warningThreshold: 0.8
+      },
+      actions: {
+        type: 'block_uploads',
+        notifyUser: true,
+        template: 'storage_limit_warning'
+      },
+      isActive: true,
+      priority: 70,
+      triggerCount: 45,
+      lastTriggered: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Scheduled Maintenance Notification',
+      description: 'Send notifications before scheduled maintenance windows',
+      type: 'NOTIFICATION',
+      conditions: {
+        eventType: 'scheduled_maintenance',
+        advanceNoticeDays: [7, 1, 0],
+        affectedServices: ['all']
+      },
+      actions: {
+        type: 'send_notification',
+        channels: ['email', 'in_app', 'webhook'],
+        template: 'maintenance_notice'
+      },
+      isActive: true,
+      priority: 40,
+      triggerCount: 8,
+      lastTriggered: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'API Abuse Detection',
+      description: 'Detect and prevent API abuse patterns',
+      type: 'SECURITY',
+      conditions: {
+        patterns: ['rapid_enumeration', 'credential_stuffing', 'scraping'],
+        detectionWindow: 300,
+        sensitivityLevel: 'high'
+      },
+      actions: {
+        type: 'temporary_ban',
+        duration: 3600,
+        alertSecurityTeam: true,
+        logDetails: true
+      },
+      isActive: true,
+      priority: 300,
+      triggerCount: 23,
+      lastTriggered: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Trial Expiration Handler',
+      description: 'Handle trial account expirations and conversions',
+      type: 'BILLING',
+      conditions: {
+        accountType: 'trial',
+        daysBeforeExpiration: [7, 3, 1, 0],
+        hasPaymentMethod: false
+      },
+      actions: {
+        type: 'send_reminder',
+        template: 'trial_expiring',
+        offerDiscount: true,
+        discountPercent: 20
+      },
+      isActive: true,
+      priority: 60,
+      triggerCount: 89,
+      lastTriggered: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemRule.create({
+    data: {
+      name: 'Data Export Compliance',
+      description: 'Ensure data exports comply with regional regulations',
+      type: 'COMPLIANCE',
+      conditions: {
+        exportTypes: ['bulk_export', 'report_download', 'api_export'],
+        regions: ['EU', 'CA', 'BR'],
+        dataTypes: ['pii', 'financial', 'health']
+      },
+      actions: {
+        type: 'add_audit_trail',
+        requireApproval: true,
+        encryptExport: true,
+        notifyDPO: true
+      },
+      isActive: true,
+      priority: 180,
+      triggerCount: 67,
+      lastTriggered: new Date(now.getTime() - 4 * 60 * 60 * 1000),
     }
   })
 
@@ -3171,6 +3431,124 @@ async function main() {
     }
   })
 
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00007',
+      orgId: enterpriseCo.id,
+      userId: sarahEnterprise.id,
+      subject: 'Need custom report template',
+      description: 'We need a custom branded report template that matches our corporate design guidelines. Can you help us set this up?',
+      category: 'FEATURE_REQUEST',
+      priority: 'LOW',
+      status: 'WAITING_ON_CUSTOMER',
+      tags: ['branding', 'reports', 'customization'],
+      firstResponseAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00008',
+      orgId: techStartup.id,
+      userId: bobWilson.id,
+      subject: 'Data import failed with timeout',
+      description: 'Trying to import a 50MB CSV file but keep getting timeout errors after about 2 minutes. The file has approximately 500,000 rows of survey data.',
+      category: 'BUG_REPORT',
+      priority: 'HIGH',
+      status: 'IN_PROGRESS',
+      tags: ['import', 'csv', 'performance', 'timeout'],
+      firstResponseAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00009',
+      orgId: acmeCorp.id,
+      userId: janeSmith.id,
+      subject: 'AI agent producing inconsistent results',
+      description: 'The sentiment analysis agent is giving different results for the same text input when run multiple times. Expected deterministic output.',
+      category: 'BUG_REPORT',
+      priority: 'MEDIUM',
+      status: 'OPEN',
+      tags: ['ai', 'agent', 'sentiment', 'consistency'],
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00010',
+      orgId: enterpriseCo.id,
+      subject: 'Request for dedicated account manager',
+      description: 'As we scale our usage, we would like to have a dedicated account manager assigned to our organization for better support coordination.',
+      category: 'ACCOUNT',
+      priority: 'MEDIUM',
+      status: 'RESOLVED',
+      tags: ['account', 'support', 'enterprise'],
+      resolvedAt: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+      firstResponseAt: new Date(now.getTime() - 48 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00011',
+      orgId: suspendedOrg.id,
+      subject: 'Appeal account suspension',
+      description: 'Our account was suspended due to alleged ToS violation. We believe this was a mistake and would like to appeal this decision.',
+      category: 'ACCOUNT',
+      priority: 'URGENT',
+      status: 'WAITING_ON_INTERNAL',
+      tags: ['suspension', 'appeal', 'tos'],
+      firstResponseAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00012',
+      orgId: billingIssueOrg.id,
+      subject: 'Payment method update not working',
+      description: 'I am trying to update our credit card information but the form keeps showing an error. We need to resolve this before our subscription lapses.',
+      category: 'BILLING',
+      priority: 'HIGH',
+      status: 'IN_PROGRESS',
+      tags: ['payment', 'credit-card', 'billing'],
+      firstResponseAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00013',
+      orgId: trialOrg.id,
+      subject: 'Questions about enterprise features',
+      description: 'We are evaluating your platform for our organization. Can you provide more details about SSO integration and audit logging capabilities?',
+      category: 'OTHER',
+      priority: 'LOW',
+      status: 'RESOLVED',
+      tags: ['trial', 'evaluation', 'enterprise', 'sso'],
+      resolvedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+      firstResponseAt: new Date(now.getTime() - 18 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.supportTicket.create({
+    data: {
+      ticketNumber: 'TKT-202501-00014',
+      orgId: acmeCorp.id,
+      userId: johnDoe.id,
+      subject: 'Dashboard widget not loading',
+      description: 'The brand health widget on our main dashboard shows a spinning loader indefinitely. Other widgets work fine. Started happening after the latest update.',
+      category: 'BUG_REPORT',
+      priority: 'MEDIUM',
+      status: 'CLOSED',
+      tags: ['dashboard', 'widget', 'ui', 'bug'],
+      resolvedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+      firstResponseAt: new Date(now.getTime() - 10 * 60 * 60 * 1000),
+    }
+  })
+
   // ==================== TENANT HEALTH SCORES ====================
   console.log('💚 Creating tenant health scores...')
 
@@ -3228,6 +3606,128 @@ async function main() {
       riskLevel: 'HEALTHY',
       churnProbability: 0.02,
       recommendations: ['Potential case study candidate', 'Consider for beta program'],
+    }
+  })
+
+  // Historical health scores (30 days ago)
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: acmeCorp.id,
+      overallScore: 82,
+      engagementScore: 85,
+      usageScore: 79,
+      healthIndicators: {
+        dailyActiveUsers: 38,
+        weeklyAgentRuns: 198,
+        featureAdoption: 0.72,
+        supportTickets: 4,
+        nps: 68
+      },
+      riskLevel: 'HEALTHY',
+      churnProbability: 0.08,
+      recommendations: ['Improve feature adoption', 'Address support ticket backlog'],
+      calculatedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: techStartup.id,
+      overallScore: 71,
+      engagementScore: 68,
+      usageScore: 74,
+      healthIndicators: {
+        dailyActiveUsers: 11,
+        weeklyAgentRuns: 62,
+        featureAdoption: 0.51,
+        supportTickets: 1,
+        nps: 52
+      },
+      riskLevel: 'AT_RISK',
+      churnProbability: 0.28,
+      recommendations: ['Monitor closely for engagement drop', 'Consider proactive outreach'],
+      calculatedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: enterpriseCo.id,
+      overallScore: 93,
+      engagementScore: 96,
+      usageScore: 90,
+      healthIndicators: {
+        dailyActiveUsers: 119,
+        weeklyAgentRuns: 1320,
+        featureAdoption: 0.91,
+        supportTickets: 2,
+        nps: 86
+      },
+      riskLevel: 'HEALTHY',
+      churnProbability: 0.03,
+      recommendations: ['Strong account - consider upsell opportunities'],
+      calculatedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  // Historical health scores (60 days ago)
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: acmeCorp.id,
+      overallScore: 78,
+      engagementScore: 80,
+      usageScore: 76,
+      healthIndicators: {
+        dailyActiveUsers: 32,
+        weeklyAgentRuns: 156,
+        featureAdoption: 0.65,
+        supportTickets: 3,
+        nps: 62
+      },
+      riskLevel: 'HEALTHY',
+      churnProbability: 0.12,
+      recommendations: ['Onboarding follow-up needed', 'Schedule training session'],
+      calculatedAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: techStartup.id,
+      overallScore: 55,
+      engagementScore: 48,
+      usageScore: 62,
+      healthIndicators: {
+        dailyActiveUsers: 5,
+        weeklyAgentRuns: 28,
+        featureAdoption: 0.35,
+        supportTickets: 5,
+        nps: 38
+      },
+      riskLevel: 'CRITICAL',
+      churnProbability: 0.52,
+      recommendations: ['Urgent intervention needed', 'Escalate to customer success manager', 'Offer extended trial'],
+      calculatedAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: enterpriseCo.id,
+      overallScore: 91,
+      engagementScore: 94,
+      usageScore: 88,
+      healthIndicators: {
+        dailyActiveUsers: 108,
+        weeklyAgentRuns: 1180,
+        featureAdoption: 0.88,
+        supportTickets: 0,
+        nps: 84
+      },
+      riskLevel: 'HEALTHY',
+      churnProbability: 0.04,
+      recommendations: ['Account growing steadily', 'Good candidate for reference customer'],
+      calculatedAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
     }
   })
 
@@ -3675,11 +4175,11 @@ async function main() {
   console.log('')
   console.log('   === Admin Portal Data ===')
   console.log('   Super Admins: 5')
-  console.log('   Feature Flags: 6')
-  console.log('   System Rules: 5')
-  console.log('   Support Tickets: 6')
+  console.log('   Feature Flags: 14')
+  console.log('   System Rules: 12')
+  console.log('   Support Tickets: 14')
   console.log('   Ticket Responses: 4')
-  console.log('   Tenant Health Scores: 6')
+  console.log('   Tenant Health Scores: 12')
   console.log('   System Notifications: 4')
   console.log('   Platform Audit Logs: 14')
   console.log('   System Config: 8')
