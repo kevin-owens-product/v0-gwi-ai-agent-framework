@@ -10,7 +10,9 @@ async function safeDeleteMany(deleteOperation: () => Promise<unknown>): Promise<
     await deleteOperation()
   } catch (error: unknown) {
     // Ignore P2021 error: "The table does not exist in the current database"
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2021') {
+    // Use explicit type casting to handle Prisma error structure
+    const prismaError = error as { code?: string }
+    if (prismaError?.code === 'P2021') {
       // Table doesn't exist yet, skip silently
       return
     }
@@ -24,7 +26,9 @@ async function safeSeedSection(sectionName: string, seedOperation: () => Promise
     await seedOperation()
   } catch (error: unknown) {
     // Ignore P2021 error: "The table does not exist in the current database"
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2021') {
+    // Use explicit type casting to handle Prisma error structure
+    const prismaError = error as { code?: string }
+    if (prismaError?.code === 'P2021') {
       console.log(`⚠️  Skipping ${sectionName} - table not yet migrated`)
       return
     }
@@ -7211,138 +7215,154 @@ async function main() {
   // ==================== WEBHOOK ENDPOINTS ====================
   console.log('🔗 Creating webhook endpoints...')
 
-  const webhook1 = await prisma.webhookEndpoint.create({
-    data: {
-      orgId: enterpriseCo.id,
-      name: 'Slack Notifications',
-      url: 'https://hooks.slack.com/services/T00/B00/XXXX',
-      status: 'OPEN',
-      events: ['report.completed', 'insight.generated', 'export.ready'],
-      secret: 'whsec_enterprise_slack_abc123',
-      version: 'v1',
-      headers: { 'X-Custom-Header': 'enterprise-webhook' },
-      retryPolicy: { maxRetries: 3, backoffMultiplier: 2 },
-      successRate: 99.2,
-      totalDeliveries: 15678,
-      lastDeliveryAt: new Date(now.getTime() - 30 * 60 * 1000),
-      createdBy: sarahEnterprise.id,
-    }
-  })
+  // Declare webhook variables outside the safeSeedSection so they can be used later
+  let webhook1: { id: string } | null = null
+  let webhook2: { id: string } | null = null
+  let webhook3: { id: string } | null = null
+  let webhook4: { id: string } | null = null
+  let webhook5: { id: string } | null = null
 
-  const webhook2 = await prisma.webhookEndpoint.create({
-    data: {
-      orgId: enterpriseCo.id,
-      name: 'Data Pipeline Trigger',
-      url: 'https://pipeline.enterprise-co.com/webhooks/gwi',
-      status: 'OPEN',
-      events: ['audience.updated', 'datasource.synced', 'agent.completed'],
-      secret: 'whsec_enterprise_pipeline_def456',
-      version: 'v1',
-      retryPolicy: { maxRetries: 5, backoffMultiplier: 2 },
-      successRate: 98.5,
-      totalDeliveries: 45678,
-      lastDeliveryAt: new Date(now.getTime() - 15 * 60 * 1000),
-      createdBy: sarahEnterprise.id,
-    }
-  })
-
-  const webhook3 = await prisma.webhookEndpoint.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Internal Event Handler',
-      url: 'https://api.acme.com/webhooks/gwi-events',
-      status: 'OPEN',
-      events: ['*'],
-      secret: 'whsec_acme_events_ghi789',
-      version: 'v1',
-      successRate: 97.8,
-      totalDeliveries: 23456,
-      lastDeliveryAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
-      createdBy: adminUser.id,
-    }
-  })
-
-  const webhook4 = await prisma.webhookEndpoint.create({
-    data: {
-      orgId: acmeCorp.id,
-      name: 'Zapier Integration',
-      url: 'https://hooks.zapier.com/hooks/catch/12345/abcdef/',
-      status: 'OPEN',
-      events: ['report.completed', 'export.ready'],
-      secret: 'whsec_acme_zapier_jkl012',
-      version: 'v1',
-      successRate: 99.9,
-      totalDeliveries: 5678,
-      lastDeliveryAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
-      createdBy: janeSmith.id,
-    }
-  })
-
-  const webhook5 = await prisma.webhookEndpoint.create({
-    data: {
-      orgId: techStartup.id,
-      name: 'Analytics Processor',
-      url: 'https://analytics.techstartup.io/webhook',
-      status: 'FAILING',
-      events: ['insight.generated', 'agent.completed'],
-      secret: 'whsec_startup_analytics_mno345',
-      version: 'v1',
-      successRate: 45.2,
-      totalDeliveries: 890,
-      lastDeliveryAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
-      lastError: 'Connection refused: ECONNREFUSED',
-      lastErrorAt: new Date(now.getTime() - 30 * 60 * 1000),
-      createdBy: bobWilson.id,
-    }
-  })
-
-  await prisma.webhookEndpoint.createMany({
-    data: [
-      {
+  await safeSeedSection('WebhookEndpoint', async () => {
+    webhook1 = await prisma.webhookEndpoint.create({
+      data: {
         orgId: enterpriseCo.id,
-        name: 'Security Alerts',
-        url: 'https://siem.enterprise-co.com/api/gwi-alerts',
-        status: 'OPEN',
-        events: ['security.violation', 'user.suspicious_activity'],
-        secret: 'whsec_enterprise_security_pqr678',
-        version: 'v1',
-        successRate: 100,
-        totalDeliveries: 234,
+        name: 'Slack Notifications',
+        url: 'https://hooks.slack.com/services/T00/B00/XXXX',
+        status: 'ACTIVE',
+        events: ['report.completed', 'insight.generated', 'export.ready'],
+        secret: 'whsec_enterprise_slack_abc123',
+        retryPolicy: { maxRetries: 3, backoffMultiplier: 2 },
+        totalDeliveries: 15678,
+        successfulDeliveries: 15550,
+        failedDeliveries: 128,
+        lastDeliveryAt: new Date(now.getTime() - 30 * 60 * 1000),
         createdBy: sarahEnterprise.id,
-      },
-      {
+      }
+    })
+
+    webhook2 = await prisma.webhookEndpoint.create({
+      data: {
+        orgId: enterpriseCo.id,
+        name: 'Data Pipeline Trigger',
+        url: 'https://pipeline.enterprise-co.com/webhooks/gwi',
+        status: 'ACTIVE',
+        events: ['audience.updated', 'datasource.synced', 'agent.completed'],
+        secret: 'whsec_enterprise_pipeline_def456',
+        retryPolicy: { maxRetries: 5, backoffMultiplier: 2 },
+        totalDeliveries: 45678,
+        successfulDeliveries: 44993,
+        failedDeliveries: 685,
+        lastDeliveryAt: new Date(now.getTime() - 15 * 60 * 1000),
+        createdBy: sarahEnterprise.id,
+      }
+    })
+
+    webhook3 = await prisma.webhookEndpoint.create({
+      data: {
         orgId: acmeCorp.id,
-        name: 'Disabled Legacy Webhook',
-        url: 'https://old-api.acme.com/webhook',
-        status: 'DISABLED',
-        events: ['report.completed'],
-        secret: 'whsec_acme_legacy_stu901',
-        version: 'v1',
-        totalDeliveries: 12345,
-        disabledAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
-        disabledReason: 'Endpoint deprecated - migrated to new system',
+        name: 'Internal Event Handler',
+        url: 'https://api.acme.com/webhooks/gwi-events',
+        status: 'ACTIVE',
+        events: ['*'],
+        secret: 'whsec_acme_events_ghi789',
+        totalDeliveries: 23456,
+        successfulDeliveries: 22939,
+        failedDeliveries: 517,
+        lastDeliveryAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
         createdBy: adminUser.id,
-      },
-    ]
+      }
+    })
+
+    webhook4 = await prisma.webhookEndpoint.create({
+      data: {
+        orgId: acmeCorp.id,
+        name: 'Zapier Integration',
+        url: 'https://hooks.zapier.com/hooks/catch/12345/abcdef/',
+        status: 'ACTIVE',
+        events: ['report.completed', 'export.ready'],
+        secret: 'whsec_acme_zapier_jkl012',
+        totalDeliveries: 5678,
+        successfulDeliveries: 5672,
+        failedDeliveries: 6,
+        lastDeliveryAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+        createdBy: janeSmith.id,
+      }
+    })
+
+    webhook5 = await prisma.webhookEndpoint.create({
+      data: {
+        orgId: techStartup.id,
+        name: 'Analytics Processor',
+        url: 'https://analytics.techstartup.io/webhook',
+        status: 'FAILED',
+        events: ['insight.generated', 'agent.completed'],
+        secret: 'whsec_startup_analytics_mno345',
+        isHealthy: false,
+        consecutiveFailures: 5,
+        totalDeliveries: 890,
+        successfulDeliveries: 402,
+        failedDeliveries: 488,
+        lastDeliveryAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+        createdBy: bobWilson.id,
+      }
+    })
+
+    await prisma.webhookEndpoint.createMany({
+      data: [
+        {
+          orgId: enterpriseCo.id,
+          name: 'Security Alerts',
+          url: 'https://siem.enterprise-co.com/api/gwi-alerts',
+          status: 'ACTIVE',
+          events: ['security.violation', 'user.suspicious_activity'],
+          secret: 'whsec_enterprise_security_pqr678',
+          totalDeliveries: 234,
+          successfulDeliveries: 234,
+          failedDeliveries: 0,
+          createdBy: sarahEnterprise.id,
+        },
+        {
+          orgId: acmeCorp.id,
+          name: 'Disabled Legacy Webhook',
+          url: 'https://old-api.acme.com/webhook',
+          status: 'DISABLED',
+          events: ['report.completed'],
+          secret: 'whsec_acme_legacy_stu901',
+          totalDeliveries: 12345,
+          successfulDeliveries: 12000,
+          failedDeliveries: 345,
+          disabledAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
+          disabledReason: 'Endpoint deprecated - migrated to new system',
+          createdBy: adminUser.id,
+        },
+      ]
+    })
   })
 
   // ==================== WEBHOOK DELIVERIES ====================
   console.log('📬 Creating webhook deliveries...')
 
-  await prisma.webhookDelivery.createMany({
-    data: [
-      { webhookId: webhook1.id, eventType: 'report.completed', status: 'DELIVERED', requestBody: { reportId: 'rpt_001', name: 'Q4 Analysis' }, responseStatus: 200, responseBody: { ok: true }, latencyMs: 145, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 30 * 60 * 1000) },
-      { webhookId: webhook1.id, eventType: 'insight.generated', status: 'DELIVERED', requestBody: { insightId: 'ins_001', type: 'trend' }, responseStatus: 200, responseBody: { ok: true }, latencyMs: 98, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 2 * 60 * 60 * 1000) },
-      { webhookId: webhook2.id, eventType: 'audience.updated', status: 'DELIVERED', requestBody: { audienceId: 'aud_001', changes: ['criteria'] }, responseStatus: 200, latencyMs: 234, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 15 * 60 * 1000) },
-      { webhookId: webhook2.id, eventType: 'agent.completed', status: 'DELIVERED', requestBody: { agentId: 'agent_001', status: 'success' }, responseStatus: 200, latencyMs: 189, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 1 * 60 * 60 * 1000) },
-      { webhookId: webhook3.id, eventType: 'export.ready', status: 'DELIVERED', requestBody: { exportId: 'exp_001', url: 'https://...' }, responseStatus: 200, latencyMs: 312, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 2 * 60 * 60 * 1000) },
-      { webhookId: webhook3.id, eventType: 'report.completed', status: 'FAILED', requestBody: { reportId: 'rpt_002' }, responseStatus: 500, responseBody: { error: 'Internal server error' }, latencyMs: 5000, attemptNumber: 3, error: 'Max retries exceeded', nextRetryAt: null },
-      { webhookId: webhook4.id, eventType: 'report.completed', status: 'DELIVERED', requestBody: { reportId: 'rpt_003' }, responseStatus: 200, latencyMs: 456, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
-      { webhookId: webhook5.id, eventType: 'insight.generated', status: 'FAILED', requestBody: { insightId: 'ins_002' }, latencyMs: 30000, attemptNumber: 3, error: 'Connection refused: ECONNREFUSED' },
-      { webhookId: webhook5.id, eventType: 'agent.completed', status: 'PENDING', requestBody: { agentId: 'agent_002' }, attemptNumber: 1, nextRetryAt: new Date(now.getTime() + 5 * 60 * 1000) },
-      { webhookId: webhook1.id, eventType: 'export.ready', status: 'DELIVERED', requestBody: { exportId: 'exp_002' }, responseStatus: 200, latencyMs: 167, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 45 * 60 * 1000) },
-    ]
-  })
+  // Only seed webhook deliveries if webhooks were created
+  if (webhook1 && webhook2 && webhook3 && webhook4 && webhook5) {
+    await safeSeedSection('WebhookDelivery', async () => {
+      await prisma.webhookDelivery.createMany({
+        data: [
+          { webhookId: webhook1!.id, eventType: 'report.completed', status: 'DELIVERED', payload: { reportId: 'rpt_001', name: 'Q4 Analysis' }, httpStatus: 200, response: '{"ok":true}', attempts: 1, deliveredAt: new Date(now.getTime() - 30 * 60 * 1000) },
+          { webhookId: webhook1!.id, eventType: 'insight.generated', status: 'DELIVERED', payload: { insightId: 'ins_001', type: 'trend' }, httpStatus: 200, response: '{"ok":true}', attempts: 1, deliveredAt: new Date(now.getTime() - 2 * 60 * 60 * 1000) },
+          { webhookId: webhook2!.id, eventType: 'audience.updated', status: 'DELIVERED', payload: { audienceId: 'aud_001', changes: ['criteria'] }, httpStatus: 200, attempts: 1, deliveredAt: new Date(now.getTime() - 15 * 60 * 1000) },
+          { webhookId: webhook2!.id, eventType: 'agent.completed', status: 'DELIVERED', payload: { agentId: 'agent_001', status: 'success' }, httpStatus: 200, attempts: 1, deliveredAt: new Date(now.getTime() - 1 * 60 * 60 * 1000) },
+          { webhookId: webhook3!.id, eventType: 'export.ready', status: 'DELIVERED', payload: { exportId: 'exp_001', url: 'https://...' }, httpStatus: 200, attempts: 1, deliveredAt: new Date(now.getTime() - 2 * 60 * 60 * 1000) },
+          { webhookId: webhook3!.id, eventType: 'report.completed', status: 'FAILED', payload: { reportId: 'rpt_002' }, httpStatus: 500, response: '{"error":"Internal server error"}', attempts: 3, error: 'Max retries exceeded' },
+          { webhookId: webhook4!.id, eventType: 'report.completed', status: 'DELIVERED', payload: { reportId: 'rpt_003' }, httpStatus: 200, attempts: 1, deliveredAt: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
+          { webhookId: webhook5!.id, eventType: 'insight.generated', status: 'FAILED', payload: { insightId: 'ins_002' }, attempts: 3, error: 'Connection refused: ECONNREFUSED' },
+          { webhookId: webhook5!.id, eventType: 'agent.completed', status: 'PENDING', payload: { agentId: 'agent_002' }, attempts: 1, nextRetryAt: new Date(now.getTime() + 5 * 60 * 1000) },
+          { webhookId: webhook1!.id, eventType: 'export.ready', status: 'DELIVERED', payload: { exportId: 'exp_002' }, httpStatus: 200, attempts: 1, deliveredAt: new Date(now.getTime() - 45 * 60 * 1000) },
+        ]
+      })
+    })
+  } else {
+    console.log('⚠️  Skipping WebhookDelivery - webhook endpoints not created')
+  }
 
   // ==================== INTEGRATION APPS ====================
   console.log('🧩 Creating integration apps...')
@@ -7353,21 +7373,19 @@ async function main() {
       slug: 'slack',
       description: 'Send insights and reports directly to Slack channels. Get real-time notifications for important events.',
       shortDescription: 'Team communication and notifications',
-      // category: 'COMMUNICATION',
+      category: 'COMMUNICATION',
       developer: 'GWI',
       developerUrl: 'https://gwi.com',
-      logoUrl: 'https://cdn.gwi.com/integrations/slack-logo.png',
+      iconUrl: 'https://cdn.gwi.com/integrations/slack-logo.png',
       status: 'PUBLISHED',
-      version: '2.1.0',
-      features: ['Real-time notifications', 'Channel integration', 'Slash commands', 'Interactive messages'],
-      permissions: ['read:reports', 'read:insights', 'webhooks:send'],
+      requiredScopes: ['read:reports', 'read:insights', 'webhooks:send'],
       setupInstructions: 'Click Install and authorize GWI to access your Slack workspace.',
-      documentationUrl: 'https://docs.gwi.com/integrations/slack',
       supportUrl: 'https://support.gwi.com/slack',
       isOfficial: true,
       installCount: 456,
       rating: 4.8,
       reviewCount: 89,
+      metadata: { version: '2.1.0', features: ['Real-time notifications', 'Channel integration', 'Slash commands', 'Interactive messages'], documentationUrl: 'https://docs.gwi.com/integrations/slack' },
     }
   })
 
@@ -7377,19 +7395,17 @@ async function main() {
       slug: 'salesforce',
       description: 'Sync audience insights with Salesforce CRM. Enrich customer profiles with GWI data.',
       shortDescription: 'CRM integration and data sync',
-      // category: 'CRM',
+      category: 'CRM',
       developer: 'GWI',
       developerUrl: 'https://gwi.com',
-      logoUrl: 'https://cdn.gwi.com/integrations/salesforce-logo.png',
+      iconUrl: 'https://cdn.gwi.com/integrations/salesforce-logo.png',
       status: 'PUBLISHED',
-      version: '1.5.0',
-      features: ['Contact enrichment', 'Custom field mapping', 'Bi-directional sync', 'Automated workflows'],
-      permissions: ['read:audiences', 'read:insights', 'write:exports'],
-      documentationUrl: 'https://docs.gwi.com/integrations/salesforce',
+      requiredScopes: ['read:audiences', 'read:insights', 'write:exports'],
       isOfficial: true,
       installCount: 234,
       rating: 4.5,
       reviewCount: 45,
+      metadata: { version: '1.5.0', features: ['Contact enrichment', 'Custom field mapping', 'Bi-directional sync', 'Automated workflows'], documentationUrl: 'https://docs.gwi.com/integrations/salesforce' },
     }
   })
 
@@ -7399,19 +7415,17 @@ async function main() {
       slug: 'tableau',
       description: 'Connect GWI data to Tableau for advanced visualization and business intelligence.',
       shortDescription: 'Data visualization connector',
-      // category: 'ANALYTICS',
+      category: 'ANALYTICS',
       developer: 'GWI',
       developerUrl: 'https://gwi.com',
-      logoUrl: 'https://cdn.gwi.com/integrations/tableau-logo.png',
+      iconUrl: 'https://cdn.gwi.com/integrations/tableau-logo.png',
       status: 'PUBLISHED',
-      version: '1.2.0',
-      features: ['Web Data Connector', 'Live data connection', 'Custom extracts', 'Dashboard embedding'],
-      permissions: ['read:audiences', 'read:crosstabs', 'read:analytics'],
-      documentationUrl: 'https://docs.gwi.com/integrations/tableau',
+      requiredScopes: ['read:audiences', 'read:crosstabs', 'read:analytics'],
       isOfficial: true,
       installCount: 178,
       rating: 4.6,
       reviewCount: 34,
+      metadata: { version: '1.2.0', features: ['Web Data Connector', 'Live data connection', 'Custom extracts', 'Dashboard embedding'], documentationUrl: 'https://docs.gwi.com/integrations/tableau' },
     }
   })
 
@@ -7422,169 +7436,159 @@ async function main() {
         slug: 'microsoft-teams',
         description: 'Integrate GWI with Microsoft Teams for seamless collaboration and notifications.',
         shortDescription: 'Team collaboration and alerts',
-        // category: 'COMMUNICATION',
+        category: 'COMMUNICATION',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/teams-logo.png',
+        iconUrl: 'https://cdn.gwi.com/integrations/teams-logo.png',
         status: 'PUBLISHED',
-        version: '1.0.0',
-        features: ['Channel notifications', 'Adaptive cards', 'Bot commands'],
-        permissions: ['read:reports', 'webhooks:send'],
+        requiredScopes: ['read:reports', 'webhooks:send'],
         isOfficial: true,
         installCount: 123,
         rating: 4.3,
         reviewCount: 18,
+        metadata: { version: '1.0.0', features: ['Channel notifications', 'Adaptive cards', 'Bot commands'] },
       },
       {
         name: 'HubSpot',
         slug: 'hubspot',
         description: 'Sync GWI audience data with HubSpot for enriched marketing campaigns.',
         shortDescription: 'Marketing automation sync',
-        // category: 'CRM',
+        category: 'MARKETING',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/hubspot-logo.png',
+        iconUrl: 'https://cdn.gwi.com/integrations/hubspot-logo.png',
         status: 'PUBLISHED',
-        version: '1.3.0',
-        features: ['Contact enrichment', 'List sync', 'Custom properties'],
-        permissions: ['read:audiences', 'write:exports'],
+        requiredScopes: ['read:audiences', 'write:exports'],
         isOfficial: true,
         installCount: 167,
         rating: 4.4,
         reviewCount: 28,
+        metadata: { version: '1.3.0', features: ['Contact enrichment', 'List sync', 'Custom properties'] },
       },
       {
         name: 'Google BigQuery',
         slug: 'google-bigquery',
         description: 'Export GWI data directly to Google BigQuery for advanced analytics.',
         shortDescription: 'Data warehouse export',
-        // category: 'DATA_WAREHOUSE',
+        category: 'ANALYTICS',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/bigquery-logo.png',
+        iconUrl: 'https://cdn.gwi.com/integrations/bigquery-logo.png',
         status: 'PUBLISHED',
-        version: '2.0.0',
-        features: ['Scheduled exports', 'Custom schemas', 'Incremental sync'],
-        permissions: ['read:*', 'write:exports'],
+        requiredScopes: ['read:*', 'write:exports'],
         isOfficial: true,
         installCount: 89,
         rating: 4.7,
         reviewCount: 15,
+        metadata: { version: '2.0.0', features: ['Scheduled exports', 'Custom schemas', 'Incremental sync'] },
       },
       {
         name: 'Snowflake',
         slug: 'snowflake',
         description: 'Connect GWI to Snowflake for enterprise data warehousing.',
         shortDescription: 'Cloud data warehouse',
-        // category: 'DATA_WAREHOUSE',
+        category: 'ANALYTICS',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/snowflake-logo.png',
+        iconUrl: 'https://cdn.gwi.com/integrations/snowflake-logo.png',
         status: 'PUBLISHED',
-        version: '1.1.0',
-        features: ['Data sharing', 'Secure views', 'Real-time sync'],
-        permissions: ['read:*', 'write:exports'],
+        requiredScopes: ['read:*', 'write:exports'],
         isOfficial: true,
         installCount: 67,
         rating: 4.8,
         reviewCount: 12,
+        metadata: { version: '1.1.0', features: ['Data sharing', 'Secure views', 'Real-time sync'] },
       },
       {
         name: 'Zapier',
         slug: 'zapier',
         description: 'Connect GWI to 5000+ apps through Zapier automation.',
         shortDescription: 'Workflow automation',
-        // category: 'AUTOMATION',
+        category: 'PRODUCTIVITY',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/zapier-logo.png',
+        iconUrl: 'https://cdn.gwi.com/integrations/zapier-logo.png',
         status: 'PUBLISHED',
-        version: '1.4.0',
-        features: ['Triggers', 'Actions', 'Multi-step Zaps'],
-        permissions: ['read:reports', 'read:exports', 'webhooks:receive'],
+        requiredScopes: ['read:reports', 'read:exports', 'webhooks:receive'],
         isOfficial: true,
         installCount: 345,
         rating: 4.5,
         reviewCount: 67,
+        metadata: { version: '1.4.0', features: ['Triggers', 'Actions', 'Multi-step Zaps'] },
       },
       {
         name: 'Power BI',
         slug: 'power-bi',
         description: 'Microsoft Power BI connector for GWI data visualization.',
         shortDescription: 'Business intelligence',
-        // category: 'ANALYTICS',
+        category: 'ANALYTICS',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/powerbi-logo.png',
+        iconUrl: 'https://cdn.gwi.com/integrations/powerbi-logo.png',
         status: 'PUBLISHED',
-        version: '1.0.0',
-        features: ['DirectQuery', 'Scheduled refresh', 'Custom visuals'],
-        permissions: ['read:audiences', 'read:crosstabs'],
+        requiredScopes: ['read:audiences', 'read:crosstabs'],
         isOfficial: true,
         installCount: 145,
         rating: 4.4,
         reviewCount: 23,
+        metadata: { version: '1.0.0', features: ['DirectQuery', 'Scheduled refresh', 'Custom visuals'] },
       },
       {
         name: 'Marketo',
         slug: 'marketo',
         description: 'Enrich Marketo leads with GWI audience insights.',
         shortDescription: 'Marketing automation',
-        // category: 'CRM',
+        category: 'MARKETING',
         developer: 'Partner Solutions Inc',
         developerUrl: 'https://partnersolutions.com',
-        logoUrl: 'https://cdn.gwi.com/integrations/marketo-logo.png',
+        iconUrl: 'https://cdn.gwi.com/integrations/marketo-logo.png',
         status: 'PUBLISHED',
-        version: '0.9.0',
-        features: ['Lead enrichment', 'Segment sync'],
-        permissions: ['read:audiences'],
+        requiredScopes: ['read:audiences'],
         isOfficial: false,
         installCount: 34,
         rating: 4.1,
         reviewCount: 8,
+        metadata: { version: '0.9.0', features: ['Lead enrichment', 'Segment sync'] },
       },
       {
         name: 'Custom Webhook',
         slug: 'custom-webhook',
         description: 'Send GWI events to any webhook endpoint.',
         shortDescription: 'Custom integrations',
-        // category: 'DEVELOPER',
+        category: 'DEVELOPER_TOOLS',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/webhook-logo.png',
+        iconUrl: 'https://cdn.gwi.com/integrations/webhook-logo.png',
         status: 'PUBLISHED',
-        version: '1.0.0',
-        features: ['Custom events', 'Retry logic', 'HMAC signing'],
-        permissions: ['webhooks:send'],
+        requiredScopes: ['webhooks:send'],
         isOfficial: true,
         installCount: 567,
         rating: 4.6,
         reviewCount: 45,
+        metadata: { version: '1.0.0', features: ['Custom events', 'Retry logic', 'HMAC signing'] },
       },
       {
         name: 'AWS S3 Export',
         slug: 'aws-s3',
         description: 'Export GWI data directly to Amazon S3 buckets.',
         shortDescription: 'Cloud storage export',
-        // category: 'DATA_WAREHOUSE',
+        category: 'ANALYTICS',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/s3-logo.png',
-        status: 'BETA',
-        version: '0.5.0',
-        features: ['Scheduled exports', 'Multiple formats', 'Cross-account access'],
-        permissions: ['read:*', 'write:exports'],
+        iconUrl: 'https://cdn.gwi.com/integrations/s3-logo.png',
+        status: 'DRAFT',
+        requiredScopes: ['read:*', 'write:exports'],
         isOfficial: true,
         installCount: 23,
         rating: 4.2,
         reviewCount: 5,
+        metadata: { version: '0.5.0', features: ['Scheduled exports', 'Multiple formats', 'Cross-account access'], isBeta: true },
       },
       {
         name: 'Looker Studio',
         slug: 'looker-studio',
         description: 'Google Looker Studio connector for GWI data.',
         shortDescription: 'Data visualization',
-        // category: 'ANALYTICS',
+        category: 'ANALYTICS',
         developer: 'GWI',
-        logoUrl: 'https://cdn.gwi.com/integrations/looker-logo.png',
-        status: 'COMING_SOON',
-        version: '0.1.0',
-        features: ['Community connector', 'Custom dimensions'],
-        permissions: ['read:audiences', 'read:analytics'],
+        iconUrl: 'https://cdn.gwi.com/integrations/looker-logo.png',
+        status: 'DRAFT',
+        requiredScopes: ['read:audiences', 'read:analytics'],
         isOfficial: true,
         installCount: 0,
+        metadata: { version: '0.1.0', features: ['Community connector', 'Custom dimensions'], comingSoon: true },
       },
     ]
   })
@@ -7594,13 +7598,13 @@ async function main() {
 
   await prisma.integrationInstall.createMany({
     data: [
-      { appId: slackApp.id, orgId: enterpriseCo.id, status: 'OPEN', config: { channel: '#gwi-insights', notifyOn: ['reports', 'insights'] }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 1 * 60 * 60 * 1000) },
-      { appId: slackApp.id, orgId: acmeCorp.id, status: 'OPEN', config: { channel: '#analytics', notifyOn: ['reports'] }, installedBy: adminUser.id, installedAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
-      { appId: salesforceApp.id, orgId: enterpriseCo.id, status: 'OPEN', config: { objectType: 'Contact', fieldMapping: { email: 'Email', segment: 'GWI_Segment__c' } }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 120 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 24 * 60 * 60 * 1000) },
-      { appId: tableauApp.id, orgId: enterpriseCo.id, status: 'OPEN', config: { server: 'https://tableau.enterprise-co.com' }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 45 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
-      { appId: tableauApp.id, orgId: acmeCorp.id, status: 'OPEN', config: { server: 'https://tableau.acme.com' }, installedBy: janeSmith.id, installedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000) },
-      { appId: slackApp.id, orgId: techStartup.id, status: 'SUSPENDED', config: { channel: '#data' }, installedBy: bobWilson.id, installedAt: new Date(now.getTime() - 75 * 24 * 60 * 60 * 1000), suspendedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000), suspendReason: 'Slack workspace disconnected' },
-      { appId: salesforceApp.id, orgId: acmeCorp.id, status: 'OPEN', config: { objectType: 'Lead' }, installedBy: adminUser.id, installedAt: new Date(now.getTime() - 50 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 48 * 60 * 60 * 1000) },
+      { appId: slackApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', configuration: { channel: '#gwi-insights', notifyOn: ['reports', 'insights'] }, installedBy: sarahEnterprise.id, lastUsedAt: new Date(now.getTime() - 1 * 60 * 60 * 1000) },
+      { appId: slackApp.id, orgId: acmeCorp.id, status: 'ACTIVE', configuration: { channel: '#analytics', notifyOn: ['reports'] }, installedBy: adminUser.id, lastUsedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
+      { appId: salesforceApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', configuration: { objectType: 'Contact', fieldMapping: { email: 'Email', segment: 'GWI_Segment__c' } }, installedBy: sarahEnterprise.id, lastUsedAt: new Date(now.getTime() - 24 * 60 * 60 * 1000) },
+      { appId: tableauApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', configuration: { server: 'https://tableau.enterprise-co.com' }, installedBy: sarahEnterprise.id, lastUsedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
+      { appId: tableauApp.id, orgId: acmeCorp.id, status: 'ACTIVE', configuration: { server: 'https://tableau.acme.com' }, installedBy: janeSmith.id, lastUsedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000) },
+      { appId: slackApp.id, orgId: techStartup.id, status: 'PAUSED', configuration: { channel: '#data' }, installedBy: bobWilson.id, metadata: { suspendedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000).toISOString(), suspendReason: 'Slack workspace disconnected' } },
+      { appId: salesforceApp.id, orgId: acmeCorp.id, status: 'ACTIVE', configuration: { objectType: 'Lead' }, installedBy: adminUser.id, lastUsedAt: new Date(now.getTime() - 48 * 60 * 60 * 1000) },
     ]
   })
 
