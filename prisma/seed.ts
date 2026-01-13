@@ -1381,186 +1381,372 @@ async function main() {
   // ==================== CROSSTABS ====================
   console.log('📋 Creating crosstabs...')
 
+  // Create 16 comprehensive crosstabs organized by category
   await prisma.crosstab.createMany({
     data: [
+      // ============================================================================
+      // SOCIAL & PLATFORM ANALYSIS (3 crosstabs)
+      // ============================================================================
       {
+        id: 'social-1',
         orgId: acmeCorp.id,
-        name: 'Brand Awareness by Age Group',
-        description: 'Cross-tabulation of brand awareness metrics across different age demographics',
+        name: 'Generational Social Media Platform Analysis',
+        description: 'Comprehensive analysis of social media platform usage and engagement across generational cohorts',
         audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 4).map(a => a.id),
-        metrics: ['awareness', 'consideration', 'preference', 'purchase_intent'],
-        filters: { period: 'last_quarter', markets: ['US', 'UK', 'DE'] },
+        metrics: ['daily_usage', 'engagement_rate', 'content_creation', 'time_spent', 'purchase_influence', 'ad_receptivity', 'brand_discovery', 'trust_level'],
+        filters: { platforms: ['TikTok', 'Instagram', 'YouTube', 'Facebook', 'Twitter', 'LinkedIn'], period: 'last_quarter' },
         results: {
           rows: [
-            { segment: '18-24', awareness: 78.5, consideration: 52.3, preference: 38.2, purchase_intent: 28.5 },
-            { segment: '25-34', awareness: 82.1, consideration: 58.7, preference: 45.6, purchase_intent: 35.2 },
-            { segment: '35-44', awareness: 85.3, consideration: 62.4, preference: 48.9, purchase_intent: 38.7 },
-            { segment: '45-54', awareness: 79.8, consideration: 55.2, preference: 42.1, purchase_intent: 32.4 },
-            { segment: '55+', awareness: 72.4, consideration: 48.6, preference: 35.8, purchase_intent: 26.1 }
+            { platform: 'TikTok', gen_z: 89.2, millennials: 58.5, gen_x: 22.3, boomers: 8.5 },
+            { platform: 'Instagram', gen_z: 92.5, millennials: 82.3, gen_x: 48.5, boomers: 28.2 },
+            { platform: 'YouTube', gen_z: 95.8, millennials: 88.5, gen_x: 72.3, boomers: 55.8 },
+            { platform: 'Facebook', gen_z: 32.5, millennials: 68.2, gen_x: 78.5, boomers: 72.3 },
+            { platform: 'Twitter/X', gen_z: 45.2, millennials: 52.8, gen_x: 42.5, boomers: 32.5 },
+            { platform: 'LinkedIn', gen_z: 28.5, millennials: 72.3, gen_x: 68.5, boomers: 42.8 }
           ],
-          metadata: { sampleSize: 15420, confidence: 0.95, lastUpdated: now.toISOString() }
+          metadata: { sampleSize: 85000, confidence: 0.95, lastUpdated: now.toISOString(), metric: 'percentage_active_users' }
         },
-        views: 234,
+        views: 1245,
         createdBy: adminUser.id
       },
       {
+        id: 'social-2',
         orgId: acmeCorp.id,
-        name: 'Platform Usage by Audience',
-        description: 'Social media and digital platform usage patterns across key audience segments',
+        name: 'TikTok vs Instagram Engagement by Age',
+        description: 'Head-to-head comparison of TikTok and Instagram engagement metrics across age demographics',
         audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 5).map(a => a.id),
-        metrics: ['daily_active_users', 'time_spent', 'engagement_rate', 'content_creation'],
-        filters: { platforms: ['Instagram', 'TikTok', 'YouTube', 'Twitter', 'LinkedIn'] },
+        metrics: ['engagement_rate', 'avg_session_time', 'content_interactions', 'share_rate', 'save_rate', 'comment_rate'],
+        filters: { platforms: ['TikTok', 'Instagram'], contentTypes: ['video', 'stories', 'reels'] },
         results: {
           rows: [
-            { platform: 'TikTok', gen_z: 85.2, millennials: 62.4, gen_x: 28.5, boomers: 12.3 },
-            { platform: 'Instagram', gen_z: 92.1, millennials: 78.5, gen_x: 52.3, boomers: 35.2 },
-            { platform: 'YouTube', gen_z: 95.8, millennials: 88.2, gen_x: 72.4, boomers: 58.6 },
-            { platform: 'Twitter', gen_z: 42.3, millennials: 55.8, gen_x: 48.2, boomers: 38.5 },
-            { platform: 'LinkedIn', gen_z: 28.5, millennials: 68.2, gen_x: 72.5, boomers: 45.2 }
-          ],
-          metadata: { sampleSize: 28500, confidence: 0.95, lastUpdated: now.toISOString() }
-        },
-        views: 456,
-        createdBy: johnDoe.id
-      },
-      {
-        orgId: acmeCorp.id,
-        name: 'Purchase Drivers by Segment',
-        description: 'Key purchase decision factors across different consumer segments',
-        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 6).map(a => a.id),
-        metrics: ['price_sensitivity', 'brand_loyalty', 'quality_focus', 'convenience', 'sustainability'],
-        filters: { categories: ['consumer_goods', 'technology', 'fashion'] },
-        results: {
-          rows: [
-            { driver: 'Price', gen_z: 72.5, millennials: 65.2, eco_conscious: 48.5, luxury: 22.3, parents: 78.5 },
-            { driver: 'Quality', gen_z: 58.2, millennials: 75.8, eco_conscious: 82.3, luxury: 95.2, parents: 85.2 },
-            { driver: 'Brand Values', gen_z: 78.5, millennials: 68.2, eco_conscious: 92.5, luxury: 75.8, parents: 62.3 },
-            { driver: 'Convenience', gen_z: 82.3, millennials: 78.5, eco_conscious: 55.2, luxury: 88.5, parents: 92.5 },
-            { driver: 'Sustainability', gen_z: 68.5, millennials: 62.3, eco_conscious: 98.2, luxury: 45.5, parents: 58.2 }
+            { metric: 'Engagement Rate', tiktok_18_24: 8.5, instagram_18_24: 3.2, tiktok_25_34: 6.2, instagram_25_34: 2.8, tiktok_35_plus: 4.5, instagram_35_plus: 2.2 },
+            { metric: 'Avg Session (min)', tiktok_18_24: 52.3, instagram_18_24: 28.5, tiktok_25_34: 38.5, instagram_25_34: 25.2, tiktok_35_plus: 22.5, instagram_35_plus: 18.8 },
+            { metric: 'Daily Opens', tiktok_18_24: 12.5, instagram_18_24: 8.2, tiktok_25_34: 8.5, instagram_25_34: 7.5, tiktok_35_plus: 5.2, instagram_35_plus: 6.2 },
+            { metric: 'Share Rate (%)', tiktok_18_24: 15.2, instagram_18_24: 8.5, tiktok_25_34: 12.3, instagram_25_34: 7.2, tiktok_35_plus: 8.5, instagram_35_plus: 5.8 }
           ],
           metadata: { sampleSize: 42000, confidence: 0.95, lastUpdated: now.toISOString() }
         },
-        views: 678,
-        createdBy: janeSmith.id
-      },
-      {
-        orgId: acmeCorp.id,
-        name: 'Media Consumption Patterns',
-        description: 'Media consumption habits and preferences across audience segments',
-        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 4).map(a => a.id),
-        metrics: ['streaming_hours', 'traditional_tv', 'podcast_listening', 'news_consumption', 'gaming'],
-        filters: { period: 'weekly_average' },
-        results: {
-          rows: [
-            { media: 'Streaming Video', gen_z: 4.2, millennials: 3.8, gen_x: 2.5, boomers: 1.8 },
-            { media: 'Traditional TV', gen_z: 0.8, millennials: 1.2, gen_x: 2.8, boomers: 4.5 },
-            { media: 'Podcasts', gen_z: 1.5, millennials: 2.2, gen_x: 1.8, boomers: 0.8 },
-            { media: 'Social Media', gen_z: 3.5, millennials: 2.8, gen_x: 1.5, boomers: 0.8 },
-            { media: 'Gaming', gen_z: 2.8, millennials: 1.5, gen_x: 0.8, boomers: 0.3 }
-          ],
-          metadata: { sampleSize: 18500, unit: 'hours_per_day', confidence: 0.95 }
-        },
-        views: 345,
-        createdBy: adminUser.id
-      },
-      {
-        orgId: acmeCorp.id,
-        name: 'Brand Health by Market',
-        description: 'Brand health metrics comparison across key geographic markets',
-        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 3).map(a => a.id),
-        metrics: ['brand_health', 'awareness', 'nps', 'market_share'],
-        filters: { brands: ['Nike', 'Spotify', 'Tesla'] },
-        results: {
-          rows: [
-            { market: 'United States', nike: 85.2, spotify: 78.5, tesla: 72.3 },
-            { market: 'United Kingdom', nike: 82.5, spotify: 82.3, tesla: 68.5 },
-            { market: 'Germany', nike: 78.2, spotify: 75.8, tesla: 75.2 },
-            { market: 'Japan', nike: 88.5, spotify: 62.3, tesla: 58.5 },
-            { market: 'Australia', nike: 84.2, spotify: 80.5, tesla: 70.2 }
-          ],
-          metadata: { metric: 'brand_health_score', sampleSize: 52000, confidence: 0.95 }
-        },
-        views: 567,
+        views: 892,
         createdBy: johnDoe.id
       },
       {
+        id: 'social-3',
         orgId: acmeCorp.id,
-        name: 'Competitive NPS Analysis',
-        description: 'Net Promoter Score comparison across competitors by audience segment',
+        name: 'Content Format Preferences by Generation',
+        description: 'Analysis of preferred content formats (video, images, text, audio) across generational segments',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 4).map(a => a.id),
+        metrics: ['preference_score', 'engagement_rate', 'completion_rate', 'share_likelihood', 'brand_recall', 'purchase_intent', 'time_spent'],
+        filters: { formats: ['short_video', 'long_video', 'images', 'carousels', 'stories', 'live_streams', 'podcasts'] },
+        results: {
+          rows: [
+            { format: 'Short Video (<60s)', gen_z: 92.5, millennials: 78.5, gen_x: 52.3, boomers: 35.2 },
+            { format: 'Long Video (>3min)', gen_z: 68.5, millennials: 72.3, gen_x: 65.8, boomers: 58.5 },
+            { format: 'Image Carousels', gen_z: 75.2, millennials: 82.5, gen_x: 68.2, boomers: 55.8 },
+            { format: 'Stories/Ephemeral', gen_z: 88.5, millennials: 72.5, gen_x: 42.3, boomers: 22.5 },
+            { format: 'Live Streams', gen_z: 58.2, millennials: 52.5, gen_x: 38.5, boomers: 28.2 },
+            { format: 'Podcasts/Audio', gen_z: 52.3, millennials: 68.5, gen_x: 58.2, boomers: 42.5 }
+          ],
+          metadata: { sampleSize: 35000, confidence: 0.95, metric: 'preference_percentage' }
+        },
+        views: 567,
+        createdBy: janeSmith.id
+      },
+
+      // ============================================================================
+      // COMMERCE & PURCHASE BEHAVIOR (3 crosstabs)
+      // ============================================================================
+      {
+        id: 'commerce-1',
+        orgId: acmeCorp.id,
+        name: 'Income Segment Purchase Channel Preferences',
+        description: 'Purchase channel preferences and behaviors across different income segments',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 5).map(a => a.id),
+        metrics: ['channel_preference', 'avg_order_value', 'purchase_frequency', 'return_rate', 'loyalty_score', 'cross_channel_usage', 'mobile_share', 'social_commerce'],
+        filters: { channels: ['online_direct', 'marketplace', 'retail_store', 'social_commerce', 'mobile_app'], income_bands: ['<50K', '50-100K', '100-150K', '150K+'] },
+        results: {
+          rows: [
+            { channel: 'Brand Website', under_50k: 28.5, income_50_100k: 42.3, income_100_150k: 55.8, over_150k: 68.2 },
+            { channel: 'Amazon/Marketplace', under_50k: 72.5, income_50_100k: 65.2, income_100_150k: 52.3, over_150k: 42.5 },
+            { channel: 'Physical Retail', under_50k: 58.2, income_50_100k: 52.5, income_100_150k: 62.3, over_150k: 72.5 },
+            { channel: 'Social Commerce', under_50k: 42.5, income_50_100k: 38.2, income_100_150k: 28.5, over_150k: 22.3 },
+            { channel: 'Mobile App', under_50k: 52.3, income_50_100k: 58.5, income_100_150k: 62.5, over_150k: 55.8 }
+          ],
+          metadata: { sampleSize: 62000, confidence: 0.95, metric: 'percentage_primary_channel' }
+        },
+        views: 1056,
+        createdBy: adminUser.id
+      },
+      {
+        id: 'commerce-2',
+        orgId: acmeCorp.id,
+        name: 'E-commerce vs In-Store by Product Category',
+        description: 'Channel preference analysis for different product categories',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 6).map(a => a.id),
+        metrics: ['online_share', 'store_share', 'omnichannel_rate', 'return_rate', 'avg_basket_size'],
+        filters: { categories: ['electronics', 'apparel', 'grocery', 'beauty', 'home', 'sports'] },
+        results: {
+          rows: [
+            { category: 'Electronics', online: 72.5, in_store: 18.5, omnichannel: 9.0 },
+            { category: 'Apparel', online: 48.2, in_store: 38.5, omnichannel: 13.3 },
+            { category: 'Grocery', online: 22.5, in_store: 68.2, omnichannel: 9.3 },
+            { category: 'Beauty', online: 55.8, in_store: 32.5, omnichannel: 11.7 },
+            { category: 'Home & Garden', online: 42.3, in_store: 45.2, omnichannel: 12.5 },
+            { category: 'Sports & Fitness', online: 52.5, in_store: 35.8, omnichannel: 11.7 }
+          ],
+          metadata: { sampleSize: 78000, confidence: 0.95, lastUpdated: now.toISOString() }
+        },
+        views: 789,
+        createdBy: johnDoe.id
+      },
+      {
+        id: 'commerce-3',
+        orgId: acmeCorp.id,
+        name: 'Subscription Service Adoption by Segment',
+        description: 'Subscription service usage and preferences across consumer segments',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 5).map(a => a.id),
+        metrics: ['adoption_rate', 'avg_subscriptions', 'monthly_spend', 'churn_rate', 'satisfaction', 'likelihood_to_add'],
+        filters: { categories: ['streaming', 'meal_kits', 'beauty_boxes', 'fitness', 'software', 'news_media'] },
+        results: {
+          rows: [
+            { category: 'Video Streaming', gen_z: 92.5, millennials: 88.2, gen_x: 75.5, boomers: 58.2 },
+            { category: 'Music Streaming', gen_z: 85.2, millennials: 78.5, gen_x: 52.3, boomers: 32.5 },
+            { category: 'Meal Kits', gen_z: 18.5, millennials: 35.2, gen_x: 28.5, boomers: 15.8 },
+            { category: 'Fitness Apps', gen_z: 42.5, millennials: 38.2, gen_x: 25.5, boomers: 12.3 },
+            { category: 'News/Media', gen_z: 15.2, millennials: 28.5, gen_x: 42.3, boomers: 55.8 }
+          ],
+          metadata: { sampleSize: 45000, confidence: 0.95, metric: 'active_subscription_rate' }
+        },
+        views: 654,
+        createdBy: janeSmith.id
+      },
+
+      // ============================================================================
+      // BRAND & COMPETITIVE INTELLIGENCE (3 crosstabs)
+      // ============================================================================
+      {
+        id: 'brand-1',
+        orgId: acmeCorp.id,
+        name: 'Brand Awareness Competitive Landscape',
+        description: 'Competitive brand awareness and consideration metrics across audience segments',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 6).map(a => a.id),
+        metrics: ['unaided_awareness', 'aided_awareness', 'consideration', 'preference', 'usage', 'loyalty', 'nps', 'share_of_voice'],
+        filters: { industry: 'sportswear', brands: ['Nike', 'Adidas', 'Puma', 'Under Armour', 'New Balance', 'Lululemon'] },
+        results: {
+          rows: [
+            { brand: 'Nike', unaided: 78.5, aided: 95.2, consideration: 68.5, preference: 42.3, nps: 58 },
+            { brand: 'Adidas', unaided: 62.3, aided: 92.5, consideration: 58.2, preference: 28.5, nps: 45 },
+            { brand: 'Puma', unaided: 35.2, aided: 85.5, consideration: 42.5, preference: 15.8, nps: 38 },
+            { brand: 'Under Armour', unaided: 42.5, aided: 82.3, consideration: 45.2, preference: 18.5, nps: 32 },
+            { brand: 'New Balance', unaided: 38.5, aided: 78.5, consideration: 48.2, preference: 22.3, nps: 52 },
+            { brand: 'Lululemon', unaided: 28.5, aided: 72.5, consideration: 38.5, preference: 25.8, nps: 62 }
+          ],
+          metadata: { sampleSize: 52000, confidence: 0.95, industry: 'sportswear' }
+        },
+        views: 1423,
+        createdBy: adminUser.id
+      },
+      {
+        id: 'brand-2',
+        orgId: acmeCorp.id,
+        name: 'Brand Health Funnel by Market',
+        description: 'Brand funnel metrics (awareness to purchase) across key geographic markets',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 5).map(a => a.id),
+        metrics: ['awareness', 'familiarity', 'consideration', 'preference', 'purchase'],
+        filters: { markets: ['US', 'UK', 'Germany', 'France', 'Japan'], brand: 'Nike' },
+        results: {
+          rows: [
+            { market: 'United States', awareness: 96.5, familiarity: 88.2, consideration: 72.5, preference: 45.2, purchase: 38.5 },
+            { market: 'United Kingdom', awareness: 94.2, familiarity: 85.5, consideration: 68.2, preference: 42.3, purchase: 35.2 },
+            { market: 'Germany', awareness: 92.5, familiarity: 82.3, consideration: 62.5, preference: 38.5, purchase: 32.5 },
+            { market: 'France', awareness: 90.8, familiarity: 78.5, consideration: 58.2, preference: 35.8, purchase: 28.5 },
+            { market: 'Japan', awareness: 95.2, familiarity: 88.5, consideration: 75.2, preference: 48.5, purchase: 42.3 }
+          ],
+          metadata: { sampleSize: 85000, confidence: 0.95, brand: 'Nike' }
+        },
+        views: 876,
+        createdBy: johnDoe.id
+      },
+      {
+        id: 'brand-3',
+        orgId: acmeCorp.id,
+        name: 'Competitive NPS Benchmarking',
+        description: 'Net Promoter Score comparison across competitors with promoter/detractor breakdown',
         audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 4).map(a => a.id),
         metrics: ['nps', 'promoters', 'passives', 'detractors'],
         filters: { industry: 'sportswear', period: 'last_quarter' },
         results: {
           rows: [
             { brand: 'Nike', nps: 58, promoters: 68, passives: 22, detractors: 10 },
+            { brand: 'Lululemon', nps: 62, promoters: 72, passives: 18, detractors: 10 },
+            { brand: 'New Balance', nps: 52, promoters: 62, passives: 28, detractors: 10 },
             { brand: 'Adidas', nps: 45, promoters: 58, passives: 29, detractors: 13 },
-            { brand: 'Under Armour', nps: 32, promoters: 48, passives: 36, detractors: 16 },
-            { brand: 'Puma', nps: 38, promoters: 52, passives: 34, detractors: 14 },
-            { brand: 'New Balance', nps: 52, promoters: 62, passives: 28, detractors: 10 }
+            { brand: 'Under Armour', nps: 32, promoters: 48, passives: 36, detractors: 16 }
           ],
-          metadata: { sampleSize: 28500, confidence: 0.95, industry: 'sportswear' }
+          metadata: { sampleSize: 42000, confidence: 0.95, period: 'Q4 2024' }
         },
-        views: 432,
+        views: 567,
         createdBy: janeSmith.id
       },
+
+      // ============================================================================
+      // MEDIA & CONTENT CONSUMPTION (3 crosstabs)
+      // ============================================================================
       {
-        orgId: techStartup.id,
-        name: 'SaaS Adoption by Company Size',
-        description: 'SaaS tool adoption rates across different company sizes',
-        audiences: allAudiences.filter(a => a.orgId === techStartup.id).map(a => a.id),
-        metrics: ['adoption_rate', 'tools_per_user', 'spending', 'churn_rate'],
-        filters: { category: 'productivity_tools' },
+        id: 'media-1',
+        orgId: acmeCorp.id,
+        name: 'Media Consumption by Daypart',
+        description: 'Media consumption patterns across different times of day by audience segment',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 5).map(a => a.id),
+        metrics: ['reach', 'time_spent', 'engagement', 'ad_receptivity', 'content_type', 'device_usage', 'multitasking_rate', 'attention_quality'],
+        filters: { dayparts: ['early_morning', 'morning_commute', 'daytime', 'evening_prime', 'late_night'], media: ['tv', 'streaming', 'social', 'radio', 'podcast'] },
         results: {
           rows: [
-            { size: '1-10 employees', adoption: 92.5, tools: 8.2, spending: 125, churn: 5.2 },
-            { size: '11-50 employees', adoption: 88.2, tools: 12.5, spending: 85, churn: 4.8 },
-            { size: '51-200 employees', adoption: 82.5, tools: 15.8, spending: 68, churn: 3.5 },
-            { size: '201-1000 employees', adoption: 75.8, tools: 18.2, spending: 52, churn: 2.8 },
-            { size: '1000+ employees', adoption: 68.5, tools: 22.5, spending: 45, churn: 1.5 }
+            { daypart: 'Early Morning (5-8am)', tv: 22.5, streaming: 15.2, social: 42.5, radio: 28.5, podcast: 18.2 },
+            { daypart: 'Morning Commute (8-10am)', tv: 8.5, streaming: 12.3, social: 55.2, radio: 42.5, podcast: 35.8 },
+            { daypart: 'Daytime (10am-5pm)', tv: 15.2, streaming: 22.5, social: 48.5, radio: 32.5, podcast: 28.2 },
+            { daypart: 'Evening Prime (7-10pm)', tv: 58.5, streaming: 72.3, social: 52.5, radio: 12.5, podcast: 22.5 },
+            { daypart: 'Late Night (10pm+)', tv: 32.5, streaming: 55.8, social: 45.2, radio: 8.5, podcast: 15.2 }
           ],
-          metadata: { sampleSize: 5800, unit: 'per_employee_monthly', confidence: 0.92 }
+          metadata: { sampleSize: 38000, metric: 'percentage_reach', confidence: 0.95 }
         },
-        views: 189,
-        createdBy: bobWilson.id
+        views: 892,
+        createdBy: adminUser.id
       },
       {
-        orgId: techStartup.id,
-        name: 'Developer Tool Preferences',
-        description: 'Programming language and tool preferences among developer audiences',
-        audiences: allAudiences.filter(a => a.orgId === techStartup.id).map(a => a.id),
-        metrics: ['usage_rate', 'satisfaction', 'recommendation_score'],
-        filters: { role: 'software_developer' },
+        id: 'media-2',
+        orgId: acmeCorp.id,
+        name: 'Streaming Service Preferences by Age',
+        description: 'Streaming service usage and satisfaction across age demographics',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 4).map(a => a.id),
+        metrics: ['subscription_rate', 'monthly_hours', 'satisfaction', 'likelihood_to_churn', 'content_preference', 'ad_tolerance'],
+        filters: { services: ['Netflix', 'Disney+', 'HBO Max', 'Amazon Prime', 'Hulu', 'Apple TV+'] },
         results: {
           rows: [
-            { tool: 'VS Code', usage: 78.5, satisfaction: 88.2, recommendation: 92.5 },
-            { tool: 'GitHub', usage: 85.2, satisfaction: 82.5, recommendation: 88.5 },
-            { tool: 'Docker', usage: 62.5, satisfaction: 75.8, recommendation: 78.2 },
-            { tool: 'Jira', usage: 58.2, satisfaction: 52.3, recommendation: 48.5 },
-            { tool: 'Slack', usage: 72.5, satisfaction: 78.5, recommendation: 82.3 }
+            { service: 'Netflix', age_18_24: 78.5, age_25_34: 82.3, age_35_44: 75.2, age_45_plus: 62.5 },
+            { service: 'Disney+', age_18_24: 52.3, age_25_34: 68.5, age_35_44: 72.5, age_45_plus: 45.2 },
+            { service: 'HBO Max', age_18_24: 42.5, age_25_34: 55.8, age_35_44: 48.2, age_45_plus: 38.5 },
+            { service: 'Amazon Prime', age_18_24: 58.2, age_25_34: 72.5, age_35_44: 78.5, age_45_plus: 68.2 },
+            { service: 'YouTube Premium', age_18_24: 35.2, age_25_34: 28.5, age_35_44: 18.5, age_45_plus: 12.3 }
           ],
-          metadata: { sampleSize: 12500, confidence: 0.95 }
+          metadata: { sampleSize: 55000, metric: 'active_subscription_rate', confidence: 0.95 }
         },
-        views: 234,
-        createdBy: bobWilson.id
+        views: 654,
+        createdBy: johnDoe.id
       },
       {
+        id: 'media-3',
+        orgId: acmeCorp.id,
+        name: 'News Source Trust by Demographics',
+        description: 'Trust levels in different news sources across demographic segments',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 5).map(a => a.id),
+        metrics: ['trust_score', 'usage_frequency', 'credibility', 'recommendation_rate', 'political_lean_perception', 'ad_receptivity', 'subscription_intent'],
+        filters: { sources: ['traditional_tv', 'newspapers', 'social_media', 'podcasts', 'online_news', 'local_news'] },
+        results: {
+          rows: [
+            { source: 'Traditional TV News', gen_z: 32.5, millennials: 42.5, gen_x: 58.2, boomers: 72.5 },
+            { source: 'Print Newspapers', gen_z: 18.5, millennials: 28.5, gen_x: 48.2, boomers: 68.5 },
+            { source: 'Social Media News', gen_z: 42.5, millennials: 35.2, gen_x: 22.5, boomers: 15.2 },
+            { source: 'Podcasts', gen_z: 48.5, millennials: 55.8, gen_x: 42.3, boomers: 28.5 },
+            { source: 'Online News Sites', gen_z: 55.2, millennials: 62.5, gen_x: 58.2, boomers: 48.5 }
+          ],
+          metadata: { sampleSize: 42000, metric: 'trust_percentage', confidence: 0.95 }
+        },
+        views: 423,
+        createdBy: janeSmith.id
+      },
+
+      // ============================================================================
+      // DEMOGRAPHICS & SEGMENTATION (2 crosstabs)
+      // ============================================================================
+      {
+        id: 'demo-1',
+        orgId: acmeCorp.id,
+        name: 'Sustainability Attitudes by Consumer Segment',
+        description: 'Environmental attitudes and sustainable purchasing behavior across consumer segments',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 5).map(a => a.id),
+        metrics: ['concern_level', 'purchase_impact', 'willingness_to_pay_more', 'brand_switching', 'greenwashing_skepticism', 'action_intent', 'category_relevance', 'information_seeking'],
+        filters: { topics: ['climate_change', 'plastic_reduction', 'carbon_footprint', 'ethical_sourcing', 'circular_economy'] },
+        results: {
+          rows: [
+            { attitude: 'Very Concerned', gen_z: 68.5, millennials: 58.2, gen_x: 45.5, boomers: 38.2, eco_conscious: 95.2 },
+            { attitude: 'Pay Premium (10%+)', gen_z: 52.3, millennials: 48.5, gen_x: 35.2, boomers: 28.5, eco_conscious: 85.5 },
+            { attitude: 'Switched Brands', gen_z: 62.5, millennials: 55.8, gen_x: 42.3, boomers: 32.5, eco_conscious: 88.2 },
+            { attitude: 'Research Before Buy', gen_z: 72.5, millennials: 68.2, gen_x: 52.5, boomers: 42.3, eco_conscious: 92.5 },
+            { attitude: 'Skeptical of Claims', gen_z: 58.5, millennials: 52.3, gen_x: 48.2, boomers: 55.8, eco_conscious: 75.2 }
+          ],
+          metadata: { sampleSize: 65000, confidence: 0.95, lastUpdated: now.toISOString() }
+        },
+        views: 1087,
+        createdBy: adminUser.id
+      },
+      {
+        id: 'demo-2',
+        orgId: techStartup.id,
+        name: 'Tech Adoption by Income Level',
+        description: 'Technology adoption rates and attitudes across different income brackets',
+        audiences: allAudiences.filter(a => a.orgId === techStartup.id).map(a => a.id),
+        metrics: ['adoption_rate', 'spending', 'early_adopter_index', 'brand_preference', 'upgrade_frequency'],
+        filters: { categories: ['smartphones', 'smart_home', 'wearables', 'ev_vehicles', 'ai_assistants'] },
+        results: {
+          rows: [
+            { tech: 'Latest Smartphone', under_50k: 42.5, income_50_100k: 65.2, income_100_150k: 82.5, over_150k: 92.3 },
+            { tech: 'Smart Home Devices', under_50k: 28.5, income_50_100k: 48.5, income_100_150k: 72.3, over_150k: 88.5 },
+            { tech: 'Wearable Tech', under_50k: 22.3, income_50_100k: 42.5, income_100_150k: 62.5, over_150k: 78.2 },
+            { tech: 'Electric Vehicle', under_50k: 5.2, income_50_100k: 12.5, income_100_150k: 28.5, over_150k: 52.3 },
+            { tech: 'AI Assistants', under_50k: 35.2, income_50_100k: 52.3, income_100_150k: 68.5, over_150k: 82.5 }
+          ],
+          metadata: { sampleSize: 32000, metric: 'ownership_rate', confidence: 0.92 }
+        },
+        views: 345,
+        createdBy: bobWilson.id
+      },
+
+      // ============================================================================
+      // MARKET & GEOGRAPHIC ANALYSIS (2 crosstabs)
+      // ============================================================================
+      {
+        id: 'market-1',
+        orgId: acmeCorp.id,
+        name: 'Global Market Digital Behavior Comparison',
+        description: 'Digital behavior and platform usage patterns across global markets',
+        audiences: allAudiences.filter(a => a.orgId === acmeCorp.id).slice(0, 8).map(a => a.id),
+        metrics: ['internet_penetration', 'mobile_usage', 'social_media_adoption', 'ecommerce_share', 'digital_payments', 'streaming_adoption', 'gaming_engagement', 'digital_ad_spend'],
+        filters: { markets: ['US', 'UK', 'Germany', 'France', 'Japan', 'China', 'Brazil', 'India'] },
+        results: {
+          rows: [
+            { market: 'United States', internet: 92.5, mobile: 85.2, social: 72.5, ecommerce: 21.5 },
+            { market: 'United Kingdom', internet: 95.2, mobile: 88.5, social: 78.2, ecommerce: 28.5 },
+            { market: 'Germany', internet: 91.5, mobile: 82.3, social: 65.2, ecommerce: 18.5 },
+            { market: 'Japan', internet: 93.8, mobile: 92.5, social: 72.5, ecommerce: 12.5 },
+            { market: 'China', internet: 73.5, mobile: 98.2, social: 85.5, ecommerce: 52.3 },
+            { market: 'Brazil', internet: 81.2, mobile: 92.5, social: 88.5, ecommerce: 15.2 },
+            { market: 'India', internet: 52.5, mobile: 78.5, social: 45.2, ecommerce: 8.5 }
+          ],
+          metadata: { sampleSize: 185000, metric: 'percentage', confidence: 0.95, lastUpdated: now.toISOString() }
+        },
+        views: 2156,
+        createdBy: adminUser.id
+      },
+      {
+        id: 'market-2',
         orgId: enterpriseCo.id,
-        name: 'Enterprise Software Evaluation',
-        description: 'Key factors in enterprise software purchasing decisions',
+        name: 'US vs UK vs Germany Consumer Attitudes',
+        description: 'Cross-market comparison of consumer attitudes, values, and purchase behaviors',
         audiences: [allAudiences.find(a => a.name === 'Enterprise Decision Makers')?.id].filter(Boolean) as string[],
-        metrics: ['importance_score', 'satisfaction', 'vendor_comparison'],
-        filters: { purchase_value: 'over_100k', decision_timeline: '6_months' },
+        metrics: ['price_sensitivity', 'brand_loyalty', 'quality_focus', 'sustainability_priority', 'innovation_openness', 'privacy_concern', 'ad_receptivity', 'local_preference', 'online_trust', 'service_expectations'],
+        filters: { markets: ['US', 'UK', 'Germany'], categories: ['all'] },
         results: {
           rows: [
-            { factor: 'Security & Compliance', importance: 95.2, satisfaction: 72.5, gap: 22.7 },
-            { factor: 'Integration Capabilities', importance: 88.5, satisfaction: 65.8, gap: 22.7 },
-            { factor: 'Scalability', importance: 85.2, satisfaction: 78.2, gap: 7.0 },
-            { factor: 'Vendor Support', importance: 82.5, satisfaction: 68.5, gap: 14.0 },
-            { factor: 'Total Cost of Ownership', importance: 78.5, satisfaction: 55.2, gap: 23.3 }
+            { attitude: 'Price Sensitivity', us: 65.2, uk: 72.5, germany: 78.5 },
+            { attitude: 'Brand Loyalty', us: 52.3, uk: 58.2, germany: 68.5 },
+            { attitude: 'Quality Focus', us: 72.5, uk: 75.8, germany: 88.2 },
+            { attitude: 'Sustainability Priority', us: 55.2, uk: 62.5, germany: 78.5 },
+            { attitude: 'Privacy Concern', us: 58.5, uk: 65.2, germany: 85.5 },
+            { attitude: 'Local Brand Preference', us: 42.5, uk: 48.5, germany: 62.3 }
           ],
-          metadata: { sampleSize: 2800, confidence: 0.92, avg_deal_size: 285000 }
+          metadata: { sampleSize: 45000, metric: 'importance_score', confidence: 0.95 }
         },
-        views: 456,
+        views: 876,
         createdBy: sarahEnterprise.id
       }
     ]
@@ -4872,7 +5058,7 @@ async function main() {
   console.log('   Data Sources: 7')
   console.log('   Insights: 7')
   console.log('   Audiences: 11')
-  console.log('   Crosstabs: 9')
+  console.log('   Crosstabs: 16')
   console.log('   Dashboards: 7')
   console.log('   Charts: 10')
   console.log('   Reports: 20')
