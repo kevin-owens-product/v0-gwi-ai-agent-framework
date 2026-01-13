@@ -65,43 +65,278 @@ interface Report {
   author: { name: string; avatar: string }
 }
 
-// Demo reports shown when API returns empty
+// Demo reports shown when API returns empty - organized by solution area
 const demoReports: Report[] = [
+  // ============================================================================
+  // CORE SOLUTION AREA REPORTS
+  // ============================================================================
   {
-    id: "1",
-    title: "Q4 2024 Consumer Insights Report",
+    id: "core-1",
+    title: "Global Audience Segmentation Analysis 2024",
     type: "presentation",
     status: "published",
     thumbnail: "/presentation-slides.png",
-    createdAt: "2024-12-01",
-    updatedAt: "2024-12-03",
-    views: 234,
-    agent: "Audience Strategy Agent",
+    createdAt: "2024-12-10",
+    updatedAt: "2024-12-12",
+    views: 892,
+    agent: "Audience Explorer Agent",
     author: { name: "Sarah Chen", avatar: "/diverse-woman-avatar.png" },
   },
   {
-    id: "2",
-    title: "Gen Z Media Consumption Dashboard",
+    id: "core-2",
+    title: "Millennial vs Gen Z Behavioral Comparison",
+    type: "dashboard",
+    status: "published",
+    thumbnail: "/analytics-dashboard.png",
+    createdAt: "2024-12-05",
+    updatedAt: "2024-12-08",
+    views: 1247,
+    agent: "Persona Architect Agent",
+    author: { name: "Michael Park", avatar: "/man-avatar.png" },
+  },
+  {
+    id: "core-3",
+    title: "Cultural Shifts in Consumer Values Q4 2024",
+    type: "pdf",
+    status: "published",
+    thumbnail: "/pdf-report-document.jpg",
+    createdAt: "2024-11-28",
+    updatedAt: "2024-12-01",
+    views: 654,
+    agent: "Culture Tracker Agent",
+    author: { name: "Emily Johnson", avatar: "/professional-woman.png" },
+  },
+
+  // ============================================================================
+  // SALES SOLUTION AREA REPORTS
+  // ============================================================================
+  {
+    id: "sales-1",
+    title: "Enterprise Buyer Persona Deep Dive",
+    type: "presentation",
+    status: "published",
+    thumbnail: "/presentation-slides.png",
+    createdAt: "2024-12-08",
+    updatedAt: "2024-12-10",
+    views: 423,
+    agent: "Buyer Persona Agent",
+    author: { name: "James Wilson", avatar: "/man-avatar.png" },
+  },
+  {
+    id: "sales-2",
+    title: "Competitive Battlecard: Tech Industry Q4",
+    type: "pdf",
+    status: "published",
+    thumbnail: "/pdf-report-document.jpg",
+    createdAt: "2024-12-03",
+    updatedAt: "2024-12-06",
+    views: 312,
+    agent: "Competitive Intelligence Agent",
+    author: { name: "Lisa Martinez", avatar: "/diverse-woman-avatar.png" },
+  },
+  {
+    id: "sales-3",
+    title: "Account Prioritization Model Dashboard",
+    type: "dashboard",
+    status: "draft",
+    thumbnail: "/analytics-dashboard.png",
+    createdAt: "2024-12-11",
+    updatedAt: "2024-12-12",
+    views: 0,
+    agent: "Account Scoring Agent",
+    author: { name: "David Kim", avatar: "/man-avatar.png" },
+  },
+
+  // ============================================================================
+  // INSIGHTS SOLUTION AREA REPORTS
+  // ============================================================================
+  {
+    id: "insights-1",
+    title: "Consumer Motivation Analysis: Sustainability",
+    type: "presentation",
+    status: "published",
+    thumbnail: "/presentation-slides.png",
+    createdAt: "2024-11-25",
+    updatedAt: "2024-11-28",
+    views: 789,
+    agent: "Motivation Decoder Agent",
+    author: { name: "Rachel Green", avatar: "/professional-woman.png" },
+  },
+  {
+    id: "insights-2",
+    title: "Cross-Market Insights: US vs UK vs Germany",
+    type: "dashboard",
+    status: "published",
+    thumbnail: "/analytics-dashboard.png",
+    createdAt: "2024-11-20",
+    updatedAt: "2024-11-25",
+    views: 1056,
+    agent: "Global Perspective Agent",
+    author: { name: "Thomas Anderson", avatar: "/man-avatar.png" },
+  },
+
+  // ============================================================================
+  // AD SALES SOLUTION AREA REPORTS
+  // ============================================================================
+  {
+    id: "adsales-1",
+    title: "Premium Audience Package: Tech Enthusiasts",
+    type: "presentation",
+    status: "published",
+    thumbnail: "/presentation-slides.png",
+    createdAt: "2024-12-02",
+    updatedAt: "2024-12-05",
+    views: 534,
+    agent: "Audience Packager Agent",
+    author: { name: "Amanda Foster", avatar: "/diverse-woman-avatar.png" },
+  },
+  {
+    id: "adsales-2",
+    title: "Q1 2025 Media Planning Recommendations",
+    type: "pdf",
+    status: "draft",
+    thumbnail: "/pdf-report-document.jpg",
+    createdAt: "2024-12-09",
+    updatedAt: "2024-12-11",
+    views: 0,
+    agent: "Media Planner Agent",
+    author: { name: "Kevin O'Brien", avatar: "/man-avatar.png" },
+  },
+  {
+    id: "adsales-3",
+    title: "Automotive Advertiser Pitch Deck",
+    type: "presentation",
+    status: "published",
+    thumbnail: "/presentation-slides.png",
+    createdAt: "2024-11-18",
+    updatedAt: "2024-11-22",
+    views: 267,
+    agent: "Pitch Generator Agent",
+    author: { name: "Sophia Lee", avatar: "/professional-woman.png" },
+  },
+
+  // ============================================================================
+  // MARKETING SOLUTION AREA REPORTS
+  // ============================================================================
+  {
+    id: "marketing-1",
+    title: "Holiday Campaign Performance Forecast",
+    type: "dashboard",
+    status: "published",
+    thumbnail: "/analytics-dashboard.png",
+    createdAt: "2024-11-15",
+    updatedAt: "2024-11-20",
+    views: 1423,
+    agent: "Performance Predictor Agent",
+    author: { name: "Jennifer Walsh", avatar: "/diverse-woman-avatar.png" },
+  },
+  {
+    id: "marketing-2",
+    title: "Social Media Trend Analysis: TikTok vs Instagram",
+    type: "infographic",
+    status: "published",
+    thumbnail: "/analytics-dashboard.png",
+    createdAt: "2024-11-22",
+    updatedAt: "2024-11-25",
+    views: 2156,
+    agent: "Trend Forecaster Agent",
+    author: { name: "Alex Rivera", avatar: "/man-avatar.png" },
+  },
+  {
+    id: "marketing-3",
+    title: "Content Strategy Framework: Gen Z Engagement",
+    type: "pdf",
+    status: "draft",
+    thumbnail: "/pdf-report-document.jpg",
+    createdAt: "2024-12-07",
+    updatedAt: "2024-12-10",
+    views: 0,
+    agent: "Content Creator Agent",
+    author: { name: "Michelle Taylor", avatar: "/professional-woman.png" },
+  },
+
+  // ============================================================================
+  // PRODUCT DEVELOPMENT SOLUTION AREA REPORTS
+  // ============================================================================
+  {
+    id: "product-1",
+    title: "New Product Opportunity Landscape 2025",
+    type: "presentation",
+    status: "published",
+    thumbnail: "/presentation-slides.png",
+    createdAt: "2024-11-10",
+    updatedAt: "2024-11-15",
+    views: 876,
+    agent: "Opportunity Scout Agent",
+    author: { name: "Daniel Brooks", avatar: "/man-avatar.png" },
+  },
+  {
+    id: "product-2",
+    title: "Feature Prioritization Matrix: Mobile App",
     type: "dashboard",
     status: "published",
     thumbnail: "/analytics-dashboard.png",
     createdAt: "2024-11-28",
-    updatedAt: "2024-12-02",
-    views: 567,
-    agent: "Trend Forecaster Agent",
-    author: { name: "Michael Park", avatar: "/man-avatar.png" },
+    updatedAt: "2024-12-01",
+    views: 445,
+    agent: "Feature Prioritizer Agent",
+    author: { name: "Olivia Martinez", avatar: "/diverse-woman-avatar.png" },
+  },
+
+  // ============================================================================
+  // MARKET RESEARCH SOLUTION AREA REPORTS
+  // ============================================================================
+  {
+    id: "research-1",
+    title: "Financial Services Market Landscape Report",
+    type: "pdf",
+    status: "published",
+    thumbnail: "/pdf-report-document.jpg",
+    createdAt: "2024-10-25",
+    updatedAt: "2024-11-01",
+    views: 1678,
+    agent: "Market Mapper Agent",
+    author: { name: "Robert Chen", avatar: "/man-avatar.png" },
   },
   {
-    id: "3",
-    title: "Beauty Industry Competitive Analysis",
+    id: "research-2",
+    title: "Consumer Survey Results: Brand Perception",
+    type: "export",
+    status: "archived",
+    thumbnail: "/analytics-dashboard.png",
+    createdAt: "2024-09-15",
+    updatedAt: "2024-10-01",
+    views: 923,
+    agent: "Survey Analyzer Agent",
+    author: { name: "Nina Patel", avatar: "/professional-woman.png" },
+  },
+
+  // ============================================================================
+  // INNOVATION SOLUTION AREA REPORTS
+  // ============================================================================
+  {
+    id: "innovation-1",
+    title: "Emerging Trends Synthesis: AI & Consumer Tech",
+    type: "presentation",
+    status: "published",
+    thumbnail: "/presentation-slides.png",
+    createdAt: "2024-11-05",
+    updatedAt: "2024-11-10",
+    views: 1534,
+    agent: "Trend Synthesizer Agent",
+    author: { name: "Chris Morgan", avatar: "/man-avatar.png" },
+  },
+  {
+    id: "innovation-2",
+    title: "Innovation Validation Report: Smart Home Products",
     type: "pdf",
     status: "draft",
     thumbnail: "/pdf-report-document.jpg",
-    createdAt: "2024-11-25",
-    updatedAt: "2024-12-01",
+    createdAt: "2024-12-06",
+    updatedAt: "2024-12-09",
     views: 0,
-    agent: "Competitive Tracker Agent",
-    author: { name: "Emily Johnson", avatar: "/professional-woman.png" },
+    agent: "Innovation Validator Agent",
+    author: { name: "Emma Thompson", avatar: "/diverse-woman-avatar.png" },
   },
 ]
 
