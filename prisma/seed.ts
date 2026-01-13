@@ -3162,7 +3162,7 @@ async function main() {
         ],
         dataSources: ['GWI Core', 'GWI USA', 'Internal Performance Data'],
         markets: ['United States', 'Canada', 'United Kingdom', 'Germany', 'Australia'],
-        metadata: { generatedAt: now.toISOString(), // category: 'Automotive', proposalValue: '$2.5M' }
+        metadata: { generatedAt: now.toISOString() } // category: 'Automotive', proposalValue: '$2.5M'
       },
       thumbnail: '/presentation-slides.png',
       agentId: marketResearchAgent.id,
