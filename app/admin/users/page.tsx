@@ -116,7 +116,9 @@ export default function UsersPage() {
         ...(search && { search }),
         ...(statusFilter !== "all" && { status: statusFilter }),
       })
-      const response = await fetch(`/api/admin/users?${params}`)
+      const response = await fetch(`/api/admin/users?${params}`, {
+        credentials: "include",
+      })
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -154,6 +156,7 @@ export default function UsersPage() {
     try {
       const response = await fetch(`/api/admin/users/${selectedUser.id}/ban`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           reason: banReason,
@@ -183,6 +186,7 @@ export default function UsersPage() {
     try {
       const response = await fetch(`/api/admin/users/${userId}/ban/${banId}`, {
         method: "DELETE",
+        credentials: "include",
       })
       if (!response.ok) {
         if (response.status === 401) {
@@ -208,7 +212,9 @@ export default function UsersPage() {
 
   const fetchOrganizations = async () => {
     try {
-      const response = await fetch("/api/admin/tenants?limit=100")
+      const response = await fetch("/api/admin/tenants?limit=100", {
+        credentials: "include",
+      })
       if (!response.ok) {
         if (response.status === 401) {
           window.location.href = "/admin/login"
@@ -234,6 +240,7 @@ export default function UsersPage() {
     try {
       const response = await fetch("/api/admin/users", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...newUser,
