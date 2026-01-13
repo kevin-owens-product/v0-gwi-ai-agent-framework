@@ -82,41 +82,7 @@ import {
   Send,
   Loader2,
 } from "lucide-react"
-
-// Map slide types to appropriate thumbnail images
-const slideTypeThumbnails: Record<string, string> = {
-  title: "/executive-summary-slide-with-key-metrics.jpg",
-  metrics: "/key-findings-chart-with-statistics.jpg",
-  chart: "/trend-analysis-line-graph.jpg",
-  comparison: "/audience-segmentation-pie-chart.jpg",
-  insights: "/key-findings-chart.jpg",
-  recommendations: "/recommendations-bullet-points-slide.jpg",
-  marketMap: "/presentation-slides.png",
-  shareOfVoice: "/media-consumption-bar-chart.jpg",
-  swot: "/audience-segments-diagram.jpg",
-  trends: "/trend-analysis-line-graph.jpg",
-  threats: "/key-findings-chart-with-statistics.jpg",
-  kpi: "/analytics-dashboard.png",
-  table: "/data-export-spreadsheet.jpg",
-  alerts: "/key-findings-chart.jpg",
-  header: "/executive-summary-slide.jpg",
-  platform_stats: "/infographic-sports-audience.jpg",
-  top_content: "/gen-z-consumer-behavior-infographic.jpg",
-  sentiment: "/audience-segmentation-pie-chart.jpg",
-  marketSize: "/key-findings-chart-with-statistics.jpg",
-  countryAnalysis: "/presentation-slides.png",
-  competitive: "/audience-segments-diagram.jpg",
-  entryModes: "/recommendations-bullet-points-slide.jpg",
-  timeline: "/trend-analysis-line-graph.jpg",
-  financials: "/data-export-spreadsheet.jpg",
-}
-
-// Helper to get thumbnail for a slide based on its type or existing thumbnail
-function getSlideThumbnail(slide: any): string {
-  if (slide.thumbnail) return slide.thumbnail
-  if (slide.type && slideTypeThumbnails[slide.type]) return slideTypeThumbnails[slide.type]
-  return "/placeholder.svg"
-}
+import { SlideContent, SlideThumbnail } from "./slide-content"
 
 // Default placeholder data for when report is loading or has no content
 const defaultReportData = {
@@ -418,10 +384,10 @@ export function ReportViewer({ id }: { id: string }) {
         <div className="flex-1 p-6 flex flex-col">
           {/* Slide viewer */}
           <div className="relative flex-1 bg-muted rounded-lg overflow-hidden mb-4 group">
-            <img
-              src={getSlideThumbnail(reportData.slides[currentSlide])}
-              alt={reportData.slides[currentSlide].title}
-              className="w-full h-full object-contain"
+            <SlideContent
+              slide={reportData.slides[currentSlide]}
+              slideIndex={currentSlide}
+              totalSlides={reportData.slides.length}
             />
 
             {/* Slide controls overlay */}
@@ -477,10 +443,10 @@ export function ReportViewer({ id }: { id: string }) {
                     : "border-transparent hover:border-muted-foreground/50"
                 }`}
               >
-                <img
-                  src={getSlideThumbnail(slide)}
-                  alt={slide.title}
-                  className="w-full h-full object-cover"
+                <SlideThumbnail
+                  slide={slide}
+                  slideIndex={index}
+                  totalSlides={reportData.slides.length}
                 />
                 <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-1">
                   <span className="text-[10px] text-white font-medium">
