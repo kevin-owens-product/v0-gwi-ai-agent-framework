@@ -30,6 +30,35 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ tree })
     }
 
+    // Helper function to recursively fetch child orgs
+    async function fetchChildOrgsRecursively(parentId: string, depth: number = 0, maxDepth: number = 10): Promise<any[]> {
+      if (depth >= maxDepth) return []
+
+      const children = await prisma.organization.findMany({
+        where: { parentOrgId: parentId },
+        include: {
+          _count: {
+            select: {
+              members: true,
+              childOrgs: true,
+            },
+          },
+        },
+        orderBy: { displayOrder: "asc" },
+      })
+
+      // Recursively fetch grandchildren for each child
+      for (const child of children) {
+        if (child._count.childOrgs > 0) {
+          (child as any).childOrgs = await fetchChildOrgsRecursively(child.id, depth + 1, maxDepth)
+        } else {
+          (child as any).childOrgs = []
+        }
+      }
+
+      return children
+    }
+
     // Get all root-level organizations (those without parents)
     const rootOrgs = await prisma.organization.findMany({
       where: {
@@ -42,49 +71,47 @@ export async function GET(request: NextRequest) {
             childOrgs: true,
           },
         },
-        childOrgs: {
-          include: {
-            _count: {
-              select: {
-                members: true,
-                childOrgs: true,
-              },
-            },
-          },
-          orderBy: { displayOrder: "asc" },
-        },
       },
       orderBy: { createdAt: "desc" },
     })
 
+    // Recursively fetch all child organizations for each root org
+    for (const rootOrg of rootOrgs) {
+      if (rootOrg._count.childOrgs > 0) {
+        (rootOrg as any).childOrgs = await fetchChildOrgsRecursively(rootOrg.id)
+      } else {
+        (rootOrg as any).childOrgs = []
+      }
+    }
+
     // Get hierarchy statistics
-    const stats = await prisma.$queryRaw<Array<{ orgType: string; count: bigint }>>`
-      SELECT "orgType", COUNT(*) as count
-      FROM "Organization"
-      GROUP BY "orgType"
-    `
+    const [stats, totalOrgs, totalWithChildren, totalWithParent, maxDepth] = await Promise.all([
+      prisma.$queryRaw<Array<{ orgType: string; count: bigint }>>`
+        SELECT "orgType", COUNT(*) as count
+        FROM "Organization"
+        GROUP BY "orgType"
+      `,
+      prisma.organization.count(),
+      prisma.organization.count({
+        where: { allowChildOrgs: true },
+      }),
+      prisma.organization.count({
+        where: { parentOrgId: { not: null } },
+      }),
+      prisma.organization.aggregate({
+        _max: { hierarchyLevel: true },
+      }),
+    ])
 
     const orgsByType = stats.reduce((acc, s) => {
       acc[s.orgType] = Number(s.count)
       return acc
     }, {} as Record<string, number>)
 
-    const totalWithChildren = await prisma.organization.count({
-      where: { allowChildOrgs: true },
-    })
-
-    const totalWithParent = await prisma.organization.count({
-      where: { parentOrgId: { not: null } },
-    })
-
-    const maxDepth = await prisma.organization.aggregate({
-      _max: { hierarchyLevel: true },
-    })
-
     return NextResponse.json({
       organizations: rootOrgs,
       stats: {
-        totalOrgs: rootOrgs.length,
+        totalOrgs,
         totalWithChildren,
         totalWithParent,
         maxDepth: maxDepth._max.hierarchyLevel || 0,

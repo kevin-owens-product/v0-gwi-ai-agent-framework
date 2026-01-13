@@ -120,12 +120,25 @@ export default function TenantsPage() {
         ...(statusFilter !== "all" && { status: statusFilter }),
       })
       const response = await fetch(`/api/admin/tenants?${params}`)
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          console.error("Unauthorized - redirecting to login")
+          window.location.href = "/admin/login"
+          return
+        }
+        throw new Error(`HTTP error: ${response.status}`)
+      }
+
       const data = await response.json()
-      setTenants(data.tenants)
-      setTotalPages(data.totalPages)
-      setTotal(data.total)
+      setTenants(data.tenants || [])
+      setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
     } catch (error) {
       console.error("Failed to fetch tenants:", error)
+      setTenants([])
+      setTotalPages(1)
+      setTotal(0)
     } finally {
       setIsLoading(false)
     }
@@ -142,7 +155,7 @@ export default function TenantsPage() {
     if (!selectedTenant || !suspendReason) return
     setIsSubmitting(true)
     try {
-      await fetch(`/api/admin/tenants/${selectedTenant.id}/suspend`, {
+      const response = await fetch(`/api/admin/tenants/${selectedTenant.id}/suspend`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -150,11 +163,20 @@ export default function TenantsPage() {
           suspensionType: suspendType,
         }),
       })
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        const data = await response.json()
+        throw new Error(data.error || "Failed to suspend tenant")
+      }
       setSuspendDialogOpen(false)
       setSuspendReason("")
       fetchTenants()
     } catch (error) {
       console.error("Failed to suspend tenant:", error)
+      alert(error instanceof Error ? error.message : "Failed to suspend tenant")
     } finally {
       setIsSubmitting(false)
     }
@@ -162,12 +184,21 @@ export default function TenantsPage() {
 
   const handleLiftSuspension = async (tenantId: string) => {
     try {
-      await fetch(`/api/admin/tenants/${tenantId}/suspend`, {
+      const response = await fetch(`/api/admin/tenants/${tenantId}/suspend`, {
         method: "DELETE",
       })
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        const data = await response.json()
+        throw new Error(data.error || "Failed to lift suspension")
+      }
       fetchTenants()
     } catch (error) {
       console.error("Failed to lift suspension:", error)
+      alert(error instanceof Error ? error.message : "Failed to lift suspension")
     }
   }
 
@@ -185,6 +216,10 @@ export default function TenantsPage() {
       })
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
         const data = await response.json()
         throw new Error(data.error || "Failed to create tenant")
       }

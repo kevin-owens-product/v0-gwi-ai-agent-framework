@@ -289,11 +289,23 @@ export default function HierarchyPage() {
     setIsLoading(true)
     try {
       const response = await fetch("/api/admin/hierarchy")
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          console.error("Unauthorized - redirecting to login")
+          window.location.href = "/admin/login"
+          return
+        }
+        throw new Error(`HTTP error: ${response.status}`)
+      }
+
       const data = await response.json()
-      setOrganizations(data.organizations)
-      setStats(data.stats)
+      setOrganizations(data.organizations || [])
+      setStats(data.stats || null)
     } catch (error) {
       console.error("Failed to fetch hierarchy:", error)
+      setOrganizations([])
+      setStats(null)
     } finally {
       setIsLoading(false)
     }
@@ -302,19 +314,38 @@ export default function HierarchyPage() {
   const fetchRelationships = useCallback(async () => {
     try {
       const response = await fetch("/api/admin/hierarchy/relationships")
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        throw new Error(`HTTP error: ${response.status}`)
+      }
+
       const data = await response.json()
-      setRelationships(data.relationships)
+      setRelationships(data.relationships || [])
     } catch (error) {
       console.error("Failed to fetch relationships:", error)
+      setRelationships([])
     }
   }, [])
 
   const fetchAllOrgs = useCallback(async () => {
     try {
       const response = await fetch("/api/admin/tenants?limit=200")
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        throw new Error(`HTTP error: ${response.status}`)
+      }
+
       const data = await response.json()
       setAllOrgs(
-        data.tenants.map((t: { id: string; name: string; slug: string }) => ({
+        (data.tenants || []).map((t: { id: string; name: string; slug: string }) => ({
           id: t.id,
           name: t.name,
           slug: t.slug,
@@ -322,6 +353,7 @@ export default function HierarchyPage() {
       )
     } catch (error) {
       console.error("Failed to fetch all orgs:", error)
+      setAllOrgs([])
     }
   }, [])
 
@@ -345,6 +377,10 @@ export default function HierarchyPage() {
       })
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
         const data = await response.json()
         throw new Error(data.error || "Failed to create child organization")
       }
@@ -378,6 +414,10 @@ export default function HierarchyPage() {
       })
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
         const data = await response.json()
         throw new Error(data.error || "Failed to create relationship")
       }
@@ -411,6 +451,10 @@ export default function HierarchyPage() {
       })
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
         const data = await response.json()
         throw new Error(data.error || "Failed to move organization")
       }
@@ -429,14 +473,23 @@ export default function HierarchyPage() {
 
   const handleUpdateRelationshipStatus = async (id: string, status: string) => {
     try {
-      await fetch("/api/admin/hierarchy/relationships", {
+      const response = await fetch("/api/admin/hierarchy/relationships", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ relationshipId: id, status }),
       })
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        const data = await response.json()
+        throw new Error(data.error || "Failed to update relationship")
+      }
       fetchRelationships()
     } catch (error) {
       console.error("Failed to update relationship:", error)
+      alert(error instanceof Error ? error.message : "Failed to update relationship")
     }
   }
 
