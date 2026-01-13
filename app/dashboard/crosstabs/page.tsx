@@ -17,14 +17,35 @@ interface Crosstab {
   lastModified: string
 }
 
-// Demo crosstabs for fallback
+// Demo crosstabs for fallback - organized by category
 const demoCrosstabs: Crosstab[] = [
-  { id: "1", name: "Generational Social Media Platform Analysis", audiences: 4, metrics: 8, lastModified: "1 hour ago" },
-  { id: "2", name: "Income Segment Purchase Channel Preferences", audiences: 5, metrics: 8, lastModified: "4 hours ago" },
-  { id: "3", name: "Global Market Digital Behavior Comparison", audiences: 8, metrics: 8, lastModified: "2 days ago" },
-  { id: "4", name: "Sustainability Attitudes by Consumer Segment", audiences: 5, metrics: 8, lastModified: "6 hours ago" },
-  { id: "5", name: "Brand Awareness Competitive Landscape", audiences: 6, metrics: 8, lastModified: "3 hours ago" },
-  { id: "6", name: "Media Consumption by Daypart", audiences: 5, metrics: 8, lastModified: "8 hours ago" },
+  // Social & Platform Analysis
+  { id: "social-1", name: "Generational Social Media Platform Analysis", audiences: 4, metrics: 8, lastModified: "1 hour ago" },
+  { id: "social-2", name: "TikTok vs Instagram Engagement by Age", audiences: 5, metrics: 6, lastModified: "3 hours ago" },
+  { id: "social-3", name: "Content Format Preferences by Generation", audiences: 4, metrics: 7, lastModified: "1 day ago" },
+
+  // Commerce & Purchase Behavior
+  { id: "commerce-1", name: "Income Segment Purchase Channel Preferences", audiences: 5, metrics: 8, lastModified: "4 hours ago" },
+  { id: "commerce-2", name: "E-commerce vs In-Store by Product Category", audiences: 6, metrics: 5, lastModified: "2 hours ago" },
+  { id: "commerce-3", name: "Subscription Service Adoption by Segment", audiences: 5, metrics: 6, lastModified: "6 hours ago" },
+
+  // Brand & Competitive Intelligence
+  { id: "brand-1", name: "Brand Awareness Competitive Landscape", audiences: 6, metrics: 8, lastModified: "3 hours ago" },
+  { id: "brand-2", name: "Brand Health Funnel by Market", audiences: 5, metrics: 5, lastModified: "5 hours ago" },
+  { id: "brand-3", name: "Competitive NPS Benchmarking", audiences: 4, metrics: 4, lastModified: "8 hours ago" },
+
+  // Media & Content Consumption
+  { id: "media-1", name: "Media Consumption by Daypart", audiences: 5, metrics: 8, lastModified: "8 hours ago" },
+  { id: "media-2", name: "Streaming Service Preferences by Age", audiences: 4, metrics: 6, lastModified: "12 hours ago" },
+  { id: "media-3", name: "News Source Trust by Demographics", audiences: 5, metrics: 7, lastModified: "1 day ago" },
+
+  // Demographics & Segmentation
+  { id: "demo-1", name: "Sustainability Attitudes by Consumer Segment", audiences: 5, metrics: 8, lastModified: "6 hours ago" },
+  { id: "demo-2", name: "Tech Adoption by Income Level", audiences: 4, metrics: 5, lastModified: "2 days ago" },
+
+  // Market & Geographic Analysis
+  { id: "market-1", name: "Global Market Digital Behavior Comparison", audiences: 8, metrics: 8, lastModified: "2 days ago" },
+  { id: "market-2", name: "US vs UK vs Germany Consumer Attitudes", audiences: 3, metrics: 10, lastModified: "1 day ago" },
 ]
 
 function formatTimeAgo(dateString: string): string {
