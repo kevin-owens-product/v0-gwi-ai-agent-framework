@@ -117,12 +117,25 @@ export default function UsersPage() {
         ...(statusFilter !== "all" && { status: statusFilter }),
       })
       const response = await fetch(`/api/admin/users?${params}`)
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          console.error("Unauthorized - redirecting to login")
+          window.location.href = "/admin/login"
+          return
+        }
+        throw new Error(`HTTP error: ${response.status}`)
+      }
+
       const data = await response.json()
-      setUsers(data.users)
-      setTotalPages(data.totalPages)
-      setTotal(data.total)
+      setUsers(data.users || [])
+      setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
     } catch (error) {
       console.error("Failed to fetch users:", error)
+      setUsers([])
+      setTotalPages(1)
+      setTotal(0)
     } finally {
       setIsLoading(false)
     }
@@ -139,7 +152,7 @@ export default function UsersPage() {
     if (!selectedUser || !banReason) return
     setIsSubmitting(true)
     try {
-      await fetch(`/api/admin/users/${selectedUser.id}/ban`, {
+      const response = await fetch(`/api/admin/users/${selectedUser.id}/ban`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -147,11 +160,20 @@ export default function UsersPage() {
           banType: banType,
         }),
       })
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        const data = await response.json()
+        throw new Error(data.error || "Failed to ban user")
+      }
       setBanDialogOpen(false)
       setBanReason("")
       fetchUsers()
     } catch (error) {
       console.error("Failed to ban user:", error)
+      alert(error instanceof Error ? error.message : "Failed to ban user")
     } finally {
       setIsSubmitting(false)
     }
@@ -159,12 +181,21 @@ export default function UsersPage() {
 
   const handleLiftBan = async (userId: string, banId: string) => {
     try {
-      await fetch(`/api/admin/users/${userId}/ban/${banId}`, {
+      const response = await fetch(`/api/admin/users/${userId}/ban/${banId}`, {
         method: "DELETE",
       })
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        const data = await response.json()
+        throw new Error(data.error || "Failed to lift ban")
+      }
       fetchUsers()
     } catch (error) {
       console.error("Failed to lift ban:", error)
+      alert(error instanceof Error ? error.message : "Failed to lift ban")
     }
   }
 
@@ -178,14 +209,22 @@ export default function UsersPage() {
   const fetchOrganizations = async () => {
     try {
       const response = await fetch("/api/admin/tenants?limit=100")
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        throw new Error(`HTTP error: ${response.status}`)
+      }
       const data = await response.json()
-      setOrganizations(data.tenants.map((t: { id: string; name: string; slug: string }) => ({
+      setOrganizations((data.tenants || []).map((t: { id: string; name: string; slug: string }) => ({
         id: t.id,
         name: t.name,
         slug: t.slug,
       })))
     } catch (error) {
       console.error("Failed to fetch organizations:", error)
+      setOrganizations([])
     }
   }
 
@@ -204,6 +243,10 @@ export default function UsersPage() {
       })
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
         const data = await response.json()
         throw new Error(data.error || "Failed to create user")
       }
