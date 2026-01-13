@@ -51,6 +51,7 @@ import {
   Shield,
   Mail,
 } from "lucide-react"
+import Link from "next/link"
 
 interface User {
   id: string
@@ -292,9 +293,11 @@ export default function UsersPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
+                            <DropdownMenuItem asChild>
+                              <Link href={`/admin/users/${user.id}`}>
+                                <Eye className="h-4 w-4 mr-2" />
+                                View Details
+                              </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <ExternalLink className="h-4 w-4 mr-2" />
