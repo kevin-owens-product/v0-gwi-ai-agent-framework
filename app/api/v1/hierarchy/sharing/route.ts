@@ -8,7 +8,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/lib/db'
 import { getUserMembership } from '@/lib/tenant'
 import { getOrgIdFromRequest } from '@/lib/shared-utils'
 import { hasPermission, canShareResources } from '@/lib/permissions'
