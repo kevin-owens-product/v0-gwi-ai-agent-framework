@@ -31,9 +31,15 @@ services:
         sync: false
       - key: STRIPE_STARTER_MONTHLY_PRICE_ID
         sync: false
+      - key: STRIPE_STARTER_YEARLY_PRICE_ID
+        sync: false
       - key: STRIPE_PROFESSIONAL_MONTHLY_PRICE_ID
         sync: false
+      - key: STRIPE_PROFESSIONAL_YEARLY_PRICE_ID
+        sync: false
       - key: STRIPE_ENTERPRISE_MONTHLY_PRICE_ID
+        sync: false
+      - key: STRIPE_ENTERPRISE_YEARLY_PRICE_ID
         sync: false
       - key: GOOGLE_CLIENT_ID
         sync: false
@@ -55,7 +61,9 @@ services:
         sync: false
       - key: GWI_API_BASE_URL
         sync: false
-      - key: GWI_API_TOKEN
+      - key: GWI_PLATFORM_API_KEY
+        sync: false
+      - key: GWI_SPARK_API_KEY
         sync: false
 
 databases:
