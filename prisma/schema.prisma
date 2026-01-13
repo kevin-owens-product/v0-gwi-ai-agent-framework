@@ -1070,3 +1070,135 @@ enum SuspensionType {
   BILLING_HOLD   // Suspended due to billing issues
   INVESTIGATION  // Under investigation
 }
+
+// ==================== DATA CHANGE TRACKING ====================
+
+model EntityVersion {
+  id            String     @id @default(cuid())
+  orgId         String
+  entityType    String     // 'audience' | 'crosstab' | 'insight' | 'chart' | 'report' | 'dashboard'
+  entityId      String
+  version       Int
+  data          Json       // Full entity snapshot
+  delta         Json?      // Changes from previous version (null for first version)
+  changedFields String[]   // List of changed field names
+  changeType    ChangeType
+  changeSummary String?    // Human-readable summary of changes
+  createdBy     String?
+  createdAt     DateTime   @default(now())
+
+  @@unique([entityType, entityId, version])
+  @@index([orgId])
+  @@index([orgId, entityType])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@index([createdBy])
+}
+
+enum ChangeType {
+  CREATE
+  UPDATE
+  DELETE
+  REGENERATE  // For AI-generated content that was regenerated
+  RESTORE     // Restored from a previous version
+}
+
+model AnalysisHistory {
+  id              String    @id @default(cuid())
+  orgId           String
+  analysisType    String    // 'crosstab' | 'audience_insight' | 'brand_health' | 'market_analysis'
+  referenceId     String    // ID of the analyzed entity
+  analysisVersion Int
+  results         Json      // Full analysis results
+  aiInsights      String[]  // AI-generated insights at this point
+  keyMetrics      Json      // Important metrics for comparison
+  confidence      Float?    // Confidence score 0-1
+  dataSourceDate  DateTime? // When underlying data was collected
+  metadata        Json      @default("{}")
+  createdAt       DateTime  @default(now())
+
+  @@unique([analysisType, referenceId, analysisVersion])
+  @@index([orgId])
+  @@index([orgId, analysisType])
+  @@index([analysisType, referenceId])
+  @@index([createdAt])
+}
+
+model ChangeSummary {
+  id                 String    @id @default(cuid())
+  orgId              String
+  period             String    // 'daily' | 'weekly' | 'monthly'
+  periodStart        DateTime
+  periodEnd          DateTime
+  summaryType        String    // 'overview' | 'audiences' | 'insights' | 'brand' | 'charts'
+  metrics            Json      // Aggregated change metrics
+  highlights         Json      // Notable changes for display
+  newItems           Int       @default(0)
+  updatedItems       Int       @default(0)
+  deletedItems       Int       @default(0)
+  significantChanges Int       @default(0)
+  topChanges         Json      @default("[]") // Array of most important changes
+  createdAt          DateTime  @default(now())
+
+  @@unique([orgId, period, periodStart, summaryType])
+  @@index([orgId])
+  @@index([orgId, period])
+  @@index([periodStart, periodEnd])
+}
+
+model UserChangeTracker {
+  id              String    @id @default(cuid())
+  orgId           String
+  userId          String
+  lastVisit       DateTime  @default(now())
+  lastSeenChanges DateTime  @default(now()) // When user last acknowledged changes
+  preferences     Json      @default("{}") // User preferences for change notifications
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([orgId, userId])
+  @@index([orgId])
+  @@index([userId])
+}
+
+model ChangeAlert {
+  id              String           @id @default(cuid())
+  orgId           String
+  entityType      String
+  entityId        String
+  alertType       ChangeAlertType
+  severity        AlertSeverity    @default(INFO)
+  title           String
+  message         String
+  metric          String?          // The metric that triggered the alert
+  previousValue   Json?            // Previous value
+  currentValue    Json?            // Current value
+  changePercent   Float?           // Percentage change
+  threshold       Float?           // The threshold that was crossed
+  isRead          Boolean          @default(false)
+  isDismissed     Boolean          @default(false)
+  metadata        Json             @default("{}")
+  createdAt       DateTime         @default(now())
+
+  @@index([orgId])
+  @@index([orgId, entityType])
+  @@index([orgId, isRead])
+  @@index([orgId, alertType])
+  @@index([createdAt])
+}
+
+enum ChangeAlertType {
+  SIGNIFICANT_INCREASE
+  SIGNIFICANT_DECREASE
+  THRESHOLD_CROSSED
+  TREND_REVERSAL
+  NEW_DATA_AVAILABLE
+  ANALYSIS_CHANGED
+  ANOMALY_DETECTED
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
