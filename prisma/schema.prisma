@@ -18,6 +18,48 @@ model Organization {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Multi-level hierarchy fields
+  orgType           OrganizationType    @default(STANDARD)
+  parentOrgId       String?             // Direct parent organization
+  rootOrgId         String?             // Top-level organization in hierarchy (for quick queries)
+  hierarchyPath     String              @default("/") // Materialized path for efficient tree queries (e.g., "/rootId/parentId/id/")
+  hierarchyLevel    Int                 @default(0)   // Depth in the hierarchy (0 = root)
+  maxChildDepth     Int                 @default(5)   // Maximum allowed child depth
+  displayOrder      Int                 @default(0)   // Ordering among siblings
+
+  // Hierarchy settings
+  hierarchySettings Json                @default("{}") // Hierarchy-specific configurations
+  inheritSettings   Boolean             @default(true) // Whether to inherit parent settings
+  allowChildOrgs    Boolean             @default(false) // Whether this org can have children
+
+  // Branding and identity
+  logoUrl           String?
+  brandColor        String?             // Primary brand color
+  domain            String?             @unique // Custom domain for white-labeling
+
+  // Industry and categorization
+  industry          String?
+  companySize       CompanySize?
+  country           String?
+  timezone          String              @default("UTC")
+
+  // Hierarchy relationships
+  parentOrg         Organization?       @relation("OrgHierarchy", fields: [parentOrgId], references: [id])
+  childOrgs         Organization[]      @relation("OrgHierarchy")
+  rootOrg           Organization?       @relation("RootOrgRef", fields: [rootOrgId], references: [id])
+  descendantOrgs    Organization[]      @relation("RootOrgRef")
+
+  // Cross-org relationships (partnerships, etc.)
+  relationshipsFrom OrgRelationship[]   @relation("RelationshipFrom")
+  relationshipsTo   OrgRelationship[]   @relation("RelationshipTo")
+
+  // Shared resource access
+  sharedResourceAccess SharedResourceAccess[] @relation("SharedResourceOrg")
+  sharedResources      SharedResourceAccess[] @relation("SharedResourceOwner")
+
+  // Role inheritance configurations
+  roleInheritanceRules RoleInheritanceRule[]
+
   members       OrganizationMember[]
   agents        Agent[]
   dataSources   DataSource[]
@@ -38,6 +80,13 @@ model Organization {
   templates     Template[]
   brandTrackings BrandTracking[]
   brandSnapshots BrandTrackingSnapshot[]
+
+  @@index([parentOrgId])
+  @@index([rootOrgId])
+  @@index([hierarchyPath])
+  @@index([orgType])
+  @@index([industry])
+  @@index([domain])
 }
 
 model OrganizationMember {
@@ -67,6 +116,311 @@ enum Role {
   ADMIN
   MEMBER
   VIEWER
+}
+
+// ==================== ORGANIZATION HIERARCHY TYPES ====================
+
+enum OrganizationType {
+  STANDARD          // Default individual organization
+  AGENCY            // Marketing/advertising agency managing clients
+  HOLDING_COMPANY   // Parent company owning multiple subsidiaries
+  SUBSIDIARY        // Company owned by a holding company
+  BRAND             // Individual brand entity
+  SUB_BRAND         // Sub-brand under a parent brand
+  DIVISION          // Business division within an enterprise
+  DEPARTMENT        // Department within a division or org
+  FRANCHISE         // Franchise organization
+  FRANCHISEE        // Individual franchise location
+  RESELLER          // Partner that resells to clients
+  CLIENT            // Client organization (managed by agency/reseller)
+  REGIONAL          // Regional entity (e.g., EMEA, APAC)
+  PORTFOLIO_COMPANY // Company within a PE/VC portfolio
+}
+
+enum CompanySize {
+  SOLO              // 1 person
+  SMALL             // 2-10 employees
+  MEDIUM            // 11-50 employees
+  LARGE             // 51-200 employees
+  ENTERPRISE        // 201-1000 employees
+  GLOBAL            // 1000+ employees
+}
+
+enum OrgRelationshipType {
+  OWNERSHIP         // Full ownership (holding company -> subsidiary)
+  MANAGEMENT        // Management access (agency -> client)
+  PARTNERSHIP       // Partnership/collaboration
+  LICENSING         // Licensing agreement (franchisor -> franchisee)
+  RESELLER          // Reseller relationship
+  WHITE_LABEL       // White-label partnership
+  DATA_SHARING      // Data sharing agreement only
+  CONSORTIUM        // Part of a consortium/group
+}
+
+enum RelationshipStatus {
+  PENDING           // Awaiting acceptance
+  ACTIVE            // Currently active
+  SUSPENDED         // Temporarily suspended
+  TERMINATED        // Ended
+}
+
+enum BillingRelationship {
+  INDEPENDENT       // Each org handles own billing
+  PARENT_PAYS       // Parent pays for child
+  CONSOLIDATED      // Consolidated billing across hierarchy
+  PASS_THROUGH      // Parent bills but passes costs through
+  SUBSIDIZED        // Parent partially subsidizes
+}
+
+enum ResourceSharingScope {
+  NONE              // No sharing
+  READ_ONLY         // Can view but not modify
+  FULL_ACCESS       // Full access to shared resources
+  INHERIT           // Inherit from parent org settings
+}
+
+enum SharedResourceType {
+  TEMPLATE          // Report/dashboard templates
+  AUDIENCE          // Audience definitions
+  DATA_SOURCE       // Data source configurations
+  BRAND_TRACKING    // Brand tracking setups
+  WORKFLOW          // Workflow configurations
+  AGENT             // AI agent configurations
+  CHART             // Chart configurations
+  ALL               // All resource types
+}
+
+// ==================== ORGANIZATION RELATIONSHIPS ====================
+
+model OrgRelationship {
+  id                String               @id @default(cuid())
+  fromOrgId         String               // The org initiating/controlling the relationship
+  toOrgId           String               // The org being related to
+  relationshipType  OrgRelationshipType
+  status            RelationshipStatus   @default(PENDING)
+
+  // Permissions granted through this relationship
+  permissions       Json                 @default("{}") // Granular permissions
+  accessLevel       ResourceSharingScope @default(READ_ONLY)
+
+  // Billing configuration
+  billingRelation   BillingRelationship  @default(INDEPENDENT)
+  billingConfig     Json                 @default("{}")
+
+  // Relationship metadata
+  contractStart     DateTime?
+  contractEnd       DateTime?
+  notes             String?
+  metadata          Json                 @default("{}")
+
+  // Approval tracking
+  initiatedBy       String               // User who created
+  approvedBy        String?              // User who approved (if applicable)
+  approvedAt        DateTime?
+
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  fromOrg           Organization         @relation("RelationshipFrom", fields: [fromOrgId], references: [id], onDelete: Cascade)
+  toOrg             Organization         @relation("RelationshipTo", fields: [toOrgId], references: [id], onDelete: Cascade)
+
+  @@unique([fromOrgId, toOrgId, relationshipType])
+  @@index([fromOrgId])
+  @@index([toOrgId])
+  @@index([relationshipType])
+  @@index([status])
+}
+
+// ==================== SHARED RESOURCE ACCESS ====================
+
+model SharedResourceAccess {
+  id                String               @id @default(cuid())
+  ownerOrgId        String               // Organization that owns the resource
+  targetOrgId       String               // Organization granted access
+  resourceType      SharedResourceType
+  resourceId        String?              // Specific resource ID, null = all of type
+  accessLevel       ResourceSharingScope
+
+  // Fine-grained permissions
+  canView           Boolean              @default(true)
+  canEdit           Boolean              @default(false)
+  canDelete         Boolean              @default(false)
+  canShare          Boolean              @default(false) // Can re-share with others
+
+  // Propagation settings
+  propagateToChildren Boolean            @default(false) // Share with target's children too
+
+  // Validity
+  expiresAt         DateTime?
+  isActive          Boolean              @default(true)
+
+  grantedBy         String               // User who granted access
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  ownerOrg          Organization         @relation("SharedResourceOwner", fields: [ownerOrgId], references: [id], onDelete: Cascade)
+  targetOrg         Organization         @relation("SharedResourceOrg", fields: [targetOrgId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerOrgId, targetOrgId, resourceType, resourceId])
+  @@index([ownerOrgId])
+  @@index([targetOrgId])
+  @@index([resourceType])
+  @@index([isActive])
+}
+
+// ==================== ROLE INHERITANCE RULES ====================
+
+model RoleInheritanceRule {
+  id                String    @id @default(cuid())
+  orgId             String    // The org where this rule applies
+
+  // Rule definition
+  name              String
+  description       String?
+
+  // Source role (in parent org)
+  sourceRole        Role
+  sourceOrgType     OrganizationType? // Optional: only apply for certain org types
+
+  // Target role (in this/child org)
+  targetRole        Role
+
+  // Inheritance direction
+  inheritUp         Boolean   @default(false) // Role inherits upward to parent
+  inheritDown       Boolean   @default(true)  // Role inherits downward to children
+  inheritLevels     Int       @default(1)     // How many levels to inherit (-1 = unlimited)
+
+  // Conditions
+  requiresApproval  Boolean   @default(false)
+  conditions        Json      @default("{}") // Additional conditions
+
+  isActive          Boolean   @default(true)
+  priority          Int       @default(0)    // Higher = evaluated first
+
+  createdBy         String
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  organization      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([sourceRole])
+  @@index([isActive])
+}
+
+// ==================== HIERARCHY AUDIT LOG ====================
+
+model HierarchyAuditLog {
+  id                String    @id @default(cuid())
+  orgId             String    // Organization affected
+  actorOrgId        String?   // Organization of the actor (may differ for cross-org actions)
+  actorUserId       String
+
+  action            HierarchyAction
+  targetOrgId       String?   // Target org for relationship actions
+
+  previousState     Json?     // State before change
+  newState          Json?     // State after change
+
+  metadata          Json      @default("{}")
+  ipAddress         String?
+  userAgent         String?
+
+  timestamp         DateTime  @default(now())
+
+  @@index([orgId])
+  @@index([actorOrgId])
+  @@index([actorUserId])
+  @@index([action])
+  @@index([timestamp])
+}
+
+enum HierarchyAction {
+  ORG_CREATED
+  ORG_MOVED            // Changed parent
+  ORG_TYPE_CHANGED
+  RELATIONSHIP_CREATED
+  RELATIONSHIP_UPDATED
+  RELATIONSHIP_TERMINATED
+  RESOURCE_SHARED
+  RESOURCE_UNSHARED
+  ACCESS_GRANTED
+  ACCESS_REVOKED
+  ROLE_INHERITED
+  SETTINGS_INHERITED
+  BILLING_CHANGED
+}
+
+// ==================== HIERARCHY TEMPLATES ====================
+
+model HierarchyTemplate {
+  id                String    @id @default(cuid())
+  name              String
+  description       String?
+
+  // Template structure
+  structure         Json      // Predefined org structure template
+  defaultSettings   Json      @default("{}") // Default settings for orgs in this template
+  defaultRules      Json      @default("{}") // Default inheritance rules
+
+  // Applicability
+  applicableToTypes OrganizationType[]
+  industry          String?   // Industry-specific template
+
+  // Template metadata
+  isPublic          Boolean   @default(false) // Available to all
+  isOfficial        Boolean   @default(false) // Platform-provided template
+  usageCount        Int       @default(0)
+
+  createdBy         String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([isPublic])
+  @@index([applicableToTypes])
+  @@index([industry])
+}
+
+// ==================== CROSS-ORG INVITATIONS ====================
+
+model CrossOrgInvitation {
+  id                String               @id @default(cuid())
+  fromOrgId         String               // Inviting organization
+  toEmail           String               // Email of invitee
+  toOrgId           String?              // If inviting existing org
+
+  relationshipType  OrgRelationshipType
+  proposedRole      Role                 @default(MEMBER)
+  proposedAccess    ResourceSharingScope @default(READ_ONLY)
+
+  // New org creation (if toOrgId is null)
+  newOrgName        String?
+  newOrgType        OrganizationType?
+
+  // Invitation details
+  message           String?
+  token             String               @unique
+  status            CrossOrgInviteStatus @default(PENDING)
+
+  expiresAt         DateTime
+  respondedAt       DateTime?
+
+  invitedBy         String               // User who sent invite
+  createdAt         DateTime             @default(now())
+
+  @@index([fromOrgId])
+  @@index([toEmail])
+  @@index([toOrgId])
+  @@index([token])
+  @@index([status])
+}
+
+enum CrossOrgInviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  REVOKED
 }
 
 // ==================== USERS & AUTH ====================
