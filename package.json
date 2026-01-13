@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "prisma generate && prisma migrate deploy && next build && npm run db:seed-if-empty",
-    "build:no-seed": "prisma generate && prisma migrate deploy && next build",
-    "build:with-seed": "prisma generate && prisma migrate deploy && next build && npm run db:seed",
+    "build": "prisma generate && npm run db:migrate && next build && npm run db:seed-if-empty",
+    "build:no-seed": "prisma generate && npm run db:migrate && next build",
+    "build:with-seed": "prisma generate && npm run db:migrate && next build && npm run db:seed",
     "dev": "next dev",
     "dev:seed": "npm run db:seed && next dev",
     "lint": "eslint .",
