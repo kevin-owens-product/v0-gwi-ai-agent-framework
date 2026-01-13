@@ -1,17 +1,9 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
+// Use CSS variables for fonts instead of next/font/google to avoid build-time network calls
+// The fonts will be loaded via CSS if available, with fallbacks to system fonts
 
 export const metadata: Metadata = {
   title: "GWI Insights | AI-Powered Human Intelligence Platform",
@@ -43,7 +35,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+      </head>
+      <body className="font-sans antialiased" style={{ fontFamily: 'Geist, system-ui, arial, sans-serif' }}>
         {children}
       </body>
     </html>
