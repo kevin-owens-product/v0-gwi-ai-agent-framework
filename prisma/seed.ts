@@ -7924,6 +7924,729 @@ async function main() {
     ]
   })
 
+  // ==================== ORGANIZATION RELATIONSHIPS ====================
+  console.log('🔗 Creating organization relationships...')
+
+  await safeSeedSection('Organization Relationships', async () => {
+    // Agency-Client relationship
+    await prisma.orgRelationship.create({
+      data: {
+        fromOrgId: enterpriseCo.id,
+        toOrgId: acmeCorp.id,
+        relationshipType: 'MANAGEMENT',
+        status: 'ACTIVE',
+        permissions: { canViewReports: true, canManageUsers: false, canAccessBilling: false },
+        accessLevel: 'READ_ONLY',
+        billingRelation: 'INDEPENDENT',
+        initiatedBy: sarahEnterprise.id,
+        approvedBy: adminUser.id,
+        approvedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        notes: 'Strategic partnership for market research',
+      }
+    })
+
+    // Data sharing partnership
+    await prisma.orgRelationship.create({
+      data: {
+        fromOrgId: acmeCorp.id,
+        toOrgId: techStartup.id,
+        relationshipType: 'DATA_SHARING',
+        status: 'ACTIVE',
+        permissions: { canShareInsights: true, canShareAudiences: true },
+        accessLevel: 'READ_ONLY',
+        billingRelation: 'INDEPENDENT',
+        initiatedBy: adminUser.id,
+        approvedBy: bobWilson.id,
+        approvedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+      }
+    })
+
+    // Pending partnership request
+    await prisma.orgRelationship.create({
+      data: {
+        fromOrgId: techStartup.id,
+        toOrgId: enterpriseCo.id,
+        relationshipType: 'PARTNERSHIP',
+        status: 'PENDING',
+        permissions: {},
+        accessLevel: 'NONE',
+        billingRelation: 'INDEPENDENT',
+        initiatedBy: bobWilson.id,
+        notes: 'Requesting partnership for joint research initiatives',
+      }
+    })
+  })
+
+  // ==================== SHARED RESOURCE ACCESS ====================
+  console.log('📤 Creating shared resource access records...')
+
+  await safeSeedSection('Shared Resource Access', async () => {
+    await prisma.sharedResourceAccess.createMany({
+      data: [
+        {
+          ownerOrgId: acmeCorp.id,
+          targetOrgId: techStartup.id,
+          resourceType: 'TEMPLATE',
+          resourceId: null,
+          accessLevel: 'READ_ONLY',
+          canView: true,
+          canEdit: false,
+          canDelete: false,
+          canShare: false,
+          propagateToChildren: false,
+          grantedBy: adminUser.id,
+        },
+        {
+          ownerOrgId: enterpriseCo.id,
+          targetOrgId: acmeCorp.id,
+          resourceType: 'AUDIENCE',
+          resourceId: null,
+          accessLevel: 'READ_ONLY',
+          canView: true,
+          canEdit: false,
+          canDelete: false,
+          canShare: false,
+          propagateToChildren: false,
+          grantedBy: sarahEnterprise.id,
+        },
+        {
+          ownerOrgId: acmeCorp.id,
+          targetOrgId: enterpriseCo.id,
+          resourceType: 'BRAND_TRACKING',
+          resourceId: null,
+          accessLevel: 'FULL_ACCESS',
+          canView: true,
+          canEdit: true,
+          canDelete: false,
+          canShare: true,
+          propagateToChildren: true,
+          grantedBy: adminUser.id,
+        },
+      ]
+    })
+  })
+
+  // ==================== ROLE INHERITANCE RULES ====================
+  console.log('👑 Creating role inheritance rules...')
+
+  await safeSeedSection('Role Inheritance Rules', async () => {
+    await prisma.roleInheritanceRule.createMany({
+      data: [
+        {
+          orgId: enterpriseCo.id,
+          name: 'Admin Propagation',
+          description: 'Propagate admin role to child organizations',
+          sourceRole: 'ADMIN',
+          targetRole: 'ADMIN',
+          inheritUp: false,
+          inheritDown: true,
+          inheritLevels: 2,
+          requiresApproval: false,
+          isActive: true,
+          priority: 10,
+          createdBy: sarahEnterprise.id,
+        },
+        {
+          orgId: enterpriseCo.id,
+          name: 'Viewer Access',
+          description: 'Allow viewers to access child org data',
+          sourceRole: 'VIEWER',
+          targetRole: 'VIEWER',
+          inheritUp: false,
+          inheritDown: true,
+          inheritLevels: 1,
+          requiresApproval: false,
+          isActive: true,
+          priority: 5,
+          createdBy: sarahEnterprise.id,
+        },
+      ]
+    })
+  })
+
+  // ==================== HIERARCHY TEMPLATES ====================
+  console.log('📋 Creating hierarchy templates...')
+
+  await safeSeedSection('Hierarchy Templates', async () => {
+    await prisma.hierarchyTemplate.createMany({
+      data: [
+        {
+          name: 'Enterprise with Divisions',
+          description: 'Standard enterprise structure with regional divisions',
+          structure: {
+            rootType: 'HOLDING_COMPANY',
+            levels: [
+              { type: 'DIVISION', maxChildren: 10 },
+              { type: 'DEPARTMENT', maxChildren: 20 },
+            ]
+          },
+          defaultSettings: { inheritSettings: true, allowChildOrgs: true },
+          defaultPermissions: { canViewReports: true, canManageUsers: false },
+          isPublic: true,
+          usageCount: 15,
+          createdBy: superAdmin?.id || 'system',
+        },
+        {
+          name: 'Agency with Clients',
+          description: 'Marketing agency structure with client management',
+          structure: {
+            rootType: 'AGENCY',
+            levels: [
+              { type: 'CLIENT', maxChildren: 100 },
+            ]
+          },
+          defaultSettings: { inheritSettings: false, allowChildOrgs: false },
+          defaultPermissions: { canViewReports: true, canAccessBilling: false },
+          isPublic: true,
+          usageCount: 8,
+          createdBy: superAdmin?.id || 'system',
+        },
+        {
+          name: 'Franchise Network',
+          description: 'Franchise structure with regional franchisees',
+          structure: {
+            rootType: 'FRANCHISE',
+            levels: [
+              { type: 'REGIONAL', maxChildren: 10 },
+              { type: 'FRANCHISEE', maxChildren: 50 },
+            ]
+          },
+          defaultSettings: { inheritSettings: true, allowChildOrgs: true },
+          defaultPermissions: { canShareData: true },
+          isPublic: true,
+          usageCount: 3,
+          createdBy: superAdmin?.id || 'system',
+        },
+      ]
+    })
+  })
+
+  // ==================== CROSS-ORG INVITATIONS ====================
+  console.log('✉️ Creating cross-org invitations...')
+
+  await safeSeedSection('Cross-Org Invitations', async () => {
+    await prisma.crossOrgInvitation.createMany({
+      data: [
+        {
+          fromOrgId: enterpriseCo.id,
+          toEmail: 'partner@newcompany.com',
+          relationshipType: 'PARTNERSHIP',
+          proposedPermissions: { canViewReports: true, canShareData: true },
+          proposedAccessLevel: 'READ_ONLY',
+          message: 'We would like to invite you to join our partner network for collaborative research.',
+          status: 'PENDING',
+          expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+          createdBy: sarahEnterprise.id,
+        },
+        {
+          fromOrgId: acmeCorp.id,
+          toEmail: 'client@newbrand.io',
+          relationshipType: 'MANAGEMENT',
+          proposedPermissions: { fullAccess: true },
+          proposedAccessLevel: 'FULL_ACCESS',
+          message: 'Welcome to Acme! We would like to manage your analytics.',
+          status: 'PENDING',
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          createdBy: adminUser.id,
+        },
+        {
+          fromOrgId: techStartup.id,
+          toEmail: 'test@declined.com',
+          relationshipType: 'DATA_SHARING',
+          proposedPermissions: {},
+          proposedAccessLevel: 'READ_ONLY',
+          message: 'Data sharing request',
+          status: 'DECLINED',
+          declinedReason: 'Not interested at this time',
+          expiresAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          createdBy: bobWilson.id,
+        },
+      ]
+    })
+  })
+
+  // ==================== WORKFLOWS ====================
+  console.log('⚙️ Creating workflows...')
+
+  await safeSeedSection('Workflows', async () => {
+    const workflow1 = await prisma.workflow.create({
+      data: {
+        orgId: acmeCorp.id,
+        name: 'Weekly Market Analysis',
+        description: 'Automated weekly market analysis with report generation',
+        status: 'ACTIVE',
+        isPublic: false,
+        createdBy: adminUser.id,
+        config: {
+          schedule: 'weekly',
+          steps: [
+            { agentType: 'RESEARCH', order: 1 },
+            { agentType: 'ANALYSIS', order: 2 },
+            { agentType: 'REPORTING', order: 3 },
+          ],
+          notifications: { email: true, slack: false },
+        },
+      }
+    })
+
+    const workflow2 = await prisma.workflow.create({
+      data: {
+        orgId: acmeCorp.id,
+        name: 'Brand Health Monitor',
+        description: 'Daily brand sentiment monitoring and alerting',
+        status: 'ACTIVE',
+        isPublic: false,
+        createdBy: johnDoe.id,
+        config: {
+          schedule: 'daily',
+          steps: [
+            { agentType: 'MONITORING', order: 1 },
+            { agentType: 'ANALYSIS', order: 2 },
+          ],
+          alertThreshold: -0.2,
+        },
+      }
+    })
+
+    await prisma.workflow.create({
+      data: {
+        orgId: enterpriseCo.id,
+        name: 'Quarterly Report Generation',
+        description: 'Generate comprehensive quarterly reports for all clients',
+        status: 'ACTIVE',
+        isPublic: true,
+        createdBy: sarahEnterprise.id,
+        config: {
+          schedule: 'quarterly',
+          steps: [
+            { agentType: 'RESEARCH', order: 1 },
+            { agentType: 'ANALYSIS', order: 2 },
+            { agentType: 'REPORTING', order: 3 },
+          ],
+          outputFormat: 'pdf',
+        },
+      }
+    })
+
+    // ==================== WORKFLOW RUNS ====================
+    console.log('🏃 Creating workflow runs...')
+
+    await prisma.workflowRun.createMany({
+      data: [
+        {
+          workflowId: workflow1.id,
+          status: 'COMPLETED',
+          startedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          completedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 15 * 60 * 1000),
+          result: { insightsGenerated: 12, reportUrl: '/reports/weekly-123' },
+          metadata: { triggeredBy: 'schedule' },
+        },
+        {
+          workflowId: workflow1.id,
+          status: 'COMPLETED',
+          startedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+          completedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000 + 18 * 60 * 1000),
+          result: { insightsGenerated: 15, reportUrl: '/reports/weekly-122' },
+          metadata: { triggeredBy: 'schedule' },
+        },
+        {
+          workflowId: workflow2.id,
+          status: 'RUNNING',
+          startedAt: new Date(),
+          metadata: { triggeredBy: 'schedule' },
+        },
+        {
+          workflowId: workflow2.id,
+          status: 'FAILED',
+          startedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+          completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000),
+          error: 'API rate limit exceeded',
+          metadata: { triggeredBy: 'schedule' },
+        },
+      ]
+    })
+  })
+
+  // ==================== TEMPLATES ====================
+  console.log('📄 Creating templates...')
+
+  await safeSeedSection('Templates', async () => {
+    await prisma.template.createMany({
+      data: [
+        {
+          orgId: acmeCorp.id,
+          name: 'Brand Analysis Prompt',
+          description: 'Standard prompt template for brand analysis tasks',
+          type: 'ANALYSIS',
+          content: 'Analyze the brand {{brand_name}} across the following dimensions: awareness, sentiment, loyalty, and purchase intent. Focus on the {{target_audience}} demographic.',
+          variables: ['brand_name', 'target_audience'],
+          isPublic: false,
+          usageCount: 45,
+          createdBy: adminUser.id,
+        },
+        {
+          orgId: acmeCorp.id,
+          name: 'Market Research Summary',
+          description: 'Template for generating market research summaries',
+          type: 'REPORT',
+          content: 'Generate a comprehensive market research summary for {{industry}} focusing on {{key_metrics}}. Include competitive analysis and trend forecasts.',
+          variables: ['industry', 'key_metrics'],
+          isPublic: true,
+          usageCount: 28,
+          createdBy: johnDoe.id,
+        },
+        {
+          orgId: enterpriseCo.id,
+          name: 'Executive Dashboard Report',
+          description: 'Template for C-level executive reports',
+          type: 'DASHBOARD',
+          content: 'Executive summary for {{quarter}} showing key performance indicators, market trends, and strategic recommendations.',
+          variables: ['quarter'],
+          isPublic: true,
+          usageCount: 67,
+          createdBy: sarahEnterprise.id,
+        },
+      ]
+    })
+  })
+
+  // ==================== MEMORY ====================
+  console.log('🧠 Creating agent memories...')
+
+  await safeSeedSection('Agent Memory', async () => {
+    await prisma.memory.createMany({
+      data: [
+        {
+          orgId: acmeCorp.id,
+          agentId: marketResearchAgent.id,
+          key: 'preferred_data_sources',
+          value: { sources: ['gwi-platform', 'competitor-feeds', 'social-media'], lastUpdated: new Date().toISOString() },
+          type: 'PREFERENCE',
+        },
+        {
+          orgId: acmeCorp.id,
+          agentId: marketResearchAgent.id,
+          key: 'industry_context',
+          value: { industry: 'Technology', focusAreas: ['AI', 'Cloud', 'Security'], competitors: ['CompA', 'CompB'] },
+          type: 'CONTEXT',
+        },
+        {
+          orgId: acmeCorp.id,
+          agentId: audienceAnalysisAgent.id,
+          key: 'segment_definitions',
+          value: { segments: ['millennials', 'gen-z', 'professionals'], metrics: ['engagement', 'sentiment'] },
+          type: 'CONTEXT',
+        },
+        {
+          orgId: acmeCorp.id,
+          key: 'org_preferences',
+          value: { timezone: 'America/New_York', reportFormat: 'pdf', notificationPrefs: { email: true, slack: true } },
+          type: 'PREFERENCE',
+        },
+      ]
+    })
+  })
+
+  // ==================== TENANT ENTITLEMENTS ====================
+  console.log('🎫 Creating tenant entitlements...')
+
+  await safeSeedSection('Tenant Entitlements', async () => {
+    await prisma.tenantEntitlement.createMany({
+      data: [
+        {
+          orgId: enterpriseCo.id,
+          featureId: featureAdvancedAnalytics.id,
+          isEnabled: true,
+          customLimits: { maxReports: 1000, maxAgentRuns: 10000 },
+          expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+          grantedBy: superAdmin?.id || 'system',
+          reason: 'Enterprise plan upgrade bonus',
+        },
+        {
+          orgId: enterpriseCo.id,
+          featureId: featureCustomAgents.id,
+          isEnabled: true,
+          customLimits: { maxCustomAgents: 50 },
+          grantedBy: superAdmin?.id || 'system',
+          reason: 'Premium feature access',
+        },
+        {
+          orgId: acmeCorp.id,
+          featureId: featureDataExport.id,
+          isEnabled: true,
+          customLimits: { maxExportsPerMonth: 100 },
+          expiresAt: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000),
+          grantedBy: platformAdmin?.id || 'system',
+          reason: 'Trial of premium export feature',
+        },
+        {
+          orgId: techStartup.id,
+          featureId: featureApiAccess.id,
+          isEnabled: true,
+          customLimits: { rateLimit: 1000 },
+          grantedBy: superAdmin?.id || 'system',
+          reason: 'Developer tier API access',
+        },
+      ]
+    })
+  })
+
+  // ==================== HIERARCHY AUDIT LOGS ====================
+  console.log('📜 Creating hierarchy audit logs...')
+
+  await safeSeedSection('Hierarchy Audit Logs', async () => {
+    await prisma.hierarchyAuditLog.createMany({
+      data: [
+        {
+          orgId: enterpriseCo.id,
+          action: 'ORG_CREATED',
+          performedBy: sarahEnterprise.id,
+          details: { orgName: 'Enterprise Solutions Ltd', planTier: 'ENTERPRISE' },
+          previousState: null,
+          newState: { status: 'active', planTier: 'ENTERPRISE' },
+        },
+        {
+          orgId: enterpriseCo.id,
+          action: 'RELATIONSHIP_CREATED',
+          performedBy: sarahEnterprise.id,
+          targetOrgId: acmeCorp.id,
+          details: { relationshipType: 'MANAGEMENT', status: 'ACTIVE' },
+          previousState: null,
+          newState: { relationshipType: 'MANAGEMENT', status: 'ACTIVE' },
+        },
+        {
+          orgId: acmeCorp.id,
+          action: 'SETTINGS_UPDATED',
+          performedBy: adminUser.id,
+          details: { settingsChanged: ['timezone', 'features'] },
+          previousState: { timezone: 'UTC' },
+          newState: { timezone: 'America/New_York' },
+        },
+        {
+          orgId: acmeCorp.id,
+          action: 'MEMBER_ADDED',
+          performedBy: adminUser.id,
+          details: { userId: janeSmith.id, role: 'MEMBER' },
+          newState: { memberCount: 5 },
+        },
+      ]
+    })
+  })
+
+  // ==================== ENTITY VERSIONS ====================
+  console.log('📚 Creating entity versions...')
+
+  await safeSeedSection('Entity Versions', async () => {
+    await prisma.entityVersion.createMany({
+      data: [
+        {
+          entityType: 'REPORT',
+          entityId: 'report-123',
+          version: 1,
+          data: { title: 'Q4 Market Analysis', status: 'DRAFT' },
+          changedBy: adminUser.id,
+          changeReason: 'Initial creation',
+        },
+        {
+          entityType: 'REPORT',
+          entityId: 'report-123',
+          version: 2,
+          data: { title: 'Q4 Market Analysis', status: 'PUBLISHED' },
+          changedBy: johnDoe.id,
+          changeReason: 'Published after review',
+        },
+        {
+          entityType: 'DASHBOARD',
+          entityId: 'dashboard-456',
+          version: 1,
+          data: { name: 'Executive Dashboard', widgets: 5 },
+          changedBy: sarahEnterprise.id,
+          changeReason: 'Initial creation',
+        },
+        {
+          entityType: 'AGENT',
+          entityId: marketResearchAgent.id,
+          version: 1,
+          data: { name: 'Market Research Agent', status: 'ACTIVE' },
+          changedBy: adminUser.id,
+          changeReason: 'Agent configuration update',
+        },
+      ]
+    })
+  })
+
+  // ==================== ANALYSIS HISTORY ====================
+  console.log('📊 Creating analysis history...')
+
+  await safeSeedSection('Analysis History', async () => {
+    await prisma.analysisHistory.createMany({
+      data: [
+        {
+          orgId: acmeCorp.id,
+          analysisType: 'BRAND_HEALTH',
+          parameters: { brand: 'Nike', period: '30d', metrics: ['awareness', 'sentiment'] },
+          results: { awareness: 92, sentiment: 0.78, trendDirection: 'up' },
+          duration: 45000,
+          status: 'COMPLETED',
+          createdBy: johnDoe.id,
+        },
+        {
+          orgId: acmeCorp.id,
+          analysisType: 'MARKET_RESEARCH',
+          parameters: { industry: 'Technology', region: 'North America' },
+          results: { marketSize: '45B', growthRate: 12.5, keyPlayers: ['A', 'B', 'C'] },
+          duration: 120000,
+          status: 'COMPLETED',
+          createdBy: adminUser.id,
+        },
+        {
+          orgId: enterpriseCo.id,
+          analysisType: 'COMPETITOR_ANALYSIS',
+          parameters: { competitors: ['CompA', 'CompB'], metrics: ['market_share', 'sentiment'] },
+          results: { summary: 'Analysis complete', findings: 8 },
+          duration: 90000,
+          status: 'COMPLETED',
+          createdBy: sarahEnterprise.id,
+        },
+      ]
+    })
+  })
+
+  // ==================== CHANGE SUMMARIES ====================
+  console.log('📋 Creating change summaries...')
+
+  await safeSeedSection('Change Summaries', async () => {
+    await prisma.changeSummary.createMany({
+      data: [
+        {
+          orgId: acmeCorp.id,
+          period: 'WEEKLY',
+          startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          endDate: new Date(),
+          summary: { totalChanges: 45, categories: { reports: 12, dashboards: 8, agents: 5, other: 20 } },
+          highlights: ['New brand tracking setup', '3 reports published', '2 new team members added'],
+          metrics: { engagement: '+15%', agentRuns: 234, reportsGenerated: 12 },
+        },
+        {
+          orgId: acmeCorp.id,
+          period: 'MONTHLY',
+          startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          endDate: new Date(),
+          summary: { totalChanges: 180, categories: { reports: 45, dashboards: 25, agents: 20, other: 90 } },
+          highlights: ['Major platform update', 'New API integrations', 'Team expansion'],
+          metrics: { engagement: '+28%', agentRuns: 890, reportsGenerated: 45 },
+        },
+        {
+          orgId: enterpriseCo.id,
+          period: 'WEEKLY',
+          startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          endDate: new Date(),
+          summary: { totalChanges: 120, categories: { reports: 35, dashboards: 20, agents: 15, other: 50 } },
+          highlights: ['Enterprise SSO configured', '5 new client integrations', 'Quarterly reports completed'],
+          metrics: { engagement: '+22%', agentRuns: 567, reportsGenerated: 35 },
+        },
+      ]
+    })
+  })
+
+  // ==================== USER CHANGE TRACKERS ====================
+  console.log('👁️ Creating user change trackers...')
+
+  await safeSeedSection('User Change Trackers', async () => {
+    await prisma.userChangeTracker.createMany({
+      data: [
+        {
+          userId: adminUser.id,
+          entityType: 'REPORT',
+          entityId: 'report-123',
+          lastViewedVersion: 2,
+          lastViewedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+        },
+        {
+          userId: johnDoe.id,
+          entityType: 'DASHBOARD',
+          entityId: 'dashboard-456',
+          lastViewedVersion: 1,
+          lastViewedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+        },
+        {
+          userId: janeSmith.id,
+          entityType: 'AGENT',
+          entityId: marketResearchAgent.id,
+          lastViewedVersion: 1,
+          lastViewedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+        },
+        {
+          userId: sarahEnterprise.id,
+          entityType: 'REPORT',
+          entityId: 'report-789',
+          lastViewedVersion: 3,
+          lastViewedAt: new Date(),
+        },
+      ]
+    })
+  })
+
+  // ==================== CHANGE ALERTS ====================
+  console.log('🔔 Creating change alerts...')
+
+  await safeSeedSection('Change Alerts', async () => {
+    await prisma.changeAlert.createMany({
+      data: [
+        {
+          orgId: acmeCorp.id,
+          name: 'Brand Sentiment Drop Alert',
+          description: 'Alert when brand sentiment drops below threshold',
+          entityType: 'BRAND_TRACKING',
+          conditions: { metricType: 'sentiment', threshold: -0.2, comparison: 'less_than' },
+          notificationChannels: ['EMAIL', 'SLACK'],
+          recipients: [adminUser.id, johnDoe.id],
+          isActive: true,
+          lastTriggered: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+          triggerCount: 3,
+          createdBy: adminUser.id,
+        },
+        {
+          orgId: acmeCorp.id,
+          name: 'High API Usage Alert',
+          description: 'Alert when API usage exceeds 80% of limit',
+          entityType: 'USAGE',
+          conditions: { metricType: 'api_calls', threshold: 0.8, comparison: 'greater_than' },
+          notificationChannels: ['EMAIL'],
+          recipients: [adminUser.id],
+          isActive: true,
+          triggerCount: 1,
+          createdBy: adminUser.id,
+        },
+        {
+          orgId: enterpriseCo.id,
+          name: 'New Competitor Activity',
+          description: 'Alert when significant competitor activity detected',
+          entityType: 'COMPETITOR',
+          conditions: { activityType: 'any', significance: 'high' },
+          notificationChannels: ['EMAIL', 'IN_APP'],
+          recipients: [sarahEnterprise.id, enterpriseUser2.id],
+          isActive: true,
+          lastTriggered: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+          triggerCount: 7,
+          createdBy: sarahEnterprise.id,
+        },
+        {
+          orgId: acmeCorp.id,
+          name: 'Weekly Report Ready',
+          description: 'Notification when weekly reports are generated',
+          entityType: 'REPORT',
+          conditions: { reportType: 'weekly', status: 'completed' },
+          notificationChannels: ['IN_APP'],
+          recipients: [adminUser.id, johnDoe.id, janeSmith.id],
+          isActive: false,
+          triggerCount: 12,
+          createdBy: johnDoe.id,
+        },
+      ]
+    })
+  })
+
   } catch (enterpriseError: unknown) {
     // Log warning but continue - enterprise platform data is optional
     console.log('⚠️  Skipping enterprise platform seed data (tables may not be migrated yet)')
@@ -7996,6 +8719,28 @@ async function main() {
   console.log('   Analytics Snapshots: 30 (daily for last 30 days)')
   console.log('   Custom Reports: 8')
   console.log('   Broadcast Messages: 11')
+  console.log('')
+  console.log('   === Hierarchy & Collaboration ===')
+  console.log('   Organization Relationships: 3')
+  console.log('   Shared Resource Access: 3')
+  console.log('   Role Inheritance Rules: 2')
+  console.log('   Hierarchy Templates: 3')
+  console.log('   Cross-Org Invitations: 3')
+  console.log('   Hierarchy Audit Logs: 4')
+  console.log('')
+  console.log('   === Workflows & Templates ===')
+  console.log('   Workflows: 3')
+  console.log('   Workflow Runs: 4')
+  console.log('   Templates: 3')
+  console.log('   Agent Memories: 4')
+  console.log('')
+  console.log('   === Entitlements & Tracking ===')
+  console.log('   Tenant Entitlements: 4')
+  console.log('   Entity Versions: 4')
+  console.log('   Analysis History: 3')
+  console.log('   Change Summaries: 3')
+  console.log('   User Change Trackers: 4')
+  console.log('   Change Alerts: 4')
 
   console.log('\n🔑 Test Credentials:')
   console.log('')
