@@ -38,6 +38,7 @@ import {
   AlertTriangle,
   MessageSquare,
 } from "lucide-react"
+import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
 
 interface Ticket {
@@ -317,13 +318,11 @@ export default function SupportPage() {
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => fetchTicketDetails(ticket.id)}
-                        >
-                          <MessageSquare className="h-4 w-4 mr-1" />
-                          View
+                        <Button variant="ghost" size="sm" asChild>
+                          <Link href={`/admin/support/${ticket.id}`}>
+                            <MessageSquare className="h-4 w-4 mr-1" />
+                            View
+                          </Link>
                         </Button>
                       </TableCell>
                     </TableRow>
