@@ -45,7 +45,9 @@ import {
   Wrench,
   Sparkles,
   Gift,
+  Eye,
 } from "lucide-react"
+import Link from "next/link"
 import { Checkbox } from "@/components/ui/checkbox"
 
 interface Notification {
@@ -434,6 +436,11 @@ export default function NotificationsPage() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
+                            <Button variant="ghost" size="sm" asChild>
+                              <Link href={`/admin/notifications/${notification.id}`}>
+                                <Eye className="h-4 w-4" />
+                              </Link>
+                            </Button>
                             <Button
                               variant="ghost"
                               size="sm"
