@@ -8,6 +8,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    turbopackUseSystemTlsCerts: true,
+  },
 }
 
 // Sentry configuration options
