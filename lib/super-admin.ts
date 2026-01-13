@@ -169,51 +169,56 @@ export async function authenticateSuperAdmin(
   ipAddress?: string,
   userAgent?: string
 ) {
-  const admin = await prisma.superAdmin.findUnique({
-    where: { email },
-  })
+  try {
+    const admin = await prisma.superAdmin.findUnique({
+      where: { email },
+    })
 
-  if (!admin || !admin.isActive) {
-    return { success: false, error: 'Invalid credentials' }
-  }
+    if (!admin || !admin.isActive) {
+      return { success: false, error: 'Invalid credentials' }
+    }
 
-  const passwordHash = hashPassword(password)
-  if (admin.passwordHash !== passwordHash) {
-    // Log failed attempt
-    await logPlatformAudit({
-      action: 'login_failed',
+    const passwordHash = hashPassword(password)
+    if (admin.passwordHash !== passwordHash) {
+      // Log failed attempt (non-blocking)
+      logPlatformAudit({
+        action: 'login_failed',
+        resourceType: 'super_admin',
+        resourceId: admin.id,
+        details: { email, reason: 'invalid_password' },
+        ipAddress,
+        userAgent,
+      }).catch(console.error)
+      return { success: false, error: 'Invalid credentials' }
+    }
+
+    const { session, token } = await createSuperAdminSession(admin.id, ipAddress, userAgent)
+
+    // Log successful login (non-blocking)
+    logPlatformAudit({
+      adminId: admin.id,
+      action: 'login',
       resourceType: 'super_admin',
       resourceId: admin.id,
-      details: { email, reason: 'invalid_password' },
+      details: { email },
       ipAddress,
       userAgent,
-    })
-    return { success: false, error: 'Invalid credentials' }
-  }
+    }).catch(console.error)
 
-  const { session, token } = await createSuperAdminSession(admin.id, ipAddress, userAgent)
-
-  // Log successful login
-  await logPlatformAudit({
-    adminId: admin.id,
-    action: 'login',
-    resourceType: 'super_admin',
-    resourceId: admin.id,
-    details: { email },
-    ipAddress,
-    userAgent,
-  })
-
-  return {
-    success: true,
-    admin: {
-      id: admin.id,
-      email: admin.email,
-      name: admin.name,
-      role: admin.role,
-    },
-    token,
-    expiresAt: session.expiresAt,
+    return {
+      success: true,
+      admin: {
+        id: admin.id,
+        email: admin.email,
+        name: admin.name,
+        role: admin.role,
+      },
+      token,
+      expiresAt: session.expiresAt,
+    }
+  } catch (error) {
+    console.error('authenticateSuperAdmin error:', error)
+    throw error
   }
 }
 
