@@ -2479,296 +2479,763 @@ async function main() {
   // ==================== REPORTS ====================
   console.log('📄 Creating reports...')
 
-  // Create 10 advanced reports with explicit IDs for reliable API access
+  // Create 20 advanced reports organized by solution area with explicit IDs for reliable API access
+
+  // ============================================================================
+  // CORE SOLUTION AREA REPORTS (3 reports)
+  // ============================================================================
   await prisma.report.create({
     data: {
-      id: '1',
+      id: 'core-1',
       orgId: acmeCorp.id,
-      title: 'Q4 2024 Brand Performance Summary',
-      description: 'Comprehensive quarterly analysis of brand health metrics, market share trends, and competitive positioning across all tracked brands.',
+      title: 'Global Audience Segmentation Analysis 2024',
+      description: 'Deep dive into audience segments across 52 global markets, identifying key behavioral patterns, demographic clusters, and engagement opportunities.',
       type: ReportType.PRESENTATION,
       status: ReportStatus.PUBLISHED,
       content: {
+        agent: 'Audience Explorer Agent',
+        solutionArea: 'Core',
         slides: [
-          { type: 'title', title: 'Q4 2024 Brand Performance', subtitle: 'Executive Summary' },
-          { type: 'metrics', title: 'Key Highlights', data: { brandHealth: 82.5, nps: 62, marketShare: 28.5, yoyGrowth: 12.3 } },
-          { type: 'chart', title: 'Brand Health Trend', chartType: 'line', dataSource: 'brand_tracking' },
-          { type: 'comparison', title: 'Competitive Analysis', brands: ['Nike', 'Adidas', 'Puma', 'Under Armour'] },
-          { type: 'insights', title: 'Key Takeaways', bullets: ['Strong brand awareness growth in Gen Z', 'NPS improved 8 points YoY', 'Market share gains in premium segment'] },
-          { type: 'recommendations', title: 'Strategic Recommendations', items: ['Double down on digital marketing', 'Expand sustainability messaging', 'Target emerging markets'] }
+          { type: 'title', title: 'Global Audience Segmentation', subtitle: '2024 Analysis Report' },
+          { type: 'overview', title: 'Executive Summary', keyFindings: ['12 distinct audience segments identified', '2.8B addressable consumers', '35% growth in digital-first segment'] },
+          { type: 'segments', title: 'Primary Segments', data: [
+            { name: 'Digital Natives', size: '485M', growth: '+18%', engagement: 'Very High' },
+            { name: 'Value Seekers', size: '620M', growth: '+8%', engagement: 'Medium' },
+            { name: 'Premium Aspirers', size: '340M', growth: '+22%', engagement: 'High' },
+            { name: 'Eco-Conscious', size: '280M', growth: '+45%', engagement: 'High' }
+          ]},
+          { type: 'demographics', title: 'Demographic Distribution', charts: ['age_breakdown', 'income_levels', 'geographic_spread'] },
+          { type: 'behaviors', title: 'Behavioral Insights', patterns: ['Mobile-first browsing', 'Social commerce adoption', 'Subscription fatigue', 'Privacy awareness'] },
+          { type: 'recommendations', title: 'Strategic Actions', items: ['Prioritize Digital Natives for new product launches', 'Develop value messaging for price-sensitive segments', 'Invest in sustainability messaging'] }
         ],
-        metadata: { generatedAt: now.toISOString(), period: 'Q4 2024', author: 'AI Research Agent' }
+        dataSources: ['GWI Core', 'GWI USA', 'GWI Zeitgeist'],
+        markets: ['United States', 'United Kingdom', 'Germany', 'France', 'Japan'],
+        metadata: { generatedAt: now.toISOString(), period: 'Q4 2024', sampleSize: 850000 }
       },
-      thumbnail: '/key-findings-chart-with-statistics.jpg',
-      agentId: marketResearchAgent.id,
-      views: 342,
+      thumbnail: '/presentation-slides.png',
+      agentId: audienceAnalysisAgent.id,
+      views: 892,
       createdBy: adminUser.id
     }
   })
 
   await prisma.report.create({
     data: {
-      id: '2',
+      id: 'core-2',
       orgId: acmeCorp.id,
-      title: 'Gen Z Consumer Insights Deep Dive',
-      description: 'In-depth analysis of Gen Z consumer behavior, preferences, and brand affinities across digital platforms.',
-      type: ReportType.PDF,
-      status: ReportStatus.PUBLISHED,
-      content: {
-        sections: [
-          { title: 'Executive Summary', content: 'Gen Z represents a $360B market opportunity with unique consumption patterns...' },
-          { title: 'Digital Platform Usage', data: { tiktok: 85.2, instagram: 92.1, youtube: 95.8, snapchat: 78.5 } },
-          { title: 'Brand Preferences', insights: ['Authenticity over perfection', 'Values-driven purchasing', 'Peer influence critical'] },
-          { title: 'Purchase Drivers', factors: ['Sustainability', 'Social proof', 'Brand purpose', 'Digital experience'] },
-          { title: 'Media Consumption', patterns: { streaming: 4.2, socialMedia: 3.5, gaming: 2.8, podcasts: 1.5 } },
-          { title: 'Recommendations', actions: ['Invest in TikTok presence', 'Emphasize sustainability', 'Leverage influencer partnerships'] }
-        ],
-        charts: ['platform_usage', 'purchase_drivers', 'media_consumption'],
-        pageCount: 24,
-        metadata: { generatedAt: now.toISOString(), audienceSegment: 'Gen Z', sampleSize: 15420 }
-      },
-      thumbnail: '/gen-z-consumer-behavior-infographic.jpg',
-      agentId: audienceAnalysisAgent.id,
-      views: 567,
-      createdBy: johnDoe.id
-    }
-  })
-
-  await prisma.report.create({
-    data: {
-      id: '3',
-      orgId: acmeCorp.id,
-      title: 'Competitive Landscape Analysis 2024',
-      description: 'Strategic analysis of competitive positioning, market share dynamics, and emerging threats in the sportswear industry.',
-      type: ReportType.PRESENTATION,
-      status: ReportStatus.PUBLISHED,
-      content: {
-        slides: [
-          { type: 'title', title: 'Competitive Landscape 2024', subtitle: 'Market Intelligence Report' },
-          { type: 'marketMap', title: 'Market Positioning', quadrants: ['Leaders', 'Challengers', 'Niche Players', 'Emerging'] },
-          { type: 'shareOfVoice', title: 'Share of Voice Analysis', platforms: ['Social', 'Search', 'Media'] },
-          { type: 'swot', title: 'Competitive SWOT', competitors: ['Adidas', 'Under Armour', 'Puma'] },
-          { type: 'trends', title: 'Market Trends', items: ['DTC acceleration', 'Sustainability focus', 'Athleisure growth'] },
-          { type: 'threats', title: 'Emerging Threats', competitors: ['On Running', 'Hoka', 'Allbirds'] }
-        ],
-        metadata: { generatedAt: now.toISOString(), industry: 'Sportswear', competitorsAnalyzed: 12 }
-      },
-      thumbnail: '/presentation-slides.png',
-      agentId: marketResearchAgent.id,
-      views: 423,
-      createdBy: janeSmith.id
-    }
-  })
-
-  await prisma.report.create({
-    data: {
-      id: '4',
-      orgId: acmeCorp.id,
-      title: 'Brand Health Dashboard - Weekly Snapshot',
-      description: 'Real-time dashboard showing key brand health indicators with week-over-week comparisons.',
+      title: 'Millennial vs Gen Z Behavioral Comparison',
+      description: 'Comprehensive persona analysis comparing Millennial and Gen Z consumer behaviors, preferences, and brand relationships.',
       type: ReportType.DASHBOARD,
       status: ReportStatus.PUBLISHED,
       content: {
+        agent: 'Persona Architect Agent',
+        solutionArea: 'Core',
         widgets: [
-          { type: 'kpi', title: 'Brand Health Score', value: 84.2, change: 2.3, trend: 'up' },
-          { type: 'kpi', title: 'Net Promoter Score', value: 62, change: 5, trend: 'up' },
-          { type: 'kpi', title: 'Market Share', value: 28.5, change: 0.8, trend: 'up' },
-          { type: 'kpi', title: 'Sentiment Score', value: 0.78, change: 0.05, trend: 'up' },
-          { type: 'chart', title: 'Weekly Trend', chartType: 'line', period: '4w' },
-          { type: 'chart', title: 'Competitor Comparison', chartType: 'bar', competitors: 5 },
-          { type: 'table', title: 'Top Performing Segments', rows: 5 },
-          { type: 'alerts', title: 'Attention Required', items: ['NPS drop in 45-54 segment', 'Competitor campaign detected'] }
+          { type: 'comparison_header', title: 'Generation Comparison Dashboard', generations: ['Millennials (25-40)', 'Gen Z (16-24)'] },
+          { type: 'kpi_row', metrics: [
+            { label: 'Total Addressable', millennial: '1.8B', genZ: '2.1B' },
+            { label: 'Avg. Spend/Year', millennial: '$4,200', genZ: '$2,800' },
+            { label: 'Brand Loyalty Index', millennial: 72, genZ: 58 }
+          ]},
+          { type: 'chart', title: 'Platform Preferences', chartType: 'grouped_bar', data: {
+            platforms: ['TikTok', 'Instagram', 'YouTube', 'Facebook', 'Twitter'],
+            millennial: [35, 78, 82, 68, 42],
+            genZ: [89, 85, 92, 22, 28]
+          }},
+          { type: 'chart', title: 'Purchase Drivers', chartType: 'radar', categories: ['Price', 'Quality', 'Brand Values', 'Convenience', 'Sustainability', 'Social Proof'] },
+          { type: 'insights', title: 'Key Differentiators', items: [
+            'Gen Z 3x more likely to discover brands on TikTok',
+            'Millennials show 40% higher brand loyalty',
+            'Both prioritize sustainability but Gen Z acts on it more'
+          ]},
+          { type: 'table', title: 'Top Brand Affinities', columns: ['Brand', 'Millennial Affinity', 'Gen Z Affinity', 'Gap'] }
         ],
-        refreshRate: '1h',
+        refreshRate: '24h',
         lastUpdated: now.toISOString(),
-        metadata: { period: 'Weekly', brands: ['Nike'] }
+        metadata: { period: 'Q4 2024', respondents: 125000 }
       },
       thumbnail: '/analytics-dashboard.png',
-      views: 1245,
-      createdBy: adminUser.id
-    }
-  })
-
-  await prisma.report.create({
-    data: {
-      id: '5',
-      orgId: acmeCorp.id,
-      title: 'Sustainability Perception Study',
-      description: 'Consumer perception analysis of brand sustainability initiatives and their impact on purchase intent.',
-      type: ReportType.PDF,
-      status: ReportStatus.PUBLISHED,
-      content: {
-        sections: [
-          { title: 'Research Overview', methodology: 'Mixed methods: Survey (n=5,000) + Social listening' },
-          { title: 'Key Findings', highlights: ['72% consider sustainability in purchases', 'Greenwashing concerns rising', 'Transparency is critical'] },
-          { title: 'Brand Rankings', data: { patagonia: 92, nike: 68, adidas: 72, underArmour: 45 } },
-          { title: 'Consumer Segments', segments: ['Eco-Warriors', 'Conscious Consumers', 'Skeptics', 'Indifferent'] },
-          { title: 'Impact on Purchase', correlation: 0.68, priceElasticity: 0.23 },
-          { title: 'Recommendations', actions: ['Increase transparency', 'Third-party certifications', 'Circular economy initiatives'] }
-        ],
-        appendix: { methodology: true, rawData: true, bibliography: true },
-        pageCount: 36,
-        metadata: { studyPeriod: 'Sep-Oct 2024', markets: ['US', 'UK', 'DE', 'FR'] }
-      },
-      thumbnail: '/pdf-report-document.jpg',
       agentId: audienceAnalysisAgent.id,
-      views: 289,
-      createdBy: janeSmith.id
-    }
-  })
-
-  await prisma.report.create({
-    data: {
-      id: '6',
-      orgId: acmeCorp.id,
-      title: 'Social Media Performance Infographic',
-      description: 'Visual summary of social media performance metrics across all platforms.',
-      type: ReportType.INFOGRAPHIC,
-      status: ReportStatus.PUBLISHED,
-      content: {
-        sections: [
-          { type: 'header', title: 'Social Media Performance', period: 'Q4 2024' },
-          { type: 'platform_stats', platforms: [
-            { name: 'Instagram', followers: '12.5M', engagement: '4.2%', growth: '+15%' },
-            { name: 'TikTok', followers: '8.2M', engagement: '8.5%', growth: '+45%' },
-            { name: 'Twitter', followers: '5.8M', engagement: '2.1%', growth: '+8%' },
-            { name: 'YouTube', subscribers: '3.2M', avgViews: '450K', growth: '+22%' }
-          ]},
-          { type: 'top_content', posts: ['Behind the scenes campaign video', 'Athlete partnership announcement', 'Sustainability milestone'] },
-          { type: 'sentiment', positive: 78, neutral: 15, negative: 7 },
-          { type: 'comparison', vsCompetitors: '+23% engagement', vsIndustry: '+35% growth' }
-        ],
-        dimensions: { width: 1200, height: 2400 },
-        colorScheme: 'brand',
-        metadata: { generatedAt: now.toISOString(), platforms: 4 }
-      },
-      thumbnail: '/infographic-sports-audience.jpg',
-      views: 876,
+      views: 1247,
       createdBy: johnDoe.id
     }
   })
 
   await prisma.report.create({
     data: {
-      id: '7',
-      orgId: techStartup.id,
-      title: 'Market Entry Analysis - APAC Region',
-      description: 'Strategic analysis for market expansion into Asia-Pacific markets including market sizing, competitive landscape, and entry strategies.',
+      id: 'core-3',
+      orgId: acmeCorp.id,
+      title: 'Cultural Shifts in Consumer Values Q4 2024',
+      description: 'Analysis of emerging cultural trends and shifting consumer values impacting brand perception and purchase behavior.',
+      type: ReportType.PDF,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Culture Tracker Agent',
+        solutionArea: 'Core',
+        sections: [
+          { title: 'Executive Summary', content: 'Consumer values are undergoing rapid transformation, driven by economic uncertainty, climate concerns, and technological disruption.' },
+          { title: 'Top Cultural Shifts', trends: [
+            { name: 'Conscious Consumption', impact: 'High', growth: '+28%', description: 'Consumers increasingly evaluate purchases through ethical and environmental lens' },
+            { name: 'Digital Wellness', impact: 'Medium', growth: '+35%', description: 'Growing awareness of screen time and desire for digital-physical balance' },
+            { name: 'Community Over Individualism', impact: 'High', growth: '+22%', description: 'Shift from personal branding to collective experiences and local connections' },
+            { name: 'Authenticity Imperative', impact: 'Very High', growth: '+40%', description: 'Rejection of polished marketing in favor of genuine brand communication' }
+          ]},
+          { title: 'Regional Variations', markets: [
+            { region: 'North America', primaryTrend: 'Digital Wellness', uniqueFactor: 'Political polarization affecting brand choices' },
+            { region: 'Europe', primaryTrend: 'Conscious Consumption', uniqueFactor: 'Regulatory pressure driving sustainability' },
+            { region: 'APAC', primaryTrend: 'Community Focus', uniqueFactor: 'Rising nationalism influencing local brand preference' }
+          ]},
+          { title: 'Implications for Brands', recommendations: ['Lead with purpose, not product', 'Embrace imperfection in content', 'Build community touchpoints', 'Demonstrate measurable impact'] },
+          { title: 'Methodology', details: 'Social listening analysis of 2.5M conversations, survey of 50,000 respondents across 15 markets' }
+        ],
+        pageCount: 42,
+        metadata: { generatedAt: now.toISOString(), markets: 15, conversationsAnalyzed: 2500000 }
+      },
+      thumbnail: '/pdf-report-document.jpg',
+      agentId: marketResearchAgent.id,
+      views: 654,
+      createdBy: janeSmith.id
+    }
+  })
+
+  // ============================================================================
+  // SALES SOLUTION AREA REPORTS (3 reports)
+  // ============================================================================
+  await prisma.report.create({
+    data: {
+      id: 'sales-1',
+      orgId: acmeCorp.id,
+      title: 'Enterprise Buyer Persona Deep Dive',
+      description: 'Detailed buyer personas for enterprise software purchasing, including decision-making patterns, pain points, and engagement preferences.',
       type: ReportType.PRESENTATION,
       status: ReportStatus.PUBLISHED,
       content: {
+        agent: 'Buyer Persona Agent',
+        solutionArea: 'Sales',
         slides: [
-          { type: 'title', title: 'APAC Market Entry Strategy', subtitle: 'Expansion Opportunity Assessment' },
-          { type: 'marketSize', title: 'Market Opportunity', tam: '$42B', sam: '$8.5B', som: '$1.2B' },
-          { type: 'countryAnalysis', title: 'Priority Markets', countries: ['Japan', 'South Korea', 'Singapore', 'Australia'] },
-          { type: 'competitive', title: 'Local Competition', players: ['Local Champion A', 'Global Player B', 'Regional C'] },
-          { type: 'entryModes', title: 'Entry Strategies', options: ['Direct entry', 'Partnership', 'Acquisition'] },
-          { type: 'timeline', title: 'Implementation Roadmap', phases: ['Research', 'Pilot', 'Scale'] },
-          { type: 'financials', title: 'Investment Requirements', capex: '$5M', timeline: '18 months', roi: '3.2x' }
+          { type: 'title', title: 'Enterprise Buyer Personas', subtitle: 'Data-Driven Sales Intelligence' },
+          { type: 'persona', name: 'The Strategic CTO', demographics: { age: '42-55', company: 'Enterprise 1000+', budget: '$500K+' }, motivations: ['Digital transformation', 'Cost optimization', 'Competitive advantage'], painPoints: ['Legacy system integration', 'Change management', 'Vendor lock-in'], channels: ['LinkedIn', 'Industry events', 'Peer referrals'] },
+          { type: 'persona', name: 'The Pragmatic VP Engineering', demographics: { age: '35-48', company: 'Mid-market', budget: '$100K-500K' }, motivations: ['Team productivity', 'Technical excellence', 'Scalability'], painPoints: ['Resource constraints', 'Technical debt', 'Talent retention'], channels: ['Technical blogs', 'GitHub', 'Dev conferences'] },
+          { type: 'persona', name: 'The Innovation Director', demographics: { age: '38-52', company: 'Fortune 500', budget: '$1M+' }, motivations: ['Market disruption', 'Emerging tech adoption', 'Strategic partnerships'], painPoints: ['ROI demonstration', 'Internal politics', 'Speed to market'], channels: ['Executive networks', 'Thought leadership', 'Advisory boards'] },
+          { type: 'journey', title: 'Buyer Journey Map', stages: ['Awareness', 'Consideration', 'Evaluation', 'Decision', 'Implementation'] },
+          { type: 'tactics', title: 'Engagement Strategies', items: ['Lead with business outcomes', 'Provide technical depth on request', 'Leverage peer testimonials', 'Offer proof-of-concept programs'] }
         ],
-        metadata: { generatedAt: now.toISOString(), region: 'APAC', markets: 4 }
+        metadata: { generatedAt: now.toISOString(), personasResearched: 3, respondents: 8500 }
       },
-      thumbnail: '/executive-summary-slide-with-key-metrics.jpg',
-      agentId: startupResearchAgent.id,
-      views: 156,
-      createdBy: bobWilson.id
+      thumbnail: '/presentation-slides.png',
+      agentId: audienceAnalysisAgent.id,
+      views: 423,
+      createdBy: johnDoe.id
     }
   })
 
   await prisma.report.create({
     data: {
-      id: '8',
+      id: 'sales-2',
+      orgId: acmeCorp.id,
+      title: 'Competitive Battlecard: Tech Industry Q4',
+      description: 'Sales battlecard with competitive positioning, objection handling, and win strategies against top 5 competitors.',
+      type: ReportType.PDF,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Competitive Intelligence Agent',
+        solutionArea: 'Sales',
+        sections: [
+          { title: 'Competitive Overview', summary: 'Analysis of top 5 competitors by market share, positioning, and recent activity' },
+          { title: 'Competitor A - Market Leader', marketShare: '32%', positioning: 'Enterprise-first, premium pricing', strengths: ['Brand recognition', 'Ecosystem lock-in', 'Global support'], weaknesses: ['Slow innovation', 'Complex pricing', 'Poor mid-market fit'], winStrategy: 'Emphasize agility and TCO advantages', objectionHandlers: [
+            { objection: 'You\'re not as established', response: 'Our modern architecture delivers 40% faster implementation with dedicated support' },
+            { objection: 'Integration concerns', response: 'Pre-built connectors for 200+ enterprise systems, plus open API' }
+          ]},
+          { title: 'Competitor B - Challenger', marketShare: '18%', positioning: 'Price disruptor', strengths: ['Aggressive pricing', 'Simple deployment'], weaknesses: ['Limited features', 'Support issues', 'Scalability concerns'], winStrategy: 'Focus on total cost of ownership and enterprise readiness' },
+          { title: 'Win/Loss Analysis', data: { wins: { vsCompA: 42, vsCompB: 68 }, losses: { vsCompA: 31, vsCompB: 22 }, primaryWinReasons: ['Product capabilities', 'Customer success', 'Pricing transparency'], primaryLossReasons: ['Incumbent relationship', 'Budget constraints', 'Feature gaps'] }},
+          { title: 'Talk Tracks', scenarios: ['Initial discovery', 'Technical evaluation', 'Procurement negotiation'] }
+        ],
+        pageCount: 28,
+        metadata: { generatedAt: now.toISOString(), competitorsAnalyzed: 5, dealsAnalyzed: 340 }
+      },
+      thumbnail: '/pdf-report-document.jpg',
+      agentId: marketResearchAgent.id,
+      views: 312,
+      createdBy: janeSmith.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: 'sales-3',
       orgId: techStartup.id,
-      title: 'User Acquisition Cost Analysis',
-      description: 'Detailed breakdown of customer acquisition costs by channel with optimization recommendations.',
-      type: ReportType.PDF,
+      title: 'Account Prioritization Model Dashboard',
+      description: 'Interactive dashboard for scoring and prioritizing accounts based on fit, intent, and engagement signals.',
+      type: ReportType.DASHBOARD,
+      status: ReportStatus.DRAFT,
+      content: {
+        agent: 'Account Scoring Agent',
+        solutionArea: 'Sales',
+        widgets: [
+          { type: 'score_distribution', title: 'Account Score Distribution', buckets: ['Hot (80+)', 'Warm (60-79)', 'Nurture (40-59)', 'Cold (<40)'], counts: [45, 128, 234, 412] },
+          { type: 'top_accounts', title: 'Priority Accounts', columns: ['Account', 'Score', 'Signals', 'Next Action'], rows: 25 },
+          { type: 'scoring_factors', title: 'Score Components', factors: [
+            { name: 'Firmographic Fit', weight: 30, description: 'Company size, industry, tech stack' },
+            { name: 'Intent Signals', weight: 35, description: 'Website visits, content engagement, search behavior' },
+            { name: 'Engagement Level', weight: 25, description: 'Email opens, meeting attendance, demo requests' },
+            { name: 'Relationship Strength', weight: 10, description: 'Executive connections, past interactions' }
+          ]},
+          { type: 'trends', title: 'Score Movement', chartType: 'waterfall', period: '30d' },
+          { type: 'alerts', title: 'Score Alerts', items: ['12 accounts moved to Hot this week', '3 engaged accounts showing buying signals', '5 accounts at risk of churning'] }
+        ],
+        filters: ['Industry', 'Region', 'Account Owner', 'Score Range'],
+        lastUpdated: now.toISOString(),
+        metadata: { accountsScored: 819, modelVersion: '2.3' }
+      },
+      thumbnail: '/analytics-dashboard.png',
+      views: 0,
+      createdBy: bobWilson.id
+    }
+  })
+
+  // ============================================================================
+  // INSIGHTS SOLUTION AREA REPORTS (2 reports)
+  // ============================================================================
+  await prisma.report.create({
+    data: {
+      id: 'insights-1',
+      orgId: acmeCorp.id,
+      title: 'Consumer Motivation Analysis: Sustainability',
+      description: 'Deep analysis of sustainability as a purchase driver, exploring motivations, barriers, and segment-specific attitudes.',
+      type: ReportType.PRESENTATION,
       status: ReportStatus.PUBLISHED,
       content: {
-        sections: [
-          { title: 'Executive Summary', cac: 45.80, ltv: 285, ltvCacRatio: 6.2 },
-          { title: 'Channel Performance', channels: [
-            { name: 'Paid Social', cac: 52.30, volume: 3500, quality: 'High' },
-            { name: 'Organic Search', cac: 12.40, volume: 2200, quality: 'Very High' },
-            { name: 'Paid Search', cac: 68.90, volume: 1800, quality: 'Medium' },
-            { name: 'Referral', cac: 8.50, volume: 1200, quality: 'Very High' },
-            { name: 'Content Marketing', cac: 22.10, volume: 950, quality: 'High' }
+        agent: 'Motivation Decoder Agent',
+        solutionArea: 'Insights',
+        slides: [
+          { type: 'title', title: 'Sustainability Motivations', subtitle: 'Understanding the Green Consumer' },
+          { type: 'overview', title: 'Key Findings', stats: { careAboutSustainability: '78%', willingToPayMore: '62%', switchedBrands: '45%', skepticalOfClaims: '55%' }},
+          { type: 'motivations', title: 'Primary Drivers', ranked: [
+            { motivation: 'Environmental concern', strength: 85, segment: 'All ages' },
+            { motivation: 'Health & wellness connection', strength: 72, segment: 'Parents, 35-54' },
+            { motivation: 'Social signaling', strength: 68, segment: 'Gen Z, Urban' },
+            { motivation: 'Cost savings (long-term)', strength: 58, segment: 'Value-conscious' },
+            { motivation: 'Quality perception', strength: 52, segment: 'Premium buyers' }
           ]},
-          { title: 'Cohort Analysis', retention: { m1: 85, m3: 62, m6: 48, m12: 35 } },
-          { title: 'Optimization Opportunities', savings: '$125K/quarter', actions: ['Reduce paid search spend', 'Scale referral program', 'Invest in content'] },
-          { title: 'Benchmarks', industry: { avgCac: 65, topQuartile: 38 } }
+          { type: 'barriers', title: 'Purchase Barriers', items: ['Price premium perception', 'Greenwashing skepticism', 'Convenience trade-offs', 'Lack of clear information'] },
+          { type: 'segments', title: 'Attitude Segments', data: [
+            { segment: 'Eco-Champions', size: '18%', behavior: 'Active seekers, premium payers' },
+            { segment: 'Considerers', size: '35%', behavior: 'Open but price-sensitive' },
+            { segment: 'Skeptics', size: '28%', behavior: 'Need proof, distrust claims' },
+            { segment: 'Indifferent', size: '19%', behavior: 'Other priorities dominate' }
+          ]},
+          { type: 'implications', title: 'Strategic Implications', recommendations: ['Lead with proof, not promises', 'Make sustainable choice the easy choice', 'Connect sustainability to personal benefit'] }
         ],
-        pageCount: 18,
-        metadata: { period: 'Q4 2024', currency: 'USD' }
+        metadata: { generatedAt: now.toISOString(), respondents: 42000, markets: ['US', 'UK', 'DE', 'FR', 'JP'] }
       },
-      thumbnail: '/key-findings-chart.jpg',
-      views: 234,
+      thumbnail: '/presentation-slides.png',
+      agentId: audienceAnalysisAgent.id,
+      views: 789,
+      createdBy: janeSmith.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: 'insights-2',
+      orgId: acmeCorp.id,
+      title: 'Cross-Market Insights: US vs UK vs Germany',
+      description: 'Comparative analysis of consumer behavior, brand perception, and market dynamics across three key markets.',
+      type: ReportType.DASHBOARD,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Global Perspective Agent',
+        solutionArea: 'Insights',
+        widgets: [
+          { type: 'market_overview', title: 'Market Comparison', markets: [
+            { name: 'United States', population: '331M', digitalPenetration: '92%', ecommerceShare: '21%' },
+            { name: 'United Kingdom', population: '67M', digitalPenetration: '95%', ecommerceShare: '28%' },
+            { name: 'Germany', population: '83M', digitalPenetration: '91%', ecommerceShare: '18%' }
+          ]},
+          { type: 'chart', title: 'Brand Awareness Comparison', chartType: 'grouped_bar', metrics: ['Aided Awareness', 'Unaided Awareness', 'Consideration', 'Preference'] },
+          { type: 'chart', title: 'Channel Preferences', chartType: 'stacked_bar', channels: ['Social', 'Search', 'Email', 'TV', 'OOH'] },
+          { type: 'heatmap', title: 'Cultural Factors Matrix', factors: ['Price Sensitivity', 'Brand Loyalty', 'Sustainability Focus', 'Digital Adoption', 'Privacy Concerns'] },
+          { type: 'insights', title: 'Key Differentiators', items: [
+            'US: Highest brand switching, lowest loyalty',
+            'UK: Most advanced in social commerce',
+            'Germany: Strongest privacy concerns, data reluctance'
+          ]},
+          { type: 'recommendations', title: 'Localization Needs', items: ['Adjust pricing strategy by market', 'Customize messaging for cultural values', 'Adapt channel mix significantly'] }
+        ],
+        refreshRate: 'weekly',
+        lastUpdated: now.toISOString(),
+        metadata: { marketsCompared: 3, metricsTracked: 45 }
+      },
+      thumbnail: '/analytics-dashboard.png',
+      agentId: marketResearchAgent.id,
+      views: 1056,
+      createdBy: adminUser.id
+    }
+  })
+
+  // ============================================================================
+  // AD SALES SOLUTION AREA REPORTS (3 reports)
+  // ============================================================================
+  await prisma.report.create({
+    data: {
+      id: 'adsales-1',
+      orgId: acmeCorp.id,
+      title: 'Premium Audience Package: Tech Enthusiasts',
+      description: 'Curated audience package for advertisers targeting tech enthusiasts, including reach, engagement metrics, and activation recommendations.',
+      type: ReportType.PRESENTATION,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Audience Packager Agent',
+        solutionArea: 'Ad Sales',
+        slides: [
+          { type: 'title', title: 'Tech Enthusiasts Audience Package', subtitle: 'Premium Targeting Opportunity' },
+          { type: 'audience_overview', title: 'Audience Profile', stats: { totalReach: '45M', avgAge: 32, maleSkew: '62%', incomeIndex: 142 }},
+          { type: 'composition', title: 'Segment Breakdown', segments: [
+            { name: 'Early Adopters', share: '28%', value: 'Highest engagement, premium CPM' },
+            { name: 'Tech Professionals', share: '35%', value: 'B2B crossover potential' },
+            { name: 'Gaming Enthusiasts', share: '22%', value: 'High frequency, younger demo' },
+            { name: 'Smart Home Owners', share: '15%', value: 'High HHI, purchase intent' }
+          ]},
+          { type: 'behaviors', title: 'Key Behaviors', items: ['4.2 devices owned on average', '3x more likely to pre-order products', '85% research online before purchase', '68% active in tech communities'] },
+          { type: 'activation', title: 'Recommended Tactics', channels: [
+            { channel: 'Programmatic Display', reach: '38M', cpm: '$12.50', performance: 'High viewability' },
+            { channel: 'Connected TV', reach: '22M', cpm: '$28.00', performance: 'Premium completion rates' },
+            { channel: 'Native Content', reach: '15M', cpm: '$18.00', performance: 'Highest engagement' }
+          ]},
+          { type: 'pricing', title: 'Package Options', tiers: ['Standard ($50K min)', 'Premium ($150K min)', 'Exclusive ($500K min)'] }
+        ],
+        metadata: { generatedAt: now.toISOString(), audienceSize: 45000000, dataFreshness: 'Monthly' }
+      },
+      thumbnail: '/presentation-slides.png',
+      agentId: audienceAnalysisAgent.id,
+      views: 534,
+      createdBy: johnDoe.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: 'adsales-2',
+      orgId: techStartup.id,
+      title: 'Q1 2025 Media Planning Recommendations',
+      description: 'Strategic media planning recommendations for Q1 2025 based on audience behavior, market trends, and competitive activity.',
+      type: ReportType.PDF,
+      status: ReportStatus.DRAFT,
+      content: {
+        agent: 'Media Planner Agent',
+        solutionArea: 'Ad Sales',
+        sections: [
+          { title: 'Executive Summary', summary: 'Q1 2025 presents unique opportunities with post-holiday engagement recovery and major cultural moments.' },
+          { title: 'Market Context', factors: ['Economic uncertainty driving value-seeking', 'Privacy changes impacting targeting', 'CTV adoption accelerating', 'Retail media networks maturing'] },
+          { title: 'Budget Allocation', recommendation: {
+            digital: { share: '65%', channels: ['Programmatic 40%', 'Social 35%', 'Search 25%'] },
+            traditional: { share: '25%', channels: ['CTV/Streaming 60%', 'Audio 25%', 'OOH 15%'] },
+            emerging: { share: '10%', channels: ['Retail Media', 'Gaming', 'Influencer'] }
+          }},
+          { title: 'Timing Strategy', calendar: [
+            { period: 'Early January', focus: 'Resolution/wellness messaging', intensity: 'High' },
+            { period: 'Late January', focus: 'Value propositions', intensity: 'Medium' },
+            { period: 'February', focus: 'Valentine\'s + brand building', intensity: 'High' },
+            { period: 'March', focus: 'Spring transition, consideration', intensity: 'Medium' }
+          ]},
+          { title: 'Measurement Framework', kpis: ['Brand lift', 'Attention metrics', 'Conversion attribution', 'Incremental reach'] },
+          { title: 'Risk Factors', risks: ['Cookie deprecation timeline', 'Economic downturn impact', 'Political ad competition'] }
+        ],
+        pageCount: 35,
+        metadata: { generatedAt: now.toISOString(), planningPeriod: 'Q1 2025', markets: ['US'] }
+      },
+      thumbnail: '/pdf-report-document.jpg',
+      views: 0,
       createdBy: bobWilson.id
     }
   })
 
   await prisma.report.create({
     data: {
-      id: '9',
+      id: 'adsales-3',
+      orgId: acmeCorp.id,
+      title: 'Automotive Advertiser Pitch Deck',
+      description: 'Custom pitch deck for automotive category advertisers, featuring audience insights, success stories, and partnership opportunities.',
+      type: ReportType.PRESENTATION,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Pitch Generator Agent',
+        solutionArea: 'Ad Sales',
+        slides: [
+          { type: 'title', title: 'Reaching Auto Intenders', subtitle: 'Your Audience Awaits' },
+          { type: 'opportunity', title: 'Market Opportunity', stats: { autoIntenders: '28M', avgResearchTime: '89 days', touchpointsBeforePurchase: 24 }},
+          { type: 'audience', title: 'Our Auto Audience', profiles: [
+            { segment: 'Luxury Seekers', size: '4.2M', income: '$150K+', motivation: 'Status, technology' },
+            { segment: 'Family First', size: '8.5M', income: '$75-150K', motivation: 'Safety, space, value' },
+            { segment: 'Eco-Drivers', size: '6.8M', income: '$80K+', motivation: 'Sustainability, innovation' },
+            { segment: 'Performance Fans', size: '3.1M', income: '$100K+', motivation: 'Power, design, brand' }
+          ]},
+          { type: 'capabilities', title: 'Targeting Capabilities', features: ['In-market signals', 'Dealership proximity', 'Competitive conquesting', 'Lifecycle targeting'] },
+          { type: 'case_study', title: 'Success Story', client: 'Major OEM', results: { brandLift: '+18%', dealerTraffic: '+32%', costPerVisit: '-24%' }},
+          { type: 'packages', title: 'Partnership Options', tiers: ['Awareness Package', 'Consideration Package', 'Full Funnel Package'] },
+          { type: 'cta', title: 'Next Steps', actions: ['Custom audience analysis', 'Competitive share of voice', 'Campaign simulation'] }
+        ],
+        metadata: { generatedAt: now.toISOString(), category: 'Automotive', proposalValue: '$2.5M' }
+      },
+      thumbnail: '/presentation-slides.png',
+      agentId: marketResearchAgent.id,
+      views: 267,
+      createdBy: janeSmith.id
+    }
+  })
+
+  // ============================================================================
+  // MARKETING SOLUTION AREA REPORTS (3 reports)
+  // ============================================================================
+  await prisma.report.create({
+    data: {
+      id: 'marketing-1',
+      orgId: acmeCorp.id,
+      title: 'Holiday Campaign Performance Forecast',
+      description: 'Predictive analysis of holiday campaign performance based on historical data, market trends, and competitive benchmarks.',
+      type: ReportType.DASHBOARD,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Performance Predictor Agent',
+        solutionArea: 'Marketing',
+        widgets: [
+          { type: 'forecast_summary', title: 'Campaign Forecast', predictions: { expectedROAS: 4.2, confidenceInterval: '3.8-4.6', budgetEfficiency: 'High' }},
+          { type: 'chart', title: 'Daily Performance Projection', chartType: 'area', metrics: ['Impressions', 'Clicks', 'Conversions'], period: '45 days' },
+          { type: 'channel_forecast', title: 'Channel Performance', channels: [
+            { name: 'Paid Social', projectedROAS: 3.8, trend: 'stable', confidence: '85%' },
+            { name: 'Paid Search', projectedROAS: 5.2, trend: 'up', confidence: '90%' },
+            { name: 'Display', projectedROAS: 2.4, trend: 'down', confidence: '75%' },
+            { name: 'Email', projectedROAS: 8.5, trend: 'up', confidence: '92%' }
+          ]},
+          { type: 'scenarios', title: 'What-If Scenarios', options: [
+            { scenario: 'Increase budget 20%', impact: '+15% revenue, ROAS drops to 3.9' },
+            { scenario: 'Shift to email', impact: '+8% revenue, ROAS improves to 4.5' },
+            { scenario: 'Cut display', impact: 'Flat revenue, ROAS improves to 4.8' }
+          ]},
+          { type: 'risks', title: 'Risk Factors', items: ['Competitor promotion activity', 'Inventory constraints', 'Economic headwinds'] },
+          { type: 'recommendations', title: 'Optimization Actions', items: ['Front-load budget in first 2 weeks', 'Reserve 15% for real-time optimization', 'A/B test creative variations'] }
+        ],
+        lastUpdated: now.toISOString(),
+        metadata: { campaignPeriod: 'Nov 15 - Dec 31', totalBudget: '$2.4M', historicalDataYears: 3 }
+      },
+      thumbnail: '/analytics-dashboard.png',
+      agentId: marketResearchAgent.id,
+      views: 1423,
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: 'marketing-2',
+      orgId: acmeCorp.id,
+      title: 'Social Media Trend Analysis: TikTok vs Instagram',
+      description: 'Visual comparison of platform trends, content performance, and audience behavior on TikTok and Instagram.',
+      type: ReportType.INFOGRAPHIC,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Trend Forecaster Agent',
+        solutionArea: 'Marketing',
+        sections: [
+          { type: 'header', title: 'TikTok vs Instagram', subtitle: '2024 Platform Showdown' },
+          { type: 'stats_comparison', metrics: [
+            { metric: 'Monthly Active Users', tiktok: '1.5B', instagram: '2.0B' },
+            { metric: 'Avg. Time Spent/Day', tiktok: '95 min', instagram: '53 min' },
+            { metric: 'Engagement Rate', tiktok: '5.96%', instagram: '0.83%' },
+            { metric: 'Content Reach', tiktok: '118%', instagram: '13.5%' }
+          ]},
+          { type: 'audience_split', data: {
+            tiktok: { genZ: '60%', millennial: '26%', genX: '14%' },
+            instagram: { genZ: '31%', millennial: '35%', genX: '34%' }
+          }},
+          { type: 'trending_formats', platforms: [
+            { platform: 'TikTok', trends: ['Long-form (3+ min)', 'Storytimes', 'Educational content', 'Duets/Stitches'] },
+            { platform: 'Instagram', trends: ['Reels (15-30 sec)', 'Carousel posts', 'Stories with polls', 'Broadcast channels'] }
+          ]},
+          { type: 'brand_implications', insights: [
+            'TikTok: Best for awareness and virality',
+            'Instagram: Best for consideration and conversion',
+            'Both: Authenticity beats production value'
+          ]},
+          { type: 'predictions', title: '2025 Outlook', items: ['TikTok Shop growth', 'Instagram pivoting to creators', 'Both pushing AI content tools'] }
+        ],
+        dimensions: { width: 1200, height: 2800 },
+        colorScheme: 'gradient',
+        metadata: { generatedAt: now.toISOString(), dataSource: 'GWI Zeitgeist + Platform APIs' }
+      },
+      thumbnail: '/analytics-dashboard.png',
+      views: 2156,
+      createdBy: johnDoe.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: 'marketing-3',
+      orgId: techStartup.id,
+      title: 'Content Strategy Framework: Gen Z Engagement',
+      description: 'Strategic framework for creating content that resonates with Gen Z audiences across platforms.',
+      type: ReportType.PDF,
+      status: ReportStatus.DRAFT,
+      content: {
+        agent: 'Content Creator Agent',
+        solutionArea: 'Marketing',
+        sections: [
+          { title: 'Executive Summary', summary: 'Gen Z demands authenticity, entertainment, and value. This framework provides a systematic approach to content that converts.' },
+          { title: 'Gen Z Content Preferences', insights: [
+            { preference: 'Authentic over polished', evidence: '72% prefer user-generated style content' },
+            { preference: 'Entertainment first', evidence: '85% want to be entertained, even by brands' },
+            { preference: 'Values alignment', evidence: '68% research brand values before purchase' },
+            { preference: 'Interactive experiences', evidence: '3x engagement on polls, quizzes, challenges' }
+          ]},
+          { title: 'Content Pillars Framework', pillars: [
+            { pillar: 'Educational', share: '25%', purpose: 'Build authority, provide value', formats: ['How-tos', 'Explainers', 'Tips'] },
+            { pillar: 'Entertainment', share: '35%', purpose: 'Drive reach and engagement', formats: ['Trends', 'Humor', 'Challenges'] },
+            { pillar: 'Community', share: '25%', purpose: 'Build connection and loyalty', formats: ['UGC', 'Collabs', 'Behind-scenes'] },
+            { pillar: 'Conversion', share: '15%', purpose: 'Drive business outcomes', formats: ['Social proof', 'Offers', 'Product demos'] }
+          ]},
+          { title: 'Platform Strategy', platforms: [
+            { platform: 'TikTok', focus: 'Entertainment + Education', frequency: '1-2x daily', bestTimes: ['7-9am', '7-11pm'] },
+            { platform: 'Instagram', focus: 'Community + Conversion', frequency: '1x daily + stories', bestTimes: ['11am-1pm', '7-9pm'] },
+            { platform: 'YouTube', focus: 'Education (long-form)', frequency: '2x weekly', bestTimes: ['Thursday-Saturday'] }
+          ]},
+          { title: 'Measurement Framework', kpis: ['Engagement rate by pillar', 'Share/save ratio', 'Comment sentiment', 'Profile visits', 'Conversion attribution'] },
+          { title: 'Implementation Roadmap', phases: ['Audit current content', 'Develop pillar themes', 'Create content calendar', 'Test and optimize'] }
+        ],
+        pageCount: 32,
+        metadata: { generatedAt: now.toISOString(), targetAudience: 'Gen Z (16-24)', contentTypes: 12 }
+      },
+      thumbnail: '/pdf-report-document.jpg',
+      views: 0,
+      createdBy: bobWilson.id
+    }
+  })
+
+  // ============================================================================
+  // PRODUCT DEVELOPMENT SOLUTION AREA REPORTS (2 reports)
+  // ============================================================================
+  await prisma.report.create({
+    data: {
+      id: 'product-1',
+      orgId: techStartup.id,
+      title: 'New Product Opportunity Landscape 2025',
+      description: 'Analysis of emerging product opportunities based on unmet consumer needs, market gaps, and technology trends.',
+      type: ReportType.PRESENTATION,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Opportunity Scout Agent',
+        solutionArea: 'Product Development',
+        slides: [
+          { type: 'title', title: 'Product Opportunity Landscape', subtitle: '2025 Innovation Roadmap' },
+          { type: 'methodology', title: 'How We Found Opportunities', steps: ['Analyzed 500K consumer conversations', 'Surveyed 25K consumers on unmet needs', 'Mapped competitive white spaces', 'Assessed technology readiness'] },
+          { type: 'opportunity', rank: 1, title: 'AI-Powered Personal Finance', score: 92, tam: '$18B', competition: 'Fragmented', unmetNeed: '68% want automated financial optimization', barriers: ['Trust', 'Regulation'], timeToMarket: '12-18 months' },
+          { type: 'opportunity', rank: 2, title: 'Sustainable Subscription Boxes', score: 87, tam: '$8B', competition: 'Growing', unmetNeed: '54% want curated eco-friendly products', barriers: ['Unit economics', 'Supply chain'], timeToMarket: '6-12 months' },
+          { type: 'opportunity', rank: 3, title: 'Mental Wellness Gaming', score: 84, tam: '$12B', competition: 'Emerging', unmetNeed: '71% of Gen Z want mental health support in games', barriers: ['Clinical validation', 'Stigma'], timeToMarket: '18-24 months' },
+          { type: 'opportunity', rank: 4, title: 'Hyper-Local Community Platforms', score: 81, tam: '$5B', competition: 'Low', unmetNeed: '62% feel disconnected from local community', barriers: ['Network effects', 'Monetization'], timeToMarket: '12-18 months' },
+          { type: 'matrix', title: 'Opportunity Matrix', axes: ['Market Attractiveness', 'Strategic Fit'] },
+          { type: 'recommendations', title: 'Recommended Actions', items: ['Deep dive on top 2 opportunities', 'Consumer co-creation sessions', 'MVP scoping and feasibility'] }
+        ],
+        metadata: { generatedAt: now.toISOString(), opportunitiesEvaluated: 45, dataPoints: 125000 }
+      },
+      thumbnail: '/presentation-slides.png',
+      agentId: startupResearchAgent.id,
+      views: 876,
+      createdBy: bobWilson.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: 'product-2',
+      orgId: techStartup.id,
+      title: 'Feature Prioritization Matrix: Mobile App',
+      description: 'Data-driven feature prioritization for mobile app roadmap based on user demand, effort, and strategic value.',
+      type: ReportType.DASHBOARD,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Feature Prioritizer Agent',
+        solutionArea: 'Product Development',
+        widgets: [
+          { type: 'matrix', title: 'Prioritization Matrix', axes: { x: 'Implementation Effort', y: 'User Value' }, quadrants: ['Quick Wins', 'Strategic Bets', 'Fill-ins', 'Deprioritize'] },
+          { type: 'feature_list', title: 'Ranked Features', features: [
+            { name: 'Offline Mode', score: 94, userDemand: 'Very High', effort: 'Medium', priority: 'P0' },
+            { name: 'Social Sharing', score: 88, userDemand: 'High', effort: 'Low', priority: 'P0' },
+            { name: 'Dark Mode', score: 85, userDemand: 'High', effort: 'Low', priority: 'P1' },
+            { name: 'Biometric Login', score: 82, userDemand: 'High', effort: 'Medium', priority: 'P1' },
+            { name: 'Custom Notifications', score: 78, userDemand: 'Medium', effort: 'Medium', priority: 'P2' },
+            { name: 'AR Features', score: 65, userDemand: 'Medium', effort: 'High', priority: 'P3' }
+          ]},
+          { type: 'chart', title: 'User Request Volume', chartType: 'bar', period: '6 months' },
+          { type: 'comparison', title: 'Competitive Gap Analysis', features: ['Offline', 'Social', 'Personalization'], vsCompetitors: 3 },
+          { type: 'impact', title: 'Projected Impact', metrics: { retentionLift: '+12%', npsImprovement: '+8 pts', conversionIncrease: '+15%' }},
+          { type: 'roadmap', title: 'Suggested Roadmap', quarters: ['Q1: Offline + Social', 'Q2: Dark Mode + Biometric', 'Q3: Notifications', 'Q4: AR Exploration'] }
+        ],
+        lastUpdated: now.toISOString(),
+        metadata: { featuresEvaluated: 28, userFeedbackPoints: 15000, competitorsAnalyzed: 5 }
+      },
+      thumbnail: '/analytics-dashboard.png',
+      agentId: startupResearchAgent.id,
+      views: 445,
+      createdBy: bobWilson.id
+    }
+  })
+
+  // ============================================================================
+  // MARKET RESEARCH SOLUTION AREA REPORTS (2 reports)
+  // ============================================================================
+  await prisma.report.create({
+    data: {
+      id: 'research-1',
       orgId: enterpriseCo.id,
-      title: 'Enterprise Brand Audit 2024',
-      description: 'Comprehensive brand audit covering brand equity, perception, and strategic positioning across enterprise segments.',
+      title: 'Financial Services Market Landscape Report',
+      description: 'Comprehensive market analysis of the financial services sector including market sizing, segmentation, and growth opportunities.',
       type: ReportType.PDF,
       status: ReportStatus.PUBLISHED,
       content: {
+        agent: 'Market Mapper Agent',
+        solutionArea: 'Market Research',
         sections: [
-          { title: 'Brand Equity Assessment', score: 78.5, components: { awareness: 85, loyalty: 72, quality: 82, associations: 75 } },
-          { title: 'Stakeholder Perception', segments: [
-            { name: 'C-Suite', perception: 82, priorities: ['Reliability', 'Innovation', 'ROI'] },
-            { name: 'IT Decision Makers', perception: 78, priorities: ['Security', 'Integration', 'Support'] },
-            { name: 'End Users', perception: 71, priorities: ['Ease of use', 'Performance', 'Features'] }
+          { title: 'Executive Summary', highlights: ['$12.5T global market', '8.2% CAGR through 2028', 'Digital transformation driving growth', 'Regulatory complexity increasing'] },
+          { title: 'Market Sizing', data: {
+            global: { size: '$12.5T', growth: '8.2%', keyDrivers: ['Digital adoption', 'Emerging markets', 'Wealth transfer'] },
+            byRegion: [
+              { region: 'North America', size: '$4.8T', share: '38%', growth: '6.5%' },
+              { region: 'Europe', size: '$3.2T', share: '26%', growth: '5.8%' },
+              { region: 'Asia Pacific', size: '$3.5T', share: '28%', growth: '12.5%' },
+              { region: 'Rest of World', size: '$1.0T', share: '8%', growth: '9.2%' }
+            ]
+          }},
+          { title: 'Segmentation', segments: [
+            { segment: 'Retail Banking', size: '$4.2T', trend: 'Consolidating', opportunity: 'Digital-only banks' },
+            { segment: 'Wealth Management', size: '$3.1T', trend: 'Growing', opportunity: 'Robo-advisory, democratization' },
+            { segment: 'Insurance', size: '$2.8T', trend: 'Transforming', opportunity: 'InsurTech, usage-based' },
+            { segment: 'Payments', size: '$2.4T', trend: 'Disrupting', opportunity: 'Embedded finance, BNPL' }
           ]},
-          { title: 'Competitive Position', rank: 3, totalMarket: 12, gapToLeader: 8.5 },
-          { title: 'Brand Architecture', recommendation: 'Endorsed brand strategy', rationale: 'Leverage corporate equity while enabling product differentiation' },
-          { title: 'Action Plan', initiatives: ['Thought leadership program', 'Customer advocacy', 'Visual identity refresh'] }
+          { title: 'Competitive Landscape', tiers: ['Global Leaders', 'Regional Champions', 'Specialists', 'Disruptors'] },
+          { title: 'Consumer Trends', insights: ['Trust in traditional institutions declining', 'Demand for personalization rising', 'ESG investing mainstream', 'Mobile-first expectation'] },
+          { title: 'Strategic Implications', recommendations: ['Accelerate digital transformation', 'Partner with fintechs', 'Invest in data capabilities', 'Focus on customer experience'] }
         ],
-        appendices: ['Research methodology', 'Detailed survey results', 'Competitive profiles'],
-        pageCount: 52,
-        metadata: { auditScope: 'Global', segments: 5, respondents: 2500 }
+        appendices: ['Methodology', 'Data sources', 'Company profiles'],
+        pageCount: 68,
+        metadata: { generatedAt: now.toISOString(), industry: 'Financial Services', dataPoints: 250000 }
       },
-      thumbnail: '/audience-segments-diagram.jpg',
+      thumbnail: '/pdf-report-document.jpg',
       agentId: enterpriseAnalysisAgent.id,
-      views: 412,
+      views: 1678,
       createdBy: sarahEnterprise.id
     }
   })
 
   await prisma.report.create({
     data: {
-      id: '10',
+      id: 'research-2',
       orgId: enterpriseCo.id,
-      title: 'Quarterly Business Review Export',
-      description: 'Exportable data package containing all key metrics and insights for quarterly business review.',
+      title: 'Consumer Survey Results: Brand Perception',
+      description: 'Raw survey data export with cross-tabulations and statistical analysis of brand perception study.',
       type: ReportType.EXPORT,
-      status: ReportStatus.PUBLISHED,
+      status: ReportStatus.ARCHIVED,
       content: {
+        agent: 'Survey Analyzer Agent',
+        solutionArea: 'Market Research',
         datasets: [
-          { name: 'brand_metrics', format: 'csv', rows: 1250, columns: 18 },
-          { name: 'audience_segments', format: 'csv', rows: 85, columns: 24 },
-          { name: 'competitive_data', format: 'csv', rows: 420, columns: 15 },
-          { name: 'campaign_performance', format: 'csv', rows: 36, columns: 22 },
-          { name: 'financial_summary', format: 'xlsx', sheets: 4 }
+          { name: 'raw_responses', format: 'csv', rows: 8500, columns: 45, description: 'Individual survey responses' },
+          { name: 'cross_tabs', format: 'xlsx', sheets: 12, description: 'Cross-tabulations by demographics' },
+          { name: 'significance_tests', format: 'csv', rows: 250, columns: 8, description: 'Statistical significance results' },
+          { name: 'open_ends_coded', format: 'csv', rows: 3200, columns: 5, description: 'Coded open-ended responses' },
+          { name: 'weighting_scheme', format: 'xlsx', sheets: 2, description: 'Sample weighting methodology' }
         ],
         visualizations: [
-          { name: 'executive_dashboard', format: 'png', dimensions: '1920x1080' },
-          { name: 'trend_charts', format: 'svg', count: 8 },
-          { name: 'infographics', format: 'pdf', pages: 4 }
+          { name: 'brand_funnel', format: 'png', description: 'Awareness-consideration-preference funnel' },
+          { name: 'perception_map', format: 'svg', description: 'Perceptual mapping of brands' },
+          { name: 'segment_profiles', format: 'pdf', pages: 8, description: 'Detailed segment profiles' }
         ],
-        documentation: {
-          dataDict: true,
-          methodology: true,
-          changelog: true
+        methodology: {
+          sampleSize: 8500,
+          methodology: 'Online panel',
+          fieldDates: 'Sep 1-15, 2024',
+          markets: ['US', 'UK', 'DE'],
+          confidenceLevel: '95%',
+          marginOfError: '±1.1%'
         },
-        exportedAt: now.toISOString(),
-        metadata: { period: 'Q4 2024', dataPoints: 125000, formats: ['CSV', 'XLSX', 'PNG', 'SVG', 'PDF'] }
+        metadata: { generatedAt: now.toISOString(), studyType: 'Brand Tracking', wave: 'Q3 2024' }
       },
-      thumbnail: '/data-export-spreadsheet.jpg',
-      views: 189,
+      thumbnail: '/analytics-dashboard.png',
+      agentId: enterpriseAnalysisAgent.id,
+      views: 923,
       createdBy: sarahEnterprise.id
+    }
+  })
+
+  // ============================================================================
+  // INNOVATION SOLUTION AREA REPORTS (2 reports)
+  // ============================================================================
+  await prisma.report.create({
+    data: {
+      id: 'innovation-1',
+      orgId: acmeCorp.id,
+      title: 'Emerging Trends Synthesis: AI & Consumer Tech',
+      description: 'Synthesis of emerging technology trends and their implications for consumer behavior and business strategy.',
+      type: ReportType.PRESENTATION,
+      status: ReportStatus.PUBLISHED,
+      content: {
+        agent: 'Trend Synthesizer Agent',
+        solutionArea: 'Innovation',
+        slides: [
+          { type: 'title', title: 'AI & Consumer Tech Trends', subtitle: 'What\'s Next for 2025' },
+          { type: 'trend', rank: 1, name: 'Generative AI Goes Mainstream', maturity: 'Emerging', timeframe: '12-18 months', consumerAdoption: '42%', implications: ['Content creation democratized', 'Search behavior changing', 'Trust/authenticity concerns'] },
+          { type: 'trend', rank: 2, name: 'Ambient Computing', maturity: 'Early', timeframe: '24-36 months', consumerAdoption: '18%', implications: ['Screenless interactions', 'Privacy redefined', 'Always-on engagement'] },
+          { type: 'trend', rank: 3, name: 'Spatial Computing (AR/VR)', maturity: 'Emerging', timeframe: '18-24 months', consumerAdoption: '24%', implications: ['Immersive commerce', 'Virtual experiences', 'New content formats'] },
+          { type: 'trend', rank: 4, name: 'Decentralized Identity', maturity: 'Early', timeframe: '36-48 months', consumerAdoption: '8%', implications: ['User data ownership', 'Portable digital identity', 'New trust models'] },
+          { type: 'synthesis', title: 'Converging Trends', insight: 'AI + Ambient + Spatial = Seamless, personalized, immersive consumer experiences' },
+          { type: 'implications', title: 'Business Implications', areas: [
+            { area: 'Marketing', impact: 'AI-generated personalization at scale, new immersive formats' },
+            { area: 'Product', impact: 'Voice/gesture interfaces, spatial features, AI assistants' },
+            { area: 'Operations', impact: 'AI automation, predictive everything, digital twins' }
+          ]},
+          { type: 'actions', title: 'Recommended Actions', items: ['Establish AI governance framework', 'Experiment with spatial content', 'Develop voice strategy', 'Monitor decentralization signals'] }
+        ],
+        metadata: { generatedAt: now.toISOString(), trendsAnalyzed: 28, sourcesReviewed: 150 }
+      },
+      thumbnail: '/presentation-slides.png',
+      agentId: marketResearchAgent.id,
+      views: 1534,
+      createdBy: adminUser.id
+    }
+  })
+
+  await prisma.report.create({
+    data: {
+      id: 'innovation-2',
+      orgId: techStartup.id,
+      title: 'Innovation Validation Report: Smart Home Products',
+      description: 'Consumer validation study for new smart home product concepts including desirability, feasibility, and viability assessment.',
+      type: ReportType.PDF,
+      status: ReportStatus.DRAFT,
+      content: {
+        agent: 'Innovation Validator Agent',
+        solutionArea: 'Innovation',
+        sections: [
+          { title: 'Study Overview', purpose: 'Validate 5 smart home concepts with target consumers', methodology: 'Concept testing (n=2,500) + Qualitative deep dives (n=45)' },
+          { title: 'Concept A: AI Home Manager', scores: { desirability: 78, feasibility: 65, viability: 72 }, totalScore: 72, verdict: 'Proceed with refinement', feedback: ['Strong interest in automation', 'Privacy concerns significant', 'Price sensitivity high'] },
+          { title: 'Concept B: Predictive Energy System', scores: { desirability: 82, feasibility: 58, viability: 68 }, totalScore: 69, verdict: 'Technical validation needed', feedback: ['Sustainability appeal strong', 'ROI must be clear', 'Installation concerns'] },
+          { title: 'Concept C: Family Wellness Hub', scores: { desirability: 85, feasibility: 72, viability: 75 }, totalScore: 77, verdict: 'Strong candidate - accelerate', feedback: ['High emotional resonance', 'Trust in health data critical', 'Integration with existing devices wanted'] },
+          { title: 'Concept D: Smart Security Companion', scores: { desirability: 71, feasibility: 80, viability: 70 }, totalScore: 74, verdict: 'Proceed - differentiation needed', feedback: ['Crowded market', 'AI features differentiate', 'Subscription resistance'] },
+          { title: 'Concept E: Elderly Care Monitor', scores: { desirability: 88, feasibility: 68, viability: 62 }, totalScore: 73, verdict: 'Pivot business model', feedback: ['Strongest emotional need', 'B2B2C opportunity', 'Regulatory complexity'] },
+          { title: 'Recommendations', actions: [
+            'Fast-track Concept C (Family Wellness Hub)',
+            'Conduct technical deep-dive on Concept B',
+            'Explore B2B model for Concept E',
+            'Park Concepts A and D for future consideration'
+          ]},
+          { title: 'Next Steps', timeline: ['Week 1-2: Concept C business case', 'Week 3-4: Prototype development', 'Week 5-8: Beta testing'] }
+        ],
+        pageCount: 48,
+        metadata: { generatedAt: now.toISOString(), conceptsTested: 5, respondents: 2545 }
+      },
+      thumbnail: '/pdf-report-document.jpg',
+      agentId: startupResearchAgent.id,
+      views: 0,
+      createdBy: bobWilson.id
     }
   })
 
@@ -4408,7 +4875,7 @@ async function main() {
   console.log('   Crosstabs: 9')
   console.log('   Dashboards: 7')
   console.log('   Charts: 10')
-  console.log('   Reports: 10')
+  console.log('   Reports: 20')
   console.log('   Audit Logs: 10')
   console.log('   Usage Records: 150+')
   console.log('   Billing Subscriptions: 3')
