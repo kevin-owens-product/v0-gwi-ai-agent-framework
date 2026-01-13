@@ -59,7 +59,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 
 interface Incident {
   id: string
@@ -128,7 +128,6 @@ export default function IncidentsPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null)
   const [newUpdate, setNewUpdate] = useState("")
-  const { toast } = useToast()
 
   const [newIncident, setNewIncident] = useState({
     title: "",
@@ -171,10 +170,7 @@ export default function IncidentsPage() {
         throw new Error("Failed to create incident")
       }
 
-      toast({
-        title: "Incident Created",
-        description: "Incident has been logged and team notified",
-      })
+      toast.success("Incident has been logged and team notified")
 
       setIsCreateOpen(false)
       setNewIncident({
@@ -186,11 +182,7 @@ export default function IncidentsPage() {
       })
       fetchIncidents()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create incident",
-        variant: "destructive",
-      })
+      toast.error("Failed to create incident")
     }
   }
 
@@ -206,20 +198,13 @@ export default function IncidentsPage() {
         throw new Error("Failed to update incident")
       }
 
-      toast({
-        title: "Success",
-        description: "Incident status updated",
-      })
+      toast.success("Incident status updated")
       fetchIncidents()
       if (selectedIncident?.id === incidentId) {
         setSelectedIncident((prev) => prev ? { ...prev, status: newStatus } : null)
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update incident",
-        variant: "destructive",
-      })
+      toast.error("Failed to update incident")
     }
   }
 
@@ -237,18 +222,11 @@ export default function IncidentsPage() {
         throw new Error("Failed to add update")
       }
 
-      toast({
-        title: "Success",
-        description: "Update added to incident",
-      })
+      toast.success("Update added to incident")
       setNewUpdate("")
       fetchIncidents()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to add update",
-        variant: "destructive",
-      })
+      toast.error("Failed to add update")
     }
   }
 

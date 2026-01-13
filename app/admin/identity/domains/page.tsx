@@ -51,7 +51,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 
 interface Domain {
   id: string
@@ -73,7 +73,6 @@ export default function DomainManagementPage() {
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const { toast } = useToast()
 
   const [newDomain, setNewDomain] = useState({
     domain: "",
@@ -98,11 +97,7 @@ export default function DomainManagementPage() {
       setDomains(data.domains || [])
     } catch (error) {
       console.error("Failed to fetch domains:", error)
-      toast({
-        title: "Error",
-        description: "Failed to fetch domain verifications",
-        variant: "destructive",
-      })
+      toast.error("Failed to fetch domain verifications")
     } finally {
       setLoading(false)
     }
@@ -118,17 +113,10 @@ export default function DomainManagementPage() {
         throw new Error("Verification failed")
       }
 
-      toast({
-        title: "Success",
-        description: "Domain verification initiated",
-      })
+      toast.success("Domain verification initiated")
       fetchDomains()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to verify domain",
-        variant: "destructive",
-      })
+      toast.error("Failed to verify domain")
     }
   }
 
