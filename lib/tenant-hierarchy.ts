@@ -11,7 +11,7 @@
  * - Billing consolidation
  */
 
-import { prisma } from './prisma'
+import { prisma } from './db'
 import type {
   Organization,
   OrganizationType,
