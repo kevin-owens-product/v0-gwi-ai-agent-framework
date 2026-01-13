@@ -378,69 +378,136 @@ interface CrosstabData {
   data: { metric: string; category?: string; values: Record<string, number> }[]
 }
 
+// Audience key to human-readable name mapping
+const audienceKeyMap: Record<string, string> = {
+  // Generational segments
+  gen_z: 'Gen Z (18-24)',
+  millennials: 'Millennials (25-40)',
+  gen_x: 'Gen X (41-56)',
+  boomers: 'Boomers (57-75)',
+  eco_conscious: 'Eco-Conscious',
+  // Income segments
+  under_50k: 'Under $50K',
+  income_50_100k: '$50K-$100K',
+  income_100_150k: '$100K-$150K',
+  over_150k: '$150K+',
+  // Age demographics
+  age_18_24: '18-24',
+  age_25_34: '25-34',
+  age_35_44: '35-44',
+  age_45_plus: '45+',
+  // Platform-specific
+  tiktok_18_24: 'TikTok 18-24',
+  instagram_18_24: 'Instagram 18-24',
+  tiktok_25_34: 'TikTok 25-34',
+  instagram_25_34: 'Instagram 25-34',
+  tiktok_35_plus: 'TikTok 35+',
+  instagram_35_plus: 'Instagram 35+',
+  // Channel segments
+  online: 'Online',
+  in_store: 'In-Store',
+  omnichannel: 'Omnichannel',
+  // Media types
+  tv: 'TV',
+  streaming: 'Streaming',
+  social: 'Social Media',
+  radio: 'Radio',
+  podcast: 'Podcast',
+  // Brand metrics
+  unaided: 'Unaided Awareness',
+  aided: 'Aided Awareness',
+  consideration: 'Consideration',
+  preference: 'Preference',
+  nps: 'NPS',
+  promoters: 'Promoters',
+  passives: 'Passives',
+  detractors: 'Detractors',
+  // Market funnel
+  awareness: 'Awareness',
+  familiarity: 'Familiarity',
+  purchase: 'Purchase',
+  // Market metrics
+  internet: 'Internet Penetration',
+  mobile: 'Mobile Usage',
+  ecommerce: 'E-commerce Share',
+  // Market names
+  us: 'United States',
+  uk: 'United Kingdom',
+  germany: 'Germany',
+  france: 'France',
+  japan: 'Japan',
+  brazil: 'Brazil',
+  australia: 'Australia',
+  south_korea: 'South Korea',
+  india: 'India',
+  china: 'China',
+}
+
+// Row identifier keys used in seed data
+const ROW_IDENTIFIER_KEYS = ['platform', 'metric', 'format', 'channel', 'category', 'brand', 'market', 'segment', 'name', 'daypart', 'service', 'attitude', 'source', 'tech']
+
 // Transform API response to frontend format
 function transformApiCrosstab(apiData: any): CrosstabData | null {
   if (!apiData) return null
 
-  // API returns: results.rows = [{ segment: 'name', metric1: val, metric2: val, ... }]
-  // Frontend expects: data = [{ metric: 'name', values: { audience1: val, audience2: val, ... } }]
-
   const results = apiData.results || {}
   const rows = Array.isArray(results.rows) ? results.rows : []
-  const metrics = Array.isArray(apiData.metrics) ? apiData.metrics : []
 
-  // Build audiences list from the first row's keys (excluding 'segment' and metric-like keys)
-  let audiences: string[] = []
-  if (rows.length > 0) {
-    // Get column names that aren't metrics - these are the audience/segment names
-    const firstRow = rows[0]
-    audiences = Object.keys(firstRow).filter(key => key !== 'segment' && !metrics.includes(key))
-
-    // If no audiences found from row keys, check if row values have audience-keyed values
-    if (audiences.length === 0 && firstRow.segment) {
-      // The data is structured with segment as the row identifier
-      // and metric values as columns - need to transpose
-      audiences = rows.map((r: any) => r.segment).filter(Boolean)
-    }
+  if (rows.length === 0) {
+    return null
   }
 
-  // If audiences is still empty, use the API's audiences field
-  if (audiences.length === 0 && Array.isArray(apiData.audiences)) {
-    audiences = apiData.audiences
-  }
+  // Detect the row identifier key (e.g., 'platform', 'metric', 'format', etc.)
+  const firstRow = rows[0]
+  const rowIdKey = ROW_IDENTIFIER_KEYS.find(key => typeof firstRow[key] === 'string') || 'metric'
 
-  // Transform the data structure
-  let data: { metric: string; category?: string; values: Record<string, number> }[] = []
+  // Get all numeric columns (these are the audience/segment columns)
+  const numericColumns = Object.keys(firstRow).filter(key =>
+    key !== rowIdKey && typeof firstRow[key] === 'number'
+  )
 
-  if (rows.length > 0 && metrics.length > 0) {
-    // Transpose: rows are segments, columns are metrics -> rows are metrics, columns are segments
-    data = metrics.map((metric: string) => {
-      const values: Record<string, number> = {}
-      rows.forEach((row: any) => {
-        const segmentName = row.segment || row.name || 'Unknown'
-        if (row[metric] !== undefined) {
-          values[segmentName] = row[metric]
-        }
-      })
-      return { metric, values }
+  // Map column keys to human-readable audience names
+  const audienceNames = numericColumns.map(col => {
+    const mapped = audienceKeyMap[col.toLowerCase()]
+    if (mapped) return mapped
+    // Fallback: Convert snake_case to Title Case
+    return col.split('_').map(word =>
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    ).join(' ')
+  })
+
+  // Build the transformed data structure
+  const data: { metric: string; category?: string; values: Record<string, number> }[] = rows.map((row: any) => {
+    const metricName = row[rowIdKey] || 'Unknown'
+    const values: Record<string, number> = {}
+
+    numericColumns.forEach((col, index) => {
+      const audienceName = audienceNames[index]
+      values[audienceName] = row[col]
     })
 
-    // Update audiences to be the segment names from rows
-    if (rows.length > 0 && rows[0].segment) {
-      audiences = rows.map((r: any) => r.segment).filter(Boolean)
+    return {
+      metric: metricName,
+      values,
     }
-  }
+  })
+
+  // Build metrics list from the row identifiers
+  const metricsFromData = data.map(d => d.metric)
+
+  // Get metadata from results if available
+  const metadata = results.metadata || {}
 
   return {
     id: apiData.id,
     name: apiData.name,
-    audiences,
-    metrics,
+    audiences: audienceNames,
+    metrics: metricsFromData,
     lastModified: apiData.updatedAt ? formatTimeAgo(apiData.updatedAt) : 'Recently',
     views: apiData.views || 0,
     createdBy: apiData.createdByName || 'Unknown',
     description: apiData.description || '',
-    dataSource: apiData.dataSource || 'GWI Core',
+    dataSource: metadata.metric || apiData.dataSource || 'GWI Core',
     category: apiData.category,
     data,
   }
