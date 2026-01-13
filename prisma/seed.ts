@@ -656,7 +656,7 @@ async function main() {
         type: DataSourceType.WEBHOOK,
         status: DataSourceStatus.CONNECTED,
         connectionConfig: {
-          webhookUrl: 'https://hooks.slack.com/services/xxx',
+          webhookUrl: 'https://hooks.slack.com/services/YOUR_WEBHOOK_URL',
           events: ['agent_completed', 'insight_generated']
         }
       },
@@ -7227,7 +7227,7 @@ async function main() {
       data: {
         orgId: enterpriseCo.id,
         name: 'Slack Notifications',
-        url: 'https://hooks.slack.com/services/T00/B00/XXXX',
+        url: 'https://hooks.slack.com/services/YOUR_WEBHOOK_URL',
         status: 'ACTIVE',
         events: ['report.completed', 'insight.generated', 'export.ready'],
         secret: 'whsec_enterprise_slack_abc123',
