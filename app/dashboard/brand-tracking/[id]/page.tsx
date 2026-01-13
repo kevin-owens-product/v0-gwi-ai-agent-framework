@@ -3,10 +3,21 @@
 import { useState, useEffect } from "react"
 import { use } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   ArrowLeft,
   TrendingUp,
@@ -17,9 +28,66 @@ import {
   BarChart3,
   Loader2,
   RefreshCw,
+  Edit,
+  Trash2,
+  Share2,
+  Download,
+  MoreHorizontal,
+  Copy,
+  Check,
+  Star,
+  StarOff,
+  Play,
+  Pause,
+  MessageSquare,
+  History,
+  Clock,
+  Eye,
+  FileJson,
+  FileText,
+  Table,
+  FileImage,
+  Mail,
+  UserPlus,
+  Link2,
+  ChevronDown,
+  Sparkles,
 } from "lucide-react"
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { format } from "date-fns"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  Tooltip as TooltipUI,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { CommentsPanel } from "@/components/shared/comments-panel"
+import { VersionHistory } from "@/components/shared/version-history"
 
 interface BrandTracking {
   id: string
@@ -53,6 +121,25 @@ const statusColors = {
   ARCHIVED: "bg-slate-500/10 text-slate-500 border-slate-500/20",
 }
 
+// Mock activity data
+interface ActivityItem {
+  id: string
+  action: string
+  user: string
+  timestamp: string
+  details?: string
+}
+
+const mockActivityData: ActivityItem[] = [
+  { id: "1", action: "viewed", user: "John Smith", timestamp: "10 minutes ago" },
+  { id: "2", action: "took snapshot", user: "Sarah Chen", timestamp: "2 hours ago" },
+  { id: "3", action: "edited", user: "Marcus Johnson", timestamp: "1 day ago", details: "Updated competitors" },
+  { id: "4", action: "shared", user: "Emily Thompson", timestamp: "2 days ago", details: "Via email to brand team" },
+  { id: "5", action: "exported", user: "Sarah Chen", timestamp: "3 days ago", details: "PDF format" },
+  { id: "6", action: "commented", user: "Alex Rivera", timestamp: "4 days ago", details: "Added note on awareness trend" },
+  { id: "7", action: "created", user: "Sarah Chen", timestamp: "1 week ago" },
+]
+
 // Generate demo snapshots for visualization when no real data exists
 function generateDemoSnapshots(_brandName: string) {
   const snapshots = []
@@ -85,9 +172,21 @@ function generateDemoSnapshots(_brandName: string) {
 
 export default function BrandTrackingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
+  const router = useRouter()
   const [brandTracking, setBrandTracking] = useState<BrandTracking | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showShareDialog, setShowShareDialog] = useState(false)
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [autoRefresh, setAutoRefresh] = useState(false)
+  const [shareEmail, setShareEmail] = useState("")
+  const [shareRole, setShareRole] = useState("viewer")
+  const [activeTab, setActiveTab] = useState("funnel")
 
   useEffect(() => {
     fetchBrandTracking()
@@ -175,6 +274,105 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
     }
   }
 
+  const handleExport = async (format: "json" | "csv" | "pdf" = "json") => {
+    if (!brandTracking) return
+    setIsExporting(true)
+    try {
+      const exportData = {
+        brand: {
+          id: brandTracking.id,
+          name: brandTracking.brandName,
+          description: brandTracking.description,
+          industry: brandTracking.industry,
+          status: brandTracking.status,
+          competitors: brandTracking.competitors,
+          audiences: brandTracking.audiences,
+        },
+        snapshots: brandTracking.snapshots,
+        metadata: {
+          exportedAt: new Date().toISOString(),
+          snapshotCount: brandTracking.snapshotCount,
+        },
+      }
+      const dateStr = new Date().toISOString().split("T")[0]
+      if (format === "csv") {
+        const csvContent = [
+          `"Brand: ${brandTracking.brandName}"`,
+          `"Industry: ${brandTracking.industry || 'N/A'}"`,
+          `"Status: ${brandTracking.status}"`,
+          "",
+          "Date,Brand Health,Awareness,Consideration,Preference,Loyalty,NPS,Market Share",
+          ...(brandTracking.snapshots || []).map(s =>
+            `"${s.snapshotDate}",${s.brandHealth || ''},${s.awareness || ''},${s.consideration || ''},${s.preference || ''},${s.loyalty || ''},${s.nps || ''},${s.marketShare || ''}`
+          ),
+        ].join("\n")
+        const blob = new Blob([csvContent], { type: "text/csv" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `brand-tracking-${brandTracking.id}-${dateStr}.csv`
+        a.click()
+        URL.revokeObjectURL(url)
+      } else {
+        const content = JSON.stringify(exportData, null, 2)
+        const blob = new Blob([content], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `brand-tracking-${brandTracking.id}-${dateStr}.${format}`
+        a.click()
+        URL.revokeObjectURL(url)
+      }
+    } catch (error) {
+      console.error("Export failed:", error)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/v1/brand-tracking/${id}`, { method: "DELETE" })
+      if (response.ok) {
+        router.push("/dashboard/brand-tracking")
+      }
+    } catch (error) {
+      console.error("Delete failed:", error)
+    } finally {
+      setIsDeleting(false)
+      setShowDeleteDialog(false)
+    }
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleDuplicate = async () => {
+    if (!brandTracking) return
+    try {
+      const response = await fetch("/api/v1/brand-tracking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          brandName: `${brandTracking.brandName} (Copy)`,
+          description: brandTracking.description,
+          industry: brandTracking.industry,
+          competitors: brandTracking.competitors,
+          audiences: brandTracking.audiences,
+        }),
+      })
+      if (response.ok) {
+        router.push("/dashboard/brand-tracking")
+      }
+    } catch (error) {
+      console.error("Duplicate failed:", error)
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -221,38 +419,121 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
   const healthTrend = calculateTrend(latestSnapshot?.brandHealth, previousSnapshot?.brandHealth)
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/dashboard/brand-tracking">
-              <ArrowLeft className="h-4 w-4" />
-            </Link>
-          </Button>
-          <div>
-            <div className="flex items-center gap-3">
-              <Target className="h-6 w-6 text-primary" />
-              <h1 className="text-3xl font-bold tracking-tight">{brandTracking.brandName}</h1>
+    <TooltipProvider>
+    <div className="space-y-6 p-6">
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div className="flex items-start gap-4">
+          <Link href="/dashboard/brand-tracking">
+            <Button variant="ghost" size="icon" className="mt-1">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Target className="h-5 w-5 text-primary" />
+              <h1 className="text-2xl font-bold">{brandTracking.brandName}</h1>
               <Badge variant="outline" className={statusColors[brandTracking.status as keyof typeof statusColors]}>
                 {brandTracking.status}
               </Badge>
+              <TooltipUI>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsFavorite(!isFavorite)}>
+                    {isFavorite ? <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" /> : <StarOff className="h-4 w-4" />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{isFavorite ? "Remove from favorites" : "Add to favorites"}</TooltipContent>
+              </TooltipUI>
             </div>
             {brandTracking.industry && (
-              <p className="text-muted-foreground mt-1">{brandTracking.industry}</p>
+              <p className="text-sm text-muted-foreground">{brandTracking.industry}</p>
             )}
             {brandTracking.description && (
-              <p className="text-sm text-muted-foreground mt-1">{brandTracking.description}</p>
+              <p className="text-sm text-muted-foreground max-w-2xl">{brandTracking.description}</p>
             )}
+            <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground pt-1">
+              <span className="flex items-center gap-1"><Activity className="h-3 w-3" /> {brandTracking.snapshotCount} snapshots</span>
+              <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> Last snapshot: {brandTracking.lastSnapshot ? format(new Date(brandTracking.lastSnapshot), 'MMM dd, yyyy') : 'Never'}</span>
+            </div>
           </div>
         </div>
-        <Button onClick={handleTakeSnapshot} disabled={isRefreshing}>
-          {isRefreshing ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <RefreshCw className="mr-2 h-4 w-4" />
-          )}
-          Take Snapshot
-        </Button>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <TooltipUI>
+            <TooltipTrigger asChild>
+              <Button variant="outline" size="sm" onClick={() => setAutoRefresh(!autoRefresh)}>
+                {autoRefresh ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{autoRefresh ? "Pause auto-refresh" : "Enable auto-refresh"}</TooltipContent>
+          </TooltipUI>
+
+          <Button variant="outline" size="sm" onClick={handleTakeSnapshot} disabled={isRefreshing}>
+            {isRefreshing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <RefreshCw className="h-4 w-4 mr-2" />}
+            Snapshot
+          </Button>
+
+          <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
+            <Share2 className="h-4 w-4 mr-2" />
+            Share
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export
+                <ChevronDown className="h-3 w-3 ml-1" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleExport("json")}>
+                <FileJson className="h-4 w-4 mr-2" /> Export as JSON
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("csv")}>
+                <Table className="h-4 w-4 mr-2" /> Export as CSV
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                <FileText className="h-4 w-4 mr-2" /> Export as PDF
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Link href={`/dashboard/brand-tracking/new?edit=${brandTracking.id}`}>
+            <Button size="sm">
+              <Edit className="h-4 w-4 mr-2" />
+              Edit
+            </Button>
+          </Link>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleDuplicate}>
+                <Copy className="h-4 w-4 mr-2" /> Duplicate
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setShowScheduleDialog(true)}>
+                <Mail className="h-4 w-4 mr-2" /> Schedule Report
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleCopyLink}>
+                {copied ? <Check className="h-4 w-4 mr-2" /> : <Link2 className="h-4 w-4 mr-2" />}
+                {copied ? "Copied!" : "Copy Link"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {/* Key Metrics */}
@@ -321,12 +602,29 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
       </div>
 
       {/* Charts and Analytics */}
-      <Tabs defaultValue="funnel" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="funnel">Brand Funnel</TabsTrigger>
-          <TabsTrigger value="health">Health & NPS</TabsTrigger>
-          <TabsTrigger value="competitors">Competitors</TabsTrigger>
-          <TabsTrigger value="insights">Insights</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList className="flex-wrap h-auto gap-1">
+          <TabsTrigger value="funnel" className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4" /> Brand Funnel
+          </TabsTrigger>
+          <TabsTrigger value="health" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" /> Health & NPS
+          </TabsTrigger>
+          <TabsTrigger value="competitors" className="flex items-center gap-2">
+            <Users className="h-4 w-4" /> Competitors
+          </TabsTrigger>
+          <TabsTrigger value="insights" className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4" /> Insights
+          </TabsTrigger>
+          <TabsTrigger value="comments" className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" /> Comments
+          </TabsTrigger>
+          <TabsTrigger value="activity" className="flex items-center gap-2">
+            <Eye className="h-4 w-4" /> Activity
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center gap-2">
+            <History className="h-4 w-4" /> History
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="funnel">
@@ -454,7 +752,196 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* Comments Tab */}
+        <TabsContent value="comments" className="space-y-4">
+          <Card className="p-6">
+            <CommentsPanel
+              resourceType="brand-tracking"
+              resourceId={id}
+              currentUserId="current-user"
+            />
+          </Card>
+        </TabsContent>
+
+        {/* Activity Tab */}
+        <TabsContent value="activity" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Activity Log</CardTitle>
+              <CardDescription>Recent activity on this brand tracker</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[500px]">
+                <div className="space-y-4">
+                  {mockActivityData.map(item => (
+                    <div key={item.id} className="flex items-start gap-3 pb-4 border-b last:border-0">
+                      <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
+                        item.action === "viewed" ? "bg-blue-500/10 text-blue-500" :
+                        item.action === "exported" ? "bg-green-500/10 text-green-500" :
+                        item.action === "shared" ? "bg-orange-500/10 text-orange-500" :
+                        item.action === "edited" ? "bg-yellow-500/10 text-yellow-500" :
+                        item.action === "created" ? "bg-primary/10 text-primary" :
+                        item.action === "took snapshot" ? "bg-purple-500/10 text-purple-500" :
+                        "bg-pink-500/10 text-pink-500"
+                      }`}>
+                        {item.action === "viewed" && <Eye className="h-4 w-4" />}
+                        {item.action === "exported" && <Download className="h-4 w-4" />}
+                        {item.action === "shared" && <Share2 className="h-4 w-4" />}
+                        {item.action === "edited" && <Edit className="h-4 w-4" />}
+                        {item.action === "created" && <Sparkles className="h-4 w-4" />}
+                        {item.action === "took snapshot" && <RefreshCw className="h-4 w-4" />}
+                        {item.action === "commented" && <MessageSquare className="h-4 w-4" />}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm">
+                          <span className="font-medium">{item.user}</span>
+                          <span className="text-muted-foreground"> {item.action}</span>
+                        </p>
+                        {item.details && <p className="text-xs text-muted-foreground">{item.details}</p>}
+                        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                          <Clock className="h-3 w-3" /> {item.timestamp}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* History Tab */}
+        <TabsContent value="history" className="space-y-4">
+          <Card className="p-6">
+            <VersionHistory
+              resourceType="brand-tracking"
+              resourceId={id}
+              resourceName={brandTracking.brandName}
+              versions={[]}
+              onRestore={(versionId) => {
+                console.log("Restoring version:", versionId)
+              }}
+            />
+          </Card>
+        </TabsContent>
       </Tabs>
+
+      {/* Delete Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Brand Tracker</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{brandTracking.brandName}"? This action cannot be undone and all snapshots will be lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Share Dialog */}
+      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Share Brand Tracker</DialogTitle>
+            <DialogDescription>
+              Share this brand tracker with team members or external collaborators.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Label htmlFor="shareEmail">Email address</Label>
+                <Input
+                  id="shareEmail"
+                  placeholder="email@example.com"
+                  value={shareEmail}
+                  onChange={(e) => setShareEmail(e.target.value)}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label>Role</Label>
+                <Select value={shareRole} onValueChange={setShareRole}>
+                  <SelectTrigger className="mt-2 w-[120px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="viewer">Viewer</SelectItem>
+                    <SelectItem value="editor">Editor</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="p-3 bg-muted rounded-lg">
+              <Label className="text-xs text-muted-foreground">Share link</Label>
+              <div className="flex items-center gap-2 mt-1">
+                <Input value={typeof window !== 'undefined' ? window.location.href : ''} readOnly className="text-xs" />
+                <Button size="sm" variant="outline" onClick={handleCopyLink}>
+                  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowShareDialog(false)}>Cancel</Button>
+            <Button onClick={() => { setShowShareDialog(false); setShareEmail(""); }}>
+              <UserPlus className="h-4 w-4 mr-2" /> Share
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Schedule Report Dialog */}
+      <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Schedule Report</DialogTitle>
+            <DialogDescription>Set up automatic email delivery of this brand tracking report.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Recipients</Label>
+              <Input placeholder="email@example.com, team@example.com" className="mt-2" />
+            </div>
+            <div>
+              <Label>Frequency</Label>
+              <Select defaultValue="weekly">
+                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Format</Label>
+              <Select defaultValue="pdf">
+                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                  <SelectItem value="csv">CSV</SelectItem>
+                  <SelectItem value="json">JSON</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>Cancel</Button>
+            <Button><Mail className="h-4 w-4 mr-2" /> Schedule</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+    </TooltipProvider>
   )
 }

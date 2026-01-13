@@ -25,6 +25,22 @@ import {
   SlidersHorizontal,
   X,
   Sparkles,
+  Play,
+  Pause,
+  Clock,
+  Activity,
+  Maximize2,
+  Minimize2,
+  Star,
+  StarOff,
+  FileJson,
+  FileText,
+  Table,
+  FileImage,
+  History,
+  Mail,
+  UserPlus,
+  Link2,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -53,6 +69,22 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Input } from "@/components/ui/input"
+import { CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -78,6 +110,25 @@ import {
 } from "@/components/crosstabs/advanced-filters"
 import { CommentsPanel } from "@/components/shared/comments-panel"
 import { VersionHistory } from "@/components/shared/version-history"
+
+// Mock activity data for crosstabs
+interface ActivityItem {
+  id: string
+  action: string
+  user: string
+  timestamp: string
+  details?: string
+}
+
+const mockActivityData: ActivityItem[] = [
+  { id: "1", action: "viewed", user: "John Smith", timestamp: "5 minutes ago" },
+  { id: "2", action: "exported", user: "Sarah Chen", timestamp: "1 hour ago", details: "CSV format" },
+  { id: "3", action: "edited", user: "Marcus Johnson", timestamp: "3 hours ago", details: "Updated filter criteria" },
+  { id: "4", action: "shared", user: "Emily Thompson", timestamp: "1 day ago", details: "Via email to marketing team" },
+  { id: "5", action: "commented", user: "Alex Rivera", timestamp: "2 days ago", details: "Added note on Gen Z data" },
+  { id: "6", action: "created chart", user: "Sarah Chen", timestamp: "3 days ago", details: "Platform Comparison Chart" },
+  { id: "7", action: "created", user: "Sarah Chen", timestamp: "1 week ago" },
+]
 
 // Mock crosstab data - 10 advanced examples
 const crosstabData: Record<string, {
@@ -533,9 +584,19 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
   const [isExporting, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showShareDialog, setShowShareDialog] = useState(false)
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showFilterPanel, setShowFilterPanel] = useState(false)
   const [activeTab, setActiveTab] = useState<"filters" | "audiences" | "metrics">("filters")
+  const [mainTab, setMainTab] = useState<"data" | "activity" | "comments" | "history">("data")
+
+  // New feature states
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [autoRefresh, setAutoRefresh] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [shareEmail, setShareEmail] = useState("")
+  const [shareRole, setShareRole] = useState("viewer")
 
   // Filter state
   const [activeFilters, setActiveFilters] = useState<FilterGroup[]>([])
@@ -966,21 +1027,59 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
   }
 
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <TooltipProvider>
+    <div className={`flex-1 space-y-6 p-6 ${isFullscreen ? 'fixed inset-0 z-50 bg-background overflow-auto' : ''}`}>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex items-start justify-between">
+        <div className="flex items-start gap-4">
           <Link href="/dashboard/crosstabs">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="mt-1">
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <div>
-            <h1 className="text-3xl font-bold">{crosstab.name}</h1>
-            <p className="text-muted-foreground mt-1">{crosstab.description}</p>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-2xl font-bold">{crosstab.name}</h1>
+              <Badge variant="secondary">{crosstab.audiences.length} audiences</Badge>
+              <Badge variant="outline">{crosstab.metrics.length} metrics</Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsFavorite(!isFavorite)}>
+                    {isFavorite ? <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" /> : <StarOff className="h-4 w-4" />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{isFavorite ? "Remove from favorites" : "Add to favorites"}</TooltipContent>
+              </Tooltip>
+            </div>
+            <p className="text-sm text-muted-foreground max-w-2xl">{crosstab.description}</p>
+            <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground pt-1">
+              <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {crosstab.views.toLocaleString()} views</span>
+              <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> Modified {crosstab.lastModified}</span>
+              <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {crosstab.createdBy}</span>
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="outline" size="sm" onClick={() => setAutoRefresh(!autoRefresh)}>
+                {autoRefresh ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{autoRefresh ? "Pause auto-refresh" : "Enable auto-refresh"}</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="outline" size="sm" onClick={() => setIsFullscreen(!isFullscreen)}>
+                {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}</TooltipContent>
+          </Tooltip>
+
           {/* Filter Button */}
           <Sheet open={showFilterPanel} onOpenChange={setShowFilterPanel}>
             <SheetTrigger asChild>
@@ -1348,61 +1447,230 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
         }}
       />
 
-      {/* AI Insights Panel */}
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">AI-Generated Insights</h3>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="p-4 rounded-lg bg-muted/50">
-            <h4 className="font-medium text-sm mb-2">Top Performer</h4>
-            <p className="text-sm text-muted-foreground">
-              {gridData.length > 0 && gridColumns.length > 0 ? (
-                <>
-                  <span className="font-semibold text-foreground">{gridColumns[0]?.label}</span> leads in most metrics with an average of {
-                    Math.round(gridData.reduce((sum, row) => sum + (row.values[gridColumns[0]?.key] || 0), 0) / gridData.length)
-                  }%.
-                </>
-              ) : "No data available"}
-            </p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/50">
-            <h4 className="font-medium text-sm mb-2">Biggest Gap</h4>
-            <p className="text-sm text-muted-foreground">
-              The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.
-            </p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/50">
-            <h4 className="font-medium text-sm mb-2">Trending</h4>
-            <p className="text-sm text-muted-foreground">
-              {filteredData.length} metrics currently displayed after applying {activeFilterCount > 0 ? activeFilterCount : "no"} filters.
-            </p>
-          </div>
-        </div>
-      </Card>
+      {/* Main Content Tabs */}
+      <Tabs value={mainTab} onValueChange={(v) => setMainTab(v as typeof mainTab)} className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="data" className="flex items-center gap-2">
+            <Table2 className="h-4 w-4" /> Data
+          </TabsTrigger>
+          <TabsTrigger value="activity" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" /> Activity
+          </TabsTrigger>
+          <TabsTrigger value="comments" className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4" /> Comments
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center gap-2">
+            <History className="h-4 w-4" /> History
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Comments and Version History */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="p-6">
-          <CommentsPanel
-            resourceType="crosstab"
-            resourceId={id}
-            currentUserId="current-user"
-          />
-        </Card>
-        <Card className="p-6">
-          <VersionHistory
-            resourceType="crosstab"
-            resourceId={id}
-            resourceName={crosstab.name}
-            versions={[]}
-            onRestore={(versionId) => {
-              console.log("Restoring version:", versionId)
-            }}
-          />
-        </Card>
-      </div>
+        {/* Data Tab */}
+        <TabsContent value="data" className="space-y-6">
+          {/* AI Insights Panel */}
+          <Card className="p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold">AI-Generated Insights</h3>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="p-4 rounded-lg bg-muted/50">
+                <h4 className="font-medium text-sm mb-2">Top Performer</h4>
+                <p className="text-sm text-muted-foreground">
+                  {gridData.length > 0 && gridColumns.length > 0 ? (
+                    <>
+                      <span className="font-semibold text-foreground">{gridColumns[0]?.label}</span> leads in most metrics with an average of {
+                        Math.round(gridData.reduce((sum, row) => sum + (row.values[gridColumns[0]?.key] || 0), 0) / gridData.length)
+                      }%.
+                    </>
+                  ) : "No data available"}
+                </p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50">
+                <h4 className="font-medium text-sm mb-2">Biggest Gap</h4>
+                <p className="text-sm text-muted-foreground">
+                  The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.
+                </p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50">
+                <h4 className="font-medium text-sm mb-2">Trending</h4>
+                <p className="text-sm text-muted-foreground">
+                  {filteredData.length} metrics currently displayed after applying {activeFilterCount > 0 ? activeFilterCount : "no"} filters.
+                </p>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
+
+        {/* Activity Tab */}
+        <TabsContent value="activity">
+          <Card>
+            <CardHeader>
+              <CardTitle>Activity Log</CardTitle>
+              <CardDescription>Recent activity on this crosstab</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[500px]">
+                <div className="space-y-4">
+                  {mockActivityData.map(item => (
+                    <div key={item.id} className="flex items-start gap-3 pb-4 border-b last:border-0">
+                      <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
+                        item.action === "viewed" ? "bg-blue-500/10 text-blue-500" :
+                        item.action === "exported" ? "bg-green-500/10 text-green-500" :
+                        item.action === "shared" ? "bg-orange-500/10 text-orange-500" :
+                        item.action === "edited" ? "bg-yellow-500/10 text-yellow-500" :
+                        item.action === "created" ? "bg-primary/10 text-primary" :
+                        item.action === "commented" ? "bg-purple-500/10 text-purple-500" :
+                        "bg-pink-500/10 text-pink-500"
+                      }`}>
+                        {item.action === "viewed" && <Eye className="h-4 w-4" />}
+                        {item.action === "exported" && <Download className="h-4 w-4" />}
+                        {item.action === "shared" && <Share2 className="h-4 w-4" />}
+                        {item.action === "edited" && <Edit className="h-4 w-4" />}
+                        {item.action === "created" && <Sparkles className="h-4 w-4" />}
+                        {item.action === "commented" && <Sparkles className="h-4 w-4" />}
+                        {item.action === "created chart" && <BarChart3 className="h-4 w-4" />}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm">
+                          <span className="font-medium">{item.user}</span>
+                          <span className="text-muted-foreground"> {item.action}</span>
+                        </p>
+                        {item.details && <p className="text-xs text-muted-foreground">{item.details}</p>}
+                        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                          <Clock className="h-3 w-3" /> {item.timestamp}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Comments Tab */}
+        <TabsContent value="comments">
+          <Card className="p-6">
+            <CommentsPanel
+              resourceType="crosstab"
+              resourceId={id}
+              currentUserId="current-user"
+            />
+          </Card>
+        </TabsContent>
+
+        {/* History Tab */}
+        <TabsContent value="history">
+          <Card className="p-6">
+            <VersionHistory
+              resourceType="crosstab"
+              resourceId={id}
+              resourceName={crosstab.name}
+              versions={[]}
+              onRestore={(versionId) => {
+                console.log("Restoring version:", versionId)
+              }}
+            />
+          </Card>
+        </TabsContent>
+      </Tabs>
+
+      {/* Share Dialog */}
+      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Share Crosstab</DialogTitle>
+            <DialogDescription>
+              Share this crosstab with team members or external collaborators.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Label htmlFor="shareEmail">Email address</Label>
+                <Input
+                  id="shareEmail"
+                  placeholder="email@example.com"
+                  value={shareEmail}
+                  onChange={(e) => setShareEmail(e.target.value)}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label>Role</Label>
+                <Select value={shareRole} onValueChange={setShareRole}>
+                  <SelectTrigger className="mt-2 w-[120px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="viewer">Viewer</SelectItem>
+                    <SelectItem value="editor">Editor</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="p-3 bg-muted rounded-lg">
+              <Label className="text-xs text-muted-foreground">Share link</Label>
+              <div className="flex items-center gap-2 mt-1">
+                <Input value={typeof window !== 'undefined' ? window.location.href : ''} readOnly className="text-xs" />
+                <Button size="sm" variant="outline" onClick={handleCopyLink}>
+                  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowShareDialog(false)}>Cancel</Button>
+            <Button onClick={() => { setShowShareDialog(false); setShareEmail(""); }}>
+              <UserPlus className="h-4 w-4 mr-2" /> Share
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Schedule Report Dialog */}
+      <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Schedule Report</DialogTitle>
+            <DialogDescription>Set up automatic email delivery of this crosstab report.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Recipients</Label>
+              <Input placeholder="email@example.com, team@example.com" className="mt-2" />
+            </div>
+            <div>
+              <Label>Frequency</Label>
+              <Select defaultValue="weekly">
+                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Format</Label>
+              <Select defaultValue="csv">
+                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                  <SelectItem value="csv">CSV</SelectItem>
+                  <SelectItem value="excel">Excel</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>Cancel</Button>
+            <Button><Mail className="h-4 w-4 mr-2" /> Schedule</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+    </TooltipProvider>
   )
 }

@@ -2,10 +2,21 @@
 
 import { useState, useEffect, use } from "react"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   ArrowLeft,
   Download,
@@ -28,6 +39,22 @@ import {
   Activity,
   Heart,
   Tv,
+  MessageSquare,
+  History,
+  Eye,
+  ChevronDown,
+  Star,
+  StarOff,
+  Play,
+  Pause,
+  Code,
+  Mail,
+  FileJson,
+  FileImage,
+  FileText,
+  Table,
+  UserPlus,
+  Link2,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -36,6 +63,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
@@ -47,6 +75,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 // Import new advanced audience components
 import { AudiencePersona } from "@/components/audiences/audience-persona"
@@ -54,6 +96,8 @@ import { DayInTheLife } from "@/components/audiences/day-in-the-life"
 import { HabitsBehaviors } from "@/components/audiences/habits-behaviors"
 import { MediaConsumption } from "@/components/audiences/media-consumption"
 import { BrandAffinities } from "@/components/audiences/brand-affinities"
+import { CommentsPanel } from "@/components/shared/comments-panel"
+import { VersionHistory } from "@/components/shared/version-history"
 
 // Mock audience data - 10 advanced examples
 const audienceData: Record<string, {
@@ -445,15 +489,41 @@ interface AudienceType {
   criteria?: Record<string, unknown>
 }
 
+interface ActivityItem {
+  id: string
+  action: string
+  user: string
+  timestamp: string
+  details?: string
+}
+
+// Mock activity data
+const mockActivityData: ActivityItem[] = [
+  { id: "1", action: "viewed", user: "John Smith", timestamp: "10 minutes ago" },
+  { id: "2", action: "exported", user: "Sarah Chen", timestamp: "2 hours ago", details: "JSON format" },
+  { id: "3", action: "edited", user: "Marcus Johnson", timestamp: "1 day ago", details: "Updated demographics" },
+  { id: "4", action: "shared", user: "Emily Thompson", timestamp: "2 days ago", details: "Via email to research team" },
+  { id: "5", action: "created chart", user: "Sarah Chen", timestamp: "3 days ago", details: "Social Media Usage" },
+  { id: "6", action: "added to crosstab", user: "Alex Rivera", timestamp: "4 days ago", details: "Gen Z Analysis" },
+  { id: "7", action: "created", user: "Sarah Chen", timestamp: "1 week ago" },
+]
+
 export default function AudienceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
   const [isExporting, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showShareDialog, setShowShareDialog] = useState(false)
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false)
   const [copied, setCopied] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [audience, setAudience] = useState<AudienceType | null>(null)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [autoRefresh, setAutoRefresh] = useState(false)
+  const [shareEmail, setShareEmail] = useState("")
+  const [shareRole, setShareRole] = useState("viewer")
+  const [activeTab, setActiveTab] = useState("overview")
 
   useEffect(() => {
     async function fetchAudience() {
@@ -560,7 +630,7 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
     )
   }
 
-  const handleExport = async () => {
+  const handleExport = async (format: "json" | "csv" | "pdf" | "pptx" = "json") => {
     setIsExporting(true)
     try {
       const exportData = {
@@ -580,14 +650,48 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
           createdBy: audience.createdBy,
         },
       }
-      const content = JSON.stringify(exportData, null, 2)
-      const blob = new Blob([content], { type: "application/json" })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `audience-${audience.id}-${new Date().toISOString().split("T")[0]}.json`
-      a.click()
-      URL.revokeObjectURL(url)
+
+      const dateStr = new Date().toISOString().split("T")[0]
+
+      if (format === "csv") {
+        // Create CSV content
+        const demoHeaders = ["Attribute", "Value"]
+        const demoRows = audience.demographics.map(d => `"${d.label}","${d.value}"`)
+        const behaviorRows = audience.behaviors.map((b, i) => `"Behavior ${i + 1}","${b}"`)
+        const interestRows = audience.interests.map((int, i) => `"Interest ${i + 1}","${int}"`)
+        const csvContent = [
+          `"Audience: ${audience.name}"`,
+          `"Description: ${audience.description}"`,
+          `"Size: ${audience.size}"`,
+          `"Markets: ${audience.markets.join(", ")}"`,
+          "",
+          demoHeaders.join(","),
+          ...demoRows,
+          "",
+          "Behaviors",
+          ...behaviorRows,
+          "",
+          "Interests",
+          ...interestRows,
+        ].join("\n")
+        const blob = new Blob([csvContent], { type: "text/csv" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `audience-${audience.id}-${dateStr}.csv`
+        a.click()
+        URL.revokeObjectURL(url)
+      } else {
+        // JSON and other formats
+        const content = JSON.stringify(exportData, null, 2)
+        const blob = new Blob([content], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `audience-${audience.id}-${dateStr}.${format}`
+        a.click()
+        URL.revokeObjectURL(url)
+      }
     } catch (error) {
       console.error("Export failed:", error)
     } finally {
@@ -641,41 +745,93 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
   }
 
   return (
+    <TooltipProvider>
     <div className="flex-1 space-y-6 p-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex items-start justify-between">
+        <div className="flex items-start gap-4">
           <Link href="/dashboard/audiences">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="mt-1">
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <div>
-            <h1 className="text-3xl font-bold">{audience.name}</h1>
-            <p className="text-muted-foreground mt-1">{audience.description}</p>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-2xl font-bold">{audience.name}</h1>
+              <Badge variant="secondary">{audience.size} people</Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsFavorite(!isFavorite)}>
+                    {isFavorite ? <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" /> : <StarOff className="h-4 w-4" />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{isFavorite ? "Remove from favorites" : "Add to favorites"}</TooltipContent>
+              </Tooltip>
+            </div>
+            <p className="text-sm text-muted-foreground max-w-2xl">{audience.description}</p>
+            <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground pt-1">
+              <span className="flex items-center gap-1"><Globe className="h-3 w-3" /> {audience.markets.join(", ")}</span>
+              <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> Used {audience.lastUsed}</span>
+              <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {audience.createdBy}</span>
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="outline" size="sm" onClick={() => setAutoRefresh(!autoRefresh)}>
+                {autoRefresh ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{autoRefresh ? "Pause auto-refresh" : "Enable auto-refresh"}</TooltipContent>
+          </Tooltip>
+
           <Link href={`/dashboard/playground?audience=${audience.id}`}>
-            <Button variant="outline" size="sm" className="bg-transparent">
+            <Button variant="outline" size="sm">
               <Zap className="h-4 w-4 mr-2" />
               Explore
             </Button>
           </Link>
-          <Button variant="outline" size="sm" className="bg-transparent">
+
+          <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" size="sm" className="bg-transparent" onClick={handleExport} disabled={isExporting}>
-            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-            {isExporting ? "Exporting..." : "Export"}
-          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export
+                <ChevronDown className="h-3 w-3 ml-1" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleExport("json")}>
+                <FileJson className="h-4 w-4 mr-2" /> Export as JSON
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("csv")}>
+                <Table className="h-4 w-4 mr-2" /> Export as CSV
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                <FileText className="h-4 w-4 mr-2" /> Export as PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("pptx")}>
+                <FileImage className="h-4 w-4 mr-2" /> Export to PowerPoint
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Link href={`/dashboard/audiences/new?edit=${audience.id}`}>
             <Button size="sm">
               <Edit className="h-4 w-4 mr-2" />
               Edit
             </Button>
           </Link>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -683,63 +839,46 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/dashboard/audiences/new?lookalike=${audience.id}`}>Create Lookalike</Link>
+              <DropdownMenuItem onClick={handleDuplicate}>
+                <Copy className="h-4 w-4 mr-2" /> Duplicate
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/crosstabs/new?audience=${audience.id}`}>Add to Crosstab</Link>
+                <Link href={`/dashboard/audiences/new?lookalike=${audience.id}`}>
+                  <Users className="h-4 w-4 mr-2" /> Create Lookalike
+                </Link>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/crosstabs/new?audience=${audience.id}`}>
+                  <BarChart3 className="h-4 w-4 mr-2" /> Add to Crosstab
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/dashboards/new?audience=${audience.id}`}>
+                  <Target className="h-4 w-4 mr-2" /> Add to Dashboard
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setShowScheduleDialog(true)}>
+                <Mail className="h-4 w-4 mr-2" /> Schedule Report
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleCopyLink}>
+                {copied ? <Check className="h-4 w-4 mr-2" /> : <Link2 className="h-4 w-4 mr-2" />}
+                {copied ? "Copied!" : "Copy Link"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Audience</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete "{audience.name}"? This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                  {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </div>
-
-      {/* Meta info */}
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-        <div className="flex items-center gap-1">
-          <Users className="h-4 w-4" />
-          <span>{audience.size} people</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <Globe className="h-4 w-4" />
-          <span>{audience.markets.join(", ")}</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <Calendar className="h-4 w-4" />
-          <span>Used {audience.lastUsed}</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <Target className="h-4 w-4" />
-          <span>Created by {audience.createdBy}</span>
         </div>
       </div>
 
       {/* Main Tabs for Audience Insights */}
-      <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="w-full justify-start mb-4 flex-wrap h-auto gap-1">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
+        <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             Overview
@@ -753,7 +892,7 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
             Day in the Life
           </TabsTrigger>
           <TabsTrigger value="habits" className="flex items-center gap-2">
-            <Activity className="h-4 w-4" />
+            <TrendingUp className="h-4 w-4" />
             Habits & Behaviors
           </TabsTrigger>
           <TabsTrigger value="media" className="flex items-center gap-2">
@@ -763,6 +902,18 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
           <TabsTrigger value="brands" className="flex items-center gap-2">
             <Heart className="h-4 w-4" />
             Brand Affinities
+          </TabsTrigger>
+          <TabsTrigger value="comments" className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Comments
+          </TabsTrigger>
+          <TabsTrigger value="activity" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Activity
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center gap-2">
+            <History className="h-4 w-4" />
+            History
           </TabsTrigger>
         </TabsList>
 
@@ -855,7 +1006,7 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
                       Compare Audiences
                     </Button>
                   </Link>
-                  <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleExport} disabled={isExporting}>
+                  <Button variant="outline" className="w-full justify-start bg-transparent" onClick={() => handleExport("json")} disabled={isExporting}>
                     {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
                     Export Profile
                   </Button>
@@ -913,7 +1064,195 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
             audienceCriteria={audience.criteria}
           />
         </TabsContent>
+
+        {/* Comments Tab */}
+        <TabsContent value="comments" className="space-y-4">
+          <Card className="p-6">
+            <CommentsPanel
+              resourceType="audience"
+              resourceId={id}
+              currentUserId="current-user"
+            />
+          </Card>
+        </TabsContent>
+
+        {/* Activity Tab */}
+        <TabsContent value="activity" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Activity Log</CardTitle>
+              <CardDescription>Recent activity on this audience</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[500px]">
+                <div className="space-y-4">
+                  {mockActivityData.map(item => (
+                    <div key={item.id} className="flex items-start gap-3 pb-4 border-b last:border-0">
+                      <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
+                        item.action === "viewed" ? "bg-blue-500/10 text-blue-500" :
+                        item.action === "exported" ? "bg-green-500/10 text-green-500" :
+                        item.action === "shared" ? "bg-orange-500/10 text-orange-500" :
+                        item.action === "edited" ? "bg-yellow-500/10 text-yellow-500" :
+                        item.action === "created" ? "bg-primary/10 text-primary" :
+                        "bg-purple-500/10 text-purple-500"
+                      }`}>
+                        {item.action === "viewed" && <Eye className="h-4 w-4" />}
+                        {item.action === "exported" && <Download className="h-4 w-4" />}
+                        {item.action === "shared" && <Share2 className="h-4 w-4" />}
+                        {item.action === "edited" && <Edit className="h-4 w-4" />}
+                        {item.action === "created" && <Sparkles className="h-4 w-4" />}
+                        {item.action === "created chart" && <BarChart3 className="h-4 w-4" />}
+                        {item.action === "added to crosstab" && <Users className="h-4 w-4" />}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm">
+                          <span className="font-medium">{item.user}</span>
+                          <span className="text-muted-foreground"> {item.action}</span>
+                        </p>
+                        {item.details && <p className="text-xs text-muted-foreground">{item.details}</p>}
+                        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                          <Clock className="h-3 w-3" /> {item.timestamp}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* History Tab */}
+        <TabsContent value="history" className="space-y-4">
+          <Card className="p-6">
+            <VersionHistory
+              resourceType="audience"
+              resourceId={id}
+              resourceName={audience.name}
+              versions={[]}
+              onRestore={(versionId) => {
+                console.log("Restoring version:", versionId)
+              }}
+            />
+          </Card>
+        </TabsContent>
       </Tabs>
+
+      {/* Delete Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Audience</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{audience.name}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Share Dialog */}
+      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Share Audience</DialogTitle>
+            <DialogDescription>
+              Share this audience with team members or external collaborators.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Label htmlFor="shareEmail">Email address</Label>
+                <Input
+                  id="shareEmail"
+                  placeholder="email@example.com"
+                  value={shareEmail}
+                  onChange={(e) => setShareEmail(e.target.value)}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label>Role</Label>
+                <Select value={shareRole} onValueChange={setShareRole}>
+                  <SelectTrigger className="mt-2 w-[120px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="viewer">Viewer</SelectItem>
+                    <SelectItem value="editor">Editor</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="p-3 bg-muted rounded-lg">
+              <Label className="text-xs text-muted-foreground">Share link</Label>
+              <div className="flex items-center gap-2 mt-1">
+                <Input value={typeof window !== 'undefined' ? window.location.href : ''} readOnly className="text-xs" />
+                <Button size="sm" variant="outline" onClick={handleCopyLink}>
+                  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowShareDialog(false)}>Cancel</Button>
+            <Button onClick={() => { setShowShareDialog(false); setShareEmail(""); }}>
+              <UserPlus className="h-4 w-4 mr-2" /> Share
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Schedule Report Dialog */}
+      <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Schedule Report</DialogTitle>
+            <DialogDescription>Set up automatic email delivery of this audience report.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Recipients</Label>
+              <Input placeholder="email@example.com, team@example.com" className="mt-2" />
+            </div>
+            <div>
+              <Label>Frequency</Label>
+              <Select defaultValue="weekly">
+                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Format</Label>
+              <Select defaultValue="pdf">
+                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                  <SelectItem value="csv">CSV</SelectItem>
+                  <SelectItem value="json">JSON</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>Cancel</Button>
+            <Button><Mail className="h-4 w-4 mr-2" /> Schedule</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+    </TooltipProvider>
   )
 }
