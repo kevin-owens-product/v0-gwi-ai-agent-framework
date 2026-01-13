@@ -74,7 +74,7 @@ interface Agent {
 interface WorkflowItem {
   id: string
   name: string
-  isActive: boolean
+  status: string
   createdAt: string
 }
 
@@ -532,8 +532,8 @@ export default function TenantDetailPage() {
                           <Workflow className="h-4 w-4 text-muted-foreground" />
                           <span className="font-medium">{workflow.name}</span>
                         </div>
-                        <Badge variant={workflow.isActive ? "default" : "secondary"}>
-                          {workflow.isActive ? "Active" : "Inactive"}
+                        <Badge variant={workflow.status === "ACTIVE" ? "default" : "secondary"}>
+                          {workflow.status}
                         </Badge>
                       </div>
                     ))}

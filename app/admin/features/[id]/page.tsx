@@ -53,7 +53,7 @@ interface AuditLog {
   action: string
   resourceType: string
   details: Record<string, unknown>
-  createdAt: string
+  timestamp: string
 }
 
 interface FeatureFlag {
@@ -500,7 +500,7 @@ export default function FeatureFlagDetailPage() {
                           <Badge variant="outline">{log.action}</Badge>
                         </TableCell>
                         <TableCell className="text-muted-foreground">
-                          {new Date(log.createdAt).toLocaleString()}
+                          {new Date(log.timestamp).toLocaleString()}
                         </TableCell>
                       </TableRow>
                     ))}

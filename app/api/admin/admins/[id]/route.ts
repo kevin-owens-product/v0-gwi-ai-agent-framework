@@ -63,7 +63,7 @@ export async function GET(
     // Get audit logs for this admin
     const auditLogs = await prisma.platformAuditLog.findMany({
       where: { adminId: id },
-      orderBy: { createdAt: "desc" },
+      orderBy: { timestamp: "desc" },
       take: 20,
       select: {
         id: true,
@@ -72,7 +72,7 @@ export async function GET(
         resourceId: true,
         details: true,
         ipAddress: true,
-        createdAt: true,
+        timestamp: true,
       },
     })
 
@@ -89,7 +89,7 @@ export async function GET(
         where: {
           adminId: id,
           resourceType: "support_ticket",
-          createdAt: { gte: thirtyDaysAgo },
+          timestamp: { gte: thirtyDaysAgo },
         },
       }),
     ])

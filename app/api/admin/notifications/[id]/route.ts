@@ -44,7 +44,7 @@ export async function GET(
         resourceType: "notification",
         resourceId: id,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { timestamp: "desc" },
       take: 10,
     })
 
