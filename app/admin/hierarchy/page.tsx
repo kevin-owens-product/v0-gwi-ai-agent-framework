@@ -288,7 +288,9 @@ export default function HierarchyPage() {
   const fetchHierarchy = useCallback(async () => {
     setIsLoading(true)
     try {
-      const response = await fetch("/api/admin/hierarchy")
+      const response = await fetch("/api/admin/hierarchy", {
+        credentials: "include",
+      })
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -313,7 +315,9 @@ export default function HierarchyPage() {
 
   const fetchRelationships = useCallback(async () => {
     try {
-      const response = await fetch("/api/admin/hierarchy/relationships")
+      const response = await fetch("/api/admin/hierarchy/relationships", {
+        credentials: "include",
+      })
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -333,7 +337,9 @@ export default function HierarchyPage() {
 
   const fetchAllOrgs = useCallback(async () => {
     try {
-      const response = await fetch("/api/admin/tenants?limit=200")
+      const response = await fetch("/api/admin/tenants?limit=200", {
+        credentials: "include",
+      })
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -369,6 +375,7 @@ export default function HierarchyPage() {
     try {
       const response = await fetch("/api/admin/hierarchy", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...newChild,
@@ -409,6 +416,7 @@ export default function HierarchyPage() {
     try {
       const response = await fetch("/api/admin/hierarchy/relationships", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newRelationship),
       })
@@ -444,6 +452,7 @@ export default function HierarchyPage() {
     try {
       const response = await fetch(`/api/admin/hierarchy/${moveOrg.id}`, {
         method: "PATCH",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           newParentOrgId: newParentId || null,
@@ -475,6 +484,7 @@ export default function HierarchyPage() {
     try {
       const response = await fetch("/api/admin/hierarchy/relationships", {
         method: "PATCH",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ relationshipId: id, status }),
       })
