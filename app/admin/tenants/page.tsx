@@ -337,7 +337,7 @@ export default function TenantsPage() {
         body: JSON.stringify({
           ...newTenant,
           companySize: newTenant.companySize || undefined,
-          parentOrgId: newTenant.parentOrgId || undefined,
+          parentOrgId: newTenant.parentOrgId && newTenant.parentOrgId !== "none" ? newTenant.parentOrgId : undefined,
         }),
       })
 
@@ -914,7 +914,7 @@ export default function TenantsPage() {
                   <SelectValue placeholder="None (root organization)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">None (root organization)</SelectItem>
+                  <SelectItem value="none">None (root organization)</SelectItem>
                   {parentOrgs.map((org) => (
                     <SelectItem key={org.id} value={org.id}>{org.name}</SelectItem>
                   ))}
