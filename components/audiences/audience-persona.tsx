@@ -141,9 +141,31 @@ function generatePersonaFromCriteria(
   const random = (index: number) => ((seed * (index + 1)) % 100) / 100
 
   // Parse criteria to influence persona generation
-  const ageRange = (criteria?.age as string) || "25-44"
+  // Handle ageRange - can be string or object { min, max }
+  let ageRange = "25-44"
+  const ageValue = criteria?.age ?? criteria?.ageRange
+  if (ageValue) {
+    if (typeof ageValue === 'string') {
+      ageRange = ageValue
+    } else if (typeof ageValue === 'object' && ageValue !== null && 'min' in ageValue) {
+      const ageObj = ageValue as { min: number; max?: number }
+      ageRange = ageObj.max ? `${ageObj.min}-${ageObj.max}` : `${ageObj.min}+`
+    }
+  }
+
   const gender = random(1) > 0.5 ? "Female" : "Male"
-  const income = (criteria?.income as string) || "$75,000 - $150,000"
+
+  // Handle income - can be string or object { min, currency }
+  let income = "$75,000 - $150,000"
+  if (criteria?.income) {
+    if (typeof criteria.income === 'string') {
+      income = criteria.income
+    } else if (typeof criteria.income === 'object' && criteria.income !== null && 'min' in criteria.income) {
+      const incomeObj = criteria.income as { min: number; currency?: string }
+      const formattedMin = new Intl.NumberFormat('en-US', { style: 'currency', currency: incomeObj.currency || 'USD', maximumFractionDigits: 0 }).format(incomeObj.min)
+      income = `${formattedMin}+`
+    }
+  }
 
   // Generate names based on demographics
   const femaleNames = ["Sarah", "Emily", "Jessica", "Ashley", "Amanda", "Olivia", "Emma", "Sophia", "Mia", "Isabella"]
