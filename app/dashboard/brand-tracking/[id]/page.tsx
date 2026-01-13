@@ -43,7 +43,75 @@ interface BrandTracking {
     nps: number | null
     sentimentScore: number | null
     marketShare: number | null
+    competitorData?: Record<string, any>
+    audienceBreakdown?: Record<string, any>
+    insights?: string[]
   }>
+}
+
+// Transform API response to frontend format
+function transformApiBrandTracking(apiData: any): BrandTracking | null {
+  if (!apiData || !apiData.id) return null
+
+  // Ensure competitors is an array (stored as JSON in seed)
+  let competitors: string[] = []
+  if (Array.isArray(apiData.competitors)) {
+    competitors = apiData.competitors
+  } else if (typeof apiData.competitors === 'string') {
+    try {
+      competitors = JSON.parse(apiData.competitors)
+    } catch {
+      competitors = []
+    }
+  }
+
+  // Ensure audiences is an array
+  let audiences: string[] = []
+  if (Array.isArray(apiData.audiences)) {
+    audiences = apiData.audiences
+  } else if (typeof apiData.audiences === 'string') {
+    try {
+      audiences = JSON.parse(apiData.audiences)
+    } catch {
+      audiences = []
+    }
+  }
+
+  // Transform snapshots if present
+  const snapshots = Array.isArray(apiData.snapshots)
+    ? apiData.snapshots.map((snapshot: any) => ({
+        id: snapshot.id,
+        snapshotDate: snapshot.snapshotDate,
+        brandHealth: snapshot.brandHealth ?? snapshot.metrics?.brandHealth ?? null,
+        awareness: snapshot.awareness ?? snapshot.metrics?.awareness ?? null,
+        consideration: snapshot.consideration ?? snapshot.metrics?.consideration ?? null,
+        preference: snapshot.preference ?? snapshot.metrics?.preference ?? null,
+        loyalty: snapshot.loyalty ?? snapshot.metrics?.loyalty ?? null,
+        nps: snapshot.nps ?? snapshot.metrics?.nps ?? null,
+        sentimentScore: snapshot.sentimentScore ?? snapshot.metrics?.sentimentScore ?? null,
+        marketShare: snapshot.marketShare ?? snapshot.metrics?.marketShare ?? null,
+        competitorData: snapshot.competitorData,
+        audienceBreakdown: snapshot.audienceBreakdown,
+        insights: snapshot.insights,
+      }))
+    : []
+
+  // Get snapshot count from _count or snapshotCount field
+  const snapshotCount = apiData._count?.snapshots ?? apiData.snapshotCount ?? snapshots.length
+
+  return {
+    id: apiData.id,
+    brandName: apiData.brandName,
+    description: apiData.description || null,
+    industry: apiData.industry || null,
+    status: apiData.status || 'ACTIVE',
+    competitors,
+    audiences,
+    snapshotCount,
+    lastSnapshot: apiData.lastSnapshot || (snapshots[0]?.snapshotDate ?? null),
+    createdAt: apiData.createdAt,
+    snapshots,
+  }
 }
 
 const statusColors = {
@@ -98,55 +166,23 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
       const response = await fetch(`/api/v1/brand-tracking/${id}`)
       if (response.ok) {
         const data = await response.json()
-        // If no snapshots exist, generate demo data for visualization
-        if (!data.snapshots || data.snapshots.length === 0) {
-          data.snapshots = generateDemoSnapshots(data.brandName)
-          data._isUsingDemoData = true
+        // Transform API response to frontend format
+        const transformed = transformApiBrandTracking(data)
+        if (transformed) {
+          // If no snapshots exist, generate demo data for visualization
+          if (!transformed.snapshots || transformed.snapshots.length === 0) {
+            transformed.snapshots = generateDemoSnapshots(transformed.brandName)
+          }
+          setBrandTracking(transformed)
+        } else {
+          // Fall back to demo data if transform fails
+          const demoData = demoBrands[id]
+          if (demoData) {
+            setBrandTracking(demoData)
+          }
         }
-        setBrandTracking(data)
       } else {
-        // For demo IDs or when API fails, create demo brand tracking
-        const demoBrands: Record<string, BrandTracking> = {
-          '1': {
-            id: '1',
-            brandName: 'Nike',
-            description: 'Track Nike\'s brand health and competitive position in athletic wear market',
-            industry: 'Sportswear',
-            status: 'ACTIVE',
-            competitors: ['Adidas', 'Under Armour', 'Puma', 'Reebok'],
-            audiences: ['18-24', '25-34', 'Athletes'],
-            snapshotCount: 47,
-            lastSnapshot: new Date().toISOString(),
-            createdAt: '2024-11-01',
-            snapshots: generateDemoSnapshots('Nike'),
-          },
-          '2': {
-            id: '2',
-            brandName: 'Coca-Cola',
-            description: 'Monitor brand perception and market share in beverage industry',
-            industry: 'Beverages',
-            status: 'ACTIVE',
-            competitors: ['Pepsi', 'Dr Pepper', 'Sprite'],
-            audiences: ['All Ages', 'Health Conscious'],
-            snapshotCount: 124,
-            lastSnapshot: new Date().toISOString(),
-            createdAt: '2024-10-15',
-            snapshots: generateDemoSnapshots('Coca-Cola'),
-          },
-          '3': {
-            id: '3',
-            brandName: 'Tesla',
-            description: 'Track electric vehicle brand performance and innovation perception',
-            industry: 'Automotive',
-            status: 'ACTIVE',
-            competitors: ['Ford', 'GM', 'Rivian', 'Lucid'],
-            audiences: ['Tech Early Adopters', 'Eco-Conscious', '35-54'],
-            snapshotCount: 89,
-            lastSnapshot: new Date().toISOString(),
-            createdAt: '2024-09-20',
-            snapshots: generateDemoSnapshots('Tesla'),
-          },
-        }
+        // For demo IDs or when API fails, use demo brand tracking
         const demoData = demoBrands[id]
         if (demoData) {
           setBrandTracking(demoData)
@@ -154,9 +190,57 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
       }
     } catch (error) {
       console.error('Failed to fetch brand tracking:', error)
+      // Fall back to demo data on error
+      const demoData = demoBrands[id]
+      if (demoData) {
+        setBrandTracking(demoData)
+      }
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // Demo brand data for fallback
+  const demoBrands: Record<string, BrandTracking> = {
+    '1': {
+      id: '1',
+      brandName: 'Nike',
+      description: 'Track Nike\'s brand health and competitive position in athletic wear market',
+      industry: 'Sportswear',
+      status: 'ACTIVE',
+      competitors: ['Adidas', 'Under Armour', 'Puma', 'Reebok'],
+      audiences: ['18-24', '25-34', 'Athletes'],
+      snapshotCount: 47,
+      lastSnapshot: new Date().toISOString(),
+      createdAt: '2024-11-01',
+      snapshots: generateDemoSnapshots('Nike'),
+    },
+    '2': {
+      id: '2',
+      brandName: 'Coca-Cola',
+      description: 'Monitor brand perception and market share in beverage industry',
+      industry: 'Beverages',
+      status: 'ACTIVE',
+      competitors: ['Pepsi', 'Dr Pepper', 'Sprite'],
+      audiences: ['All Ages', 'Health Conscious'],
+      snapshotCount: 124,
+      lastSnapshot: new Date().toISOString(),
+      createdAt: '2024-10-15',
+      snapshots: generateDemoSnapshots('Coca-Cola'),
+    },
+    '3': {
+      id: '3',
+      brandName: 'Tesla',
+      description: 'Track electric vehicle brand performance and innovation perception',
+      industry: 'Automotive',
+      status: 'ACTIVE',
+      competitors: ['Ford', 'GM', 'Rivian', 'Lucid'],
+      audiences: ['Tech Early Adopters', 'Eco-Conscious', '35-54'],
+      snapshotCount: 89,
+      lastSnapshot: new Date().toISOString(),
+      createdAt: '2024-09-20',
+      snapshots: generateDemoSnapshots('Tesla'),
+    },
   }
 
   async function handleTakeSnapshot() {
