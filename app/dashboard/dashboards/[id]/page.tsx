@@ -1381,7 +1381,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList>
+          <TabsList className="flex-wrap h-auto gap-1">
             <TabsTrigger value="charts" className="gap-2">
               <BarChart3 className="h-4 w-4" />
               Charts ({filteredCharts.length})
@@ -1390,9 +1390,17 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <Activity className="h-4 w-4" />
               Analytics
             </TabsTrigger>
+            <TabsTrigger value="comments" className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              Comments
+            </TabsTrigger>
             <TabsTrigger value="activity" className="gap-2">
               <History className="h-4 w-4" />
               Activity
+            </TabsTrigger>
+            <TabsTrigger value="history" className="gap-2">
+              <Clock className="h-4 w-4" />
+              History
             </TabsTrigger>
             <TabsTrigger value="settings" className="gap-2">
               <Settings className="h-4 w-4" />
@@ -1659,6 +1667,17 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
             </Card>
           </TabsContent>
 
+          {/* Comments Tab */}
+          <TabsContent value="comments" className="space-y-6">
+            <Card className="p-6">
+              <CommentsPanel
+                resourceType="audience"
+                resourceId={id}
+                currentUserId="current-user"
+              />
+            </Card>
+          </TabsContent>
+
           {/* Activity Tab */}
           <TabsContent value="activity" className="space-y-6">
             <Card className="p-6">
@@ -1681,28 +1700,21 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                 ))}
               </div>
             </Card>
+          </TabsContent>
 
-            {/* Comments and Version History */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              <Card className="p-6">
-                <CommentsPanel
-                  resourceType="dashboard"
-                  resourceId={id}
-                  currentUserId="current-user"
-                />
-              </Card>
-              <Card className="p-6">
-                <VersionHistory
-                  resourceType="dashboard"
-                  resourceId={id}
-                  resourceName={dashboard.name}
-                  versions={[]}
-                  onRestore={(versionId) => {
-                    console.log("Restoring version:", versionId)
-                  }}
-                />
-              </Card>
-            </div>
+          {/* History Tab */}
+          <TabsContent value="history" className="space-y-6">
+            <Card className="p-6">
+              <VersionHistory
+                resourceType="audience"
+                resourceId={id}
+                resourceName={dashboard.name}
+                versions={[]}
+                onRestore={(versionId) => {
+                  console.log("Restoring version:", versionId)
+                }}
+              />
+            </Card>
           </TabsContent>
 
           {/* Settings Tab */}
