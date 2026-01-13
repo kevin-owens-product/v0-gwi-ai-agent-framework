@@ -66,7 +66,7 @@ export async function GET(
       return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
     }
 
-    if (!hasPermission(membership.role, 'insight:read')) {
+    if (!hasPermission(membership.role, 'insights:read')) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 

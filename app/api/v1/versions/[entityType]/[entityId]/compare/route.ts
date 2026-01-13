@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
 import { getUserMembership } from '@/lib/tenant'
-import { hasPermission } from '@/lib/permissions'
+import { hasPermission, type Permission } from '@/lib/permissions'
 import { compareEntityVersions, type VersionedEntityType } from '@/lib/change-tracking'
 
 // Helper to get org ID from header or cookies
@@ -32,6 +32,17 @@ const VALID_ENTITY_TYPES: VersionedEntityType[] = [
   'dashboard',
   'brand_tracking',
 ]
+
+// Map entity types to permission keys
+const ENTITY_TYPE_PERMISSIONS: Record<VersionedEntityType, Permission> = {
+  audience: 'audiences:read',
+  crosstab: 'crosstabs:read',
+  insight: 'insights:read',
+  chart: 'charts:read',
+  report: 'reports:read',
+  dashboard: 'dashboards:read',
+  brand_tracking: 'brand-tracking:read',
+}
 
 // GET /api/v1/versions/[entityType]/[entityId]/compare - Compare two versions
 export async function GET(
@@ -63,7 +74,7 @@ export async function GET(
       return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
     }
 
-    const permissionKey = `${entityType}:read` as const
+    const permissionKey = ENTITY_TYPE_PERMISSIONS[entityType as VersionedEntityType]
     if (!hasPermission(membership.role, permissionKey)) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
