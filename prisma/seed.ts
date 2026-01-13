@@ -1549,12 +1549,12 @@ async function main() {
         filters: { categories: ['electronics', 'apparel', 'grocery', 'beauty', 'home', 'sports'] },
         results: {
           rows: [
-            { // category: 'Electronics', online: 72.5, in_store: 18.5, omnichannel: 9.0 },
-            { // category: 'Apparel', online: 48.2, in_store: 38.5, omnichannel: 13.3 },
-            { // category: 'Grocery', online: 22.5, in_store: 68.2, omnichannel: 9.3 },
-            { // category: 'Beauty', online: 55.8, in_store: 32.5, omnichannel: 11.7 },
-            { // category: 'Home & Garden', online: 42.3, in_store: 45.2, omnichannel: 12.5 },
-            { // category: 'Sports & Fitness', online: 52.5, in_store: 35.8, omnichannel: 11.7 }
+            { category: 'Electronics', online: 72.5, in_store: 18.5, omnichannel: 9.0 },
+            { category: 'Apparel', online: 48.2, in_store: 38.5, omnichannel: 13.3 },
+            { category: 'Grocery', online: 22.5, in_store: 68.2, omnichannel: 9.3 },
+            { category: 'Beauty', online: 55.8, in_store: 32.5, omnichannel: 11.7 },
+            { category: 'Home & Garden', online: 42.3, in_store: 45.2, omnichannel: 12.5 },
+            { category: 'Sports & Fitness', online: 52.5, in_store: 35.8, omnichannel: 11.7 }
           ],
           metadata: { sampleSize: 78000, confidence: 0.95, lastUpdated: now.toISOString() }
         },
@@ -1571,11 +1571,11 @@ async function main() {
         filters: { categories: ['streaming', 'meal_kits', 'beauty_boxes', 'fitness', 'software', 'news_media'] },
         results: {
           rows: [
-            { // category: 'Video Streaming', gen_z: 92.5, millennials: 88.2, gen_x: 75.5, boomers: 58.2 },
-            { // category: 'Music Streaming', gen_z: 85.2, millennials: 78.5, gen_x: 52.3, boomers: 32.5 },
-            { // category: 'Meal Kits', gen_z: 18.5, millennials: 35.2, gen_x: 28.5, boomers: 15.8 },
-            { // category: 'Fitness Apps', gen_z: 42.5, millennials: 38.2, gen_x: 25.5, boomers: 12.3 },
-            { // category: 'News/Media', gen_z: 15.2, millennials: 28.5, gen_x: 42.3, boomers: 55.8 }
+            { category: 'Video Streaming', gen_z: 92.5, millennials: 88.2, gen_x: 75.5, boomers: 58.2 },
+            { category: 'Music Streaming', gen_z: 85.2, millennials: 78.5, gen_x: 52.3, boomers: 32.5 },
+            { category: 'Meal Kits', gen_z: 18.5, millennials: 35.2, gen_x: 28.5, boomers: 15.8 },
+            { category: 'Fitness Apps', gen_z: 42.5, millennials: 38.2, gen_x: 25.5, boomers: 12.3 },
+            { category: 'News/Media', gen_z: 15.2, millennials: 28.5, gen_x: 42.3, boomers: 55.8 }
           ],
           metadata: { sampleSize: 45000, confidence: 0.95, metric: 'active_subscription_rate' }
         },
@@ -5712,7 +5712,7 @@ async function main() {
         ipRange: '185.220.100.0/24',
         type: 'THREAT_INTEL',
         reason: 'Known Tor exit node range',
-        metadata: { // category: 'tor_exit_nodes', provider: 'TorProject' },
+        metadata: { category: 'tor_exit_nodes', provider: 'TorProject' },
       },
       {
         ipAddress: '103.21.244.0',
