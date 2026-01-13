@@ -510,12 +510,52 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
           const apiDashboard = data.data || data
           if (apiDashboard && apiDashboard.id) {
             const widgetsArray = Array.isArray(apiDashboard.widgets) ? apiDashboard.widgets : []
-            // Valid chart types for validation
-            const validChartTypes: ChartType[] = ["BAR", "LINE", "PIE", "DONUT", "AREA", "SCATTER", "HEATMAP", "TREEMAP", "FUNNEL", "RADAR", "METRIC"]
+            // Valid chart types for validation - include all types from seed data
+            const validChartTypes: ChartType[] = ["BAR", "LINE", "PIE", "DONUT", "AREA", "SCATTER", "HEATMAP", "TREEMAP", "FUNNEL", "RADAR", "METRIC", "GAUGE", "TABLE"]
+
+            // Map seed data types to valid chart types
+            const typeMapping: Record<string, ChartType> = {
+              gauge: "METRIC",
+              table: "BAR", // Table displays as bar chart visualization
+            }
+
             const getValidChartType = (type: string | undefined): ChartType => {
               const upperType = (type || "").toUpperCase()
+              const lowerType = (type || "").toLowerCase()
+              // Check for type mapping first
+              if (typeMapping[lowerType]) {
+                return typeMapping[lowerType]
+              }
               return validChartTypes.includes(upperType as ChartType) ? (upperType as ChartType) : "BAR"
             }
+
+            // Infer category from widget type/metric
+            const getCategoryFromWidget = (widget: any): string => {
+              if (widget.category) return widget.category
+              const type = (widget.type || "").toLowerCase()
+              const metric = (widget.metric || "").toLowerCase()
+
+              if (metric.includes("brand") || metric.includes("awareness") || metric.includes("nps")) {
+                return "Brand Health"
+              }
+              if (metric.includes("market") || metric.includes("share")) {
+                return "Market Share"
+              }
+              if (metric.includes("sentiment")) {
+                return "Sentiment"
+              }
+              if (type === "funnel") {
+                return "Conversion"
+              }
+              if (type === "radar") {
+                return "Analysis"
+              }
+              if (type === "heatmap" || type === "treemap") {
+                return "Patterns"
+              }
+              return "General"
+            }
+
             setDashboard({
               id: apiDashboard.id,
               name: apiDashboard.name,
@@ -524,8 +564,8 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
                 id: w.id || `chart-${i}`,
                 name: w.title || w.name || `Chart ${i + 1}`,
                 type: getValidChartType(w.type),
-                category: w.category || "General",
-                dataSource: w.dataSource || "Unknown",
+                category: getCategoryFromWidget(w),
+                dataSource: w.dataSource || "GWI Core",
               })),
               lastModified: apiDashboard.updatedAt ? formatTimeAgo(apiDashboard.updatedAt) : "Recently",
               views: apiDashboard.views || 0,
