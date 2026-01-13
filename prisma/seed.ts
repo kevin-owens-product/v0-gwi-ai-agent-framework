@@ -177,6 +177,99 @@ async function main() {
     }
   })
 
+  // Additional users for comprehensive testing
+  const bannedUser = await prisma.user.create({
+    data: {
+      email: 'banned@example.com',
+      name: 'Banned User',
+      passwordHash: defaultPassword,
+      emailVerified: new Date(),
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=banned'
+    }
+  })
+
+  const suspiciousUser = await prisma.user.create({
+    data: {
+      email: 'suspicious@example.com',
+      name: 'Suspicious Account',
+      passwordHash: defaultPassword,
+      emailVerified: null, // Unverified
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=suspicious'
+    }
+  })
+
+  const inactiveUser = await prisma.user.create({
+    data: {
+      email: 'inactive@oldcompany.com',
+      name: 'Inactive User',
+      passwordHash: defaultPassword,
+      emailVerified: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // Verified 1 year ago
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=inactive'
+    }
+  })
+
+  const trialUser = await prisma.user.create({
+    data: {
+      email: 'trial@startup.io',
+      name: 'Trial User',
+      passwordHash: defaultPassword,
+      emailVerified: new Date(),
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=trial'
+    }
+  })
+
+  const enterpriseUser2 = await prisma.user.create({
+    data: {
+      email: 'mike@enterprise.co',
+      name: 'Mike Enterprise',
+      passwordHash: defaultPassword,
+      emailVerified: new Date(),
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=mike'
+    }
+  })
+
+  // ==================== ADDITIONAL ORGANIZATIONS ====================
+  console.log('🏢 Creating additional organizations for testing...')
+
+  const suspendedOrg = await prisma.organization.create({
+    data: {
+      name: 'Suspended Corp',
+      slug: 'suspended-corp',
+      planTier: PlanTier.PROFESSIONAL,
+      settings: {
+        theme: 'light',
+        timezone: 'America/Chicago',
+        features: {}
+      }
+    }
+  })
+
+  const billingIssueOrg = await prisma.organization.create({
+    data: {
+      name: 'Billing Issue Inc',
+      slug: 'billing-issue-inc',
+      planTier: PlanTier.STARTER,
+      settings: {
+        theme: 'dark',
+        timezone: 'America/New_York',
+        features: {}
+      }
+    }
+  })
+
+  const trialOrg = await prisma.organization.create({
+    data: {
+      name: 'Trial Company',
+      slug: 'trial-company',
+      planTier: PlanTier.STARTER,
+      settings: {
+        theme: 'system',
+        timezone: 'Europe/Berlin',
+        features: {}
+      }
+    }
+  })
+
   // ==================== ORGANIZATION MEMBERSHIPS ====================
   console.log('🔗 Creating organization memberships...')
 
@@ -204,6 +297,29 @@ async function main() {
     data: [
       { orgId: enterpriseCo.id, userId: sarahEnterprise.id, role: Role.OWNER },
       { orgId: enterpriseCo.id, userId: demoUser.id, role: Role.VIEWER },
+      { orgId: enterpriseCo.id, userId: enterpriseUser2.id, role: Role.ADMIN },
+    ]
+  })
+
+  // Suspended Corp memberships
+  await prisma.organizationMember.createMany({
+    data: [
+      { orgId: suspendedOrg.id, userId: bannedUser.id, role: Role.OWNER },
+      { orgId: suspendedOrg.id, userId: suspiciousUser.id, role: Role.MEMBER },
+    ]
+  })
+
+  // Billing Issue Inc memberships
+  await prisma.organizationMember.createMany({
+    data: [
+      { orgId: billingIssueOrg.id, userId: inactiveUser.id, role: Role.OWNER },
+    ]
+  })
+
+  // Trial Company memberships
+  await prisma.organizationMember.createMany({
+    data: [
+      { orgId: trialOrg.id, userId: trialUser.id, role: Role.OWNER },
     ]
   })
 
@@ -3311,10 +3427,234 @@ async function main() {
     ]
   })
 
+  // ==================== USER BANS ====================
+  console.log('🚫 Creating user bans...')
+
+  if (superAdmin && platformAdmin) {
+    // Platform-wide permanent ban
+    await prisma.userBan.create({
+      data: {
+        userId: bannedUser.id,
+        orgId: null, // Platform-wide ban
+        reason: 'Multiple violations of terms of service including sharing credentials and automated scraping.',
+        bannedBy: superAdmin.id,
+        banType: 'PERMANENT',
+        expiresAt: null,
+        appealStatus: 'REJECTED',
+        appealNotes: 'Appeal denied on 2025-01-05. User showed no willingness to comply with ToS.',
+        metadata: {
+          previousWarnings: 3,
+          incidentIds: ['INC-2024-001', 'INC-2024-012', 'INC-2025-003'],
+          ipAddresses: ['45.33.32.156', '192.168.1.200']
+        }
+      }
+    })
+
+    // Temporary ban with pending appeal
+    await prisma.userBan.create({
+      data: {
+        userId: suspiciousUser.id,
+        orgId: null,
+        reason: 'Suspicious activity detected - unusual API request patterns suggesting automated usage.',
+        bannedBy: platformAdmin.id,
+        banType: 'TEMPORARY',
+        expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+        appealStatus: 'PENDING',
+        appealNotes: 'User claims their API integration had a bug. Under review.',
+        metadata: {
+          detectedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          requestsPerMinute: 500,
+          normalRate: 50
+        }
+      }
+    })
+
+    // Shadow ban for spam behavior
+    await prisma.userBan.create({
+      data: {
+        userId: inactiveUser.id,
+        orgId: billingIssueOrg.id, // Org-specific ban
+        reason: 'Account flagged for promotional spam in shared workspaces.',
+        bannedBy: platformAdmin.id,
+        banType: 'SHADOW',
+        expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        appealStatus: 'NONE',
+        metadata: {
+          spamCount: 15,
+          affectedWorkspaces: ['marketing-insights', 'q4-planning']
+        }
+      }
+    })
+  }
+
+  // ==================== ORGANIZATION SUSPENSIONS ====================
+  console.log('⛔ Creating organization suspensions...')
+
+  if (superAdmin && platformAdmin) {
+    // Full suspension for ToS violation
+    await prisma.organizationSuspension.create({
+      data: {
+        orgId: suspendedOrg.id,
+        reason: 'Severe terms of service violation: Automated data harvesting detected across multiple endpoints.',
+        suspendedBy: superAdmin.id,
+        suspensionType: 'FULL',
+        expiresAt: null, // Indefinite
+        isActive: true,
+        notes: 'Owner contacted via email on 2025-01-10. No response. Legal review pending.'
+      }
+    })
+
+    // Billing hold suspension
+    await prisma.organizationSuspension.create({
+      data: {
+        orgId: billingIssueOrg.id,
+        reason: 'Failed payment after 3 retry attempts. Invoice #INV-2025-0042 overdue by 14 days.',
+        suspendedBy: platformAdmin.id,
+        suspensionType: 'BILLING_HOLD',
+        expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000), // Grace period
+        isActive: true,
+        notes: 'Customer support ticket TKT-202501-00010 opened. Awaiting updated payment method.'
+      }
+    })
+
+    // Investigation suspension (not active - was resolved)
+    await prisma.organizationSuspension.create({
+      data: {
+        orgId: techStartup.id,
+        reason: 'Security incident reported - potential unauthorized access to admin credentials.',
+        suspendedBy: superAdmin.id,
+        suspensionType: 'INVESTIGATION',
+        expiresAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000), // Expired 5 days ago
+        isActive: false,
+        notes: 'Investigation concluded: False alarm. User forgot their password and triggered security alerts. Suspension lifted on 2025-01-08.'
+      }
+    })
+
+    // Add more audit logs for bans and suspensions
+    await prisma.platformAuditLog.createMany({
+      data: [
+        {
+          adminId: superAdmin.id,
+          action: 'ban_user',
+          resourceType: 'user',
+          targetUserId: bannedUser.id,
+          details: { banType: 'PERMANENT', reason: 'Multiple ToS violations' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'ban_user',
+          resourceType: 'user',
+          targetUserId: suspiciousUser.id,
+          details: { banType: 'TEMPORARY', reason: 'Suspicious activity' },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: superAdmin.id,
+          action: 'suspend_org',
+          resourceType: 'organization',
+          targetOrgId: suspendedOrg.id,
+          details: { suspensionType: 'FULL', reason: 'ToS violation' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'suspend_org',
+          resourceType: 'organization',
+          targetOrgId: billingIssueOrg.id,
+          details: { suspensionType: 'BILLING_HOLD', reason: 'Failed payment' },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: superAdmin.id,
+          action: 'lift_suspension',
+          resourceType: 'organization',
+          targetOrgId: techStartup.id,
+          details: { previousType: 'INVESTIGATION', reason: 'Investigation completed - false alarm' },
+          ipAddress: '192.168.1.100',
+          timestamp: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        },
+        {
+          adminId: platformAdmin.id,
+          action: 'impersonate_user',
+          resourceType: 'user',
+          targetUserId: trialUser.id,
+          details: { reason: 'Customer support - helping with onboarding' },
+          ipAddress: '192.168.1.101',
+          timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        },
+      ]
+    })
+  }
+
+  // ==================== ADDITIONAL TENANT HEALTH SCORES ====================
+  console.log('💚 Creating additional tenant health scores...')
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: suspendedOrg.id,
+      overallScore: 12,
+      engagementScore: 5,
+      usageScore: 19,
+      healthIndicators: {
+        dailyActiveUsers: 0,
+        weeklyAgentRuns: 0,
+        featureAdoption: 0.1,
+        supportTickets: 5,
+        nps: -50
+      },
+      riskLevel: 'CRITICAL',
+      churnProbability: 0.95,
+      recommendations: ['Account suspended - resolve ToS violation', 'Legal review required'],
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: billingIssueOrg.id,
+      overallScore: 35,
+      engagementScore: 28,
+      usageScore: 42,
+      healthIndicators: {
+        dailyActiveUsers: 2,
+        weeklyAgentRuns: 12,
+        featureAdoption: 0.25,
+        supportTickets: 2,
+        nps: 20
+      },
+      riskLevel: 'CRITICAL',
+      churnProbability: 0.72,
+      recommendations: ['Resolve billing issue immediately', 'Offer payment plan option', 'Customer success outreach required'],
+    }
+  })
+
+  await prisma.tenantHealthScore.create({
+    data: {
+      orgId: trialOrg.id,
+      overallScore: 58,
+      engagementScore: 65,
+      usageScore: 51,
+      healthIndicators: {
+        dailyActiveUsers: 3,
+        weeklyAgentRuns: 28,
+        featureAdoption: 0.52,
+        supportTickets: 1,
+        nps: 55
+      },
+      riskLevel: 'AT_RISK',
+      churnProbability: 0.45,
+      recommendations: ['Trial ending soon - send conversion offer', 'Schedule demo of premium features', 'Assign customer success manager'],
+    }
+  })
+
   console.log('\n📊 Summary:')
-  console.log('   Organizations: 3')
-  console.log('   Users: 7')
-  console.log('   Organization Memberships: 10')
+  console.log('   Organizations: 6')
+  console.log('   Users: 12')
+  console.log('   Organization Memberships: 16')
   console.log('   Agents: 7')
   console.log('   Agent Runs: 15+')
   console.log('   Data Sources: 7')
@@ -3339,10 +3679,12 @@ async function main() {
   console.log('   System Rules: 5')
   console.log('   Support Tickets: 6')
   console.log('   Ticket Responses: 4')
-  console.log('   Tenant Health Scores: 3')
+  console.log('   Tenant Health Scores: 6')
   console.log('   System Notifications: 4')
-  console.log('   Platform Audit Logs: 8')
+  console.log('   Platform Audit Logs: 14')
   console.log('   System Config: 8')
+  console.log('   User Bans: 3')
+  console.log('   Organization Suspensions: 3')
 
   console.log('\n🔑 Test Credentials:')
   console.log('')
