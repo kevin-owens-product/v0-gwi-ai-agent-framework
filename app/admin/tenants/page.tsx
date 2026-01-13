@@ -50,6 +50,8 @@ import {
   ExternalLink,
   Loader2,
   RefreshCw,
+  Plus,
+  Network,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -90,6 +92,22 @@ export default function TenantsPage() {
   const [suspendReason, setSuspendReason] = useState("")
   const [suspendType, setSuspendType] = useState("FULL")
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Create tenant state
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
+  const [newTenant, setNewTenant] = useState({
+    name: "",
+    slug: "",
+    planTier: "STARTER",
+    orgType: "STANDARD",
+    industry: "",
+    companySize: "",
+    country: "",
+    timezone: "UTC",
+    ownerEmail: "",
+    ownerName: "",
+    allowChildOrgs: false,
+  })
 
   const fetchTenants = useCallback(async () => {
     setIsLoading(true)
@@ -153,6 +171,47 @@ export default function TenantsPage() {
     }
   }
 
+  const handleCreateTenant = async () => {
+    if (!newTenant.name) return
+    setIsSubmitting(true)
+    try {
+      const response = await fetch("/api/admin/tenants", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...newTenant,
+          companySize: newTenant.companySize || undefined,
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to create tenant")
+      }
+
+      setCreateDialogOpen(false)
+      setNewTenant({
+        name: "",
+        slug: "",
+        planTier: "STARTER",
+        orgType: "STANDARD",
+        industry: "",
+        companySize: "",
+        country: "",
+        timezone: "UTC",
+        ownerEmail: "",
+        ownerName: "",
+        allowChildOrgs: false,
+      })
+      fetchTenants()
+    } catch (error) {
+      console.error("Failed to create tenant:", error)
+      alert(error instanceof Error ? error.message : "Failed to create tenant")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <Card>
@@ -164,10 +223,22 @@ export default function TenantsPage() {
                 Manage all organizations on the platform ({total} total)
               </CardDescription>
             </div>
-            <Button onClick={fetchTenants} variant="outline" size="sm">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={fetchTenants} variant="outline" size="sm">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/admin/hierarchy">
+                  <Network className="h-4 w-4 mr-2" />
+                  Hierarchy
+                </Link>
+              </Button>
+              <Button onClick={() => setCreateDialogOpen(true)} size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Tenant
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -410,6 +481,194 @@ export default function TenantsPage() {
                 </>
               ) : (
                 "Suspend Organization"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Tenant Dialog */}
+      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create New Organization</DialogTitle>
+            <DialogDescription>
+              Add a new tenant organization to the platform.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Organization Name *</Label>
+                <Input
+                  id="name"
+                  placeholder="Acme Corporation"
+                  value={newTenant.name}
+                  onChange={(e) => setNewTenant({ ...newTenant, name: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="slug">Slug (auto-generated if empty)</Label>
+                <Input
+                  id="slug"
+                  placeholder="acme-corporation"
+                  value={newTenant.slug}
+                  onChange={(e) => setNewTenant({ ...newTenant, slug: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Plan Tier</Label>
+                <Select
+                  value={newTenant.planTier}
+                  onValueChange={(value) => setNewTenant({ ...newTenant, planTier: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="STARTER">Starter</SelectItem>
+                    <SelectItem value="PROFESSIONAL">Professional</SelectItem>
+                    <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Organization Type</Label>
+                <Select
+                  value={newTenant.orgType}
+                  onValueChange={(value) => setNewTenant({ ...newTenant, orgType: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="STANDARD">Standard</SelectItem>
+                    <SelectItem value="AGENCY">Agency</SelectItem>
+                    <SelectItem value="HOLDING_COMPANY">Holding Company</SelectItem>
+                    <SelectItem value="SUBSIDIARY">Subsidiary</SelectItem>
+                    <SelectItem value="BRAND">Brand</SelectItem>
+                    <SelectItem value="SUB_BRAND">Sub-Brand</SelectItem>
+                    <SelectItem value="DIVISION">Division</SelectItem>
+                    <SelectItem value="DEPARTMENT">Department</SelectItem>
+                    <SelectItem value="FRANCHISE">Franchise</SelectItem>
+                    <SelectItem value="FRANCHISEE">Franchisee</SelectItem>
+                    <SelectItem value="RESELLER">Reseller</SelectItem>
+                    <SelectItem value="CLIENT">Client</SelectItem>
+                    <SelectItem value="REGIONAL">Regional</SelectItem>
+                    <SelectItem value="PORTFOLIO_COMPANY">Portfolio Company</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="industry">Industry</Label>
+                <Input
+                  id="industry"
+                  placeholder="Technology"
+                  value={newTenant.industry}
+                  onChange={(e) => setNewTenant({ ...newTenant, industry: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Company Size</Label>
+                <Select
+                  value={newTenant.companySize}
+                  onValueChange={(value) => setNewTenant({ ...newTenant, companySize: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="SOLO">Solo (1)</SelectItem>
+                    <SelectItem value="SMALL">Small (2-10)</SelectItem>
+                    <SelectItem value="MEDIUM">Medium (11-50)</SelectItem>
+                    <SelectItem value="LARGE">Large (51-200)</SelectItem>
+                    <SelectItem value="ENTERPRISE">Enterprise (201-1000)</SelectItem>
+                    <SelectItem value="GLOBAL">Global (1000+)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="country">Country</Label>
+                <Input
+                  id="country"
+                  placeholder="United States"
+                  value={newTenant.country}
+                  onChange={(e) => setNewTenant({ ...newTenant, country: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="timezone">Timezone</Label>
+                <Input
+                  id="timezone"
+                  placeholder="UTC"
+                  value={newTenant.timezone}
+                  onChange={(e) => setNewTenant({ ...newTenant, timezone: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="border-t pt-4 mt-2">
+              <h4 className="text-sm font-medium mb-3">Owner Information (Optional)</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="ownerEmail">Owner Email</Label>
+                  <Input
+                    id="ownerEmail"
+                    type="email"
+                    placeholder="owner@example.com"
+                    value={newTenant.ownerEmail}
+                    onChange={(e) => setNewTenant({ ...newTenant, ownerEmail: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ownerName">Owner Name</Label>
+                  <Input
+                    id="ownerName"
+                    placeholder="John Doe"
+                    value={newTenant.ownerName}
+                    onChange={(e) => setNewTenant({ ...newTenant, ownerName: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2 pt-2">
+              <input
+                type="checkbox"
+                id="allowChildOrgs"
+                checked={newTenant.allowChildOrgs}
+                onChange={(e) => setNewTenant({ ...newTenant, allowChildOrgs: e.target.checked })}
+                className="rounded border-gray-300"
+              />
+              <Label htmlFor="allowChildOrgs" className="text-sm">
+                Allow child organizations (enables hierarchy features)
+              </Label>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateTenant}
+              disabled={!newTenant.name || isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                "Create Organization"
               )}
             </Button>
           </DialogFooter>

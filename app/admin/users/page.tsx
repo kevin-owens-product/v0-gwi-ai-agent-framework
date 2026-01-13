@@ -50,6 +50,7 @@ import {
   RefreshCw,
   Shield,
   Mail,
+  Plus,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -94,6 +95,17 @@ export default function UsersPage() {
   const [banReason, setBanReason] = useState("")
   const [banType, setBanType] = useState("TEMPORARY")
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Create user state
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
+  const [organizations, setOrganizations] = useState<Array<{ id: string; name: string; slug: string }>>([])
+  const [newUser, setNewUser] = useState({
+    email: "",
+    name: "",
+    password: "",
+    orgId: "",
+    role: "MEMBER",
+  })
 
   const fetchUsers = useCallback(async () => {
     setIsLoading(true)
@@ -163,6 +175,61 @@ export default function UsersPage() {
     return email.slice(0, 2).toUpperCase()
   }
 
+  const fetchOrganizations = async () => {
+    try {
+      const response = await fetch("/api/admin/tenants?limit=100")
+      const data = await response.json()
+      setOrganizations(data.tenants.map((t: { id: string; name: string; slug: string }) => ({
+        id: t.id,
+        name: t.name,
+        slug: t.slug,
+      })))
+    } catch (error) {
+      console.error("Failed to fetch organizations:", error)
+    }
+  }
+
+  const handleCreateUser = async () => {
+    if (!newUser.email) return
+    setIsSubmitting(true)
+    try {
+      const response = await fetch("/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...newUser,
+          orgId: newUser.orgId || undefined,
+          password: newUser.password || undefined,
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to create user")
+      }
+
+      setCreateDialogOpen(false)
+      setNewUser({
+        email: "",
+        name: "",
+        password: "",
+        orgId: "",
+        role: "MEMBER",
+      })
+      fetchUsers()
+    } catch (error) {
+      console.error("Failed to create user:", error)
+      alert(error instanceof Error ? error.message : "Failed to create user")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const openCreateDialog = () => {
+    fetchOrganizations()
+    setCreateDialogOpen(true)
+  }
+
   return (
     <div className="space-y-6">
       <Card>
@@ -174,10 +241,16 @@ export default function UsersPage() {
                 Manage all users across the platform ({total} total)
               </CardDescription>
             </div>
-            <Button onClick={fetchUsers} variant="outline" size="sm">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={fetchUsers} variant="outline" size="sm">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+              <Button onClick={openCreateDialog} size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Add User
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -409,6 +482,114 @@ export default function UsersPage() {
                 </>
               ) : (
                 "Ban User"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create User Dialog */}
+      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Create New User</DialogTitle>
+            <DialogDescription>
+              Add a new user to the platform. They can optionally be added to an organization.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email *</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="user@example.com"
+                value={newUser.email}
+                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="userName">Name</Label>
+              <Input
+                id="userName"
+                placeholder="John Doe"
+                value={newUser.name}
+                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password (optional)</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Leave empty for invite-only"
+                value={newUser.password}
+                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+              />
+            </div>
+
+            <div className="border-t pt-4 mt-2">
+              <h4 className="text-sm font-medium mb-3">Organization Assignment (Optional)</h4>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Organization</Label>
+                  <Select
+                    value={newUser.orgId}
+                    onValueChange={(value) => setNewUser({ ...newUser, orgId: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select organization (optional)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">No organization</SelectItem>
+                      {organizations.map((org) => (
+                        <SelectItem key={org.id} value={org.id}>
+                          {org.name} ({org.slug})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {newUser.orgId && (
+                  <div className="space-y-2">
+                    <Label>Role</Label>
+                    <Select
+                      value={newUser.role}
+                      onValueChange={(value) => setNewUser({ ...newUser, role: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="OWNER">Owner</SelectItem>
+                        <SelectItem value="ADMIN">Admin</SelectItem>
+                        <SelectItem value="MEMBER">Member</SelectItem>
+                        <SelectItem value="VIEWER">Viewer</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateUser}
+              disabled={!newUser.email || isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                "Create User"
               )}
             </Button>
           </DialogFooter>
