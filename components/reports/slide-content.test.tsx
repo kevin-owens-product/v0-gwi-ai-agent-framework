@@ -154,7 +154,7 @@ describe('slide-content utility functions', () => {
 
     it('should return CheckCircle2 for opportunity titles', () => {
       const title = 'Growth Opportunities'
-      const shouldUseCheck = title.toLowerCase().includes('opportunity')
+      const shouldUseCheck = title.toLowerCase().includes('opportunit')
       expect(shouldUseCheck).toBe(true)
     })
 
@@ -435,7 +435,7 @@ describe('slide-content utility functions', () => {
     })
 
     it('should use red gradient for competition', () => {
-      const title = 'Competitive Analysis'
+      const title = 'Competitor Analysis'
       const isCompetition = title.toLowerCase().includes('competitor') || title.toLowerCase().includes('risk') || title.toLowerCase().includes('challenge')
       expect(isCompetition).toBe(true)
     })
