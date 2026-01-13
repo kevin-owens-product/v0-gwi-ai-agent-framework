@@ -455,7 +455,7 @@ export default function HierarchyPage() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          newParentOrgId: newParentId || null,
+          newParentOrgId: newParentId && newParentId !== "root" ? newParentId : null,
         }),
       })
 
@@ -964,7 +964,7 @@ export default function HierarchyPage() {
                   <SelectValue placeholder="Select new parent (or leave empty for root)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Make Root Organization</SelectItem>
+                  <SelectItem value="root">Make Root Organization</SelectItem>
                   {allOrgs
                     .filter((o) => o.id !== moveOrg?.id)
                     .map((org) => (

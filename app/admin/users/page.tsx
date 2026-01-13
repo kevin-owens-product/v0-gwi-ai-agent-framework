@@ -244,7 +244,7 @@ export default function UsersPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...newUser,
-          orgId: newUser.orgId || undefined,
+          orgId: newUser.orgId && newUser.orgId !== "none" ? newUser.orgId : undefined,
           password: newUser.password || undefined,
         }),
       })
@@ -593,7 +593,7 @@ export default function UsersPage() {
                       <SelectValue placeholder="Select organization (optional)" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">No organization</SelectItem>
+                      <SelectItem value="none">No organization</SelectItem>
                       {organizations.map((org) => (
                         <SelectItem key={org.id} value={org.id}>
                           {org.name} ({org.slug})
@@ -603,7 +603,7 @@ export default function UsersPage() {
                   </Select>
                 </div>
 
-                {newUser.orgId && (
+                {newUser.orgId && newUser.orgId !== "none" && (
                   <div className="space-y-2">
                     <Label>Role</Label>
                     <Select
