@@ -1691,3 +1691,1195 @@ enum AlertSeverity {
   WARNING
   CRITICAL
 }
+
+// ==================== ENTERPRISE SECURITY CENTER ====================
+
+model SecurityPolicy {
+  id              String              @id @default(cuid())
+  name            String
+  description     String?
+  type            SecurityPolicyType
+  scope           SecurityPolicyScope @default(PLATFORM)
+  targetOrgs      String[]            @default([])
+  targetPlans     PlanTier[]          @default([])
+  settings        Json                @default("{}")
+  isActive        Boolean             @default(true)
+  priority        Int                 @default(0)
+  enforcementMode EnforcementMode     @default(ENFORCE)
+  violations      SecurityViolation[]
+  createdBy       String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([type])
+  @@index([scope])
+  @@index([isActive])
+}
+
+enum SecurityPolicyType {
+  PASSWORD           // Password requirements (length, complexity, rotation)
+  SESSION            // Session timeout, concurrent sessions
+  MFA                // Multi-factor authentication requirements
+  IP_ALLOWLIST       // IP allowlisting/blocklisting
+  DATA_ACCESS        // Data access restrictions
+  FILE_SHARING       // File sharing policies
+  EXTERNAL_SHARING   // External collaboration policies
+  DLP                // Data Loss Prevention rules
+  ENCRYPTION         // Encryption requirements
+  DEVICE_TRUST       // Device compliance requirements
+  API_ACCESS         // API access policies
+  RETENTION          // Data retention policies
+}
+
+enum SecurityPolicyScope {
+  PLATFORM           // Platform-wide policy
+  ENTERPRISE_ONLY    // Only for enterprise plans
+  SPECIFIC_ORGS      // Specific organizations
+  SPECIFIC_PLANS     // Specific plan tiers
+}
+
+enum EnforcementMode {
+  MONITOR            // Log violations but don't block
+  WARN               // Warn users but allow
+  ENFORCE            // Block non-compliant actions
+  STRICT             // Block and require immediate remediation
+}
+
+model SecurityViolation {
+  id            String                  @id @default(cuid())
+  policyId      String
+  orgId         String?
+  userId        String?
+  violationType SecurityViolationType
+  severity      AlertSeverity           @default(WARNING)
+  description   String
+  details       Json                    @default("{}")
+  ipAddress     String?
+  userAgent     String?
+  resourceType  String?
+  resourceId    String?
+  status        ViolationStatus         @default(OPEN)
+  resolvedBy    String?
+  resolvedAt    DateTime?
+  resolution    String?
+  createdAt     DateTime                @default(now())
+
+  policy SecurityPolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([policyId])
+  @@index([orgId])
+  @@index([userId])
+  @@index([violationType])
+  @@index([severity])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum SecurityViolationType {
+  WEAK_PASSWORD
+  FAILED_MFA
+  SUSPICIOUS_LOGIN
+  IP_BLOCKED
+  UNAUTHORIZED_ACCESS
+  DATA_EXFILTRATION
+  FILE_POLICY_VIOLATION
+  EXTERNAL_SHARING_BLOCKED
+  SESSION_VIOLATION
+  DEVICE_NOT_COMPLIANT
+  API_ABUSE
+  RATE_LIMIT_EXCEEDED
+  BRUTE_FORCE_DETECTED
+  IMPOSSIBLE_TRAVEL
+  ANOMALOUS_BEHAVIOR
+}
+
+enum ViolationStatus {
+  OPEN
+  INVESTIGATING
+  RESOLVED
+  FALSE_POSITIVE
+  ESCALATED
+}
+
+model ThreatEvent {
+  id            String            @id @default(cuid())
+  type          ThreatEventType
+  severity      AlertSeverity     @default(WARNING)
+  source        String            // IP, user, system
+  orgId         String?
+  userId        String?
+  description   String
+  details       Json              @default("{}")
+  indicators    Json              @default("[]")   // Array of IOCs
+  status        ThreatStatus      @default(ACTIVE)
+  mitigatedBy   String?
+  mitigatedAt   DateTime?
+  mitigation    String?
+  relatedEvents String[]          @default([])
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([type])
+  @@index([severity])
+  @@index([orgId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum ThreatEventType {
+  BRUTE_FORCE
+  CREDENTIAL_STUFFING
+  PHISHING_ATTEMPT
+  ACCOUNT_TAKEOVER
+  DATA_BREACH
+  MALWARE_DETECTED
+  RANSOMWARE
+  DLP_VIOLATION
+  INSIDER_THREAT
+  API_ABUSE
+  BOT_ATTACK
+  DDOS_ATTEMPT
+  SUSPICIOUS_ACTIVITY
+  COMPLIANCE_VIOLATION
+}
+
+enum ThreatStatus {
+  ACTIVE
+  CONTAINED
+  MITIGATED
+  RESOLVED
+  FALSE_POSITIVE
+}
+
+model IPBlocklist {
+  id          String          @id @default(cuid())
+  ipAddress   String
+  ipRange     String?         // CIDR notation for ranges
+  type        IPBlockType     @default(MANUAL)
+  reason      String
+  orgId       String?         // Null = platform-wide
+  blockedBy   String?
+  expiresAt   DateTime?
+  isActive    Boolean         @default(true)
+  metadata    Json            @default("{}")
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@unique([ipAddress, orgId])
+  @@index([ipAddress])
+  @@index([orgId])
+  @@index([isActive])
+  @@index([expiresAt])
+}
+
+enum IPBlockType {
+  MANUAL             // Manually blocked by admin
+  AUTOMATIC          // Blocked by security rules
+  THREAT_INTEL       // From threat intelligence feeds
+  BRUTE_FORCE        // Blocked due to brute force
+  GEOGRAPHIC         // Geographic blocking
+}
+
+// ==================== COMPLIANCE & LEGAL ====================
+
+model ComplianceFramework {
+  id            String                   @id @default(cuid())
+  name          String
+  code          String                   @unique // SOC2, HIPAA, GDPR, etc.
+  description   String?
+  version       String?
+  requirements  Json                     @default("[]")
+  controls      Json                     @default("[]")
+  isActive      Boolean                  @default(true)
+  metadata      Json                     @default("{}")
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+
+  attestations  ComplianceAttestation[]
+  audits        ComplianceAudit[]
+
+  @@index([code])
+  @@index([isActive])
+}
+
+model ComplianceAttestation {
+  id            String                @id @default(cuid())
+  frameworkId   String
+  orgId         String
+  status        AttestationStatus     @default(NOT_STARTED)
+  score         Float?                // Compliance score 0-100
+  findings      Json                  @default("[]")
+  evidence      Json                  @default("[]")
+  attestedBy    String?
+  attestedAt    DateTime?
+  validUntil    DateTime?
+  notes         String?
+  metadata      Json                  @default("{}")
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  framework ComplianceFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+
+  @@unique([frameworkId, orgId])
+  @@index([frameworkId])
+  @@index([orgId])
+  @@index([status])
+}
+
+enum AttestationStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  PENDING_REVIEW
+  COMPLIANT
+  NON_COMPLIANT
+  EXPIRED
+}
+
+model ComplianceAudit {
+  id            String            @id @default(cuid())
+  frameworkId   String
+  orgId         String?           // Null = platform audit
+  type          AuditType         @default(INTERNAL)
+  status        ComplianceAuditStatus @default(SCHEDULED)
+  scheduledDate DateTime
+  startedAt     DateTime?
+  completedAt   DateTime?
+  auditor       String?
+  findings      Json              @default("[]")
+  recommendations Json            @default("[]")
+  score         Float?
+  reportUrl     String?
+  metadata      Json              @default("{}")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  framework ComplianceFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+
+  @@index([frameworkId])
+  @@index([orgId])
+  @@index([status])
+  @@index([scheduledDate])
+}
+
+enum AuditType {
+  INTERNAL
+  EXTERNAL
+  REGULATORY
+  CUSTOMER_REQUESTED
+}
+
+enum ComplianceAuditStatus {
+  SCHEDULED
+  IN_PROGRESS
+  PENDING_REVIEW
+  COMPLETED
+  CANCELLED
+}
+
+model LegalHold {
+  id            String            @id @default(cuid())
+  name          String
+  description   String?
+  caseNumber    String?           @unique
+  orgId         String?           // Null = platform-wide
+  custodians    String[]          @default([])  // User IDs under hold
+  startDate     DateTime          @default(now())
+  endDate       DateTime?
+  status        LegalHoldStatus   @default(ACTIVE)
+  scope         Json              @default("{}")  // What data is under hold
+  createdBy     String
+  releasedBy    String?
+  releasedAt    DateTime?
+  notes         String?
+  metadata      Json              @default("{}")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  exports       DataExport[]
+
+  @@index([orgId])
+  @@index([caseNumber])
+  @@index([status])
+  @@index([startDate])
+}
+
+enum LegalHoldStatus {
+  ACTIVE
+  RELEASED
+  EXPIRED
+  PENDING_RELEASE
+}
+
+model DataExport {
+  id            String            @id @default(cuid())
+  type          DataExportType
+  requestedBy   String
+  orgId         String?
+  userId        String?
+  legalHoldId   String?
+  status        DataExportStatus  @default(PENDING)
+  scope         Json              @default("{}")
+  format        String            @default("json")
+  fileUrl       String?
+  fileSize      BigInt?
+  expiresAt     DateTime?
+  error         String?
+  startedAt     DateTime?
+  completedAt   DateTime?
+  metadata      Json              @default("{}")
+  createdAt     DateTime          @default(now())
+
+  legalHold LegalHold? @relation(fields: [legalHoldId], references: [id])
+
+  @@index([type])
+  @@index([orgId])
+  @@index([userId])
+  @@index([legalHoldId])
+  @@index([status])
+}
+
+enum DataExportType {
+  GDPR_REQUEST       // GDPR data subject request
+  LEGAL_DISCOVERY    // eDiscovery export
+  USER_DATA_REQUEST  // User requesting their data
+  ADMIN_EXPORT       // Admin export
+  BACKUP             // Backup export
+  MIGRATION          // Data migration export
+}
+
+enum DataExportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  EXPIRED
+  CANCELLED
+}
+
+model DataRetentionPolicy {
+  id            String            @id @default(cuid())
+  name          String
+  description   String?
+  dataType      String            // messages, files, audit_logs, etc.
+  retentionDays Int               // Days to retain (-1 = forever)
+  scope         SecurityPolicyScope @default(PLATFORM)
+  targetOrgs    String[]          @default([])
+  targetPlans   PlanTier[]        @default([])
+  deleteAction  DeleteAction      @default(SOFT_DELETE)
+  isActive      Boolean           @default(true)
+  lastRun       DateTime?
+  nextRun       DateTime?
+  createdBy     String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([dataType])
+  @@index([scope])
+  @@index([isActive])
+}
+
+enum DeleteAction {
+  SOFT_DELETE
+  HARD_DELETE
+  ARCHIVE
+  ANONYMIZE
+}
+
+// ==================== PLATFORM OPERATIONS ====================
+
+model PlatformIncident {
+  id              String              @id @default(cuid())
+  title           String
+  description     String              @db.Text
+  severity        IncidentSeverity    @default(MINOR)
+  status          IncidentStatus      @default(INVESTIGATING)
+  type            IncidentType
+  affectedServices String[]           @default([])
+  affectedOrgs    String[]            @default([])  // Specific orgs affected
+  affectedRegions String[]            @default([])
+  impact          String?
+  rootCause       String?
+  timeline        Json                @default("[]")  // Array of timeline events
+  responders      String[]            @default([])
+  commanderId     String?             // Incident commander
+  startedAt       DateTime            @default(now())
+  detectedAt      DateTime            @default(now())
+  acknowledgedAt  DateTime?
+  mitigatedAt     DateTime?
+  resolvedAt      DateTime?
+  postmortemUrl   String?
+  metadata        Json                @default("{}")
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  updates         IncidentUpdate[]
+
+  @@index([severity])
+  @@index([status])
+  @@index([type])
+  @@index([startedAt])
+}
+
+enum IncidentSeverity {
+  MINOR            // Minimal impact
+  MODERATE         // Some users affected
+  MAJOR            // Significant impact
+  CRITICAL         // Platform-wide outage
+}
+
+enum IncidentStatus {
+  INVESTIGATING
+  IDENTIFIED
+  MONITORING
+  RESOLVED
+  POSTMORTEM
+}
+
+enum IncidentType {
+  OUTAGE           // Service outage
+  DEGRADATION      // Performance degradation
+  SECURITY         // Security incident
+  DATA_ISSUE       // Data corruption/loss
+  THIRD_PARTY      // Third-party dependency issue
+  CAPACITY         // Capacity/scaling issue
+  NETWORK          // Network issue
+  DATABASE         // Database issue
+}
+
+model IncidentUpdate {
+  id            String    @id @default(cuid())
+  incidentId    String
+  message       String    @db.Text
+  status        IncidentStatus?
+  isPublic      Boolean   @default(true)
+  postedBy      String?
+  createdAt     DateTime  @default(now())
+
+  incident PlatformIncident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId])
+  @@index([createdAt])
+}
+
+model MaintenanceWindow {
+  id            String                @id @default(cuid())
+  title         String
+  description   String?
+  type          MaintenanceType       @default(SCHEDULED)
+  status        MaintenanceStatus     @default(SCHEDULED)
+  affectedServices String[]           @default([])
+  affectedRegions String[]            @default([])
+  scheduledStart DateTime
+  scheduledEnd  DateTime
+  actualStart   DateTime?
+  actualEnd     DateTime?
+  notifyBefore  Int                   @default(24)  // Hours before to notify
+  createdBy     String?
+  metadata      Json                  @default("{}")
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  @@index([status])
+  @@index([scheduledStart])
+}
+
+enum MaintenanceType {
+  SCHEDULED        // Regular scheduled maintenance
+  EMERGENCY        // Emergency maintenance
+  UPGRADE          // Platform upgrade
+  MIGRATION        // Data migration
+  SECURITY_PATCH   // Security patching
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  EXTENDED
+}
+
+model ReleaseManagement {
+  id            String            @id @default(cuid())
+  version       String
+  name          String?
+  description   String?           @db.Text
+  type          ReleaseType       @default(MINOR)
+  status        ReleaseStatus     @default(PLANNED)
+  features      Json              @default("[]")
+  bugFixes      Json              @default("[]")
+  breakingChanges Json            @default("[]")
+  rolloutStrategy RolloutStrategy @default(STAGED)
+  rolloutPercentage Int           @default(0)
+  rolloutRegions String[]         @default([])
+  plannedDate   DateTime?
+  startedAt     DateTime?
+  completedAt   DateTime?
+  rollbackedAt  DateTime?
+  changelogUrl  String?
+  createdBy     String?
+  metadata      Json              @default("{}")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@unique([version])
+  @@index([status])
+  @@index([plannedDate])
+}
+
+enum ReleaseType {
+  MAJOR
+  MINOR
+  PATCH
+  HOTFIX
+}
+
+enum ReleaseStatus {
+  PLANNED
+  IN_DEVELOPMENT
+  STAGING
+  ROLLING_OUT
+  COMPLETED
+  ROLLBACK
+  CANCELLED
+}
+
+enum RolloutStrategy {
+  BIG_BANG         // All at once
+  STAGED           // Percentage-based rollout
+  CANARY           // Canary deployment
+  BLUE_GREEN       // Blue-green deployment
+  RING             // Ring-based deployment
+}
+
+model CapacityMetric {
+  id            String    @id @default(cuid())
+  metricType    String    // cpu, memory, storage, connections, etc.
+  region        String?
+  service       String?
+  currentValue  Float
+  maxValue      Float
+  threshold     Float     @default(80)  // Alert threshold percentage
+  unit          String    @default("percent")
+  status        CapacityStatus @default(NORMAL)
+  recordedAt    DateTime  @default(now())
+  metadata      Json      @default("{}")
+
+  @@index([metricType])
+  @@index([region])
+  @@index([service])
+  @@index([status])
+  @@index([recordedAt])
+}
+
+enum CapacityStatus {
+  NORMAL
+  WARNING
+  CRITICAL
+  OVER_CAPACITY
+}
+
+// ==================== DOMAIN & IDENTITY MANAGEMENT ====================
+
+model DomainVerification {
+  id            String              @id @default(cuid())
+  domain        String              @unique
+  orgId         String
+  status        DomainStatus        @default(PENDING)
+  verificationMethod DomainVerificationMethod @default(DNS_TXT)
+  verificationToken String
+  verifiedAt    DateTime?
+  expiresAt     DateTime?
+  autoJoin      Boolean             @default(false)  // Auto-join users with this domain
+  ssoEnforced   Boolean             @default(false)  // Require SSO for this domain
+  metadata      Json                @default("{}")
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([domain])
+  @@index([orgId])
+  @@index([status])
+}
+
+enum DomainStatus {
+  PENDING
+  VERIFIED
+  FAILED
+  EXPIRED
+}
+
+enum DomainVerificationMethod {
+  DNS_TXT
+  DNS_CNAME
+  META_TAG
+  FILE_UPLOAD
+}
+
+model EnterpriseSSO {
+  id              String            @id @default(cuid())
+  orgId           String            @unique
+  provider        SSOProvider
+  status          SSOStatus         @default(CONFIGURING)
+  displayName     String?
+
+  // SAML Configuration
+  entityId        String?
+  ssoUrl          String?
+  sloUrl          String?
+  certificate     String?           @db.Text
+
+  // OIDC Configuration
+  clientId        String?
+  clientSecret    String?
+  discoveryUrl    String?
+  authorizationUrl String?
+  tokenUrl        String?
+  userInfoUrl     String?
+
+  // Common settings
+  defaultRole     Role              @default(MEMBER)
+  jitProvisioning Boolean           @default(true)  // Just-in-time user provisioning
+  autoDeactivate  Boolean           @default(false) // Deactivate users removed from IdP
+  attributeMapping Json             @default("{}")
+  allowedDomains  String[]          @default([])
+
+  lastSyncAt      DateTime?
+  syncErrors      Json              @default("[]")
+  metadata        Json              @default("{}")
+  createdBy       String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([provider])
+  @@index([status])
+}
+
+enum SSOProvider {
+  SAML
+  OIDC
+  AZURE_AD
+  OKTA
+  GOOGLE_WORKSPACE
+  ONELOGIN
+  PING_IDENTITY
+  CUSTOM
+}
+
+enum SSOStatus {
+  CONFIGURING
+  TESTING
+  ACTIVE
+  DISABLED
+  ERROR
+}
+
+model SCIMIntegration {
+  id              String            @id @default(cuid())
+  orgId           String            @unique
+  status          SCIMStatus        @default(CONFIGURING)
+  endpoint        String?           // SCIM endpoint URL
+  bearerToken     String?           // Hashed bearer token for authentication
+  tokenPrefix     String?           // First 8 chars for identification
+
+  // Sync settings
+  syncUsers       Boolean           @default(true)
+  syncGroups      Boolean           @default(true)
+  autoDeactivate  Boolean           @default(true)
+  defaultRole     Role              @default(MEMBER)
+
+  // Statistics
+  lastSyncAt      DateTime?
+  usersProvisioned Int              @default(0)
+  usersSynced     Int               @default(0)
+  groupsSynced    Int               @default(0)
+  syncErrors      Json              @default("[]")
+
+  metadata        Json              @default("{}")
+  createdBy       String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([status])
+}
+
+enum SCIMStatus {
+  CONFIGURING
+  ACTIVE
+  PAUSED
+  ERROR
+}
+
+// ==================== DEVICE TRUST & EMM ====================
+
+model TrustedDevice {
+  id              String            @id @default(cuid())
+  userId          String
+  deviceId        String            @unique
+  name            String?
+  type            DeviceType
+  platform        String?           // iOS, Android, Windows, macOS, Linux
+  osVersion       String?
+  appVersion      String?
+  model           String?
+  manufacturer    String?
+
+  // Security status
+  isCompliant     Boolean           @default(true)
+  complianceChecks Json             @default("[]")
+  lastComplianceCheck DateTime?
+
+  // Trust status
+  trustStatus     DeviceTrustStatus @default(PENDING)
+  trustedAt       DateTime?
+  trustedBy       String?           // Admin who approved
+
+  // Activity
+  lastActiveAt    DateTime?
+  lastIpAddress   String?
+  lastLocation    String?
+
+  // Management
+  isManaged       Boolean           @default(false)  // MDM managed
+  mdmEnrolledAt   DateTime?
+
+  metadata        Json              @default("{}")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([deviceId])
+  @@index([trustStatus])
+  @@index([isCompliant])
+}
+
+enum DeviceType {
+  DESKTOP
+  LAPTOP
+  MOBILE
+  TABLET
+  OTHER
+}
+
+enum DeviceTrustStatus {
+  PENDING
+  TRUSTED
+  BLOCKED
+  REVOKED
+}
+
+model DevicePolicy {
+  id              String            @id @default(cuid())
+  name            String
+  description     String?
+  scope           SecurityPolicyScope @default(PLATFORM)
+  targetOrgs      String[]          @default([])
+  targetPlans     PlanTier[]        @default([])
+
+  // Requirements
+  requireEncryption Boolean         @default(false)
+  requirePasscode  Boolean          @default(false)
+  requireBiometric Boolean          @default(false)
+  requireMDM      Boolean           @default(false)
+  minOSVersion    Json              @default("{}")  // { ios: "15.0", android: "12" }
+  allowedPlatforms String[]         @default([])
+  blockedPlatforms String[]         @default([])
+
+  // Actions
+  blockOnViolation Boolean          @default(false)
+  wipeOnViolation Boolean           @default(false)
+  notifyOnViolation Boolean         @default(true)
+
+  isActive        Boolean           @default(true)
+  priority        Int               @default(0)
+  createdBy       String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([scope])
+  @@index([isActive])
+}
+
+// ==================== API & INTEGRATION MANAGEMENT ====================
+
+model APIClient {
+  id              String            @id @default(cuid())
+  orgId           String
+  name            String
+  description     String?
+  clientId        String            @unique
+  clientSecretHash String           // Hashed secret
+  type            APIClientType     @default(CONFIDENTIAL)
+  status          APIClientStatus   @default(ACTIVE)
+
+  // OAuth settings
+  redirectUris    String[]          @default([])
+  allowedScopes   String[]          @default([])
+  allowedGrants   String[]          @default(["authorization_code"])
+
+  // Limits
+  rateLimit       Int               @default(1000)  // Requests per minute
+  dailyLimit      Int?              // Daily request limit
+  monthlyLimit    Int?              // Monthly request limit
+
+  // Statistics
+  totalRequests   BigInt            @default(0)
+  lastUsedAt      DateTime?
+
+  metadata        Json              @default("{}")
+  createdBy       String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([orgId])
+  @@index([clientId])
+  @@index([status])
+}
+
+enum APIClientType {
+  CONFIDENTIAL     // Server-side apps with secure storage
+  PUBLIC           // SPAs, mobile apps
+  SERVICE          // Machine-to-machine
+}
+
+enum APIClientStatus {
+  ACTIVE
+  SUSPENDED
+  REVOKED
+}
+
+model WebhookEndpoint {
+  id              String            @id @default(cuid())
+  orgId           String
+  url             String
+  name            String?
+  description     String?
+  events          String[]          @default([])  // Events to subscribe to
+  status          WebhookStatus     @default(ACTIVE)
+  secret          String            // For signature verification
+
+  // Delivery settings
+  retryPolicy     Json              @default("{}")
+  timeout         Int               @default(30)  // Seconds
+
+  // Statistics
+  totalDeliveries BigInt            @default(0)
+  successfulDeliveries BigInt       @default(0)
+  failedDeliveries BigInt           @default(0)
+  lastDeliveryAt  DateTime?
+  lastStatus      Int?              // Last HTTP status code
+
+  // Health
+  isHealthy       Boolean           @default(true)
+  consecutiveFailures Int           @default(0)
+  disabledAt      DateTime?
+  disabledReason  String?
+
+  metadata        Json              @default("{}")
+  createdBy       String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  deliveries      WebhookDelivery[]
+
+  @@index([orgId])
+  @@index([status])
+  @@index([isHealthy])
+}
+
+enum WebhookStatus {
+  ACTIVE
+  PAUSED
+  DISABLED
+  FAILED
+}
+
+model WebhookDelivery {
+  id              String            @id @default(cuid())
+  webhookId       String
+  eventType       String
+  payload         Json
+  status          DeliveryStatus    @default(PENDING)
+  httpStatus      Int?
+  response        String?
+  error           String?
+  attempts        Int               @default(0)
+  nextRetryAt     DateTime?
+  deliveredAt     DateTime?
+  createdAt       DateTime          @default(now())
+
+  webhook WebhookEndpoint @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId])
+  @@index([status])
+  @@index([eventType])
+  @@index([createdAt])
+}
+
+enum DeliveryStatus {
+  PENDING
+  DELIVERED
+  FAILED
+  RETRYING
+}
+
+model IntegrationApp {
+  id              String            @id @default(cuid())
+  slug            String            @unique
+  name            String
+  description     String?           @db.Text
+  shortDescription String?
+  category        IntegrationCategory
+  developer       String
+  developerUrl    String?
+  supportUrl      String?
+  privacyUrl      String?
+  iconUrl         String?
+  bannerUrl       String?
+
+  // Status
+  status          IntegrationStatus @default(DRAFT)
+  isOfficial      Boolean           @default(false)
+  isFeatured      Boolean           @default(false)
+
+  // Configuration
+  requiredScopes  String[]          @default([])
+  optionalScopes  String[]          @default([])
+  setupInstructions String?         @db.Text
+  configSchema    Json              @default("{}")
+
+  // Statistics
+  installCount    Int               @default(0)
+  rating          Float?
+  reviewCount     Int               @default(0)
+
+  // Restrictions
+  allowedPlans    PlanTier[]        @default([])
+  blockedOrgs     String[]          @default([])
+
+  metadata        Json              @default("{}")
+  publishedAt     DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  installations   IntegrationInstall[]
+
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([isFeatured])
+}
+
+enum IntegrationCategory {
+  PRODUCTIVITY
+  COMMUNICATION
+  PROJECT_MANAGEMENT
+  CRM
+  ANALYTICS
+  SECURITY
+  DEVELOPER_TOOLS
+  HR
+  FINANCE
+  MARKETING
+  CUSTOMER_SUPPORT
+  OTHER
+}
+
+enum IntegrationStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  PUBLISHED
+  DEPRECATED
+  REMOVED
+}
+
+model IntegrationInstall {
+  id              String            @id @default(cuid())
+  appId           String
+  orgId           String
+  status          InstallStatus     @default(ACTIVE)
+  installedBy     String
+  configuration   Json              @default("{}")
+  grantedScopes   String[]          @default([])
+
+  lastUsedAt      DateTime?
+  uninstalledAt   DateTime?
+  uninstalledBy   String?
+
+  metadata        Json              @default("{}")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  app IntegrationApp @relation(fields: [appId], references: [id], onDelete: Cascade)
+
+  @@unique([appId, orgId])
+  @@index([appId])
+  @@index([orgId])
+  @@index([status])
+}
+
+enum InstallStatus {
+  ACTIVE
+  PAUSED
+  UNINSTALLED
+}
+
+// ==================== ANALYTICS & REPORTING ====================
+
+model AnalyticsSnapshot {
+  id              String            @id @default(cuid())
+  type            SnapshotType
+  period          String            // daily, weekly, monthly
+  periodStart     DateTime
+  periodEnd       DateTime
+
+  // Platform metrics
+  totalOrgs       Int               @default(0)
+  activeOrgs      Int               @default(0)
+  newOrgs         Int               @default(0)
+  churnedOrgs     Int               @default(0)
+
+  totalUsers      Int               @default(0)
+  activeUsers     Int               @default(0)
+  newUsers        Int               @default(0)
+
+  // Usage metrics
+  totalAgentRuns  Int               @default(0)
+  totalTokens     BigInt            @default(0)
+  totalApiCalls   BigInt            @default(0)
+  totalStorage    BigInt            @default(0)
+
+  // Revenue metrics (in cents)
+  mrr             Int               @default(0)
+  arr             Int               @default(0)
+  newMrr          Int               @default(0)
+  churnedMrr      Int               @default(0)
+  expansionMrr    Int               @default(0)
+
+  // Breakdown
+  orgsByPlan      Json              @default("{}")
+  orgsByRegion    Json              @default("{}")
+  orgsByIndustry  Json              @default("{}")
+
+  metrics         Json              @default("{}")
+  metadata        Json              @default("{}")
+  createdAt       DateTime          @default(now())
+
+  @@unique([type, period, periodStart])
+  @@index([type])
+  @@index([period])
+  @@index([periodStart])
+}
+
+enum SnapshotType {
+  PLATFORM
+  USAGE
+  REVENUE
+  ENGAGEMENT
+  SECURITY
+}
+
+model CustomReport {
+  id              String            @id @default(cuid())
+  name            String
+  description     String?
+  type            CustomReportType
+  query           Json              // Report definition/query
+  schedule        String?           // Cron expression for scheduled reports
+  recipients      String[]          @default([])
+  format          String            @default("csv")
+
+  isActive        Boolean           @default(true)
+  lastRunAt       DateTime?
+  nextRunAt       DateTime?
+  lastResult      Json?
+
+  createdBy       String?
+  metadata        Json              @default("{}")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+  @@index([nextRunAt])
+}
+
+enum CustomReportType {
+  USAGE
+  REVENUE
+  SECURITY
+  COMPLIANCE
+  USER_ACTIVITY
+  CUSTOM_SQL
+}
+
+// ==================== COMMUNICATION & BROADCAST ====================
+
+model BroadcastMessage {
+  id              String            @id @default(cuid())
+  title           String
+  content         String            @db.Text
+  contentHtml     String?           @db.Text
+  type            BroadcastType
+  priority        BroadcastPriority @default(NORMAL)
+
+  // Targeting
+  targetType      NotificationTargetType @default(ALL)
+  targetOrgs      String[]          @default([])
+  targetPlans     PlanTier[]        @default([])
+  targetRoles     Role[]            @default([])
+
+  // Delivery
+  channels        BroadcastChannel[] @default([IN_APP])
+  status          BroadcastStatus   @default(DRAFT)
+  scheduledFor    DateTime?
+  sentAt          DateTime?
+
+  // Statistics
+  totalRecipients Int               @default(0)
+  delivered       Int               @default(0)
+  opened          Int               @default(0)
+  clicked         Int               @default(0)
+
+  expiresAt       DateTime?
+  createdBy       String?
+  metadata        Json              @default("{}")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([scheduledFor])
+}
+
+enum BroadcastType {
+  ANNOUNCEMENT
+  PRODUCT_UPDATE
+  MAINTENANCE
+  SECURITY_ALERT
+  MARKETING
+  SURVEY
+}
+
+enum BroadcastPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum BroadcastChannel {
+  IN_APP
+  EMAIL
+  PUSH
+  SMS
+  SLACK
+}
+
+enum BroadcastStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+  CANCELLED
+}
