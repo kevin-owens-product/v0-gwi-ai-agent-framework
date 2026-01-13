@@ -19,6 +19,12 @@ async function main() {
 
   // Clean existing data (in reverse order of dependencies)
   console.log('🧹 Cleaning existing data...')
+
+  // Clean super admin data
+  await prisma.platformAuditLog.deleteMany()
+  await prisma.superAdminSession.deleteMany()
+  await prisma.superAdmin.deleteMany()
+
   await prisma.brandTrackingSnapshot.deleteMany()
   await prisma.brandTracking.deleteMany()
   await prisma.insight.deleteMany()
@@ -2637,6 +2643,98 @@ async function main() {
 
   // ==================== SUMMARY ====================
   console.log('\n✅ Database seeding completed!')
+  // ==================== SUPER ADMINS ====================
+  console.log('🔐 Creating super admin accounts...')
+
+  // Helper to hash passwords for super admin (uses SHA256, not bcrypt)
+  function hashSuperAdminPassword(password: string): string {
+    return crypto.createHash('sha256').update(password).digest('hex')
+  }
+
+  // Super Admin accounts with different roles
+  await prisma.superAdmin.create({
+    data: {
+      email: 'superadmin@gwi.com',
+      name: 'Super Administrator',
+      passwordHash: hashSuperAdminPassword('SuperAdmin123!'),
+      role: 'SUPER_ADMIN',
+      permissions: ['super:*'],
+      isActive: true,
+    }
+  })
+
+  await prisma.superAdmin.create({
+    data: {
+      email: 'admin@gwi.com',
+      name: 'Platform Admin',
+      passwordHash: hashSuperAdminPassword('Admin123!'),
+      role: 'ADMIN',
+      permissions: [
+        'tenants:read', 'tenants:write', 'tenants:suspend',
+        'users:read', 'users:write', 'users:ban',
+        'analytics:read', 'analytics:export',
+        'features:read', 'features:write',
+        'rules:read', 'rules:write',
+        'support:read', 'support:write', 'support:manage',
+        'config:read',
+        'audit:read',
+        'notifications:read', 'notifications:write',
+        'billing:read',
+        'admins:read',
+      ],
+      isActive: true,
+    }
+  })
+
+  await prisma.superAdmin.create({
+    data: {
+      email: 'support@gwi.com',
+      name: 'Support Agent',
+      passwordHash: hashSuperAdminPassword('Support123!'),
+      role: 'SUPPORT',
+      permissions: [
+        'tenants:read',
+        'users:read',
+        'analytics:read',
+        'features:read',
+        'support:read', 'support:write',
+        'audit:read',
+        'notifications:read',
+        'billing:read',
+      ],
+      isActive: true,
+    }
+  })
+
+  await prisma.superAdmin.create({
+    data: {
+      email: 'analyst@gwi.com',
+      name: 'Data Analyst',
+      passwordHash: hashSuperAdminPassword('Analyst123!'),
+      role: 'ANALYST',
+      permissions: [
+        'tenants:read',
+        'users:read',
+        'analytics:read', 'analytics:export',
+        'features:read',
+        'audit:read',
+      ],
+      isActive: true,
+    }
+  })
+
+  // Demo super admin for easy testing
+  await prisma.superAdmin.create({
+    data: {
+      email: 'demo-admin@gwi.com',
+      name: 'Demo Admin',
+      passwordHash: hashSuperAdminPassword('demo123'),
+      role: 'SUPER_ADMIN',
+      permissions: ['super:*'],
+      isActive: true,
+    }
+  })
+
   console.log('\n📊 Summary:')
   console.log('   Organizations: 3')
   console.log('   Users: 7')
@@ -2658,9 +2756,13 @@ async function main() {
   console.log('   SSO Configurations: 1')
   console.log('   Brand Trackings: 8 (Nike, Spotify, Tesla, Patagonia, Oatly, Airbnb, Peloton, Notion)')
   console.log('   Brand Tracking Snapshots: 378+ (52+45+78+36+28+42+65+32 weekly snapshots)')
+  console.log('   Super Admins: 5')
 
   console.log('\n🔑 Test Credentials:')
-  console.log('   ────────────────────────────────────────')
+  console.log('')
+  console.log('   ═══════════════════════════════════════════════════════════')
+  console.log('   PLATFORM LOGIN (Regular Users)')
+  console.log('   ═══════════════════════════════════════════════════════════')
   console.log('   Demo User (easiest):')
   console.log('     Email: demo@example.com')
   console.log('     Password: demo123')
@@ -2669,7 +2771,35 @@ async function main() {
   console.log('     Email: admin@acme.com')
   console.log('     Password: Password123!')
   console.log('   ────────────────────────────────────────')
-  console.log('   All other users use: Password123!')
+  console.log('   All other platform users use: Password123!')
+  console.log('')
+  console.log('   ═══════════════════════════════════════════════════════════')
+  console.log('   ADMIN PORTAL LOGIN (Super Admins)')
+  console.log('   ═══════════════════════════════════════════════════════════')
+  console.log('   Demo Admin (easiest):')
+  console.log('     Email: demo-admin@gwi.com')
+  console.log('     Password: demo123')
+  console.log('     Role: SUPER_ADMIN (full access)')
+  console.log('   ────────────────────────────────────────')
+  console.log('   Super Administrator:')
+  console.log('     Email: superadmin@gwi.com')
+  console.log('     Password: SuperAdmin123!')
+  console.log('     Role: SUPER_ADMIN (full access)')
+  console.log('   ────────────────────────────────────────')
+  console.log('   Platform Admin:')
+  console.log('     Email: admin@gwi.com')
+  console.log('     Password: Admin123!')
+  console.log('     Role: ADMIN (standard admin ops)')
+  console.log('   ────────────────────────────────────────')
+  console.log('   Support Agent:')
+  console.log('     Email: support@gwi.com')
+  console.log('     Password: Support123!')
+  console.log('     Role: SUPPORT (customer support)')
+  console.log('   ────────────────────────────────────────')
+  console.log('   Data Analyst:')
+  console.log('     Email: analyst@gwi.com')
+  console.log('     Password: Analyst123!')
+  console.log('     Role: ANALYST (read-only analytics)')
   console.log('')
 }
 
