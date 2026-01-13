@@ -535,17 +535,39 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
           const apiAudience = data.data || data
           if (apiAudience && apiAudience.id) {
             const criteria = apiAudience.criteria || {}
+
+            // Extract demographics from criteria structure
+            const demographics: { label: string; value: string }[] = []
+            if (criteria.ageRange) {
+              demographics.push({ label: "Age Range", value: `${criteria.ageRange.min}-${criteria.ageRange.max}` })
+            }
+            if (criteria.income) {
+              demographics.push({ label: "Income", value: `$${(criteria.income.min / 1000).toFixed(0)}K+` })
+            }
+            if (criteria.lifestyle && Array.isArray(criteria.lifestyle)) {
+              criteria.lifestyle.forEach((l: string) => {
+                demographics.push({ label: "Lifestyle", value: formatCriteriaValue(l) })
+              })
+            }
+            if (criteria.values && Array.isArray(criteria.values)) {
+              criteria.values.forEach((v: string) => {
+                demographics.push({ label: "Values", value: formatCriteriaValue(v) })
+              })
+            }
+
             setAudience({
               id: apiAudience.id,
               name: apiAudience.name,
               description: apiAudience.description || "",
               size: formatSize(apiAudience.size || 0),
-              markets: criteria.markets || ["Global"],
-              lastUsed: formatTimeAgo(apiAudience.updatedAt),
+              // markets is at root level in seed data, not inside criteria
+              markets: apiAudience.markets || criteria.markets || ["Global"],
+              lastUsed: formatTimeAgo(apiAudience.updatedAt || apiAudience.lastUsed),
               createdBy: apiAudience.createdByName || "Unknown",
-              demographics: criteria.demographics || [],
-              behaviors: criteria.behaviors || [],
-              interests: criteria.interests || [],
+              demographics,
+              // behaviors and interests are arrays of strings in seed data
+              behaviors: (criteria.behaviors || []).map((b: string) => formatCriteriaValue(b)),
+              interests: (criteria.interests || []).map((i: string) => formatCriteriaValue(i)),
               criteria,
             })
           } else {
@@ -564,7 +586,17 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
     fetchAudience()
   }, [id])
 
+  // Convert snake_case criteria values to Title Case for display
+  function formatCriteriaValue(value: string): string {
+    if (!value) return value
+    return value
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
+  }
+
   function formatTimeAgo(dateString: string): string {
+    if (!dateString) return "Unknown"
     const date = new Date(dateString)
     const now = new Date()
     const diffMs = now.getTime() - date.getTime()

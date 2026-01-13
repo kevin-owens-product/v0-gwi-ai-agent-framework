@@ -384,11 +384,56 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
           const data = await response.json()
           const apiChart = data.data || data
           if (apiChart && apiChart.id) {
-            // Ensure data and insights are arrays
+            const config = apiChart.config || {}
+
+            // Transform chart data - seed data has nested structure with labels/datasets
+            let chartDataArray = apiChart.data
+            if (apiChart.data && !Array.isArray(apiChart.data)) {
+              // Convert nested seed data structure to array format for table display
+              const seedData = apiChart.data as { labels?: string[]; datasets?: any[]; values?: number[] }
+              if (seedData.labels && seedData.datasets) {
+                // For line/bar charts with labels and datasets
+                chartDataArray = seedData.labels.map((label: string, idx: number) => {
+                  const row: Record<string, any> = { label }
+                  seedData.datasets?.forEach((ds: any) => {
+                    row[ds.label || 'value'] = Array.isArray(ds.data) ? ds.data[idx] : ds.data
+                  })
+                  return row
+                })
+              } else if (seedData.values) {
+                // For funnel charts with values array
+                const stages = config.stages || []
+                chartDataArray = seedData.values.map((value: number, idx: number) => ({
+                  stage: stages[idx] || `Stage ${idx + 1}`,
+                  value,
+                }))
+              }
+            }
+
+            // Generate insights from config if not present
+            const insights = Array.isArray(apiChart.insights) ? apiChart.insights : []
+            if (insights.length === 0 && config.series) {
+              // Generate basic insights for charts with series
+              insights.push({
+                type: "highlight" as const,
+                title: "Key Metrics",
+                description: `Tracking ${config.series.length} series across ${apiChart.data?.labels?.length || 0} data points`,
+              })
+            }
+
             setChart({
               ...apiChart,
-              data: Array.isArray(apiChart.data) ? apiChart.data : undefined,
-              insights: Array.isArray(apiChart.insights) ? apiChart.insights : [],
+              data: Array.isArray(chartDataArray) ? chartDataArray : undefined,
+              insights,
+              // Extract metadata from config or provide defaults
+              audience: config.audience || apiChart.audience,
+              metric: config.metric || config.yAxis?.label || apiChart.metric,
+              dataSource: apiChart.dataSource || config.dataSource || "GWI Core",
+              views: apiChart.views || 0,
+              sampleSize: config.sampleSize || apiChart.sampleSize,
+              confidenceLevel: config.confidenceLevel || apiChart.confidenceLevel || 95,
+              methodology: config.methodology || apiChart.methodology,
+              category: apiChart.category || getCategoryFromType(apiChart.type),
             })
           } else {
             setChart(demoCharts[id] || null)
@@ -404,6 +449,23 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
     }
     fetchChart()
   }, [id])
+
+  // Helper to determine category from chart type
+  function getCategoryFromType(type: string): string {
+    const categoryMap: Record<string, string> = {
+      LINE: "Trends",
+      BAR: "Comparisons",
+      PIE: "Distribution",
+      FUNNEL: "Conversion",
+      RADAR: "Analysis",
+      SCATTER: "Correlation",
+      HEATMAP: "Patterns",
+      SANKEY: "Flow",
+      TREEMAP: "Hierarchy",
+      GAUGE: "KPI",
+    }
+    return categoryMap[type] || "General"
+  }
 
   // Auto-refresh effect
   useEffect(() => {
