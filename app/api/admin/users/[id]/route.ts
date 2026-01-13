@@ -45,10 +45,11 @@ export async function GET(
         sessions: {
           select: {
             id: true,
-            createdAt: true,
             expires: true,
+            ipAddress: true,
+            userAgent: true,
           },
-          orderBy: { createdAt: "desc" },
+          orderBy: { expires: "desc" },
           take: 5,
         },
       },
@@ -67,11 +68,6 @@ export async function GET(
           { expiresAt: { gt: new Date() } },
         ],
       },
-      include: {
-        bannedByAdmin: {
-          select: { name: true, email: true },
-        },
-      },
     })
 
     // Get ban history
@@ -79,19 +75,14 @@ export async function GET(
       where: { userId: id },
       orderBy: { createdAt: "desc" },
       take: 10,
-      include: {
-        bannedByAdmin: {
-          select: { name: true, email: true },
-        },
-      },
     })
 
-    // Get recent activity
+    // Get recent activity - count active sessions (those not yet expired)
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-    const recentSessions = await prisma.session.count({
+    const activeSessions = await prisma.session.count({
       where: {
         userId: id,
-        createdAt: { gte: thirtyDaysAgo },
+        expires: { gte: new Date() },
       },
     })
 
@@ -118,7 +109,7 @@ export async function GET(
         activeBan,
         banHistory,
         stats: {
-          recentSessions,
+          activeSessions,
           agentRunsLast30Days: agentRunsCount,
         },
         auditLogs,

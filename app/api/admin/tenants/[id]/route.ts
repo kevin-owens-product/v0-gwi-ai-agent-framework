@@ -78,11 +78,6 @@ export async function GET(
     // Get suspension status
     const suspension = await prisma.organizationSuspension.findFirst({
       where: { orgId: id, isActive: true },
-      include: {
-        suspendedByAdmin: {
-          select: { name: true, email: true },
-        },
-      },
     })
 
     // Get recent usage stats
@@ -106,11 +101,6 @@ export async function GET(
       where: { orgId: id },
       orderBy: { createdAt: "desc" },
       take: 5,
-      include: {
-        suspendedByAdmin: {
-          select: { name: true, email: true },
-        },
-      },
     })
 
     return NextResponse.json({
