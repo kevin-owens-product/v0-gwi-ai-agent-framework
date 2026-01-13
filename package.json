@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "prisma generate && npm run db:migrate && next build && npm run db:seed-if-empty",
+    "build": "prisma generate && npm run db:migrate && next build && npm run db:seed",
     "build:no-seed": "prisma generate && npm run db:migrate && next build",
     "build:with-seed": "prisma generate && npm run db:migrate && next build && npm run db:seed",
     "dev": "next dev",
