@@ -54,51 +54,54 @@ interface CommentsPanelProps {
   className?: string
 }
 
-// Mock comments
-const mockComments: Comment[] = [
-  {
-    id: "1",
-    content: "The Gen Z numbers for TikTok seem surprisingly high. Should we validate against the latest survey wave?",
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    author: { id: "1", name: "Sarah Chen", email: "sarah@example.com" },
-    isPinned: true,
-    isResolved: false,
-    replies: [
-      {
-        id: "1-1",
-        content: "@Marcus confirmed - this matches our Q4 data. TikTok adoption in this segment has accelerated.",
-        createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-        author: { id: "2", name: "Marcus Johnson", email: "marcus@example.com" },
-        isPinned: false,
-        isResolved: false,
-        replies: [],
-        mentions: ["Marcus"],
-      },
-    ],
-    mentions: [],
-    attachedTo: { type: "cell", id: "tiktok-genz", label: "TikTok / Gen Z" },
-  },
-  {
-    id: "2",
-    content: "We should highlight the LinkedIn vs Facebook crossover for Millennials in the presentation. Interesting finding!",
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-    author: { id: "3", name: "Emily Thompson", email: "emily@example.com" },
-    isPinned: false,
-    isResolved: true,
-    replies: [],
-    mentions: [],
-  },
-  {
-    id: "3",
-    content: "Consider adding Threads to future iterations of this analysis.",
-    createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
-    author: { id: "1", name: "Sarah Chen", email: "sarah@example.com" },
-    isPinned: false,
-    isResolved: false,
-    replies: [],
-    mentions: [],
-  },
-]
+// Generate mock comments with relative timestamps (called lazily to avoid hydration mismatch)
+function getMockComments(): Comment[] {
+  const now = Date.now()
+  return [
+    {
+      id: "1",
+      content: "The Gen Z numbers for TikTok seem surprisingly high. Should we validate against the latest survey wave?",
+      createdAt: new Date(now - 2 * 60 * 60 * 1000).toISOString(),
+      author: { id: "1", name: "Sarah Chen", email: "sarah@example.com" },
+      isPinned: true,
+      isResolved: false,
+      replies: [
+        {
+          id: "1-1",
+          content: "@Marcus confirmed - this matches our Q4 data. TikTok adoption in this segment has accelerated.",
+          createdAt: new Date(now - 1 * 60 * 60 * 1000).toISOString(),
+          author: { id: "2", name: "Marcus Johnson", email: "marcus@example.com" },
+          isPinned: false,
+          isResolved: false,
+          replies: [],
+          mentions: ["Marcus"],
+        },
+      ],
+      mentions: [],
+      attachedTo: { type: "cell", id: "tiktok-genz", label: "TikTok / Gen Z" },
+    },
+    {
+      id: "2",
+      content: "We should highlight the LinkedIn vs Facebook crossover for Millennials in the presentation. Interesting finding!",
+      createdAt: new Date(now - 24 * 60 * 60 * 1000).toISOString(),
+      author: { id: "3", name: "Emily Thompson", email: "emily@example.com" },
+      isPinned: false,
+      isResolved: true,
+      replies: [],
+      mentions: [],
+    },
+    {
+      id: "3",
+      content: "Consider adding Threads to future iterations of this analysis.",
+      createdAt: new Date(now - 48 * 60 * 60 * 1000).toISOString(),
+      author: { id: "1", name: "Sarah Chen", email: "sarah@example.com" },
+      isPinned: false,
+      isResolved: false,
+      replies: [],
+      mentions: [],
+    },
+  ]
+}
 
 export function CommentsPanel({
   resourceType: _resourceType,
@@ -106,7 +109,7 @@ export function CommentsPanel({
   currentUserId,
   className,
 }: CommentsPanelProps) {
-  const [comments, setComments] = useState<Comment[]>(mockComments)
+  const [comments, setComments] = useState<Comment[]>(() => getMockComments())
   const [newComment, setNewComment] = useState("")
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyContent, setReplyContent] = useState("")
