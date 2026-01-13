@@ -58,7 +58,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 
 interface SecurityPolicy {
   id: string
@@ -124,7 +124,6 @@ export default function SecurityPoliciesPage() {
   const [typeFilter, setTypeFilter] = useState("all")
   const [scopeFilter, setScopeFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const { toast } = useToast()
 
   const [newPolicy, setNewPolicy] = useState({
     name: "",
@@ -152,11 +151,7 @@ export default function SecurityPoliciesPage() {
       setPolicies(data.policies || [])
     } catch (error) {
       console.error("Failed to fetch policies:", error)
-      toast({
-        title: "Error",
-        description: "Failed to fetch security policies",
-        variant: "destructive",
-      })
+      toast.error("Failed to fetch security policies")
     } finally {
       setLoading(false)
     }
@@ -174,10 +169,7 @@ export default function SecurityPoliciesPage() {
         throw new Error("Failed to create policy")
       }
 
-      toast({
-        title: "Success",
-        description: "Security policy created successfully",
-      })
+      toast.success("Security policy created successfully")
       setIsCreateOpen(false)
       setNewPolicy({
         name: "",
@@ -190,11 +182,7 @@ export default function SecurityPoliciesPage() {
       })
       fetchPolicies()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create security policy",
-        variant: "destructive",
-      })
+      toast.error("Failed to create security policy")
     }
   }
 
@@ -210,17 +198,10 @@ export default function SecurityPoliciesPage() {
         throw new Error("Failed to update policy")
       }
 
-      toast({
-        title: "Success",
-        description: `Policy ${policy.isActive ? "disabled" : "enabled"} successfully`,
-      })
+      toast.success(`Policy ${policy.isActive ? "disabled" : "enabled"} successfully`)
       fetchPolicies()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update policy",
-        variant: "destructive",
-      })
+      toast.error("Failed to update policy")
     }
   }
 
@@ -236,17 +217,10 @@ export default function SecurityPoliciesPage() {
         throw new Error("Failed to delete policy")
       }
 
-      toast({
-        title: "Success",
-        description: "Policy deleted successfully",
-      })
+      toast.success("Policy deleted successfully")
       fetchPolicies()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete policy",
-        variant: "destructive",
-      })
+      toast.error("Failed to delete policy")
     }
   }
 

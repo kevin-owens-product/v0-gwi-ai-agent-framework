@@ -55,7 +55,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 
 interface APIClient {
   id: string
@@ -87,7 +87,6 @@ export default function APIClientsPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [showSecret, setShowSecret] = useState<string | null>(null)
-  const { toast } = useToast()
 
   const [newClient, setNewClient] = useState({
     name: "",
@@ -137,10 +136,7 @@ export default function APIClientsPage() {
 
       const data = await response.json()
 
-      toast({
-        title: "API Client Created",
-        description: "Make sure to copy the client secret - it won't be shown again!",
-      })
+      toast.success("API Client Created - Make sure to copy the client secret!")
 
       // Show the secret
       if (data.clientSecret) {
@@ -159,11 +155,7 @@ export default function APIClientsPage() {
       })
       fetchClients()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create API client",
-        variant: "destructive",
-      })
+      toast.error("Failed to create API client")
     }
   }
 
@@ -180,26 +172,16 @@ export default function APIClientsPage() {
         throw new Error("Failed to update client")
       }
 
-      toast({
-        title: "Success",
-        description: `Client ${newStatus === "ACTIVE" ? "activated" : "suspended"}`,
-      })
+      toast.success(`Client ${newStatus === "ACTIVE" ? "activated" : "suspended"}`)
       fetchClients()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update client status",
-        variant: "destructive",
-      })
+      toast.error("Failed to update client status")
     }
   }
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast({
-      title: "Copied",
-      description: "Value copied to clipboard",
-    })
+    toast.success("Value copied to clipboard")
   }
 
   const getStatusBadge = (status: string) => {

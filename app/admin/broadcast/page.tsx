@@ -56,7 +56,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 
 interface BroadcastMessage {
   id: string
@@ -111,7 +111,6 @@ export default function BroadcastCenterPage() {
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const { toast } = useToast()
 
   const [newMessage, setNewMessage] = useState({
     title: "",
@@ -154,10 +153,7 @@ export default function BroadcastCenterPage() {
         throw new Error("Failed to create message")
       }
 
-      toast({
-        title: "Success",
-        description: "Broadcast message created",
-      })
+      toast.success("Broadcast message created")
       setIsCreateOpen(false)
       setNewMessage({
         title: "",
@@ -169,11 +165,7 @@ export default function BroadcastCenterPage() {
       })
       fetchMessages()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create message",
-        variant: "destructive",
-      })
+      toast.error("Failed to create message")
     }
   }
 
@@ -187,17 +179,10 @@ export default function BroadcastCenterPage() {
         throw new Error("Failed to send message")
       }
 
-      toast({
-        title: "Success",
-        description: "Broadcast message sent",
-      })
+      toast.success("Broadcast message sent")
       fetchMessages()
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send message",
-        variant: "destructive",
-      })
+      toast.error("Failed to send message")
     }
   }
 
