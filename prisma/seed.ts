@@ -25,6 +25,12 @@ async function main() {
   await prisma.superAdminSession.deleteMany()
   await prisma.superAdmin.deleteMany()
   await prisma.featureFlag.deleteMany()
+
+  // Clean entitlement system data
+  await prisma.tenantEntitlement.deleteMany()
+  await prisma.planFeature.deleteMany()
+  await prisma.feature.deleteMany()
+  await prisma.plan.deleteMany()
   await prisma.systemRule.deleteMany()
   await prisma.ticketResponse.deleteMany()
   await prisma.supportTicket.deleteMany()
@@ -2765,6 +2771,245 @@ async function main() {
       createdBy: sarahEnterprise.id
     }
   })
+
+  // ==================== ENTITLEMENT SYSTEM ====================
+  console.log('🎫 Creating plans and features...')
+
+  // Create Features
+  const featureAdvancedAnalytics = await prisma.feature.create({
+    data: {
+      key: 'advanced_analytics',
+      name: 'Advanced Analytics',
+      description: 'Access to advanced analytics dashboards and reports',
+      category: 'ANALYTICS',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 1,
+    }
+  })
+
+  const featureCustomBranding = await prisma.feature.create({
+    data: {
+      key: 'custom_branding',
+      name: 'Custom Branding',
+      description: 'White-label platform with custom logos and colors',
+      category: 'CUSTOMIZATION',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 2,
+    }
+  })
+
+  const featureSso = await prisma.feature.create({
+    data: {
+      key: 'sso',
+      name: 'Single Sign-On',
+      description: 'SAML/OIDC SSO integration',
+      category: 'SECURITY',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 3,
+    }
+  })
+
+  const featureAuditLog = await prisma.feature.create({
+    data: {
+      key: 'audit_log',
+      name: 'Audit Log',
+      description: 'Detailed audit logging for compliance',
+      category: 'SECURITY',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 4,
+    }
+  })
+
+  const featureApiAccess = await prisma.feature.create({
+    data: {
+      key: 'api_access',
+      name: 'API Access',
+      description: 'Programmatic API access',
+      category: 'API',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 5,
+    }
+  })
+
+  const featurePrioritySupport = await prisma.feature.create({
+    data: {
+      key: 'priority_support',
+      name: 'Priority Support',
+      description: '24/7 priority customer support',
+      category: 'SUPPORT',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 6,
+    }
+  })
+
+  const featureDataExport = await prisma.feature.create({
+    data: {
+      key: 'data_export',
+      name: 'Data Export',
+      description: 'Export data to CSV, Excel, and other formats',
+      category: 'CORE',
+      valueType: 'BOOLEAN',
+      defaultValue: true,
+      sortOrder: 7,
+    }
+  })
+
+  const featureCustomAgents = await prisma.feature.create({
+    data: {
+      key: 'custom_agents',
+      name: 'Custom Agents',
+      description: 'Create and configure custom AI agents',
+      category: 'AGENTS',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 8,
+    }
+  })
+
+  const featureAdvancedWorkflows = await prisma.feature.create({
+    data: {
+      key: 'advanced_workflows',
+      name: 'Advanced Workflows',
+      description: 'Complex multi-step workflow automation',
+      category: 'AGENTS',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 9,
+    }
+  })
+
+  const featureMultiTenant = await prisma.feature.create({
+    data: {
+      key: 'multi_tenant',
+      name: 'Multi-Tenant Hierarchy',
+      description: 'Manage multiple organizations in a hierarchy',
+      category: 'ADVANCED',
+      valueType: 'BOOLEAN',
+      defaultValue: false,
+      sortOrder: 10,
+    }
+  })
+
+  // Create Plans
+  const starterPlan = await prisma.plan.create({
+    data: {
+      name: 'starter',
+      displayName: 'Starter',
+      description: 'Perfect for small teams getting started',
+      tier: 'STARTER',
+      isActive: true,
+      isPublic: true,
+      sortOrder: 1,
+      monthlyPrice: 0,
+      yearlyPrice: 0,
+      limits: {
+        agentRuns: 100,
+        teamSeats: 3,
+        dataSources: 5,
+        apiCallsPerMin: 100,
+        retentionDays: 30,
+        tokensPerMonth: 100000,
+        dashboards: 3,
+        reports: 10,
+        workflows: 2,
+        brandTrackings: 1,
+      },
+    }
+  })
+
+  const professionalPlan = await prisma.plan.create({
+    data: {
+      name: 'professional',
+      displayName: 'Professional',
+      description: 'For growing teams that need more power',
+      tier: 'PROFESSIONAL',
+      isActive: true,
+      isPublic: true,
+      sortOrder: 2,
+      monthlyPrice: 9900, // $99
+      yearlyPrice: 99900, // $999
+      limits: {
+        agentRuns: 1000,
+        teamSeats: 10,
+        dataSources: 25,
+        apiCallsPerMin: 500,
+        retentionDays: 90,
+        tokensPerMonth: 1000000,
+        dashboards: 20,
+        reports: 100,
+        workflows: 10,
+        brandTrackings: 5,
+      },
+    }
+  })
+
+  const enterprisePlan = await prisma.plan.create({
+    data: {
+      name: 'enterprise',
+      displayName: 'Enterprise',
+      description: 'For large organizations with advanced needs',
+      tier: 'ENTERPRISE',
+      isActive: true,
+      isPublic: true,
+      sortOrder: 3,
+      monthlyPrice: 49900, // $499
+      yearlyPrice: 499900, // $4999
+      limits: {
+        agentRuns: -1, // unlimited
+        teamSeats: -1,
+        dataSources: -1,
+        apiCallsPerMin: 2000,
+        retentionDays: 365,
+        tokensPerMonth: -1,
+        dashboards: -1,
+        reports: -1,
+        workflows: -1,
+        brandTrackings: -1,
+      },
+    }
+  })
+
+  // Assign features to Starter plan
+  await prisma.planFeature.createMany({
+    data: [
+      { planId: starterPlan.id, featureId: featureDataExport.id, value: true },
+    ]
+  })
+
+  // Assign features to Professional plan
+  await prisma.planFeature.createMany({
+    data: [
+      { planId: professionalPlan.id, featureId: featureDataExport.id, value: true },
+      { planId: professionalPlan.id, featureId: featureAdvancedAnalytics.id, value: true },
+      { planId: professionalPlan.id, featureId: featureApiAccess.id, value: true },
+      { planId: professionalPlan.id, featureId: featureCustomAgents.id, value: true },
+      { planId: professionalPlan.id, featureId: featureCustomBranding.id, value: true },
+    ]
+  })
+
+  // Assign features to Enterprise plan
+  await prisma.planFeature.createMany({
+    data: [
+      { planId: enterprisePlan.id, featureId: featureDataExport.id, value: true },
+      { planId: enterprisePlan.id, featureId: featureAdvancedAnalytics.id, value: true },
+      { planId: enterprisePlan.id, featureId: featureApiAccess.id, value: true },
+      { planId: enterprisePlan.id, featureId: featureCustomAgents.id, value: true },
+      { planId: enterprisePlan.id, featureId: featureCustomBranding.id, value: true },
+      { planId: enterprisePlan.id, featureId: featureSso.id, value: true },
+      { planId: enterprisePlan.id, featureId: featureAuditLog.id, value: true },
+      { planId: enterprisePlan.id, featureId: featurePrioritySupport.id, value: true },
+      { planId: enterprisePlan.id, featureId: featureAdvancedWorkflows.id, value: true },
+      { planId: enterprisePlan.id, featureId: featureMultiTenant.id, value: true },
+    ]
+  })
+
+  console.log('   Created 3 plans with 10 features')
 
   // ==================== SUMMARY ====================
   console.log('\n✅ Database seeding completed!')

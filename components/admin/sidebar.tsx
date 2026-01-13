@@ -16,6 +16,8 @@ import {
   FileText,
   Shield,
   LogOut,
+  CreditCard,
+  Sparkles,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAdmin } from "@/components/providers/admin-provider"
@@ -24,6 +26,8 @@ const navItems = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Tenants", href: "/admin/tenants", icon: Building2 },
   { name: "Users", href: "/admin/users", icon: Users },
+  { name: "Plans", href: "/admin/plans", icon: CreditCard },
+  { name: "Features", href: "/admin/entitlement-features", icon: Sparkles },
   { name: "Feature Flags", href: "/admin/features", icon: Flag },
   { name: "System Rules", href: "/admin/rules", icon: Scale },
   { name: "Support Tickets", href: "/admin/support", icon: TicketCheck },

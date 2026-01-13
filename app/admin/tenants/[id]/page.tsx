@@ -49,6 +49,10 @@ import {
   Save,
   X,
   Coins,
+  Sparkles,
+  Plus,
+  Trash2,
+  CreditCard,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -98,6 +102,50 @@ interface HealthScore {
   calculatedAt: string
 }
 
+interface Plan {
+  id: string
+  name: string
+  displayName: string
+}
+
+interface Feature {
+  id: string
+  key: string
+  name: string
+  category: string
+}
+
+interface TenantEntitlement {
+  id: string
+  planId: string | null
+  featureId: string | null
+  value: unknown
+  limit: number | null
+  isActive: boolean
+  expiresAt: string | null
+  grantedBy: string | null
+  reason: string | null
+  createdAt: string
+  plan: Plan | null
+  feature: Feature | null
+}
+
+interface EntitlementsData {
+  planId: string | null
+  planName: string | null
+  planTier: string
+  limits: Record<string, number>
+  features: Array<{
+    key: string
+    name: string
+    category: string
+    valueType: string
+    value: unknown
+    limit: number | null
+    isOverride: boolean
+  }>
+}
+
 interface Tenant {
   id: string
   name: string
@@ -143,6 +191,18 @@ export default function TenantDetailPage() {
   const [suspendType, setSuspendType] = useState("FULL")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Entitlements state
+  const [entitlements, setEntitlements] = useState<EntitlementsData | null>(null)
+  const [entitlementOverrides, setEntitlementOverrides] = useState<TenantEntitlement[]>([])
+  const [allPlans, setAllPlans] = useState<Plan[]>([])
+  const [allFeatures, setAllFeatures] = useState<Feature[]>([])
+  const [assignPlanDialogOpen, setAssignPlanDialogOpen] = useState(false)
+  const [grantFeatureDialogOpen, setGrantFeatureDialogOpen] = useState(false)
+  const [selectedPlanId, setSelectedPlanId] = useState("")
+  const [selectedFeatureId, setSelectedFeatureId] = useState("")
+  const [featureValue, setFeatureValue] = useState<unknown>(true)
+  const [featureReason, setFeatureReason] = useState("")
+
   const fetchTenant = useCallback(async () => {
     setIsLoading(true)
     try {
@@ -160,9 +220,43 @@ export default function TenantDetailPage() {
     }
   }, [tenantId])
 
+  const fetchEntitlements = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/admin/tenants/${tenantId}/entitlements`)
+      if (response.ok) {
+        const data = await response.json()
+        setEntitlements(data.entitlements)
+        setEntitlementOverrides(data.overrides)
+      }
+    } catch (error) {
+      console.error("Failed to fetch entitlements:", error)
+    }
+  }, [tenantId])
+
+  const fetchPlansAndFeatures = useCallback(async () => {
+    try {
+      const [plansRes, featuresRes] = await Promise.all([
+        fetch("/api/admin/plans?limit=50"),
+        fetch("/api/admin/entitlement-features?limit=100"),
+      ])
+      if (plansRes.ok) {
+        const data = await plansRes.json()
+        setAllPlans(data.plans)
+      }
+      if (featuresRes.ok) {
+        const data = await featuresRes.json()
+        setAllFeatures(data.features)
+      }
+    } catch (error) {
+      console.error("Failed to fetch plans/features:", error)
+    }
+  }, [])
+
   useEffect(() => {
     fetchTenant()
-  }, [fetchTenant])
+    fetchEntitlements()
+    fetchPlansAndFeatures()
+  }, [fetchTenant, fetchEntitlements, fetchPlansAndFeatures])
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -213,6 +307,83 @@ export default function TenantDetailPage() {
       fetchTenant()
     } catch (error) {
       console.error("Failed to lift suspension:", error)
+    }
+  }
+
+  const handleAssignPlan = async () => {
+    if (!selectedPlanId) return
+    setIsSubmitting(true)
+    try {
+      const response = await fetch(`/api/admin/tenants/${tenantId}/entitlements`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "plan",
+          planId: selectedPlanId,
+          reason: featureReason || undefined,
+        }),
+      })
+      if (response.ok) {
+        setAssignPlanDialogOpen(false)
+        setSelectedPlanId("")
+        setFeatureReason("")
+        fetchEntitlements()
+        fetchTenant()
+      } else {
+        const data = await response.json()
+        alert(data.error || "Failed to assign plan")
+      }
+    } catch (error) {
+      console.error("Failed to assign plan:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleGrantFeature = async () => {
+    if (!selectedFeatureId) return
+    setIsSubmitting(true)
+    try {
+      const response = await fetch(`/api/admin/tenants/${tenantId}/entitlements`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "feature",
+          featureId: selectedFeatureId,
+          value: featureValue,
+          reason: featureReason || undefined,
+        }),
+      })
+      if (response.ok) {
+        setGrantFeatureDialogOpen(false)
+        setSelectedFeatureId("")
+        setFeatureValue(true)
+        setFeatureReason("")
+        fetchEntitlements()
+      } else {
+        const data = await response.json()
+        alert(data.error || "Failed to grant feature")
+      }
+    } catch (error) {
+      console.error("Failed to grant feature:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleRevokeEntitlement = async (entitlementId: string) => {
+    try {
+      const response = await fetch(`/api/admin/tenants/${tenantId}/entitlements?entitlementId=${entitlementId}`, {
+        method: "DELETE",
+      })
+      if (response.ok) {
+        fetchEntitlements()
+      } else {
+        const data = await response.json()
+        alert(data.error || "Failed to revoke entitlement")
+      }
+    } catch (error) {
+      console.error("Failed to revoke entitlement:", error)
     }
   }
 
@@ -302,6 +473,10 @@ export default function TenantDetailPage() {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="members">Members ({tenant._count.members})</TabsTrigger>
+          <TabsTrigger value="entitlements">
+            <Sparkles className="h-4 w-4 mr-1" />
+            Entitlements
+          </TabsTrigger>
           <TabsTrigger value="activity">Activity</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
@@ -602,6 +777,197 @@ export default function TenantDetailPage() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="entitlements" className="space-y-6">
+          {/* Current Plan & Limits */}
+          <div className="grid gap-6 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <CreditCard className="h-5 w-5" />
+                      Current Plan
+                    </CardTitle>
+                    <CardDescription>Assigned subscription plan</CardDescription>
+                  </div>
+                  <Button size="sm" onClick={() => setAssignPlanDialogOpen(true)}>
+                    <Edit className="h-4 w-4 mr-1" />
+                    Change Plan
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {entitlements ? (
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Plan Name</span>
+                      <span className="font-medium">{entitlements.planName || "Default"}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Plan Tier</span>
+                      <Badge variant={
+                        entitlements.planTier === "ENTERPRISE" ? "default" :
+                        entitlements.planTier === "PROFESSIONAL" ? "secondary" : "outline"
+                      }>
+                        {entitlements.planTier}
+                      </Badge>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">Loading...</p>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Usage Limits</CardTitle>
+                <CardDescription>Current limits for this tenant</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {entitlements?.limits ? (
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    {Object.entries(entitlements.limits).map(([key, value]) => (
+                      <div key={key} className="flex justify-between">
+                        <span className="text-muted-foreground capitalize">{key.replace(/([A-Z])/g, " $1").trim()}</span>
+                        <span className="font-mono">{value === -1 ? "∞" : value}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">No limits configured</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Feature Entitlements */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5" />
+                    Feature Entitlements
+                  </CardTitle>
+                  <CardDescription>Features available to this tenant</CardDescription>
+                </div>
+                <Button size="sm" onClick={() => setGrantFeatureDialogOpen(true)}>
+                  <Plus className="h-4 w-4 mr-1" />
+                  Grant Feature
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {entitlements?.features && entitlements.features.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Feature</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Value</TableHead>
+                      <TableHead>Source</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {entitlements.features.map((feature) => (
+                      <TableRow key={feature.key}>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{feature.name}</p>
+                            <p className="text-xs text-muted-foreground font-mono">{feature.key}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{feature.category}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <span className="font-mono text-sm">
+                            {typeof feature.value === "boolean"
+                              ? feature.value ? "Enabled" : "Disabled"
+                              : String(feature.value)}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          {feature.isOverride ? (
+                            <Badge variant="secondary">Override</Badge>
+                          ) : (
+                            <Badge variant="outline">Plan</Badge>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-muted-foreground text-center py-4">No features configured</p>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Entitlement Overrides */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Entitlement Overrides</CardTitle>
+              <CardDescription>Manual overrides applied to this tenant</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {entitlementOverrides.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Reason</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {entitlementOverrides.map((override) => (
+                      <TableRow key={override.id}>
+                        <TableCell>
+                          <Badge variant={override.planId ? "default" : "secondary"}>
+                            {override.planId ? "Plan" : "Feature"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {override.plan?.displayName || override.feature?.name || "Unknown"}
+                        </TableCell>
+                        <TableCell className="max-w-[200px] truncate text-muted-foreground">
+                          {override.reason || "-"}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {new Date(override.createdAt).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={override.isActive ? "default" : "secondary"}>
+                            {override.isActive ? "Active" : "Inactive"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {override.isActive && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleRevokeEntitlement(override.id)}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-muted-foreground text-center py-4">No manual overrides</p>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="activity">
           <Card>
             <CardHeader>
@@ -729,6 +1095,112 @@ export default function TenantDetailPage() {
                 </>
               ) : (
                 "Suspend Organization"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Assign Plan Dialog */}
+      <Dialog open={assignPlanDialogOpen} onOpenChange={setAssignPlanDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Assign Plan</DialogTitle>
+            <DialogDescription>
+              Assign a subscription plan to {tenant.name}. This will override their current plan.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Select Plan</Label>
+              <Select value={selectedPlanId} onValueChange={setSelectedPlanId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a plan..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {allPlans.map((plan) => (
+                    <SelectItem key={plan.id} value={plan.id}>
+                      {plan.displayName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Reason (optional)</Label>
+              <Textarea
+                placeholder="Why is this plan being assigned?"
+                value={featureReason}
+                onChange={(e) => setFeatureReason(e.target.value)}
+                rows={2}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAssignPlanDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAssignPlan} disabled={!selectedPlanId || isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Assigning...
+                </>
+              ) : (
+                "Assign Plan"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Grant Feature Dialog */}
+      <Dialog open={grantFeatureDialogOpen} onOpenChange={setGrantFeatureDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Grant Feature</DialogTitle>
+            <DialogDescription>
+              Grant a specific feature override to {tenant.name}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Select Feature</Label>
+              <Select value={selectedFeatureId} onValueChange={setSelectedFeatureId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a feature..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {allFeatures.map((feature) => (
+                    <SelectItem key={feature.id} value={feature.id}>
+                      {feature.name} ({feature.key})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Reason (optional)</Label>
+              <Textarea
+                placeholder="Why is this feature being granted?"
+                value={featureReason}
+                onChange={(e) => setFeatureReason(e.target.value)}
+                rows={2}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setGrantFeatureDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleGrantFeature} disabled={!selectedFeatureId || isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Granting...
+                </>
+              ) : (
+                "Grant Feature"
               )}
             </Button>
           </DialogFooter>
