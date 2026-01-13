@@ -1093,6 +1093,141 @@ model ToolMemory {
   @@index([expiresAt])
 }
 
+// ==================== ENTITLEMENT SYSTEM ====================
+
+model Plan {
+  id            String      @id @default(cuid())
+  name          String      @unique
+  displayName   String
+  description   String?
+  tier          PlanTier    @default(STARTER)
+  isActive      Boolean     @default(true)
+  isPublic      Boolean     @default(true) // Visible to customers
+  sortOrder     Int         @default(0)
+
+  // Pricing
+  monthlyPrice  Int         @default(0) // In cents
+  yearlyPrice   Int         @default(0) // In cents
+  stripePriceIdMonthly String?
+  stripePriceIdYearly  String?
+
+  // Limits (numeric entitlements)
+  limits        Json        @default("{}") // { agentRuns: 100, teamSeats: 3, ... }
+
+  // Metadata
+  metadata      Json        @default("{}")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  features      PlanFeature[]
+  tenantEntitlements TenantEntitlement[]
+
+  @@index([tier])
+  @@index([isActive])
+  @@index([isPublic])
+}
+
+model Feature {
+  id            String        @id @default(cuid())
+  key           String        @unique // e.g., "advanced_analytics", "custom_branding"
+  name          String
+  description   String?
+  category      FeatureCategory @default(CORE)
+  isActive      Boolean       @default(true)
+  sortOrder     Int           @default(0)
+
+  // Feature configuration
+  valueType     FeatureValueType @default(BOOLEAN) // boolean, number, string, json
+  defaultValue  Json          @default("false")
+
+  // Metadata
+  metadata      Json          @default("{}")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  plans         PlanFeature[]
+  tenantEntitlements TenantEntitlement[]
+
+  @@index([category])
+  @@index([isActive])
+}
+
+enum FeatureCategory {
+  CORE          // Core platform features
+  ANALYTICS     // Analytics and reporting features
+  AGENTS        // AI agent features
+  INTEGRATIONS  // Third-party integrations
+  SECURITY      // Security features
+  SUPPORT       // Support features
+  CUSTOMIZATION // Branding and customization
+  API           // API access features
+  ADVANCED      // Advanced/premium features
+}
+
+enum FeatureValueType {
+  BOOLEAN       // Simple on/off
+  NUMBER        // Numeric limit (e.g., max dashboards)
+  STRING        // String value
+  JSON          // Complex configuration
+}
+
+model PlanFeature {
+  id            String    @id @default(cuid())
+  planId        String
+  featureId     String
+
+  // Feature value for this plan
+  value         Json      @default("true") // The value of this feature for this plan
+
+  // Optional override of limit for this specific feature
+  limit         Int?      // If feature has numeric limit
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  plan          Plan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  feature       Feature   @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, featureId])
+  @@index([planId])
+  @@index([featureId])
+}
+
+model TenantEntitlement {
+  id            String    @id @default(cuid())
+  orgId         String
+
+  // Can be linked to a plan OR a specific feature (or both for overrides)
+  planId        String?   // If set, tenant has this plan's entitlements
+  featureId     String?   // If set, this is a feature-specific override
+
+  // Override values
+  value         Json?     // Override the feature value
+  limit         Int?      // Override numeric limit
+
+  // Validity
+  isActive      Boolean   @default(true)
+  expiresAt     DateTime? // Optional expiration for temporary grants
+
+  // Audit
+  grantedBy     String?   // Admin who granted this
+  reason        String?   // Reason for grant/override
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  plan          Plan?     @relation(fields: [planId], references: [id], onDelete: SetNull)
+  feature       Feature?  @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([planId])
+  @@index([featureId])
+  @@index([isActive])
+  @@index([expiresAt])
+}
+
 // ==================== SUPER ADMIN PORTAL ====================
 
 model SuperAdmin {
