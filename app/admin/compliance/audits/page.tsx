@@ -33,9 +33,12 @@ import {
   Clock,
   FileSearch,
   PlayCircle,
+  Trash2,
+  XCircle,
+  Play,
 } from "lucide-react"
 import Link from "next/link"
-import { AdminDataTable, Column, RowAction } from "@/components/admin/data-table"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Framework {
   id: string
@@ -302,18 +305,177 @@ export default function AuditsPage() {
     },
   ]
 
+  // Handle delete audit
+  const handleDeleteAudit = async (audit: Audit) => {
+    try {
+      const response = await fetch(`/api/admin/compliance/audits/${audit.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to delete audit")
+      }
+      fetchAudits()
+    } catch (error) {
+      console.error("Failed to delete audit:", error)
+      throw error
+    }
+  }
+
+  // Handle start audit
+  const handleStartAudit = async (audit: Audit) => {
+    try {
+      const response = await fetch(`/api/admin/compliance/audits/${audit.id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "IN_PROGRESS", startedAt: new Date().toISOString() }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to start audit")
+      }
+      fetchAudits()
+    } catch (error) {
+      console.error("Failed to start audit:", error)
+      alert(error instanceof Error ? error.message : "Failed to start audit")
+    }
+  }
+
+  // Handle cancel audit
+  const handleCancelAudit = async (audit: Audit) => {
+    try {
+      const response = await fetch(`/api/admin/compliance/audits/${audit.id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "CANCELLED" }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to cancel audit")
+      }
+      fetchAudits()
+    } catch (error) {
+      console.error("Failed to cancel audit:", error)
+      alert(error instanceof Error ? error.message : "Failed to cancel audit")
+    }
+  }
+
   // Define row actions
   const rowActions: RowAction<Audit>[] = [
+    {
+      label: "Start Audit",
+      icon: <Play className="h-4 w-4" />,
+      onClick: handleStartAudit,
+      hidden: (audit) => audit.status !== "SCHEDULED",
+    },
+    {
+      label: "Cancel Audit",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: handleCancelAudit,
+      hidden: (audit) => audit.status !== "SCHEDULED" && audit.status !== "IN_PROGRESS",
+    },
     {
       label: "View Framework",
       icon: <Shield className="h-4 w-4" />,
       href: (audit) => `/admin/compliance/frameworks/${audit.frameworkId}`,
+      separator: true,
     },
     {
       label: "View Organization",
       icon: <Building2 className="h-4 w-4" />,
       href: (audit) => `/admin/tenants/${audit.orgId}`,
       hidden: (audit) => !audit.organization,
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Start Selected",
+      icon: <Play className="h-4 w-4" />,
+      onClick: async (ids) => {
+        const scheduledAudits = audits.filter((a) => ids.includes(a.id) && a.status === "SCHEDULED")
+        if (scheduledAudits.length === 0) {
+          alert("No scheduled audits selected")
+          return
+        }
+        try {
+          await Promise.all(
+            scheduledAudits.map((audit) =>
+              fetch(`/api/admin/compliance/audits/${audit.id}`, {
+                method: "PATCH",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "IN_PROGRESS", startedAt: new Date().toISOString() }),
+              })
+            )
+          )
+          fetchAudits()
+          setSelectedIds(new Set())
+        } catch (error) {
+          console.error("Failed to start audits:", error)
+        }
+      },
+      confirmTitle: "Start Audits",
+      confirmDescription: "Are you sure you want to start the selected scheduled audits?",
+    },
+    {
+      label: "Cancel Selected",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: async (ids) => {
+        const cancelableAudits = audits.filter(
+          (a) => ids.includes(a.id) && (a.status === "SCHEDULED" || a.status === "IN_PROGRESS")
+        )
+        if (cancelableAudits.length === 0) {
+          alert("No cancelable audits selected")
+          return
+        }
+        try {
+          await Promise.all(
+            cancelableAudits.map((audit) =>
+              fetch(`/api/admin/compliance/audits/${audit.id}`, {
+                method: "PATCH",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "CANCELLED" }),
+              })
+            )
+          )
+          fetchAudits()
+          setSelectedIds(new Set())
+        } catch (error) {
+          console.error("Failed to cancel audits:", error)
+        }
+      },
+      confirmTitle: "Cancel Audits",
+      confirmDescription: "Are you sure you want to cancel the selected audits?",
+    },
+    {
+      separator: true,
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: async (ids) => {
+        try {
+          await Promise.all(
+            ids.map((id) =>
+              fetch(`/api/admin/compliance/audits/${id}`, {
+                method: "DELETE",
+                credentials: "include",
+              })
+            )
+          )
+          fetchAudits()
+          setSelectedIds(new Set())
+        } catch (error) {
+          console.error("Failed to delete audits:", error)
+        }
+      },
+      variant: "destructive",
+      confirmTitle: "Delete Audits",
+      confirmDescription: "Are you sure you want to delete the selected audits? This action cannot be undone.",
     },
   ]
 
@@ -389,6 +551,12 @@ export default function AuditsPage() {
             emptyMessage="No audits found"
             viewHref={(audit) => `/admin/compliance/audits/${audit.id}`}
             rowActions={rowActions}
+            bulkActions={bulkActions}
+            onDelete={handleDeleteAudit}
+            deleteConfirmTitle="Delete Audit"
+            deleteConfirmDescription={(audit) =>
+              `Are you sure you want to delete the ${audit.framework.name} audit? This action cannot be undone.`
+            }
             page={page}
             totalPages={totalPages}
             total={total}
