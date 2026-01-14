@@ -1110,6 +1110,7 @@ model Plan {
   yearlyPrice   Int         @default(0) // In cents
   stripePriceIdMonthly String?
   stripePriceIdYearly  String?
+  trialDays     Int         @default(0) // Trial period in days
 
   // Limits (numeric entitlements)
   limits        Json        @default("{}") // { agentRuns: 100, teamSeats: 3, ... }
