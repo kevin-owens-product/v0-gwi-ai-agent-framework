@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
@@ -39,13 +39,17 @@ import {
   Gavel,
   Download,
   ChevronDown,
-  ChevronRight,
   Smartphone,
   UserCog,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAdmin } from "@/components/providers/admin-provider"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 interface NavItem {
   name: string
@@ -176,32 +180,43 @@ function NavSectionComponent({ section }: { section: NavSection }) {
   const hasActiveItem = section.items.some((item) => isActive(item.href))
 
   // Auto-expand if has active item
-  const effectiveIsOpen = isOpen || hasActiveItem
+  useEffect(() => {
+    if (hasActiveItem && !isOpen) {
+      setIsOpen(true)
+    }
+  }, [hasActiveItem, isOpen])
 
   return (
-    <div className="mb-2">
-      <button
-        onClick={() => setIsOpen(!effectiveIsOpen)}
-        className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-300"
-      >
-        {section.title}
-        {effectiveIsOpen ? (
-          <ChevronDown className="h-3.5 w-3.5" />
-        ) : (
-          <ChevronRight className="h-3.5 w-3.5" />
-        )}
-      </button>
-      {effectiveIsOpen && (
-        <div className="space-y-0.5 mt-1">
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="mb-1">
+      <CollapsibleTrigger asChild>
+        <button
+          className={cn(
+            "flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded-md transition-colors",
+            isOpen || hasActiveItem
+              ? "text-slate-200 bg-slate-800/50"
+              : "text-slate-400 hover:text-slate-300 hover:bg-slate-800/30"
+          )}
+        >
+          <span>{section.title}</span>
+          <ChevronDown
+            className={cn(
+              "h-3.5 w-3.5 transition-transform duration-200",
+              isOpen ? "rotate-0" : "-rotate-90"
+            )}
+          />
+        </button>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="mt-1">
+        <div className="space-y-0.5 pl-1">
           {section.items.map((item) => (
             <Link
               key={item.name}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150",
                 isActive(item.href)
-                  ? "bg-primary text-primary-foreground"
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-slate-300 hover:bg-slate-800 hover:text-white hover:translate-x-0.5"
               )}
             >
               <item.icon className="h-4 w-4 flex-shrink-0" />
@@ -214,8 +229,8 @@ function NavSectionComponent({ section }: { section: NavSection }) {
             </Link>
           ))}
         </div>
-      )}
-    </div>
+      </CollapsibleContent>
+    </Collapsible>
   )
 }
 

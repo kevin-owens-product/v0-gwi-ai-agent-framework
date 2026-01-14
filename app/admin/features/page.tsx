@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,14 +9,6 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Slider } from "@/components/ui/slider"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import {
   Select,
   SelectContent,
@@ -38,14 +30,14 @@ import {
   Plus,
   Loader2,
   RefreshCw,
-  Pencil,
-  Trash2,
-  ToggleLeft,
   Percent,
-  Eye,
+  ToggleLeft,
+  ToggleRight,
+  Trash2,
+  Copy,
 } from "lucide-react"
-import Link from "next/link"
 import { Checkbox } from "@/components/ui/checkbox"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface FeatureFlag {
   id: string
@@ -68,6 +60,7 @@ export default function FeatureFlagsPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingFlag, setEditingFlag] = useState<FeatureFlag | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   // Form state
   const [formData, setFormData] = useState({
@@ -80,22 +73,24 @@ export default function FeatureFlagsPage() {
     allowedPlans: [] as string[],
   })
 
-  const fetchFlags = async () => {
+  const fetchFlags = useCallback(async () => {
     setIsLoading(true)
     try {
       const response = await fetch("/api/admin/features")
       const data = await response.json()
-      setFlags(data.flags)
+      setFlags(data.flags || [])
+      setSelectedIds(new Set())
     } catch (error) {
       console.error("Failed to fetch feature flags:", error)
+      setFlags([])
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchFlags()
-  }, [])
+  }, [fetchFlags])
 
   const resetForm = () => {
     setFormData({
@@ -165,13 +160,59 @@ export default function FeatureFlagsPage() {
     }
   }
 
-  const handleDelete = async (flagId: string) => {
-    if (!confirm("Are you sure you want to delete this feature flag?")) return
+  const handleDelete = async (flag: FeatureFlag) => {
     try {
-      await fetch(`/api/admin/features/${flagId}`, { method: "DELETE" })
+      await fetch(`/api/admin/features/${flag.id}`, { method: "DELETE" })
       fetchFlags()
     } catch (error) {
       console.error("Failed to delete feature flag:", error)
+    }
+  }
+
+  const handleBulkEnable = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/features/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isEnabled: true }),
+          })
+        )
+      )
+      fetchFlags()
+    } catch (error) {
+      console.error("Failed to enable feature flags:", error)
+    }
+  }
+
+  const handleBulkDisable = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/features/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isEnabled: false }),
+          })
+        )
+      )
+      fetchFlags()
+    } catch (error) {
+      console.error("Failed to disable feature flags:", error)
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/features/${id}`, { method: "DELETE" })
+        )
+      )
+      fetchFlags()
+    } catch (error) {
+      console.error("Failed to delete feature flags:", error)
     }
   }
 
@@ -183,6 +224,126 @@ export default function FeatureFlagsPage() {
         : [...prev.allowedPlans, plan],
     }))
   }
+
+  // Define columns for the data table
+  const columns: Column<FeatureFlag>[] = [
+    {
+      id: "flag",
+      header: "Flag",
+      cell: (flag) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Flag className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <p className="font-medium">{flag.name}</p>
+            <code className="text-xs text-muted-foreground bg-muted px-1 rounded">
+              {flag.key}
+            </code>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (flag) => <Badge variant="outline">{flag.type}</Badge>,
+    },
+    {
+      id: "status",
+      header: "Status",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (flag) => (
+        <div className="flex items-center justify-center">
+          <Switch
+            checked={flag.isEnabled}
+            onCheckedChange={() => handleToggle(flag)}
+          />
+        </div>
+      ),
+    },
+    {
+      id: "rollout",
+      header: "Rollout",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (flag) => (
+        <div className="flex items-center justify-center gap-1">
+          <Percent className="h-3 w-3 text-muted-foreground" />
+          {flag.rolloutPercentage}%
+        </div>
+      ),
+    },
+    {
+      id: "plans",
+      header: "Allowed Plans",
+      cell: (flag) =>
+        flag.allowedPlans.length === 0 ? (
+          <span className="text-xs text-muted-foreground">All Plans</span>
+        ) : (
+          <div className="flex flex-wrap gap-1">
+            {flag.allowedPlans.map((plan) => (
+              <Badge key={plan} variant="secondary" className="text-xs">
+                {plan}
+              </Badge>
+            ))}
+          </div>
+        ),
+    },
+    {
+      id: "updated",
+      header: "Updated",
+      cell: (flag) => (
+        <span className="text-muted-foreground">
+          {new Date(flag.updatedAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<FeatureFlag>[] = [
+    {
+      label: "Edit Flag",
+      icon: <Flag className="h-4 w-4" />,
+      onClick: (flag) => handleOpenDialog(flag),
+    },
+    {
+      label: "Copy Key",
+      icon: <Copy className="h-4 w-4" />,
+      onClick: (flag) => {
+        navigator.clipboard.writeText(flag.key)
+      },
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Enable All",
+      icon: <ToggleRight className="h-4 w-4" />,
+      onClick: handleBulkEnable,
+      confirmTitle: "Enable Selected Flags",
+      confirmDescription: "Are you sure you want to enable all selected feature flags?",
+    },
+    {
+      label: "Disable All",
+      icon: <ToggleLeft className="h-4 w-4" />,
+      onClick: handleBulkDisable,
+      confirmTitle: "Disable Selected Flags",
+      confirmDescription: "Are you sure you want to disable all selected feature flags?",
+    },
+    {
+      label: "Delete All",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Selected Flags",
+      confirmDescription: "Are you sure you want to permanently delete all selected feature flags? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -330,111 +491,23 @@ export default function FeatureFlagsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Flag</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="text-center">Rollout</TableHead>
-                  <TableHead>Allowed Plans</TableHead>
-                  <TableHead>Updated</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : flags.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No feature flags configured
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  flags.map((flag) => (
-                    <TableRow key={flag.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Flag className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{flag.name}</p>
-                            <code className="text-xs text-muted-foreground bg-muted px-1 rounded">
-                              {flag.key}
-                            </code>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{flag.type}</Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center">
-                          <Switch
-                            checked={flag.isEnabled}
-                            onCheckedChange={() => handleToggle(flag)}
-                          />
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <Percent className="h-3 w-3 text-muted-foreground" />
-                          {flag.rolloutPercentage}%
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {flag.allowedPlans.length === 0 ? (
-                          <span className="text-xs text-muted-foreground">All Plans</span>
-                        ) : (
-                          <div className="flex flex-wrap gap-1">
-                            {flag.allowedPlans.map((plan) => (
-                              <Badge key={plan} variant="secondary" className="text-xs">
-                                {plan}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(flag.updatedAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <Button variant="ghost" size="sm" asChild>
-                            <Link href={`/admin/features/${flag.id}`}>
-                              <Eye className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleOpenDialog(flag)}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-destructive hover:text-destructive"
-                            onClick={() => handleDelete(flag.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+          <AdminDataTable
+            data={flags}
+            columns={columns}
+            getRowId={(flag) => flag.id}
+            isLoading={isLoading}
+            emptyMessage="No feature flags configured"
+            viewHref={(flag) => `/admin/features/${flag.id}`}
+            onDelete={handleDelete}
+            deleteConfirmTitle="Delete Feature Flag"
+            deleteConfirmDescription={(flag) =>
+              `Are you sure you want to delete the "${flag.name}" feature flag? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
     </div>

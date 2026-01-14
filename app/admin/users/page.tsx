@@ -7,27 +7,12 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -40,9 +25,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Search,
-  MoreHorizontal,
   Building2,
-  Eye,
   Ban,
   CheckCircle,
   ExternalLink,
@@ -51,8 +34,10 @@ import {
   Shield,
   Mail,
   Plus,
+  Trash2,
+  UserX,
 } from "lucide-react"
-import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface User {
   id: string
@@ -89,6 +74,7 @@ export default function UsersPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [banDialogOpen, setBanDialogOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
@@ -122,7 +108,6 @@ export default function UsersPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          console.error("Unauthorized - redirecting to login")
           window.location.href = "/admin/login"
           return
         }
@@ -133,6 +118,7 @@ export default function UsersPage() {
       setUsers(data.users || [])
       setTotalPages(data.totalPages || 1)
       setTotal(data.total || 0)
+      setSelectedIds(new Set())
     } catch (error) {
       console.error("Failed to fetch users:", error)
       setUsers([])
@@ -200,6 +186,94 @@ export default function UsersPage() {
     } catch (error) {
       console.error("Failed to lift ban:", error)
       alert(error instanceof Error ? error.message : "Failed to lift ban")
+    }
+  }
+
+  const handleDeleteUser = async (user: User) => {
+    try {
+      const response = await fetch(`/api/admin/users/${user.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/admin/login"
+          return
+        }
+        const data = await response.json()
+        throw new Error(data.error || "Failed to delete user")
+      }
+      fetchUsers()
+    } catch (error) {
+      console.error("Failed to delete user:", error)
+      alert(error instanceof Error ? error.message : "Failed to delete user")
+    }
+  }
+
+  const handleBulkBan = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/users/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "ban",
+          userIds: ids,
+          data: { reason: "Bulk ban action", banType: "PERMANENT" },
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk ban failed")
+      }
+      fetchUsers()
+    } catch (error) {
+      console.error("Bulk ban failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk ban failed")
+    }
+  }
+
+  const handleBulkUnban = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/users/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "unban",
+          userIds: ids,
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk unban failed")
+      }
+      fetchUsers()
+    } catch (error) {
+      console.error("Bulk unban failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk unban failed")
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/users/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "delete",
+          userIds: ids,
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk delete failed")
+      }
+      fetchUsers()
+    } catch (error) {
+      console.error("Bulk delete failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk delete failed")
     }
   }
 
@@ -280,6 +354,147 @@ export default function UsersPage() {
     setCreateDialogOpen(true)
   }
 
+  // Define columns for the data table
+  const columns: Column<User>[] = [
+    {
+      id: "user",
+      header: "User",
+      cell: (user) => (
+        <div className="flex items-center gap-3">
+          <Avatar className="h-9 w-9">
+            <AvatarImage src={user.avatarUrl || undefined} />
+            <AvatarFallback>{getInitials(user.name, user.email)}</AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="font-medium">{user.name || "No name"}</p>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Mail className="h-3 w-3" />
+              {user.email}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "organizations",
+      header: "Organizations",
+      cell: (user) => (
+        <div className="flex flex-wrap gap-1">
+          {user.memberships.slice(0, 2).map((m) => (
+            <Badge key={m.organization.id} variant="secondary" className="text-xs">
+              <Building2 className="h-3 w-3 mr-1" />
+              {m.organization.name}
+              <span className="ml-1 opacity-60">({m.role})</span>
+            </Badge>
+          ))}
+          {user.memberships.length > 2 && (
+            <Badge variant="outline" className="text-xs">
+              +{user.memberships.length - 2} more
+            </Badge>
+          )}
+          {user.memberships.length === 0 && (
+            <span className="text-xs text-muted-foreground">No organizations</span>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (user) => (
+        user.isBanned ? (
+          <Badge variant="destructive">Banned</Badge>
+        ) : user.emailVerified ? (
+          <Badge variant="default" className="bg-green-500">Verified</Badge>
+        ) : (
+          <Badge variant="secondary">Unverified</Badge>
+        )
+      ),
+    },
+    {
+      id: "sessions",
+      header: "Sessions",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (user) => (
+        <div className="flex items-center justify-center gap-1">
+          <Shield className="h-3 w-3 text-muted-foreground" />
+          {user._count.sessions}
+        </div>
+      ),
+    },
+    {
+      id: "joined",
+      header: "Joined",
+      cell: (user) => (
+        <span className="text-muted-foreground">
+          {new Date(user.createdAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<User>[] = [
+    {
+      label: "Impersonate",
+      icon: <ExternalLink className="h-4 w-4" />,
+      onClick: (user) => {
+        // Impersonate logic
+        console.log("Impersonate", user.id)
+      },
+    },
+    {
+      label: "Lift Ban",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (user) => {
+        if (user.ban) {
+          handleLiftBan(user.id, user.ban.id)
+        }
+      },
+      hidden: (user) => !user.isBanned,
+      separator: true,
+    },
+    {
+      label: "Ban User",
+      icon: <Ban className="h-4 w-4" />,
+      onClick: (user) => {
+        setSelectedUser(user)
+        setBanDialogOpen(true)
+      },
+      variant: "destructive",
+      hidden: (user) => user.isBanned,
+      separator: true,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Ban Selected",
+      icon: <Ban className="h-4 w-4" />,
+      onClick: handleBulkBan,
+      confirmTitle: "Ban Selected Users",
+      confirmDescription: "Are you sure you want to ban all selected users? They will be unable to access the platform.",
+    },
+    {
+      label: "Unban Selected",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: handleBulkUnban,
+      confirmTitle: "Unban Selected Users",
+      confirmDescription: "Are you sure you want to unban all selected users?",
+    },
+    {
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Selected Users",
+      confirmDescription: "Are you sure you want to permanently delete all selected users? This action cannot be undone.",
+    },
+  ]
+
   return (
     <div className="space-y-6">
       <Card>
@@ -327,159 +542,29 @@ export default function UsersPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>User</TableHead>
-                  <TableHead>Organizations</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Sessions</TableHead>
-                  <TableHead>Joined</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : users.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      No users found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  users.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-9 w-9">
-                            <AvatarImage src={user.avatarUrl || undefined} />
-                            <AvatarFallback>{getInitials(user.name, user.email)}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-medium">{user.name || "No name"}</p>
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                              <Mail className="h-3 w-3" />
-                              {user.email}
-                            </div>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
-                          {user.memberships.slice(0, 2).map((m) => (
-                            <Badge key={m.organization.id} variant="secondary" className="text-xs">
-                              <Building2 className="h-3 w-3 mr-1" />
-                              {m.organization.name}
-                              <span className="ml-1 opacity-60">({m.role})</span>
-                            </Badge>
-                          ))}
-                          {user.memberships.length > 2 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{user.memberships.length - 2} more
-                            </Badge>
-                          )}
-                          {user.memberships.length === 0 && (
-                            <span className="text-xs text-muted-foreground">No organizations</span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {user.isBanned ? (
-                          <Badge variant="destructive">Banned</Badge>
-                        ) : user.emailVerified ? (
-                          <Badge variant="default" className="bg-green-500">Verified</Badge>
-                        ) : (
-                          <Badge variant="secondary">Unverified</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <Shield className="h-3 w-3 text-muted-foreground" />
-                          {user._count.sessions}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/users/${user.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <ExternalLink className="h-4 w-4 mr-2" />
-                              Impersonate
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            {user.isBanned && user.ban ? (
-                              <DropdownMenuItem onClick={() => handleLiftBan(user.id, user.ban!.id)}>
-                                <CheckCircle className="h-4 w-4 mr-2" />
-                                Lift Ban
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem
-                                className="text-destructive"
-                                onClick={() => {
-                                  setSelectedUser(user)
-                                  setBanDialogOpen(true)
-                                }}
-                              >
-                                <Ban className="h-4 w-4 mr-2" />
-                                Ban User
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={users}
+            columns={columns}
+            getRowId={(user) => user.id}
+            isLoading={isLoading}
+            emptyMessage="No users found"
+            viewHref={(user) => `/admin/users/${user.id}`}
+            editHref={(user) => `/admin/users/${user.id}/edit`}
+            onDelete={handleDeleteUser}
+            deleteConfirmTitle="Delete User"
+            deleteConfirmDescription={(user) =>
+              `Are you sure you want to delete ${user.name || user.email}? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
 
