@@ -62,6 +62,14 @@ export async function POST(
       },
     })
 
+    // Fetch user details separately
+    const deviceUser = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: { id: true, email: true, name: true },
+    })
+
+    const deviceWithUser = { ...device, user: deviceUser }
+
     await logPlatformAudit({
       adminId: session.adminId,
       action: "approve_device_trust",
