@@ -7,27 +7,12 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -40,12 +25,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Search,
-  MoreHorizontal,
   Building2,
   Users,
-  Bot,
-  Workflow,
-  Eye,
   Ban,
   CheckCircle,
   ExternalLink,
@@ -53,13 +34,13 @@ import {
   RefreshCw,
   Plus,
   Network,
-  ChevronDown,
   GitBranch,
   Trash2,
   Settings,
   AlertTriangle,
 } from "lucide-react"
 import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Tenant {
   id: string
@@ -114,21 +95,13 @@ export default function TenantsPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
-
-  // Selection state for bulk operations
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const [selectAll, setSelectAll] = useState(false)
 
   const [suspendDialogOpen, setSuspendDialogOpen] = useState(false)
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null)
   const [suspendReason, setSuspendReason] = useState("")
   const [suspendType, setSuspendType] = useState("FULL")
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Bulk action state
-  const [bulkDialogOpen, setBulkDialogOpen] = useState(false)
-  const [bulkAction, setBulkAction] = useState("")
-  const [bulkData, setBulkData] = useState<Record<string, string>>({})
 
   // Create tenant state
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
@@ -175,7 +148,6 @@ export default function TenantsPage() {
       setTotalPages(data.totalPages || 1)
       setTotal(data.total || 0)
       setSelectedIds(new Set())
-      setSelectAll(false)
     } catch (error) {
       console.error("Failed to fetch tenants:", error)
       setTenants([])
@@ -214,26 +186,6 @@ export default function TenantsPage() {
   useEffect(() => {
     fetchParentOrgs()
   }, [fetchParentOrgs])
-
-  const handleSelectAll = (checked: boolean) => {
-    setSelectAll(checked)
-    if (checked) {
-      setSelectedIds(new Set(tenants.map(t => t.id)))
-    } else {
-      setSelectedIds(new Set())
-    }
-  }
-
-  const handleSelectOne = (id: string, checked: boolean) => {
-    const newSelected = new Set(selectedIds)
-    if (checked) {
-      newSelected.add(id)
-    } else {
-      newSelected.delete(id)
-    }
-    setSelectedIds(newSelected)
-    setSelectAll(newSelected.size === tenants.length)
-  }
 
   const handleSuspend = async () => {
     if (!selectedTenant || !suspendReason) return
@@ -288,41 +240,91 @@ export default function TenantsPage() {
     }
   }
 
-  const handleBulkAction = async () => {
-    if (selectedIds.size === 0) return
-    setIsSubmitting(true)
+  const handleDeleteTenant = async (tenant: Tenant) => {
     try {
-      const response = await fetch("/api/admin/tenants/bulk", {
-        method: "POST",
+      const response = await fetch(`/api/admin/tenants/${tenant.id}`, {
+        method: "DELETE",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: bulkAction,
-          tenantIds: Array.from(selectedIds),
-          data: bulkData,
-        }),
       })
-
       if (!response.ok) {
         if (response.status === 401) {
           window.location.href = "/admin/login"
           return
         }
         const data = await response.json()
+        throw new Error(data.error || "Failed to delete tenant")
+      }
+      fetchTenants()
+    } catch (error) {
+      console.error("Failed to delete tenant:", error)
+      alert(error instanceof Error ? error.message : "Failed to delete tenant")
+    }
+  }
+
+  const handleBulkSuspend = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/tenants/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "suspend",
+          tenantIds: ids,
+          data: { suspensionType: "FULL", reason: "Bulk suspension" },
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
         throw new Error(data.error || "Bulk operation failed")
       }
-
-      const result = await response.json()
-      alert(`Bulk operation completed: ${result.success} succeeded, ${result.failed} failed`)
-      setBulkDialogOpen(false)
-      setBulkAction("")
-      setBulkData({})
       fetchTenants()
     } catch (error) {
       console.error("Bulk operation failed:", error)
       alert(error instanceof Error ? error.message : "Bulk operation failed")
-    } finally {
-      setIsSubmitting(false)
+    }
+  }
+
+  const handleBulkUnsuspend = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/tenants/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "unsuspend",
+          tenantIds: ids,
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk operation failed")
+      }
+      fetchTenants()
+    } catch (error) {
+      console.error("Bulk operation failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk operation failed")
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/tenants/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "delete",
+          tenantIds: ids,
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk operation failed")
+      }
+      fetchTenants()
+    } catch (error) {
+      console.error("Bulk operation failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk operation failed")
     }
   }
 
@@ -375,11 +377,164 @@ export default function TenantsPage() {
     }
   }
 
-  const openBulkDialog = (action: string) => {
-    setBulkAction(action)
-    setBulkData({})
-    setBulkDialogOpen(true)
-  }
+  // Define columns for the data table
+  const columns: Column<Tenant>[] = [
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (tenant) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Building2 className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <p className="font-medium">{tenant.name}</p>
+              {(tenant.hierarchyLevel ?? 0) > 0 && (
+                <Badge variant="outline" className="text-xs">
+                  Level {tenant.hierarchyLevel}
+                </Badge>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground">{tenant.slug}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (tenant) => (
+        <Badge variant="outline" className="text-xs">
+          {ORG_TYPE_LABELS[tenant.orgType || "STANDARD"] || tenant.orgType}
+        </Badge>
+      ),
+    },
+    {
+      id: "plan",
+      header: "Plan",
+      cell: (tenant) => (
+        <Badge variant={
+          tenant.planTier === "ENTERPRISE" ? "default" :
+          tenant.planTier === "PROFESSIONAL" ? "secondary" : "outline"
+        }>
+          {tenant.planTier}
+        </Badge>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (tenant) => (
+        tenant.isSuspended ? (
+          <Badge variant="destructive">Suspended</Badge>
+        ) : tenant.subscription?.status === "ACTIVE" ? (
+          <Badge variant="default" className="bg-green-500">Active</Badge>
+        ) : (
+          <Badge variant="secondary">{tenant.subscription?.status || "Trial"}</Badge>
+        )
+      ),
+    },
+    {
+      id: "members",
+      header: "Members",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (tenant) => (
+        <div className="flex items-center justify-center gap-1">
+          <Users className="h-3 w-3 text-muted-foreground" />
+          {tenant._count.members}
+        </div>
+      ),
+    },
+    {
+      id: "children",
+      header: "Children",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (tenant) => (
+        tenant.allowChildOrgs ? (
+          <div className="flex items-center justify-center gap-1">
+            <GitBranch className="h-3 w-3 text-muted-foreground" />
+            {tenant._count.childOrgs ?? 0}
+          </div>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        )
+      ),
+    },
+    {
+      id: "created",
+      header: "Created",
+      cell: (tenant) => (
+        <span className="text-muted-foreground">
+          {new Date(tenant.createdAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Tenant>[] = [
+    {
+      label: "Impersonate",
+      icon: <ExternalLink className="h-4 w-4" />,
+      onClick: (tenant) => {
+        console.log("Impersonate", tenant.id)
+      },
+    },
+    {
+      label: "View Hierarchy",
+      icon: <GitBranch className="h-4 w-4" />,
+      href: (tenant) => `/admin/hierarchy?root=${tenant.id}`,
+      hidden: (tenant) => !tenant.allowChildOrgs,
+    },
+    {
+      label: "Lift Suspension",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (tenant) => handleLiftSuspension(tenant.id),
+      hidden: (tenant) => !tenant.isSuspended,
+      separator: true,
+    },
+    {
+      label: "Suspend",
+      icon: <Ban className="h-4 w-4" />,
+      onClick: (tenant) => {
+        setSelectedTenant(tenant)
+        setSuspendDialogOpen(true)
+      },
+      variant: "destructive",
+      hidden: (tenant) => tenant.isSuspended,
+      separator: true,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Suspend All",
+      icon: <Ban className="h-4 w-4" />,
+      onClick: handleBulkSuspend,
+      confirmTitle: "Suspend Selected Organizations",
+      confirmDescription: "Are you sure you want to suspend all selected organizations? Users will be unable to access the platform.",
+    },
+    {
+      label: "Unsuspend All",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: handleBulkUnsuspend,
+      confirmTitle: "Unsuspend Selected Organizations",
+      confirmDescription: "Are you sure you want to unsuspend all selected organizations?",
+    },
+    {
+      label: "Delete All",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Selected Organizations",
+      confirmDescription: "Are you sure you want to permanently delete all selected organizations? Organizations with child organizations cannot be deleted. This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -445,244 +600,29 @@ export default function TenantsPage() {
             </Select>
           </div>
 
-          {/* Bulk Actions Bar */}
-          {selectedIds.size > 0 && (
-            <div className="flex items-center gap-4 p-3 mb-4 bg-muted rounded-lg">
-              <span className="text-sm font-medium">
-                {selectedIds.size} selected
-              </span>
-              <div className="flex gap-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      Bulk Actions
-                      <ChevronDown className="h-4 w-4 ml-2" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => openBulkDialog("suspend")}>
-                      <Ban className="h-4 w-4 mr-2" />
-                      Suspend All
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => openBulkDialog("unsuspend")}>
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Unsuspend All
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => openBulkDialog("updatePlan")}>
-                      <Settings className="h-4 w-4 mr-2" />
-                      Change Plan
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => openBulkDialog("enableHierarchy")}>
-                      <GitBranch className="h-4 w-4 mr-2" />
-                      Enable Hierarchy
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-destructive"
-                      onClick={() => openBulkDialog("delete")}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete All
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedIds(new Set())
-                    setSelectAll(false)
-                  }}
-                >
-                  Clear Selection
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-12">
-                    <Checkbox
-                      checked={selectAll}
-                      onCheckedChange={handleSelectAll}
-                    />
-                  </TableHead>
-                  <TableHead>Organization</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Plan</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Members</TableHead>
-                  <TableHead className="text-center">Children</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : tenants.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
-                      No tenants found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  tenants.map((tenant) => (
-                    <TableRow key={tenant.id} className={selectedIds.has(tenant.id) ? "bg-muted/50" : ""}>
-                      <TableCell>
-                        <Checkbox
-                          checked={selectedIds.has(tenant.id)}
-                          onCheckedChange={(checked) => handleSelectOne(tenant.id, checked as boolean)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Building2 className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <p className="font-medium">{tenant.name}</p>
-                              {(tenant.hierarchyLevel ?? 0) > 0 && (
-                                <Badge variant="outline" className="text-xs">
-                                  Level {tenant.hierarchyLevel}
-                                </Badge>
-                              )}
-                            </div>
-                            <p className="text-xs text-muted-foreground">{tenant.slug}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="text-xs">
-                          {ORG_TYPE_LABELS[tenant.orgType || "STANDARD"] || tenant.orgType}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={
-                          tenant.planTier === "ENTERPRISE" ? "default" :
-                          tenant.planTier === "PROFESSIONAL" ? "secondary" : "outline"
-                        }>
-                          {tenant.planTier}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {tenant.isSuspended ? (
-                          <Badge variant="destructive">Suspended</Badge>
-                        ) : tenant.subscription?.status === "ACTIVE" ? (
-                          <Badge variant="default" className="bg-green-500">Active</Badge>
-                        ) : (
-                          <Badge variant="secondary">{tenant.subscription?.status || "Trial"}</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <Users className="h-3 w-3 text-muted-foreground" />
-                          {tenant._count.members}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {tenant.allowChildOrgs ? (
-                          <div className="flex items-center justify-center gap-1">
-                            <GitBranch className="h-3 w-3 text-muted-foreground" />
-                            {tenant._count.childOrgs ?? 0}
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(tenant.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/tenants/${tenant.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <ExternalLink className="h-4 w-4 mr-2" />
-                              Impersonate
-                            </DropdownMenuItem>
-                            {tenant.allowChildOrgs && (
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/hierarchy?root=${tenant.id}`}>
-                                  <GitBranch className="h-4 w-4 mr-2" />
-                                  View Hierarchy
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                            <DropdownMenuSeparator />
-                            {tenant.isSuspended ? (
-                              <DropdownMenuItem onClick={() => handleLiftSuspension(tenant.id)}>
-                                <CheckCircle className="h-4 w-4 mr-2" />
-                                Lift Suspension
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem
-                                className="text-destructive"
-                                onClick={() => {
-                                  setSelectedTenant(tenant)
-                                  setSuspendDialogOpen(true)
-                                }}
-                              >
-                                <Ban className="h-4 w-4 mr-2" />
-                                Suspend
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages} ({total} total)
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={tenants}
+            columns={columns}
+            getRowId={(tenant) => tenant.id}
+            isLoading={isLoading}
+            emptyMessage="No tenants found"
+            viewHref={(tenant) => `/admin/tenants/${tenant.id}`}
+            editHref={(tenant) => `/admin/tenants/${tenant.id}/edit`}
+            onDelete={handleDeleteTenant}
+            deleteConfirmTitle="Delete Organization"
+            deleteConfirmDescription={(tenant) =>
+              `Are you sure you want to delete ${tenant.name}? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
 
@@ -736,101 +676,6 @@ export default function TenantsPage() {
                 </>
               ) : (
                 "Suspend Organization"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Bulk Action Dialog */}
-      <Dialog open={bulkDialogOpen} onOpenChange={setBulkDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {bulkAction === "delete" && <AlertTriangle className="h-5 w-5 inline mr-2 text-destructive" />}
-              Bulk {bulkAction.charAt(0).toUpperCase() + bulkAction.slice(1)}
-            </DialogTitle>
-            <DialogDescription>
-              This action will affect {selectedIds.size} organization(s)
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            {bulkAction === "suspend" && (
-              <>
-                <div className="space-y-2">
-                  <Label>Suspension Type</Label>
-                  <Select
-                    value={bulkData.suspensionType || "FULL"}
-                    onValueChange={(v) => setBulkData({ ...bulkData, suspensionType: v })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="FULL">Full Suspension</SelectItem>
-                      <SelectItem value="PARTIAL">Partial</SelectItem>
-                      <SelectItem value="BILLING_HOLD">Billing Hold</SelectItem>
-                      <SelectItem value="INVESTIGATION">Investigation</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Reason</Label>
-                  <Textarea
-                    placeholder="Enter reason..."
-                    value={bulkData.reason || ""}
-                    onChange={(e) => setBulkData({ ...bulkData, reason: e.target.value })}
-                    rows={2}
-                  />
-                </div>
-              </>
-            )}
-            {bulkAction === "updatePlan" && (
-              <div className="space-y-2">
-                <Label>New Plan Tier</Label>
-                <Select
-                  value={bulkData.planTier || ""}
-                  onValueChange={(v) => setBulkData({ ...bulkData, planTier: v })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select plan" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="STARTER">Starter</SelectItem>
-                    <SelectItem value="PROFESSIONAL">Professional</SelectItem>
-                    <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-            {bulkAction === "delete" && (
-              <div className="p-4 bg-destructive/10 rounded-lg text-destructive text-sm">
-                <AlertTriangle className="h-4 w-4 inline mr-2" />
-                This action cannot be undone. Organizations with child organizations cannot be deleted.
-              </div>
-            )}
-            {(bulkAction === "unsuspend" || bulkAction === "enableHierarchy") && (
-              <p className="text-sm text-muted-foreground">
-                Click confirm to proceed with this action on all selected organizations.
-              </p>
-            )}
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setBulkDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant={bulkAction === "delete" ? "destructive" : "default"}
-              onClick={handleBulkAction}
-              disabled={isSubmitting || (bulkAction === "updatePlan" && !bulkData.planTier)}
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                "Confirm"
               )}
             </Button>
           </DialogFooter>
