@@ -147,7 +147,7 @@ export async function PUT(
       action: "update_legal_hold",
       resourceType: "legal_hold",
       resourceId: legalHold.id,
-      targetOrgId: legalHold.orgId,
+      targetOrgId: legalHold.orgId ?? undefined,
       details: {
         changes: Object.keys(body),
         previousStatus: existingHold.status,
@@ -221,7 +221,7 @@ export async function DELETE(
       action: "delete_legal_hold",
       resourceType: "legal_hold",
       resourceId: id,
-      targetOrgId: existingHold.orgId,
+      targetOrgId: existingHold.orgId ?? undefined,
       details: {
         name: existingHold.name,
         caseNumber: existingHold.caseNumber,

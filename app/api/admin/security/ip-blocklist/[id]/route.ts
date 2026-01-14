@@ -133,7 +133,7 @@ export async function PUT(
       action: "update_ip_blocklist_entry",
       resourceType: "ip_blocklist",
       resourceId: id,
-      targetOrgId: entry.orgId,
+      targetOrgId: entry.orgId ?? undefined,
       details: {
         changes: Object.keys(body),
         previousIp: existingEntry.ipAddress,
@@ -188,7 +188,7 @@ export async function DELETE(
       action: "delete_ip_blocklist_entry",
       resourceType: "ip_blocklist",
       resourceId: id,
-      targetOrgId: existingEntry.orgId,
+      targetOrgId: existingEntry.orgId ?? undefined,
       details: {
         ipAddress: existingEntry.ipAddress,
         type: existingEntry.type,

@@ -510,8 +510,8 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
           const apiDashboard = data.data || data
           if (apiDashboard && apiDashboard.id) {
             const widgetsArray = Array.isArray(apiDashboard.widgets) ? apiDashboard.widgets : []
-            // Valid chart types for validation - include all types from seed data
-            const validChartTypes: ChartType[] = ["BAR", "LINE", "PIE", "DONUT", "AREA", "SCATTER", "HEATMAP", "TREEMAP", "FUNNEL", "RADAR", "METRIC", "GAUGE", "TABLE"]
+            // Valid chart types for validation - include all types from ChartType
+            const validChartTypes: ChartType[] = ["BAR", "LINE", "PIE", "DONUT", "AREA", "SCATTER", "HEATMAP", "TREEMAP", "FUNNEL", "RADAR", "METRIC"]
 
             // Map seed data types to valid chart types
             const typeMapping: Record<string, ChartType> = {

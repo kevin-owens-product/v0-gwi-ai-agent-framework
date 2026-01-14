@@ -67,10 +67,9 @@ export async function GET(request: NextRequest) {
       // Total users
       prisma.user.count(),
 
-      // Active users (with recent session)
+      // Active users (with valid session)
       prisma.session.count({
-        where: { createdAt: { gte: startDate } },
-        select: { userId: true },
+        where: { expires: { gte: new Date() } },
       }).then((result) => typeof result === "number" ? result : 0).catch(() => 0),
 
       // New users this period

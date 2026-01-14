@@ -1,6 +1,7 @@
 import { prisma } from './db'
 import { createHash, randomBytes } from 'crypto'
 import type { SuperAdminRole } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 // Super Admin Permissions
 export const SUPER_ADMIN_PERMISSIONS = {
@@ -252,7 +253,7 @@ export async function logPlatformAudit({
       resourceId,
       targetOrgId,
       targetUserId,
-      details,
+      details: details as Prisma.InputJsonValue,
       ipAddress,
       userAgent,
     },
@@ -761,10 +762,11 @@ export async function calculateTenantHealthScore(orgId: string) {
     prisma.agentRun.count({
       where: { orgId, startedAt: { gte: thirtyDaysAgo } },
     }),
+    // Count active sessions (sessions that haven't expired)
     prisma.session.count({
       where: {
         user: { memberships: { some: { orgId } } },
-        createdAt: { gte: thirtyDaysAgo },
+        expires: { gte: new Date() },
       },
     }),
   ])
@@ -849,8 +851,8 @@ export async function createSystemRule(data: {
       name: data.name,
       description: data.description,
       type: data.type,
-      conditions: data.conditions,
-      actions: data.actions,
+      conditions: data.conditions as Prisma.InputJsonValue,
+      actions: data.actions as Prisma.InputJsonValue,
       priority: data.priority ?? 0,
       appliesTo: data.appliesTo ?? [],
       excludeOrgs: data.excludeOrgs ?? [],

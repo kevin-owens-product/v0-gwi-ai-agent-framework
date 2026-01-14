@@ -48,7 +48,7 @@ interface Comment {
 }
 
 interface CommentsPanelProps {
-  resourceType: "audience" | "crosstab"
+  resourceType: "audience" | "crosstab" | "brand-tracking"
   resourceId: string
   currentUserId: string
   className?: string

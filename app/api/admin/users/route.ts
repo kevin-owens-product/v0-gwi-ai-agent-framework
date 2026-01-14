@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
-import { Role } from "@prisma/client"
+import { Role, Prisma } from "@prisma/client"
 import bcrypt from "bcryptjs"
 
 export async function GET(request: NextRequest) {
@@ -207,7 +207,9 @@ export async function POST(request: NextRequest) {
             orgId,
             userId: newUser.id,
             action: "user.created",
-            details: {
+            resourceType: "user",
+            resourceId: newUser.id,
+            metadata: {
               email: newUser.email,
               role,
               createdBy: session.adminId,

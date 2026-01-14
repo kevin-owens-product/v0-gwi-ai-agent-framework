@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
+import { Prisma } from "@prisma/client"
 
 export async function GET(
   request: NextRequest,
@@ -136,19 +137,20 @@ export async function POST(
 
     // Update incident status and timeline if status provided
     if (status && status !== incident.status) {
-      const timeline = incident.timeline as Array<Record<string, unknown>>
+      const timeline = (incident.timeline as Prisma.JsonArray) || []
+      const newTimeline = [
+        ...timeline,
+        {
+          timestamp: new Date().toISOString(),
+          event: `Status changed to ${status}: ${message}`,
+          actor: session.admin.name || session.admin.email,
+        },
+      ] as Prisma.InputJsonValue
       await prisma.platformIncident.update({
         where: { id },
         data: {
           status,
-          timeline: [
-            ...timeline,
-            {
-              timestamp: new Date().toISOString(),
-              event: `Status changed to ${status}: ${message}`,
-              actor: session.admin.name || session.admin.email,
-            },
-          ],
+          timeline: newTimeline,
           ...(status === "RESOLVED" && !incident.resolvedAt
             ? { resolvedAt: new Date() }
             : {}),

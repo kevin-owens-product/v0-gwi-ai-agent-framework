@@ -50,14 +50,15 @@ export async function POST(
         trustedAt: new Date(),
         trustedBy: session.adminId,
       },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
+    })
+
+    // Query user separately since TrustedDevice doesn't have a relation to User
+    const user = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
       },
     })
 
@@ -76,7 +77,7 @@ export async function POST(
     })
 
     return NextResponse.json({
-      device,
+      device: { ...device, user },
       message: "Device trust approved successfully",
     })
   } catch (error) {

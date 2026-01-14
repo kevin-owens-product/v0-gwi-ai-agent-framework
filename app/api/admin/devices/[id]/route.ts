@@ -23,32 +23,33 @@ export async function GET(
 
     const device = await prisma.trustedDevice.findUnique({
       where: { id },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            avatarUrl: true,
-            memberships: {
-              include: {
-                organization: {
-                  select: {
-                    id: true,
-                    name: true,
-                    slug: true,
-                  },
-                },
+    })
+
+    if (!device) {
+      return NextResponse.json({ error: "Device not found" }, { status: 404 })
+    }
+
+    // Query user separately since TrustedDevice doesn't have a relation to User
+    const user = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        memberships: {
+          include: {
+            organization: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
               },
             },
           },
         },
       },
     })
-
-    if (!device) {
-      return NextResponse.json({ error: "Device not found" }, { status: 404 })
-    }
 
     // Get device activity logs if available
     const activityLogs = await prisma.platformAuditLog.findMany({
@@ -63,6 +64,7 @@ export async function GET(
     return NextResponse.json({
       device: {
         ...device,
+        user,
         activityLogs,
       },
     })
@@ -118,14 +120,15 @@ export async function PUT(
         ...(isManaged !== undefined && { isManaged }),
         ...(isCompliant !== undefined && { lastComplianceCheck: new Date() }),
       },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
+    })
+
+    // Query user separately since TrustedDevice doesn't have a relation to User
+    const user = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
       },
     })
 
@@ -140,7 +143,7 @@ export async function PUT(
       },
     })
 
-    return NextResponse.json({ device })
+    return NextResponse.json({ device: { ...device, user } })
   } catch (error) {
     console.error("Device update error:", error)
     return NextResponse.json(

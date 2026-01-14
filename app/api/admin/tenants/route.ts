@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
-import { PlanTier, OrganizationType, CompanySize } from "@prisma/client"
+import { PlanTier, OrganizationType, CompanySize, Prisma } from "@prisma/client"
 
 export async function GET(request: NextRequest) {
   try {
@@ -234,7 +234,9 @@ export async function POST(request: NextRequest) {
         data: {
           orgId: org.id,
           action: "organization.created",
-          details: {
+          resourceType: "organization",
+          resourceId: org.id,
+          metadata: {
             name: org.name,
             planTier: org.planTier,
             orgType: org.orgType,

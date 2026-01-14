@@ -93,12 +93,12 @@ export function ChartTemplateGallery({
 
     // Filter by category
     if (activeTab !== "all" && activeTab !== "popular") {
-      const categoryTemplates = templateCategories[activeTab as keyof typeof templateCategories]
-      if (categoryTemplates && !categoryTemplates.includes(key as any)) return false
+      const categoryTemplates = templateCategories[activeTab as keyof typeof templateCategories] as readonly string[]
+      if (categoryTemplates && !categoryTemplates.includes(key)) return false
     }
 
     if (activeTab === "popular") {
-      return templateCategories.popular.includes(key as any)
+      return (templateCategories.popular as readonly string[]).includes(key)
     }
 
     return true
