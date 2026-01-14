@@ -295,6 +295,21 @@ const segmentOptions = [
   { value: "boomers", label: "Boomers (45-54)" },
 ]
 
+// Helper function to flatten treemap data structure
+function flattenTreemapData(children: any[]): any[] {
+  const result: any[] = []
+  for (const child of children) {
+    if (child.children && Array.isArray(child.children)) {
+      // Parent node - recursively flatten children
+      result.push(...flattenTreemapData(child.children))
+    } else {
+      // Leaf node
+      result.push({ name: child.name, value: child.value })
+    }
+  }
+  return result
+}
+
 function formatChartType(type: AdvancedChartType): string {
   const typeMap: Record<string, string> = {
     BAR: "Bar Chart", HORIZONTAL_BAR: "Horizontal Bar", GROUPED_BAR: "Grouped Bar",
@@ -387,26 +402,53 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
 
             // Transform chart data - seed data has nested structure with labels/datasets
             let chartDataArray = apiChart.data
+            let extractedDataKeys: string[] = []
+            let extractedColors: string[] = []
+
             if (apiChart.data && !Array.isArray(apiChart.data)) {
-              // Convert nested seed data structure to array format for table display
-              const seedData = apiChart.data as { labels?: string[]; datasets?: any[]; values?: number[] }
+              // Convert nested seed data structure to array format for chart rendering
+              const seedData = apiChart.data as { labels?: string[]; datasets?: any[]; values?: number[]; children?: any[] }
+
               if (seedData.labels && seedData.datasets) {
                 // For line/bar charts with labels and datasets
+                // Extract data keys from dataset labels (sanitized for use as object keys)
+                extractedDataKeys = seedData.datasets.map((ds: any) => {
+                  const label = ds.label || 'value'
+                  // Create a safe key name from the label
+                  return label.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_+$/, '')
+                })
+                extractedColors = seedData.datasets.map((ds: any) => ds.color).filter(Boolean)
+
                 chartDataArray = seedData.labels.map((label: string, idx: number) => {
-                  const row: Record<string, any> = { label }
-                  seedData.datasets?.forEach((ds: any) => {
-                    row[ds.label || 'value'] = Array.isArray(ds.data) ? ds.data[idx] : ds.data
+                  const row: Record<string, any> = { name: label }
+                  seedData.datasets?.forEach((ds: any, dsIdx: number) => {
+                    const key = extractedDataKeys[dsIdx] || 'value'
+                    row[key] = Array.isArray(ds.data) ? ds.data[idx] : ds.data
                   })
+                  // Also add a 'value' key for simple chart types that expect it
+                  if (seedData.datasets?.length === 1 && extractedDataKeys[0] !== 'value') {
+                    row.value = Array.isArray(seedData.datasets[0].data) ? seedData.datasets[0].data[idx] : seedData.datasets[0].data
+                  }
                   return row
                 })
               } else if (seedData.values) {
                 // For funnel charts with values array
                 const stages = config.stages || []
                 chartDataArray = seedData.values.map((value: number, idx: number) => ({
-                  stage: stages[idx] || `Stage ${idx + 1}`,
+                  name: stages[idx] || `Stage ${idx + 1}`,
                   value,
                 }))
+              } else if (seedData.children) {
+                // For treemap charts with children structure
+                chartDataArray = flattenTreemapData(seedData.children)
               }
+            }
+
+            // Store extracted keys for chart config
+            const chartConfig = {
+              ...config,
+              extractedDataKeys,
+              extractedColors: extractedColors.length > 0 ? extractedColors : undefined,
             }
 
             // Generate insights from config if not present
@@ -423,6 +465,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
             setChart({
               ...apiChart,
               data: Array.isArray(chartDataArray) ? chartDataArray : undefined,
+              config: chartConfig, // Use enhanced config with extracted dataKeys
               insights,
               // Extract metadata from config or provide defaults
               audience: config.audience || apiChart.audience,
@@ -783,6 +826,10 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
                           height: isFullscreen ? 600 : 400,
                           animate: true,
                           formatter: "percentage",
+                          // Pass extracted dataKeys for multi-series charts
+                          dataKeys: chart.config?.extractedDataKeys?.length > 0 ? chart.config.extractedDataKeys : undefined,
+                          // Pass extracted colors if available
+                          colors: chart.config?.extractedColors,
                         }}
                         template={chart.template}
                       />

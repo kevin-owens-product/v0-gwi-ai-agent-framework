@@ -334,6 +334,9 @@ export function AdvancedChartRenderer({
       case "BAR":
       case "HORIZONTAL_BAR": {
         const isHorizontal = type === "HORIZONTAL_BAR" || horizontal
+        // Check if we have multiple series (dataKeys provided and data has those keys)
+        const hasMultipleSeries = dataKeys.length > 0 && chartData.some((d: any) => dataKeys.some(key => key in d))
+
         return (
           <BarChart
             data={chartData}
@@ -363,22 +366,37 @@ export function AdvancedChartRenderer({
                 label={{ value: benchmarkLabel, position: "top", fill: "hsl(var(--destructive))" }}
               />
             )}
-            <Bar
-              dataKey={dataKey}
-              fill={chartColors[0]}
-              radius={borderRadius}
-              animationDuration={animate ? animationDuration : 0}
-              onClick={handleClick}
-            >
-              {chartData.map((_entry: any, index: number) => (
-                <Cell
-                  key={`cell-${index}`}
+            {hasMultipleSeries ? (
+              // Render multiple bars for multi-series data
+              dataKeys.map((key, index) => (
+                <Bar
+                  key={key}
+                  dataKey={key}
+                  name={key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                   fill={chartColors[index % chartColors.length]}
-                  opacity={activeIndex === null || activeIndex === index ? fillOpacity : 0.3}
-                  cursor={interactive ? "pointer" : "default"}
+                  radius={borderRadius}
+                  animationDuration={animate ? animationDuration : 0}
                 />
-              ))}
-            </Bar>
+              ))
+            ) : (
+              // Render single bar for simple data
+              <Bar
+                dataKey={dataKey}
+                fill={chartColors[0]}
+                radius={borderRadius}
+                animationDuration={animate ? animationDuration : 0}
+                onClick={handleClick}
+              >
+                {chartData.map((_entry: any, index: number) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={chartColors[index % chartColors.length]}
+                    opacity={activeIndex === null || activeIndex === index ? fillOpacity : 0.3}
+                    cursor={interactive ? "pointer" : "default"}
+                  />
+                ))}
+              </Bar>
+            )}
             {showBrush && <Brush dataKey={xAxisKey} height={30} stroke={chartColors[0]} />}
           </BarChart>
         )
@@ -418,64 +436,120 @@ export function AdvancedChartRenderer({
       }
 
       case "LINE":
-      case "MULTI_LINE":
+      case "MULTI_LINE": {
+        // Use the configured xAxisKey or try to detect if data has 'date' or 'name' key
+        const lineXAxisKey = chartData[0]?.date !== undefined ? "date" : xAxisKey
+        // Check if we have multiple series
+        const hasMultipleLineSeries = dataKeys.length > 0 && chartData.some((d: any) => dataKeys.some(key => key in d))
+
         return (
           <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted/30" />}
-            <XAxis dataKey="date" {...commonAxisProps} />
+            <XAxis dataKey={lineXAxisKey} {...commonAxisProps} />
             <YAxis {...commonAxisProps} />
             {showTooltip && <Tooltip {...tooltipProps} />}
             {showLegend && <Legend {...legendProps} />}
-            <Line
-              type="monotone"
-              dataKey={dataKey}
-              stroke={chartColors[0]}
-              strokeWidth={strokeWidth}
-              dot={{ fill: chartColors[0], strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, strokeWidth: 0 }}
-              animationDuration={animate ? animationDuration : 0}
-            />
-            {chartData.some((d: any) => d.projected) && (
-              <Line
+            {hasMultipleLineSeries ? (
+              // Render multiple lines for multi-series data
+              dataKeys.map((key, index) => (
+                <Line
+                  key={key}
+                  type="monotone"
+                  dataKey={key}
+                  name={key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                  stroke={chartColors[index % chartColors.length]}
+                  strokeWidth={strokeWidth}
+                  dot={{ fill: chartColors[index % chartColors.length], strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, strokeWidth: 0 }}
+                  animationDuration={animate ? animationDuration : 0}
+                />
+              ))
+            ) : (
+              <>
+                <Line
+                  type="monotone"
+                  dataKey={dataKey}
+                  stroke={chartColors[0]}
+                  strokeWidth={strokeWidth}
+                  dot={{ fill: chartColors[0], strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, strokeWidth: 0 }}
+                  animationDuration={animate ? animationDuration : 0}
+                />
+                {chartData.some((d: any) => d.projected) && (
+                  <Line
+                    type="monotone"
+                    dataKey={dataKey}
+                    stroke={chartColors[0]}
+                    strokeWidth={strokeWidth}
+                    strokeDasharray="5 5"
+                    dot={false}
+                    data={chartData.filter((d: any) => d.projected)}
+                  />
+                )}
+              </>
+            )}
+            {showBrush && <Brush dataKey={lineXAxisKey} height={30} stroke={chartColors[0]} />}
+          </LineChart>
+        )
+      }
+
+      case "AREA":
+      case "STACKED_AREA": {
+        // Use the configured xAxisKey or try to detect if data has 'date' or 'name' key
+        const areaXAxisKey = chartData[0]?.date !== undefined ? "date" : xAxisKey
+        // Check if we have multiple series
+        const hasMultipleAreaSeries = dataKeys.length > 0 && chartData.some((d: any) => dataKeys.some(key => key in d))
+
+        return (
+          <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+            <defs>
+              {hasMultipleAreaSeries ? (
+                dataKeys.map((key, index) => (
+                  <linearGradient key={key} id={`colorGradient-${key}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={chartColors[index % chartColors.length]} stopOpacity={0.8} />
+                    <stop offset="95%" stopColor={chartColors[index % chartColors.length]} stopOpacity={0.1} />
+                  </linearGradient>
+                ))
+              ) : (
+                <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={chartColors[0]} stopOpacity={0.8} />
+                  <stop offset="95%" stopColor={chartColors[0]} stopOpacity={0.1} />
+                </linearGradient>
+              )}
+            </defs>
+            {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted/30" />}
+            <XAxis dataKey={areaXAxisKey} {...commonAxisProps} />
+            <YAxis {...commonAxisProps} />
+            {showTooltip && <Tooltip {...tooltipProps} />}
+            {showLegend && <Legend {...legendProps} />}
+            {hasMultipleAreaSeries ? (
+              dataKeys.map((key, index) => (
+                <Area
+                  key={key}
+                  type="monotone"
+                  dataKey={key}
+                  name={key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                  stroke={chartColors[index % chartColors.length]}
+                  strokeWidth={strokeWidth}
+                  fill={`url(#colorGradient-${key})`}
+                  stackId={type === "STACKED_AREA" ? "stack" : undefined}
+                  animationDuration={animate ? animationDuration : 0}
+                />
+              ))
+            ) : (
+              <Area
                 type="monotone"
                 dataKey={dataKey}
                 stroke={chartColors[0]}
                 strokeWidth={strokeWidth}
-                strokeDasharray="5 5"
-                dot={false}
-                data={chartData.filter((d: any) => d.projected)}
+                fill="url(#colorGradient)"
+                animationDuration={animate ? animationDuration : 0}
               />
             )}
-            {showBrush && <Brush dataKey="date" height={30} stroke={chartColors[0]} />}
-          </LineChart>
-        )
-
-      case "AREA":
-      case "STACKED_AREA":
-        return (
-          <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-            <defs>
-              <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={chartColors[0]} stopOpacity={0.8} />
-                <stop offset="95%" stopColor={chartColors[0]} stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted/30" />}
-            <XAxis dataKey="date" {...commonAxisProps} />
-            <YAxis {...commonAxisProps} />
-            {showTooltip && <Tooltip {...tooltipProps} />}
-            {showLegend && <Legend {...legendProps} />}
-            <Area
-              type="monotone"
-              dataKey={dataKey}
-              stroke={chartColors[0]}
-              strokeWidth={strokeWidth}
-              fill="url(#colorGradient)"
-              animationDuration={animate ? animationDuration : 0}
-            />
-            {showBrush && <Brush dataKey="date" height={30} stroke={chartColors[0]} />}
+            {showBrush && <Brush dataKey={areaXAxisKey} height={30} stroke={chartColors[0]} />}
           </AreaChart>
         )
+      }
 
       case "PIE":
         return (
