@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
     ])
 
     return NextResponse.json({
-      devices: devicesWithUsers,
+      devices,
       pagination: {
         page,
         limit,
