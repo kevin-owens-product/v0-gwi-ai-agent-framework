@@ -9,7 +9,6 @@ import {
   CheckCircle,
   AlertTriangle,
   Activity,
-  MoreHorizontal,
   Edit,
   MessageSquare,
   Users,
@@ -20,21 +19,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -60,6 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast } from "sonner"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Incident {
   id: string
@@ -128,6 +113,7 @@ export default function IncidentsPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null)
   const [newUpdate, setNewUpdate] = useState("")
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [newIncident, setNewIncident] = useState({
     title: "",
@@ -261,6 +247,164 @@ export default function IncidentsPage() {
   const activeIncidents = incidents.filter(
     (i) => !["RESOLVED", "POSTMORTEM"].includes(i.status)
   )
+
+  // Define columns for AdminDataTable
+  const columns: Column<Incident>[] = [
+    {
+      id: "incident",
+      header: "Incident",
+      cell: (incident) => (
+        <div>
+          <p className="font-medium">{incident.title}</p>
+          <p className="text-xs text-muted-foreground">
+            Started {new Date(incident.startedAt).toLocaleString()}
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: "severity",
+      header: "Severity",
+      cell: (incident) => getSeverityBadge(incident.severity),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (incident) => getStatusBadge(incident.status),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (incident) => <Badge variant="outline">{incident.type}</Badge>,
+    },
+    {
+      id: "affectedServices",
+      header: "Affected Services",
+      cell: (incident) => (
+        <div className="flex flex-wrap gap-1 max-w-[200px]">
+          {incident.affectedServices.slice(0, 2).map((service) => (
+            <Badge key={service} variant="secondary" className="text-xs">
+              {service}
+            </Badge>
+          ))}
+          {incident.affectedServices.length > 2 && (
+            <Badge variant="secondary" className="text-xs">
+              +{incident.affectedServices.length - 2}
+            </Badge>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "duration",
+      header: "Duration",
+      cell: (incident) =>
+        incident.resolvedAt ? (
+          <span className="text-xs text-muted-foreground">
+            {Math.round(
+              (new Date(incident.resolvedAt).getTime() -
+                new Date(incident.startedAt).getTime()) /
+                60000
+            )}{" "}
+            min
+          </span>
+        ) : (
+          <span className="text-xs text-yellow-500">Ongoing</span>
+        ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Incident>[] = [
+    {
+      label: "View Details",
+      icon: <ExternalLink className="h-4 w-4" />,
+      onClick: (incident) => setSelectedIncident(incident),
+    },
+    {
+      label: "Change Status",
+      icon: <Activity className="h-4 w-4" />,
+      onClick: (incident) => setSelectedIncident(incident),
+    },
+    {
+      label: "Add Update",
+      icon: <MessageSquare className="h-4 w-4" />,
+      onClick: (incident) => {
+        setSelectedIncident(incident)
+        setNewUpdate("")
+      },
+      separator: true,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Mark as Resolved",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: async (selectedIds) => {
+        try {
+          await Promise.all(
+            selectedIds.map((id) =>
+              fetch(`/api/admin/operations/incidents/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "RESOLVED" }),
+              })
+            )
+          )
+          toast.success(`${selectedIds.length} incident(s) marked as resolved`)
+          fetchIncidents()
+        } catch (error) {
+          toast.error("Failed to update incidents")
+        }
+      },
+      confirmTitle: "Mark Incidents as Resolved",
+      confirmDescription: "Are you sure you want to mark the selected incidents as resolved?",
+    },
+    {
+      label: "Mark as Monitoring",
+      icon: <Activity className="h-4 w-4" />,
+      onClick: async (selectedIds) => {
+        try {
+          await Promise.all(
+            selectedIds.map((id) =>
+              fetch(`/api/admin/operations/incidents/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "MONITORING" }),
+              })
+            )
+          )
+          toast.success(`${selectedIds.length} incident(s) marked as monitoring`)
+          fetchIncidents()
+        } catch (error) {
+          toast.error("Failed to update incidents")
+        }
+      },
+    },
+    {
+      label: "Mark as Investigating",
+      icon: <AlertTriangle className="h-4 w-4" />,
+      onClick: async (selectedIds) => {
+        try {
+          await Promise.all(
+            selectedIds.map((id) =>
+              fetch(`/api/admin/operations/incidents/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "INVESTIGATING" }),
+              })
+            )
+          )
+          toast.success(`${selectedIds.length} incident(s) marked as investigating`)
+          fetchIncidents()
+        } catch (error) {
+          toast.error("Failed to update incidents")
+        }
+      },
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -590,103 +734,18 @@ export default function IncidentsPage() {
       </Card>
 
       {/* Incidents Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Incident</TableHead>
-                <TableHead>Severity</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Affected Services</TableHead>
-                <TableHead>Duration</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={7}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredIncidents.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12">
-                    <CheckCircle className="h-12 w-12 mx-auto text-green-500 mb-4" />
-                    <p className="text-muted-foreground">No incidents found</p>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredIncidents.map((incident) => (
-                  <TableRow
-                    key={incident.id}
-                    className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => setSelectedIncident(incident)}
-                  >
-                    <TableCell>
-                      <div>
-                        <p className="font-medium">{incident.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Started {new Date(incident.startedAt).toLocaleString()}
-                        </p>
-                      </div>
-                    </TableCell>
-                    <TableCell>{getSeverityBadge(incident.severity)}</TableCell>
-                    <TableCell>{getStatusBadge(incident.status)}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{incident.type}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1 max-w-[200px]">
-                        {incident.affectedServices.slice(0, 2).map((service) => (
-                          <Badge key={service} variant="secondary" className="text-xs">
-                            {service}
-                          </Badge>
-                        ))}
-                        {incident.affectedServices.length > 2 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{incident.affectedServices.length - 2}
-                          </Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {incident.resolvedAt ? (
-                        <span className="text-xs text-muted-foreground">
-                          {Math.round(
-                            (new Date(incident.resolvedAt).getTime() -
-                              new Date(incident.startedAt).getTime()) /
-                              60000
-                          )}{" "}
-                          min
-                        </span>
-                      ) : (
-                        <span className="text-xs text-yellow-500">Ongoing</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setSelectedIncident(incident)
-                        }}
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <AdminDataTable
+        data={filteredIncidents}
+        columns={columns}
+        getRowId={(incident) => incident.id}
+        isLoading={loading}
+        emptyMessage="No incidents found"
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+        enableSelection={true}
+      />
     </div>
   )
 }

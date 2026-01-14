@@ -10,13 +10,12 @@ import {
   CheckCircle,
   Clock,
   AlertTriangle,
-  MoreHorizontal,
-  ExternalLink,
   RefreshCw,
   Tag,
   Play,
   Undo,
   XCircle,
+  Trash2,
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -24,21 +23,6 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -57,6 +41,7 @@ import {
 } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
 import { toast } from "sonner"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Release {
   id: string
@@ -116,6 +101,7 @@ export default function ReleasesPage() {
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [newRelease, setNewRelease] = useState({
     version: "",
@@ -261,6 +247,143 @@ export default function ReleasesPage() {
   const activeReleases = releases.filter((r) =>
     ["IN_DEVELOPMENT", "STAGING", "ROLLING_OUT"].includes(r.status)
   )
+
+  // Define columns for AdminDataTable
+  const columns: Column<Release>[] = [
+    {
+      id: "release",
+      header: "Release",
+      cell: (release) => (
+        <div>
+          <Link
+            href={`/admin/operations/releases/${release.id}`}
+            className="font-medium hover:underline"
+          >
+            v{release.version}
+            {release.name && (
+              <span className="text-muted-foreground ml-1">
+                ({release.name})
+              </span>
+            )}
+          </Link>
+          {release.description && (
+            <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+              {release.description}
+            </p>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (release) => getTypeBadge(release.type),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (release) => getStatusBadge(release.status),
+    },
+    {
+      id: "rollout",
+      header: "Rollout",
+      cell: (release) =>
+        release.status === "ROLLING_OUT" ? (
+          <div className="flex items-center gap-2">
+            <Progress value={release.rolloutPercentage} className="w-16" />
+            <span className="text-xs">{release.rolloutPercentage}%</span>
+          </div>
+        ) : (
+          <Badge variant="outline">{release.rolloutStrategy.replace("_", " ")}</Badge>
+        ),
+    },
+    {
+      id: "planned",
+      header: "Planned",
+      cell: (release) =>
+        release.plannedDate ? (
+          <div className="flex items-center gap-1 text-sm">
+            <Calendar className="h-3 w-3" />
+            {new Date(release.plannedDate).toLocaleDateString()}
+          </div>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        ),
+    },
+    {
+      id: "features",
+      header: "Features",
+      cell: (release) => (
+        <div className="flex gap-1">
+          {Array.isArray(release.features) && release.features.length > 0 && (
+            <Badge variant="secondary" className="text-xs">
+              {release.features.length} features
+            </Badge>
+          )}
+          {Array.isArray(release.bugFixes) && release.bugFixes.length > 0 && (
+            <Badge variant="secondary" className="text-xs">
+              {release.bugFixes.length} fixes
+            </Badge>
+          )}
+        </div>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Release>[] = [
+    {
+      label: "Start Rollout",
+      icon: <Play className="h-4 w-4" />,
+      onClick: (release) => handleUpdateStatus(release.id, "ROLLING_OUT"),
+      hidden: (release) => release.status !== "STAGING",
+    },
+    {
+      label: "Complete",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (release) => handleUpdateStatus(release.id, "COMPLETED"),
+      hidden: (release) => release.status !== "ROLLING_OUT",
+    },
+    {
+      label: "Rollback",
+      icon: <Undo className="h-4 w-4" />,
+      onClick: (release) => handleUpdateStatus(release.id, "ROLLBACK"),
+      variant: "destructive" as const,
+      hidden: (release) => release.status !== "ROLLING_OUT",
+    },
+    {
+      label: "Cancel",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (release) => handleUpdateStatus(release.id, "CANCELLED"),
+      hidden: (release) => !["PLANNED", "IN_DEVELOPMENT"].includes(release.status),
+    },
+  ]
+
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: async (ids) => {
+        for (const id of ids) {
+          try {
+            const response = await fetch(`/api/admin/operations/releases/${id}`, {
+              method: "DELETE",
+            })
+            if (!response.ok) {
+              throw new Error("Failed to delete release")
+            }
+          } catch (error) {
+            toast.error(`Failed to delete release ${id}`)
+          }
+        }
+        toast.success(`Deleted ${ids.length} release${ids.length !== 1 ? "s" : ""}`)
+        fetchReleases()
+      },
+      variant: "destructive",
+      confirmTitle: "Delete Releases",
+      confirmDescription: "Are you sure you want to delete the selected releases? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -517,187 +640,27 @@ export default function ReleasesPage() {
       </Card>
 
       {/* Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Release</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Rollout</TableHead>
-                <TableHead>Planned</TableHead>
-                <TableHead>Features</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={7}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredReleases.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12">
-                    <Tag className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No releases found</p>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredReleases.map((release) => (
-                  <TableRow key={release.id}>
-                    <TableCell>
-                      <div>
-                        <Link
-                          href={`/admin/operations/releases/${release.id}`}
-                          className="font-medium hover:underline"
-                        >
-                          v{release.version}
-                          {release.name && (
-                            <span className="text-muted-foreground ml-1">
-                              ({release.name})
-                            </span>
-                          )}
-                        </Link>
-                        {release.description && (
-                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                            {release.description}
-                          </p>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>{getTypeBadge(release.type)}</TableCell>
-                    <TableCell>{getStatusBadge(release.status)}</TableCell>
-                    <TableCell>
-                      {release.status === "ROLLING_OUT" ? (
-                        <div className="flex items-center gap-2">
-                          <Progress value={release.rolloutPercentage} className="w-16" />
-                          <span className="text-xs">{release.rolloutPercentage}%</span>
-                        </div>
-                      ) : (
-                        <Badge variant="outline">{release.rolloutStrategy.replace("_", " ")}</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {release.plannedDate ? (
-                        <div className="flex items-center gap-1 text-sm">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(release.plannedDate).toLocaleDateString()}
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        {Array.isArray(release.features) && release.features.length > 0 && (
-                          <Badge variant="secondary" className="text-xs">
-                            {release.features.length} features
-                          </Badge>
-                        )}
-                        {Array.isArray(release.bugFixes) && release.bugFixes.length > 0 && (
-                          <Badge variant="secondary" className="text-xs">
-                            {release.bugFixes.length} fixes
-                          </Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/operations/releases/${release.id}`}>
-                              <ExternalLink className="h-4 w-4 mr-2" />
-                              View Details
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          {release.status === "STAGING" && (
-                            <DropdownMenuItem
-                              onClick={() => handleUpdateStatus(release.id, "ROLLING_OUT")}
-                            >
-                              <Play className="h-4 w-4 mr-2" />
-                              Start Rollout
-                            </DropdownMenuItem>
-                          )}
-                          {release.status === "ROLLING_OUT" && (
-                            <>
-                              <DropdownMenuItem
-                                onClick={() => handleUpdateStatus(release.id, "COMPLETED")}
-                              >
-                                <CheckCircle className="h-4 w-4 mr-2" />
-                                Complete
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleUpdateStatus(release.id, "ROLLBACK")}
-                                className="text-red-500"
-                              >
-                                <Undo className="h-4 w-4 mr-2" />
-                                Rollback
-                              </DropdownMenuItem>
-                            </>
-                          )}
-                          {["PLANNED", "IN_DEVELOPMENT"].includes(release.status) && (
-                            <DropdownMenuItem
-                              onClick={() => handleUpdateStatus(release.id, "CANCELLED")}
-                            >
-                              <XCircle className="h-4 w-4 mr-2" />
-                              Cancel
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-red-500"
-                            onClick={() => handleDelete(release.id)}
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
+      <AdminDataTable
+        data={filteredReleases}
+        columns={columns}
+        getRowId={(release) => release.id}
+        isLoading={loading}
+        emptyMessage="No releases found"
+        viewHref={(release) => `/admin/operations/releases/${release.id}`}
+        onDelete={handleDelete}
+        deleteConfirmTitle="Delete Release"
+        deleteConfirmDescription={(release) =>
+          `Are you sure you want to delete release v${release.version}? This action cannot be undone.`
+        }
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={setPage}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+      />
     </div>
   )
 }

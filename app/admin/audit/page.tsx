@@ -6,14 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -30,7 +22,6 @@ import {
 import {
   FileText,
   Search,
-  Loader2,
   RefreshCw,
   User,
   Building2,
@@ -38,6 +29,7 @@ import {
   Clock,
   Eye,
 } from "lucide-react"
+import { AdminDataTable, Column, RowAction } from "@/components/admin/data-table"
 
 interface AuditLog {
   id: string
@@ -84,6 +76,23 @@ export default function AuditLogPage() {
   const [selectedLog, setSelectedLog] = useState<AuditLog | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
 
+  const getActionBadge = (action: string) => {
+    const color = actionColors[action] || "bg-secondary"
+    return (
+      <Badge className={`${color} text-white`}>
+        {action.replace(/_/g, " ")}
+      </Badge>
+    )
+  }
+
+  const formatTimestamp = (timestamp: string) => {
+    const date = new Date(timestamp)
+    return {
+      date: date.toLocaleDateString(),
+      time: date.toLocaleTimeString(),
+    }
+  }
+
   const fetchLogs = useCallback(async () => {
     setIsLoading(true)
     try {
@@ -113,22 +122,103 @@ export default function AuditLogPage() {
     return () => clearTimeout(debounce)
   }, [fetchLogs])
 
-  const getActionBadge = (action: string) => {
-    const color = actionColors[action] || "bg-secondary"
-    return (
-      <Badge className={`${color} text-white`}>
-        {action.replace(/_/g, " ")}
-      </Badge>
-    )
-  }
+  // Define columns for AdminDataTable
+  const columns: Column<AuditLog>[] = [
+    {
+      id: "timestamp",
+      header: "Timestamp",
+      cell: (log) => {
+        const { date, time } = formatTimestamp(log.timestamp)
+        return (
+          <div className="flex items-center gap-2">
+            <Clock className="h-3 w-3 text-muted-foreground" />
+            <div>
+              <p className="text-sm">{date}</p>
+              <p className="text-xs text-muted-foreground">{time}</p>
+            </div>
+          </div>
+        )
+      },
+    },
+    {
+      id: "admin",
+      header: "Admin",
+      cell: (log) => {
+        if (log.admin) {
+          return (
+            <div className="flex items-center gap-2">
+              <User className="h-3 w-3 text-muted-foreground" />
+              <div>
+                <p className="text-sm font-medium">{log.admin.name}</p>
+                <p className="text-xs text-muted-foreground">{log.admin.email}</p>
+              </div>
+            </div>
+          )
+        }
+        return <span className="text-muted-foreground">System</span>
+      },
+    },
+    {
+      id: "action",
+      header: "Action",
+      cell: (log) => getActionBadge(log.action),
+    },
+    {
+      id: "resource",
+      header: "Resource",
+      cell: (log) => <Badge variant="outline">{log.resourceType}</Badge>,
+    },
+    {
+      id: "target",
+      header: "Target",
+      cell: (log) => (
+        <div className="flex flex-col gap-1">
+          {log.targetOrgId && (
+            <div className="flex items-center gap-1 text-xs">
+              <Building2 className="h-3 w-3" />
+              <span className="truncate max-w-[100px]">{log.targetOrgId}</span>
+            </div>
+          )}
+          {log.targetUserId && (
+            <div className="flex items-center gap-1 text-xs">
+              <User className="h-3 w-3" />
+              <span className="truncate max-w-[100px]">{log.targetUserId}</span>
+            </div>
+          )}
+          {!log.targetOrgId && !log.targetUserId && (
+            <span className="text-muted-foreground">-</span>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "ipAddress",
+      header: "IP Address",
+      cell: (log) => {
+        if (log.ipAddress) {
+          return (
+            <div className="flex items-center gap-1 text-xs">
+              <Globe className="h-3 w-3 text-muted-foreground" />
+              {log.ipAddress}
+            </div>
+          )
+        }
+        return <span className="text-muted-foreground">-</span>
+      },
+    },
+  ]
 
-  const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp)
-    return {
-      date: date.toLocaleDateString(),
-      time: date.toLocaleTimeString(),
-    }
-  }
+  // Define row actions for AdminDataTable
+  const rowActions: RowAction<AuditLog>[] = [
+    {
+      label: "View Details",
+      icon: <Eye className="h-4 w-4" />,
+      onClick: (log) => {
+        setSelectedLog(log)
+        setSheetOpen(true)
+      },
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -190,138 +280,19 @@ export default function AuditLogPage() {
           </div>
 
           {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead>Admin</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead>Resource</TableHead>
-                  <TableHead>Target</TableHead>
-                  <TableHead>IP Address</TableHead>
-                  <TableHead className="text-right">Details</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : logs.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No audit logs found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  logs.map((log) => {
-                    const { date, time } = formatTimestamp(log.timestamp)
-                    return (
-                      <TableRow key={log.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-3 w-3 text-muted-foreground" />
-                            <div>
-                              <p className="text-sm">{date}</p>
-                              <p className="text-xs text-muted-foreground">{time}</p>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {log.admin ? (
-                            <div className="flex items-center gap-2">
-                              <User className="h-3 w-3 text-muted-foreground" />
-                              <div>
-                                <p className="text-sm font-medium">{log.admin.name}</p>
-                                <p className="text-xs text-muted-foreground">{log.admin.email}</p>
-                              </div>
-                            </div>
-                          ) : (
-                            <span className="text-muted-foreground">System</span>
-                          )}
-                        </TableCell>
-                        <TableCell>{getActionBadge(log.action)}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{log.resourceType}</Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col gap-1">
-                            {log.targetOrgId && (
-                              <div className="flex items-center gap-1 text-xs">
-                                <Building2 className="h-3 w-3" />
-                                <span className="truncate max-w-[100px]">{log.targetOrgId}</span>
-                              </div>
-                            )}
-                            {log.targetUserId && (
-                              <div className="flex items-center gap-1 text-xs">
-                                <User className="h-3 w-3" />
-                                <span className="truncate max-w-[100px]">{log.targetUserId}</span>
-                              </div>
-                            )}
-                            {!log.targetOrgId && !log.targetUserId && (
-                              <span className="text-muted-foreground">-</span>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {log.ipAddress ? (
-                            <div className="flex items-center gap-1 text-xs">
-                              <Globe className="h-3 w-3 text-muted-foreground" />
-                              {log.ipAddress}
-                            </div>
-                          ) : (
-                            <span className="text-muted-foreground">-</span>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedLog(log)
-                              setSheetOpen(true)
-                            }}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          <AdminDataTable
+            data={logs}
+            columns={columns}
+            getRowId={(log) => log.id}
+            isLoading={isLoading}
+            emptyMessage="No audit logs found"
+            rowActions={rowActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            enableSelection={false}
+          />
         </CardContent>
       </Card>
 

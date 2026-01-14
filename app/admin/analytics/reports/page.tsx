@@ -7,41 +7,24 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import {
   FileText,
   Plus,
   Loader2,
   RefreshCw,
-  Eye,
   Play,
   Trash2,
-  MoreVertical,
   Search,
   Calendar,
   Clock,
   Filter,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -85,6 +68,7 @@ export default function CustomReportsPage() {
   const [pagination, setPagination] = useState<Pagination | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [runningReportId, setRunningReportId] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   // Filter state
   const [filterType, setFilterType] = useState<string>("all")
@@ -159,16 +143,29 @@ export default function CustomReportsPage() {
     }
   }
 
-  const handleDeleteReport = async (reportId: string) => {
-    if (!confirm("Are you sure you want to delete this report?")) return
-
+  const handleDeleteReport = async (report: CustomReport) => {
     try {
-      await fetch(`/api/admin/analytics/reports/${reportId}`, {
+      await fetch(`/api/admin/analytics/reports/${report.id}`, {
         method: "DELETE",
       })
       fetchReports()
     } catch (error) {
       console.error("Failed to delete report:", error)
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map(id =>
+          fetch(`/api/admin/analytics/reports/${id}`, {
+            method: "DELETE",
+          })
+        )
+      )
+      fetchReports()
+    } catch (error) {
+      console.error("Failed to bulk delete reports:", error)
     }
   }
 
@@ -193,6 +190,108 @@ export default function CustomReportsPage() {
     }
     return schedules[schedule] || schedule
   }
+
+  // Define columns for AdminDataTable
+  const columns: Column<CustomReport>[] = [
+    {
+      id: "report",
+      header: "Report",
+      cell: (report) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <FileText className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <p className="font-medium">{report.name}</p>
+            {report.description && (
+              <p className="text-xs text-muted-foreground line-clamp-1">
+                {report.description}
+              </p>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (report) => (
+        <Badge className={getTypeColor(report.type)}>
+          {report.type}
+        </Badge>
+      ),
+    },
+    {
+      id: "schedule",
+      header: "Schedule",
+      cell: (report) => (
+        <div className="flex items-center gap-1 text-sm">
+          <Clock className="h-3 w-3 text-muted-foreground" />
+          {formatSchedule(report.schedule)}
+        </div>
+      ),
+    },
+    {
+      id: "lastRun",
+      header: "Last Run",
+      cell: (report) =>
+        report.lastRunAt ? (
+          <div className="flex items-center gap-1 text-sm">
+            <Calendar className="h-3 w-3 text-muted-foreground" />
+            {new Date(report.lastRunAt).toLocaleDateString()}
+          </div>
+        ) : (
+          <span className="text-muted-foreground text-sm">Never</span>
+        ),
+    },
+    {
+      id: "nextRun",
+      header: "Next Run",
+      cell: (report) =>
+        report.nextRunAt ? (
+          <div className="flex items-center gap-1 text-sm">
+            <Calendar className="h-3 w-3 text-muted-foreground" />
+            {new Date(report.nextRunAt).toLocaleDateString()}
+          </div>
+        ) : (
+          <span className="text-muted-foreground text-sm">-</span>
+        ),
+    },
+    {
+      id: "active",
+      header: "Active",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (report) => (
+        <Switch
+          checked={report.isActive}
+          onCheckedChange={() => handleToggleActive(report)}
+        />
+      ),
+    },
+  ]
+
+  // Define row actions (created dynamically to access current runningReportId)
+  const rowActions: RowAction<CustomReport>[] = [
+    {
+      label: "Run Now",
+      icon: <Play className="h-4 w-4" />,
+      onClick: (report) => handleRunReport(report.id),
+      hidden: (report) => !report.isActive,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      confirmTitle: "Delete Reports",
+      confirmDescription: "Are you sure you want to delete the selected reports? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -341,175 +440,28 @@ export default function CustomReportsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Report</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Schedule</TableHead>
-                  <TableHead>Last Run</TableHead>
-                  <TableHead>Next Run</TableHead>
-                  <TableHead className="text-center">Active</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : reports.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No reports found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  reports.map((report) => (
-                    <TableRow key={report.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <FileText className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{report.name}</p>
-                            {report.description && (
-                              <p className="text-xs text-muted-foreground line-clamp-1">
-                                {report.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getTypeColor(report.type)}>
-                          {report.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1 text-sm">
-                          <Clock className="h-3 w-3 text-muted-foreground" />
-                          {formatSchedule(report.schedule)}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {report.lastRunAt ? (
-                          <div className="flex items-center gap-1 text-sm">
-                            <Calendar className="h-3 w-3 text-muted-foreground" />
-                            {new Date(report.lastRunAt).toLocaleDateString()}
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground text-sm">Never</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {report.nextRunAt ? (
-                          <div className="flex items-center gap-1 text-sm">
-                            <Calendar className="h-3 w-3 text-muted-foreground" />
-                            {new Date(report.nextRunAt).toLocaleDateString()}
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground text-sm">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Switch
-                          checked={report.isActive}
-                          onCheckedChange={() => handleToggleActive(report)}
-                        />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRunReport(report.id)}
-                            disabled={runningReportId === report.id || !report.isActive}
-                          >
-                            {runningReportId === report.id ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Play className="h-4 w-4" />
-                            )}
-                          </Button>
-                          <Button variant="ghost" size="sm" asChild>
-                            <Link href={`/admin/analytics/reports/${report.id}`}>
-                              <Eye className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/analytics/reports/${report.id}`}>
-                                  <Eye className="h-4 w-4 mr-2" />
-                                  View Details
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleRunReport(report.id)}
-                                disabled={!report.isActive}
-                              >
-                                <Play className="h-4 w-4 mr-2" />
-                                Run Now
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="text-destructive"
-                                onClick={() => handleDeleteReport(report.id)}
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {pagination && pagination.totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Showing {((pagination.page - 1) * pagination.limit) + 1} to{" "}
-                {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
-                {pagination.total} reports
-              </p>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm">
-                  Page {pagination.page} of {pagination.totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(p => Math.min(pagination.totalPages, p + 1))}
-                  disabled={currentPage === pagination.totalPages}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          )}
+          <AdminDataTable
+            data={reports}
+            columns={columns}
+            getRowId={(report) => report.id}
+            isLoading={isLoading}
+            emptyMessage="No reports found"
+            viewHref={(report) => `/admin/analytics/reports/${report.id}`}
+            onDelete={handleDeleteReport}
+            deleteConfirmTitle="Delete Report"
+            deleteConfirmDescription={(report) =>
+              `Are you sure you want to delete "${report.name}"? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={pagination?.page || 1}
+            totalPages={pagination?.totalPages || 1}
+            total={pagination?.total}
+            onPageChange={setCurrentPage}
+            enableSelection={true}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
     </div>

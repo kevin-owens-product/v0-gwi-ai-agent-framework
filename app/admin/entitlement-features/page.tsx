@@ -9,14 +9,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -31,16 +23,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import {
   Search,
-  MoreHorizontal,
   Sparkles,
   Pencil,
   Trash2,
@@ -97,10 +82,12 @@ export default function FeaturesPage() {
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
 
+  // Selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+
   // Dialog states
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -206,28 +193,6 @@ export default function FeaturesPage() {
     }
   }
 
-  const handleDelete = async () => {
-    if (!selectedFeature) return
-    setIsSubmitting(true)
-    try {
-      const response = await fetch(`/api/admin/entitlement-features/${selectedFeature.id}`, {
-        method: "DELETE",
-      })
-      if (response.ok) {
-        setDeleteDialogOpen(false)
-        setSelectedFeature(null)
-        fetchFeatures()
-      } else {
-        const data = await response.json()
-        alert(data.error || "Failed to delete feature")
-      }
-    } catch (error) {
-      console.error("Failed to delete feature:", error)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   const openEditDialog = (feature: Feature) => {
     setSelectedFeature(feature)
     setFormData({
@@ -257,6 +222,138 @@ export default function FeaturesPage() {
     }
     return colors[category] || "bg-gray-500"
   }
+
+  // Handle delete for AdminDataTable
+  const handleDeleteFeature = async (feature: Feature) => {
+    try {
+      const response = await fetch(`/api/admin/entitlement-features/${feature.id}`, {
+        method: "DELETE",
+      })
+      if (response.ok) {
+        fetchFeatures()
+      } else {
+        const data = await response.json()
+        alert(data.error || "Failed to delete feature")
+      }
+    } catch (error) {
+      console.error("Failed to delete feature:", error)
+      throw error
+    }
+  }
+
+  // Handle bulk enable/disable
+  const handleBulkToggleActive = async (ids: string[], isActive: boolean) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/entitlement-features/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isActive }),
+          })
+        )
+      )
+      fetchFeatures()
+    } catch (error) {
+      console.error("Failed to bulk update features:", error)
+      throw error
+    }
+  }
+
+  // Column definitions
+  const columns: Column<Feature>[] = [
+    {
+      id: "feature",
+      header: "Feature",
+      cell: (feature) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Sparkles className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <p className="font-medium">{feature.name}</p>
+            <p className="text-xs text-muted-foreground font-mono">{feature.key}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "category",
+      header: "Category",
+      cell: (feature) => (
+        <Badge className={getCategoryBadgeColor(feature.category)}>
+          {feature.category}
+        </Badge>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (feature) => <Badge variant="outline">{feature.valueType}</Badge>,
+    },
+    {
+      id: "default",
+      header: "Default",
+      cell: (feature) => (
+        <span className="font-mono text-sm">
+          {typeof feature.defaultValue === "boolean"
+            ? feature.defaultValue ? "true" : "false"
+            : String(feature.defaultValue)}
+        </span>
+      ),
+    },
+    {
+      id: "plans",
+      header: "Plans",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (feature) => <Badge variant="outline">{feature._count.plans}</Badge>,
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (feature) =>
+        feature.isActive ? (
+          <Badge variant="default" className="bg-green-500">
+            <Check className="h-3 w-3 mr-1" />
+            Active
+          </Badge>
+        ) : (
+          <Badge variant="secondary">
+            <X className="h-3 w-3 mr-1" />
+            Inactive
+          </Badge>
+        ),
+    },
+  ]
+
+  // Row actions
+  const rowActions: RowAction<Feature>[] = [
+    {
+      label: "Edit Feature",
+      icon: <Pencil className="h-4 w-4" />,
+      onClick: openEditDialog,
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Enable Selected",
+      icon: <Check className="h-4 w-4" />,
+      onClick: (ids) => handleBulkToggleActive(ids, true),
+      confirmTitle: "Enable Features",
+      confirmDescription: "Are you sure you want to enable the selected features?",
+    },
+    {
+      label: "Disable Selected",
+      icon: <X className="h-4 w-4" />,
+      onClick: (ids) => handleBulkToggleActive(ids, false),
+      confirmTitle: "Disable Features",
+      confirmDescription: "Are you sure you want to disable the selected features?",
+      separator: true,
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -319,138 +416,34 @@ export default function FeaturesPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Feature</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Default</TableHead>
-                  <TableHead className="text-center">Plans</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : features.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No features found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  features.map((feature) => (
-                    <TableRow key={feature.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Sparkles className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{feature.name}</p>
-                            <p className="text-xs text-muted-foreground font-mono">{feature.key}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getCategoryBadgeColor(feature.category)}>
-                          {feature.category}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{feature.valueType}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <span className="font-mono text-sm">
-                          {typeof feature.defaultValue === "boolean"
-                            ? feature.defaultValue ? "true" : "false"
-                            : String(feature.defaultValue)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge variant="outline">{feature._count.plans}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        {feature.isActive ? (
-                          <Badge variant="default" className="bg-green-500">
-                            <Check className="h-3 w-3 mr-1" />
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary">
-                            <X className="h-3 w-3 mr-1" />
-                            Inactive
-                          </Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => openEditDialog(feature)}>
-                              <Pencil className="h-4 w-4 mr-2" />
-                              Edit Feature
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-destructive"
-                              onClick={() => {
-                                setSelectedFeature(feature)
-                                setDeleteDialogOpen(true)
-                              }}
-                              disabled={feature._count.plans > 0}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* AdminDataTable */}
+          <AdminDataTable
+            data={features}
+            columns={columns}
+            getRowId={(feature) => feature.id}
+            isLoading={isLoading}
+            emptyMessage="No features found"
+            rowActions={rowActions}
+            onDelete={(feature) => {
+              // Check if feature is used in plans before deleting
+              if (feature._count.plans > 0) {
+                alert(`Cannot delete this feature as it is used by ${feature._count.plans} plan(s)`)
+                return Promise.reject(new Error("Feature is in use"))
+              }
+              return handleDeleteFeature(feature)
+            }}
+            deleteConfirmTitle="Delete Feature"
+            deleteConfirmDescription={(feature) =>
+              `Are you sure you want to delete "${feature.name}"? This action cannot be undone.`
+            }
+            bulkActions={bulkActions}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+          />
         </CardContent>
       </Card>
 
@@ -612,36 +605,6 @@ export default function FeaturesPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Feature</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete &quot;{selectedFeature?.name}&quot;? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                "Delete Feature"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

@@ -13,10 +13,8 @@ import {
   XCircle,
   Users,
   Building2,
-  MoreHorizontal,
   Edit,
   Trash,
-  Eye,
   Calendar,
   Filter,
   Loader2,
@@ -30,21 +28,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Select,
   SelectContent,
@@ -62,6 +45,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import { toast } from "sonner"
 
 interface BroadcastMessage {
@@ -134,6 +118,9 @@ export default function BroadcastMessagesPage() {
   const [search, setSearch] = useState(searchParams.get("search") || "")
   const [typeFilter, setTypeFilter] = useState(searchParams.get("type") || "all")
   const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "all")
+
+  // Selection
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   // Delete dialog
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -241,6 +228,52 @@ export default function BroadcastMessagesPage() {
     }
   }
 
+  const handleBulkSend = async (ids: string[]) => {
+    try {
+      const results = await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/broadcast/messages/${id}/send`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({}),
+          })
+        )
+      )
+
+      const failed = results.filter((r) => !r.ok)
+      if (failed.length > 0) {
+        toast.error(`Failed to send ${failed.length} message(s)`)
+      } else {
+        toast.success(`Successfully sent ${ids.length} message(s)`)
+      }
+      fetchMessages()
+    } catch (error) {
+      toast.error("Failed to send messages")
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      const results = await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/broadcast/messages/${id}`, {
+            method: "DELETE",
+          })
+        )
+      )
+
+      const failed = results.filter((r) => !r.ok)
+      if (failed.length > 0) {
+        toast.error(`Failed to delete ${failed.length} message(s)`)
+      } else {
+        toast.success(`Successfully deleted ${ids.length} message(s)`)
+      }
+      fetchMessages()
+    } catch (error) {
+      toast.error("Failed to delete messages")
+    }
+  }
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "SENT":
@@ -306,6 +339,177 @@ export default function BroadcastMessagesPage() {
       </Badge>
     )
   }
+
+  // Define columns for the data table
+  const columns: Column<BroadcastMessage>[] = [
+    {
+      id: "title",
+      header: "Title",
+      cell: (message) => (
+        <Link
+          href={`/admin/broadcast/messages/${message.id}`}
+          className="hover:underline"
+        >
+          <div>
+            <p className="font-medium">{message.title}</p>
+            <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+              {message.content}
+            </p>
+          </div>
+        </Link>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (message) => getTypeBadge(message.type),
+    },
+    {
+      id: "priority",
+      header: "Priority",
+      cell: (message) => getPriorityBadge(message.priority),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (message) => getStatusBadge(message.status),
+    },
+    {
+      id: "target",
+      header: "Target",
+      cell: (message) => (
+        <div className="flex items-center gap-1">
+          {message.targetType === "ALL" ? (
+            <Users className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <Building2 className="h-4 w-4 text-muted-foreground" />
+          )}
+          <span className="text-xs">
+            {message.targetType.replace(/_/g, " ")}
+          </span>
+        </div>
+      ),
+    },
+    {
+      id: "channels",
+      header: "Channels",
+      cell: (message) => (
+        <div className="flex gap-1">
+          {message.channels.map((channel) => {
+            const Icon = channelIcons[channel] || Bell
+            return (
+              <div
+                key={channel}
+                className="h-6 w-6 rounded bg-muted flex items-center justify-center"
+                title={channel}
+              >
+                <Icon className="h-3 w-3" />
+              </div>
+            )
+          })}
+        </div>
+      ),
+    },
+    {
+      id: "delivery",
+      header: "Delivery",
+      cell: (message) => {
+        if (message.status === "SENT") {
+          return (
+            <div className="text-xs">
+              <p>{message.delivered.toLocaleString()} delivered</p>
+              <p className="text-muted-foreground">
+                {message.opened} opened (
+                {message.totalRecipients > 0
+                  ? Math.round((message.opened / message.totalRecipients) * 100)
+                  : 0}
+                %)
+              </p>
+            </div>
+          )
+        } else if (message.totalRecipients > 0) {
+          return (
+            <span className="text-xs text-muted-foreground">
+              {message.totalRecipients.toLocaleString()} recipients
+            </span>
+          )
+        } else {
+          return <span className="text-xs text-muted-foreground">-</span>
+        }
+      },
+    },
+    {
+      id: "date",
+      header: "Date",
+      cell: (message) => (
+        <div className="text-xs">
+          {message.sentAt
+            ? new Date(message.sentAt).toLocaleDateString()
+            : message.scheduledFor
+              ? `Scheduled: ${new Date(message.scheduledFor).toLocaleDateString()}`
+              : new Date(message.createdAt).toLocaleDateString()}
+        </div>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<BroadcastMessage>[] = [
+    {
+      label: "Edit",
+      icon: <Edit className="h-4 w-4" />,
+      href: (message) => `/admin/broadcast/messages/${message.id}/edit`,
+      hidden: (message) => message.status !== "DRAFT",
+    },
+    {
+      label: "Send Now",
+      icon: <Send className="h-4 w-4" />,
+      onClick: (message) => handleSendMessage(message.id),
+      hidden: (message) => message.status !== "DRAFT",
+    },
+    {
+      label: "Schedule",
+      icon: <Calendar className="h-4 w-4" />,
+      href: (message) => `/admin/broadcast/messages/${message.id}?schedule=true`,
+      hidden: (message) => message.status !== "DRAFT",
+    },
+    {
+      label: "Cancel",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (message) => handleCancelMessage(message.id),
+      hidden: (message) => message.status !== "SCHEDULED",
+    },
+    {
+      label: "Delete",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: (message) => {
+        setMessageToDelete(message)
+        setDeleteDialogOpen(true)
+      },
+      variant: "destructive",
+      separator: true,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Send Selected",
+      icon: <Send className="h-4 w-4" />,
+      onClick: handleBulkSend,
+      confirmTitle: "Send Multiple Messages",
+      confirmDescription: "Are you sure you want to send the selected messages? This action cannot be undone.",
+    },
+    {
+      label: "Delete Selected",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Multiple Messages",
+      confirmDescription: "Are you sure you want to delete the selected messages? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -415,209 +619,34 @@ export default function BroadcastMessagesPage() {
       </Card>
 
       {/* Messages Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Target</TableHead>
-                <TableHead>Channels</TableHead>
-                <TableHead>Delivery</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={9}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : messages.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={9} className="text-center py-12">
-                    <Megaphone className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No broadcast messages found</p>
-                    <Button variant="outline" className="mt-4" asChild>
-                      <Link href="/admin/broadcast/messages/new">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Create First Broadcast
-                      </Link>
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                messages.map((message) => (
-                  <TableRow key={message.id}>
-                    <TableCell>
-                      <Link
-                        href={`/admin/broadcast/messages/${message.id}`}
-                        className="hover:underline"
-                      >
-                        <div>
-                          <p className="font-medium">{message.title}</p>
-                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                            {message.content}
-                          </p>
-                        </div>
-                      </Link>
-                    </TableCell>
-                    <TableCell>{getTypeBadge(message.type)}</TableCell>
-                    <TableCell>{getPriorityBadge(message.priority)}</TableCell>
-                    <TableCell>{getStatusBadge(message.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        {message.targetType === "ALL" ? (
-                          <Users className="h-4 w-4 text-muted-foreground" />
-                        ) : (
-                          <Building2 className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <span className="text-xs">
-                          {message.targetType.replace(/_/g, " ")}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        {message.channels.map((channel) => {
-                          const Icon = channelIcons[channel] || Bell
-                          return (
-                            <div
-                              key={channel}
-                              className="h-6 w-6 rounded bg-muted flex items-center justify-center"
-                              title={channel}
-                            >
-                              <Icon className="h-3 w-3" />
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {message.status === "SENT" ? (
-                        <div className="text-xs">
-                          <p>{message.delivered.toLocaleString()} delivered</p>
-                          <p className="text-muted-foreground">
-                            {message.opened} opened (
-                            {message.totalRecipients > 0
-                              ? Math.round((message.opened / message.totalRecipients) * 100)
-                              : 0}
-                            %)
-                          </p>
-                        </div>
-                      ) : message.totalRecipients > 0 ? (
-                        <span className="text-xs text-muted-foreground">
-                          {message.totalRecipients.toLocaleString()} recipients
-                        </span>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-xs">
-                        {message.sentAt
-                          ? new Date(message.sentAt).toLocaleDateString()
-                          : message.scheduledFor
-                            ? `Scheduled: ${new Date(message.scheduledFor).toLocaleDateString()}`
-                            : new Date(message.createdAt).toLocaleDateString()}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/broadcast/messages/${message.id}`}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </Link>
-                          </DropdownMenuItem>
-                          {message.status === "DRAFT" && (
-                            <>
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/broadcast/messages/${message.id}/edit`}>
-                                  <Edit className="h-4 w-4 mr-2" />
-                                  Edit
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleSendMessage(message.id)}>
-                                <Send className="h-4 w-4 mr-2" />
-                                Send Now
-                              </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/broadcast/messages/${message.id}?schedule=true`}>
-                                  <Calendar className="h-4 w-4 mr-2" />
-                                  Schedule
-                                </Link>
-                              </DropdownMenuItem>
-                            </>
-                          )}
-                          {message.status === "SCHEDULED" && (
-                            <DropdownMenuItem onClick={() => handleCancelMessage(message.id)}>
-                              <XCircle className="h-4 w-4 mr-2" />
-                              Cancel
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => {
-                              setMessageToDelete(message)
-                              setDeleteDialogOpen(true)
-                            }}
-                          >
-                            <Trash className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
-            {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} messages
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page <= 1}
-              onClick={() => setPagination((p) => ({ ...p, page: p.page - 1 }))}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page >= pagination.totalPages}
-              onClick={() => setPagination((p) => ({ ...p, page: p.page + 1 }))}
-            >
-              Next
+      <AdminDataTable
+        data={messages}
+        columns={columns}
+        getRowId={(message) => message.id}
+        isLoading={loading}
+        emptyMessage={
+          <div className="text-center py-8">
+            <Megaphone className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">No broadcast messages found</p>
+            <Button variant="outline" className="mt-4" asChild>
+              <Link href="/admin/broadcast/messages/new">
+                <Plus className="h-4 w-4 mr-2" />
+                Create First Broadcast
+              </Link>
             </Button>
           </div>
-        </div>
-      )}
+        }
+        viewHref={(message) => `/admin/broadcast/messages/${message.id}`}
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        total={pagination.total}
+        onPageChange={(page) => setPagination((p) => ({ ...p, page }))}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+        enableSelection={true}
+      />
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

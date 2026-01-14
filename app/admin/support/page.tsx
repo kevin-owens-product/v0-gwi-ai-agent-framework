@@ -6,14 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -37,8 +29,11 @@ import {
   Send,
   AlertTriangle,
   MessageSquare,
+  UserPlus,
+  CheckCircle,
+  XCircle,
 } from "lucide-react"
-import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import { useAdmin } from "@/components/providers/admin-provider"
 
 interface Ticket {
@@ -73,6 +68,7 @@ export default function SupportPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -186,6 +182,142 @@ export default function SupportPage() {
     }
   }
 
+  const handleBulkClose = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/support/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "CLOSED" }),
+          })
+        )
+      )
+      fetchTickets()
+    } catch (error) {
+      console.error("Failed to close tickets:", error)
+    }
+  }
+
+  const handleBulkResolve = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/support/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "RESOLVED" }),
+          })
+        )
+      )
+      fetchTickets()
+    } catch (error) {
+      console.error("Failed to resolve tickets:", error)
+    }
+  }
+
+  // Define columns for the data table
+  const columns: Column<Ticket>[] = [
+    {
+      id: "ticket",
+      header: "Ticket",
+      cell: (ticket) => (
+        <div className="flex items-center gap-3">
+          <div className={`h-9 w-9 rounded-lg flex items-center justify-center ${
+            ticket.priority === "URGENT" ? "bg-red-500/10" :
+            ticket.priority === "HIGH" ? "bg-amber-500/10" : "bg-primary/10"
+          }`}>
+            <TicketCheck className={`h-4 w-4 ${
+              ticket.priority === "URGENT" ? "text-red-500" :
+              ticket.priority === "HIGH" ? "text-amber-500" : "text-primary"
+            }`} />
+          </div>
+          <div>
+            <p className="font-medium truncate max-w-[200px]">{ticket.subject}</p>
+            <p className="text-xs text-muted-foreground">{ticket.ticketNumber}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "category",
+      header: "Category",
+      cell: (ticket) => <Badge variant="outline">{ticket.category}</Badge>,
+    },
+    {
+      id: "priority",
+      header: "Priority",
+      cell: (ticket) => (
+        <Badge className={getPriorityColor(ticket.priority)}>
+          {ticket.priority === "URGENT" && <AlertTriangle className="h-3 w-3 mr-1" />}
+          {ticket.priority}
+        </Badge>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (ticket) => (
+        <Badge className={getStatusColor(ticket.status)}>
+          {ticket.status.replace(/_/g, " ")}
+        </Badge>
+      ),
+    },
+    {
+      id: "assigned",
+      header: "Assigned",
+      cell: (ticket) => (
+        ticket.assignedTo ? (
+          <div className="flex items-center gap-1 text-sm">
+            <User className="h-3 w-3 text-muted-foreground" />
+            Assigned
+          </div>
+        ) : (
+          <span className="text-xs text-muted-foreground">Unassigned</span>
+        )
+      ),
+    },
+    {
+      id: "created",
+      header: "Created",
+      cell: (ticket) => (
+        <div className="flex items-center gap-1 text-muted-foreground">
+          <Clock className="h-3 w-3" />
+          {new Date(ticket.createdAt).toLocaleDateString()}
+        </div>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Ticket>[] = [
+    {
+      label: "Assign to me",
+      icon: <UserPlus className="h-4 w-4" />,
+      onClick: (ticket) => handleAssign(ticket.id),
+      hidden: (ticket) => !!ticket.assignedTo,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Resolve Selected",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: handleBulkResolve,
+      confirmTitle: "Resolve Selected Tickets",
+      confirmDescription: "Are you sure you want to mark all selected tickets as resolved?",
+    },
+    {
+      label: "Close Selected",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: handleBulkClose,
+      separator: true,
+      confirmTitle: "Close Selected Tickets",
+      confirmDescription: "Are you sure you want to close all selected tickets?",
+    },
+  ]
+
   return (
     <div className="space-y-6">
       <Card>
@@ -234,130 +366,23 @@ export default function SupportPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Ticket</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Assigned</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : tickets.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No tickets found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  tickets.map((ticket) => (
-                    <TableRow key={ticket.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className={`h-9 w-9 rounded-lg flex items-center justify-center ${
-                            ticket.priority === "URGENT" ? "bg-red-500/10" :
-                            ticket.priority === "HIGH" ? "bg-amber-500/10" : "bg-primary/10"
-                          }`}>
-                            <TicketCheck className={`h-4 w-4 ${
-                              ticket.priority === "URGENT" ? "text-red-500" :
-                              ticket.priority === "HIGH" ? "text-amber-500" : "text-primary"
-                            }`} />
-                          </div>
-                          <div>
-                            <p className="font-medium truncate max-w-[200px]">{ticket.subject}</p>
-                            <p className="text-xs text-muted-foreground">{ticket.ticketNumber}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{ticket.category}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getPriorityColor(ticket.priority)}>
-                          {ticket.priority === "URGENT" && <AlertTriangle className="h-3 w-3 mr-1" />}
-                          {ticket.priority}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getStatusColor(ticket.status)}>
-                          {ticket.status.replace(/_/g, " ")}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {ticket.assignedTo ? (
-                          <div className="flex items-center gap-1 text-sm">
-                            <User className="h-3 w-3 text-muted-foreground" />
-                            Assigned
-                          </div>
-                        ) : (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleAssign(ticket.id)}
-                          >
-                            Assign to me
-                          </Button>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {new Date(ticket.createdAt).toLocaleDateString()}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/admin/support/${ticket.id}`}>
-                            <MessageSquare className="h-4 w-4 mr-1" />
-                            View
-                          </Link>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={tickets}
+            columns={columns}
+            getRowId={(ticket) => ticket.id}
+            isLoading={isLoading}
+            emptyMessage="No tickets found"
+            viewHref={(ticket) => `/admin/support/${ticket.id}`}
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
 

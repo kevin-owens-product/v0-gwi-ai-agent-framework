@@ -5,14 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -35,7 +27,6 @@ import {
   Plus,
   Loader2,
   RefreshCw,
-  Eye,
   Building2,
   Users,
   TrendingUp,
@@ -44,10 +35,9 @@ import {
   Activity,
   Calendar,
   Filter,
-  ChevronLeft,
-  ChevronRight,
+  Trash2,
 } from "lucide-react"
-import Link from "next/link"
+import { AdminDataTable, Column, BulkAction } from "@/components/admin/data-table"
 
 interface AnalyticsSnapshot {
   id: string
@@ -114,6 +104,9 @@ export default function AnalyticsSnapshotsPage() {
   const [endDate, setEndDate] = useState<string>("")
   const [currentPage, setCurrentPage] = useState(1)
 
+  // Selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+
   // Form state
   const [formData, setFormData] = useState({
     type: "PLATFORM",
@@ -176,6 +169,22 @@ export default function AnalyticsSnapshotsPage() {
     }
   }
 
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/analytics/snapshots/${id}`, {
+            method: "DELETE",
+          })
+        )
+      )
+      fetchSnapshots()
+      setSelectedIds(new Set())
+    } catch (error) {
+      console.error("Failed to delete snapshots:", error)
+    }
+  }
+
   const formatNumber = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
     if (num >= 1000) return `${(num / 1000).toFixed(1)}K`
@@ -196,6 +205,97 @@ export default function AnalyticsSnapshotsPage() {
     }
     return colors[type] || "bg-gray-500/10 text-gray-500"
   }
+
+  // Define columns for AdminDataTable
+  const columns: Column<AnalyticsSnapshot>[] = [
+    {
+      id: "type",
+      header: "Type",
+      cell: (snapshot) => (
+        <Badge className={getTypeColor(snapshot.type)}>
+          {snapshot.type}
+        </Badge>
+      ),
+    },
+    {
+      id: "period",
+      header: "Period",
+      cell: (snapshot) => (
+        <Badge variant="outline">{snapshot.period}</Badge>
+      ),
+    },
+    {
+      id: "orgs",
+      header: "Orgs",
+      headerClassName: "text-right",
+      className: "text-right",
+      cell: (snapshot) => (
+        <div>
+          <div className="font-medium">{formatNumber(snapshot.totalOrgs)}</div>
+          <div className="text-xs text-muted-foreground">
+            +{formatNumber(snapshot.newOrgs)} new
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "users",
+      header: "Users",
+      headerClassName: "text-right",
+      className: "text-right",
+      cell: (snapshot) => (
+        <div>
+          <div className="font-medium">{formatNumber(snapshot.totalUsers)}</div>
+          <div className="text-xs text-muted-foreground">
+            {formatNumber(snapshot.activeUsers)} active
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "mrr",
+      header: "MRR",
+      headerClassName: "text-right",
+      className: "text-right",
+      cell: (snapshot) => (
+        <div>
+          <div className="font-medium">{formatCurrency(snapshot.mrr)}</div>
+          <div className="text-xs text-green-500">
+            +{formatCurrency(snapshot.newMrr)}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "agentRuns",
+      header: "Agent Runs",
+      headerClassName: "text-right",
+      className: "text-right",
+      cell: (snapshot) => formatNumber(snapshot.totalAgentRuns),
+    },
+    {
+      id: "date",
+      header: "Date",
+      cell: (snapshot) => (
+        <div className="flex items-center gap-1 text-sm">
+          <Calendar className="h-3 w-3" />
+          {new Date(snapshot.periodStart).toLocaleDateString()}
+        </div>
+      ),
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      confirmTitle: "Delete Snapshots",
+      confirmDescription: "Are you sure you want to delete the selected snapshots? This action cannot be undone.",
+    },
+  ]
 
   // Get latest snapshot for summary cards
   const latestSnapshot = snapshots[0]
@@ -452,116 +552,21 @@ export default function AnalyticsSnapshotsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Period</TableHead>
-                  <TableHead className="text-right">Orgs</TableHead>
-                  <TableHead className="text-right">Users</TableHead>
-                  <TableHead className="text-right">MRR</TableHead>
-                  <TableHead className="text-right">Agent Runs</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : snapshots.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No snapshots found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  snapshots.map((snapshot) => (
-                    <TableRow key={snapshot.id}>
-                      <TableCell>
-                        <Badge className={getTypeColor(snapshot.type)}>
-                          {snapshot.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{snapshot.period}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="font-medium">{formatNumber(snapshot.totalOrgs)}</div>
-                        <div className="text-xs text-muted-foreground">
-                          +{formatNumber(snapshot.newOrgs)} new
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="font-medium">{formatNumber(snapshot.totalUsers)}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {formatNumber(snapshot.activeUsers)} active
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="font-medium">{formatCurrency(snapshot.mrr)}</div>
-                        <div className="text-xs text-green-500">
-                          +{formatCurrency(snapshot.newMrr)}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {formatNumber(snapshot.totalAgentRuns)}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1 text-sm">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(snapshot.periodStart).toLocaleDateString()}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/admin/analytics/snapshots/${snapshot.id}`}>
-                            <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {pagination && pagination.totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Showing {((pagination.page - 1) * pagination.limit) + 1} to{" "}
-                {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
-                {pagination.total} snapshots
-              </p>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm">
-                  Page {pagination.page} of {pagination.totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(p => Math.min(pagination.totalPages, p + 1))}
-                  disabled={currentPage === pagination.totalPages}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          )}
+          <AdminDataTable
+            data={snapshots}
+            columns={columns}
+            getRowId={(snapshot) => snapshot.id}
+            isLoading={isLoading}
+            emptyMessage="No snapshots found"
+            viewHref={(snapshot) => `/admin/analytics/snapshots/${snapshot.id}`}
+            bulkActions={bulkActions}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+            page={pagination?.page || 1}
+            totalPages={pagination?.totalPages || 1}
+            total={pagination?.total}
+            onPageChange={setCurrentPage}
+          />
         </CardContent>
       </Card>
     </div>

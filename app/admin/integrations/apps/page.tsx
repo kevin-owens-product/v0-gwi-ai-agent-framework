@@ -5,37 +5,19 @@ import {
   Puzzle,
   Plus,
   Search,
-  MoreHorizontal,
-  Edit,
-  Trash,
   Star,
   Building2,
   Download,
-  Eye,
   CheckCircle,
   Clock,
-  Globe,
   Shield,
+  XCircle,
+  Trash,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -56,7 +38,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner"
-import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface IntegrationApp {
   id: string
@@ -112,6 +94,7 @@ export default function IntegrationAppsPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [categoryFilter, setCategoryFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [newApp, setNewApp] = useState({
     name: "",
@@ -127,6 +110,7 @@ export default function IntegrationAppsPage() {
 
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [total, setTotal] = useState(0)
   const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({})
 
   useEffect(() => {
@@ -145,6 +129,7 @@ export default function IntegrationAppsPage() {
       const data = await response.json()
       setApps(data.apps || [])
       setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
       setCategoryCounts(data.categoryCounts || {})
     } catch (error) {
       console.error("Failed to fetch apps:", error)
@@ -225,8 +210,6 @@ export default function IntegrationAppsPage() {
   }
 
   const handleDeleteApp = async (app: IntegrationApp) => {
-    if (!confirm("Are you sure you want to delete this integration app?")) return
-
     try {
       const response = await fetch(`/api/admin/integrations/apps/${app.id}`, {
         method: "DELETE",
@@ -241,6 +224,40 @@ export default function IntegrationAppsPage() {
       fetchApps()
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Failed to delete app")
+    }
+  }
+
+  const handleBulkStatusUpdate = async (ids: string[], newStatus: string) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/integrations/apps/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: newStatus }),
+          })
+        )
+      )
+      toast.success(`${ids.length} app(s) updated to ${newStatus.toLowerCase()}`)
+      fetchApps()
+    } catch (error) {
+      toast.error("Failed to update apps")
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/integrations/apps/${id}`, {
+            method: "DELETE",
+          })
+        )
+      )
+      toast.success(`${ids.length} app(s) deleted`)
+      fetchApps()
+    } catch (error) {
+      toast.error("Failed to delete apps")
     }
   }
 
@@ -276,6 +293,171 @@ export default function IntegrationAppsPage() {
       app.developer.toLowerCase().includes(search.toLowerCase()) ||
       app.description?.toLowerCase().includes(search.toLowerCase())
   )
+
+  // Column definitions
+  const columns: Column<IntegrationApp>[] = [
+    {
+      id: "app",
+      header: "App",
+      cell: (app) => (
+        <div className="flex items-center gap-3">
+          {app.iconUrl ? (
+            <img
+              src={app.iconUrl}
+              alt={app.name}
+              className="h-10 w-10 rounded-lg object-cover"
+            />
+          ) : (
+            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Puzzle className="h-5 w-5 text-primary" />
+            </div>
+          )}
+          <div>
+            <div className="flex items-center gap-2">
+              <p className="font-medium">{app.name}</p>
+              {app.isOfficial && (
+                <span title="Official">
+                  <Shield className="h-4 w-4 text-blue-500" />
+                </span>
+              )}
+              {app.isFeatured && (
+                <span title="Featured">
+                  <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+              {app.shortDescription || app.slug}
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "category",
+      header: "Category",
+      cell: (app) => (
+        <Badge variant="outline">
+          {categories.find((c) => c.value === app.category)?.label || app.category}
+        </Badge>
+      ),
+    },
+    {
+      id: "developer",
+      header: "Developer",
+      cell: (app) => (
+        <div className="flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">{app.developer}</span>
+        </div>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (app) => getStatusBadge(app.status),
+    },
+    {
+      id: "installs",
+      header: "Installs",
+      cell: (app) => (
+        <div className="flex items-center gap-1">
+          <Download className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">{formatNumber(app.installCount)}</span>
+        </div>
+      ),
+    },
+    {
+      id: "rating",
+      header: "Rating",
+      cell: (app) =>
+        app.rating ? (
+          <div className="flex items-center gap-1">
+            <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+            <span className="text-sm">{app.rating.toFixed(1)}</span>
+            <span className="text-xs text-muted-foreground">({app.reviewCount})</span>
+          </div>
+        ) : (
+          <span className="text-xs text-muted-foreground">No reviews</span>
+        ),
+    },
+  ]
+
+  // Row actions
+  const rowActions: RowAction<IntegrationApp>[] = [
+    {
+      label: "Make Featured",
+      icon: <Star className="h-4 w-4" />,
+      onClick: handleToggleFeatured,
+      hidden: (app) => app.isFeatured,
+    },
+    {
+      label: "Remove Featured",
+      icon: <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />,
+      onClick: handleToggleFeatured,
+      hidden: (app) => !app.isFeatured,
+    },
+    {
+      separator: true,
+      label: "Approve",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (app) => handleUpdateStatus(app, "APPROVED"),
+      hidden: (app) => app.status === "APPROVED",
+    },
+    {
+      label: "Publish",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (app) => handleUpdateStatus(app, "PUBLISHED"),
+      hidden: (app) => app.status === "PUBLISHED",
+    },
+    {
+      label: "Deprecate",
+      icon: <Clock className="h-4 w-4" />,
+      onClick: (app) => handleUpdateStatus(app, "DEPRECATED"),
+      hidden: (app) => app.status === "DEPRECATED",
+    },
+    {
+      label: "Remove",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (app) => handleUpdateStatus(app, "REMOVED"),
+      variant: "destructive",
+      hidden: (app) => app.status === "REMOVED",
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Approve Selected",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusUpdate(ids, "APPROVED"),
+      confirmTitle: "Approve Apps",
+      confirmDescription: "Are you sure you want to approve the selected apps?",
+    },
+    {
+      label: "Publish Selected",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusUpdate(ids, "PUBLISHED"),
+      confirmTitle: "Publish Apps",
+      confirmDescription: "Are you sure you want to publish the selected apps?",
+    },
+    {
+      label: "Deprecate Selected",
+      icon: <Clock className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusUpdate(ids, "DEPRECATED"),
+      confirmTitle: "Deprecate Apps",
+      confirmDescription: "Are you sure you want to deprecate the selected apps?",
+    },
+    {
+      separator: true,
+      label: "Delete Selected",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      confirmTitle: "Delete Apps",
+      confirmDescription: "Are you sure you want to delete the selected apps? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -514,179 +696,41 @@ export default function IntegrationAppsPage() {
       </Card>
 
       {/* Apps Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>App</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Developer</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Installs</TableHead>
-                <TableHead>Rating</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={7}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredApps.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12">
-                    <Puzzle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No integration apps found</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => setIsCreateOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create First App
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredApps.map((app) => (
-                  <TableRow key={app.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        {app.iconUrl ? (
-                          <img
-                            src={app.iconUrl}
-                            alt={app.name}
-                            className="h-10 w-10 rounded-lg object-cover"
-                          />
-                        ) : (
-                          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Puzzle className="h-5 w-5 text-primary" />
-                          </div>
-                        )}
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium">{app.name}</p>
-                            {app.isOfficial && (
-                              <span title="Official">
-                                <Shield className="h-4 w-4 text-blue-500" />
-                              </span>
-                            )}
-                            {app.isFeatured && (
-                              <span title="Featured">
-                                <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                            {app.shortDescription || app.slug}
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {categories.find(c => c.value === app.category)?.label || app.category}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{app.developer}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(app.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Download className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{formatNumber(app.installCount)}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {app.rating ? (
-                        <div className="flex items-center gap-1">
-                          <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                          <span className="text-sm">{app.rating.toFixed(1)}</span>
-                          <span className="text-xs text-muted-foreground">({app.reviewCount})</span>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">No reviews</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/integrations/apps/${app.id}`}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleToggleFeatured(app)}>
-                            <Star className={`h-4 w-4 mr-2 ${app.isFeatured ? "fill-yellow-500 text-yellow-500" : ""}`} />
-                            {app.isFeatured ? "Remove Featured" : "Make Featured"}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => handleUpdateStatus(app, "PUBLISHED")}>
-                            <CheckCircle className="h-4 w-4 mr-2" />
-                            Publish
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleUpdateStatus(app, "DEPRECATED")}>
-                            <Clock className="h-4 w-4 mr-2" />
-                            Deprecate
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDeleteApp(app)}
-                          >
-                            <Trash className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-            disabled={page === 1}
-          >
-            Previous
-          </Button>
-          <span className="flex items-center px-4 text-sm text-muted-foreground">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-          >
-            Next
-          </Button>
-        </div>
-      )}
+      <AdminDataTable<IntegrationApp>
+        data={filteredApps}
+        columns={columns}
+        getRowId={(app) => app.id}
+        isLoading={loading}
+        emptyMessage={
+          <div className="text-center py-12">
+            <Puzzle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">No integration apps found</p>
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => setIsCreateOpen(true)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Create First App
+            </Button>
+          </div>
+        }
+        viewHref={(app) => `/admin/integrations/apps/${app.id}`}
+        onDelete={handleDeleteApp}
+        deleteConfirmTitle="Delete Integration App"
+        deleteConfirmDescription={(app) =>
+          `Are you sure you want to delete "${app.name}"? This action cannot be undone.`
+        }
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={setPage}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+        enableSelection={true}
+      />
     </div>
   )
 }

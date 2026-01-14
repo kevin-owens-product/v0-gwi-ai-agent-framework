@@ -3,16 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import {
   Select,
   SelectContent,
@@ -21,16 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Search,
-  MoreHorizontal,
-  Eye,
-  Loader2,
   RefreshCw,
   FileText,
   Shield,
@@ -41,6 +22,7 @@ import {
   Clock,
 } from "lucide-react"
 import Link from "next/link"
+import { AdminDataTable, Column, RowAction } from "@/components/admin/data-table"
 
 interface Framework {
   id: string
@@ -87,6 +69,7 @@ export default function AttestationsPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const fetchAttestations = useCallback(async () => {
     setIsLoading(true)
@@ -148,6 +131,103 @@ export default function AttestationsPage() {
     return "text-red-500"
   }
 
+  // Define columns for AdminDataTable
+  const columns: Column<Attestation>[] = [
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (attestation) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Building2 className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <p className="font-medium">
+              {attestation.organization?.name || "Unknown Org"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {attestation.organization?.slug || attestation.orgId.slice(0, 8)}
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "framework",
+      header: "Framework",
+      cell: (attestation) => (
+        <div className="flex items-center gap-2">
+          <Shield className="h-4 w-4 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{attestation.framework.name}</p>
+            <Badge variant="outline" className="text-xs">
+              {attestation.framework.code}
+            </Badge>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (attestation) => getStatusBadge(attestation.status),
+    },
+    {
+      id: "score",
+      header: "Score",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (attestation) => (
+        <span className={`font-bold ${getScoreColor(attestation.score)}`}>
+          {attestation.score !== null ? `${attestation.score}%` : "-"}
+        </span>
+      ),
+    },
+    {
+      id: "findings",
+      header: "Findings",
+      cell: (attestation) => (
+        <Badge variant="outline">
+          {attestation.findings.length} findings
+        </Badge>
+      ),
+    },
+    {
+      id: "validUntil",
+      header: "Valid Until",
+      cell: (attestation) => (
+        <span className="text-muted-foreground">
+          {attestation.validUntil
+            ? new Date(attestation.validUntil).toLocaleDateString()
+            : "-"}
+        </span>
+      ),
+    },
+    {
+      id: "updatedAt",
+      header: "Updated",
+      cell: (attestation) => (
+        <span className="text-muted-foreground">
+          {new Date(attestation.updatedAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Attestation>[] = [
+    {
+      label: "View Organization",
+      icon: <Building2 className="h-4 w-4" />,
+      href: (attestation) => `/admin/tenants/${attestation.orgId}`,
+    },
+    {
+      label: "View Framework",
+      icon: <Shield className="h-4 w-4" />,
+      href: (attestation) => `/admin/compliance/frameworks/${attestation.frameworkId}`,
+    },
+  ]
+
   return (
     <div className="space-y-6">
       <Card>
@@ -195,144 +275,22 @@ export default function AttestationsPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Organization</TableHead>
-                  <TableHead>Framework</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Score</TableHead>
-                  <TableHead>Findings</TableHead>
-                  <TableHead>Valid Until</TableHead>
-                  <TableHead>Updated</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : attestations.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No attestations found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  attestations.map((attestation) => (
-                    <TableRow key={attestation.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Building2 className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">
-                              {attestation.organization?.name || "Unknown Org"}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {attestation.organization?.slug || attestation.orgId.slice(0, 8)}
-                            </p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Shield className="h-4 w-4 text-muted-foreground" />
-                          <div>
-                            <p className="font-medium">{attestation.framework.name}</p>
-                            <Badge variant="outline" className="text-xs">
-                              {attestation.framework.code}
-                            </Badge>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{getStatusBadge(attestation.status)}</TableCell>
-                      <TableCell className="text-center">
-                        <span className={`font-bold ${getScoreColor(attestation.score)}`}>
-                          {attestation.score !== null ? `${attestation.score}%` : "-"}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">
-                          {attestation.findings.length} findings
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {attestation.validUntil
-                          ? new Date(attestation.validUntil).toLocaleDateString()
-                          : "-"}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(attestation.updatedAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/compliance/attestations/${attestation.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/tenants/${attestation.orgId}`}>
-                                <Building2 className="h-4 w-4 mr-2" />
-                                View Organization
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/compliance/frameworks/${attestation.frameworkId}`}>
-                                <Shield className="h-4 w-4 mr-2" />
-                                View Framework
-                              </Link>
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages} ({total} total)
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={attestations}
+            columns={columns}
+            getRowId={(attestation) => attestation.id}
+            isLoading={isLoading}
+            emptyMessage="No attestations found"
+            viewHref={(attestation) => `/admin/compliance/attestations/${attestation.id}`}
+            rowActions={rowActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
     </div>

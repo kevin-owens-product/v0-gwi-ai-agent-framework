@@ -6,27 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -35,11 +20,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Search,
-  MoreHorizontal,
   Eye,
   Loader2,
   RefreshCw,
@@ -102,6 +87,7 @@ export default function RetentionPoliciesPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -214,8 +200,6 @@ export default function RetentionPoliciesPage() {
   }
 
   const handleDeletePolicy = async (policy: RetentionPolicy) => {
-    if (!confirm(`Are you sure you want to delete the policy "${policy.name}"?`)) return
-
     try {
       const response = await fetch(`/api/admin/compliance/retention-policies/${policy.id}`, {
         method: "DELETE",
@@ -259,6 +243,144 @@ export default function RetentionPoliciesPage() {
         return <Badge variant="outline">{action}</Badge>
     }
   }
+
+  // Define table columns
+  const columns: Column<RetentionPolicy>[] = [
+    {
+      id: "policy",
+      header: "Policy",
+      cell: (policy) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-purple-500/10 flex items-center justify-center">
+            <Database className="h-4 w-4 text-purple-500" />
+          </div>
+          <div>
+            <p className="font-medium">{policy.name}</p>
+            {policy.description && (
+              <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+                {policy.description}
+              </p>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "dataType",
+      header: "Data Type",
+      cell: (policy) => (
+        <Badge variant="outline">{policy.dataType.replace(/_/g, " ")}</Badge>
+      ),
+    },
+    {
+      id: "retention",
+      header: "Retention",
+      cell: (policy) => (
+        <div className="flex items-center gap-1">
+          <Timer className="h-3 w-3 text-muted-foreground" />
+          <span className="font-medium">{policy.retentionPeriod}</span>
+        </div>
+      ),
+    },
+    {
+      id: "scope",
+      header: "Scope",
+      cell: (policy) => getScopeBadge(policy.scope),
+    },
+    {
+      id: "action",
+      header: "Action",
+      cell: (policy) => getDeleteActionBadge(policy.deleteAction),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (policy) =>
+        policy.isActive ? (
+          <Badge className="bg-green-500">Active</Badge>
+        ) : (
+          <Badge variant="secondary">Inactive</Badge>
+        ),
+    },
+    {
+      id: "nextRun",
+      header: "Next Run",
+      cell: (policy) =>
+        policy.nextRun ? (
+          <div className="flex items-center gap-1 text-muted-foreground">
+            <Clock className="h-3 w-3" />
+            {policy.daysUntilNextRun !== null && policy.daysUntilNextRun <= 0
+              ? "Today"
+              : `${policy.daysUntilNextRun} days`}
+          </div>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<RetentionPolicy>[] = [
+    {
+      label: "Activate",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (policy) => policy.isActive,
+    },
+    {
+      label: "Deactivate",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (policy) => !policy.isActive,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Enable Selected",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: async (ids) => {
+        for (const id of ids) {
+          const policy = policies.find((p) => p.id === id)
+          if (policy && !policy.isActive) {
+            await handleToggleStatus(policy)
+          }
+        }
+        setSelectedIds(new Set())
+      },
+    },
+    {
+      label: "Disable Selected",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: async (ids) => {
+        for (const id of ids) {
+          const policy = policies.find((p) => p.id === id)
+          if (policy && policy.isActive) {
+            await handleToggleStatus(policy)
+          }
+        }
+        setSelectedIds(new Set())
+      },
+    },
+    {
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      variant: "destructive" as const,
+      separator: true,
+      confirmTitle: "Delete Policies",
+      confirmDescription: "Are you sure you want to delete the selected policies? This action cannot be undone.",
+      onClick: async (ids) => {
+        for (const id of ids) {
+          const policy = policies.find((p) => p.id === id)
+          if (policy) {
+            await handleDeletePolicy(policy)
+          }
+        }
+        setSelectedIds(new Set())
+      },
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -343,146 +465,26 @@ export default function RetentionPoliciesPage() {
           </div>
 
           {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Policy</TableHead>
-                  <TableHead>Data Type</TableHead>
-                  <TableHead>Retention</TableHead>
-                  <TableHead>Scope</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Next Run</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : policies.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No retention policies found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  policies.map((policy) => (
-                    <TableRow key={policy.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-purple-500/10 flex items-center justify-center">
-                            <Database className="h-4 w-4 text-purple-500" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{policy.name}</p>
-                            {policy.description && (
-                              <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                                {policy.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{policy.dataType.replace(/_/g, " ")}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Timer className="h-3 w-3 text-muted-foreground" />
-                          <span className="font-medium">{policy.retentionPeriod}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>{getScopeBadge(policy.scope)}</TableCell>
-                      <TableCell>{getDeleteActionBadge(policy.deleteAction)}</TableCell>
-                      <TableCell>
-                        {policy.isActive ? (
-                          <Badge className="bg-green-500">Active</Badge>
-                        ) : (
-                          <Badge variant="secondary">Inactive</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {policy.nextRun ? (
-                          <div className="flex items-center gap-1 text-muted-foreground">
-                            <Clock className="h-3 w-3" />
-                            {policy.daysUntilNextRun !== null && policy.daysUntilNextRun <= 0
-                              ? "Today"
-                              : `${policy.daysUntilNextRun} days`}
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleToggleStatus(policy)}>
-                              {policy.isActive ? (
-                                <>
-                                  <XCircle className="h-4 w-4 mr-2" />
-                                  Deactivate
-                                </>
-                              ) : (
-                                <>
-                                  <CheckCircle className="h-4 w-4 mr-2" />
-                                  Activate
-                                </>
-                              )}
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-destructive"
-                              onClick={() => handleDeletePolicy(policy)}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages} ({total} total)
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          <AdminDataTable
+            data={policies}
+            columns={columns}
+            getRowId={(policy) => policy.id}
+            isLoading={isLoading}
+            emptyMessage="No retention policies found"
+            onDelete={handleDeletePolicy}
+            deleteConfirmTitle="Delete Retention Policy"
+            deleteConfirmDescription={(policy) =>
+              `Are you sure you want to delete the policy "${policy.name}"? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
 

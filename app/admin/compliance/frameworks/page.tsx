@@ -6,27 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -39,9 +24,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Search,
-  MoreHorizontal,
-  Eye,
-  Edit,
   Loader2,
   RefreshCw,
   Plus,
@@ -53,6 +35,7 @@ import {
   Trash2,
 } from "lucide-react"
 import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface ComplianceFramework {
   id: string
@@ -77,6 +60,7 @@ export default function FrameworksPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -187,8 +171,6 @@ export default function FrameworksPage() {
   }
 
   const handleDeleteFramework = async (framework: ComplianceFramework) => {
-    if (!confirm(`Are you sure you want to delete "${framework.name}"?`)) return
-
     try {
       const response = await fetch(`/api/admin/compliance/frameworks/${framework.id}`, {
         method: "DELETE",
@@ -206,6 +188,171 @@ export default function FrameworksPage() {
       alert(error instanceof Error ? error.message : "Failed to delete framework")
     }
   }
+
+  const handleBulkToggleStatus = async (ids: string[], isActive: boolean) => {
+    try {
+      const promises = ids.map((id) =>
+        fetch(`/api/admin/compliance/frameworks/${id}`, {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ isActive }),
+        })
+      )
+
+      const results = await Promise.all(promises)
+      const failed = results.filter((r) => !r.ok)
+
+      if (failed.length > 0) {
+        throw new Error(`Failed to update ${failed.length} framework(s)`)
+      }
+
+      fetchFrameworks()
+    } catch (error) {
+      console.error("Failed to update frameworks:", error)
+      alert(error instanceof Error ? error.message : "Failed to update frameworks")
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      const promises = ids.map((id) =>
+        fetch(`/api/admin/compliance/frameworks/${id}`, {
+          method: "DELETE",
+          credentials: "include",
+        })
+      )
+
+      const results = await Promise.all(promises)
+      const failed = results.filter((r) => !r.ok)
+
+      if (failed.length > 0) {
+        throw new Error(`Failed to delete ${failed.length} framework(s)`)
+      }
+
+      fetchFrameworks()
+    } catch (error) {
+      console.error("Failed to delete frameworks:", error)
+      alert(error instanceof Error ? error.message : "Failed to delete frameworks")
+    }
+  }
+
+  // Column definitions
+  const columns: Column<ComplianceFramework>[] = [
+    {
+      id: "framework",
+      header: "Framework",
+      cell: (framework) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Shield className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <p className="font-medium">{framework.name}</p>
+            {framework.description && (
+              <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+                {framework.description}
+              </p>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "code",
+      header: "Code",
+      cell: (framework) => <Badge variant="outline">{framework.code}</Badge>,
+    },
+    {
+      id: "version",
+      header: "Version",
+      cell: (framework) => (
+        <span className="text-muted-foreground">{framework.version || "-"}</span>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (framework) =>
+        framework.isActive ? (
+          <Badge className="bg-green-500">Active</Badge>
+        ) : (
+          <Badge variant="secondary">Inactive</Badge>
+        ),
+    },
+    {
+      id: "attestations",
+      header: "Attestations",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (framework) => (
+        <div className="flex items-center justify-center gap-1">
+          <FileText className="h-3 w-3 text-muted-foreground" />
+          {framework.attestationCount}
+        </div>
+      ),
+    },
+    {
+      id: "audits",
+      header: "Audits",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (framework) => (
+        <div className="flex items-center justify-center gap-1">
+          <FileText className="h-3 w-3 text-muted-foreground" />
+          {framework.auditCount}
+        </div>
+      ),
+    },
+    {
+      id: "updated",
+      header: "Updated",
+      cell: (framework) => (
+        <span className="text-muted-foreground">
+          {new Date(framework.updatedAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ]
+
+  // Row actions
+  const rowActions: RowAction<ComplianceFramework>[] = [
+    {
+      label: "Activate",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (framework) => framework.isActive,
+    },
+    {
+      label: "Deactivate",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (framework) => !framework.isActive,
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Enable Selected",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkToggleStatus(ids, true),
+    },
+    {
+      label: "Disable Selected",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkToggleStatus(ids, false),
+    },
+    {
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Frameworks",
+      confirmDescription: "Are you sure you want to delete the selected frameworks? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -265,151 +412,28 @@ export default function FrameworksPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Framework</TableHead>
-                  <TableHead>Code</TableHead>
-                  <TableHead>Version</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Attestations</TableHead>
-                  <TableHead className="text-center">Audits</TableHead>
-                  <TableHead>Updated</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : frameworks.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No frameworks found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  frameworks.map((framework) => (
-                    <TableRow key={framework.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Shield className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{framework.name}</p>
-                            {framework.description && (
-                              <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                                {framework.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{framework.code}</Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {framework.version || "-"}
-                      </TableCell>
-                      <TableCell>
-                        {framework.isActive ? (
-                          <Badge className="bg-green-500">Active</Badge>
-                        ) : (
-                          <Badge variant="secondary">Inactive</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <FileText className="h-3 w-3 text-muted-foreground" />
-                          {framework.attestationCount}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <FileText className="h-3 w-3 text-muted-foreground" />
-                          {framework.auditCount}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(framework.updatedAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/compliance/frameworks/${framework.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleToggleStatus(framework)}>
-                              {framework.isActive ? (
-                                <>
-                                  <XCircle className="h-4 w-4 mr-2" />
-                                  Deactivate
-                                </>
-                              ) : (
-                                <>
-                                  <CheckCircle className="h-4 w-4 mr-2" />
-                                  Activate
-                                </>
-                              )}
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-destructive"
-                              onClick={() => handleDeleteFramework(framework)}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages} ({total} total)
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={frameworks}
+            columns={columns}
+            getRowId={(framework) => framework.id}
+            isLoading={isLoading}
+            emptyMessage="No frameworks found"
+            viewHref={(framework) => `/admin/compliance/frameworks/${framework.id}`}
+            onDelete={handleDeleteFramework}
+            deleteConfirmTitle="Delete Framework"
+            deleteConfirmDescription={(framework) =>
+              `Are you sure you want to delete "${framework.name}"? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
 

@@ -8,14 +8,6 @@ import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -41,10 +33,11 @@ import {
   Key,
   Clock,
   Globe,
-  Eye,
+  CheckCircle,
+  XCircle,
 } from "lucide-react"
-import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Admin {
   id: string
@@ -72,6 +65,7 @@ export default function AdminsPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [formData, setFormData] = useState({
     email: "",
@@ -158,21 +152,173 @@ export default function AdminsPage() {
     }
   }
 
-  const handleDelete = async (adminId: string) => {
-    if (adminId === currentAdmin.id) {
+  const handleDelete = async (admin: Admin) => {
+    if (admin.id === currentAdmin.id) {
       alert("You cannot delete your own account")
       return
     }
-    if (!confirm("Are you sure you want to delete this admin?")) return
     try {
-      await fetch(`/api/admin/admins/${adminId}`, { method: "DELETE" })
+      await fetch(`/api/admin/admins/${admin.id}`, { method: "DELETE" })
       fetchAdmins()
     } catch (error) {
       console.error("Failed to delete admin:", error)
     }
   }
 
+  const handleBulkActivate = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map(id =>
+          fetch(`/api/admin/admins/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isActive: true }),
+          })
+        )
+      )
+      fetchAdmins()
+    } catch (error) {
+      console.error("Failed to activate admins:", error)
+    }
+  }
+
+  const handleBulkDeactivate = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map(id =>
+          fetch(`/api/admin/admins/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isActive: false }),
+          })
+        )
+      )
+      fetchAdmins()
+    } catch (error) {
+      console.error("Failed to deactivate admins:", error)
+    }
+  }
+
   const isSuperAdmin = currentAdmin.role === "SUPER_ADMIN"
+
+  // Define columns for AdminDataTable
+  const columns: Column<Admin>[] = [
+    {
+      id: "admin",
+      header: "Admin",
+      cell: (admin) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Shield className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <p className="font-medium">
+              {admin.name}
+              {admin.id === currentAdmin.id && (
+                <span className="ml-2 text-xs text-muted-foreground">(You)</span>
+              )}
+            </p>
+            <p className="text-xs text-muted-foreground">{admin.email}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "role",
+      header: "Role",
+      cell: (admin) => (
+        <Badge className={`${roleColors[admin.role]} text-white`}>
+          {admin.role.replace("_", " ")}
+        </Badge>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (admin) =>
+        admin.isActive ? (
+          <Badge variant="default" className="bg-green-500">Active</Badge>
+        ) : (
+          <Badge variant="secondary">Inactive</Badge>
+        ),
+    },
+    {
+      id: "2fa",
+      header: "2FA",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (admin) =>
+        admin.twoFactorEnabled ? (
+          <Key className="h-4 w-4 text-green-500 mx-auto" />
+        ) : (
+          <span className="text-xs text-muted-foreground">-</span>
+        ),
+    },
+    {
+      id: "lastLogin",
+      header: "Last Login",
+      cell: (admin) =>
+        admin.lastLoginAt ? (
+          <div>
+            <div className="flex items-center gap-1 text-sm">
+              <Clock className="h-3 w-3 text-muted-foreground" />
+              {new Date(admin.lastLoginAt).toLocaleDateString()}
+            </div>
+            {admin.lastLoginIp && (
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Globe className="h-3 w-3" />
+                {admin.lastLoginIp}
+              </div>
+            )}
+          </div>
+        ) : (
+          <span className="text-muted-foreground">Never</span>
+        ),
+    },
+    {
+      id: "created",
+      header: "Created",
+      cell: (admin) => (
+        <span className="text-muted-foreground">
+          {new Date(admin.createdAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ]
+
+  // Define row actions (only if super admin)
+  const rowActions: RowAction<Admin>[] = isSuperAdmin
+    ? [
+        {
+          label: "Edit",
+          icon: <Pencil className="h-4 w-4" />,
+          onClick: (admin) => handleOpenDialog(admin),
+        },
+      ]
+    : []
+
+  // Define bulk actions (only if super admin)
+  const bulkActions: BulkAction[] = isSuperAdmin
+    ? [
+        {
+          label: "Activate Selected",
+          icon: <CheckCircle className="h-4 w-4" />,
+          onClick: handleBulkActivate,
+          confirmTitle: "Activate Admins",
+          confirmDescription: "Are you sure you want to activate the selected admin accounts?",
+        },
+        {
+          label: "Deactivate Selected",
+          icon: <XCircle className="h-4 w-4" />,
+          onClick: handleBulkDeactivate,
+          variant: "destructive",
+          confirmTitle: "Deactivate Admins",
+          confirmDescription: "Are you sure you want to deactivate the selected admin accounts?",
+        },
+      ]
+    : []
 
   return (
     <div className="space-y-6">
@@ -292,125 +438,32 @@ export default function AdminsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Admin</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="text-center">2FA</TableHead>
-                  <TableHead>Last Login</TableHead>
-                  <TableHead>Created</TableHead>
-                  {isSuperAdmin && <TableHead className="text-right">Actions</TableHead>}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : admins.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No admins found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  admins.map((admin) => (
-                    <TableRow key={admin.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Shield className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">
-                              {admin.name}
-                              {admin.id === currentAdmin.id && (
-                                <span className="ml-2 text-xs text-muted-foreground">(You)</span>
-                              )}
-                            </p>
-                            <p className="text-xs text-muted-foreground">{admin.email}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={`${roleColors[admin.role]} text-white`}>
-                          {admin.role.replace("_", " ")}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {admin.isActive ? (
-                          <Badge variant="default" className="bg-green-500">Active</Badge>
-                        ) : (
-                          <Badge variant="secondary">Inactive</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {admin.twoFactorEnabled ? (
-                          <Key className="h-4 w-4 text-green-500 mx-auto" />
-                        ) : (
-                          <span className="text-xs text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {admin.lastLoginAt ? (
-                          <div>
-                            <div className="flex items-center gap-1 text-sm">
-                              <Clock className="h-3 w-3 text-muted-foreground" />
-                              {new Date(admin.lastLoginAt).toLocaleDateString()}
-                            </div>
-                            {admin.lastLoginIp && (
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                <Globe className="h-3 w-3" />
-                                {admin.lastLoginIp}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">Never</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(admin.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      {isSuperAdmin && (
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <Button variant="ghost" size="sm" asChild>
-                              <Link href={`/admin/admins/${admin.id}`}>
-                                <Eye className="h-4 w-4" />
-                              </Link>
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleOpenDialog(admin)}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            {admin.id !== currentAdmin.id && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-destructive hover:text-destructive"
-                                onClick={() => handleDelete(admin.id)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            )}
-                          </div>
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+          <AdminDataTable
+            data={admins}
+            columns={columns}
+            getRowId={(admin) => admin.id}
+            isLoading={isLoading}
+            emptyMessage="No admins found"
+            viewHref={isSuperAdmin ? (admin) => `/admin/admins/${admin.id}` : undefined}
+            onDelete={
+              isSuperAdmin
+                ? (admin) => {
+                    if (admin.id !== currentAdmin.id) {
+                      handleDelete(admin)
+                    }
+                  }
+                : undefined
+            }
+            deleteConfirmTitle="Delete Admin"
+            deleteConfirmDescription={(admin) =>
+              `Are you sure you want to delete ${admin.name}? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            enableSelection={isSuperAdmin}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
     </div>

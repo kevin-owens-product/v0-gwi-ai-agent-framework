@@ -5,9 +5,6 @@ import {
   Webhook,
   Plus,
   Search,
-  MoreHorizontal,
-  Edit,
-  Trash,
   Power,
   PowerOff,
   Activity,
@@ -17,27 +14,12 @@ import {
   CheckCircle,
   XCircle,
   AlertTriangle,
-  Eye,
+  Trash,
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -57,7 +39,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast } from "sonner"
-import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface WebhookEndpoint {
   id: string
@@ -98,6 +80,7 @@ export default function WebhooksPage() {
   const [healthFilter, setHealthFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [showSecret, setShowSecret] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [newWebhook, setNewWebhook] = useState({
     name: "",
@@ -110,6 +93,7 @@ export default function WebhooksPage() {
 
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
     fetchWebhooks()
@@ -127,6 +111,7 @@ export default function WebhooksPage() {
       const data = await response.json()
       setWebhooks(data.webhooks || [])
       setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
     } catch (error) {
       console.error("Failed to fetch webhooks:", error)
     } finally {
@@ -210,8 +195,6 @@ export default function WebhooksPage() {
   }
 
   const handleDeleteWebhook = async (webhook: WebhookEndpoint) => {
-    if (!confirm("Are you sure you want to delete this webhook?")) return
-
     try {
       const response = await fetch(`/api/admin/integrations/webhooks/${webhook.id}`, {
         method: "DELETE",
@@ -225,6 +208,40 @@ export default function WebhooksPage() {
       fetchWebhooks()
     } catch (error) {
       toast.error("Failed to delete webhook")
+    }
+  }
+
+  const handleBulkStatusChange = async (ids: string[], newStatus: string) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/integrations/webhooks/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: newStatus }),
+          })
+        )
+      )
+      toast.success(`${ids.length} webhook(s) ${newStatus === "ACTIVE" ? "activated" : "paused"}`)
+      fetchWebhooks()
+    } catch (error) {
+      toast.error("Failed to update webhooks")
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/integrations/webhooks/${id}`, {
+            method: "DELETE",
+          })
+        )
+      )
+      toast.success(`${ids.length} webhook(s) deleted`)
+      fetchWebhooks()
+    } catch (error) {
+      toast.error("Failed to delete webhooks")
     }
   }
 
@@ -279,6 +296,140 @@ export default function WebhooksPage() {
         : [...prev.events, event],
     }))
   }
+
+  // Define columns for the data table
+  const columns: Column<WebhookEndpoint>[] = [
+    {
+      id: "webhook",
+      header: "Webhook",
+      cell: (webhook) => (
+        <div>
+          <p className="font-medium">{webhook.name || "Unnamed"}</p>
+          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+            {webhook.url}
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (webhook) => (
+        <div className="flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">{webhook.orgName || webhook.orgId}</span>
+        </div>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (webhook) => getStatusBadge(webhook.status),
+    },
+    {
+      id: "health",
+      header: "Health",
+      cell: (webhook) => (
+        <div className="flex items-center gap-2">
+          {getHealthIndicator(webhook)}
+          {webhook.consecutiveFailures > 0 && (
+            <span className="text-xs text-muted-foreground">
+              {webhook.consecutiveFailures} failures
+            </span>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "deliveries",
+      header: "Deliveries",
+      cell: (webhook) => (
+        <div className="flex items-center gap-1">
+          <Activity className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">{formatNumber(webhook.totalDeliveries)}</span>
+        </div>
+      ),
+    },
+    {
+      id: "successRate",
+      header: "Success Rate",
+      cell: (webhook) =>
+        webhook.totalDeliveries > 0 ? (
+          <span className={`font-medium ${
+            (webhook.successfulDeliveries / webhook.totalDeliveries) >= 0.95
+              ? "text-green-500"
+              : (webhook.successfulDeliveries / webhook.totalDeliveries) >= 0.8
+                ? "text-yellow-500"
+                : "text-red-500"
+          }`}>
+            {((webhook.successfulDeliveries / webhook.totalDeliveries) * 100).toFixed(1)}%
+          </span>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        ),
+    },
+    {
+      id: "lastDelivery",
+      header: "Last Delivery",
+      cell: (webhook) =>
+        webhook.lastDeliveryAt ? (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Clock className="h-3 w-3" />
+            {new Date(webhook.lastDeliveryAt).toLocaleDateString()}
+          </div>
+        ) : (
+          <span className="text-xs text-muted-foreground">Never</span>
+        ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<WebhookEndpoint>[] = [
+    {
+      label: "Send Test",
+      icon: <Send className="h-4 w-4" />,
+      onClick: handleTestWebhook,
+    },
+    {
+      label: "Pause",
+      icon: <PowerOff className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (webhook) => webhook.status !== "ACTIVE",
+    },
+    {
+      label: "Activate",
+      icon: <Power className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (webhook) => webhook.status === "ACTIVE",
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Activate Selected",
+      icon: <Power className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "ACTIVE"),
+      confirmTitle: "Activate Webhooks",
+      confirmDescription: "Are you sure you want to activate the selected webhooks?",
+    },
+    {
+      label: "Pause Selected",
+      icon: <PowerOff className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "PAUSED"),
+      confirmTitle: "Pause Webhooks",
+      confirmDescription: "Are you sure you want to pause the selected webhooks?",
+    },
+    {
+      label: "Delete Selected",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Webhooks",
+      confirmDescription: "Are you sure you want to delete the selected webhooks? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -491,178 +642,27 @@ export default function WebhooksPage() {
       </Card>
 
       {/* Webhooks Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Webhook</TableHead>
-                <TableHead>Organization</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Health</TableHead>
-                <TableHead>Deliveries</TableHead>
-                <TableHead>Success Rate</TableHead>
-                <TableHead>Last Delivery</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={8}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredWebhooks.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-12">
-                    <Webhook className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No webhooks found</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => setIsCreateOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create First Webhook
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredWebhooks.map((webhook) => (
-                  <TableRow key={webhook.id}>
-                    <TableCell>
-                      <div>
-                        <p className="font-medium">{webhook.name || "Unnamed"}</p>
-                        <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                          {webhook.url}
-                        </p>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{webhook.orgName || webhook.orgId}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(webhook.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {getHealthIndicator(webhook)}
-                        {webhook.consecutiveFailures > 0 && (
-                          <span className="text-xs text-muted-foreground">
-                            {webhook.consecutiveFailures} failures
-                          </span>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Activity className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{formatNumber(webhook.totalDeliveries)}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {webhook.totalDeliveries > 0 ? (
-                        <span className={`font-medium ${
-                          (webhook.successfulDeliveries / webhook.totalDeliveries) >= 0.95
-                            ? "text-green-500"
-                            : (webhook.successfulDeliveries / webhook.totalDeliveries) >= 0.8
-                              ? "text-yellow-500"
-                              : "text-red-500"
-                        }`}>
-                          {((webhook.successfulDeliveries / webhook.totalDeliveries) * 100).toFixed(1)}%
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {webhook.lastDeliveryAt ? (
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          {new Date(webhook.lastDeliveryAt).toLocaleDateString()}
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">Never</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/integrations/webhooks/${webhook.id}`}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleTestWebhook(webhook)}>
-                            <Send className="h-4 w-4 mr-2" />
-                            Send Test
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleToggleStatus(webhook)}>
-                            {webhook.status === "ACTIVE" ? (
-                              <>
-                                <PowerOff className="h-4 w-4 mr-2" />
-                                Pause
-                              </>
-                            ) : (
-                              <>
-                                <Power className="h-4 w-4 mr-2" />
-                                Activate
-                              </>
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDeleteWebhook(webhook)}
-                          >
-                            <Trash className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-            disabled={page === 1}
-          >
-            Previous
-          </Button>
-          <span className="flex items-center px-4 text-sm text-muted-foreground">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-          >
-            Next
-          </Button>
-        </div>
-      )}
+      <AdminDataTable
+        data={filteredWebhooks}
+        columns={columns}
+        getRowId={(webhook) => webhook.id}
+        isLoading={loading}
+        emptyMessage="No webhooks found"
+        viewHref={(webhook) => `/admin/integrations/webhooks/${webhook.id}`}
+        onDelete={handleDeleteWebhook}
+        deleteConfirmTitle="Delete Webhook"
+        deleteConfirmDescription={(webhook) =>
+          `Are you sure you want to delete "${webhook.name || webhook.url}"? This action cannot be undone.`
+        }
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={setPage}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+      />
     </div>
   )
 }

@@ -5,17 +5,14 @@ import {
   Monitor,
   Search,
   Filter,
-  Shield,
   Clock,
-  User,
   Globe,
-  ChevronLeft,
-  ChevronRight,
   ArrowUpDown,
   Users,
   Activity,
   Smartphone,
   RefreshCw,
+  XCircle,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -29,13 +26,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+  AdminDataTable,
+  Column,
+  RowAction,
+  BulkAction,
+} from "@/components/admin/data-table"
 import {
   Tooltip,
   TooltipContent,
@@ -77,6 +72,7 @@ export default function SessionsPage() {
   const [activeFilter, setActiveFilter] = useState("true")
   const [sortBy, setSortBy] = useState("expires")
   const [sortOrder, setSortOrder] = useState("desc")
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [stats, setStats] = useState<SessionStats>({
     totalActive: 0,
     activeLast24h: 0,
@@ -211,12 +207,206 @@ export default function SessionsPage() {
     return email.slice(0, 2).toUpperCase()
   }
 
+  const handleTerminateSession = async (session: PlatformSession) => {
+    try {
+      const response = await fetch(`/api/admin/security/sessions/${session.id}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to terminate session")
+      }
+
+      toast.success("Session terminated successfully")
+      fetchSessions()
+    } catch (error) {
+      console.error("Failed to terminate session:", error)
+      toast.error("Failed to terminate session")
+    }
+  }
+
+  const handleBulkTerminate = async (sessionIds: string[]) => {
+    try {
+      const response = await fetch("/api/admin/security/sessions/bulk-terminate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionIds }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to terminate sessions")
+      }
+
+      toast.success(`${sessionIds.length} session(s) terminated successfully`)
+      setSelectedIds(new Set())
+      fetchSessions()
+    } catch (error) {
+      console.error("Failed to terminate sessions:", error)
+      toast.error("Failed to terminate sessions")
+    }
+  }
+
   const filteredSessions = sessions.filter(
     (session) =>
       session.user?.email?.toLowerCase().includes(search.toLowerCase()) ||
       session.user?.name?.toLowerCase().includes(search.toLowerCase()) ||
       session.ipAddress?.toLowerCase().includes(search.toLowerCase())
   )
+
+  // Define columns for AdminDataTable
+  const columns: Column<PlatformSession>[] = [
+    {
+      id: "user",
+      header: "User",
+      cell: (session) => (
+        <div className="flex items-center gap-3">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={session.user?.avatarUrl || undefined} />
+            <AvatarFallback>
+              {getUserInitials(session.user?.name, session.user?.email)}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="font-medium">
+              {session.user?.name || "Unknown User"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {session.user?.email}
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "session",
+      header: "Session",
+      cell: (session) => (
+        <code className="font-mono text-xs text-muted-foreground">
+          {session.sessionTokenPrefix}
+        </code>
+      ),
+    },
+    {
+      id: "ipAddress",
+      header: (
+        <div className="flex items-center gap-2">
+          <Globe className="h-4 w-4" />
+          IP Address
+        </div>
+      ),
+      cell: (session) => (
+        <div className="flex items-center gap-1 text-sm">
+          <Globe className="h-3 w-3 text-muted-foreground" />
+          {session.ipAddress || "N/A"}
+        </div>
+      ),
+    },
+    {
+      id: "device",
+      header: "Device",
+      cell: (session) => {
+        const { browser, os, device } = parseUserAgent(session.userAgent)
+        return (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2">
+                  {getDeviceIcon(session.userAgent)}
+                  <span className="text-sm">{browser}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div className="text-xs">
+                  <p>Browser: {browser}</p>
+                  <p>OS: {os}</p>
+                  <p>Device: {device}</p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )
+      },
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (session) => (
+        session.isActive ? (
+          <Badge variant="default" className="bg-green-500">
+            Active
+          </Badge>
+        ) : (
+          <Badge variant="secondary">Expired</Badge>
+        )
+      ),
+    },
+    {
+      id: "expires",
+      header: (
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("expires")}>
+          Expires
+          <ArrowUpDown className="h-4 w-4" />
+        </div>
+      ),
+      cell: (session) => (
+        <div className="flex items-center gap-1 text-sm">
+          <Clock className="h-3 w-3 text-muted-foreground" />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span
+                  className={
+                    session.isActive
+                      ? "text-green-600"
+                      : "text-muted-foreground"
+                  }
+                >
+                  {getTimeRemaining(session.expires)}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                {new Date(session.expires).toLocaleString()}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<PlatformSession>[] = [
+    {
+      label: "Terminate Session",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: handleTerminateSession,
+      variant: "destructive",
+      hidden: (session) => !session.isActive,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Terminate Selected Sessions",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: handleBulkTerminate,
+      variant: "destructive",
+      confirmTitle: "Terminate Sessions",
+      confirmDescription: "Are you sure you want to terminate the selected sessions? Users will be logged out immediately.",
+    },
+  ]
+
+  // Convert offset-based pagination to page-based
+  const currentPage = Math.floor(pagination.offset / pagination.limit) + 1
+  const totalPages = Math.ceil(pagination.total / pagination.limit)
+
+  const handlePageChange = (page: number) => {
+    setPagination((prev) => ({
+      ...prev,
+      offset: (page - 1) * prev.limit,
+    }))
+  }
 
   return (
     <div className="space-y-6">
@@ -319,182 +509,21 @@ export default function SessionsPage() {
       </Card>
 
       {/* Sessions Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Session</TableHead>
-                <TableHead>
-                  <div className="flex items-center gap-2">
-                    <Globe className="h-4 w-4" />
-                    IP Address
-                  </div>
-                </TableHead>
-                <TableHead>Device</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("expires")}
-                >
-                  <div className="flex items-center gap-2">
-                    Expires
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={6}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredSessions.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-12">
-                    <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No sessions found</p>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredSessions.map((session) => {
-                  const { browser, os, device } = parseUserAgent(session.userAgent)
-                  return (
-                    <TableRow key={session.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={session.user?.avatarUrl || undefined} />
-                            <AvatarFallback>
-                              {getUserInitials(session.user?.name, session.user?.email)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-medium">
-                              {session.user?.name || "Unknown User"}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {session.user?.email}
-                            </p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <code className="font-mono text-xs text-muted-foreground">
-                          {session.sessionTokenPrefix}
-                        </code>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1 text-sm">
-                          <Globe className="h-3 w-3 text-muted-foreground" />
-                          {session.ipAddress || "N/A"}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <div className="flex items-center gap-2">
-                                {getDeviceIcon(session.userAgent)}
-                                <span className="text-sm">{browser}</span>
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <div className="text-xs">
-                                <p>Browser: {browser}</p>
-                                <p>OS: {os}</p>
-                                <p>Device: {device}</p>
-                              </div>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </TableCell>
-                      <TableCell>
-                        {session.isActive ? (
-                          <Badge variant="default" className="bg-green-500">
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary">Expired</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1 text-sm">
-                          <Clock className="h-3 w-3 text-muted-foreground" />
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <span
-                                  className={
-                                    session.isActive
-                                      ? "text-green-600"
-                                      : "text-muted-foreground"
-                                  }
-                                >
-                                  {getTimeRemaining(session.expires)}
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                {new Date(session.expires).toLocaleString()}
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {pagination.total > pagination.limit && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {pagination.offset + 1} to{" "}
-            {Math.min(pagination.offset + pagination.limit, pagination.total)} of{" "}
-            {pagination.total} sessions
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  offset: Math.max(0, prev.offset - prev.limit),
-                }))
-              }
-              disabled={pagination.offset === 0}
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  offset: prev.offset + prev.limit,
-                }))
-              }
-              disabled={!pagination.hasMore}
-            >
-              Next
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
-          </div>
-        </div>
-      )}
+      <AdminDataTable
+        data={filteredSessions}
+        columns={columns}
+        getRowId={(session) => session.id}
+        isLoading={loading}
+        emptyMessage="No sessions found"
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+        page={currentPage}
+        totalPages={totalPages}
+        total={pagination.total}
+        onPageChange={handlePageChange}
+      />
     </div>
   )
 }

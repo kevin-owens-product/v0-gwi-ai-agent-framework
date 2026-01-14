@@ -13,7 +13,6 @@ import {
   FileText,
   Clock,
   Users,
-  MoreHorizontal,
   Edit,
   Trash,
   Power,
@@ -32,21 +31,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -59,6 +43,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface SecurityPolicy {
   id: string
@@ -124,6 +109,7 @@ export default function SecurityPoliciesPage() {
   const [typeFilter, setTypeFilter] = useState("all")
   const [scopeFilter, setScopeFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [newPolicy, setNewPolicy] = useState({
     name: "",
@@ -206,8 +192,6 @@ export default function SecurityPoliciesPage() {
   }
 
   const handleDeletePolicy = async (policyId: string) => {
-    if (!confirm("Are you sure you want to delete this policy?")) return
-
     try {
       const response = await fetch(`/api/admin/security/policies/${policyId}`, {
         method: "DELETE",
@@ -221,6 +205,7 @@ export default function SecurityPoliciesPage() {
       fetchPolicies()
     } catch (error) {
       toast.error("Failed to delete policy")
+      throw error // Re-throw to let AdminDataTable handle the error state
     }
   }
 
@@ -231,6 +216,189 @@ export default function SecurityPoliciesPage() {
   )
 
   const getPolicyIcon = (type: string) => policyTypeIcons[type] || policyTypeIcons.DEFAULT
+
+  // Define columns for AdminDataTable
+  const columns: Column<SecurityPolicy>[] = [
+    {
+      id: "icon",
+      header: "",
+      cell: (policy) => getPolicyIcon(policy.type),
+      className: "w-[40px]",
+    },
+    {
+      id: "name",
+      header: "Policy Name",
+      cell: (policy) => (
+        <div>
+          <p className="font-medium">{policy.name}</p>
+          {policy.description && (
+            <p className="text-xs text-muted-foreground truncate max-w-[300px]">
+              {policy.description}
+            </p>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (policy) => (
+        <Badge variant="outline">
+          {policy.type.replace(/_/g, " ")}
+        </Badge>
+      ),
+    },
+    {
+      id: "scope",
+      header: "Scope",
+      cell: (policy) => (
+        <Badge variant="secondary">
+          {policy.scope.replace(/_/g, " ")}
+        </Badge>
+      ),
+    },
+    {
+      id: "enforcement",
+      header: "Enforcement",
+      cell: (policy) => (
+        <Badge
+          variant={
+            policy.enforcementMode === "STRICT"
+              ? "destructive"
+              : policy.enforcementMode === "ENFORCE"
+              ? "default"
+              : "secondary"
+          }
+        >
+          {policy.enforcementMode}
+        </Badge>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (policy) => (
+        <Badge variant={policy.isActive ? "default" : "outline"}>
+          {policy.isActive ? "Active" : "Inactive"}
+        </Badge>
+      ),
+    },
+    {
+      id: "violations",
+      header: "Violations",
+      cell: (policy) =>
+        policy.violationCount > 0 ? (
+          <Badge variant="destructive">{policy.violationCount}</Badge>
+        ) : (
+          <span className="text-muted-foreground">0</span>
+        ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<SecurityPolicy>[] = [
+    {
+      label: "Edit Policy",
+      icon: <Edit className="h-4 w-4" />,
+      onClick: (policy) => {
+        // TODO: Implement edit functionality
+        toast.info("Edit functionality coming soon")
+      },
+    },
+    {
+      label: "Enable",
+      icon: <Power className="h-4 w-4" />,
+      onClick: handleTogglePolicy,
+      hidden: (policy) => policy.isActive,
+    },
+    {
+      label: "Disable",
+      icon: <PowerOff className="h-4 w-4" />,
+      onClick: handleTogglePolicy,
+      hidden: (policy) => !policy.isActive,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Enable Selected",
+      icon: <Power className="h-4 w-4" />,
+      onClick: async (ids) => {
+        try {
+          await Promise.all(
+            ids.map((id) => {
+              const policy = policies.find((p) => p.id === id)
+              if (policy && !policy.isActive) {
+                return fetch(`/api/admin/security/policies/${id}`, {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ isActive: true }),
+                })
+              }
+              return Promise.resolve()
+            })
+          )
+          toast.success(`Enabled ${ids.length} policies`)
+          fetchPolicies()
+        } catch (error) {
+          toast.error("Failed to enable policies")
+        }
+      },
+      confirmTitle: "Enable Policies",
+      confirmDescription: "Are you sure you want to enable the selected policies?",
+    },
+    {
+      label: "Disable Selected",
+      icon: <PowerOff className="h-4 w-4" />,
+      onClick: async (ids) => {
+        try {
+          await Promise.all(
+            ids.map((id) => {
+              const policy = policies.find((p) => p.id === id)
+              if (policy && policy.isActive) {
+                return fetch(`/api/admin/security/policies/${id}`, {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ isActive: false }),
+                })
+              }
+              return Promise.resolve()
+            })
+          )
+          toast.success(`Disabled ${ids.length} policies`)
+          fetchPolicies()
+        } catch (error) {
+          toast.error("Failed to disable policies")
+        }
+      },
+      confirmTitle: "Disable Policies",
+      confirmDescription: "Are you sure you want to disable the selected policies?",
+    },
+    {
+      label: "Delete Selected",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: async (ids) => {
+        try {
+          await Promise.all(
+            ids.map((id) =>
+              fetch(`/api/admin/security/policies/${id}`, {
+                method: "DELETE",
+              })
+            )
+          )
+          toast.success(`Deleted ${ids.length} policies`)
+          fetchPolicies()
+        } catch (error) {
+          toast.error("Failed to delete policies")
+        }
+      },
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Policies",
+      confirmDescription: "Are you sure you want to delete the selected policies? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -463,133 +631,38 @@ export default function SecurityPoliciesPage() {
       {/* Policies Table */}
       <Card>
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[40px]"></TableHead>
-                <TableHead>Policy Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Scope</TableHead>
-                <TableHead>Enforcement</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Violations</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={8}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredPolicies.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-12">
-                    <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No security policies found</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => setIsCreateOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create First Policy
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredPolicies.map((policy) => (
-                  <TableRow key={policy.id}>
-                    <TableCell>{getPolicyIcon(policy.type)}</TableCell>
-                    <TableCell>
-                      <div>
-                        <p className="font-medium">{policy.name}</p>
-                        {policy.description && (
-                          <p className="text-xs text-muted-foreground truncate max-w-[300px]">
-                            {policy.description}
-                          </p>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {policy.type.replace(/_/g, " ")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">
-                        {policy.scope.replace(/_/g, " ")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          policy.enforcementMode === "STRICT"
-                            ? "destructive"
-                            : policy.enforcementMode === "ENFORCE"
-                            ? "default"
-                            : "secondary"
-                        }
-                      >
-                        {policy.enforcementMode}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={policy.isActive ? "default" : "outline"}>
-                        {policy.isActive ? "Active" : "Inactive"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {policy.violationCount > 0 ? (
-                        <Badge variant="destructive">{policy.violationCount}</Badge>
-                      ) : (
-                        <span className="text-muted-foreground">0</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit Policy
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleTogglePolicy(policy)}>
-                            {policy.isActive ? (
-                              <>
-                                <PowerOff className="h-4 w-4 mr-2" />
-                                Disable
-                              </>
-                            ) : (
-                              <>
-                                <Power className="h-4 w-4 mr-2" />
-                                Enable
-                              </>
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDeletePolicy(policy.id)}
-                          >
-                            <Trash className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+          <AdminDataTable
+            data={filteredPolicies}
+            columns={columns}
+            getRowId={(policy) => policy.id}
+            isLoading={loading}
+            emptyMessage={
+              <div className="text-center py-12">
+                <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <p className="text-muted-foreground">No security policies found</p>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={() => setIsCreateOpen(true)}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create First Policy
+                </Button>
+              </div>
+            }
+            onDelete={async (policy) => {
+              await handleDeletePolicy(policy.id)
+            }}
+            deleteConfirmTitle="Delete Security Policy"
+            deleteConfirmDescription={(policy) =>
+              `Are you sure you want to delete "${policy.name}"? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+            enableSelection={true}
+          />
         </CardContent>
       </Card>
     </div>

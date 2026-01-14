@@ -10,11 +10,8 @@ import {
   Clock,
   CheckCircle,
   AlertTriangle,
-  MoreHorizontal,
-  ExternalLink,
   RefreshCw,
   Play,
-  Pause,
   XCircle,
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,21 +20,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import {
   Dialog,
   DialogContent,
@@ -112,6 +95,7 @@ export default function MaintenancePage() {
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [newWindow, setNewWindow] = useState({
     title: "",
@@ -267,6 +251,132 @@ export default function MaintenancePage() {
     (w) => w.status === "SCHEDULED" && new Date(w.scheduledStart) > new Date()
   )
   const inProgressWindows = windows.filter((w) => w.status === "IN_PROGRESS")
+
+  // Define columns for AdminDataTable
+  const columns: Column<MaintenanceWindow>[] = [
+    {
+      id: "window",
+      header: "Maintenance Window",
+      cell: (window) => (
+        <div>
+          <Link
+            href={`/admin/operations/maintenance/${window.id}`}
+            className="font-medium hover:underline"
+          >
+            {window.title}
+          </Link>
+          {window.description && (
+            <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+              {window.description}
+            </p>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (window) => getTypeBadge(window.type),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (window) => getStatusBadge(window.status),
+    },
+    {
+      id: "scheduled",
+      header: "Scheduled",
+      cell: (window) => (
+        <div className="text-sm">
+          <div className="flex items-center gap-1">
+            <Calendar className="h-3 w-3" />
+            {new Date(window.scheduledStart).toLocaleDateString()}
+          </div>
+          <div className="flex items-center gap-1 text-muted-foreground">
+            <Clock className="h-3 w-3" />
+            {new Date(window.scheduledStart).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "duration",
+      header: "Duration",
+      cell: (window) => formatDuration(window.scheduledStart, window.scheduledEnd),
+    },
+    {
+      id: "services",
+      header: "Services",
+      cell: (window) => (
+        <div className="flex flex-wrap gap-1 max-w-[150px]">
+          {window.affectedServices.slice(0, 2).map((service) => (
+            <Badge key={service} variant="secondary" className="text-xs">
+              {service}
+            </Badge>
+          ))}
+          {window.affectedServices.length > 2 && (
+            <Badge variant="secondary" className="text-xs">
+              +{window.affectedServices.length - 2}
+            </Badge>
+          )}
+        </div>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<MaintenanceWindow>[] = [
+    {
+      label: "Start Maintenance",
+      icon: <Play className="h-4 w-4" />,
+      onClick: (window) => handleUpdateStatus(window.id, "IN_PROGRESS"),
+      hidden: (window) => window.status !== "SCHEDULED",
+    },
+    {
+      label: "Complete",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (window) => handleUpdateStatus(window.id, "COMPLETED"),
+      hidden: (window) => window.status !== "IN_PROGRESS",
+    },
+    {
+      label: "Cancel",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (window) => handleUpdateStatus(window.id, "CANCELLED"),
+      hidden: (window) => window.status !== "SCHEDULED",
+      separator: true,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Cancel Selected",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: async (selectedIds) => {
+        try {
+          await Promise.all(
+            selectedIds.map((id) =>
+              fetch(`/api/admin/operations/maintenance/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "CANCELLED" }),
+              })
+            )
+          )
+          toast.success(`${selectedIds.length} maintenance window(s) cancelled`)
+          fetchWindows()
+        } catch (error) {
+          toast.error("Failed to cancel maintenance windows")
+        }
+      },
+      variant: "destructive",
+      confirmTitle: "Cancel Maintenance Windows",
+      confirmDescription: "Are you sure you want to cancel the selected maintenance windows?",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -524,172 +634,28 @@ export default function MaintenancePage() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Maintenance Window</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Scheduled</TableHead>
-                <TableHead>Duration</TableHead>
-                <TableHead>Services</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={7}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredWindows.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12">
-                    <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No maintenance windows found</p>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredWindows.map((window) => (
-                  <TableRow key={window.id}>
-                    <TableCell>
-                      <div>
-                        <Link
-                          href={`/admin/operations/maintenance/${window.id}`}
-                          className="font-medium hover:underline"
-                        >
-                          {window.title}
-                        </Link>
-                        {window.description && (
-                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                            {window.description}
-                          </p>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>{getTypeBadge(window.type)}</TableCell>
-                    <TableCell>{getStatusBadge(window.status)}</TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(window.scheduledStart).toLocaleDateString()}
-                        </div>
-                        <div className="flex items-center gap-1 text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          {new Date(window.scheduledStart).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {formatDuration(window.scheduledStart, window.scheduledEnd)}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1 max-w-[150px]">
-                        {window.affectedServices.slice(0, 2).map((service) => (
-                          <Badge key={service} variant="secondary" className="text-xs">
-                            {service}
-                          </Badge>
-                        ))}
-                        {window.affectedServices.length > 2 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{window.affectedServices.length - 2}
-                          </Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/operations/maintenance/${window.id}`}>
-                              <ExternalLink className="h-4 w-4 mr-2" />
-                              View Details
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          {window.status === "SCHEDULED" && (
-                            <DropdownMenuItem
-                              onClick={() => handleUpdateStatus(window.id, "IN_PROGRESS")}
-                            >
-                              <Play className="h-4 w-4 mr-2" />
-                              Start Maintenance
-                            </DropdownMenuItem>
-                          )}
-                          {window.status === "IN_PROGRESS" && (
-                            <DropdownMenuItem
-                              onClick={() => handleUpdateStatus(window.id, "COMPLETED")}
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Complete
-                            </DropdownMenuItem>
-                          )}
-                          {window.status === "SCHEDULED" && (
-                            <DropdownMenuItem
-                              onClick={() => handleUpdateStatus(window.id, "CANCELLED")}
-                            >
-                              <XCircle className="h-4 w-4 mr-2" />
-                              Cancel
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-red-500"
-                            onClick={() => handleDelete(window.id)}
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
+      {/* Data Table */}
+      <AdminDataTable
+        data={filteredWindows}
+        columns={columns}
+        getRowId={(window) => window.id}
+        isLoading={loading}
+        emptyMessage="No maintenance windows found"
+        viewHref={(window) => `/admin/operations/maintenance/${window.id}`}
+        onDelete={handleDelete}
+        deleteConfirmTitle="Delete Maintenance Window"
+        deleteConfirmDescription={(window) =>
+          `Are you sure you want to delete the maintenance window "${window.title}"? This action cannot be undone.`
+        }
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={setPage}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+      />
     </div>
   )
 }
