@@ -339,6 +339,59 @@ async function main() {
     }
   })
 
+  // Additional organizations to reach 10+
+  const globalMediaOrg = await prisma.organization.create({
+    data: {
+      name: 'Global Media Group',
+      slug: 'global-media-group',
+      planTier: PlanTier.ENTERPRISE,
+      settings: {
+        theme: 'light',
+        timezone: 'Europe/London',
+        features: { advancedAnalytics: true, customBranding: true, sso: true, auditLog: true, multiRegion: true }
+      }
+    }
+  })
+
+  const healthTechOrg = await prisma.organization.create({
+    data: {
+      name: 'HealthTech Innovations',
+      slug: 'healthtech-innovations',
+      planTier: PlanTier.PROFESSIONAL,
+      settings: {
+        theme: 'light',
+        timezone: 'America/Los_Angeles',
+        features: { advancedAnalytics: true, hipaaCompliant: true }
+      }
+    }
+  })
+
+  const retailGiantOrg = await prisma.organization.create({
+    data: {
+      name: 'Retail Giant Corp',
+      slug: 'retail-giant-corp',
+      planTier: PlanTier.ENTERPRISE,
+      settings: {
+        theme: 'dark',
+        timezone: 'America/Chicago',
+        features: { advancedAnalytics: true, customBranding: true, sso: true }
+      }
+    }
+  })
+
+  const financeProOrg = await prisma.organization.create({
+    data: {
+      name: 'Finance Pro Services',
+      slug: 'finance-pro-services',
+      planTier: PlanTier.PROFESSIONAL,
+      settings: {
+        theme: 'system',
+        timezone: 'America/New_York',
+        features: { advancedAnalytics: true, auditLog: true }
+      }
+    }
+  })
+
   // ==================== ORGANIZATION MEMBERSHIPS ====================
   console.log('🔗 Creating organization memberships...')
 
@@ -3783,6 +3836,190 @@ async function main() {
     }
   })
 
+  // Additional plans to reach 10+
+  await prisma.plan.create({
+    data: {
+      name: 'trial',
+      displayName: 'Trial',
+      description: '14-day free trial with full Professional features',
+      tier: 'PROFESSIONAL',
+      isActive: true,
+      isPublic: true,
+      sortOrder: 0,
+      monthlyPrice: 0,
+      yearlyPrice: 0,
+      trialDays: 14,
+      limits: {
+        agentRuns: 500,
+        teamSeats: 5,
+        dataSources: 10,
+        apiCallsPerMin: 300,
+        retentionDays: 14,
+        tokensPerMonth: 500000,
+        dashboards: 10,
+        reports: 50,
+        workflows: 5,
+        brandTrackings: 3,
+      },
+    }
+  })
+
+  await prisma.plan.create({
+    data: {
+      name: 'basic',
+      displayName: 'Basic',
+      description: 'Essential features for individual researchers',
+      tier: 'STARTER',
+      isActive: true,
+      isPublic: true,
+      sortOrder: 1,
+      monthlyPrice: 2900, // $29
+      yearlyPrice: 29900, // $299
+      limits: {
+        agentRuns: 250,
+        teamSeats: 1,
+        dataSources: 10,
+        apiCallsPerMin: 150,
+        retentionDays: 60,
+        tokensPerMonth: 250000,
+        dashboards: 5,
+        reports: 25,
+        workflows: 3,
+        brandTrackings: 2,
+      },
+    }
+  })
+
+  await prisma.plan.create({
+    data: {
+      name: 'team',
+      displayName: 'Team',
+      description: 'Collaboration features for small teams',
+      tier: 'PROFESSIONAL',
+      isActive: true,
+      isPublic: true,
+      sortOrder: 2,
+      monthlyPrice: 19900, // $199
+      yearlyPrice: 199900, // $1999
+      limits: {
+        agentRuns: 2500,
+        teamSeats: 25,
+        dataSources: 50,
+        apiCallsPerMin: 750,
+        retentionDays: 180,
+        tokensPerMonth: 2500000,
+        dashboards: 50,
+        reports: 250,
+        workflows: 25,
+        brandTrackings: 10,
+      },
+    }
+  })
+
+  await prisma.plan.create({
+    data: {
+      name: 'business',
+      displayName: 'Business',
+      description: 'Advanced features for growing businesses',
+      tier: 'PROFESSIONAL',
+      isActive: true,
+      isPublic: true,
+      sortOrder: 3,
+      monthlyPrice: 29900, // $299
+      yearlyPrice: 299900, // $2999
+      limits: {
+        agentRuns: 5000,
+        teamSeats: 50,
+        dataSources: 100,
+        apiCallsPerMin: 1000,
+        retentionDays: 270,
+        tokensPerMonth: 5000000,
+        dashboards: 100,
+        reports: 500,
+        workflows: 50,
+        brandTrackings: 20,
+      },
+    }
+  })
+
+  await prisma.plan.create({
+    data: {
+      name: 'enterprise-plus',
+      displayName: 'Enterprise Plus',
+      description: 'Premium enterprise features with dedicated support',
+      tier: 'ENTERPRISE',
+      isActive: true,
+      isPublic: false,
+      sortOrder: 5,
+      monthlyPrice: 99900, // $999
+      yearlyPrice: 999900, // $9999
+      limits: {
+        agentRuns: -1,
+        teamSeats: -1,
+        dataSources: -1,
+        apiCallsPerMin: 5000,
+        retentionDays: 730,
+        tokensPerMonth: -1,
+        dashboards: -1,
+        reports: -1,
+        workflows: -1,
+        brandTrackings: -1,
+      },
+    }
+  })
+
+  await prisma.plan.create({
+    data: {
+      name: 'legacy-pro',
+      displayName: 'Legacy Professional',
+      description: 'Grandfathered professional plan',
+      tier: 'PROFESSIONAL',
+      isActive: false,
+      isPublic: false,
+      sortOrder: 99,
+      monthlyPrice: 7900, // $79
+      yearlyPrice: 79900, // $799
+      limits: {
+        agentRuns: 800,
+        teamSeats: 8,
+        dataSources: 20,
+        apiCallsPerMin: 400,
+        retentionDays: 90,
+        tokensPerMonth: 800000,
+        dashboards: 15,
+        reports: 75,
+        workflows: 8,
+        brandTrackings: 4,
+      },
+    }
+  })
+
+  await prisma.plan.create({
+    data: {
+      name: 'partner',
+      displayName: 'Partner Program',
+      description: 'Special pricing for agency partners',
+      tier: 'ENTERPRISE',
+      isActive: true,
+      isPublic: false,
+      sortOrder: 6,
+      monthlyPrice: 39900, // $399
+      yearlyPrice: 399900, // $3999
+      limits: {
+        agentRuns: -1,
+        teamSeats: 100,
+        dataSources: -1,
+        apiCallsPerMin: 3000,
+        retentionDays: 365,
+        tokensPerMonth: -1,
+        dashboards: -1,
+        reports: -1,
+        workflows: -1,
+        brandTrackings: 50,
+      },
+    }
+  })
+
   // Assign features to Starter plan
   await prisma.planFeature.createMany({
     data: [
@@ -3910,6 +4147,62 @@ async function main() {
       role: 'SUPER_ADMIN',
       permissions: ['super:*'],
       isActive: true,
+    }
+  })
+
+  // Additional super admins to reach 10
+  await prisma.superAdmin.create({
+    data: {
+      email: 'security-admin@gwi.com',
+      name: 'Security Admin',
+      passwordHash: hashSuperAdminPassword('SecAdmin123!'),
+      role: 'ADMIN',
+      permissions: ['security:*', 'compliance:*', 'audit:read'],
+      isActive: true,
+    }
+  })
+
+  await prisma.superAdmin.create({
+    data: {
+      email: 'billing-admin@gwi.com',
+      name: 'Billing Admin',
+      passwordHash: hashSuperAdminPassword('BillAdmin123!'),
+      role: 'ADMIN',
+      permissions: ['billing:*', 'plans:*', 'tenants:read', 'users:read'],
+      isActive: true,
+    }
+  })
+
+  await prisma.superAdmin.create({
+    data: {
+      email: 'ops-admin@gwi.com',
+      name: 'Operations Admin',
+      passwordHash: hashSuperAdminPassword('OpsAdmin123!'),
+      role: 'ADMIN',
+      permissions: ['operations:*', 'incidents:*', 'maintenance:*', 'releases:*'],
+      isActive: true,
+    }
+  })
+
+  await prisma.superAdmin.create({
+    data: {
+      email: 'readonly-admin@gwi.com',
+      name: 'Read Only Admin',
+      passwordHash: hashSuperAdminPassword('ReadOnly123!'),
+      role: 'ANALYST',
+      permissions: ['*:read'],
+      isActive: true,
+    }
+  })
+
+  await prisma.superAdmin.create({
+    data: {
+      email: 'inactive-admin@gwi.com',
+      name: 'Inactive Admin',
+      passwordHash: hashSuperAdminPassword('Inactive123!'),
+      role: 'ADMIN',
+      permissions: ['tenants:*', 'users:*'],
+      isActive: false,
     }
   })
 
@@ -4833,6 +5126,79 @@ async function main() {
     }
   })
 
+  // Additional system notifications to reach 10
+  await prisma.systemNotification.create({
+    data: {
+      title: 'New Feature: AI Insights V2 Now Available',
+      message: 'We are excited to announce AI Insights V2 with improved accuracy and new recommendation capabilities. Enable it in your settings.',
+      type: 'FEATURE',
+      targetType: 'ALL',
+      isActive: true,
+      expiresAt: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'Scheduled Database Maintenance',
+      message: 'Database maintenance is scheduled for this Sunday 2AM-4AM UTC. Expect brief interruptions during this time.',
+      type: 'MAINTENANCE',
+      targetType: 'ALL',
+      isActive: true,
+      expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'Security Update: MFA Enforcement',
+      message: 'Starting next month, MFA will be required for all admin accounts. Please ensure your MFA is configured.',
+      type: 'WARNING',
+      targetType: 'SPECIFIC_ROLES',
+      targetRoles: ['ADMIN', 'OWNER'],
+      isActive: true,
+      expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'Webinar: Advanced Analytics Training',
+      message: 'Join us for a live webinar on advanced analytics techniques. Register now to secure your spot.',
+      type: 'INFO',
+      targetType: 'ALL',
+      isActive: true,
+      actionUrl: 'https://gwi.com/webinars/advanced-analytics',
+      actionText: 'Register Now',
+      expiresAt: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'Holiday Support Hours',
+      message: 'Support hours will be limited during the holiday season. Emergency support remains available 24/7.',
+      type: 'INFO',
+      targetType: 'ALL',
+      isActive: false,
+      expiresAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+    }
+  })
+
+  await prisma.systemNotification.create({
+    data: {
+      title: 'Partner Program Launch',
+      message: 'Introducing our new Partner Program with exclusive benefits. Apply today to become a certified partner.',
+      type: 'FEATURE',
+      targetType: 'SPECIFIC_PLANS',
+      targetPlans: ['PROFESSIONAL', 'ENTERPRISE'],
+      isActive: true,
+      actionUrl: 'https://gwi.com/partners',
+      actionText: 'Learn More',
+      expiresAt: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000),
+    }
+  })
+
   // ==================== PLATFORM AUDIT LOGS ====================
   console.log('📝 Creating platform audit logs...')
 
@@ -5372,6 +5738,46 @@ async function main() {
     }
   })
 
+  // Additional security policies to reach 10
+  await prisma.securityPolicy.create({
+    data: {
+      name: 'Network Segmentation Policy',
+      type: 'NETWORK',
+      description: 'Controls for network segmentation and isolation',
+      settings: {
+        enableMicroSegmentation: true,
+        isolateByTenant: true,
+        allowCrossOrgTraffic: false,
+        requireVPN: true,
+        allowedCIDRs: ['10.0.0.0/8', '172.16.0.0/12']
+      },
+      isActive: true,
+      scope: 'PLATFORM',
+      priority: 65,
+      enforcementMode: 'STRICT',
+    }
+  })
+
+  await prisma.securityPolicy.create({
+    data: {
+      name: 'Audit Logging Policy',
+      type: 'AUDIT',
+      description: 'Requirements for audit logging and retention',
+      settings: {
+        logAllActions: true,
+        retentionDays: 2555,
+        includePayloads: true,
+        realTimeAlerts: true,
+        sensitiveFieldMasking: true,
+        exportFormat: 'SIEM_COMPATIBLE'
+      },
+      isActive: true,
+      scope: 'PLATFORM',
+      priority: 60,
+      enforcementMode: 'STRICT',
+    }
+  })
+
   // ==================== SECURITY VIOLATIONS ====================
   console.log('⚠️ Creating security violations...')
 
@@ -5750,6 +6156,27 @@ async function main() {
         expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
         metadata: { requestsPerMinute: 500, limit: 100 },
       },
+      // Additional IP blocklist entries to reach 10
+      {
+        ipAddress: '91.134.175.0',
+        ipRange: '91.134.175.0/24',
+        type: 'THREAT_INTEL',
+        reason: 'Known malicious hosting provider range',
+        metadata: { provider: 'threat_intel_feed', category: 'malicious_hosting', confidence: 95 },
+      },
+      {
+        ipAddress: '192.0.2.100',
+        type: 'MANUAL',
+        reason: 'Reported for phishing campaign targeting platform users',
+        metadata: { reportedBy: 'security_team', incidentId: 'INC-2025-001', phishingDomain: 'gwi-secure.fake.com' },
+      },
+      {
+        ipAddress: '198.18.0.0',
+        ipRange: '198.18.0.0/15',
+        type: 'GEOGRAPHIC',
+        reason: 'Geographic restriction - North Korea',
+        metadata: { country: 'KP', reason: 'sanctions_compliance', regulatory: 'OFAC' },
+      },
     ]
   })
 
@@ -5893,6 +6320,107 @@ async function main() {
     }
   })
 
+  // Additional compliance frameworks to reach 10
+  const ccpaFramework = await prisma.complianceFramework.create({
+    data: {
+      name: 'CCPA',
+      code: 'CCPA',
+      description: 'California Consumer Privacy Act - Consumer data privacy rights',
+      version: '2020',
+      requirements: [
+        { id: 'CCPA-1', name: 'Right to Know', description: 'Consumer right to know what data is collected' },
+        { id: 'CCPA-2', name: 'Right to Delete', description: 'Consumer right to request deletion' },
+        { id: 'CCPA-3', name: 'Right to Opt-Out', description: 'Right to opt out of sale of personal information' },
+        { id: 'CCPA-4', name: 'Non-Discrimination', description: 'Right to non-discrimination for exercising rights' },
+      ],
+      controls: [
+        { id: 'CCPA-1.1', requirement: 'CCPA-1', name: 'Privacy Notice', implemented: true },
+        { id: 'CCPA-2.1', requirement: 'CCPA-2', name: 'Deletion Process', implemented: true },
+      ],
+      isActive: true,
+    }
+  })
+
+  const fedrampFramework = await prisma.complianceFramework.create({
+    data: {
+      name: 'FedRAMP',
+      code: 'FEDRAMP',
+      description: 'Federal Risk and Authorization Management Program',
+      version: '2023',
+      requirements: [
+        { id: 'AC', name: 'Access Control', description: 'Access control policies and procedures' },
+        { id: 'AU', name: 'Audit and Accountability', description: 'Audit and accountability measures' },
+        { id: 'CM', name: 'Configuration Management', description: 'System configuration controls' },
+        { id: 'IR', name: 'Incident Response', description: 'Incident response capabilities' },
+        { id: 'SC', name: 'System and Communications Protection', description: 'Communications security' },
+      ],
+      controls: [
+        { id: 'AC-2', requirement: 'AC', name: 'Account Management', implemented: true },
+        { id: 'AU-2', requirement: 'AU', name: 'Audit Events', implemented: true },
+      ],
+      isActive: false,
+    }
+  })
+
+  const nistFramework = await prisma.complianceFramework.create({
+    data: {
+      name: 'NIST Cybersecurity Framework',
+      code: 'NIST-CSF',
+      description: 'NIST Cybersecurity Framework for managing cybersecurity risk',
+      version: '2.0',
+      requirements: [
+        { id: 'ID', name: 'Identify', description: 'Asset management and risk assessment' },
+        { id: 'PR', name: 'Protect', description: 'Access control and data security' },
+        { id: 'DE', name: 'Detect', description: 'Continuous monitoring and detection' },
+        { id: 'RS', name: 'Respond', description: 'Response planning and communications' },
+        { id: 'RC', name: 'Recover', description: 'Recovery planning and improvements' },
+      ],
+      controls: [
+        { id: 'PR.AC-1', requirement: 'PR', name: 'Identity Management', implemented: true },
+        { id: 'DE.CM-1', requirement: 'DE', name: 'Network Monitoring', implemented: true },
+      ],
+      isActive: true,
+    }
+  })
+
+  const soxFramework = await prisma.complianceFramework.create({
+    data: {
+      name: 'SOX Compliance',
+      code: 'SOX',
+      description: 'Sarbanes-Oxley Act financial reporting and internal controls',
+      version: '2002',
+      requirements: [
+        { id: 'SOX-302', name: 'Corporate Responsibility', description: 'CEO/CFO certification requirements' },
+        { id: 'SOX-404', name: 'Internal Controls', description: 'Assessment of internal controls' },
+        { id: 'SOX-409', name: 'Real-Time Disclosure', description: 'Rapid and current disclosure' },
+      ],
+      controls: [
+        { id: 'SOX-404.1', requirement: 'SOX-404', name: 'Control Documentation', implemented: true },
+        { id: 'SOX-404.2', requirement: 'SOX-404', name: 'Control Testing', implemented: true },
+      ],
+      isActive: true,
+    }
+  })
+
+  const cmmcFramework = await prisma.complianceFramework.create({
+    data: {
+      name: 'CMMC',
+      code: 'CMMC',
+      description: 'Cybersecurity Maturity Model Certification for defense contractors',
+      version: '2.0',
+      requirements: [
+        { id: 'L1', name: 'Level 1 - Foundational', description: 'Basic cyber hygiene' },
+        { id: 'L2', name: 'Level 2 - Advanced', description: 'Good cyber hygiene with documentation' },
+        { id: 'L3', name: 'Level 3 - Expert', description: 'Advanced/progressive practices' },
+      ],
+      controls: [
+        { id: 'L1.AC', requirement: 'L1', name: 'Access Control', implemented: true },
+        { id: 'L2.IA', requirement: 'L2', name: 'Identification and Authentication', implemented: true },
+      ],
+      isActive: false,
+    }
+  })
+
   // ==================== COMPLIANCE ATTESTATIONS ====================
   console.log('✅ Creating compliance attestations...')
 
@@ -5957,6 +6485,44 @@ async function main() {
         expiresAt: new Date('2024-03-01'),
         findings: [],
         scope: { dataTypes: ['customer_data'], regions: ['EU'] },
+      },
+      // Additional attestations to reach 10
+      {
+        frameworkId: ccpaFramework.id,
+        orgId: acmeCorp.id,
+        status: 'CERTIFIED',
+        attestedBy: 'Privacy Rights Clearinghouse',
+        attestationDate: new Date('2024-08-01'),
+        expiresAt: new Date('2025-08-01'),
+        findings: [],
+        scope: { dataTypes: ['consumer_data'], regions: ['California'] },
+      },
+      {
+        frameworkId: nistFramework.id,
+        orgId: enterpriseCo.id,
+        status: 'IN_PROGRESS',
+        attestedBy: 'CyberSecure Assessment Group',
+        findings: [{ type: 'observation', area: 'PR', description: 'Additional training recommended for IT staff' }],
+        scope: { services: ['All Services'], maturityLevel: 'Tier 3' },
+      },
+      {
+        frameworkId: soxFramework.id,
+        orgId: enterpriseCo.id,
+        status: 'CERTIFIED',
+        attestedBy: 'PricewaterhouseCoopers',
+        attestationDate: new Date('2024-12-15'),
+        expiresAt: new Date('2025-12-15'),
+        certificateUrl: 'https://certs.gwi.com/sox/enterprise-co-2024.pdf',
+        findings: [],
+        scope: { controls: ['IT General Controls', 'Financial Reporting'], fiscalYear: '2024' },
+      },
+      {
+        frameworkId: pciDssFramework.id,
+        orgId: acmeCorp.id,
+        status: 'OPEN',
+        attestedBy: 'SecurityMetrics',
+        findings: [{ type: 'finding', area: 'Req11', description: 'Quarterly vulnerability scans need documentation', severity: 'low' }],
+        scope: { services: ['Payment Processing'], cardBrands: ['Visa', 'Mastercard'] },
       },
     ]
   })
@@ -6023,6 +6589,78 @@ async function main() {
         auditor: 'KPMG',
         scheduledDate: new Date('2025-02-15'),
         scope: { module: 'Healthcare Data Processing', controls: ['164.308', '164.312'] },
+      },
+      // Additional audits to reach 10
+      {
+        frameworkId: ccpaFramework.id,
+        orgId: acmeCorp.id,
+        auditType: 'INTERNAL',
+        status: 'COMPLETED',
+        auditor: 'Internal Privacy Team',
+        leadAuditor: 'Mark Thompson, CIPP',
+        scheduledDate: new Date('2024-11-01'),
+        startDate: new Date('2024-11-01'),
+        endDate: new Date('2024-11-10'),
+        scope: { areas: ['Consumer Rights', 'Data Mapping', 'Vendor Management'] },
+        findings: [],
+        recommendations: ['Update privacy policy', 'Implement automated DSR tracking'],
+      },
+      {
+        frameworkId: nistFramework.id,
+        orgId: enterpriseCo.id,
+        auditType: 'EXTERNAL',
+        status: 'COMPLETED',
+        auditor: 'Coalfire',
+        leadAuditor: 'Robert Kim, CISSP',
+        scheduledDate: new Date('2024-08-01'),
+        startDate: new Date('2024-08-01'),
+        endDate: new Date('2024-08-30'),
+        scope: { functions: ['Identify', 'Protect', 'Detect', 'Respond', 'Recover'] },
+        findings: [{ area: 'RS', finding: 'Incident response playbooks need updating', severity: 'medium', status: 'remediated' }],
+        recommendations: ['Update IR playbooks quarterly', 'Conduct tabletop exercises'],
+        reportUrl: 'https://audits.gwi.com/nist/enterprise-2024-assessment.pdf',
+      },
+      {
+        frameworkId: soxFramework.id,
+        orgId: enterpriseCo.id,
+        auditType: 'EXTERNAL',
+        status: 'COMPLETED',
+        auditor: 'Grant Thornton',
+        leadAuditor: 'Susan Davis, CPA',
+        scheduledDate: new Date('2024-09-01'),
+        startDate: new Date('2024-09-01'),
+        endDate: new Date('2024-10-31'),
+        scope: { sections: ['302', '404'], fiscalYear: '2024' },
+        findings: [],
+        recommendations: ['Continue quarterly control testing'],
+        reportUrl: 'https://audits.gwi.com/sox/enterprise-2024-final.pdf',
+      },
+      {
+        frameworkId: pciDssFramework.id,
+        orgId: acmeCorp.id,
+        auditType: 'EXTERNAL',
+        status: 'IN_PROGRESS',
+        auditor: 'Trustwave',
+        leadAuditor: 'James Wilson, QSA',
+        scheduledDate: new Date('2025-01-01'),
+        startDate: new Date('2025-01-01'),
+        scope: { level: 'Level 3 Merchant', requirements: ['All 12 requirements'] },
+        findings: [{ requirement: 'Req11', finding: 'Penetration test overdue', severity: 'high', status: 'open' }],
+      },
+      {
+        frameworkId: gdprFramework.id,
+        orgId: enterpriseCo.id,
+        auditType: 'EXTERNAL',
+        status: 'COMPLETED',
+        auditor: 'EY Advisory',
+        leadAuditor: 'Emma Schmidt, CIPP/E',
+        scheduledDate: new Date('2024-07-01'),
+        startDate: new Date('2024-07-01'),
+        endDate: new Date('2024-07-20'),
+        scope: { articles: ['5-7', '12-22', '24-34'], dataCategories: ['customer', 'employee'] },
+        findings: [],
+        recommendations: ['Implement data minimization review process'],
+        reportUrl: 'https://audits.gwi.com/gdpr/enterprise-2024.pdf',
       },
     ]
   })
@@ -6109,6 +6747,131 @@ async function main() {
         projects: ['Project Alpha', 'Analytics Engine'],
       },
       createdBy: platformAdmin?.id || 'system',
+      notificationSent: false,
+    }
+  })
+
+  // Additional legal holds to reach 10
+  await prisma.legalHold.create({
+    data: {
+      name: 'SEC Investigation - Securities Violations',
+      description: 'Document preservation for SEC inquiry into securities practices',
+      status: 'OPEN',
+      reason: 'Regulatory investigation - SEC',
+      caseReference: 'SEC File No. HO-2024-5678',
+      custodians: [adminUser.id, sarahEnterprise.id],
+      scope: {
+        dataTypes: ['financial_records', 'emails', 'trading_logs'],
+        dateRange: { start: '2023-06-01', end: 'present' },
+        departments: ['Finance', 'Executive', 'Legal'],
+      },
+      createdBy: superAdmin?.id || 'system',
+      startDate: new Date('2024-11-01'),
+      notificationSent: true,
+      acknowledgements: [
+        { userId: adminUser.id, acknowledgedAt: new Date('2024-11-02').toISOString() },
+      ],
+    }
+  })
+
+  await prisma.legalHold.create({
+    data: {
+      name: 'Contract Dispute - Vendor ABC',
+      description: 'Preservation for breach of contract claim against vendor',
+      status: 'OPEN',
+      reason: 'Contract dispute litigation',
+      caseReference: 'Case No. 2024-BC-9012',
+      custodians: [johnDoe.id],
+      scope: {
+        dataTypes: ['contracts', 'emails', 'invoices', 'communications'],
+        dateRange: { start: '2022-01-01', end: '2024-12-31' },
+        keywords: ['Vendor ABC', 'service agreement', 'SLA'],
+      },
+      createdBy: platformAdmin?.id || 'system',
+      startDate: new Date('2024-10-15'),
+      notificationSent: true,
+      acknowledgements: [
+        { userId: johnDoe.id, acknowledgedAt: new Date('2024-10-16').toISOString() },
+      ],
+    }
+  })
+
+  await prisma.legalHold.create({
+    data: {
+      name: 'Whistleblower Investigation',
+      description: 'Internal investigation following whistleblower complaint',
+      status: 'OPEN',
+      reason: 'Internal investigation - whistleblower',
+      caseReference: 'INT-2024-WB-001',
+      custodians: [adminUser.id, janeSmith.id, sarahEnterprise.id],
+      scope: {
+        dataTypes: ['all'],
+        dateRange: { start: '2024-01-01', end: 'present' },
+        departments: ['Sales', 'Marketing', 'Operations'],
+      },
+      createdBy: superAdmin?.id || 'system',
+      startDate: new Date('2024-12-01'),
+      notificationSent: true,
+      acknowledgements: [],
+    }
+  })
+
+  await prisma.legalHold.create({
+    data: {
+      name: 'EEOC Discrimination Claim',
+      description: 'Document preservation for EEOC discrimination investigation',
+      status: 'RELEASED',
+      reason: 'Employment discrimination claim',
+      caseReference: 'EEOC No. 440-2024-00123',
+      custodians: [adminUser.id],
+      scope: {
+        dataTypes: ['hr_records', 'emails', 'performance_reviews', 'compensation_data'],
+        dateRange: { start: '2022-01-01', end: '2024-06-30' },
+      },
+      createdBy: superAdmin?.id || 'system',
+      startDate: new Date('2024-03-01'),
+      endDate: new Date('2024-12-01'),
+      notificationSent: true,
+      releaseReason: 'EEOC closed investigation with no finding',
+    }
+  })
+
+  await prisma.legalHold.create({
+    data: {
+      name: 'Data Breach Response - Q4 2024',
+      description: 'Preservation for potential data breach notification and litigation',
+      status: 'OPEN',
+      reason: 'Data breach incident response',
+      caseReference: 'BREACH-2024-Q4-001',
+      custodians: [adminUser.id, johnDoe.id, sarahEnterprise.id, bobWilson.id],
+      scope: {
+        dataTypes: ['security_logs', 'access_logs', 'system_configs', 'emails'],
+        dateRange: { start: '2024-10-01', end: 'present' },
+        systems: ['Authentication', 'Database', 'API Gateway'],
+      },
+      createdBy: superAdmin?.id || 'system',
+      startDate: new Date('2024-12-10'),
+      notificationSent: true,
+      acknowledgements: [
+        { userId: adminUser.id, acknowledgedAt: new Date('2024-12-10').toISOString() },
+        { userId: johnDoe.id, acknowledgedAt: new Date('2024-12-11').toISOString() },
+      ],
+    }
+  })
+
+  await prisma.legalHold.create({
+    data: {
+      name: 'M&A Due Diligence - Project Phoenix',
+      description: 'Document preservation for merger acquisition due diligence',
+      status: 'PENDING',
+      reason: 'M&A transaction due diligence',
+      caseReference: 'MA-2025-PHOENIX',
+      custodians: [sarahEnterprise.id],
+      scope: {
+        dataTypes: ['financial_records', 'contracts', 'ip_assets', 'employee_data'],
+        dateRange: { start: '2020-01-01', end: 'present' },
+      },
+      createdBy: superAdmin?.id || 'system',
       notificationSent: false,
     }
   })
@@ -6206,6 +6969,45 @@ async function main() {
         requestedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
         completedAt: new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000),
       },
+      // Additional data exports to reach 10
+      {
+        orgId: enterpriseCo.id,
+        requestedBy: sarahEnterprise.id,
+        type: 'SECURITY_AUDIT',
+        status: 'COMPLETED',
+        scope: { auditType: 'access_review', period: 'Q4_2024' },
+        format: 'PDF',
+        fileUrl: 'https://exports.gwi.com/security/enterprise-access-review-q4.pdf',
+        fileSize: 5234567,
+        recordCount: 45678,
+        requestedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        completedAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000),
+      },
+      {
+        orgId: acmeCorp.id,
+        requestedBy: janeSmith.id,
+        type: 'USER_DATA',
+        status: 'QUEUED',
+        scope: { users: 'all_active', fields: ['profile', 'preferences', 'activity_summary'] },
+        format: 'CSV',
+        recordCount: 0,
+        requestedAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+      },
+      {
+        orgId: techStartup.id,
+        requestedBy: bobWilson.id,
+        type: 'BACKUP',
+        status: 'COMPLETED',
+        scope: { fullBackup: true, includeAttachments: true },
+        format: 'ZIP',
+        fileUrl: 'https://exports.gwi.com/backup/techstartup-full-2025-01.zip',
+        fileSize: 1567890123,
+        recordCount: 234567,
+        requestedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        completedAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+      },
     ]
   })
 
@@ -6284,6 +7086,55 @@ async function main() {
         lastExecuted: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
         nextExecution: new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000),
         legalBasis: 'User request - GDPR Art. 17',
+      },
+      // Additional retention policies to reach 10
+      {
+        name: 'Financial Transaction Records',
+        dataType: 'FINANCIAL_DATA',
+        retentionPeriod: 2555,
+        description: 'Retain financial records for 7 years per SOX requirements',
+        scope: { dataTypes: ['invoices', 'payments', 'subscriptions', 'refunds'] },
+        deletionMethod: 'ARCHIVE',
+        archiveLocation: 's3://gwi-compliance-archive/financial/',
+        isActive: true,
+        legalBasis: 'Legal obligation - SOX Section 802',
+      },
+      {
+        name: 'Support Ticket History',
+        dataType: 'SUPPORT_DATA',
+        retentionPeriod: 1825,
+        description: 'Retain support tickets for 5 years for quality assurance',
+        scope: { dataTypes: ['tickets', 'responses', 'attachments', 'ratings'] },
+        deletionMethod: 'ANONYMIZE',
+        isActive: true,
+        lastExecuted: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+        nextExecution: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+        legalBasis: 'Legitimate interest - service improvement',
+      },
+      {
+        name: 'Security Event Logs',
+        dataType: 'SECURITY_LOGS',
+        retentionPeriod: 365,
+        description: 'Retain security events for forensic investigation capability',
+        scope: { dataTypes: ['auth_events', 'threat_detections', 'policy_violations'] },
+        deletionMethod: 'ARCHIVE',
+        archiveLocation: 's3://gwi-security-archive/events/',
+        isActive: true,
+        lastExecuted: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        nextExecution: new Date(now.getTime() + 6 * 24 * 60 * 60 * 1000),
+        legalBasis: 'Legitimate interest - security monitoring',
+      },
+      {
+        name: 'API Request Logs',
+        dataType: 'API_LOGS',
+        retentionPeriod: 90,
+        description: 'Short-term retention for API debugging and monitoring',
+        scope: { dataTypes: ['request_logs', 'response_logs', 'error_logs'] },
+        deletionMethod: 'HARD_DELETE',
+        isActive: true,
+        lastExecuted: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+        nextExecution: new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000),
+        legalBasis: 'Data minimization',
       },
     ]
   })
@@ -6374,6 +7225,71 @@ async function main() {
       affectedServices: ['Webhook Service', 'Event Processing'],
       startedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
       impactSummary: { delayedWebhooks: 15000, maxDelay: '30 minutes' },
+    }
+  })
+
+  // Additional incidents to reach 10
+  await prisma.platformIncident.create({
+    data: {
+      title: 'Search Index Corruption',
+      description: 'Search results returning incorrect or missing data due to index corruption.',
+      severity: 'MAJOR',
+      status: 'RESOLVED',
+      affectedServices: ['Search Engine', 'Dashboard Queries'],
+      affectedRegions: ['us-east-1', 'eu-west-1'],
+      startedAt: new Date(now.getTime() - 21 * 24 * 60 * 60 * 1000),
+      resolvedAt: new Date(now.getTime() - 21 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000),
+      rootCause: 'Index rebuild failed silently during scheduled maintenance',
+      resolution: 'Full index rebuild from source data with validation checks',
+      postmortemUrl: 'https://docs.gwi.com/postmortems/2024-12-24-search-index',
+      impactSummary: { affectedSearches: 45000, dataInconsistencies: 1200, duration: '4 hours' },
+    }
+  })
+
+  await prisma.platformIncident.create({
+    data: {
+      title: 'EU Region Elevated Error Rates',
+      description: 'Increased 5xx error rates in EU region affecting dashboard loads.',
+      severity: 'MINOR',
+      status: 'RESOLVED',
+      affectedServices: ['Web Application', 'Dashboard'],
+      affectedRegions: ['eu-west-1'],
+      startedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+      resolvedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000 + 90 * 60 * 1000),
+      rootCause: 'Misconfigured load balancer health check causing premature instance cycling',
+      resolution: 'Corrected health check configuration and extended timeout',
+      impactSummary: { errorRate: '8%', normalRate: '0.1%', affectedRegion: 'EU' },
+    }
+  })
+
+  await prisma.platformIncident.create({
+    data: {
+      title: 'Email Notification Delays',
+      description: 'Email notifications delayed by up to 2 hours due to third-party provider issues.',
+      severity: 'MINOR',
+      status: 'RESOLVED',
+      affectedServices: ['Notification Service', 'Email Delivery'],
+      startedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000),
+      resolvedAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000),
+      rootCause: 'SendGrid experiencing regional outage',
+      resolution: 'Failover to backup email provider completed',
+      impactSummary: { delayedEmails: 25000, maxDelay: '2 hours' },
+    }
+  })
+
+  await prisma.platformIncident.create({
+    data: {
+      title: 'Billing System Unavailable',
+      description: 'Billing portal and subscription management temporarily unavailable.',
+      severity: 'CRITICAL',
+      status: 'RESOLVED',
+      affectedServices: ['Billing Portal', 'Subscription Management', 'Payment Processing'],
+      startedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+      resolvedAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000),
+      rootCause: 'Stripe API authentication failure due to expired API key',
+      resolution: 'Rotated API keys and implemented key expiration monitoring',
+      postmortemUrl: 'https://docs.gwi.com/postmortems/2024-12-14-billing-outage',
+      impactSummary: { failedPayments: 45, affectedSubscriptions: 0, revenueImpact: '$0' },
     }
   })
 
@@ -6468,6 +7384,73 @@ async function main() {
         notificationsSent: true,
         postMaintenanceNotes: 'Redis memory increased and sentinel configuration optimized.',
         createdBy: superAdmin?.id || 'system',
+      },
+      // Additional maintenance windows to reach 10
+      {
+        title: 'Kubernetes Cluster Upgrade',
+        description: 'Upgrading Kubernetes from 1.28 to 1.29 for improved security and features.',
+        type: 'PLANNED',
+        status: 'SCHEDULED',
+        scheduledStart: new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000),
+        affectedServices: ['All Services'],
+        affectedRegions: ['us-east-1', 'eu-west-1', 'ap-southeast-1'],
+        impact: 'DEGRADED',
+        notificationsSent: false,
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        title: 'Elasticsearch Reindexing',
+        description: 'Full reindex of search clusters for improved relevance.',
+        type: 'PLANNED',
+        status: 'SCHEDULED',
+        scheduledStart: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000),
+        affectedServices: ['Search Engine'],
+        impact: 'DEGRADED',
+        notificationsSent: true,
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        title: 'CDN Configuration Update',
+        description: 'Updating CDN edge locations and caching rules.',
+        type: 'PLANNED',
+        status: 'COMPLETED',
+        scheduledStart: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 1 * 60 * 60 * 1000),
+        actualStart: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+        actualEnd: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 45 * 60 * 1000),
+        affectedServices: ['Static Assets', 'Image Delivery'],
+        impact: 'NONE',
+        notificationsSent: true,
+        postMaintenanceNotes: 'CDN performance improved by 25% in APAC region.',
+        createdBy: platformAdmin?.id || 'system',
+      },
+      {
+        title: 'Backup System Migration',
+        description: 'Migrating backup infrastructure to new provider with better retention.',
+        type: 'PLANNED',
+        status: 'IN_PROGRESS',
+        scheduledStart: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() + 4 * 60 * 60 * 1000),
+        actualStart: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        affectedServices: ['Backup Service'],
+        impact: 'NONE',
+        notificationsSent: true,
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        title: 'API Rate Limiter Reconfiguration',
+        description: 'Adjusting rate limits based on customer tier entitlements.',
+        type: 'PLANNED',
+        status: 'CANCELLED',
+        scheduledStart: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        scheduledEnd: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000),
+        affectedServices: ['API Gateway'],
+        impact: 'NONE',
+        notificationsSent: true,
+        cancellationReason: 'Deferred to next sprint due to higher priority incident',
+        createdBy: platformAdmin?.id || 'system',
       },
     ]
   })
@@ -6571,6 +7554,70 @@ async function main() {
         targetDate: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
         changelog: [],
         breakingChanges: [],
+        createdBy: platformAdmin?.id || 'system',
+      },
+      // Additional releases to reach 10
+      {
+        version: '2.4.0',
+        name: 'Fall 2024 Release',
+        description: 'Major release with new analytics capabilities.',
+        type: 'MAJOR',
+        status: 'RELEASED',
+        releaseDate: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'feature', description: 'New audience builder with advanced targeting' },
+          { type: 'feature', description: 'Brand health tracking dashboard' },
+          { type: 'improvement', description: 'Redesigned report templates' },
+        ],
+        breakingChanges: [],
+        rolloutPercentage: 100,
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        version: '2.3.5',
+        name: 'Emergency Security Patch',
+        description: 'Critical security update for authentication system.',
+        type: 'PATCH',
+        status: 'RELEASED',
+        releaseDate: new Date(now.getTime() - 75 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'security', description: 'Fixed authentication bypass vulnerability' },
+          { type: 'security', description: 'Enhanced session token validation' },
+        ],
+        breakingChanges: [],
+        rolloutPercentage: 100,
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        version: '2.7.0',
+        name: 'Summer 2025 Release',
+        description: 'Major platform evolution with ML capabilities.',
+        type: 'MAJOR',
+        status: 'PLANNED',
+        targetDate: new Date(now.getTime() + 120 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'feature', description: 'Machine learning powered trend predictions' },
+          { type: 'feature', description: 'Automated report generation' },
+          { type: 'feature', description: 'Custom agent workflows' },
+        ],
+        breakingChanges: [
+          { change: 'Legacy report format deprecated', migration: 'Use new report builder format' },
+        ],
+        createdBy: superAdmin?.id || 'system',
+      },
+      {
+        version: '2.5.0-rc1',
+        name: 'Winter 2025 Release Candidate',
+        description: 'Release candidate for testing.',
+        type: 'MAJOR',
+        status: 'RELEASED',
+        releaseDate: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000),
+        changelog: [
+          { type: 'feature', description: 'All features from 2.5.0' },
+        ],
+        breakingChanges: [],
+        rolloutPercentage: 10,
+        rollbackPlan: 'Instant rollback to 2.4.2 available.',
         createdBy: platformAdmin?.id || 'system',
       },
     ]
@@ -6684,6 +7731,49 @@ async function main() {
         expiresAt: new Date(now.getTime() - 35 * 24 * 60 * 60 * 1000),
         autoRenew: false,
       },
+      // Additional domain verifications to reach 10
+      {
+        orgId: globalMediaOrg.id,
+        domain: 'globalmedia.com',
+        status: 'VERIFIED',
+        verificationType: 'DNS_TXT',
+        verificationToken: 'gwi-verify=global123',
+        verifiedAt: new Date(now.getTime() - 45 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 320 * 24 * 60 * 60 * 1000),
+        autoRenew: true,
+        isPrimary: true,
+      },
+      {
+        orgId: healthTechOrg.id,
+        domain: 'healthtech-innovations.com',
+        status: 'VERIFIED',
+        verificationType: 'DNS_CNAME',
+        verificationToken: 'gwi-verify-cname.healthtech.io',
+        verifiedAt: new Date(now.getTime() - 20 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 345 * 24 * 60 * 60 * 1000),
+        autoRenew: true,
+        isPrimary: true,
+      },
+      {
+        orgId: retailGiantOrg.id,
+        domain: 'retail-giant.com',
+        status: 'PENDING',
+        verificationType: 'DNS_TXT',
+        verificationToken: 'gwi-verify=retail456',
+        verificationAttempts: 1,
+        lastAttemptAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+      },
+      {
+        orgId: financeProOrg.id,
+        domain: 'financepro.com',
+        status: 'VERIFIED',
+        verificationType: 'META_TAG',
+        verificationToken: '<meta name="gwi-verify" content="finance789">',
+        verifiedAt: new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(now.getTime() + 350 * 24 * 60 * 60 * 1000),
+        autoRenew: true,
+        isPrimary: true,
+      },
     ]
   })
 
@@ -6774,6 +7864,94 @@ async function main() {
         allowedDomains: ['techstartup.io'],
         userCount: 0,
       },
+      // Additional SSO configurations to reach 10
+      {
+        orgId: globalMediaOrg.id,
+        provider: 'OKTA',
+        status: 'OPEN',
+        config: {
+          issuer: 'https://globalmedia.okta.com',
+          clientId: 'okta_gm_client_789',
+          authorizationEndpoint: 'https://globalmedia.okta.com/oauth2/v1/authorize',
+        },
+        attributeMapping: { email: 'email', firstName: 'given_name', lastName: 'family_name' },
+        defaultRole: 'MEMBER',
+        autoProvision: true,
+        enforceSSO: true,
+        allowedDomains: ['globalmedia.com'],
+        lastSyncAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        userCount: 234,
+      },
+      {
+        orgId: healthTechOrg.id,
+        provider: 'AZURE_AD',
+        status: 'OPEN',
+        config: {
+          tenantId: 'healthtech-tenant-id',
+          clientId: 'azure_ht_client_456',
+        },
+        attributeMapping: { email: 'mail', firstName: 'givenName', lastName: 'surname' },
+        defaultRole: 'VIEWER',
+        autoProvision: true,
+        enforceSSO: true,
+        allowedDomains: ['healthtech-innovations.com'],
+        userCount: 89,
+      },
+      {
+        orgId: retailGiantOrg.id,
+        provider: 'PING_IDENTITY',
+        status: 'TESTING',
+        config: {
+          issuer: 'https://auth.retail-giant.com',
+          clientId: 'ping_retail_123',
+        },
+        attributeMapping: { email: 'email', firstName: 'first_name', lastName: 'last_name' },
+        defaultRole: 'MEMBER',
+        autoProvision: false,
+        enforceSSO: false,
+        userCount: 0,
+      },
+      {
+        orgId: financeProOrg.id,
+        provider: 'SAML',
+        status: 'OPEN',
+        config: {
+          entityId: 'https://gwi.com/saml/financepro',
+          ssoUrl: 'https://sso.financepro.com/saml/login',
+          certificate: '-----BEGIN CERTIFICATE-----\nMIIB...finance...==\n-----END CERTIFICATE-----',
+        },
+        attributeMapping: { email: 'email', firstName: 'firstName', lastName: 'lastName' },
+        defaultRole: 'MEMBER',
+        autoProvision: true,
+        enforceSSO: true,
+        userCount: 67,
+      },
+      {
+        orgId: globalMediaOrg.id,
+        provider: 'ONELOGIN',
+        status: 'DISABLED',
+        config: {
+          clientId: 'onelogin_legacy_client',
+        },
+        attributeMapping: { email: 'email' },
+        defaultRole: 'VIEWER',
+        autoProvision: false,
+        enforceSSO: false,
+        userCount: 0,
+      },
+      {
+        orgId: acmeCorp.id,
+        provider: 'AUTH0',
+        status: 'PENDING_SETUP',
+        config: {
+          domain: 'acme.auth0.com',
+          clientId: 'auth0_acme_pending',
+        },
+        defaultRole: 'MEMBER',
+        autoProvision: true,
+        enforceSSO: false,
+        userCount: 0,
+      },
     ]
   })
 
@@ -6835,6 +8013,94 @@ async function main() {
         lastSyncError: 'Connection timeout: Legacy IdP not responding',
         userCount: 15,
         groupCount: 2,
+      },
+      // Additional SCIM integrations to reach 10
+      {
+        orgId: globalMediaOrg.id,
+        provider: 'OKTA',
+        status: 'OPEN',
+        endpoint: 'https://api.gwi.com/scim/v2/global-media',
+        bearerToken: 'scim_token_encrypted_gm001',
+        config: { syncUsers: true, syncGroups: true, autoDeactivate: true, syncInterval: 15 },
+        lastSyncAt: new Date(now.getTime() - 10 * 60 * 1000),
+        lastSyncStatus: 'SUCCESS',
+        syncStats: { usersCreated: 10, usersUpdated: 25, usersDeactivated: 3, groupsCreated: 2 },
+        userCount: 234,
+        groupCount: 12,
+      },
+      {
+        orgId: healthTechOrg.id,
+        provider: 'AZURE_AD',
+        status: 'OPEN',
+        endpoint: 'https://api.gwi.com/scim/v2/healthtech',
+        bearerToken: 'scim_token_encrypted_ht002',
+        config: { syncUsers: true, syncGroups: false, autoDeactivate: true, syncInterval: 30 },
+        lastSyncAt: new Date(now.getTime() - 20 * 60 * 1000),
+        lastSyncStatus: 'SUCCESS',
+        syncStats: { usersCreated: 2, usersUpdated: 8, usersDeactivated: 0 },
+        userCount: 89,
+        groupCount: 0,
+      },
+      {
+        orgId: retailGiantOrg.id,
+        provider: 'PING_IDENTITY',
+        status: 'PENDING_SETUP',
+        endpoint: 'https://api.gwi.com/scim/v2/retail-giant',
+        bearerToken: 'scim_token_encrypted_rg003',
+        config: { syncUsers: true, syncGroups: true, autoDeactivate: false, syncInterval: 60 },
+        userCount: 0,
+        groupCount: 0,
+      },
+      {
+        orgId: financeProOrg.id,
+        provider: 'JUMPCLOUD',
+        status: 'OPEN',
+        endpoint: 'https://api.gwi.com/scim/v2/financepro',
+        bearerToken: 'scim_token_encrypted_fp004',
+        config: { syncUsers: true, syncGroups: true, autoDeactivate: true, syncInterval: 20 },
+        lastSyncAt: new Date(now.getTime() - 15 * 60 * 1000),
+        lastSyncStatus: 'SUCCESS',
+        syncStats: { usersCreated: 1, usersUpdated: 6, usersDeactivated: 1, groupsCreated: 0 },
+        userCount: 67,
+        groupCount: 5,
+      },
+      {
+        orgId: globalMediaOrg.id,
+        provider: 'ONELOGIN',
+        status: 'DISABLED',
+        endpoint: 'https://api.gwi.com/scim/v2/global-media-legacy',
+        bearerToken: 'scim_token_encrypted_gm005',
+        config: { syncUsers: true, syncGroups: false, autoDeactivate: false, syncInterval: 60 },
+        lastSyncStatus: 'DISABLED',
+        userCount: 0,
+        groupCount: 0,
+      },
+      {
+        orgId: techStartup.id,
+        provider: 'GOOGLE',
+        status: 'TESTING',
+        endpoint: 'https://api.gwi.com/scim/v2/techstartup',
+        bearerToken: 'scim_token_encrypted_ts006',
+        config: { syncUsers: true, syncGroups: false, autoDeactivate: false, syncInterval: 30 },
+        lastSyncAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+        lastSyncStatus: 'PARTIAL',
+        syncStats: { usersCreated: 3, usersUpdated: 0, errors: 2 },
+        lastSyncError: 'Some users failed due to email format validation',
+        userCount: 12,
+        groupCount: 0,
+      },
+      {
+        orgId: acmeCorp.id,
+        provider: 'CUSTOM',
+        status: 'OPEN',
+        endpoint: 'https://api.gwi.com/scim/v2/acme-hr-system',
+        bearerToken: 'scim_token_encrypted_ac007',
+        config: { syncUsers: true, syncGroups: true, autoDeactivate: true, syncInterval: 45 },
+        lastSyncAt: new Date(now.getTime() - 35 * 60 * 1000),
+        lastSyncStatus: 'SUCCESS',
+        syncStats: { usersCreated: 0, usersUpdated: 4, usersDeactivated: 1, groupsCreated: 0 },
+        userCount: 45,
+        groupCount: 3,
       },
     ]
   })
@@ -6916,6 +8182,110 @@ async function main() {
         maxDevicesPerUser: 10,
         inactivityTimeout: 120,
         requireReauthDays: 30,
+      },
+      // Additional device policies to reach 10
+      {
+        orgId: globalMediaOrg.id,
+        name: 'Media Industry Standard Policy',
+        description: 'Device requirements for media industry with creative software needs',
+        isActive: true,
+        requirements: {
+          minOSVersions: { windows: '10.0.19041', macos: '13.0' },
+          requireEncryption: true,
+          requireScreenLock: true,
+          requireBiometric: false,
+          blockJailbroken: true,
+          allowedDeviceTypes: ['desktop', 'laptop'],
+        },
+        maxDevicesPerUser: 4,
+        inactivityTimeout: 45,
+        requireReauthDays: 7,
+      },
+      {
+        orgId: healthTechOrg.id,
+        name: 'HIPAA Compliant Device Policy',
+        description: 'Strict device requirements for HIPAA compliance',
+        isActive: true,
+        requirements: {
+          minOSVersions: { windows: '11.0', macos: '14.0', ios: '17.0', android: '14' },
+          requireEncryption: true,
+          requireScreenLock: true,
+          requireBiometric: true,
+          blockJailbroken: true,
+          blockRooted: true,
+          requireMDM: true,
+          allowedDeviceTypes: ['desktop', 'laptop'],
+        },
+        maxDevicesPerUser: 2,
+        inactivityTimeout: 10,
+        requireReauthDays: 1,
+      },
+      {
+        orgId: retailGiantOrg.id,
+        name: 'Retail Operations Policy',
+        description: 'Device policy for retail store operations',
+        isActive: true,
+        requirements: {
+          minOSVersions: { android: '11', ios: '15.0' },
+          requireEncryption: true,
+          requireScreenLock: true,
+          blockJailbroken: true,
+          allowedDeviceTypes: ['tablet', 'phone'],
+        },
+        maxDevicesPerUser: 3,
+        inactivityTimeout: 30,
+        requireReauthDays: 14,
+      },
+      {
+        orgId: financeProOrg.id,
+        name: 'Financial Services Policy',
+        description: 'Enhanced security for financial services access',
+        isActive: true,
+        requirements: {
+          minOSVersions: { windows: '11.0', macos: '14.0' },
+          requireEncryption: true,
+          requireScreenLock: true,
+          requireBiometric: true,
+          blockJailbroken: true,
+          blockRooted: true,
+          requireMDM: true,
+          allowedDeviceTypes: ['desktop', 'laptop'],
+        },
+        maxDevicesPerUser: 2,
+        inactivityTimeout: 15,
+        requireReauthDays: 3,
+      },
+      {
+        orgId: globalMediaOrg.id,
+        name: 'Contractor Device Policy',
+        description: 'Limited access policy for external contractors',
+        isActive: true,
+        requirements: {
+          requireEncryption: true,
+          requireScreenLock: true,
+          blockJailbroken: true,
+        },
+        maxDevicesPerUser: 1,
+        inactivityTimeout: 15,
+        requireReauthDays: 1,
+      },
+      {
+        orgId: enterpriseCo.id,
+        name: 'Mobile Only Policy',
+        description: 'Policy for mobile-only users',
+        isActive: true,
+        requirements: {
+          minOSVersions: { ios: '16.0', android: '13' },
+          requireEncryption: true,
+          requireScreenLock: true,
+          requireBiometric: true,
+          blockJailbroken: true,
+          blockRooted: true,
+          allowedDeviceTypes: ['phone'],
+        },
+        maxDevicesPerUser: 2,
+        inactivityTimeout: 30,
+        requireReauthDays: 7,
       },
     ]
   })
@@ -7208,6 +8578,35 @@ async function main() {
         requestCount: 2345678,
         createdBy: sarahEnterprise.id,
       },
+      // Additional API clients to reach 10
+      {
+        orgId: globalMediaOrg.id,
+        name: 'Global Media Integration',
+        description: 'API client for Global Media Group integration',
+        clientId: 'client_prod_globalmedia_001',
+        clientSecret: 'secret_encrypted_gm001xyz',
+        type: 'CONFIDENTIAL',
+        status: 'OPEN',
+        scopes: ['read:audiences', 'write:audiences', 'read:insights', 'read:reports'],
+        rateLimitOverride: 3000,
+        lastUsed: new Date(now.getTime() - 15 * 60 * 1000),
+        requestCount: 987654,
+        createdBy: adminUser.id,
+      },
+      {
+        orgId: healthTechOrg.id,
+        name: 'HealthTech Data Connector',
+        description: 'HIPAA-compliant API client for healthcare data',
+        clientId: 'client_prod_healthtech_001',
+        clientSecret: 'secret_encrypted_ht001abc',
+        type: 'CONFIDENTIAL',
+        status: 'OPEN',
+        scopes: ['read:audiences', 'read:insights'],
+        ipWhitelist: ['10.0.0.0/8'],
+        lastUsed: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+        requestCount: 45678,
+        createdBy: adminUser.id,
+      },
     ]
   })
 
@@ -7332,6 +8731,46 @@ async function main() {
           failedDeliveries: 345,
           disabledAt: new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000),
           disabledReason: 'Endpoint deprecated - migrated to new system',
+          createdBy: adminUser.id,
+        },
+        // Additional webhooks to reach 10
+        {
+          orgId: globalMediaOrg.id,
+          name: 'Global Media Event Processor',
+          url: 'https://events.globalmedia.com/webhooks/gwi',
+          status: 'ACTIVE',
+          events: ['report.completed', 'insight.generated', 'audience.updated'],
+          secret: 'whsec_globalmedia_events_001',
+          totalDeliveries: 34567,
+          successfulDeliveries: 34200,
+          failedDeliveries: 367,
+          lastDeliveryAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+          createdBy: adminUser.id,
+        },
+        {
+          orgId: healthTechOrg.id,
+          name: 'HealthTech Compliance Logger',
+          url: 'https://compliance.healthtech-innovations.com/audit-webhook',
+          status: 'ACTIVE',
+          events: ['data.accessed', 'export.completed', 'user.activity'],
+          secret: 'whsec_healthtech_audit_001',
+          retryPolicy: { maxRetries: 5, backoffMultiplier: 2 },
+          totalDeliveries: 12345,
+          successfulDeliveries: 12345,
+          failedDeliveries: 0,
+          lastDeliveryAt: new Date(now.getTime() - 30 * 60 * 1000),
+          createdBy: adminUser.id,
+        },
+        {
+          orgId: retailGiantOrg.id,
+          name: 'Retail Analytics Webhook',
+          url: 'https://analytics.retail-giant.com/gwi-events',
+          status: 'TESTING',
+          events: ['insight.generated', 'report.completed'],
+          secret: 'whsec_retail_analytics_001',
+          totalDeliveries: 150,
+          successfulDeliveries: 145,
+          failedDeliveries: 5,
           createdBy: adminUser.id,
         },
       ]
