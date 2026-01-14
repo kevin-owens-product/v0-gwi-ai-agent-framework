@@ -150,8 +150,9 @@ export async function POST(request: NextRequest) {
         where: { createdAt: { gte: periodStart } },
       }),
       prisma.user.count(),
+      // Count active sessions (with valid expires)
       prisma.session.count({
-        where: { createdAt: { gte: periodStart } },
+        where: { expires: { gte: new Date() } },
       }),
       prisma.user.count({
         where: { createdAt: { gte: periodStart } },

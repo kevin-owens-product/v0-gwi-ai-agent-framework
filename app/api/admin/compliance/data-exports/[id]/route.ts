@@ -147,8 +147,8 @@ export async function PUT(
       action: "update_data_export",
       resourceType: "data_export",
       resourceId: dataExport.id,
-      targetOrgId: dataExport.orgId,
-      targetUserId: dataExport.userId,
+      targetOrgId: dataExport.orgId ?? undefined,
+      targetUserId: dataExport.userId ?? undefined,
       details: {
         changes: Object.keys(body),
         previousStatus: existingExport.status,
@@ -228,8 +228,8 @@ export async function DELETE(
       action: "delete_data_export",
       resourceType: "data_export",
       resourceId: id,
-      targetOrgId: existingExport.orgId,
-      targetUserId: existingExport.userId,
+      targetOrgId: existingExport.orgId ?? undefined,
+      targetUserId: existingExport.userId ?? undefined,
       details: {
         type: existingExport.type,
         status: existingExport.status,

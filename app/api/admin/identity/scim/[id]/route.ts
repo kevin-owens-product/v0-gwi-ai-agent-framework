@@ -42,8 +42,8 @@ export async function GET(
     })
 
     // Count users in organization
-    const userCount = await prisma.membership.count({
-      where: { organizationId: scimIntegration.orgId },
+    const userCount = await prisma.organizationMember.count({
+      where: { orgId: scimIntegration.orgId },
     })
 
     return NextResponse.json({

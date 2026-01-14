@@ -47,7 +47,7 @@ interface Version {
 }
 
 interface VersionHistoryProps {
-  resourceType: "audience" | "crosstab"
+  resourceType: "audience" | "crosstab" | "brand-tracking"
   resourceId: string
   resourceName: string
   versions: Version[]

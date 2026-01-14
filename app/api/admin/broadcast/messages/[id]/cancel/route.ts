@@ -53,8 +53,7 @@ export async function POST(
         action: "broadcast_message_cancelled",
         resourceType: "broadcast_message",
         resourceId: message.id,
-        actorType: "SUPER_ADMIN",
-        actorId: session.admin.id,
+        adminId: session.admin.id,
         details: {
           title: message.title,
           originalScheduledFor: existingMessage.scheduledFor?.toISOString(),

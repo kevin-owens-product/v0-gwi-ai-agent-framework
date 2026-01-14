@@ -25,6 +25,7 @@ import type {
   PlanTier,
   CompanySize,
 } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 // ==================== TYPE DEFINITIONS ====================
 
@@ -158,9 +159,9 @@ export async function createChildOrganization(
   const hierarchyPath = `${parent.hierarchyPath}${parent.id}/`
 
   // Merge settings if inheriting
-  const settings = input.inheritSettings !== false && parent.settings
+  const settings = (input.inheritSettings !== false && parent.settings
     ? { ...(parent.settings as Record<string, unknown>), ...(input.settings || {}) }
-    : input.settings || {}
+    : input.settings || {}) as Prisma.InputJsonValue
 
   const newOrg = await prisma.$transaction(async (tx) => {
     // Create the organization
@@ -451,7 +452,7 @@ export async function getDescendants(
 
   const pathPrefix = `${org.hierarchyPath}${org.id}/`
 
-  const whereClause: Parameters<typeof prisma.organization.findMany>[0]['where'] = {
+  const whereClause: Prisma.OrganizationWhereInput = {
     hierarchyPath: {
       startsWith: pathPrefix,
     },
@@ -485,7 +486,7 @@ export async function getDirectChildren(
     planTiers?: PlanTier[]
   }
 ): Promise<Organization[]> {
-  const whereClause: Parameters<typeof prisma.organization.findMany>[0]['where'] = {
+  const whereClause: Prisma.OrganizationWhereInput = {
     parentOrgId: orgId,
   }
 
@@ -571,8 +572,8 @@ export async function createOrgRelationship(
         relationshipType: input.relationshipType,
         accessLevel: input.accessLevel || 'READ_ONLY',
         billingRelation: input.billingRelation || 'INDEPENDENT',
-        billingConfig: input.billingConfig || {},
-        permissions: input.permissions || {},
+        billingConfig: (input.billingConfig || {}) as Prisma.InputJsonValue,
+        permissions: (input.permissions || {}) as Prisma.InputJsonValue,
         contractStart: input.contractStart,
         contractEnd: input.contractEnd,
         notes: input.notes,

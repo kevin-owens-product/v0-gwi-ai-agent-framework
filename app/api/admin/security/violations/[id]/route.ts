@@ -123,8 +123,8 @@ export async function PUT(
       action: "update_security_violation",
       resourceType: "security_violation",
       resourceId: id,
-      targetOrgId: violation.orgId,
-      targetUserId: violation.userId,
+      targetOrgId: violation.orgId ?? undefined,
+      targetUserId: violation.userId ?? undefined,
       details: {
         changes: Object.keys(body),
         previousStatus: existingViolation.status,
@@ -177,8 +177,8 @@ export async function DELETE(
       action: "delete_security_violation",
       resourceType: "security_violation",
       resourceId: id,
-      targetOrgId: existingViolation.orgId,
-      targetUserId: existingViolation.userId,
+      targetOrgId: existingViolation.orgId ?? undefined,
+      targetUserId: existingViolation.userId ?? undefined,
       details: {
         violationType: existingViolation.violationType,
         severity: existingViolation.severity,

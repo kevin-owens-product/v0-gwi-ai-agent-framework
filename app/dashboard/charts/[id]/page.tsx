@@ -305,7 +305,6 @@ function formatChartType(type: AdvancedChartType): string {
     HEATMAP: "Heatmap", COMBO: "Combo Chart", WATERFALL: "Waterfall",
     BULLET: "Bullet Chart", METRIC: "Metric", SPARKLINE: "Sparkline",
     COMPARISON_BAR: "Comparison",
-    METRIC: "Metric",
   }
   return typeMap[type] || type
 }

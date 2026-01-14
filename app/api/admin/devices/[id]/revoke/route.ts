@@ -46,14 +46,15 @@ export async function POST(
         trustedAt: null,
         trustedBy: null,
       },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
+    })
+
+    // Query user separately since TrustedDevice doesn't have a relation to User
+    const user = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
       },
     })
 
@@ -71,7 +72,7 @@ export async function POST(
     })
 
     return NextResponse.json({
-      device,
+      device: { ...device, user },
       message: "Device trust revoked successfully",
     })
   } catch (error) {
