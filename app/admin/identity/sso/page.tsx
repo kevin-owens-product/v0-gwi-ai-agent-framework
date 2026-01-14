@@ -11,9 +11,6 @@ import {
   XCircle,
   Settings,
   Clock,
-  MoreHorizontal,
-  Edit,
-  Trash,
   Play,
   Pause,
   TestTube,
@@ -31,21 +28,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -58,6 +40,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
 import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Organization {
   id: string
@@ -106,6 +89,7 @@ export default function SSOListingPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [providerFilter, setProviderFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 20,
@@ -270,6 +254,149 @@ export default function SSOListingPage() {
     // All providers use Key icon for simplicity
     return <Key className="h-4 w-4" />
   }
+
+  const handleBulkEnable = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/identity/sso/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "ACTIVE" }),
+          })
+        )
+      )
+      toast.success(`Successfully enabled ${ids.length} SSO configuration${ids.length > 1 ? "s" : ""}`)
+      fetchSSOConfigs()
+      setSelectedIds(new Set())
+    } catch (error) {
+      toast.error("Failed to enable SSO configurations")
+    }
+  }
+
+  const handleBulkDisable = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/identity/sso/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "DISABLED" }),
+          })
+        )
+      )
+      toast.success(`Successfully disabled ${ids.length} SSO configuration${ids.length > 1 ? "s" : ""}`)
+      fetchSSOConfigs()
+      setSelectedIds(new Set())
+    } catch (error) {
+      toast.error("Failed to disable SSO configurations")
+    }
+  }
+
+  // Define columns for AdminDataTable
+  const columns: Column<SSOConfig>[] = [
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (config) => (
+        <Link href={`/admin/identity/sso/${config.id}`} className="hover:underline">
+          <div className="flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="font-medium">
+                {config.displayName || config.organization?.name || config.orgId}
+              </p>
+              {config.organization && (
+                <p className="text-xs text-muted-foreground">
+                  {config.organization.slug}
+                </p>
+              )}
+            </div>
+          </div>
+        </Link>
+      ),
+    },
+    {
+      id: "provider",
+      header: "Provider",
+      cell: (config) => (
+        <div className="flex items-center gap-2">
+          {getProviderIcon(config.provider)}
+          <Badge variant="outline">
+            {ssoProviders.find((p) => p.value === config.provider)?.label || config.provider}
+          </Badge>
+        </div>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (config) => getStatusBadge(config.status),
+    },
+    {
+      id: "provisioning",
+      header: "Provisioning",
+      cell: (config) => (
+        <div className="flex flex-col gap-1">
+          <Badge variant={config.jitProvisioning ? "default" : "secondary"} className="text-xs w-fit">
+            JIT: {config.jitProvisioning ? "On" : "Off"}
+          </Badge>
+          {config.autoDeactivate && (
+            <Badge variant="outline" className="text-xs w-fit">
+              Auto-deactivate
+            </Badge>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "lastSync",
+      header: "Last Sync",
+      cell: (config) =>
+        config.lastSyncAt ? (
+          <span className="flex items-center gap-1 text-sm">
+            <Clock className="h-3 w-3" />
+            {new Date(config.lastSyncAt).toLocaleDateString()}
+          </span>
+        ) : (
+          <span className="text-muted-foreground text-sm">Never</span>
+        ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<SSOConfig>[] = [
+    {
+      label: "Activate",
+      icon: <Play className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (config) => config.status === "ACTIVE",
+    },
+    {
+      label: "Disable",
+      icon: <Pause className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (config) => config.status !== "ACTIVE",
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Enable Selected",
+      icon: <Play className="h-4 w-4" />,
+      onClick: handleBulkEnable,
+      confirmTitle: "Enable SSO Configurations",
+      confirmDescription: "Are you sure you want to enable the selected SSO configurations?",
+    },
+    {
+      label: "Disable Selected",
+      icon: <Pause className="h-4 w-4" />,
+      onClick: handleBulkDisable,
+      confirmTitle: "Disable SSO Configurations",
+      confirmDescription: "Are you sure you want to disable the selected SSO configurations?",
+    },
+  ]
 
   const filteredConfigs = ssoConfigs.filter(
     (config) =>
@@ -480,168 +607,30 @@ export default function SSOListingPage() {
       </Card>
 
       {/* SSO Configs Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Organization</TableHead>
-                <TableHead>Provider</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Provisioning</TableHead>
-                <TableHead>Last Sync</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={6}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredConfigs.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-12">
-                    <Key className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No SSO configurations found</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => setIsCreateOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create First Configuration
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredConfigs.map((config) => (
-                  <TableRow key={config.id}>
-                    <TableCell>
-                      <Link href={`/admin/identity/sso/${config.id}`} className="hover:underline">
-                        <div className="flex items-center gap-2">
-                          <Building2 className="h-4 w-4 text-muted-foreground" />
-                          <div>
-                            <p className="font-medium">
-                              {config.displayName || config.organization?.name || config.orgId}
-                            </p>
-                            {config.organization && (
-                              <p className="text-xs text-muted-foreground">
-                                {config.organization.slug}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {getProviderIcon(config.provider)}
-                        <Badge variant="outline">
-                          {ssoProviders.find((p) => p.value === config.provider)?.label || config.provider}
-                        </Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(config.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <Badge variant={config.jitProvisioning ? "default" : "secondary"} className="text-xs w-fit">
-                          JIT: {config.jitProvisioning ? "On" : "Off"}
-                        </Badge>
-                        {config.autoDeactivate && (
-                          <Badge variant="outline" className="text-xs w-fit">
-                            Auto-deactivate
-                          </Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {config.lastSyncAt ? (
-                        <span className="flex items-center gap-1 text-sm">
-                          <Clock className="h-3 w-3" />
-                          {new Date(config.lastSyncAt).toLocaleDateString()}
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground text-sm">Never</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/identity/sso/${config.id}`}>
-                              <Edit className="h-4 w-4 mr-2" />
-                              View / Edit
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleToggleStatus(config)}>
-                            {config.status === "ACTIVE" ? (
-                              <>
-                                <Pause className="h-4 w-4 mr-2" />
-                                Disable
-                              </>
-                            ) : (
-                              <>
-                                <Play className="h-4 w-4 mr-2" />
-                                Activate
-                              </>
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDelete(config.id)}
-                          >
-                            <Trash className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
-            {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
-            {pagination.total} configurations
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page === 1}
-              onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page === pagination.totalPages}
-              onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
+      <AdminDataTable
+        data={filteredConfigs}
+        columns={columns}
+        getRowId={(config) => config.id}
+        isLoading={loading}
+        emptyMessage="No SSO configurations found"
+        viewHref={(config) => `/admin/identity/sso/${config.id}`}
+        onDelete={handleDelete}
+        deleteConfirmTitle="Delete SSO Configuration"
+        deleteConfirmDescription={(config) =>
+          `Are you sure you want to delete the SSO configuration for ${
+            config.displayName || config.organization?.name || config.orgId
+          }? This action cannot be undone.`
+        }
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        total={pagination.total}
+        onPageChange={(page) => setPagination({ ...pagination, page })}
+        enableSelection={true}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+      />
     </div>
   )
 }

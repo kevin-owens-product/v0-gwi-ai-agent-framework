@@ -11,15 +11,11 @@ import {
   XCircle,
   Settings,
   Clock,
-  MoreHorizontal,
-  Edit,
-  Trash,
   Play,
   Pause,
   Key,
   Building2,
   Users,
-  RefreshCw,
   Copy,
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -33,21 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -66,6 +47,7 @@ import {
 } from "@/components/ui/alert"
 import { toast } from "sonner"
 import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Organization {
   id: string
@@ -107,6 +89,7 @@ export default function SCIMListingPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [newToken, setNewToken] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 20,
@@ -203,11 +186,9 @@ export default function SCIMListingPage() {
     }
   }
 
-  const handleDelete = async (integrationId: string) => {
-    if (!confirm("Are you sure you want to delete this SCIM integration?")) return
-
+  const handleDelete = async (integration: SCIMIntegration) => {
     try {
-      const response = await fetch(`/api/admin/identity/scim/${integrationId}`, {
+      const response = await fetch(`/api/admin/identity/scim/${integration.id}`, {
         method: "DELETE",
       })
 
@@ -220,6 +201,42 @@ export default function SCIMListingPage() {
       fetchSCIMIntegrations()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to delete SCIM integration")
+    }
+  }
+
+  const handleBulkActivate = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/identity/scim/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "ACTIVE" }),
+          })
+        )
+      )
+      toast.success(`${ids.length} integration(s) activated successfully`)
+      fetchSCIMIntegrations()
+    } catch (error) {
+      toast.error("Failed to activate integrations")
+    }
+  }
+
+  const handleBulkPause = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/identity/scim/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "PAUSED" }),
+          })
+        )
+      )
+      toast.success(`${ids.length} integration(s) paused successfully`)
+      fetchSCIMIntegrations()
+    } catch (error) {
+      toast.error("Failed to pause integrations")
     }
   }
 
@@ -268,6 +285,112 @@ export default function SCIMListingPage() {
       integration.organization?.name.toLowerCase().includes(search.toLowerCase()) ||
       integration.orgId.toLowerCase().includes(search.toLowerCase())
   )
+
+  // Column definitions
+  const columns: Column<SCIMIntegration>[] = [
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (integration) => (
+        <Link href={`/admin/identity/scim/${integration.id}`} className="hover:underline">
+          <div className="flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="font-medium">
+                {integration.organization?.name || integration.orgId}
+              </p>
+              {integration.organization && (
+                <p className="text-xs text-muted-foreground">
+                  {integration.organization.slug}
+                </p>
+              )}
+            </div>
+          </div>
+        </Link>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (integration) => getStatusBadge(integration.status),
+    },
+    {
+      id: "syncSettings",
+      header: "Sync Settings",
+      cell: (integration) => (
+        <div className="flex flex-col gap-1">
+          <Badge variant={integration.syncUsers ? "default" : "secondary"} className="text-xs w-fit">
+            Users: {integration.syncUsers ? "On" : "Off"}
+          </Badge>
+          <Badge variant={integration.syncGroups ? "default" : "secondary"} className="text-xs w-fit">
+            Groups: {integration.syncGroups ? "On" : "Off"}
+          </Badge>
+        </div>
+      ),
+    },
+    {
+      id: "users",
+      header: "Users",
+      cell: (integration) => (
+        <div className="flex items-center gap-1">
+          <Users className="h-4 w-4 text-muted-foreground" />
+          <span>{integration.usersProvisioned}</span>
+        </div>
+      ),
+    },
+    {
+      id: "groups",
+      header: "Groups",
+      cell: (integration) => <span>{integration.groupsSynced}</span>,
+    },
+    {
+      id: "lastSync",
+      header: "Last Sync",
+      cell: (integration) =>
+        integration.lastSyncAt ? (
+          <span className="flex items-center gap-1 text-sm">
+            <Clock className="h-3 w-3" />
+            {new Date(integration.lastSyncAt).toLocaleDateString()}
+          </span>
+        ) : (
+          <span className="text-muted-foreground text-sm">Never</span>
+        ),
+    },
+  ]
+
+  // Row actions
+  const rowActions: RowAction<SCIMIntegration>[] = [
+    {
+      label: "Activate",
+      icon: <Play className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (integration) => integration.status === "ACTIVE",
+    },
+    {
+      label: "Pause",
+      icon: <Pause className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (integration) => integration.status !== "ACTIVE",
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Activate Selected",
+      icon: <Play className="h-4 w-4" />,
+      onClick: handleBulkActivate,
+      confirmTitle: "Activate Integrations",
+      confirmDescription: "Are you sure you want to activate the selected SCIM integrations?",
+    },
+    {
+      label: "Pause Selected",
+      icon: <Pause className="h-4 w-4" />,
+      onClick: handleBulkPause,
+      confirmTitle: "Pause Integrations",
+      confirmDescription: "Are you sure you want to pause the selected SCIM integrations?",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -481,168 +604,27 @@ export default function SCIMListingPage() {
       </Card>
 
       {/* SCIM Integrations Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Organization</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Sync Settings</TableHead>
-                <TableHead>Users</TableHead>
-                <TableHead>Groups</TableHead>
-                <TableHead>Last Sync</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={7}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredIntegrations.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12">
-                    <Database className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No SCIM integrations found</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => setIsCreateOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create First Integration
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredIntegrations.map((integration) => (
-                  <TableRow key={integration.id}>
-                    <TableCell>
-                      <Link href={`/admin/identity/scim/${integration.id}`} className="hover:underline">
-                        <div className="flex items-center gap-2">
-                          <Building2 className="h-4 w-4 text-muted-foreground" />
-                          <div>
-                            <p className="font-medium">
-                              {integration.organization?.name || integration.orgId}
-                            </p>
-                            {integration.organization && (
-                              <p className="text-xs text-muted-foreground">
-                                {integration.organization.slug}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </Link>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(integration.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <Badge variant={integration.syncUsers ? "default" : "secondary"} className="text-xs w-fit">
-                          Users: {integration.syncUsers ? "On" : "Off"}
-                        </Badge>
-                        <Badge variant={integration.syncGroups ? "default" : "secondary"} className="text-xs w-fit">
-                          Groups: {integration.syncGroups ? "On" : "Off"}
-                        </Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        <span>{integration.usersProvisioned}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span>{integration.groupsSynced}</span>
-                    </TableCell>
-                    <TableCell>
-                      {integration.lastSyncAt ? (
-                        <span className="flex items-center gap-1 text-sm">
-                          <Clock className="h-3 w-3" />
-                          {new Date(integration.lastSyncAt).toLocaleDateString()}
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground text-sm">Never</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/identity/scim/${integration.id}`}>
-                              <Edit className="h-4 w-4 mr-2" />
-                              View / Edit
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleToggleStatus(integration)}>
-                            {integration.status === "ACTIVE" ? (
-                              <>
-                                <Pause className="h-4 w-4 mr-2" />
-                                Pause
-                              </>
-                            ) : (
-                              <>
-                                <Play className="h-4 w-4 mr-2" />
-                                Activate
-                              </>
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDelete(integration.id)}
-                          >
-                            <Trash className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
-            {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
-            {pagination.total} integrations
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page === 1}
-              onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page === pagination.totalPages}
-              onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
+      <AdminDataTable
+        data={filteredIntegrations}
+        columns={columns}
+        getRowId={(integration) => integration.id}
+        isLoading={loading}
+        emptyMessage="No SCIM integrations found"
+        viewHref={(integration) => `/admin/identity/scim/${integration.id}`}
+        onDelete={handleDelete}
+        deleteConfirmTitle="Delete SCIM Integration"
+        deleteConfirmDescription={(integration) =>
+          `Are you sure you want to delete the SCIM integration for ${integration.organization?.name || integration.orgId}? This action cannot be undone.`
+        }
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        total={pagination.total}
+        onPageChange={(page) => setPagination({ ...pagination, page })}
+      />
     </div>
   )
 }

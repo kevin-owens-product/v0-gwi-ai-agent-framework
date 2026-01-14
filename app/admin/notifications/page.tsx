@@ -9,14 +9,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -33,7 +25,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
-  Bell,
   Plus,
   Loader2,
   RefreshCw,
@@ -41,14 +32,13 @@ import {
   Trash2,
   AlertTriangle,
   Info,
-  Megaphone,
   Wrench,
   Sparkles,
   Gift,
-  Eye,
+  CheckCheck,
 } from "lucide-react"
-import Link from "next/link"
 import { Checkbox } from "@/components/ui/checkbox"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Notification {
   id: string
@@ -79,6 +69,7 @@ export default function NotificationsPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingNotification, setEditingNotification] = useState<Notification | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [formData, setFormData] = useState({
     title: "",
@@ -183,7 +174,6 @@ export default function NotificationsPage() {
   }
 
   const handleDelete = async (notificationId: string) => {
-    if (!confirm("Are you sure you want to delete this notification?")) return
     try {
       await fetch(`/api/admin/notifications/${notificationId}`, { method: "DELETE" })
       fetchNotifications()
@@ -204,6 +194,143 @@ export default function NotificationsPage() {
         : [...prev.targetPlans, plan],
     }))
   }
+
+  const handleBulkMarkAsRead = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map(id =>
+          fetch(`/api/admin/notifications/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isActive: false }),
+          })
+        )
+      )
+      fetchNotifications()
+    } catch (error) {
+      console.error("Failed to mark notifications as read:", error)
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map(id => fetch(`/api/admin/notifications/${id}`, { method: "DELETE" }))
+      )
+      fetchNotifications()
+    } catch (error) {
+      console.error("Failed to delete notifications:", error)
+    }
+  }
+
+  // Define columns
+  const columns: Column<Notification>[] = [
+    {
+      id: "notification",
+      header: "Notification",
+      cell: (notification) => {
+        const typeInfo = getTypeInfo(notification.type)
+        const TypeIcon = typeInfo.icon
+        return (
+          <div className="flex items-center gap-3">
+            <div className={`h-9 w-9 rounded-lg ${typeInfo.color}/10 flex items-center justify-center`}>
+              <TypeIcon className={`h-4 w-4 ${typeInfo.color.replace("bg-", "text-")}`} />
+            </div>
+            <div>
+              <p className="font-medium">{notification.title}</p>
+              <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+                {notification.message}
+              </p>
+            </div>
+          </div>
+        )
+      },
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (notification) => {
+        const typeInfo = getTypeInfo(notification.type)
+        return (
+          <Badge className={`${typeInfo.color} text-white`}>
+            {typeInfo.label}
+          </Badge>
+        )
+      },
+    },
+    {
+      id: "target",
+      header: "Target",
+      cell: (notification) => (
+        <Badge variant="outline">
+          {notification.targetType === "ALL" ? "All Users" :
+           notification.targetType === "SPECIFIC_PLANS" ? notification.targetPlans.join(", ") :
+           "Custom"}
+        </Badge>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (notification) => (
+        <Switch
+          checked={notification.isActive}
+          onCheckedChange={() => handleToggle(notification)}
+        />
+      ),
+    },
+    {
+      id: "schedule",
+      header: "Schedule",
+      cell: (notification) => (
+        <span className="text-muted-foreground">
+          {notification.scheduledFor
+            ? new Date(notification.scheduledFor).toLocaleDateString()
+            : "Immediate"}
+        </span>
+      ),
+    },
+    {
+      id: "created",
+      header: "Created",
+      cell: (notification) => (
+        <span className="text-muted-foreground">
+          {new Date(notification.createdAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Notification>[] = [
+    {
+      label: "Edit",
+      icon: <Pencil className="h-4 w-4" />,
+      onClick: (notification) => handleOpenDialog(notification),
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Mark as Inactive",
+      icon: <CheckCheck className="h-4 w-4" />,
+      onClick: handleBulkMarkAsRead,
+      confirmTitle: "Mark Notifications as Inactive",
+      confirmDescription: "Are you sure you want to mark the selected notifications as inactive?",
+    },
+    {
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Notifications",
+      confirmDescription: "Are you sure you want to delete the selected notifications? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -363,108 +490,23 @@ export default function NotificationsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Notification</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Target</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead>Schedule</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : notifications.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No notifications created
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  notifications.map((notification) => {
-                    const typeInfo = getTypeInfo(notification.type)
-                    const TypeIcon = typeInfo.icon
-                    return (
-                      <TableRow key={notification.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <div className={`h-9 w-9 rounded-lg ${typeInfo.color}/10 flex items-center justify-center`}>
-                              <TypeIcon className={`h-4 w-4 ${typeInfo.color.replace("bg-", "text-")}`} />
-                            </div>
-                            <div>
-                              <p className="font-medium">{notification.title}</p>
-                              <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                                {notification.message}
-                              </p>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge className={`${typeInfo.color} text-white`}>
-                            {typeInfo.label}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {notification.targetType === "ALL" ? "All Users" :
-                             notification.targetType === "SPECIFIC_PLANS" ? notification.targetPlans.join(", ") :
-                             "Custom"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Switch
-                            checked={notification.isActive}
-                            onCheckedChange={() => handleToggle(notification)}
-                          />
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {notification.scheduledFor
-                            ? new Date(notification.scheduledFor).toLocaleDateString()
-                            : "Immediate"}
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {new Date(notification.createdAt).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <Button variant="ghost" size="sm" asChild>
-                              <Link href={`/admin/notifications/${notification.id}`}>
-                                <Eye className="h-4 w-4" />
-                              </Link>
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleOpenDialog(notification)}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-destructive hover:text-destructive"
-                              onClick={() => handleDelete(notification.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })
-                )}
-              </TableBody>
-            </Table>
-          </div>
+          <AdminDataTable
+            data={notifications}
+            columns={columns}
+            getRowId={(notification) => notification.id}
+            isLoading={isLoading}
+            emptyMessage="No notifications created"
+            viewHref={(notification) => `/admin/notifications/${notification.id}`}
+            onDelete={(notification) => handleDelete(notification.id)}
+            deleteConfirmTitle="Delete Notification"
+            deleteConfirmDescription={(notification) =>
+              `Are you sure you want to delete "${notification.title}"? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
     </div>

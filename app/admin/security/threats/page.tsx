@@ -9,13 +9,8 @@ import {
   Shield,
   Clock,
   Globe,
-  MoreHorizontal,
-  Eye,
   CheckCircle,
   XCircle,
-  ChevronLeft,
-  ChevronRight,
-  ArrowUpDown,
   AlertCircle,
   Bug,
   ShieldAlert,
@@ -33,21 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import { toast } from "sonner"
 
 interface ThreatEvent {
@@ -122,6 +103,7 @@ export default function ThreatEventsPage() {
   const [sortBy, setSortBy] = useState("createdAt")
   const [sortOrder, setSortOrder] = useState("desc")
   const [stats, setStats] = useState<Record<string, number>>({})
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [pagination, setPagination] = useState({
     total: 0,
     limit: 20,
@@ -187,6 +169,25 @@ export default function ThreatEventsPage() {
     }
   }
 
+  const handleBulkStatusChange = async (ids: string[], newStatus: string) => {
+    try {
+      const promises = ids.map((id) =>
+        fetch(`/api/admin/security/threats/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus }),
+        })
+      )
+
+      await Promise.all(promises)
+      toast.success(`${ids.length} threat(s) updated to ${newStatus}`)
+      fetchThreats()
+      setSelectedIds(new Set())
+    } catch (error) {
+      toast.error("Failed to update threats")
+    }
+  }
+
   const handleSort = (column: string) => {
     if (sortBy === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc")
@@ -233,6 +234,142 @@ export default function ThreatEventsPage() {
       threat.description?.toLowerCase().includes(search.toLowerCase()) ||
       threat.source?.toLowerCase().includes(search.toLowerCase())
   )
+
+  // Define columns for AdminDataTable
+  const columns: Column<ThreatEvent>[] = [
+    {
+      id: "icon",
+      header: "",
+      cell: (threat) => getThreatIcon(threat.type),
+      className: "w-[40px]",
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (threat) => (
+        <Badge variant="outline">
+          {threat.type.replace(/_/g, " ")}
+        </Badge>
+      ),
+    },
+    {
+      id: "description",
+      header: "Description",
+      cell: (threat) => (
+        <p className="truncate max-w-[250px]">{threat.description}</p>
+      ),
+    },
+    {
+      id: "source",
+      header: "Source",
+      cell: (threat) => (
+        <div className="flex items-center gap-1 text-sm">
+          <Globe className="h-3 w-3" />
+          {threat.source}
+        </div>
+      ),
+    },
+    {
+      id: "severity",
+      header: "Severity",
+      cell: (threat) => getSeverityBadge(threat.severity),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (threat) => getStatusBadge(threat.status),
+    },
+    {
+      id: "indicators",
+      header: "Indicators",
+      cell: (threat) => (
+        <Badge variant="secondary">
+          {Array.isArray(threat.indicators) ? threat.indicators.length : 0} IOCs
+        </Badge>
+      ),
+    },
+    {
+      id: "createdAt",
+      header: "Time",
+      cell: (threat) => (
+        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <Clock className="h-3 w-3" />
+          {new Date(threat.createdAt).toLocaleString()}
+        </div>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<ThreatEvent>[] = [
+    {
+      label: "Mark Contained",
+      icon: <Shield className="h-4 w-4" />,
+      onClick: (threat) => handleStatusChange(threat, "CONTAINED"),
+      hidden: (threat) => threat.status !== "ACTIVE",
+    },
+    {
+      label: "Mark Mitigated",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (threat) => handleStatusChange(threat, "MITIGATED"),
+      hidden: (threat) => threat.status !== "ACTIVE" && threat.status !== "CONTAINED",
+    },
+    {
+      label: "Mark Resolved",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (threat) => handleStatusChange(threat, "RESOLVED"),
+      hidden: (threat) => threat.status === "RESOLVED",
+    },
+    {
+      label: "Mark False Positive",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (threat) => handleStatusChange(threat, "FALSE_POSITIVE"),
+      hidden: (threat) => threat.status === "FALSE_POSITIVE",
+      separator: true,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Mark as Contained",
+      icon: <Shield className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "CONTAINED"),
+      confirmTitle: "Mark threats as Contained",
+      confirmDescription: "Are you sure you want to mark the selected threats as contained?",
+    },
+    {
+      label: "Mark as Mitigated",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "MITIGATED"),
+      confirmTitle: "Mark threats as Mitigated",
+      confirmDescription: "Are you sure you want to mark the selected threats as mitigated?",
+    },
+    {
+      label: "Mark as Resolved",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "RESOLVED"),
+      confirmTitle: "Mark threats as Resolved",
+      confirmDescription: "Are you sure you want to mark the selected threats as resolved?",
+    },
+    {
+      label: "Mark as False Positive",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "FALSE_POSITIVE"),
+      confirmTitle: "Mark threats as False Positive",
+      confirmDescription: "Are you sure you want to mark the selected threats as false positive?",
+      separator: true,
+    },
+  ]
+
+  // Calculate pagination for AdminDataTable
+  const currentPage = Math.floor(pagination.offset / pagination.limit) + 1
+  const totalPages = Math.ceil(pagination.total / pagination.limit)
+
+  const handlePageChange = (page: number) => {
+    const newOffset = (page - 1) * pagination.limit
+    setPagination((prev) => ({ ...prev, offset: newOffset }))
+  }
 
   return (
     <div className="space-y-6">
@@ -347,218 +484,22 @@ export default function ThreatEventsPage() {
       </Card>
 
       {/* Threats Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[40px]"></TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("type")}
-                >
-                  <div className="flex items-center gap-2">
-                    Type
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("severity")}
-                >
-                  <div className="flex items-center gap-2">
-                    Severity
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("status")}
-                >
-                  <div className="flex items-center gap-2">
-                    Status
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead>Indicators</TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("createdAt")}
-                >
-                  <div className="flex items-center gap-2">
-                    Time
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={9}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredThreats.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={9} className="text-center py-12">
-                    <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No threat events found</p>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredThreats.map((threat) => (
-                  <TableRow
-                    key={threat.id}
-                    className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => router.push(`/admin/security/threats/${threat.id}`)}
-                  >
-                    <TableCell>{getThreatIcon(threat.type)}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {threat.type.replace(/_/g, " ")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <p className="truncate max-w-[250px]">{threat.description}</p>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1 text-sm">
-                        <Globe className="h-3 w-3" />
-                        {threat.source}
-                      </div>
-                    </TableCell>
-                    <TableCell>{getSeverityBadge(threat.severity)}</TableCell>
-                    <TableCell>{getStatusBadge(threat.status)}</TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">
-                        {Array.isArray(threat.indicators) ? threat.indicators.length : 0} IOCs
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3" />
-                        {new Date(threat.createdAt).toLocaleString()}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              router.push(`/admin/security/threats/${threat.id}`)
-                            }}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Details
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          {threat.status === "ACTIVE" && (
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleStatusChange(threat, "CONTAINED")
-                              }}
-                            >
-                              <Shield className="h-4 w-4 mr-2" />
-                              Mark Contained
-                            </DropdownMenuItem>
-                          )}
-                          {(threat.status === "ACTIVE" || threat.status === "CONTAINED") && (
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleStatusChange(threat, "MITIGATED")
-                              }}
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Mark Mitigated
-                            </DropdownMenuItem>
-                          )}
-                          {threat.status !== "RESOLVED" && (
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleStatusChange(threat, "RESOLVED")
-                              }}
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Mark Resolved
-                            </DropdownMenuItem>
-                          )}
-                          {threat.status !== "FALSE_POSITIVE" && (
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleStatusChange(threat, "FALSE_POSITIVE")
-                              }}
-                            >
-                              <XCircle className="h-4 w-4 mr-2" />
-                              Mark False Positive
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {pagination.total > pagination.limit && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {pagination.offset + 1} to{" "}
-            {Math.min(pagination.offset + pagination.limit, pagination.total)} of{" "}
-            {pagination.total} threats
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  offset: Math.max(0, prev.offset - prev.limit),
-                }))
-              }
-              disabled={pagination.offset === 0}
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  offset: prev.offset + prev.limit,
-                }))
-              }
-              disabled={!pagination.hasMore}
-            >
-              Next
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
-          </div>
-        </div>
-      )}
+      <AdminDataTable
+        data={filteredThreats}
+        columns={columns}
+        getRowId={(threat) => threat.id}
+        isLoading={loading}
+        emptyMessage="No threat events found"
+        viewHref={(threat) => `/admin/security/threats/${threat.id}`}
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+        page={currentPage}
+        totalPages={totalPages}
+        total={pagination.total}
+        onPageChange={handlePageChange}
+      />
     </div>
   )
 }

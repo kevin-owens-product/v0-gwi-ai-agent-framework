@@ -5,26 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -36,8 +22,6 @@ import {
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import {
-  MoreHorizontal,
-  Eye,
   Loader2,
   RefreshCw,
   Plus,
@@ -51,6 +35,7 @@ import {
   PlayCircle,
 } from "lucide-react"
 import Link from "next/link"
+import { AdminDataTable, Column, RowAction } from "@/components/admin/data-table"
 
 interface Framework {
   id: string
@@ -107,6 +92,7 @@ export default function AuditsPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [frameworks, setFrameworks] = useState<Framework[]>([])
@@ -235,6 +221,102 @@ export default function AuditsPage() {
     }
   }
 
+  // Define columns for AdminDataTable
+  const columns: Column<Audit>[] = [
+    {
+      id: "framework",
+      header: "Framework",
+      cell: (audit) => (
+        <div className="flex items-center gap-2">
+          <Shield className="h-4 w-4 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{audit.framework.name}</p>
+            <Badge variant="outline" className="text-xs">
+              {audit.framework.code}
+            </Badge>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (audit) =>
+        audit.organization ? (
+          <div className="flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-muted-foreground" />
+            <span>{audit.organization.name}</span>
+          </div>
+        ) : (
+          <span className="text-muted-foreground">Platform-wide</span>
+        ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (audit) => getTypeBadge(audit.type),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (audit) => getStatusBadge(audit.status),
+    },
+    {
+      id: "scheduledDate",
+      header: "Scheduled",
+      cell: (audit) => (
+        <div className="flex items-center gap-1 text-muted-foreground">
+          <Calendar className="h-3 w-3" />
+          {new Date(audit.scheduledDate).toLocaleDateString()}
+        </div>
+      ),
+    },
+    {
+      id: "auditor",
+      header: "Auditor",
+      cell: (audit) => (
+        <span className="text-muted-foreground">{audit.auditor || "-"}</span>
+      ),
+    },
+    {
+      id: "score",
+      header: "Score",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (audit) =>
+        audit.score !== null ? (
+          <span
+            className={
+              audit.score >= 80
+                ? "text-green-500 font-bold"
+                : audit.score >= 60
+                ? "text-yellow-500 font-bold"
+                : "text-red-500 font-bold"
+            }
+          >
+            {audit.score}%
+          </span>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Audit>[] = [
+    {
+      label: "View Framework",
+      icon: <Shield className="h-4 w-4" />,
+      href: (audit) => `/admin/compliance/frameworks/${audit.frameworkId}`,
+    },
+    {
+      label: "View Organization",
+      icon: <Building2 className="h-4 w-4" />,
+      href: (audit) => `/admin/tenants/${audit.orgId}`,
+      hidden: (audit) => !audit.organization,
+    },
+  ]
+
   return (
     <div className="space-y-6">
       <Card>
@@ -298,146 +380,22 @@ export default function AuditsPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Framework</TableHead>
-                  <TableHead>Organization</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Scheduled</TableHead>
-                  <TableHead>Auditor</TableHead>
-                  <TableHead className="text-center">Score</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : audits.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No audits found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  audits.map((audit) => (
-                    <TableRow key={audit.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Shield className="h-4 w-4 text-muted-foreground" />
-                          <div>
-                            <p className="font-medium">{audit.framework.name}</p>
-                            <Badge variant="outline" className="text-xs">
-                              {audit.framework.code}
-                            </Badge>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {audit.organization ? (
-                          <div className="flex items-center gap-2">
-                            <Building2 className="h-4 w-4 text-muted-foreground" />
-                            <span>{audit.organization.name}</span>
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">Platform-wide</span>
-                        )}
-                      </TableCell>
-                      <TableCell>{getTypeBadge(audit.type)}</TableCell>
-                      <TableCell>{getStatusBadge(audit.status)}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1 text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(audit.scheduledDate).toLocaleDateString()}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {audit.auditor || "-"}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {audit.score !== null ? (
-                          <span className={
-                            audit.score >= 80 ? "text-green-500 font-bold" :
-                            audit.score >= 60 ? "text-yellow-500 font-bold" :
-                            "text-red-500 font-bold"
-                          }>
-                            {audit.score}%
-                          </span>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/compliance/audits/${audit.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/compliance/frameworks/${audit.frameworkId}`}>
-                                <Shield className="h-4 w-4 mr-2" />
-                                View Framework
-                              </Link>
-                            </DropdownMenuItem>
-                            {audit.organization && (
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/tenants/${audit.orgId}`}>
-                                  <Building2 className="h-4 w-4 mr-2" />
-                                  View Organization
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages} ({total} total)
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={audits}
+            columns={columns}
+            getRowId={(audit) => audit.id}
+            isLoading={isLoading}
+            emptyMessage="No audits found"
+            viewHref={(audit) => `/admin/compliance/audits/${audit.id}`}
+            rowActions={rowActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
 

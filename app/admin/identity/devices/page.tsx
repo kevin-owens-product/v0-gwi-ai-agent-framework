@@ -6,45 +6,28 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import {
   Search,
-  MoreHorizontal,
-  Eye,
   Shield,
   ShieldOff,
   Smartphone,
   Laptop,
   Monitor,
   Tablet,
-  Loader2,
   RefreshCw,
   CheckCircle,
   XCircle,
   Clock,
   AlertTriangle,
+  Ban,
 } from "lucide-react"
-import Link from "next/link"
 import { toast } from "sonner"
 
 interface Device {
@@ -104,6 +87,7 @@ export default function DevicesPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const fetchDevices = useCallback(async () => {
     setIsLoading(true)
@@ -170,6 +154,47 @@ export default function DevicesPage() {
     }
   }
 
+  const handleBlock = async (deviceId: string) => {
+    try {
+      const response = await fetch(`/api/admin/devices/${deviceId}/block`, {
+        method: "POST",
+      })
+      if (!response.ok) {
+        throw new Error("Failed to block device")
+      }
+      toast.success("Device blocked successfully")
+      fetchDevices()
+    } catch (error) {
+      toast.error("Failed to block device")
+    }
+  }
+
+  const handleBulkRevoke = async (deviceIds: string[]) => {
+    try {
+      const promises = deviceIds.map(id =>
+        fetch(`/api/admin/devices/${id}/revoke`, { method: "POST" })
+      )
+      await Promise.all(promises)
+      toast.success(`${deviceIds.length} device(s) revoked successfully`)
+      fetchDevices()
+    } catch (error) {
+      toast.error("Failed to revoke some devices")
+    }
+  }
+
+  const handleBulkBlock = async (deviceIds: string[]) => {
+    try {
+      const promises = deviceIds.map(id =>
+        fetch(`/api/admin/devices/${id}/block`, { method: "POST" })
+      )
+      await Promise.all(promises)
+      toast.success(`${deviceIds.length} device(s) blocked successfully`)
+      fetchDevices()
+    } catch (error) {
+      toast.error("Failed to block some devices")
+    }
+  }
+
   const getTrustStatusBadge = (status: string) => {
     switch (status) {
       case "TRUSTED":
@@ -184,6 +209,131 @@ export default function DevicesPage() {
         return <Badge variant="outline">{status}</Badge>
     }
   }
+
+  // Define columns for AdminDataTable
+  const columns: Column<Device>[] = [
+    {
+      id: "device",
+      header: "Device",
+      cell: (device) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            {deviceTypeIcons[device.type] || <Smartphone className="h-4 w-4" />}
+          </div>
+          <div>
+            <p className="font-medium">{device.name || device.deviceId}</p>
+            <p className="text-xs text-muted-foreground">
+              {device.model || device.manufacturer || "Unknown model"}
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "user",
+      header: "User",
+      cell: (device) => (
+        <div>
+          <p className="font-medium">{device.user?.name || "No name"}</p>
+          <p className="text-xs text-muted-foreground">{device.user?.email}</p>
+        </div>
+      ),
+    },
+    {
+      id: "platform",
+      header: "Platform",
+      cell: (device) => (
+        <div className="flex items-center gap-2">
+          <Badge className={platformColors[device.platform || ""] || "bg-gray-500"}>
+            {device.platform || "Unknown"}
+          </Badge>
+          {device.osVersion && (
+            <span className="text-xs text-muted-foreground">{device.osVersion}</span>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "compliance",
+      header: "Compliance",
+      cell: (device) =>
+        device.isCompliant ? (
+          <Badge className="bg-green-500">
+            <CheckCircle className="h-3 w-3 mr-1" />
+            Compliant
+          </Badge>
+        ) : (
+          <Badge variant="destructive">
+            <AlertTriangle className="h-3 w-3 mr-1" />
+            Non-Compliant
+          </Badge>
+        ),
+    },
+    {
+      id: "trustStatus",
+      header: "Trust Status",
+      cell: (device) => getTrustStatusBadge(device.trustStatus),
+    },
+    {
+      id: "lastActive",
+      header: "Last Active",
+      cell: (device) =>
+        device.lastActiveAt ? (
+          <div className="text-muted-foreground">
+            <p className="text-sm">{new Date(device.lastActiveAt).toLocaleDateString()}</p>
+            <p className="text-xs">{device.lastLocation || device.lastIpAddress || ""}</p>
+          </div>
+        ) : (
+          <span className="text-muted-foreground">Never</span>
+        ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Device>[] = [
+    {
+      label: "Trust Device",
+      icon: <Shield className="h-4 w-4" />,
+      onClick: (device) => handleTrust(device.id),
+      hidden: (device) => device.trustStatus !== "PENDING" && device.trustStatus !== "REVOKED",
+    },
+    {
+      label: "Revoke Trust",
+      icon: <ShieldOff className="h-4 w-4" />,
+      onClick: (device) => handleRevoke(device.id),
+      variant: "destructive",
+      hidden: (device) => device.trustStatus !== "TRUSTED",
+      separator: true,
+    },
+    {
+      label: "Block Device",
+      icon: <Ban className="h-4 w-4" />,
+      onClick: (device) => handleBlock(device.id),
+      variant: "destructive",
+      hidden: (device) => device.trustStatus === "BLOCKED",
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Bulk Revoke Trust",
+      icon: <ShieldOff className="h-4 w-4" />,
+      onClick: handleBulkRevoke,
+      variant: "destructive",
+      confirmTitle: "Revoke Trust for Multiple Devices",
+      confirmDescription: "Are you sure you want to revoke trust for the selected devices? This action cannot be undone.",
+    },
+    {
+      label: "Bulk Block Devices",
+      icon: <Ban className="h-4 w-4" />,
+      onClick: handleBulkBlock,
+      variant: "destructive",
+      confirmTitle: "Block Multiple Devices",
+      confirmDescription: "Are you sure you want to block the selected devices? This will prevent them from accessing the platform.",
+      separator: true,
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -278,165 +428,24 @@ export default function DevicesPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Device</TableHead>
-                  <TableHead>User</TableHead>
-                  <TableHead>Platform</TableHead>
-                  <TableHead>Compliance</TableHead>
-                  <TableHead>Trust Status</TableHead>
-                  <TableHead>Last Active</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : devices.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No devices found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  devices.map((device) => (
-                    <TableRow key={device.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            {deviceTypeIcons[device.type] || <Smartphone className="h-4 w-4" />}
-                          </div>
-                          <div>
-                            <p className="font-medium">{device.name || device.deviceId}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {device.model || device.manufacturer || "Unknown model"}
-                            </p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{device.user?.name || "No name"}</p>
-                          <p className="text-xs text-muted-foreground">{device.user?.email}</p>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Badge
-                            className={platformColors[device.platform || ""] || "bg-gray-500"}
-                          >
-                            {device.platform || "Unknown"}
-                          </Badge>
-                          {device.osVersion && (
-                            <span className="text-xs text-muted-foreground">{device.osVersion}</span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {device.isCompliant ? (
-                          <Badge className="bg-green-500">
-                            <CheckCircle className="h-3 w-3 mr-1" />
-                            Compliant
-                          </Badge>
-                        ) : (
-                          <Badge variant="destructive">
-                            <AlertTriangle className="h-3 w-3 mr-1" />
-                            Non-Compliant
-                          </Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {getTrustStatusBadge(device.trustStatus)}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {device.lastActiveAt ? (
-                          <div>
-                            <p className="text-sm">{new Date(device.lastActiveAt).toLocaleDateString()}</p>
-                            <p className="text-xs">{device.lastLocation || device.lastIpAddress || ""}</p>
-                          </div>
-                        ) : (
-                          "Never"
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/identity/devices/${device.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            {device.trustStatus === "PENDING" && (
-                              <DropdownMenuItem onClick={() => handleTrust(device.id)}>
-                                <Shield className="h-4 w-4 mr-2" />
-                                Trust Device
-                              </DropdownMenuItem>
-                            )}
-                            {device.trustStatus === "TRUSTED" && (
-                              <DropdownMenuItem
-                                className="text-destructive"
-                                onClick={() => handleRevoke(device.id)}
-                              >
-                                <ShieldOff className="h-4 w-4 mr-2" />
-                                Revoke Trust
-                              </DropdownMenuItem>
-                            )}
-                            {device.trustStatus === "REVOKED" && (
-                              <DropdownMenuItem onClick={() => handleTrust(device.id)}>
-                                <Shield className="h-4 w-4 mr-2" />
-                                Re-trust Device
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={devices}
+            columns={columns}
+            getRowId={(device) => device.id}
+            isLoading={isLoading}
+            emptyMessage="No devices found"
+            viewHref={(device) => `/admin/identity/devices/${device.id}`}
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            enableSelection={true}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
     </div>

@@ -5,26 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -35,8 +21,6 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import {
-  MoreHorizontal,
-  Eye,
   Loader2,
   RefreshCw,
   Plus,
@@ -52,6 +36,7 @@ import {
   FileText,
 } from "lucide-react"
 import Link from "next/link"
+import { AdminDataTable, Column, RowAction } from "@/components/admin/data-table"
 
 interface Organization {
   id: string
@@ -120,6 +105,7 @@ export default function DataExportsPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -236,6 +222,121 @@ export default function DataExportsPage() {
     return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`
   }
 
+  // Define columns for AdminDataTable
+  const columns: Column<DataExport>[] = [
+    {
+      id: "export",
+      header: "Export",
+      cell: (exp) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-green-500/10 flex items-center justify-center">
+            <Download className="h-4 w-4 text-green-500" />
+          </div>
+          <div>
+            <p className="font-mono text-xs">{exp.id.slice(0, 8)}...</p>
+            <p className="text-xs text-muted-foreground">
+              by {exp.requestedByUser?.name || exp.requestedByUser?.email || "Unknown"}
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (exp) => getTypeBadge(exp.type),
+    },
+    {
+      id: "subject",
+      header: "Subject",
+      cell: (exp) => {
+        if (exp.user) {
+          return (
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-muted-foreground" />
+              <span>{exp.user.name || exp.user.email}</span>
+            </div>
+          )
+        }
+        if (exp.organization) {
+          return (
+            <div className="flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-muted-foreground" />
+              <span>{exp.organization.name}</span>
+            </div>
+          )
+        }
+        if (exp.legalHold) {
+          return (
+            <div className="flex items-center gap-2">
+              <Gavel className="h-4 w-4 text-muted-foreground" />
+              <span>{exp.legalHold.name}</span>
+            </div>
+          )
+        }
+        return <span className="text-muted-foreground">-</span>
+      },
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (exp) => getStatusBadge(exp.status),
+    },
+    {
+      id: "format",
+      header: "Format",
+      cell: (exp) => (
+        <Badge variant="outline" className="uppercase">
+          {exp.format}
+        </Badge>
+      ),
+    },
+    {
+      id: "size",
+      header: "Size",
+      cell: (exp) => (
+        <span className="text-muted-foreground">{formatFileSize(exp.fileSize)}</span>
+      ),
+    },
+    {
+      id: "requested",
+      header: "Requested",
+      cell: (exp) => (
+        <span className="text-muted-foreground">
+          {new Date(exp.createdAt).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<DataExport>[] = [
+    {
+      label: "Download File",
+      icon: <ExternalLink className="h-4 w-4" />,
+      href: (exp) => exp.fileUrl || "#",
+      hidden: (exp) => !exp.fileUrl || exp.status !== "COMPLETED",
+    },
+    {
+      label: "View Legal Hold",
+      icon: <Gavel className="h-4 w-4" />,
+      href: (exp) => `/admin/compliance/legal-holds/${exp.legalHoldId}`,
+      hidden: (exp) => !exp.legalHold,
+    },
+    {
+      label: "View User",
+      icon: <User className="h-4 w-4" />,
+      href: (exp) => `/admin/users/${exp.userId}`,
+      hidden: (exp) => !exp.user,
+    },
+    {
+      label: "View Organization",
+      icon: <Building2 className="h-4 w-4" />,
+      href: (exp) => `/admin/tenants/${exp.orgId}`,
+      hidden: (exp) => !exp.organization,
+    },
+  ]
+
   return (
     <div className="space-y-6">
       <Card>
@@ -299,165 +400,22 @@ export default function DataExportsPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Export</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Subject</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Format</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead>Requested</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : exports.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No data exports found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  exports.map((exp) => (
-                    <TableRow key={exp.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-green-500/10 flex items-center justify-center">
-                            <Download className="h-4 w-4 text-green-500" />
-                          </div>
-                          <div>
-                            <p className="font-mono text-xs">{exp.id.slice(0, 8)}...</p>
-                            <p className="text-xs text-muted-foreground">
-                              by {exp.requestedByUser?.name || exp.requestedByUser?.email || "Unknown"}
-                            </p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{getTypeBadge(exp.type)}</TableCell>
-                      <TableCell>
-                        {exp.user ? (
-                          <div className="flex items-center gap-2">
-                            <User className="h-4 w-4 text-muted-foreground" />
-                            <span>{exp.user.name || exp.user.email}</span>
-                          </div>
-                        ) : exp.organization ? (
-                          <div className="flex items-center gap-2">
-                            <Building2 className="h-4 w-4 text-muted-foreground" />
-                            <span>{exp.organization.name}</span>
-                          </div>
-                        ) : exp.legalHold ? (
-                          <div className="flex items-center gap-2">
-                            <Gavel className="h-4 w-4 text-muted-foreground" />
-                            <span>{exp.legalHold.name}</span>
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>{getStatusBadge(exp.status)}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="uppercase">
-                          {exp.format}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {formatFileSize(exp.fileSize)}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(exp.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/compliance/data-exports/${exp.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            {exp.fileUrl && exp.status === "COMPLETED" && (
-                              <DropdownMenuItem asChild>
-                                <a href={exp.fileUrl} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="h-4 w-4 mr-2" />
-                                  Download File
-                                </a>
-                              </DropdownMenuItem>
-                            )}
-                            {exp.legalHold && (
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/compliance/legal-holds/${exp.legalHoldId}`}>
-                                  <Gavel className="h-4 w-4 mr-2" />
-                                  View Legal Hold
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                            {exp.user && (
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/users/${exp.userId}`}>
-                                  <User className="h-4 w-4 mr-2" />
-                                  View User
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                            {exp.organization && (
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/tenants/${exp.orgId}`}>
-                                  <Building2 className="h-4 w-4 mr-2" />
-                                  View Organization
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages} ({total} total)
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={exports}
+            columns={columns}
+            getRowId={(exp) => exp.id}
+            isLoading={isLoading}
+            emptyMessage="No data exports found"
+            viewHref={(exp) => `/admin/compliance/data-exports/${exp.id}`}
+            rowActions={rowActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
 

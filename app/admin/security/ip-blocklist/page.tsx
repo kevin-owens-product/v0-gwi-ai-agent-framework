@@ -8,14 +8,9 @@ import {
   Filter,
   Globe,
   Clock,
-  MoreHorizontal,
   Trash,
   Power,
   PowerOff,
-  ChevronLeft,
-  ChevronRight,
-  ArrowUpDown,
-  AlertCircle,
   Shield,
   Calendar,
 } from "lucide-react"
@@ -34,21 +29,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -58,6 +38,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface IPBlocklistEntry {
   id: string
@@ -92,11 +73,14 @@ export default function IPBlocklistPage() {
   const [sortOrder, setSortOrder] = useState("desc")
   const [stats, setStats] = useState<Record<string, number>>({})
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [pagination, setPagination] = useState({
     total: 0,
     limit: 20,
     offset: 0,
     hasMore: false,
+    page: 1,
+    totalPages: 1,
   })
 
   const [newEntry, setNewEntry] = useState({
@@ -110,11 +94,12 @@ export default function IPBlocklistPage() {
 
   useEffect(() => {
     fetchBlocklist()
-  }, [typeFilter, activeFilter, sortBy, sortOrder, pagination.offset])
+  }, [typeFilter, activeFilter, sortBy, sortOrder, pagination.page])
 
   const fetchBlocklist = async () => {
     try {
       setLoading(true)
+      const offset = (pagination.page - 1) * pagination.limit
       const params = new URLSearchParams()
       if (typeFilter !== "all") params.set("type", typeFilter)
       if (activeFilter !== "all") params.set("isActive", activeFilter)
@@ -122,17 +107,21 @@ export default function IPBlocklistPage() {
       params.set("sortBy", sortBy)
       params.set("sortOrder", sortOrder)
       params.set("limit", pagination.limit.toString())
-      params.set("offset", pagination.offset.toString())
+      params.set("offset", offset.toString())
       params.set("includeExpired", "true")
 
       const response = await fetch(`/api/admin/security/ip-blocklist?${params}`)
       const data = await response.json()
       setBlocklist(data.blocklist || [])
       setStats(data.stats || {})
+      const total = data.pagination?.total || 0
+      const totalPages = Math.ceil(total / pagination.limit)
       setPagination((prev) => ({
         ...prev,
-        total: data.pagination?.total || 0,
+        total,
         hasMore: data.pagination?.hasMore || false,
+        totalPages,
+        offset,
       }))
     } catch (error) {
       console.error("Failed to fetch blocklist:", error)
@@ -143,7 +132,7 @@ export default function IPBlocklistPage() {
   }
 
   const handleSearch = () => {
-    setPagination((prev) => ({ ...prev, offset: 0 }))
+    setPagination((prev) => ({ ...prev, page: 1, offset: 0 }))
     fetchBlocklist()
   }
 
@@ -200,11 +189,9 @@ export default function IPBlocklistPage() {
     }
   }
 
-  const handleDeleteEntry = async (entryId: string) => {
-    if (!confirm("Are you sure you want to remove this IP from the blocklist?")) return
-
+  const handleDeleteEntry = async (entry: IPBlocklistEntry) => {
     try {
-      const response = await fetch(`/api/admin/security/ip-blocklist/${entryId}`, {
+      const response = await fetch(`/api/admin/security/ip-blocklist/${entry.id}`, {
         method: "DELETE",
       })
 
@@ -217,6 +204,26 @@ export default function IPBlocklistPage() {
     } catch (error) {
       toast.error("Failed to remove IP from blocklist")
     }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/security/ip-blocklist/${id}`, {
+            method: "DELETE",
+          })
+        )
+      )
+      toast.success(`${ids.length} IP(s) removed from blocklist`)
+      fetchBlocklist()
+    } catch (error) {
+      toast.error("Failed to remove IPs from blocklist")
+    }
+  }
+
+  const handlePageChange = (page: number) => {
+    setPagination((prev) => ({ ...prev, page }))
   }
 
   const handleSort = (column: string) => {
@@ -257,6 +264,108 @@ export default function IPBlocklistPage() {
   )
 
   const totalActive = Object.values(stats).reduce((a, b) => a + b, 0)
+
+  // Define columns for AdminDataTable
+  const columns: Column<IPBlocklistEntry>[] = [
+    {
+      id: "ipAddress",
+      header: (
+        <div className="flex items-center gap-2">
+          <Globe className="h-4 w-4" />
+          IP Address
+        </div>
+      ),
+      cell: (entry) => <code className="font-mono text-sm">{entry.ipAddress}</code>,
+    },
+    {
+      id: "ipRange",
+      header: "Range",
+      cell: (entry) =>
+        entry.ipRange ? (
+          <code className="font-mono text-sm text-muted-foreground">{entry.ipRange}</code>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (entry) => getTypeBadge(entry.type),
+    },
+    {
+      id: "reason",
+      header: "Reason",
+      cell: (entry) => <p className="truncate max-w-[200px]">{entry.reason}</p>,
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (entry) => {
+        if (!entry.isActive) {
+          return <Badge variant="outline">Disabled</Badge>
+        } else if (isExpired(entry.expiresAt)) {
+          return <Badge variant="secondary">Expired</Badge>
+        } else {
+          return (
+            <Badge variant="default" className="bg-green-500">
+              Active
+            </Badge>
+          )
+        }
+      },
+    },
+    {
+      id: "expiresAt",
+      header: "Expires",
+      cell: (entry) =>
+        entry.expiresAt ? (
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <Calendar className="h-3 w-3" />
+            {new Date(entry.expiresAt).toLocaleDateString()}
+          </div>
+        ) : (
+          <span className="text-muted-foreground">Never</span>
+        ),
+    },
+    {
+      id: "createdAt",
+      header: "Blocked At",
+      cell: (entry) => (
+        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <Clock className="h-3 w-3" />
+          {new Date(entry.createdAt).toLocaleDateString()}
+        </div>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<IPBlocklistEntry>[] = [
+    {
+      label: "Disable",
+      icon: <PowerOff className="h-4 w-4" />,
+      onClick: handleToggleEntry,
+      hidden: (entry) => !entry.isActive,
+    },
+    {
+      label: "Enable",
+      icon: <Power className="h-4 w-4" />,
+      onClick: handleToggleEntry,
+      hidden: (entry) => entry.isActive,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Remove Selected",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      confirmTitle: "Remove IPs from Blocklist",
+      confirmDescription: "Are you sure you want to remove the selected IP addresses from the blocklist? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -458,202 +567,39 @@ export default function IPBlocklistPage() {
       </Card>
 
       {/* Blocklist Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("ipAddress")}
-                >
-                  <div className="flex items-center gap-2">
-                    <Globe className="h-4 w-4" />
-                    IP Address
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead>Range</TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("type")}
-                >
-                  <div className="flex items-center gap-2">
-                    Type
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead>Reason</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("expiresAt")}
-                >
-                  <div className="flex items-center gap-2">
-                    Expires
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("createdAt")}
-                >
-                  <div className="flex items-center gap-2">
-                    Blocked At
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={8}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredBlocklist.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-12">
-                    <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No blocked IPs found</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => setIsCreateOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Block First IP
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredBlocklist.map((entry) => (
-                  <TableRow key={entry.id}>
-                    <TableCell>
-                      <code className="font-mono text-sm">{entry.ipAddress}</code>
-                    </TableCell>
-                    <TableCell>
-                      {entry.ipRange ? (
-                        <code className="font-mono text-sm text-muted-foreground">
-                          {entry.ipRange}
-                        </code>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>{getTypeBadge(entry.type)}</TableCell>
-                    <TableCell>
-                      <p className="truncate max-w-[200px]">{entry.reason}</p>
-                    </TableCell>
-                    <TableCell>
-                      {!entry.isActive ? (
-                        <Badge variant="outline">Disabled</Badge>
-                      ) : isExpired(entry.expiresAt) ? (
-                        <Badge variant="secondary">Expired</Badge>
-                      ) : (
-                        <Badge variant="default" className="bg-green-500">Active</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {entry.expiresAt ? (
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(entry.expiresAt).toLocaleDateString()}
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground">Never</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3" />
-                        {new Date(entry.createdAt).toLocaleDateString()}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleToggleEntry(entry)}>
-                            {entry.isActive ? (
-                              <>
-                                <PowerOff className="h-4 w-4 mr-2" />
-                                Disable
-                              </>
-                            ) : (
-                              <>
-                                <Power className="h-4 w-4 mr-2" />
-                                Enable
-                              </>
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDeleteEntry(entry.id)}
-                          >
-                            <Trash className="h-4 w-4 mr-2" />
-                            Remove
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {pagination.total > pagination.limit && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {pagination.offset + 1} to{" "}
-            {Math.min(pagination.offset + pagination.limit, pagination.total)} of{" "}
-            {pagination.total} entries
-          </p>
-          <div className="flex gap-2">
+      <AdminDataTable
+        data={filteredBlocklist}
+        columns={columns}
+        getRowId={(entry) => entry.id}
+        isLoading={loading}
+        emptyMessage={
+          <div className="text-center py-12">
+            <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">No blocked IPs found</p>
             <Button
               variant="outline"
-              size="sm"
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  offset: Math.max(0, prev.offset - prev.limit),
-                }))
-              }
-              disabled={pagination.offset === 0}
+              className="mt-4"
+              onClick={() => setIsCreateOpen(true)}
             >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  offset: prev.offset + prev.limit,
-                }))
-              }
-              disabled={!pagination.hasMore}
-            >
-              Next
-              <ChevronRight className="h-4 w-4 ml-1" />
+              <Plus className="h-4 w-4 mr-2" />
+              Block First IP
             </Button>
           </div>
-        </div>
-      )}
+        }
+        onDelete={handleDeleteEntry}
+        deleteConfirmTitle="Remove IP from Blocklist"
+        deleteConfirmDescription={(entry) =>
+          `Are you sure you want to remove ${entry.ipAddress} from the blocklist? This action cannot be undone.`
+        }
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        total={pagination.total}
+        onPageChange={handlePageChange}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+      />
     </div>
   )
 }

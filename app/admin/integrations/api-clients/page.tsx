@@ -6,9 +6,6 @@ import {
   Plus,
   Search,
   Copy,
-  Eye,
-  EyeOff,
-  MoreHorizontal,
   Edit,
   Trash,
   Power,
@@ -18,25 +15,10 @@ import {
   Building2,
   RefreshCw,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -56,6 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast } from "sonner"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface APIClient {
   id: string
@@ -87,6 +70,7 @@ export default function APIClientsPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [showSecret, setShowSecret] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [newClient, setNewClient] = useState({
     name: "",
@@ -179,6 +163,44 @@ export default function APIClientsPage() {
     }
   }
 
+  const handleRevokeClient = async (client: APIClient) => {
+    try {
+      const response = await fetch(`/api/admin/integrations/api-clients/${client.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "REVOKED" }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to revoke client")
+      }
+
+      toast.success("Client revoked successfully")
+      fetchClients()
+    } catch (error) {
+      toast.error("Failed to revoke client")
+    }
+  }
+
+  const handleBulkRevoke = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/integrations/api-clients/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "REVOKED" }),
+          })
+        )
+      )
+      toast.success(`${ids.length} client(s) revoked successfully`)
+      fetchClients()
+      setSelectedIds(new Set())
+    } catch (error) {
+      toast.error("Failed to revoke clients")
+    }
+  }
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
     toast.success("Value copied to clipboard")
@@ -209,6 +231,138 @@ export default function APIClientsPage() {
       client.clientId.toLowerCase().includes(search.toLowerCase()) ||
       client.orgName?.toLowerCase().includes(search.toLowerCase())
   )
+
+  // Define columns for AdminDataTable
+  const columns: Column<APIClient>[] = [
+    {
+      id: "client",
+      header: "Client",
+      cell: (client) => (
+        <div>
+          <p className="font-medium">{client.name}</p>
+          {client.description && (
+            <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+              {client.description}
+            </p>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "clientId",
+      header: "Client ID",
+      cell: (client) => (
+        <div className="flex items-center gap-2">
+          <code className="text-xs bg-muted px-2 py-1 rounded">
+            {client.clientId.substring(0, 12)}...
+          </code>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
+            onClick={() => copyToClipboard(client.clientId)}
+          >
+            <Copy className="h-3 w-3" />
+          </Button>
+        </div>
+      ),
+    },
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (client) => (
+        <div className="flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">{client.orgName || client.orgId}</span>
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (client) => <Badge variant="outline">{client.type}</Badge>,
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (client) => getStatusBadge(client.status),
+    },
+    {
+      id: "usage",
+      header: "Usage",
+      cell: (client) => (
+        <div className="flex items-center gap-1">
+          <Activity className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm">{formatNumber(client.totalRequests)}</span>
+        </div>
+      ),
+    },
+    {
+      id: "lastUsed",
+      header: "Last Used",
+      cell: (client) =>
+        client.lastUsedAt ? (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Clock className="h-3 w-3" />
+            {new Date(client.lastUsedAt).toLocaleDateString()}
+          </div>
+        ) : (
+          <span className="text-xs text-muted-foreground">Never</span>
+        ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<APIClient>[] = [
+    {
+      label: "Edit",
+      icon: <Edit className="h-4 w-4" />,
+      onClick: (client) => {
+        // TODO: Implement edit functionality
+        toast.info("Edit functionality coming soon")
+      },
+    },
+    {
+      label: "Rotate Secret",
+      icon: <RefreshCw className="h-4 w-4" />,
+      onClick: (client) => {
+        // TODO: Implement rotate secret functionality
+        toast.info("Rotate secret functionality coming soon")
+      },
+    },
+    {
+      label: "Suspend",
+      icon: <PowerOff className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (client) => client.status !== "ACTIVE",
+    },
+    {
+      label: "Activate",
+      icon: <Power className="h-4 w-4" />,
+      onClick: handleToggleStatus,
+      hidden: (client) => client.status === "ACTIVE",
+    },
+    {
+      label: "Revoke",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: handleRevokeClient,
+      variant: "destructive",
+      separator: true,
+      hidden: (client) => client.status === "REVOKED",
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Revoke Selected",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: handleBulkRevoke,
+      variant: "destructive",
+      confirmTitle: "Revoke API Clients",
+      confirmDescription: "Are you sure you want to revoke the selected API clients? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -429,140 +583,19 @@ export default function APIClientsPage() {
 
       {/* Clients Table */}
       <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Client</TableHead>
-                <TableHead>Client ID</TableHead>
-                <TableHead>Organization</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Usage</TableHead>
-                <TableHead>Last Used</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={8}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredClients.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-12">
-                    <Key className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No API clients found</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => setIsCreateOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create First Client
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredClients.map((client) => (
-                  <TableRow key={client.id}>
-                    <TableCell>
-                      <div>
-                        <p className="font-medium">{client.name}</p>
-                        {client.description && (
-                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                            {client.description}
-                          </p>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <code className="text-xs bg-muted px-2 py-1 rounded">
-                          {client.clientId.substring(0, 12)}...
-                        </code>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6"
-                          onClick={() => copyToClipboard(client.clientId)}
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{client.orgName || client.orgId}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{client.type}</Badge>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(client.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Activity className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{formatNumber(client.totalRequests)}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {client.lastUsedAt ? (
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          {new Date(client.lastUsedAt).toLocaleDateString()}
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">Never</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <RefreshCw className="h-4 w-4 mr-2" />
-                            Rotate Secret
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleToggleStatus(client)}>
-                            {client.status === "ACTIVE" ? (
-                              <>
-                                <PowerOff className="h-4 w-4 mr-2" />
-                                Suspend
-                              </>
-                            ) : (
-                              <>
-                                <Power className="h-4 w-4 mr-2" />
-                                Activate
-                              </>
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive">
-                            <Trash className="h-4 w-4 mr-2" />
-                            Revoke
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+        <CardContent className="p-6">
+          <AdminDataTable
+            data={filteredClients}
+            columns={columns}
+            getRowId={(client) => client.id}
+            isLoading={loading}
+            emptyMessage="No API clients found"
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            enableSelection={true}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
     </div>

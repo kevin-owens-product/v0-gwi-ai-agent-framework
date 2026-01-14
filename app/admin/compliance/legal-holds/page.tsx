@@ -6,27 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -39,8 +24,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Search,
-  MoreHorizontal,
-  Eye,
   Loader2,
   RefreshCw,
   Plus,
@@ -55,6 +38,7 @@ import {
   AlertTriangle,
 } from "lucide-react"
 import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Organization {
   id: string
@@ -98,6 +82,7 @@ export default function LegalHoldsPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -203,6 +188,31 @@ export default function LegalHoldsPage() {
     }
   }
 
+  const handleBulkRelease = async (ids: string[]) => {
+    try {
+      const results = await Promise.allSettled(
+        ids.map(id =>
+          fetch(`/api/admin/compliance/legal-holds/${id}`, {
+            method: "PUT",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "RELEASED" }),
+          })
+        )
+      )
+
+      const failed = results.filter(r => r.status === "rejected").length
+      if (failed > 0) {
+        alert(`Failed to release ${failed} of ${ids.length} legal holds`)
+      }
+
+      fetchLegalHolds()
+    } catch (error) {
+      console.error("Failed to release legal holds:", error)
+      alert(error instanceof Error ? error.message : "Failed to release legal holds")
+    }
+  }
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "ACTIVE":
@@ -215,6 +225,125 @@ export default function LegalHoldsPage() {
         return <Badge variant="outline">{status}</Badge>
     }
   }
+
+  // Define columns for AdminDataTable
+  const columns: Column<LegalHold>[] = [
+    {
+      id: "name",
+      header: "Legal Hold",
+      cell: (hold) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-red-500/10 flex items-center justify-center">
+            <Gavel className="h-4 w-4 text-red-500" />
+          </div>
+          <div>
+            <p className="font-medium">{hold.name}</p>
+            {hold.description && (
+              <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+                {hold.description}
+              </p>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "caseNumber",
+      header: "Case Number",
+      cell: (hold) => (
+        hold.caseNumber ? (
+          <Badge variant="outline" className="font-mono">
+            {hold.caseNumber}
+          </Badge>
+        ) : (
+          <span className="text-muted-foreground">-</span>
+        )
+      ),
+    },
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (hold) => (
+        hold.organization ? (
+          <div className="flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-muted-foreground" />
+            <span>{hold.organization.name}</span>
+          </div>
+        ) : (
+          <span className="text-muted-foreground">Platform-wide</span>
+        )
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (hold) => getStatusBadge(hold.status),
+    },
+    {
+      id: "custodians",
+      header: "Custodians",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (hold) => (
+        <div className="flex items-center justify-center gap-1">
+          <Users className="h-3 w-3 text-muted-foreground" />
+          {hold.custodianCount}
+        </div>
+      ),
+    },
+    {
+      id: "exports",
+      header: "Exports",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (hold) => (
+        <div className="flex items-center justify-center gap-1">
+          <Download className="h-3 w-3 text-muted-foreground" />
+          {hold.exportCount}
+        </div>
+      ),
+    },
+    {
+      id: "startDate",
+      header: "Start Date",
+      cell: (hold) => (
+        <div className="flex items-center gap-1 text-muted-foreground">
+          <Calendar className="h-3 w-3" />
+          {new Date(hold.startDate).toLocaleDateString()}
+        </div>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<LegalHold>[] = [
+    {
+      label: "View Organization",
+      icon: <Building2 className="h-4 w-4" />,
+      href: (hold) => `/admin/tenants/${hold.orgId}`,
+      hidden: (hold) => !hold.organization,
+    },
+    {
+      label: "Release Hold",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (hold) => handleReleaseHold(hold),
+      variant: "destructive",
+      hidden: (hold) => hold.status !== "ACTIVE",
+      separator: true,
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Release Selected",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: handleBulkRelease,
+      variant: "destructive",
+      confirmTitle: "Release Legal Holds",
+      confirmDescription: "Are you sure you want to release the selected legal holds? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -276,157 +405,23 @@ export default function LegalHoldsPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Legal Hold</TableHead>
-                  <TableHead>Case Number</TableHead>
-                  <TableHead>Organization</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Custodians</TableHead>
-                  <TableHead className="text-center">Exports</TableHead>
-                  <TableHead>Start Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : legalHolds.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No legal holds found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  legalHolds.map((hold) => (
-                    <TableRow key={hold.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-red-500/10 flex items-center justify-center">
-                            <Gavel className="h-4 w-4 text-red-500" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{hold.name}</p>
-                            {hold.description && (
-                              <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                                {hold.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {hold.caseNumber ? (
-                          <Badge variant="outline" className="font-mono">
-                            {hold.caseNumber}
-                          </Badge>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {hold.organization ? (
-                          <div className="flex items-center gap-2">
-                            <Building2 className="h-4 w-4 text-muted-foreground" />
-                            <span>{hold.organization.name}</span>
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">Platform-wide</span>
-                        )}
-                      </TableCell>
-                      <TableCell>{getStatusBadge(hold.status)}</TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <Users className="h-3 w-3 text-muted-foreground" />
-                          {hold.custodianCount}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <Download className="h-3 w-3 text-muted-foreground" />
-                          {hold.exportCount}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1 text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(hold.startDate).toLocaleDateString()}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/compliance/legal-holds/${hold.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            {hold.organization && (
-                              <DropdownMenuItem asChild>
-                                <Link href={`/admin/tenants/${hold.orgId}`}>
-                                  <Building2 className="h-4 w-4 mr-2" />
-                                  View Organization
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                            {hold.status === "ACTIVE" && (
-                              <>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => handleReleaseHold(hold)}>
-                                  <CheckCircle className="h-4 w-4 mr-2" />
-                                  Release Hold
-                                </DropdownMenuItem>
-                              </>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages} ({total} total)
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={legalHolds}
+            columns={columns}
+            getRowId={(hold) => hold.id}
+            isLoading={isLoading}
+            emptyMessage="No legal holds found"
+            viewHref={(hold) => `/admin/compliance/legal-holds/${hold.id}`}
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
 

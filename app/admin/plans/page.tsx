@@ -6,50 +6,24 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { AdminDataTable, Column, BulkAction } from "@/components/admin/data-table"
 import {
   Search,
-  MoreHorizontal,
   CreditCard,
-  Eye,
-  Pencil,
-  Trash2,
   Plus,
-  Loader2,
   RefreshCw,
   Check,
   X,
   Package,
+  CheckCircle,
+  XCircle,
 } from "lucide-react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 interface Plan {
@@ -81,10 +55,7 @@ export default function PlansPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
-
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const fetchPlans = useCallback(async () => {
     setIsLoading(true)
@@ -115,16 +86,12 @@ export default function PlansPage() {
     return () => clearTimeout(debounce)
   }, [fetchPlans])
 
-  const handleDelete = async () => {
-    if (!selectedPlan) return
-    setIsDeleting(true)
+  const handleDelete = async (plan: Plan) => {
     try {
-      const response = await fetch(`/api/admin/plans/${selectedPlan.id}`, {
+      const response = await fetch(`/api/admin/plans/${plan.id}`, {
         method: "DELETE",
       })
       if (response.ok) {
-        setDeleteDialogOpen(false)
-        setSelectedPlan(null)
         fetchPlans()
       } else {
         const data = await response.json()
@@ -132,8 +99,25 @@ export default function PlansPage() {
       }
     } catch (error) {
       console.error("Failed to delete plan:", error)
-    } finally {
-      setIsDeleting(false)
+      throw error
+    }
+  }
+
+  const handleBulkStatusUpdate = async (planIds: string[], isActive: boolean) => {
+    try {
+      await Promise.all(
+        planIds.map((id) =>
+          fetch(`/api/admin/plans/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isActive }),
+          })
+        )
+      )
+      fetchPlans()
+    } catch (error) {
+      console.error("Failed to update plans:", error)
+      throw error
     }
   }
 
@@ -152,6 +136,113 @@ export default function PlansPage() {
         return "outline"
     }
   }
+
+  // Column definitions
+  const columns: Column<Plan>[] = [
+    {
+      id: "plan",
+      header: "Plan",
+      cell: (plan) => (
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Package className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <p className="font-medium">{plan.displayName}</p>
+            <p className="text-xs text-muted-foreground">{plan.name}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "tier",
+      header: "Tier",
+      cell: (plan) => (
+        <Badge variant={getTierBadgeVariant(plan.tier)}>
+          {plan.tier}
+        </Badge>
+      ),
+    },
+    {
+      id: "monthly",
+      header: "Monthly",
+      headerClassName: "text-right",
+      className: "text-right",
+      cell: (plan) => (
+        <div className="font-medium">
+          {formatPrice(plan.monthlyPrice)}
+          {plan.monthlyPrice > 0 && <span className="text-xs text-muted-foreground">/mo</span>}
+        </div>
+      ),
+    },
+    {
+      id: "yearly",
+      header: "Yearly",
+      headerClassName: "text-right",
+      className: "text-right",
+      cell: (plan) => (
+        <div className="font-medium">
+          {formatPrice(plan.yearlyPrice)}
+          {plan.yearlyPrice > 0 && <span className="text-xs text-muted-foreground">/yr</span>}
+        </div>
+      ),
+    },
+    {
+      id: "features",
+      header: "Features",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (plan) => <Badge variant="outline">{plan._count.features}</Badge>,
+    },
+    {
+      id: "tenants",
+      header: "Tenants",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (plan) => <Badge variant="outline">{plan._count.tenantEntitlements}</Badge>,
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (plan) => (
+        <div className="flex items-center gap-2">
+          {plan.isActive ? (
+            <Badge variant="default" className="bg-green-500">
+              <Check className="h-3 w-3 mr-1" />
+              Active
+            </Badge>
+          ) : (
+            <Badge variant="secondary">
+              <X className="h-3 w-3 mr-1" />
+              Inactive
+            </Badge>
+          )}
+          {plan.isPublic && (
+            <Badge variant="outline" className="text-xs">Public</Badge>
+          )}
+        </div>
+      ),
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Activate Plans",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusUpdate(ids, true),
+      confirmTitle: "Activate Plans",
+      confirmDescription: "Are you sure you want to activate the selected plans?",
+    },
+    {
+      label: "Deactivate Plans",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusUpdate(ids, false),
+      confirmTitle: "Deactivate Plans",
+      confirmDescription: "Are you sure you want to deactivate the selected plans?",
+      separator: true,
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -214,186 +305,34 @@ export default function PlansPage() {
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Plan</TableHead>
-                  <TableHead>Tier</TableHead>
-                  <TableHead className="text-right">Monthly</TableHead>
-                  <TableHead className="text-right">Yearly</TableHead>
-                  <TableHead className="text-center">Features</TableHead>
-                  <TableHead className="text-center">Tenants</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : plans.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No plans found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  plans.map((plan) => (
-                    <TableRow key={plan.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Package className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{plan.displayName}</p>
-                            <p className="text-xs text-muted-foreground">{plan.name}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={getTierBadgeVariant(plan.tier)}>
-                          {plan.tier}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right font-medium">
-                        {formatPrice(plan.monthlyPrice)}
-                        {plan.monthlyPrice > 0 && <span className="text-xs text-muted-foreground">/mo</span>}
-                      </TableCell>
-                      <TableCell className="text-right font-medium">
-                        {formatPrice(plan.yearlyPrice)}
-                        {plan.yearlyPrice > 0 && <span className="text-xs text-muted-foreground">/yr</span>}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge variant="outline">{plan._count.features}</Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge variant="outline">{plan._count.tenantEntitlements}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {plan.isActive ? (
-                            <Badge variant="default" className="bg-green-500">
-                              <Check className="h-3 w-3 mr-1" />
-                              Active
-                            </Badge>
-                          ) : (
-                            <Badge variant="secondary">
-                              <X className="h-3 w-3 mr-1" />
-                              Inactive
-                            </Badge>
-                          )}
-                          {plan.isPublic && (
-                            <Badge variant="outline" className="text-xs">Public</Badge>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/plans/${plan.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/plans/${plan.id}?edit=true`}>
-                                <Pencil className="h-4 w-4 mr-2" />
-                                Edit Plan
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-destructive"
-                              onClick={() => {
-                                setSelectedPlan(plan)
-                                setDeleteDialogOpen(true)
-                              }}
-                              disabled={plan._count.tenantEntitlements > 0}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Data Table */}
+          <AdminDataTable
+            data={plans}
+            columns={columns}
+            getRowId={(plan) => plan.id}
+            isLoading={isLoading}
+            emptyMessage="No plans found"
+            viewHref={(plan) => `/admin/plans/${plan.id}`}
+            editHref={(plan) => `/admin/plans/${plan.id}?edit=true`}
+            onDelete={handleDelete}
+            deleteConfirmTitle="Delete Plan"
+            deleteConfirmDescription={(plan) =>
+              `Are you sure you want to delete "${plan.displayName}"? This action cannot be undone.${
+                plan._count.tenantEntitlements > 0
+                  ? " Warning: This plan has active tenant entitlements."
+                  : ""
+              }`
+            }
+            bulkActions={bulkActions}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+          />
         </CardContent>
       </Card>
-
-      {/* Delete Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Plan</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete &quot;{selectedPlan?.displayName}&quot;? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={isDeleting}
-            >
-              {isDeleting ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                "Delete Plan"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

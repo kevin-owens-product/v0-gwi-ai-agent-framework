@@ -8,7 +8,6 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  MoreHorizontal,
   RefreshCw,
   Trash,
   Shield,
@@ -18,21 +17,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -52,6 +36,7 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Domain {
   id: string
@@ -73,6 +58,7 @@ export default function DomainManagementPage() {
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [newDomain, setNewDomain] = useState({
     domain: "",
@@ -120,6 +106,55 @@ export default function DomainManagementPage() {
     }
   }
 
+  const handleDeleteDomain = async (domain: Domain) => {
+    try {
+      const response = await fetch(`/api/admin/identity/domains/${domain.id}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        throw new Error("Delete failed")
+      }
+
+      toast.success("Domain deleted successfully")
+      fetchDomains()
+    } catch (error) {
+      toast.error("Failed to delete domain")
+    }
+  }
+
+  const handleBulkVerify = async (ids: string[]) => {
+    try {
+      const promises = ids.map((id) =>
+        fetch(`/api/admin/identity/domains/${id}/verify`, {
+          method: "POST",
+        })
+      )
+
+      await Promise.all(promises)
+      toast.success(`Verification initiated for ${ids.length} domain${ids.length !== 1 ? "s" : ""}`)
+      fetchDomains()
+    } catch (error) {
+      toast.error("Failed to verify domains")
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      const promises = ids.map((id) =>
+        fetch(`/api/admin/identity/domains/${id}`, {
+          method: "DELETE",
+        })
+      )
+
+      await Promise.all(promises)
+      toast.success(`Deleted ${ids.length} domain${ids.length !== 1 ? "s" : ""}`)
+      fetchDomains()
+    } catch (error) {
+      toast.error("Failed to delete domains")
+    }
+  }
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "VERIFIED":
@@ -153,6 +188,101 @@ export default function DomainManagementPage() {
       domain.domain.toLowerCase().includes(search.toLowerCase()) ||
       domain.orgName?.toLowerCase().includes(search.toLowerCase())
   )
+
+  // Column definitions
+  const columns: Column<Domain>[] = [
+    {
+      id: "domain",
+      header: "Domain",
+      cell: (domain) => (
+        <div className="flex items-center gap-2">
+          <Globe className="h-4 w-4 text-muted-foreground" />
+          <span className="font-medium">{domain.domain}</span>
+        </div>
+      ),
+    },
+    {
+      id: "organization",
+      header: "Organization",
+      cell: (domain) => (
+        <div className="flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-muted-foreground" />
+          <span>{domain.orgName || domain.orgId}</span>
+        </div>
+      ),
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: (domain) => getStatusBadge(domain.status),
+    },
+    {
+      id: "verificationMethod",
+      header: "Verification Method",
+      cell: (domain) => (
+        <Badge variant="outline">
+          {domain.verificationMethod.replace("_", " ")}
+        </Badge>
+      ),
+    },
+    {
+      id: "features",
+      header: "Features",
+      cell: (domain) => (
+        <div className="flex gap-1">
+          {domain.autoJoin && (
+            <Badge variant="secondary" className="text-xs">
+              Auto-Join
+            </Badge>
+          )}
+          {domain.ssoEnforced && (
+            <Badge variant="secondary" className="text-xs">
+              <Shield className="h-3 w-3 mr-1" />
+              SSO
+            </Badge>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "verified",
+      header: "Verified",
+      cell: (domain) =>
+        domain.verifiedAt
+          ? new Date(domain.verifiedAt).toLocaleDateString()
+          : "-",
+    },
+  ]
+
+  // Row actions
+  const rowActions: RowAction<Domain>[] = [
+    {
+      label: "Verify Now",
+      icon: <RefreshCw className="h-4 w-4" />,
+      onClick: (domain) => handleVerifyDomain(domain.id),
+      hidden: (domain) => domain.status !== "PENDING",
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Verify Selected",
+      icon: <RefreshCw className="h-4 w-4" />,
+      onClick: handleBulkVerify,
+      confirmTitle: "Verify Domains",
+      confirmDescription: "Are you sure you want to initiate verification for the selected domains?",
+    },
+    {
+      label: "Delete Selected",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Domains",
+      confirmDescription: "Are you sure you want to delete the selected domains? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -321,116 +451,35 @@ export default function DomainManagementPage() {
       </Card>
 
       {/* Domains Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Domain</TableHead>
-                <TableHead>Organization</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Verification Method</TableHead>
-                <TableHead>Features</TableHead>
-                <TableHead>Verified</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={7}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredDomains.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12">
-                    <Globe className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No domains found</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => setIsCreateOpen(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add First Domain
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredDomains.map((domain) => (
-                  <TableRow key={domain.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Globe className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">{domain.domain}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-muted-foreground" />
-                        <span>{domain.orgName || domain.orgId}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(domain.status)}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {domain.verificationMethod.replace("_", " ")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        {domain.autoJoin && (
-                          <Badge variant="secondary" className="text-xs">
-                            Auto-Join
-                          </Badge>
-                        )}
-                        {domain.ssoEnforced && (
-                          <Badge variant="secondary" className="text-xs">
-                            <Shield className="h-3 w-3 mr-1" />
-                            SSO
-                          </Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {domain.verifiedAt
-                        ? new Date(domain.verifiedAt).toLocaleDateString()
-                        : "-"}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          {domain.status === "PENDING" && (
-                            <DropdownMenuItem
-                              onClick={() => handleVerifyDomain(domain.id)}
-                            >
-                              <RefreshCw className="h-4 w-4 mr-2" />
-                              Verify Now
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive">
-                            <Trash className="h-4 w-4 mr-2" />
-                            Remove
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <AdminDataTable
+        data={filteredDomains}
+        columns={columns}
+        getRowId={(domain) => domain.id}
+        isLoading={loading}
+        emptyMessage={
+          <div className="text-center py-12">
+            <Globe className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">No domains found</p>
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => setIsCreateOpen(true)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add First Domain
+            </Button>
+          </div>
+        }
+        onDelete={handleDeleteDomain}
+        deleteConfirmTitle="Delete Domain"
+        deleteConfirmDescription={(domain) =>
+          `Are you sure you want to delete the domain "${domain.domain}"? This action cannot be undone.`
+        }
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+      />
     </div>
   )
 }

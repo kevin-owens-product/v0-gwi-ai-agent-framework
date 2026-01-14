@@ -13,8 +13,6 @@ import {
   XCircle,
   Clock,
   ShieldAlert,
-  MoreHorizontal,
-  Eye,
   ShieldCheck,
   ShieldX,
   Trash,
@@ -32,21 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 import { toast } from "sonner"
 import Link from "next/link"
 
@@ -125,6 +109,7 @@ export default function DevicesPage() {
     total: 0,
     totalPages: 0,
   })
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const fetchDevices = useCallback(async () => {
     setLoading(true)
@@ -204,8 +189,6 @@ export default function DevicesPage() {
   }
 
   const handleDeleteDevice = async (deviceId: string) => {
-    if (!confirm("Are you sure you want to delete this device? This action cannot be undone.")) return
-
     try {
       const response = await fetch(`/api/admin/devices/${deviceId}`, {
         method: "DELETE",
@@ -217,6 +200,38 @@ export default function DevicesPage() {
       fetchDevices()
     } catch (error) {
       toast.error("Failed to delete device")
+    }
+  }
+
+  const handleBulkRevoke = async (selectedIds: string[]) => {
+    try {
+      const promises = selectedIds.map((deviceId) =>
+        fetch(`/api/admin/devices/${deviceId}/revoke`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reason: "Bulk revoked by admin" }),
+        })
+      )
+      await Promise.all(promises)
+      toast.success(`Successfully revoked ${selectedIds.length} device(s)`)
+      fetchDevices()
+    } catch (error) {
+      toast.error("Failed to revoke some devices")
+    }
+  }
+
+  const handleBulkDelete = async (selectedIds: string[]) => {
+    try {
+      const promises = selectedIds.map((deviceId) =>
+        fetch(`/api/admin/devices/${deviceId}`, {
+          method: "DELETE",
+        })
+      )
+      await Promise.all(promises)
+      toast.success(`Successfully deleted ${selectedIds.length} device(s)`)
+      fetchDevices()
+    } catch (error) {
+      toast.error("Failed to delete some devices")
     }
   }
 
@@ -269,6 +284,130 @@ export default function DevicesPage() {
         return <Badge variant="outline">{status}</Badge>
     }
   }
+
+  // Define columns for AdminDataTable
+  const columns: Column<Device>[] = [
+    {
+      id: "device",
+      header: "Device",
+      cell: (device) => (
+        <Link href={`/admin/devices/${device.id}`} className="hover:underline">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              {getDeviceIcon(device.type)}
+            </div>
+            <div>
+              <p className="font-medium">
+                {device.name || device.model || device.deviceId.slice(0, 8)}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {device.manufacturer} {device.model}
+              </p>
+            </div>
+          </div>
+        </Link>
+      ),
+    },
+    {
+      id: "user",
+      header: "User",
+      cell: (device) => (
+        <Link href={`/admin/users/${device.user.id}`} className="hover:underline">
+          <div>
+            <p className="font-medium">{device.user.name || "No name"}</p>
+            <p className="text-xs text-muted-foreground">{device.user.email}</p>
+          </div>
+        </Link>
+      ),
+    },
+    {
+      id: "platform",
+      header: "Platform",
+      cell: (device) => (
+        <div className="flex flex-col gap-1">
+          <Badge variant="outline">{device.platform || "Unknown"}</Badge>
+          {device.osVersion && (
+            <span className="text-xs text-muted-foreground">v{device.osVersion}</span>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "trustStatus",
+      header: "Trust Status",
+      cell: (device) => getTrustStatusBadge(device.trustStatus),
+    },
+    {
+      id: "compliance",
+      header: "Compliance",
+      cell: (device) => (
+        device.isCompliant ? (
+          <Badge className="bg-green-500">
+            <ShieldCheck className="h-3 w-3 mr-1" />
+            Compliant
+          </Badge>
+        ) : (
+          <Badge variant="destructive">
+            <ShieldAlert className="h-3 w-3 mr-1" />
+            Non-Compliant
+          </Badge>
+        )
+      ),
+    },
+    {
+      id: "lastActive",
+      header: "Last Active",
+      cell: (device) => (
+        device.lastActiveAt ? (
+          <div className="text-sm">
+            <p>{new Date(device.lastActiveAt).toLocaleDateString()}</p>
+            <p className="text-xs text-muted-foreground">
+              {device.lastIpAddress || "Unknown IP"}
+            </p>
+          </div>
+        ) : (
+          <span className="text-muted-foreground text-sm">Never</span>
+        )
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<Device>[] = [
+    {
+      label: "Approve Trust",
+      icon: <ShieldCheck className="h-4 w-4" />,
+      onClick: (device) => handleTrustDevice(device.id),
+      hidden: (device) => device.trustStatus !== "PENDING",
+    },
+    {
+      label: "Revoke Trust",
+      icon: <ShieldX className="h-4 w-4" />,
+      onClick: (device) => handleRevokeDevice(device.id),
+      hidden: (device) => device.trustStatus !== "TRUSTED",
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Revoke Trust",
+      icon: <ShieldX className="h-4 w-4" />,
+      onClick: handleBulkRevoke,
+      variant: "destructive",
+      confirmTitle: "Revoke Trust for Selected Devices",
+      confirmDescription: "Are you sure you want to revoke trust for the selected devices?",
+    },
+    {
+      label: "Delete Devices",
+      icon: <Trash className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Selected Devices",
+      confirmDescription: "Are you sure you want to delete the selected devices? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -383,170 +522,31 @@ export default function DevicesPage() {
 
       {/* Devices Table */}
       <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Device</TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>Platform</TableHead>
-                <TableHead>Trust Status</TableHead>
-                <TableHead>Compliance</TableHead>
-                <TableHead>Last Active</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={7}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : devices.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12">
-                    <Smartphone className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No devices found</p>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                devices.map((device) => (
-                  <TableRow key={device.id}>
-                    <TableCell>
-                      <Link href={`/admin/devices/${device.id}`} className="hover:underline">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                            {getDeviceIcon(device.type)}
-                          </div>
-                          <div>
-                            <p className="font-medium">
-                              {device.name || device.model || device.deviceId.slice(0, 8)}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {device.manufacturer} {device.model}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <Link href={`/admin/users/${device.user.id}`} className="hover:underline">
-                        <div>
-                          <p className="font-medium">{device.user.name || "No name"}</p>
-                          <p className="text-xs text-muted-foreground">{device.user.email}</p>
-                        </div>
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <Badge variant="outline">{device.platform || "Unknown"}</Badge>
-                        {device.osVersion && (
-                          <span className="text-xs text-muted-foreground">v{device.osVersion}</span>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>{getTrustStatusBadge(device.trustStatus)}</TableCell>
-                    <TableCell>
-                      {device.isCompliant ? (
-                        <Badge className="bg-green-500">
-                          <ShieldCheck className="h-3 w-3 mr-1" />
-                          Compliant
-                        </Badge>
-                      ) : (
-                        <Badge variant="destructive">
-                          <ShieldAlert className="h-3 w-3 mr-1" />
-                          Non-Compliant
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {device.lastActiveAt ? (
-                        <div className="text-sm">
-                          <p>{new Date(device.lastActiveAt).toLocaleDateString()}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {device.lastIpAddress || "Unknown IP"}
-                          </p>
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground text-sm">Never</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/admin/devices/${device.id}`}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </Link>
-                          </DropdownMenuItem>
-                          {device.trustStatus === "PENDING" && (
-                            <DropdownMenuItem onClick={() => handleTrustDevice(device.id)}>
-                              <ShieldCheck className="h-4 w-4 mr-2" />
-                              Approve Trust
-                            </DropdownMenuItem>
-                          )}
-                          {device.trustStatus === "TRUSTED" && (
-                            <DropdownMenuItem onClick={() => handleRevokeDevice(device.id)}>
-                              <ShieldX className="h-4 w-4 mr-2" />
-                              Revoke Trust
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDeleteDevice(device.id)}
-                          >
-                            <Trash className="h-4 w-4 mr-2" />
-                            Delete Device
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+        <CardContent className="p-6">
+          <AdminDataTable
+            data={devices}
+            columns={columns}
+            getRowId={(device) => device.id}
+            isLoading={loading}
+            emptyMessage="No devices found"
+            viewHref={(device) => `/admin/devices/${device.id}`}
+            onDelete={(device) => handleDeleteDevice(device.id)}
+            deleteConfirmTitle="Delete Device"
+            deleteConfirmDescription={(device) =>
+              `Are you sure you want to delete ${device.name || device.deviceId}? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            total={pagination.total}
+            onPageChange={(page) => setPagination({ ...pagination, page })}
+            enableSelection={true}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
-
-      {/* Pagination */}
-      {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
-            {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
-            {pagination.total} devices
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page === 1}
-              onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page === pagination.totalPages}
-              onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

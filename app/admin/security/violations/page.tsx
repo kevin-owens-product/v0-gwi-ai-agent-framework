@@ -8,14 +8,9 @@ import {
   Filter,
   Shield,
   Clock,
-  User,
   Globe,
-  MoreHorizontal,
-  Eye,
   CheckCircle,
   XCircle,
-  ChevronLeft,
-  ChevronRight,
   ArrowUpDown,
   AlertCircle,
   Ban,
@@ -32,22 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { toast } from "sonner"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface SecurityViolation {
   id: string
@@ -127,6 +108,7 @@ export default function SecurityViolationsPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [sortBy, setSortBy] = useState("createdAt")
   const [sortOrder, setSortOrder] = useState("desc")
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [pagination, setPagination] = useState({
     total: 0,
     limit: 20,
@@ -191,6 +173,30 @@ export default function SecurityViolationsPage() {
     }
   }
 
+  const handleBulkStatusChange = async (ids: string[], newStatus: string) => {
+    try {
+      const results = await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/admin/security/violations/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: newStatus }),
+          })
+        )
+      )
+
+      const failedCount = results.filter((r) => !r.ok).length
+      if (failedCount > 0) {
+        toast.error(`${failedCount} violation(s) failed to update`)
+      } else {
+        toast.success(`${ids.length} violation(s) updated to ${newStatus}`)
+      }
+      fetchViolations()
+    } catch (error) {
+      toast.error("Failed to update violations")
+    }
+  }
+
   const handleSort = (column: string) => {
     if (sortBy === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc")
@@ -237,6 +243,140 @@ export default function SecurityViolationsPage() {
       violation.description?.toLowerCase().includes(search.toLowerCase()) ||
       violation.ipAddress?.toLowerCase().includes(search.toLowerCase())
   )
+
+  // Column definitions for AdminDataTable
+  const columns: Column<SecurityViolation>[] = [
+    {
+      id: "icon",
+      header: "",
+      cell: (violation) => getViolationIcon(violation.violationType),
+      className: "w-[40px]",
+    },
+    {
+      id: "type",
+      header: (
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("violationType")}>
+          Type
+          <ArrowUpDown className="h-4 w-4" />
+        </div>
+      ),
+      cell: (violation) => (
+        <Badge variant="outline">
+          {violation.violationType.replace(/_/g, " ")}
+        </Badge>
+      ),
+    },
+    {
+      id: "description",
+      header: "Description",
+      cell: (violation) => (
+        <p className="truncate max-w-[250px]">{violation.description}</p>
+      ),
+    },
+    {
+      id: "severity",
+      header: (
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("severity")}>
+          Severity
+          <ArrowUpDown className="h-4 w-4" />
+        </div>
+      ),
+      cell: (violation) => getSeverityBadge(violation.severity),
+    },
+    {
+      id: "policy",
+      header: "Policy",
+      cell: (violation) => (
+        <p className="text-sm truncate max-w-[150px]">
+          {violation.policy?.name || "N/A"}
+        </p>
+      ),
+    },
+    {
+      id: "status",
+      header: (
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("status")}>
+          Status
+          <ArrowUpDown className="h-4 w-4" />
+        </div>
+      ),
+      cell: (violation) => getStatusBadge(violation.status),
+    },
+    {
+      id: "ipAddress",
+      header: "IP Address",
+      cell: (violation) => (
+        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <Globe className="h-3 w-3" />
+          {violation.ipAddress || "N/A"}
+        </div>
+      ),
+    },
+    {
+      id: "createdAt",
+      header: (
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("createdAt")}>
+          Time
+          <ArrowUpDown className="h-4 w-4" />
+        </div>
+      ),
+      cell: (violation) => (
+        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <Clock className="h-3 w-3" />
+          {new Date(violation.createdAt).toLocaleString()}
+        </div>
+      ),
+    },
+  ]
+
+  // Row actions for individual violations
+  const rowActions: RowAction<SecurityViolation>[] = [
+    {
+      label: "Mark Investigating",
+      icon: <Clock className="h-4 w-4" />,
+      onClick: (violation) => handleStatusChange(violation, "INVESTIGATING"),
+      hidden: (violation) => violation.status === "INVESTIGATING",
+    },
+    {
+      label: "Mark Resolved",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (violation) => handleStatusChange(violation, "RESOLVED"),
+      hidden: (violation) => violation.status === "RESOLVED",
+    },
+    {
+      label: "Mark False Positive",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (violation) => handleStatusChange(violation, "FALSE_POSITIVE"),
+      hidden: (violation) => violation.status === "FALSE_POSITIVE",
+      separator: true,
+    },
+  ]
+
+  // Bulk actions for selected violations
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Mark as Investigating",
+      icon: <Clock className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "INVESTIGATING"),
+      confirmTitle: "Mark as Investigating",
+      confirmDescription: "Are you sure you want to mark these violations as investigating?",
+    },
+    {
+      label: "Mark as Resolved",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "RESOLVED"),
+      confirmTitle: "Mark as Resolved",
+      confirmDescription: "Are you sure you want to mark these violations as resolved?",
+    },
+    {
+      label: "Mark as False Positive",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: (ids) => handleBulkStatusChange(ids, "FALSE_POSITIVE"),
+      confirmTitle: "Mark as False Positive",
+      confirmDescription: "Are you sure you want to mark these violations as false positives?",
+      separator: true,
+    },
+  ]
 
   const stats = {
     total: pagination.total,
@@ -352,207 +492,27 @@ export default function SecurityViolationsPage() {
       </Card>
 
       {/* Violations Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[40px]"></TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("violationType")}
-                >
-                  <div className="flex items-center gap-2">
-                    Type
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("severity")}
-                >
-                  <div className="flex items-center gap-2">
-                    Severity
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead>Policy</TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("status")}
-                >
-                  <div className="flex items-center gap-2">
-                    Status
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead>IP Address</TableHead>
-                <TableHead
-                  className="cursor-pointer"
-                  onClick={() => handleSort("createdAt")}
-                >
-                  <div className="flex items-center gap-2">
-                    Time
-                    <ArrowUpDown className="h-4 w-4" />
-                  </div>
-                </TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={9}>
-                      <div className="h-12 bg-muted animate-pulse rounded" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : filteredViolations.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={9} className="text-center py-12">
-                    <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No security violations found</p>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredViolations.map((violation) => (
-                  <TableRow
-                    key={violation.id}
-                    className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => router.push(`/admin/security/violations/${violation.id}`)}
-                  >
-                    <TableCell>{getViolationIcon(violation.violationType)}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {violation.violationType.replace(/_/g, " ")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <p className="truncate max-w-[250px]">{violation.description}</p>
-                    </TableCell>
-                    <TableCell>{getSeverityBadge(violation.severity)}</TableCell>
-                    <TableCell>
-                      <p className="text-sm truncate max-w-[150px]">
-                        {violation.policy?.name || "N/A"}
-                      </p>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(violation.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Globe className="h-3 w-3" />
-                        {violation.ipAddress || "N/A"}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3" />
-                        {new Date(violation.createdAt).toLocaleString()}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              router.push(`/admin/security/violations/${violation.id}`)
-                            }}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Details
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          {violation.status !== "INVESTIGATING" && (
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleStatusChange(violation, "INVESTIGATING")
-                              }}
-                            >
-                              <Clock className="h-4 w-4 mr-2" />
-                              Mark Investigating
-                            </DropdownMenuItem>
-                          )}
-                          {violation.status !== "RESOLVED" && (
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleStatusChange(violation, "RESOLVED")
-                              }}
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Mark Resolved
-                            </DropdownMenuItem>
-                          )}
-                          {violation.status !== "FALSE_POSITIVE" && (
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleStatusChange(violation, "FALSE_POSITIVE")
-                              }}
-                            >
-                              <XCircle className="h-4 w-4 mr-2" />
-                              Mark False Positive
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      {pagination.total > pagination.limit && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing {pagination.offset + 1} to{" "}
-            {Math.min(pagination.offset + pagination.limit, pagination.total)} of{" "}
-            {pagination.total} violations
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  offset: Math.max(0, prev.offset - prev.limit),
-                }))
-              }
-              disabled={pagination.offset === 0}
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  offset: prev.offset + prev.limit,
-                }))
-              }
-              disabled={!pagination.hasMore}
-            >
-              Next
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
-          </div>
-        </div>
-      )}
+      <AdminDataTable
+        data={filteredViolations}
+        columns={columns}
+        getRowId={(violation) => violation.id}
+        isLoading={loading}
+        emptyMessage="No security violations found"
+        viewHref={(violation) => `/admin/security/violations/${violation.id}`}
+        rowActions={rowActions}
+        bulkActions={bulkActions}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
+        page={Math.floor(pagination.offset / pagination.limit) + 1}
+        totalPages={Math.ceil(pagination.total / pagination.limit)}
+        total={pagination.total}
+        onPageChange={(page) =>
+          setPagination((prev) => ({
+            ...prev,
+            offset: (page - 1) * prev.limit,
+          }))
+        }
+      />
     </div>
   )
 }

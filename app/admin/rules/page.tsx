@@ -9,14 +9,6 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -43,9 +35,10 @@ import {
   Shield,
   Clock,
   Zap,
-  Eye,
+  CheckCircle,
+  XCircle,
 } from "lucide-react"
-import Link from "next/link"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface SystemRule {
   id: string
@@ -80,6 +73,7 @@ export default function RulesPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingRule, setEditingRule] = useState<SystemRule | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const [formData, setFormData] = useState({
     name: "",
@@ -191,7 +185,6 @@ export default function RulesPage() {
   }
 
   const handleDelete = async (ruleId: string) => {
-    if (!confirm("Are you sure you want to delete this rule?")) return
     try {
       await fetch(`/api/admin/rules/${ruleId}`, { method: "DELETE" })
       fetchRules()
@@ -203,6 +196,161 @@ export default function RulesPage() {
   const getRuleTypeInfo = (type: string) => {
     return ruleTypes.find(t => t.value === type) || ruleTypes[0]
   }
+
+  const handleBulkEnable = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map(id =>
+          fetch(`/api/admin/rules/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isActive: true }),
+          })
+        )
+      )
+      fetchRules()
+    } catch (error) {
+      console.error("Failed to enable rules:", error)
+    }
+  }
+
+  const handleBulkDisable = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map(id =>
+          fetch(`/api/admin/rules/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isActive: false }),
+          })
+        )
+      )
+      fetchRules()
+    } catch (error) {
+      console.error("Failed to disable rules:", error)
+    }
+  }
+
+  const handleBulkDelete = async (ids: string[]) => {
+    try {
+      await Promise.all(
+        ids.map(id =>
+          fetch(`/api/admin/rules/${id}`, { method: "DELETE" })
+        )
+      )
+      fetchRules()
+    } catch (error) {
+      console.error("Failed to delete rules:", error)
+    }
+  }
+
+  // Define columns for the data table
+  const columns: Column<SystemRule>[] = [
+    {
+      id: "rule",
+      header: "Rule",
+      cell: (rule) => {
+        const typeInfo = getRuleTypeInfo(rule.type)
+        const TypeIcon = typeInfo.icon
+        return (
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+              <TypeIcon className="h-4 w-4 text-primary" />
+            </div>
+            <div>
+              <p className="font-medium">{rule.name}</p>
+              {rule.description && (
+                <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+                  {rule.description}
+                </p>
+              )}
+            </div>
+          </div>
+        )
+      },
+    },
+    {
+      id: "type",
+      header: "Type",
+      cell: (rule) => {
+        const typeInfo = getRuleTypeInfo(rule.type)
+        return <Badge variant="outline">{typeInfo.label}</Badge>
+      },
+    },
+    {
+      id: "priority",
+      header: "Priority",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (rule) => <Badge variant="secondary">{rule.priority}</Badge>,
+    },
+    {
+      id: "status",
+      header: "Status",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (rule) => (
+        <Switch
+          checked={rule.isActive}
+          onCheckedChange={() => handleToggle(rule)}
+        />
+      ),
+    },
+    {
+      id: "triggers",
+      header: "Triggers",
+      headerClassName: "text-center",
+      className: "text-center",
+      cell: (rule) => <span className="text-sm font-medium">{rule.triggerCount}</span>,
+    },
+    {
+      id: "lastTriggered",
+      header: "Last Triggered",
+      cell: (rule) => (
+        <span className="text-muted-foreground">
+          {rule.lastTriggered
+            ? new Date(rule.lastTriggered).toLocaleDateString()
+            : "Never"}
+        </span>
+      ),
+    },
+  ]
+
+  // Define row actions
+  const rowActions: RowAction<SystemRule>[] = [
+    {
+      label: "Edit Rule",
+      icon: <Pencil className="h-4 w-4" />,
+      onClick: (rule) => handleOpenDialog(rule),
+    },
+  ]
+
+  // Define bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Enable All",
+      icon: <CheckCircle className="h-4 w-4" />,
+      onClick: handleBulkEnable,
+      confirmTitle: "Enable Selected Rules",
+      confirmDescription: "Are you sure you want to enable all selected rules?",
+    },
+    {
+      label: "Disable All",
+      icon: <XCircle className="h-4 w-4" />,
+      onClick: handleBulkDisable,
+      confirmTitle: "Disable Selected Rules",
+      confirmDescription: "Are you sure you want to disable all selected rules?",
+    },
+    {
+      label: "Delete All",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: handleBulkDelete,
+      variant: "destructive",
+      separator: true,
+      confirmTitle: "Delete Selected Rules",
+      confirmDescription: "Are you sure you want to permanently delete all selected rules? This action cannot be undone.",
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -340,104 +488,23 @@ export default function RulesPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Rule</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead className="text-center">Priority</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="text-center">Triggers</TableHead>
-                  <TableHead>Last Triggered</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : rules.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No system rules configured
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  rules.map((rule) => {
-                    const typeInfo = getRuleTypeInfo(rule.type)
-                    const TypeIcon = typeInfo.icon
-                    return (
-                      <TableRow key={rule.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                              <TypeIcon className="h-4 w-4 text-primary" />
-                            </div>
-                            <div>
-                              <p className="font-medium">{rule.name}</p>
-                              {rule.description && (
-                                <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                                  {rule.description}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{typeInfo.label}</Badge>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant="secondary">{rule.priority}</Badge>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Switch
-                            checked={rule.isActive}
-                            onCheckedChange={() => handleToggle(rule)}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <span className="text-sm font-medium">{rule.triggerCount}</span>
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {rule.lastTriggered
-                            ? new Date(rule.lastTriggered).toLocaleDateString()
-                            : "Never"}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <Button variant="ghost" size="sm" asChild>
-                              <Link href={`/admin/rules/${rule.id}`}>
-                                <Eye className="h-4 w-4" />
-                              </Link>
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleOpenDialog(rule)}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-destructive hover:text-destructive"
-                              onClick={() => handleDelete(rule.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })
-                )}
-              </TableBody>
-            </Table>
-          </div>
+          <AdminDataTable
+            data={rules}
+            columns={columns}
+            getRowId={(rule) => rule.id}
+            isLoading={isLoading}
+            emptyMessage="No system rules configured"
+            viewHref={(rule) => `/admin/rules/${rule.id}`}
+            onDelete={(rule) => handleDelete(rule.id)}
+            deleteConfirmTitle="Delete Rule"
+            deleteConfirmDescription={(rule) =>
+              `Are you sure you want to delete the rule "${rule.name}"? This action cannot be undone.`
+            }
+            rowActions={rowActions}
+            bulkActions={bulkActions}
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
+          />
         </CardContent>
       </Card>
     </div>
