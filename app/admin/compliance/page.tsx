@@ -355,8 +355,8 @@ export default function ComplianceOverviewPage() {
 
       {/* Quick Actions */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/compliance/frameworks">
+        <Link href="/admin/compliance/frameworks">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-blue-500/10">
@@ -368,11 +368,11 @@ export default function ComplianceOverviewPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/compliance/legal-holds">
+        <Link href="/admin/compliance/legal-holds">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-red-500/10">
@@ -384,11 +384,11 @@ export default function ComplianceOverviewPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/compliance/exports">
+        <Link href="/admin/compliance/data-exports">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-green-500/10">
@@ -400,11 +400,11 @@ export default function ComplianceOverviewPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/compliance/retention">
+        <Link href="/admin/compliance/retention-policies">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-purple-500/10">
@@ -416,8 +416,8 @@ export default function ComplianceOverviewPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
       </div>
     </div>
   )

@@ -107,8 +107,10 @@ const navSections: NavSection[] = [
       { name: "Compliance Overview", href: "/admin/compliance", icon: Fingerprint },
       { name: "Frameworks", href: "/admin/compliance/frameworks", icon: FileSearch },
       { name: "Legal Holds", href: "/admin/compliance/legal-holds", icon: Gavel },
-      { name: "Data Exports", href: "/admin/compliance/exports", icon: Download },
-      { name: "Retention Policies", href: "/admin/compliance/retention", icon: Calendar },
+      { name: "Attestations", href: "/admin/compliance/attestations", icon: FileSearch },
+      { name: "Audits", href: "/admin/compliance/audits", icon: FileText },
+      { name: "Data Exports", href: "/admin/compliance/data-exports", icon: Download },
+      { name: "Retention Policies", href: "/admin/compliance/retention-policies", icon: Calendar },
     ],
   },
   {
@@ -128,7 +130,7 @@ const navSections: NavSection[] = [
     items: [
       { name: "API Clients", href: "/admin/integrations/api-clients", icon: Key },
       { name: "Webhooks", href: "/admin/integrations/webhooks", icon: Webhook },
-      { name: "App Marketplace", href: "/admin/integrations/marketplace", icon: AppWindow },
+      { name: "App Marketplace", href: "/admin/integrations/apps", icon: AppWindow },
     ],
   },
   {

@@ -337,8 +337,8 @@ export default function SecurityOverviewPage() {
 
       {/* Quick Actions */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/security/policies">
+        <Link href="/admin/security/policies">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-blue-500/10">
@@ -350,11 +350,11 @@ export default function SecurityOverviewPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/security/threats">
+        <Link href="/admin/security/threats">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-red-500/10">
@@ -366,11 +366,11 @@ export default function SecurityOverviewPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/security/violations">
+        <Link href="/admin/security/violations">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-yellow-500/10">
@@ -382,11 +382,11 @@ export default function SecurityOverviewPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/security/ip-blocklist">
+        <Link href="/admin/security/ip-blocklist">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-purple-500/10">
@@ -398,8 +398,8 @@ export default function SecurityOverviewPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
       </div>
     </div>
   )
