@@ -44,17 +44,19 @@ export async function POST(
     const scheduledFor = body.scheduledFor ? new Date(body.scheduledFor) : null
 
     // Calculate estimated recipients based on targeting
+    // Note: Users are connected to orgs via OrganizationMember relationship
     let totalRecipients = 0
 
     if (existingMessage.targetType === "ALL") {
-      totalRecipients = await prisma.user.count({
-        where: { emailVerified: { not: null } },
-      })
+      // Count all users
+      totalRecipients = await prisma.user.count()
     } else if (existingMessage.targetType === "SPECIFIC_ORGS" && existingMessage.targetOrgs.length > 0) {
+      // Count users who are members of specific organizations
       totalRecipients = await prisma.user.count({
         where: {
-          emailVerified: { not: null },
-          memberships: { some: { orgId: { in: existingMessage.targetOrgs } } },
+          memberships: {
+            some: { orgId: { in: existingMessage.targetOrgs } },
+          },
         },
       })
     } else if (existingMessage.targetType === "SPECIFIC_PLANS" && existingMessage.targetPlans.length > 0) {
@@ -64,17 +66,21 @@ export async function POST(
         select: { id: true },
       })
       const orgIds = orgs.map((o) => o.id)
+      // Count users who are members of those organizations
       totalRecipients = await prisma.user.count({
         where: {
-          emailVerified: { not: null },
-          memberships: { some: { orgId: { in: orgIds } } },
+          memberships: {
+            some: { orgId: { in: orgIds } },
+          },
         },
       })
     } else if (existingMessage.targetRoles.length > 0) {
+      // Count users who have specific roles in any organization
       totalRecipients = await prisma.user.count({
         where: {
-          emailVerified: { not: null },
-          memberships: { some: { role: { in: existingMessage.targetRoles as Role[] } } },
+          memberships: {
+            some: { role: { in: existingMessage.targetRoles } },
+          },
         },
       })
     }
@@ -113,7 +119,6 @@ export async function POST(
         action: scheduledFor ? "broadcast_message_scheduled" : "broadcast_message_sent",
         resourceType: "broadcast_message",
         resourceId: message.id,
-        
         adminId: session.admin.id,
         details: {
           title: message.title,

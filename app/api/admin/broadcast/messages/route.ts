@@ -185,7 +185,6 @@ export async function POST(request: NextRequest) {
         action: "broadcast_message_created",
         resourceType: "broadcast_message",
         resourceId: message.id,
-        
         adminId: session.admin.id,
         details: {
           title: message.title,

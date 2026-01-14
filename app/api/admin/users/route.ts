@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
-import { Role } from "@prisma/client"
+import { Role, Prisma } from "@prisma/client"
 import bcrypt from "bcryptjs"
 
 export async function GET(request: NextRequest) {

@@ -165,7 +165,6 @@ export async function PUT(
         action: "broadcast_message_updated",
         resourceType: "broadcast_message",
         resourceId: message.id,
-        
         adminId: session.admin.id,
         details: {
           updatedFields: Object.keys(updateData),
@@ -229,7 +228,6 @@ export async function DELETE(
         action: "broadcast_message_deleted",
         resourceType: "broadcast_message",
         resourceId: id,
-        
         adminId: session.admin.id,
         details: {
           title: existingMessage.title,

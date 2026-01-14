@@ -127,7 +127,7 @@ export async function PUT(
       action: "update_compliance_audit",
       resourceType: "compliance_audit",
       resourceId: audit.id,
-      targetOrgId: audit.orgId,
+      targetOrgId: audit.orgId ?? undefined,
       details: {
         changes: Object.keys(body),
         previousStatus: existingAudit.status,
@@ -193,7 +193,7 @@ export async function DELETE(
       action: "delete_compliance_audit",
       resourceType: "compliance_audit",
       resourceId: id,
-      targetOrgId: existingAudit.orgId,
+      targetOrgId: existingAudit.orgId ?? undefined,
       details: {
         frameworkCode: existingAudit.framework.code,
         status: existingAudit.status,

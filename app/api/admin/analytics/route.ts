@@ -67,10 +67,10 @@ export async function GET(request: NextRequest) {
       // Total users
       prisma.user.count(),
 
-      // Active users (with non-expired session since start date)
+      // Active users (with valid session)
       prisma.session.count({
-        where: { expires: { gte: startDate } },
-      }).catch(() => 0),
+        where: { expires: { gte: new Date() } },
+      }).then((result) => typeof result === "number" ? result : 0).catch(() => 0),
 
       // New users this period
       prisma.user.count({

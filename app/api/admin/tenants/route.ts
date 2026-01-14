@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
-import { PlanTier, OrganizationType, CompanySize } from "@prisma/client"
+import { PlanTier, OrganizationType, CompanySize, Prisma } from "@prisma/client"
 
 export async function GET(request: NextRequest) {
   try {

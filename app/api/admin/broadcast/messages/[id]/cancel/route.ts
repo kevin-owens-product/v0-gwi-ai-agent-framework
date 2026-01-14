@@ -53,7 +53,6 @@ export async function POST(
         action: "broadcast_message_cancelled",
         resourceType: "broadcast_message",
         resourceId: message.id,
-        
         adminId: session.admin.id,
         details: {
           title: message.title,

@@ -52,6 +52,16 @@ export async function POST(
       },
     })
 
+    // Query user separately since TrustedDevice doesn't have a relation to User
+    const user = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      },
+    })
+
     // Fetch user details separately
     const deviceUser = await prisma.user.findUnique({
       where: { id: device.userId },
@@ -75,7 +85,7 @@ export async function POST(
     })
 
     return NextResponse.json({
-      device: deviceWithUser,
+      device: { ...device, user },
       message: "Device trust approved successfully",
     })
   } catch (error) {

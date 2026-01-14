@@ -30,20 +30,12 @@ export async function GET(
     }
 
     // Get related threats if any
-    let relatedThreats: typeof threat[] = []
+    let relatedThreats: Awaited<ReturnType<typeof prisma.threatEvent.findMany>> = []
     if (threat.relatedEvents && threat.relatedEvents.length > 0) {
       relatedThreats = await prisma.threatEvent.findMany({
         where: {
           id: { in: threat.relatedEvents },
         },
-        select: {
-          id: true,
-          type: true,
-          severity: true,
-          status: true,
-          description: true,
-          createdAt: true,
-        } as Record<string, boolean>,
       })
     }
 
@@ -127,8 +119,8 @@ export async function PUT(
       action: "update_threat_event",
       resourceType: "threat_event",
       resourceId: id,
-      targetOrgId: threat.orgId,
-      targetUserId: threat.userId,
+      targetOrgId: threat.orgId ?? undefined,
+      targetUserId: threat.userId ?? undefined,
       details: {
         changes: Object.keys(body),
         previousStatus: existingThreat.status,
@@ -209,8 +201,8 @@ export async function PATCH(
       action: "update_threat_status",
       resourceType: "threat_event",
       resourceId: id,
-      targetOrgId: threat.orgId,
-      targetUserId: threat.userId,
+      targetOrgId: threat.orgId ?? undefined,
+      targetUserId: threat.userId ?? undefined,
       details: {
         previousStatus: existingThreat.status,
         newStatus: threat.status,
@@ -263,8 +255,8 @@ export async function DELETE(
       action: "delete_threat_event",
       resourceType: "threat_event",
       resourceId: id,
-      targetOrgId: existingThreat.orgId,
-      targetUserId: existingThreat.userId,
+      targetOrgId: existingThreat.orgId ?? undefined,
+      targetUserId: existingThreat.userId ?? undefined,
       details: {
         type: existingThreat.type,
         severity: existingThreat.severity,

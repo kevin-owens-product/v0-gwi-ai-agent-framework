@@ -29,7 +29,7 @@ export async function GET(
       return NextResponse.json({ error: "Device not found" }, { status: 404 })
     }
 
-    // Fetch user details separately
+    // Query user separately since TrustedDevice doesn't have a relation to User
     const user = await prisma.user.findUnique({
       where: { id: device.userId },
       select: {
@@ -51,8 +51,6 @@ export async function GET(
       },
     })
 
-    const deviceWithUser = { ...device, user }
-
     // Get device activity logs if available
     const activityLogs = await prisma.platformAuditLog.findMany({
       where: {
@@ -65,7 +63,8 @@ export async function GET(
 
     return NextResponse.json({
       device: {
-        ...deviceWithUser,
+        ...device,
+        user,
         activityLogs,
       },
     })
@@ -123,6 +122,16 @@ export async function PUT(
       },
     })
 
+    // Query user separately since TrustedDevice doesn't have a relation to User
+    const user = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      },
+    })
+
     // Fetch user details separately
     const deviceUser = await prisma.user.findUnique({
       where: { id: device.userId },
@@ -142,7 +151,7 @@ export async function PUT(
       },
     })
 
-    return NextResponse.json({ device: deviceWithUser })
+    return NextResponse.json({ device: { ...device, user } })
   } catch (error) {
     console.error("Device update error:", error)
     return NextResponse.json(

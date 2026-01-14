@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
       where.platform = platform
     }
 
-    const [devices, total] = await Promise.all([
+    const [rawDevices, total] = await Promise.all([
       prisma.trustedDevice.findMany({
         where,
         skip: (page - 1) * limit,
@@ -63,17 +63,20 @@ export async function GET(request: NextRequest) {
       prisma.trustedDevice.count({ where }),
     ])
 
-    // Fetch user details separately
-    const userIds = [...new Set(devices.map(d => d.userId))]
+    // Query users separately since TrustedDevice doesn't have a relation to User
+    const userIds = [...new Set(rawDevices.map(d => d.userId))]
     const users = await prisma.user.findMany({
       where: { id: { in: userIds } },
-      select: { id: true, email: true, name: true },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      },
     })
     const userMap = new Map(users.map(u => [u.id, u]))
-
-    const devicesWithUsers = devices.map(d => ({
-      ...d,
-      user: userMap.get(d.userId) || null,
+    const devices = rawDevices.map(device => ({
+      ...device,
+      user: userMap.get(device.userId) || null,
     }))
 
     // Get stats

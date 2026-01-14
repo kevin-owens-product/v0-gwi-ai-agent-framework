@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
+import { Prisma } from "@prisma/client"
 
 export async function POST(
   request: NextRequest,
@@ -88,7 +89,7 @@ export async function POST(
         where: { id },
         data: {
           lastRunAt: new Date(),
-          lastResult: result,
+          lastResult: result as Prisma.InputJsonValue,
           // Calculate next run time if scheduled
           nextRunAt: report.schedule ? calculateNextRun(report.schedule) : null,
         },
@@ -200,8 +201,9 @@ async function generateUsageReport(query: Record<string, unknown>) {
         agents: { some: { runs: { some: { startedAt: { gte: startDate } } } } },
       },
     }),
+    // Count sessions with valid expires (active sessions)
     prisma.session.count({
-      where: { expires: { gte: startDate } },
+      where: { expires: { gte: new Date() } },
     }),
   ])
 
@@ -213,7 +215,7 @@ async function generateUsageReport(query: Record<string, unknown>) {
       tokenUsage: tokenUsage._sum.quantity || 0,
       apiCalls: apiCalls._sum.quantity || 0,
       activeOrgs,
-      activeUsers,
+      activeSessions: activeUsers,
     },
     recordCount: 5,
   }
@@ -348,8 +350,9 @@ async function generateUserActivityReport(query: Record<string, unknown>) {
     prisma.user.count({
       where: { createdAt: { gte: startDate } },
     }),
+    // Count sessions with valid expires (active sessions)
     prisma.session.count({
-      where: { expires: { gte: startDate } },
+      where: { expires: { gte: new Date() } },
     }),
     prisma.auditLog.groupBy({
       by: ["action"],
