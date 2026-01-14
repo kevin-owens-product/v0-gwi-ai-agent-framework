@@ -429,10 +429,14 @@ export default function IntegrationAppDetailPage() {
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold">{app.name}</h1>
               {app.isOfficial && (
-                <Shield className="h-5 w-5 text-blue-500" title="Official" />
+                <span title="Official">
+                  <Shield className="h-5 w-5 text-blue-500" />
+                </span>
               )}
               {app.isFeatured && (
-                <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" title="Featured" />
+                <span title="Featured">
+                  <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
+                </span>
               )}
             </div>
             <p className="text-sm text-muted-foreground">{app.slug}</p>

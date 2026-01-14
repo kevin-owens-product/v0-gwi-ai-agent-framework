@@ -572,10 +572,14 @@ export default function IntegrationAppsPage() {
                           <div className="flex items-center gap-2">
                             <p className="font-medium">{app.name}</p>
                             {app.isOfficial && (
-                              <Shield className="h-4 w-4 text-blue-500" title="Official" />
+                              <span title="Official">
+                                <Shield className="h-4 w-4 text-blue-500" />
+                              </span>
                             )}
                             {app.isFeatured && (
-                              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" title="Featured" />
+                              <span title="Featured">
+                                <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                              </span>
                             )}
                           </div>
                           <p className="text-xs text-muted-foreground truncate max-w-[200px]">

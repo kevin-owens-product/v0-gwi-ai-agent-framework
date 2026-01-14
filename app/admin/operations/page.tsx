@@ -394,8 +394,8 @@ export default function OperationsCenterPage() {
 
       {/* Quick Actions */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/operations/incidents">
+        <Link href="/admin/operations/incidents">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-red-500/10">
@@ -407,11 +407,11 @@ export default function OperationsCenterPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/operations/maintenance">
+        <Link href="/admin/operations/maintenance">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-blue-500/10">
@@ -423,11 +423,11 @@ export default function OperationsCenterPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/operations/releases">
+        <Link href="/admin/operations/releases">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-green-500/10">
@@ -439,11 +439,11 @@ export default function OperationsCenterPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
 
-        <Card className="hover:bg-muted/50 transition-colors cursor-pointer" asChild>
-          <Link href="/admin/operations/capacity">
+        <Link href="/admin/operations/capacity">
+          <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-purple-500/10">
@@ -455,8 +455,8 @@ export default function OperationsCenterPage() {
                 </div>
               </div>
             </CardContent>
-          </Link>
-        </Card>
+          </Card>
+        </Link>
       </div>
     </div>
   )

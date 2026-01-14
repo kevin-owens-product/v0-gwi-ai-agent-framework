@@ -515,7 +515,7 @@ export default function DomainDetailPage() {
           </Card>
 
           {/* Verification History */}
-          {domain.metadata && (domain.metadata as Record<string, unknown>).lastVerificationAttempt && (
+          {domain.metadata && typeof domain.metadata === 'object' && 'lastVerificationAttempt' in domain.metadata && (
             <Card>
               <CardHeader>
                 <CardTitle>Last Verification Attempt</CardTitle>
@@ -524,12 +524,12 @@ export default function DomainDetailPage() {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Time</span>
                   <span>
-                    {new Date((domain.metadata as Record<string, string>).lastVerificationAttempt).toLocaleString()}
+                    {new Date(String((domain.metadata as Record<string, unknown>).lastVerificationAttempt)).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Result</span>
-                  <span>{(domain.metadata as Record<string, string>).lastVerificationResult}</span>
+                  <span>{String((domain.metadata as Record<string, unknown>).lastVerificationResult || '')}</span>
                 </div>
               </CardContent>
             </Card>
