@@ -84,18 +84,18 @@ export default function TeamSettingsPage() {
   const fetchTeamData = async () => {
     try {
       const [membersRes, invitationsRes] = await Promise.all([
-        fetch('/api/v1/team'),
-        fetch('/api/v1/invitations'),
+        fetch('/api/v1/organization/team'),
+        fetch('/api/v1/organization/team/invitations'),
       ])
 
       if (membersRes.ok) {
         const data = await membersRes.json()
-        setMembers(data.members || [])
+        setMembers(data || [])
       }
 
       if (invitationsRes.ok) {
         const data = await invitationsRes.json()
-        setInvitations(data.invitations || [])
+        setInvitations(data || [])
       }
     } catch (error) {
       console.error('Failed to fetch team data:', error)
@@ -114,10 +114,10 @@ export default function TeamSettingsPage() {
 
     setIsInviting(true)
     try {
-      const response = await fetch('/api/v1/invitations', {
+      const response = await fetch('/api/v1/organization/team/invite', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: inviteEmail, role: inviteRole }),
+        body: JSON.stringify({ emails: [inviteEmail], role: inviteRole }),
       })
 
       if (!response.ok) {
@@ -140,10 +140,10 @@ export default function TeamSettingsPage() {
   const handleRoleChange = async (memberId: string, newRole: string) => {
     setChangingRole(memberId)
     try {
-      const response = await fetch('/api/v1/team', {
-        method: 'PATCH',
+      const response = await fetch(`/api/v1/organization/team/members/${memberId}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ memberId, role: newRole }),
+        body: JSON.stringify({ role: newRole }),
       })
 
       if (!response.ok) {
@@ -164,7 +164,7 @@ export default function TeamSettingsPage() {
     if (!removeMember) return
 
     try {
-      const response = await fetch(`/api/v1/team?memberId=${removeMember.id}`, {
+      const response = await fetch(`/api/v1/organization/team/members/${removeMember.id}`, {
         method: 'DELETE',
       })
 
@@ -183,7 +183,7 @@ export default function TeamSettingsPage() {
 
   const handleRevokeInvitation = async (invitationId: string) => {
     try {
-      const response = await fetch(`/api/v1/invitations?id=${invitationId}`, {
+      const response = await fetch(`/api/v1/organization/team/invitations/${invitationId}`, {
         method: 'DELETE',
       })
 

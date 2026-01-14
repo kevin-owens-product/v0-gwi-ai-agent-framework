@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { hasPermission } from '@/lib/permissions'
 
+/**
+ * GET /api/v1/organization/hierarchy
+ * Get organization hierarchy tree
+ */
 export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
@@ -16,37 +19,36 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Organization ID required' }, { status: 400 })
     }
 
+    // Verify membership
     const member = await prisma.organizationMember.findFirst({
       where: { userId: session.user.id, organizationId: orgId },
     })
 
-    if (!member || !hasPermission(member.role, 'analytics:view')) {
+    if (!member) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const now = new Date()
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-
-    const [agentCount, workflowCount, reportCount, memberCount] = await Promise.all([
-      prisma.agent.count({ where: { organizationId: orgId } }),
-      prisma.workflow.count({ where: { organizationId: orgId } }),
-      prisma.report.count({ where: { organizationId: orgId } }),
-      prisma.organizationMember.count({ where: { organizationId: orgId } }),
-    ])
-
-    return NextResponse.json({
-      overview: {
-        period: { start: startOfMonth.toISOString(), end: now.toISOString() },
-      },
-      counts: {
-        agents: agentCount,
-        workflows: workflowCount,
-        reports: reportCount,
-        members: memberCount,
+    // Get current organization
+    const organization = await prisma.organization.findUnique({
+      where: { id: orgId },
+      include: {
+        plan: true,
+        parent: true,
+        children: {
+          include: {
+            plan: true,
+          },
+        },
       },
     })
+
+    return NextResponse.json({
+      current: organization,
+      parent: organization?.parent,
+      children: organization?.children || [],
+    })
   } catch (error) {
-    console.error('Error fetching analytics:', error)
+    console.error('Error fetching hierarchy:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
