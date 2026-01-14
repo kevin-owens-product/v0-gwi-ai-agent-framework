@@ -59,18 +59,22 @@ export async function GET(request: NextRequest) {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: "desc" },
-        include: {
-          user: {
-            select: {
-              id: true,
-              email: true,
-              name: true,
-            },
-          },
-        },
       }),
       prisma.trustedDevice.count({ where }),
     ])
+
+    // Fetch user details separately
+    const userIds = [...new Set(devices.map(d => d.userId))]
+    const users = await prisma.user.findMany({
+      where: { id: { in: userIds } },
+      select: { id: true, email: true, name: true },
+    })
+    const userMap = new Map(users.map(u => [u.id, u]))
+
+    const devicesWithUsers = devices.map(d => ({
+      ...d,
+      user: userMap.get(d.userId) || null,
+    }))
 
     // Get stats
     const [totalDevices, trustedCount, pendingCount, nonCompliantCount] = await Promise.all([
@@ -81,7 +85,7 @@ export async function GET(request: NextRequest) {
     ])
 
     return NextResponse.json({
-      devices,
+      devices: devicesWithUsers,
       pagination: {
         page,
         limit,

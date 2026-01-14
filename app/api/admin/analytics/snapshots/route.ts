@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
       }),
       prisma.user.count(),
       prisma.session.count({
-        where: { createdAt: { gte: periodStart } },
+        where: { expires: { gte: periodStart } },
       }),
       prisma.user.count({
         where: { createdAt: { gte: periodStart } },

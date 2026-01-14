@@ -201,7 +201,7 @@ async function generateUsageReport(query: Record<string, unknown>) {
       },
     }),
     prisma.session.count({
-      where: { createdAt: { gte: startDate } },
+      where: { expires: { gte: startDate } },
     }),
   ])
 
@@ -349,7 +349,7 @@ async function generateUserActivityReport(query: Record<string, unknown>) {
       where: { createdAt: { gte: startDate } },
     }),
     prisma.session.count({
-      where: { createdAt: { gte: startDate } },
+      where: { expires: { gte: startDate } },
     }),
     prisma.auditLog.groupBy({
       by: ["action"],

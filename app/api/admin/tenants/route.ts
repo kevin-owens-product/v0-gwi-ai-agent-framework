@@ -234,7 +234,9 @@ export async function POST(request: NextRequest) {
         data: {
           orgId: org.id,
           action: "organization.created",
-          details: {
+          resourceType: "organization",
+          resourceId: org.id,
+          metadata: {
             name: org.name,
             planTier: org.planTier,
             orgType: org.orgType,

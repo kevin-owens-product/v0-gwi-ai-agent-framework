@@ -23,22 +23,27 @@ export async function GET(
 
     const device = await prisma.trustedDevice.findUnique({
       where: { id },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            avatarUrl: true,
-            memberships: {
-              include: {
-                organization: {
-                  select: {
-                    id: true,
-                    name: true,
-                    slug: true,
-                  },
-                },
+    })
+
+    if (!device) {
+      return NextResponse.json({ error: "Device not found" }, { status: 404 })
+    }
+
+    // Fetch user details separately
+    const user = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        memberships: {
+          include: {
+            organization: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
               },
             },
           },
@@ -46,9 +51,7 @@ export async function GET(
       },
     })
 
-    if (!device) {
-      return NextResponse.json({ error: "Device not found" }, { status: 404 })
-    }
+    const deviceWithUser = { ...device, user }
 
     // Get device activity logs if available
     const activityLogs = await prisma.platformAuditLog.findMany({
@@ -62,7 +65,7 @@ export async function GET(
 
     return NextResponse.json({
       device: {
-        ...device,
+        ...deviceWithUser,
         activityLogs,
       },
     })
@@ -118,16 +121,15 @@ export async function PUT(
         ...(isManaged !== undefined && { isManaged }),
         ...(isCompliant !== undefined && { lastComplianceCheck: new Date() }),
       },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
-      },
     })
+
+    // Fetch user details separately
+    const deviceUser = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: { id: true, email: true, name: true },
+    })
+
+    const deviceWithUser = { ...device, user: deviceUser }
 
     await logPlatformAudit({
       adminId: session.adminId,
@@ -140,7 +142,7 @@ export async function PUT(
       },
     })
 
-    return NextResponse.json({ device })
+    return NextResponse.json({ device: deviceWithUser })
   } catch (error) {
     console.error("Device update error:", error)
     return NextResponse.json(

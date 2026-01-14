@@ -50,16 +50,15 @@ export async function POST(
         trustedAt: new Date(),
         trustedBy: session.adminId,
       },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
-      },
     })
+
+    // Fetch user details separately
+    const deviceUser = await prisma.user.findUnique({
+      where: { id: device.userId },
+      select: { id: true, email: true, name: true },
+    })
+
+    const deviceWithUser = { ...device, user: deviceUser }
 
     await logPlatformAudit({
       adminId: session.adminId,
@@ -76,7 +75,7 @@ export async function POST(
     })
 
     return NextResponse.json({
-      device,
+      device: deviceWithUser,
       message: "Device trust approved successfully",
     })
   } catch (error) {

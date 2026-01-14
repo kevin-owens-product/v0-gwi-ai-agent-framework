@@ -207,7 +207,9 @@ export async function POST(request: NextRequest) {
             orgId,
             userId: newUser.id,
             action: "user.created",
-            details: {
+            resourceType: "user",
+            resourceId: newUser.id,
+            metadata: {
               email: newUser.email,
               role,
               createdBy: session.adminId,

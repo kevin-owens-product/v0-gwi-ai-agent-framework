@@ -42,8 +42,8 @@ export async function GET(
     })
 
     // Count users provisioned via SSO (users in this org)
-    const userCount = await prisma.membership.count({
-      where: { organizationId: ssoConfig.orgId },
+    const userCount = await prisma.organizationMember.count({
+      where: { orgId: ssoConfig.orgId },
     })
 
     return NextResponse.json({

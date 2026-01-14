@@ -98,6 +98,7 @@ const navSections: NavSection[] = [
       { name: "SSO Configuration", href: "/admin/identity/sso", icon: Key },
       { name: "SCIM Provisioning", href: "/admin/identity/scim", icon: UserCog },
       { name: "Device Trust", href: "/admin/identity/devices", icon: Smartphone },
+      { name: "Device Management", href: "/admin/devices", icon: Smartphone },
     ],
   },
   {

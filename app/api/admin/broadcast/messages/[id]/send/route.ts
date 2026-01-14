@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
+import { Role } from "@prisma/client"
 
 export async function POST(
   request: NextRequest,
@@ -47,13 +48,13 @@ export async function POST(
 
     if (existingMessage.targetType === "ALL") {
       totalRecipients = await prisma.user.count({
-        where: { status: "ACTIVE" },
+        where: { emailVerified: { not: null } },
       })
     } else if (existingMessage.targetType === "SPECIFIC_ORGS" && existingMessage.targetOrgs.length > 0) {
       totalRecipients = await prisma.user.count({
         where: {
-          status: "ACTIVE",
-          organizationId: { in: existingMessage.targetOrgs },
+          emailVerified: { not: null },
+          memberships: { some: { orgId: { in: existingMessage.targetOrgs } } },
         },
       })
     } else if (existingMessage.targetType === "SPECIFIC_PLANS" && existingMessage.targetPlans.length > 0) {
@@ -65,15 +66,15 @@ export async function POST(
       const orgIds = orgs.map((o) => o.id)
       totalRecipients = await prisma.user.count({
         where: {
-          status: "ACTIVE",
-          organizationId: { in: orgIds },
+          emailVerified: { not: null },
+          memberships: { some: { orgId: { in: orgIds } } },
         },
       })
     } else if (existingMessage.targetRoles.length > 0) {
       totalRecipients = await prisma.user.count({
         where: {
-          status: "ACTIVE",
-          role: { in: existingMessage.targetRoles },
+          emailVerified: { not: null },
+          memberships: { some: { role: { in: existingMessage.targetRoles as Role[] } } },
         },
       })
     }
@@ -112,8 +113,8 @@ export async function POST(
         action: scheduledFor ? "broadcast_message_scheduled" : "broadcast_message_sent",
         resourceType: "broadcast_message",
         resourceId: message.id,
-        actorType: "SUPER_ADMIN",
-        actorId: session.admin.id,
+        
+        adminId: session.admin.id,
         details: {
           title: message.title,
           scheduledFor: scheduledFor?.toISOString() || null,
