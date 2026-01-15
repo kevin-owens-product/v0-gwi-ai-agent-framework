@@ -5,15 +5,7 @@ services:
     runtime: node
     plan: standard
     region: oregon
-    buildCommand: |
-      npm install
-      ./node_modules/.bin/prisma generate
-      ./node_modules/.bin/prisma migrate deploy
-      echo "==> Running Next.js build..."
-      ./node_modules/.bin/next build
-      echo "==> Build completed, checking output..."
-      ls -la .next/
-      npm run db:seed
+    buildCommand: npm install && npm run build:render
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
