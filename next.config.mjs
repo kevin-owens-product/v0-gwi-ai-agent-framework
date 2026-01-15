@@ -10,8 +10,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Turbopack configuration (moved from experimental for Next.js 16)
+  turbopack: {
+    useSystemTlsCerts: true,
+  },
   experimental: {
-    turbopackUseSystemTlsCerts: true,
     // Reduce memory usage during builds on memory-constrained environments
     workerThreads: isMemoryConstrained ? false : undefined,
     cpus: isMemoryConstrained ? 1 : undefined,
