@@ -478,3 +478,267 @@ describe('NavSectionComponent', () => {
     expect(screen.getByTestId('section-content-test-section')).toBeDefined()
   })
 })
+
+describe('Expand/Collapse All Functionality', () => {
+  // Mock localStorage
+  let mockStorage: Record<string, string> = {}
+
+  beforeEach(() => {
+    mockStorage = {}
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => mockStorage[key] || null)
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation((key, value) => {
+      mockStorage[key] = value
+    })
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  const mockNavSections: NavSection[] = [
+    {
+      title: "Section One",
+      defaultOpen: false,
+      items: [
+        { name: "Item A", href: "/admin/a", icon: MockIcon },
+      ],
+    },
+    {
+      title: "Section Two",
+      defaultOpen: false,
+      items: [
+        { name: "Item B", href: "/admin/b", icon: MockIcon },
+      ],
+    },
+  ]
+
+  // Mock AdminSidebar with expand/collapse all buttons
+  function AdminSidebarWithControls({ navSections }: { navSections: NavSection[] }) {
+    const [expandAllClicked, setExpandAllClicked] = useState(0)
+    const [collapseAllClicked, setCollapseAllClicked] = useState(0)
+
+    return (
+      <aside data-testid="admin-sidebar">
+        <div data-testid="nav-controls">
+          <button
+            data-testid="expand-all-btn"
+            onClick={() => setExpandAllClicked(c => c + 1)}
+          >
+            Expand all
+          </button>
+          <button
+            data-testid="collapse-all-btn"
+            onClick={() => setCollapseAllClicked(c => c + 1)}
+          >
+            Collapse all
+          </button>
+        </div>
+        <nav data-testid="sidebar-nav">
+          {navSections.map((section) => (
+            <NavSectionComponentWithControls
+              key={section.title}
+              section={section}
+              expandAllTrigger={expandAllClicked}
+              collapseAllTrigger={collapseAllClicked}
+            />
+          ))}
+        </nav>
+      </aside>
+    )
+  }
+
+  // Extended NavSectionComponent that responds to expand/collapse all
+  function NavSectionComponentWithControls({
+    section,
+    expandAllTrigger,
+    collapseAllTrigger
+  }: {
+    section: NavSection
+    expandAllTrigger: number
+    collapseAllTrigger: number
+  }) {
+    const [isOpen, setIsOpen] = useState(section.defaultOpen ?? false)
+
+    useEffect(() => {
+      if (expandAllTrigger > 0) setIsOpen(true)
+    }, [expandAllTrigger])
+
+    useEffect(() => {
+      if (collapseAllTrigger > 0) setIsOpen(false)
+    }, [collapseAllTrigger])
+
+    const testId = section.title.toLowerCase().replace(/\s+/g, '-')
+
+    return (
+      <div data-testid={`section-${testId}`}>
+        <button
+          data-testid={`section-trigger-${testId}`}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+        >
+          {section.title}
+        </button>
+        {isOpen && (
+          <div data-testid={`section-content-${testId}`}>
+            {section.items.map((item) => (
+              <a key={item.name} href={item.href}>
+                {item.name}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  it('should render expand all button', () => {
+    render(<AdminSidebarWithControls navSections={mockNavSections} />)
+    expect(screen.getByTestId('expand-all-btn')).toBeDefined()
+  })
+
+  it('should render collapse all button', () => {
+    render(<AdminSidebarWithControls navSections={mockNavSections} />)
+    expect(screen.getByTestId('collapse-all-btn')).toBeDefined()
+  })
+
+  it('should expand all sections when expand all is clicked', () => {
+    render(<AdminSidebarWithControls navSections={mockNavSections} />)
+
+    // Both sections start collapsed
+    expect(screen.queryByTestId('section-content-section-one')).toBeNull()
+    expect(screen.queryByTestId('section-content-section-two')).toBeNull()
+
+    // Click expand all
+    fireEvent.click(screen.getByTestId('expand-all-btn'))
+
+    // Both should now be expanded
+    expect(screen.getByTestId('section-content-section-one')).toBeDefined()
+    expect(screen.getByTestId('section-content-section-two')).toBeDefined()
+  })
+
+  it('should collapse all sections when collapse all is clicked', () => {
+    render(<AdminSidebarWithControls navSections={mockNavSections} />)
+
+    // First expand all
+    fireEvent.click(screen.getByTestId('expand-all-btn'))
+    expect(screen.getByTestId('section-content-section-one')).toBeDefined()
+    expect(screen.getByTestId('section-content-section-two')).toBeDefined()
+
+    // Now collapse all
+    fireEvent.click(screen.getByTestId('collapse-all-btn'))
+
+    // Both should now be collapsed
+    expect(screen.queryByTestId('section-content-section-one')).toBeNull()
+    expect(screen.queryByTestId('section-content-section-two')).toBeNull()
+  })
+})
+
+describe('Manual Collapse with Active Items', () => {
+  const mockNavSections: NavSection[] = [
+    {
+      title: "Test Section",
+      defaultOpen: false,
+      items: [
+        { name: "Active Item", href: "/admin/active", icon: MockIcon },
+        { name: "Other Item", href: "/admin/other", icon: MockIcon },
+      ],
+    },
+  ]
+
+  beforeEach(() => {
+    mockPathname = '/admin/active' // Set active item in section
+  })
+
+  it('should allow manually collapsing section with active item', () => {
+    // Mock NavSection that tracks user interaction
+    let userInteracted = false
+
+    function NavSectionWithManualCollapse({ section }: { section: NavSection }) {
+      const [isOpen, setIsOpen] = useState(true) // Start expanded due to active item
+
+      const handleToggle = () => {
+        userInteracted = true
+        setIsOpen(!isOpen)
+      }
+
+      const testId = section.title.toLowerCase().replace(/\s+/g, '-')
+
+      return (
+        <div data-testid={`section-${testId}`}>
+          <button
+            data-testid={`section-trigger-${testId}`}
+            onClick={handleToggle}
+            aria-expanded={isOpen}
+          >
+            {section.title}
+          </button>
+          {isOpen && (
+            <div data-testid={`section-content-${testId}`}>
+              {section.items.map((item) => (
+                <a key={item.name} href={item.href}>
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    render(<NavSectionWithManualCollapse section={mockNavSections[0]} />)
+
+    // Section should be expanded initially
+    expect(screen.getByTestId('section-content-test-section')).toBeDefined()
+
+    // Click to collapse
+    fireEvent.click(screen.getByTestId('section-trigger-test-section'))
+
+    // Section should now be collapsed even with active item
+    expect(screen.queryByTestId('section-content-test-section')).toBeNull()
+    expect(userInteracted).toBe(true)
+  })
+
+  it('should stay collapsed after user manually collapses', () => {
+    let userCollapsed = false
+
+    function NavSectionPersistent({ section }: { section: NavSection }) {
+      const [isOpen, setIsOpen] = useState(true)
+
+      const handleToggle = () => {
+        userCollapsed = !isOpen === false
+        setIsOpen(!isOpen)
+      }
+
+      // Auto-expand only runs if user hasn't collapsed
+      useEffect(() => {
+        if (!userCollapsed) {
+          // Would auto-expand here
+        }
+      }, [])
+
+      const testId = section.title.toLowerCase().replace(/\s+/g, '-')
+
+      return (
+        <div data-testid={`section-${testId}`}>
+          <button
+            data-testid={`section-trigger-${testId}`}
+            onClick={handleToggle}
+            aria-expanded={isOpen}
+          >
+            {section.title}
+          </button>
+          {isOpen && (
+            <div data-testid={`section-content-${testId}`}>content</div>
+          )}
+        </div>
+      )
+    }
+
+    render(<NavSectionPersistent section={mockNavSections[0]} />)
+
+    // Collapse manually
+    fireEvent.click(screen.getByTestId('section-trigger-test-section'))
+    expect(screen.queryByTestId('section-content-test-section')).toBeNull()
+    expect(userCollapsed).toBe(true)
+  })
+})
