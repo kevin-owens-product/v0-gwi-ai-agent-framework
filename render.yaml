@@ -6,7 +6,7 @@ services:
     plan: standard
     region: oregon
     buildCommand: npm install && npm run build:render
-    startCommand: npm start
+    startCommand: node .next/standalone/server.js
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
