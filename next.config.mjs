@@ -25,9 +25,6 @@ const sentryWebpackPluginOptions = {
   // Only upload source maps in production
   silent: !process.env.CI,
 
-  // Automatically tree-shake Sentry logger statements for smaller bundle size
-  disableLogger: true,
-
   // Hides source maps from generated client bundles
   hideSourceMaps: true,
 
@@ -40,9 +37,16 @@ const sentryWebpackPluginOptions = {
   // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers
   tunnelRoute: "/monitoring",
 
-  // Automatically annotate React components to show their full name in breadcrumbs and session replay
-  reactComponentAnnotation: {
-    enabled: true,
+  // Webpack-specific Sentry options (migrated from deprecated top-level options)
+  webpack: {
+    treeshake: {
+      // Automatically tree-shake Sentry logger statements for smaller bundle size
+      removeDebugLogging: true,
+    },
+    // Automatically annotate React components to show their full name in breadcrumbs and session replay
+    reactComponentAnnotation: {
+      enabled: true,
+    },
   },
 };
 
