@@ -1,5 +1,3 @@
-import { withSentryConfig } from "@sentry/nextjs";
-
 // Check if we're in a memory-constrained build environment
 const isMemoryConstrained = process.env.RENDER === 'true' || process.env.MEMORY_CONSTRAINED === 'true';
 
@@ -14,53 +12,64 @@ const nextConfig = {
   },
   experimental: {
     turbopackUseSystemTlsCerts: true,
-    // Reduce memory usage during builds
+    // Reduce memory usage during builds on memory-constrained environments
     workerThreads: isMemoryConstrained ? false : undefined,
     cpus: isMemoryConstrained ? 1 : undefined,
   },
+  // Optimize webpack for memory-constrained environments
+  webpack: (config, { isServer }) => {
+    if (isMemoryConstrained) {
+      // Disable source maps entirely to save memory
+      config.devtool = false;
+
+      // Reduce parallelism in terser to save memory
+      if (config.optimization?.minimizer) {
+        config.optimization.minimizer.forEach((minimizer) => {
+          if (minimizer.constructor.name === 'TerserPlugin') {
+            minimizer.options.parallel = false;
+          }
+        });
+      }
+
+      // Disable performance hints to reduce memory overhead
+      config.performance = { hints: false };
+    }
+    return config;
+  },
 }
 
-// Sentry configuration options
-const sentryWebpackPluginOptions = {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
+// Conditionally wrap with Sentry - skip entirely on memory-constrained builds
+// This saves ~200-300MB of memory during build
+let finalConfig = nextConfig;
 
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
+if (!isMemoryConstrained) {
+  // Only import and use Sentry on non-memory-constrained builds
+  const { withSentryConfig } = await import("@sentry/nextjs");
 
-  // Only upload source maps in production CI (not on Render builds to save memory)
-  silent: !process.env.CI,
-
-  // Disable source map upload on memory-constrained builds (saves significant memory)
-  // Source maps can be uploaded separately via CI/CD pipeline if needed
-  sourcemaps: {
-    disable: isMemoryConstrained,
-  },
-
-  // Hides source maps from generated client bundles
-  hideSourceMaps: true,
-
-  // Upload source maps for better error tracking (disabled in memory-constrained environments)
-  widenClientFileUpload: !isMemoryConstrained,
-
-  // Transpiles SDK to be compatible with IE11 if needed
-  transpileClientSDK: true,
-
-  // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers
-  tunnelRoute: "/monitoring",
-
-  // Webpack-specific Sentry options (migrated from deprecated top-level options)
-  webpack: {
-    treeshake: {
-      // Automatically tree-shake Sentry logger statements for smaller bundle size
-      removeDebugLogging: true,
+  const sentryWebpackPluginOptions = {
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    silent: !process.env.CI,
+    sourcemaps: {
+      disable: false,
     },
-    // Automatically annotate React components to show their full name in breadcrumbs and session replay
-    reactComponentAnnotation: {
-      enabled: true,
+    hideSourceMaps: true,
+    widenClientFileUpload: true,
+    transpileClientSDK: true,
+    tunnelRoute: "/monitoring",
+    webpack: {
+      treeshake: {
+        removeDebugLogging: true,
+      },
+      reactComponentAnnotation: {
+        enabled: true,
+      },
     },
-  },
-};
+  };
 
-// Make sure adding Sentry options is the last code to run before exporting
-export default withSentryConfig(nextConfig, sentryWebpackPluginOptions);
+  finalConfig = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
+} else {
+  console.log('Memory-constrained build: Skipping Sentry webpack plugin to save ~200-300MB');
+}
+
+export default finalConfig;

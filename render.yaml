@@ -22,8 +22,10 @@ services:
         value: production
       - key: RENDER
         value: "true"
+      - key: MEMORY_CONSTRAINED
+        value: "true"
       - key: NODE_MEMORY_LIMIT
-        value: "1536"
+        value: "1280"
       - key: PORT
         value: "3000"
       - key: STRIPE_SECRET_KEY
