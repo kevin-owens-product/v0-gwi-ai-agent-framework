@@ -5,16 +5,20 @@
 
 set -e
 
+# Ensure PORT is set (default to 3000 for Next.js)
+export PORT="${PORT:-3000}"
+
 echo "========================================="
 echo "  Render Start Script"
 echo "========================================="
 echo "  Node version: $(node -v)"
 echo "  Working directory: $(pwd)"
+echo "  PORT: $PORT"
 echo "========================================="
 
 # Check if the standalone build exists
 if [ -d ".next/standalone" ] && [ -f ".next/standalone/server.js" ]; then
-    echo "==> Standalone build found, starting server..."
+    echo "==> Standalone build found, starting server on port $PORT..."
     exec node .next/standalone/server.js
 fi
 
@@ -50,9 +54,9 @@ if [ -d ".next/standalone" ] && [ -f ".next/standalone/server.js" ]; then
         mkdir -p .next/standalone/.next
         cp -r .next/static .next/standalone/.next/
     fi
-    echo "==> Starting standalone server..."
+    echo "==> Starting standalone server on port $PORT..."
     exec node .next/standalone/server.js
 else
-    echo "==> Starting with next start..."
+    echo "==> Starting with next start on port $PORT..."
     exec npm start
 fi
