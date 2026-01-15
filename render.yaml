@@ -9,9 +9,12 @@ services:
       npm install
       ./node_modules/.bin/prisma generate
       ./node_modules/.bin/prisma migrate deploy
-      npm run build:no-seed
+      echo "==> Running Next.js build..."
+      ./node_modules/.bin/next build
+      echo "==> Build completed, checking output..."
+      ls -la .next/
       npm run db:seed
-    startCommand: node .next/standalone/server.js
+    startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:

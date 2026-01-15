@@ -8,8 +8,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Enable standalone output for optimized production deployments
-  output: 'standalone',
   experimental: {
     turbopackUseSystemTlsCerts: true,
   },
