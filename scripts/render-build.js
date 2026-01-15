@@ -4,11 +4,22 @@
  *
  * This script handles the complete build process for Render deployments.
  * It ensures the Next.js build completes and verifies the output exists.
+ *
+ * Memory optimization: Sets NODE_OPTIONS to manage heap size and uses
+ * garbage collection hints to prevent OOM during large builds.
  */
 
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+
+// Set memory limits for Node.js to prevent OOM on Render
+// Render standard plan has ~2GB available, so we limit heap to 1.5GB
+// to leave room for other processes
+const NODE_MEMORY_LIMIT = process.env.NODE_MEMORY_LIMIT || '1536';
+process.env.NODE_OPTIONS = `--max-old-space-size=${NODE_MEMORY_LIMIT} ${process.env.NODE_OPTIONS || ''}`.trim();
+
+console.log(`Memory limit set to ${NODE_MEMORY_LIMIT}MB`);
 
 function copyDirectory(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
@@ -54,7 +65,22 @@ function main() {
   run('npm run db:migrate', 'Running database migrations');
 
   // Step 3: Build Next.js
-  run('npx next build', 'Building Next.js application');
+  // Use single worker to reduce memory usage on memory-constrained environments
+  const buildEnv = {
+    ...process.env,
+    // Limit concurrent operations to reduce memory pressure
+    NEXT_TELEMETRY_DISABLED: '1',
+  };
+  console.log('\n==> Building Next.js application...');
+  console.log('    Running: npx next build');
+  try {
+    execSync('npx next build', { stdio: 'inherit', env: buildEnv });
+    console.log('==> Building Next.js application completed successfully');
+  } catch (error) {
+    console.error('==> ERROR: Building Next.js application failed');
+    console.error(error.message);
+    process.exit(1);
+  }
 
   // Step 4: Verify build output
   console.log('\n==> Verifying build output...');

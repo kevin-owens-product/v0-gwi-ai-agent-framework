@@ -20,6 +20,10 @@ services:
         sync: false
       - key: NODE_ENV
         value: production
+      - key: RENDER
+        value: "true"
+      - key: NODE_MEMORY_LIMIT
+        value: "1536"
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
