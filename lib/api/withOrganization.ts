@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import type { OrganizationRole } from '@prisma/client'
 
@@ -33,7 +32,7 @@ export function withOrganization(handler: ApiHandler) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       // Get session
-      const session = await getServerSession(req, res, authOptions)
+      const session = await auth()
 
       if (!session?.user) {
         return res.status(401).json({ error: 'Unauthorized' })
