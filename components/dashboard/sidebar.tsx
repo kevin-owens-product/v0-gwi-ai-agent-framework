@@ -31,6 +31,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { OrganizationSwitcher } from "./OrganizationSwitcher"
 
 const navGroups = [
   {
