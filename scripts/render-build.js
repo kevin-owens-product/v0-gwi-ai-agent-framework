@@ -140,12 +140,12 @@ async function main() {
   const phases = [];
   let success = true;
 
-  // Phase 1: Generate Prisma client (lightweight)
+  // Phase 1: Prisma Client Generation
+  // NOTE: Prisma generate already runs via postinstall hook during npm install
+  // We skip it here to avoid duplicate generation and save ~2-3 seconds
   console.log('\n--- PHASE 1: Prisma Client Generation ---');
-  if (!runPhase('npx prisma generate', 'Generating Prisma client')) {
-    process.exit(1);
-  }
-  phases.push('prisma-generate');
+  console.log('==> Skipping - already generated via postinstall hook');
+  phases.push('prisma-generate-skip');
 
   // Phase 2: Database migrations (lightweight)
   console.log('\n--- PHASE 2: Database Migration ---');
