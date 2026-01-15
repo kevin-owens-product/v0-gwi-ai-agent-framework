@@ -34,9 +34,11 @@ import {
   XCircle,
   ExternalLink,
   FileText,
+  Trash2,
+  RotateCcw,
 } from "lucide-react"
 import Link from "next/link"
-import { AdminDataTable, Column, RowAction } from "@/components/admin/data-table"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Organization {
   id: string
@@ -309,6 +311,42 @@ export default function DataExportsPage() {
     },
   ]
 
+  // Handle delete export
+  const handleDeleteExport = async (exp: DataExport) => {
+    try {
+      const response = await fetch(`/api/admin/compliance/data-exports/${exp.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to delete export")
+      }
+      fetchExports()
+    } catch (error) {
+      console.error("Failed to delete export:", error)
+      throw error
+    }
+  }
+
+  // Handle retry export
+  const handleRetryExport = async (exp: DataExport) => {
+    try {
+      const response = await fetch(`/api/admin/compliance/data-exports/${exp.id}/retry`, {
+        method: "POST",
+        credentials: "include",
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to retry export")
+      }
+      fetchExports()
+    } catch (error) {
+      console.error("Failed to retry export:", error)
+      alert(error instanceof Error ? error.message : "Failed to retry export")
+    }
+  }
+
   // Define row actions
   const rowActions: RowAction<DataExport>[] = [
     {
@@ -316,6 +354,12 @@ export default function DataExportsPage() {
       icon: <ExternalLink className="h-4 w-4" />,
       href: (exp) => exp.fileUrl || "#",
       hidden: (exp) => !exp.fileUrl || exp.status !== "COMPLETED",
+    },
+    {
+      label: "Retry Export",
+      icon: <RotateCcw className="h-4 w-4" />,
+      onClick: handleRetryExport,
+      hidden: (exp) => exp.status !== "FAILED",
     },
     {
       label: "View Legal Hold",
@@ -334,6 +378,61 @@ export default function DataExportsPage() {
       icon: <Building2 className="h-4 w-4" />,
       href: (exp) => `/admin/tenants/${exp.orgId}`,
       hidden: (exp) => !exp.organization,
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Retry Failed",
+      icon: <RotateCcw className="h-4 w-4" />,
+      onClick: async (ids) => {
+        const failedExports = exports.filter((e) => ids.includes(e.id) && e.status === "FAILED")
+        if (failedExports.length === 0) {
+          alert("No failed exports selected")
+          return
+        }
+        try {
+          await Promise.all(
+            failedExports.map((exp) =>
+              fetch(`/api/admin/compliance/data-exports/${exp.id}/retry`, {
+                method: "POST",
+                credentials: "include",
+              })
+            )
+          )
+          fetchExports()
+          setSelectedIds(new Set())
+        } catch (error) {
+          console.error("Failed to retry exports:", error)
+        }
+      },
+      confirmTitle: "Retry Failed Exports",
+      confirmDescription: "Are you sure you want to retry the selected failed exports?",
+    },
+    {
+      separator: true,
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: async (ids) => {
+        try {
+          await Promise.all(
+            ids.map((id) =>
+              fetch(`/api/admin/compliance/data-exports/${id}`, {
+                method: "DELETE",
+                credentials: "include",
+              })
+            )
+          )
+          fetchExports()
+          setSelectedIds(new Set())
+        } catch (error) {
+          console.error("Failed to delete exports:", error)
+        }
+      },
+      variant: "destructive",
+      confirmTitle: "Delete Data Exports",
+      confirmDescription: "Are you sure you want to delete the selected data exports? This action cannot be undone.",
     },
   ]
 
@@ -409,6 +508,12 @@ export default function DataExportsPage() {
             emptyMessage="No data exports found"
             viewHref={(exp) => `/admin/compliance/data-exports/${exp.id}`}
             rowActions={rowActions}
+            bulkActions={bulkActions}
+            onDelete={handleDeleteExport}
+            deleteConfirmTitle="Delete Data Export"
+            deleteConfirmDescription={(exp) =>
+              `Are you sure you want to delete this ${exp.type.replace("_", " ")} export? This action cannot be undone.`
+            }
             page={page}
             totalPages={totalPages}
             total={total}

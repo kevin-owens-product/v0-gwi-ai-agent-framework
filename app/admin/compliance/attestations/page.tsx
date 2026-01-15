@@ -20,9 +20,12 @@ import {
   CheckCircle,
   AlertTriangle,
   Clock,
+  Trash2,
+  RotateCcw,
+  Play,
 } from "lucide-react"
 import Link from "next/link"
-import { AdminDataTable, Column, RowAction } from "@/components/admin/data-table"
+import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Framework {
   id: string
@@ -214,17 +217,149 @@ export default function AttestationsPage() {
     },
   ]
 
+  // Handle delete attestation
+  const handleDeleteAttestation = async (attestation: Attestation) => {
+    try {
+      const response = await fetch(`/api/admin/compliance/attestations/${attestation.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to delete attestation")
+      }
+      fetchAttestations()
+    } catch (error) {
+      console.error("Failed to delete attestation:", error)
+      throw error
+    }
+  }
+
+  // Handle update status
+  const handleUpdateStatus = async (attestation: Attestation, status: string) => {
+    try {
+      const response = await fetch(`/api/admin/compliance/attestations/${attestation.id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to update attestation")
+      }
+      fetchAttestations()
+    } catch (error) {
+      console.error("Failed to update attestation:", error)
+      alert(error instanceof Error ? error.message : "Failed to update attestation")
+    }
+  }
+
   // Define row actions
   const rowActions: RowAction<Attestation>[] = [
+    {
+      label: "Start Assessment",
+      icon: <Play className="h-4 w-4" />,
+      onClick: (attestation) => handleUpdateStatus(attestation, "IN_PROGRESS"),
+      hidden: (attestation) => attestation.status !== "NOT_STARTED",
+    },
+    {
+      label: "Reset to Not Started",
+      icon: <RotateCcw className="h-4 w-4" />,
+      onClick: (attestation) => handleUpdateStatus(attestation, "NOT_STARTED"),
+      hidden: (attestation) => attestation.status === "NOT_STARTED",
+    },
     {
       label: "View Organization",
       icon: <Building2 className="h-4 w-4" />,
       href: (attestation) => `/admin/tenants/${attestation.orgId}`,
+      separator: true,
     },
     {
       label: "View Framework",
       icon: <Shield className="h-4 w-4" />,
       href: (attestation) => `/admin/compliance/frameworks/${attestation.frameworkId}`,
+    },
+  ]
+
+  // Bulk actions
+  const bulkActions: BulkAction[] = [
+    {
+      label: "Start Selected",
+      icon: <Play className="h-4 w-4" />,
+      onClick: async (ids) => {
+        const notStarted = attestations.filter((a) => ids.includes(a.id) && a.status === "NOT_STARTED")
+        if (notStarted.length === 0) {
+          alert("No 'Not Started' attestations selected")
+          return
+        }
+        try {
+          await Promise.all(
+            notStarted.map((attestation) =>
+              fetch(`/api/admin/compliance/attestations/${attestation.id}`, {
+                method: "PATCH",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "IN_PROGRESS" }),
+              })
+            )
+          )
+          fetchAttestations()
+          setSelectedIds(new Set())
+        } catch (error) {
+          console.error("Failed to start attestations:", error)
+        }
+      },
+      confirmTitle: "Start Assessments",
+      confirmDescription: "Are you sure you want to start the selected attestation assessments?",
+    },
+    {
+      label: "Reset Selected",
+      icon: <RotateCcw className="h-4 w-4" />,
+      onClick: async (ids) => {
+        try {
+          await Promise.all(
+            ids.map((id) =>
+              fetch(`/api/admin/compliance/attestations/${id}`, {
+                method: "PATCH",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "NOT_STARTED", score: null }),
+              })
+            )
+          )
+          fetchAttestations()
+          setSelectedIds(new Set())
+        } catch (error) {
+          console.error("Failed to reset attestations:", error)
+        }
+      },
+      confirmTitle: "Reset Attestations",
+      confirmDescription: "Are you sure you want to reset the selected attestations to 'Not Started'? This will clear any progress.",
+    },
+    {
+      separator: true,
+      label: "Delete Selected",
+      icon: <Trash2 className="h-4 w-4" />,
+      onClick: async (ids) => {
+        try {
+          await Promise.all(
+            ids.map((id) =>
+              fetch(`/api/admin/compliance/attestations/${id}`, {
+                method: "DELETE",
+                credentials: "include",
+              })
+            )
+          )
+          fetchAttestations()
+          setSelectedIds(new Set())
+        } catch (error) {
+          console.error("Failed to delete attestations:", error)
+        }
+      },
+      variant: "destructive",
+      confirmTitle: "Delete Attestations",
+      confirmDescription: "Are you sure you want to delete the selected attestations? This action cannot be undone.",
     },
   ]
 
@@ -284,6 +419,12 @@ export default function AttestationsPage() {
             emptyMessage="No attestations found"
             viewHref={(attestation) => `/admin/compliance/attestations/${attestation.id}`}
             rowActions={rowActions}
+            bulkActions={bulkActions}
+            onDelete={handleDeleteAttestation}
+            deleteConfirmTitle="Delete Attestation"
+            deleteConfirmDescription={(attestation) =>
+              `Are you sure you want to delete the ${attestation.framework.name} attestation for ${attestation.organization?.name || "this organization"}? This action cannot be undone.`
+            }
             page={page}
             totalPages={totalPages}
             total={total}
