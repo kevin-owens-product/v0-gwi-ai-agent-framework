@@ -48,19 +48,52 @@ function isPublicPath(pathname: string): boolean {
   )
 }
 
+// Static file extensions that should never go through middleware
+const STATIC_EXTENSIONS = new Set([
+  '.js', '.mjs', '.cjs',
+  '.css', '.scss', '.sass', '.less',
+  '.map',
+  '.json', '.xml',
+  '.ico', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.avif',
+  '.woff', '.woff2', '.ttf', '.eot', '.otf',
+  '.mp3', '.mp4', '.webm', '.ogg', '.wav',
+  '.pdf', '.zip', '.tar', '.gz',
+  '.txt', '.md', '.html', '.htm',
+])
+
 // Check if path is a static asset
 function isStaticAsset(pathname: string): boolean {
-  return (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/static') ||
-    pathname.includes('.') // Has file extension
-  )
+  // All Next.js internal paths (static, chunks, image optimization, Turbopack, etc.)
+  if (pathname.startsWith('/_next')) return true
+
+  // Static folder
+  if (pathname.startsWith('/static')) return true
+
+  // Check for known static file extensions
+  const lastDotIndex = pathname.lastIndexOf('.')
+  if (lastDotIndex !== -1) {
+    const extension = pathname.slice(lastDotIndex).toLowerCase()
+    if (STATIC_EXTENSIONS.has(extension)) return true
+  }
+
+  return false
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Skip static assets
+  // CRITICAL: Immediate pass-through for ALL Next.js internal paths
+  // This is the first check to ensure no interference with Turbopack/static files
+  if (pathname.startsWith('/_next/') || pathname.startsWith('/_next')) {
+    return NextResponse.next()
+  }
+
+  // Quick regex check for any file with extension (belt-and-suspenders)
+  if (/\.[a-zA-Z0-9]+$/.test(pathname)) {
+    return NextResponse.next()
+  }
+
+  // Skip static assets (comprehensive check)
   if (isStaticAsset(pathname)) {
     return NextResponse.next()
   }
@@ -124,11 +157,12 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
-     * - _next (all Next.js internal files including static, image, chunks, and Turbopack)
-     * - favicon.ico (favicon file)
-     * - public folder
+     * Match all request paths except static files and Next.js internals.
+     * This uses a negative lookahead to exclude:
+     * - _next (all Next.js files: static, chunks, image, Turbopack runtime, etc.)
+     * - Static file extensions (.js, .css, .map, .ico, .png, .jpg, .svg, .woff, etc.)
+     * - favicon.ico, public folder, and icon files
      */
-    '/((?!_next|favicon.ico|public|icon-.*|apple-icon.*).*)',
+    '/((?!_next|static|public|favicon\\.ico|icon-|apple-icon|.*\\.(?:js|css|map|ico|png|jpg|jpeg|gif|svg|webp|woff|woff2|ttf|eot|json|xml|txt|pdf)$).*)',
   ],
 }
