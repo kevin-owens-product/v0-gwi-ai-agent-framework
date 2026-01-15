@@ -140,6 +140,22 @@ async function main() {
   const phases = [];
   let success = true;
 
+  // Phase 0: Clean stale build artifacts
+  console.log('\n--- PHASE 0: Clean Stale Artifacts ---');
+  const nextDir = path.join(process.cwd(), '.next');
+  if (fs.existsSync(nextDir)) {
+    console.log('    Removing existing .next directory to ensure clean build...');
+    try {
+      fs.rmSync(nextDir, { recursive: true, force: true });
+      console.log('    .next directory removed');
+    } catch (e) {
+      console.log(`    Warning: Could not remove .next directory: ${e.message}`);
+    }
+  } else {
+    console.log('    No existing .next directory found');
+  }
+  phases.push('clean');
+
   // Phase 1: Prisma Client Generation
   // NOTE: Prisma generate already runs via postinstall hook during npm install
   // We skip it here to avoid duplicate generation and save ~2-3 seconds
@@ -174,7 +190,6 @@ async function main() {
 
   // Phase 4: Verify build output
   console.log('\n--- PHASE 4: Build Verification ---');
-  const nextDir = path.join(process.cwd(), '.next');
   const buildIdPath = path.join(nextDir, 'BUILD_ID');
 
   if (!fs.existsSync(nextDir)) {
@@ -218,6 +233,54 @@ async function main() {
       console.log('    Copying .next/static/ to standalone/.next/static/');
       fs.mkdirSync(path.join(standaloneDir, '.next'), { recursive: true });
       copyDirectory(staticDir, standaloneStatic);
+
+      // Verify static files were copied successfully
+      if (fs.existsSync(standaloneStatic)) {
+        const verifyStaticFiles = (dir) => {
+          let jsCount = 0;
+          let cssCount = 0;
+          let turbopackCount = 0;
+
+          const walkDir = (d) => {
+            const entries = fs.readdirSync(d, { withFileTypes: true });
+            for (const entry of entries) {
+              const fullPath = path.join(d, entry.name);
+              if (entry.isDirectory()) {
+                walkDir(fullPath);
+              } else {
+                if (entry.name.endsWith('.js')) jsCount++;
+                if (entry.name.endsWith('.css')) cssCount++;
+                if (entry.name.startsWith('turbopack-')) turbopackCount++;
+              }
+            }
+          };
+
+          walkDir(dir);
+          return { jsCount, cssCount, turbopackCount };
+        };
+
+        const stats = verifyStaticFiles(standaloneStatic);
+        console.log(`    Static assets: ${stats.jsCount} JS files, ${stats.cssCount} CSS files`);
+
+        if (stats.turbopackCount > 0) {
+          console.error(`    ERROR: Found ${stats.turbopackCount} turbopack files in production build!`);
+          console.error('    This should not happen - production builds use webpack, not turbopack.');
+          process.exit(1);
+        }
+
+        if (stats.jsCount === 0 && stats.cssCount === 0) {
+          console.error('    ERROR: No static assets found after copy!');
+          process.exit(1);
+        }
+
+        console.log('    Static assets verified OK');
+      } else {
+        console.error('    ERROR: Failed to create standalone static directory');
+        process.exit(1);
+      }
+    } else {
+      console.error('    ERROR: .next/static directory not found after build!');
+      process.exit(1);
     }
 
     console.log('==> Standalone deployment prepared');
