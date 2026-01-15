@@ -20,10 +20,9 @@ const path = require('path');
 // Memory configuration - reduced from 1536MB to leave more headroom
 const NODE_MEMORY_LIMIT = process.env.NODE_MEMORY_LIMIT || '1280';
 
-// Set memory limits with garbage collection hints
+// Set memory limits (note: --gc-interval is NOT allowed in NODE_OPTIONS)
 process.env.NODE_OPTIONS = [
   `--max-old-space-size=${NODE_MEMORY_LIMIT}`,
-  '--gc-interval=100', // More frequent GC
   process.env.NODE_OPTIONS || ''
 ].filter(Boolean).join(' ').trim();
 
