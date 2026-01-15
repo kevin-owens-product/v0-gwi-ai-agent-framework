@@ -1,5 +1,8 @@
 import { withSentryConfig } from "@sentry/nextjs";
 
+// Check if we're in a memory-constrained build environment
+const isMemoryConstrained = process.env.RENDER === 'true' || process.env.MEMORY_CONSTRAINED === 'true';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
@@ -11,6 +14,9 @@ const nextConfig = {
   },
   experimental: {
     turbopackUseSystemTlsCerts: true,
+    // Reduce memory usage during builds
+    workerThreads: isMemoryConstrained ? false : undefined,
+    cpus: isMemoryConstrained ? 1 : undefined,
   },
 }
 
@@ -22,17 +28,20 @@ const sentryWebpackPluginOptions = {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
 
-  // Only upload source maps in production
+  // Only upload source maps in production CI (not on Render builds to save memory)
   silent: !process.env.CI,
 
-  // Automatically tree-shake Sentry logger statements for smaller bundle size
-  disableLogger: true,
+  // Disable source map upload on memory-constrained builds (saves significant memory)
+  // Source maps can be uploaded separately via CI/CD pipeline if needed
+  sourcemaps: {
+    disable: isMemoryConstrained,
+  },
 
   // Hides source maps from generated client bundles
   hideSourceMaps: true,
 
-  // Upload source maps for better error tracking
-  widenClientFileUpload: true,
+  // Upload source maps for better error tracking (disabled in memory-constrained environments)
+  widenClientFileUpload: !isMemoryConstrained,
 
   // Transpiles SDK to be compatible with IE11 if needed
   transpileClientSDK: true,
@@ -40,9 +49,16 @@ const sentryWebpackPluginOptions = {
   // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers
   tunnelRoute: "/monitoring",
 
-  // Automatically annotate React components to show their full name in breadcrumbs and session replay
-  reactComponentAnnotation: {
-    enabled: true,
+  // Webpack-specific Sentry options (migrated from deprecated top-level options)
+  webpack: {
+    treeshake: {
+      // Automatically tree-shake Sentry logger statements for smaller bundle size
+      removeDebugLogging: true,
+    },
+    // Automatically annotate React components to show their full name in breadcrumbs and session replay
+    reactComponentAnnotation: {
+      enabled: true,
+    },
   },
 };
 
