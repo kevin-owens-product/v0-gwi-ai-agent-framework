@@ -10,6 +10,22 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+function copyDirectory(src, dest) {
+  fs.mkdirSync(dest, { recursive: true });
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
 function run(cmd, description) {
   console.log(`\n==> ${description}...`);
   console.log(`    Running: ${cmd}`);
@@ -70,7 +86,34 @@ function main() {
     console.log(`    ${type} ${item}`);
   });
 
-  // Step 5: Seed database
+  // Step 5: Copy public and static folders to standalone directory
+  console.log('\n==> Preparing standalone deployment...');
+  const standaloneDir = path.join(nextDir, 'standalone');
+  const publicDir = path.join(process.cwd(), 'public');
+  const staticDir = path.join(nextDir, 'static');
+
+  if (fs.existsSync(standaloneDir)) {
+    // Copy public folder to standalone
+    if (fs.existsSync(publicDir)) {
+      const standalonePublic = path.join(standaloneDir, 'public');
+      console.log('    Copying public/ to .next/standalone/public/');
+      copyDirectory(publicDir, standalonePublic);
+    }
+
+    // Copy .next/static to standalone/.next/static
+    if (fs.existsSync(staticDir)) {
+      const standaloneStatic = path.join(standaloneDir, '.next', 'static');
+      console.log('    Copying .next/static/ to .next/standalone/.next/static/');
+      fs.mkdirSync(path.join(standaloneDir, '.next'), { recursive: true });
+      copyDirectory(staticDir, standaloneStatic);
+    }
+
+    console.log('==> Standalone deployment prepared successfully');
+  } else {
+    console.log('    Warning: standalone directory not found, skipping copy');
+  }
+
+  // Step 6: Seed database
   run('npm run db:seed', 'Seeding database');
 
   console.log('\n========================================');
