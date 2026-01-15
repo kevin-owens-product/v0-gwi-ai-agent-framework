@@ -139,8 +139,15 @@ function main() {
     console.log('    Warning: standalone directory not found, skipping copy');
   }
 
-  // Step 6: Seed database
-  run('npm run db:seed', 'Seeding database');
+  // Step 6: Seed database (skip in production to save memory)
+  // Seeding adds 400+ MB of memory usage and is only needed for initial demo data
+  // To seed manually, run: npm run db:seed
+  if (process.env.SKIP_SEED !== 'true' && process.env.NODE_ENV !== 'production') {
+    run('npm run db:seed', 'Seeding database');
+  } else {
+    console.log('\n==> Skipping database seed (production build)');
+    console.log('    To seed manually, run: npm run db:seed');
+  }
 
   console.log('\n========================================');
   console.log('  Build completed successfully!');
