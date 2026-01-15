@@ -19,6 +19,39 @@ const nextConfig = {
     workerThreads: isMemoryConstrained ? false : undefined,
     cpus: isMemoryConstrained ? 1 : undefined,
   },
+  // Add cache-control headers to prevent stale HTML caching
+  async headers() {
+    return [
+      {
+        // HTML pages should not be cached to ensure fresh chunk references
+        source: '/((?!_next/static|_next/image|favicon.ico).*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
+          },
+        ],
+      },
+      {
+        // Static assets with hashed filenames can be cached forever
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
   // Optimize webpack for memory-constrained environments
   webpack: (config, { isServer }) => {
     if (isMemoryConstrained) {

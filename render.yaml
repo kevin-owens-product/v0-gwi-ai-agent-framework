@@ -5,7 +5,8 @@ services:
     runtime: node
     plan: standard
     region: oregon
-    buildCommand: npm install && npm run build:render
+    # Clear any stale build artifacts before building to prevent turbopack/webpack conflicts
+    buildCommand: rm -rf .next node_modules/.cache && npm install && npm run build:render
     startCommand: bash scripts/render-start.sh
     healthCheckPath: /api/health
     autoDeploy: true
