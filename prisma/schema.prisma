@@ -1236,8 +1236,8 @@ model SuperAdmin {
   email         String          @unique
   name          String
   passwordHash  String
-  role          SuperAdminRole  @default(ADMIN)
-  permissions   String[]        @default([])
+  role          SuperAdminRole  @default(ADMIN)      // Legacy field - kept for backward compatibility
+  permissions   String[]        @default([])         // Legacy field - use adminRole instead
   isActive      Boolean         @default(true)
   lastLoginAt   DateTime?
   lastLoginIp   String?
@@ -1246,11 +1246,19 @@ model SuperAdmin {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
+  // Dynamic role assignment (new system)
+  adminRoleId   String?
+  adminRole     AdminRole?      @relation("AdminRoleAssignment", fields: [adminRoleId], references: [id], onDelete: SetNull)
+
+  // Relations
   auditLogs     PlatformAuditLog[]
   sessions      SuperAdminSession[]
+  createdRoles  AdminRole[]     @relation("RoleCreator")
+  roleAuditLogs RoleAuditLog[]  @relation("RoleAuditPerformer")
 
   @@index([email])
   @@index([role])
+  @@index([adminRoleId])
 }
 
 enum SuperAdminRole {
@@ -1258,6 +1266,95 @@ enum SuperAdminRole {
   ADMIN          // Standard admin access
   SUPPORT        // Customer success/support
   ANALYST        // Read-only analytics access
+}
+
+// ==================== DYNAMIC ROLES & PERMISSIONS ====================
+
+enum RoleScope {
+  PLATFORM       // Super admin roles (platform-level)
+  TENANT         // Organization-level roles
+}
+
+enum RoleAuditAction {
+  CREATED
+  UPDATED
+  DELETED
+  PERMISSIONS_CHANGED
+  ADMIN_ASSIGNED
+  ADMIN_UNASSIGNED
+  ACTIVATED
+  DEACTIVATED
+}
+
+// Dynamic role definition - supports both platform and tenant roles
+model AdminRole {
+  id              String      @id @default(cuid())
+  name            String      @unique
+  displayName     String
+  description     String?
+  scope           RoleScope   @default(PLATFORM)
+  permissions     String[]    @default([])
+  isSystem        Boolean     @default(false)  // System roles cannot be deleted
+  isActive        Boolean     @default(true)
+  priority        Int         @default(0)      // Higher = more privileges (for hierarchy)
+  parentRoleId    String?                      // For role inheritance
+  color           String?                      // UI display color
+  icon            String?                      // UI display icon
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  createdById     String?
+
+  // Relations
+  parentRole      AdminRole?  @relation("RoleHierarchy", fields: [parentRoleId], references: [id], onDelete: SetNull)
+  childRoles      AdminRole[] @relation("RoleHierarchy")
+  superAdmins     SuperAdmin[] @relation("AdminRoleAssignment")
+  creator         SuperAdmin? @relation("RoleCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  auditLogs       RoleAuditLog[]
+
+  @@index([scope])
+  @@index([isActive])
+  @@index([priority])
+  @@index([parentRoleId])
+}
+
+// Permission registry - defines all available permissions
+model Permission {
+  id              String      @id @default(cuid())
+  key             String      @unique           // e.g., "organizations:read"
+  displayName     String                        // e.g., "View Organizations"
+  description     String?
+  category        String                        // e.g., "Organizations", "Users"
+  scope           RoleScope   @default(PLATFORM)
+  isActive        Boolean     @default(true)
+  sortOrder       Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([category])
+  @@index([scope])
+  @@index([isActive])
+}
+
+// Audit log for role changes
+model RoleAuditLog {
+  id              String          @id @default(cuid())
+  roleId          String
+  action          RoleAuditAction
+  performedById   String
+  previousState   Json?
+  newState        Json?
+  changes         Json?           // Detailed change description
+  ipAddress       String?
+  userAgent       String?
+  createdAt       DateTime        @default(now())
+
+  role            AdminRole       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  performedBy     SuperAdmin      @relation("RoleAuditPerformer", fields: [performedById], references: [id])
+
+  @@index([roleId])
+  @@index([performedById])
+  @@index([action])
+  @@index([createdAt])
 }
 
 model SuperAdminSession {
