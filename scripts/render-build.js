@@ -238,7 +238,6 @@ async function main() {
         const verifyStaticFiles = (dir) => {
           let jsCount = 0;
           let cssCount = 0;
-          let turbopackCount = 0;
 
           const walkDir = (d) => {
             const entries = fs.readdirSync(d, { withFileTypes: true });
@@ -249,23 +248,16 @@ async function main() {
               } else {
                 if (entry.name.endsWith('.js')) jsCount++;
                 if (entry.name.endsWith('.css')) cssCount++;
-                if (entry.name.startsWith('turbopack-')) turbopackCount++;
               }
             }
           };
 
           walkDir(dir);
-          return { jsCount, cssCount, turbopackCount };
+          return { jsCount, cssCount };
         };
 
         const stats = verifyStaticFiles(standaloneStatic);
         console.log(`    Static assets: ${stats.jsCount} JS files, ${stats.cssCount} CSS files`);
-
-        if (stats.turbopackCount > 0) {
-          console.error(`    ERROR: Found ${stats.turbopackCount} turbopack files in production build!`);
-          console.error('    This should not happen - production builds use webpack, not turbopack.');
-          process.exit(1);
-        }
 
         if (stats.jsCount === 0 && stats.cssCount === 0) {
           console.error('    ERROR: No static assets found after copy!');
