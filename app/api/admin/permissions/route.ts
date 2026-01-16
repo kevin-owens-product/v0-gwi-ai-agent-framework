@@ -7,7 +7,7 @@ import {
   PLATFORM_PERMISSIONS,
   TENANT_PERMISSIONS,
   PERMISSION_CATEGORIES,
-} from "@/lib/permissions"
+} from "@/lib/permissions/index"
 import { adminHasPermission } from "@/lib/roles"
 import type { RoleScope } from "@prisma/client"
 
