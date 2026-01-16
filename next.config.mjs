@@ -1,5 +1,6 @@
 // Check if we're in a memory-constrained build environment
 const isMemoryConstrained = process.env.RENDER === 'true' || process.env.MEMORY_CONSTRAINED === 'true';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -10,10 +11,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Turbopack configuration (moved from experimental for Next.js 16)
-  turbopack: {
-    useSystemTlsCerts: true,
-  },
+  // Turbopack configuration - only apply in development mode
+  // In production, webpack is used and turbopack config should not be included
+  ...(isDevelopment && {
+    turbopack: {
+      useSystemTlsCerts: true,
+    },
+  }),
   experimental: {
     // Reduce memory usage during builds on memory-constrained environments
     workerThreads: isMemoryConstrained ? false : undefined,
