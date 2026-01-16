@@ -109,8 +109,11 @@ async function main() {
 
   // Clean super admin portal data
   await safeDeleteMany(() => prisma.platformAuditLog.deleteMany())
+  await safeDeleteMany(() => prisma.roleAuditLog.deleteMany())
   await safeDeleteMany(() => prisma.superAdminSession.deleteMany())
   await safeDeleteMany(() => prisma.superAdmin.deleteMany())
+  await safeDeleteMany(() => prisma.adminRole.deleteMany())
+  await safeDeleteMany(() => prisma.permission.deleteMany())
   await safeDeleteMany(() => prisma.featureFlag.deleteMany())
 
   // Clean entitlement system data
@@ -4228,6 +4231,247 @@ async function main() {
       permissions: ['tenants:*', 'users:*'],
       isActive: false,
     }
+  })
+
+  // ==================== DYNAMIC ROLES & PERMISSIONS ====================
+  await safeSeedSection('Admin Roles & Permissions', async () => {
+    console.log('🔐 Creating dynamic roles and permissions...')
+
+    // Create default platform roles
+    const superAdminRole = await prisma.adminRole.create({
+      data: {
+        name: 'super-admin',
+        displayName: 'Super Admin',
+        description: 'Full platform access with all permissions',
+        scope: 'PLATFORM',
+        isSystem: true,
+        priority: 100,
+        color: '#8B5CF6',
+        icon: 'Shield',
+        permissions: ['super:*'],
+      }
+    })
+
+    const platformAdminRole = await prisma.adminRole.create({
+      data: {
+        name: 'platform-admin',
+        displayName: 'Platform Admin',
+        description: 'Standard admin with most management capabilities',
+        scope: 'PLATFORM',
+        isSystem: true,
+        priority: 80,
+        color: '#3B82F6',
+        icon: 'UserCog',
+        permissions: [
+          'organizations:list', 'organizations:read', 'organizations:create', 'organizations:update',
+          'organizations:suspend', 'organizations:restore', 'organizations:export',
+          'users:list', 'users:read', 'users:create', 'users:update',
+          'users:ban', 'users:unban', 'users:reset-password', 'users:export',
+          'admins:list', 'admins:read',
+          'roles:list', 'roles:read', 'roles:create', 'roles:update', 'roles:assign',
+          'security:dashboard', 'security:policies:read', 'security:threats:read',
+          'security:violations:read', 'security:violations:manage',
+          'audit:read', 'audit:export',
+          'analytics:dashboard', 'analytics:usage:read', 'analytics:revenue:read',
+          'analytics:growth:read', 'analytics:export', 'analytics:reports:create',
+          'features:list', 'features:read', 'features:create', 'features:update', 'features:toggle', 'features:rollout',
+          'billing:dashboard', 'billing:plans:read', 'billing:subscriptions:read',
+          'billing:subscriptions:write', 'billing:invoices:read',
+          'support:tickets:list', 'support:tickets:read', 'support:tickets:create',
+          'support:tickets:respond', 'support:tickets:assign', 'support:tickets:close', 'support:tickets:escalate',
+          'support:knowledge:read', 'support:knowledge:write',
+          'system:config:read', 'system:rules:read', 'system:rules:write',
+          'system:health:read', 'system:logs:read', 'system:jobs:read',
+          'notifications:list', 'notifications:create', 'notifications:broadcast',
+          'notifications:templates:read', 'notifications:templates:write',
+          'integrations:list', 'integrations:read', 'integrations:create', 'integrations:update',
+          'integrations:webhooks:read', 'integrations:webhooks:write',
+          'integrations:api-clients:read', 'integrations:api-clients:write',
+          'compliance:dashboard', 'compliance:frameworks:read', 'compliance:audits:read',
+          'compliance:legal-holds:read', 'compliance:data-retention:read',
+          'identity:domains:read', 'identity:sso:read', 'identity:scim:read', 'identity:devices:read',
+          'operations:incidents:read', 'operations:releases:read', 'operations:capacity:read',
+        ],
+      }
+    })
+
+    const supportAgentRole = await prisma.adminRole.create({
+      data: {
+        name: 'support-agent',
+        displayName: 'Support Agent',
+        description: 'Customer support with limited write access',
+        scope: 'PLATFORM',
+        isSystem: true,
+        priority: 60,
+        color: '#10B981',
+        icon: 'HeadphonesIcon',
+        permissions: [
+          'organizations:list', 'organizations:read',
+          'users:list', 'users:read', 'users:reset-password',
+          'audit:read',
+          'analytics:dashboard', 'analytics:usage:read',
+          'features:list', 'features:read',
+          'billing:dashboard', 'billing:subscriptions:read', 'billing:invoices:read',
+          'support:tickets:list', 'support:tickets:read', 'support:tickets:create',
+          'support:tickets:respond', 'support:tickets:close',
+          'support:knowledge:read',
+          'notifications:list', 'notifications:create',
+        ],
+      }
+    })
+
+    const analystRole = await prisma.adminRole.create({
+      data: {
+        name: 'analyst',
+        displayName: 'Analyst',
+        description: 'Read-only analytics access',
+        scope: 'PLATFORM',
+        isSystem: true,
+        priority: 40,
+        color: '#F59E0B',
+        icon: 'BarChart',
+        permissions: [
+          'organizations:list', 'organizations:read',
+          'users:list', 'users:read',
+          'audit:read',
+          'analytics:dashboard', 'analytics:usage:read', 'analytics:revenue:read',
+          'analytics:growth:read', 'analytics:export', 'analytics:reports:create', 'analytics:reports:schedule',
+          'features:list', 'features:read',
+        ],
+      }
+    })
+
+    // Create default tenant/organization roles
+    await prisma.adminRole.create({
+      data: {
+        name: 'org-owner',
+        displayName: 'Owner',
+        description: 'Full organization access',
+        scope: 'TENANT',
+        isSystem: true,
+        priority: 100,
+        color: '#8B5CF6',
+        icon: 'Crown',
+        permissions: ['admin:*'],
+      }
+    })
+
+    await prisma.adminRole.create({
+      data: {
+        name: 'org-admin',
+        displayName: 'Admin',
+        description: 'Full feature access, limited billing/team management',
+        scope: 'TENANT',
+        isSystem: true,
+        priority: 80,
+        color: '#3B82F6',
+        icon: 'UserCog',
+        permissions: [
+          'agents:list', 'agents:read', 'agents:create', 'agents:update', 'agents:delete', 'agents:execute', 'agents:publish',
+          'workflows:list', 'workflows:read', 'workflows:create', 'workflows:update', 'workflows:delete', 'workflows:execute', 'workflows:schedule',
+          'reports:list', 'reports:read', 'reports:create', 'reports:update', 'reports:delete', 'reports:export', 'reports:share',
+          'dashboards:list', 'dashboards:read', 'dashboards:create', 'dashboards:update', 'dashboards:delete', 'dashboards:share',
+          'datasources:list', 'datasources:read', 'datasources:create', 'datasources:update', 'datasources:delete', 'datasources:sync',
+          'team:list', 'team:read', 'team:invite', 'team:update', 'team:roles:assign',
+          'org:settings:read', 'org:settings:write', 'org:branding:read', 'org:branding:write',
+          'org:billing:read', 'org:api-keys:read', 'org:api-keys:write',
+          'org:integrations:read', 'org:integrations:write', 'org:audit:read',
+          'audiences:list', 'audiences:read', 'audiences:create', 'audiences:update', 'audiences:delete',
+          'charts:list', 'charts:read', 'charts:create', 'charts:update', 'charts:delete',
+          'brand-tracking:list', 'brand-tracking:read', 'brand-tracking:create', 'brand-tracking:update', 'brand-tracking:delete',
+          'memory:list', 'memory:read', 'memory:create', 'memory:update', 'memory:delete',
+          'hierarchy:read', 'hierarchy:write', 'hierarchy:relationships:read', 'hierarchy:relationships:write',
+          'hierarchy:sharing:read', 'hierarchy:sharing:write',
+        ],
+      }
+    })
+
+    await prisma.adminRole.create({
+      data: {
+        name: 'org-member',
+        displayName: 'Member',
+        description: 'Standard feature access',
+        scope: 'TENANT',
+        isSystem: true,
+        priority: 60,
+        color: '#10B981',
+        icon: 'User',
+        permissions: [
+          'agents:list', 'agents:read', 'agents:create', 'agents:update', 'agents:execute',
+          'workflows:list', 'workflows:read', 'workflows:create', 'workflows:update', 'workflows:execute',
+          'reports:list', 'reports:read', 'reports:create', 'reports:update', 'reports:export',
+          'dashboards:list', 'dashboards:read', 'dashboards:create', 'dashboards:update',
+          'datasources:list', 'datasources:read',
+          'team:list', 'team:read',
+          'org:settings:read', 'org:api-keys:read',
+          'audiences:list', 'audiences:read', 'audiences:create', 'audiences:update',
+          'charts:list', 'charts:read', 'charts:create', 'charts:update',
+          'brand-tracking:list', 'brand-tracking:read', 'brand-tracking:create', 'brand-tracking:update',
+          'memory:list', 'memory:read', 'memory:create', 'memory:update',
+          'hierarchy:read', 'hierarchy:relationships:read', 'hierarchy:sharing:read',
+        ],
+      }
+    })
+
+    await prisma.adminRole.create({
+      data: {
+        name: 'org-viewer',
+        displayName: 'Viewer',
+        description: 'Read-only access',
+        scope: 'TENANT',
+        isSystem: true,
+        priority: 40,
+        color: '#6B7280',
+        icon: 'Eye',
+        permissions: [
+          'agents:list', 'agents:read',
+          'workflows:list', 'workflows:read',
+          'reports:list', 'reports:read',
+          'dashboards:list', 'dashboards:read',
+          'datasources:list', 'datasources:read',
+          'team:list', 'team:read',
+          'org:settings:read',
+          'audiences:list', 'audiences:read',
+          'charts:list', 'charts:read',
+          'brand-tracking:list', 'brand-tracking:read',
+          'memory:list', 'memory:read',
+          'hierarchy:read', 'hierarchy:sharing:read',
+        ],
+      }
+    })
+
+    // Assign dynamic roles to existing super admins
+    const superAdminUser = await prisma.superAdmin.findFirst({ where: { email: 'superadmin@gwi.com' } })
+    const adminUser = await prisma.superAdmin.findFirst({ where: { email: 'admin@gwi.com' } })
+    const supportUser = await prisma.superAdmin.findFirst({ where: { email: 'support@gwi.com' } })
+    const analystUser = await prisma.superAdmin.findFirst({ where: { email: 'analyst@gwi.com' } })
+
+    if (superAdminUser) {
+      await prisma.superAdmin.update({
+        where: { id: superAdminUser.id },
+        data: { adminRoleId: superAdminRole.id }
+      })
+    }
+    if (adminUser) {
+      await prisma.superAdmin.update({
+        where: { id: adminUser.id },
+        data: { adminRoleId: platformAdminRole.id }
+      })
+    }
+    if (supportUser) {
+      await prisma.superAdmin.update({
+        where: { id: supportUser.id },
+        data: { adminRoleId: supportAgentRole.id }
+      })
+    }
+    if (analystUser) {
+      await prisma.superAdmin.update({
+        where: { id: analystUser.id },
+        data: { adminRoleId: analystRole.id }
+      })
+    }
+
+    console.log('   Created 4 platform roles and 4 tenant roles')
   })
 
   // ==================== FEATURE FLAGS ====================

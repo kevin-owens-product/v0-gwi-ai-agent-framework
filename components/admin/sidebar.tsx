@@ -137,6 +137,7 @@ const navSections: NavSection[] = [
     title: "Identity & Access",
     defaultOpen: false,
     items: [
+      { name: "Roles & Permissions", href: "/admin/roles", icon: Shield },
       { name: "Domain Management", href: "/admin/identity/domains", icon: Globe },
       { name: "SSO Configuration", href: "/admin/identity/sso", icon: Key },
       { name: "SCIM Provisioning", href: "/admin/identity/scim", icon: UserCog },
