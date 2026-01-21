@@ -182,7 +182,9 @@ async function main() {
   console.log('    - Parallel minification: DISABLED');
   console.log('    - Telemetry: DISABLED');
 
-  if (!runPhase('npx next build', 'Building Next.js application')) {
+  // Use --webpack flag to explicitly use webpack instead of Turbopack (Next.js 16 default)
+  // This ensures our memory-optimized webpack config is used
+  if (!runPhase('npx next build --webpack', 'Building Next.js application')) {
     process.exit(1);
   }
   phases.push('next-build');
