@@ -11,13 +11,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Turbopack configuration - only used in development mode
-  // In production, we use webpack to ensure stable builds
-  ...(isDevelopment && {
-    turbopack: {
-      useSystemTlsCerts: true,
-    },
-  }),
+  // Turbopack configuration - required by Next.js 16 when webpack config exists
+  // In production builds on memory-constrained environments, we use --webpack flag
+  // to explicitly use webpack with memory optimizations instead of Turbopack
+  turbopack: {
+    ...(isDevelopment && { useSystemTlsCerts: true }),
+  },
   experimental: {
     // Reduce memory usage during builds on memory-constrained environments
     workerThreads: isMemoryConstrained ? false : undefined,
