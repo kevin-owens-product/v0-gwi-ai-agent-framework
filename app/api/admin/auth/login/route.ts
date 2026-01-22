@@ -1,6 +1,42 @@
 import { NextRequest, NextResponse } from "next/server"
 import { authenticateSuperAdmin } from "@/lib/super-admin"
 import { cookies } from "next/headers"
+import { Prisma } from "@prisma/client"
+
+// Error codes that indicate transient/retriable database issues
+const TRANSIENT_ERROR_CODES = new Set([
+  'P1001', // Can't reach database server
+  'P1002', // Database server reached but timed out
+  'P1008', // Operations timed out
+  'P1017', // Server closed the connection
+  'P2024', // Timed out fetching a new connection from the pool
+])
+
+function isServiceUnavailableError(error: unknown): boolean {
+  // Check for Prisma-specific errors
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    return TRANSIENT_ERROR_CODES.has(error.code)
+  }
+  if (error instanceof Prisma.PrismaClientInitializationError) {
+    return true
+  }
+
+  // Check error message for connection-related issues
+  if (error instanceof Error) {
+    const message = error.message.toLowerCase()
+    return (
+      message.includes('connection') ||
+      message.includes('timeout') ||
+      message.includes('econnrefused') ||
+      message.includes('econnreset') ||
+      message.includes('prisma') ||
+      message.includes('database') ||
+      message.includes('socket')
+    )
+  }
+
+  return false
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,13 +87,19 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Admin login error:", error)
 
-    // Provide more specific error messages for common issues
-    const errorMessage = error instanceof Error ? error.message : "Unknown error"
-
-    if (errorMessage.includes("prisma") || errorMessage.includes("database") || errorMessage.includes("connect")) {
+    // Check for transient database/connection errors
+    if (isServiceUnavailableError(error)) {
       return NextResponse.json(
-        { error: "Database connection error. Please try again later." },
-        { status: 503 }
+        {
+          error: "Service temporarily unavailable. Please try again in a moment.",
+          retryable: true
+        },
+        {
+          status: 503,
+          headers: {
+            'Retry-After': '5', // Suggest client retry after 5 seconds
+          }
+        }
       )
     }
 

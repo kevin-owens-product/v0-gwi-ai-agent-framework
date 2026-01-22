@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,39 +9,82 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Shield, AlertCircle, Loader2 } from "lucide-react"
 
+const MAX_RETRIES = 3
+const INITIAL_DELAY_MS = 1000
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export default function AdminLoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState("Signing in...")
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
+    setLoadingMessage("Signing in...")
 
-    try {
-      const response = await fetch("/api/admin/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
+    // Cancel any pending request
+    abortControllerRef.current?.abort()
+    abortControllerRef.current = new AbortController()
 
-      const data = await response.json()
+    let lastError = ""
 
-      if (!response.ok) {
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      try {
+        const response = await fetch("/api/admin/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+          signal: abortControllerRef.current.signal,
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          router.push("/admin")
+          router.refresh()
+          return
+        }
+
+        // Check if error is retryable (503 Service Unavailable)
+        if (response.status === 503 && data.retryable && attempt < MAX_RETRIES - 1) {
+          const delay = INITIAL_DELAY_MS * Math.pow(2, attempt)
+          setLoadingMessage(`Connecting... (attempt ${attempt + 2}/${MAX_RETRIES})`)
+          await sleep(delay)
+          continue
+        }
+
+        // Non-retryable error
         setError(data.error || "Login failed")
+        setIsLoading(false)
         return
-      }
+      } catch (err) {
+        // Handle network errors with retry
+        if (err instanceof Error && err.name === 'AbortError') {
+          return // Request was cancelled
+        }
 
-      router.push("/admin")
-      router.refresh()
-    } catch {
-      setError("An error occurred. Please try again.")
-    } finally {
-      setIsLoading(false)
+        lastError = "Unable to connect. Please check your network and try again."
+
+        if (attempt < MAX_RETRIES - 1) {
+          const delay = INITIAL_DELAY_MS * Math.pow(2, attempt)
+          setLoadingMessage(`Reconnecting... (attempt ${attempt + 2}/${MAX_RETRIES})`)
+          await sleep(delay)
+          continue
+        }
+      }
     }
+
+    setError(lastError || "Service temporarily unavailable. Please try again.")
+    setIsLoading(false)
   }
 
   return (
@@ -92,7 +135,7 @@ export default function AdminLoginPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  {loadingMessage}
                 </>
               ) : (
                 "Sign in"
