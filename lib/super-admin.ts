@@ -1,4 +1,4 @@
-import { prisma } from './db'
+import { prisma, withRetry } from './db'
 import { createHash, randomBytes } from 'crypto'
 import type { SuperAdminRole } from '@prisma/client'
 import { Prisma } from '@prisma/client'
@@ -124,38 +124,50 @@ export async function createSuperAdminSession(
   const token = generateSessionToken()
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
 
-  const session = await prisma.superAdminSession.create({
-    data: {
-      adminId,
-      token,
-      ipAddress,
-      userAgent,
-      expiresAt,
-    },
-  })
+  // Use retry wrapper for session creation to handle transient connection failures
+  const session = await withRetry(
+    () => prisma.superAdminSession.create({
+      data: {
+        adminId,
+        token,
+        ipAddress,
+        userAgent,
+        expiresAt,
+      },
+    }),
+    'session creation'
+  )
 
-  // Update last login
-  await prisma.superAdmin.update({
-    where: { id: adminId },
-    data: {
-      lastLoginAt: new Date(),
-      lastLoginIp: ipAddress,
-    },
-  })
+  // Update last login with retry
+  await withRetry(
+    () => prisma.superAdmin.update({
+      where: { id: adminId },
+      data: {
+        lastLoginAt: new Date(),
+        lastLoginIp: ipAddress,
+      },
+    }),
+    'update last login'
+  )
 
   return { session, token }
 }
 
 // Validate session token
 export async function validateSuperAdminSession(token: string) {
-  const session = await prisma.superAdminSession.findUnique({
-    where: { token },
-    include: { admin: true },
-  })
+  // Use retry wrapper for session validation to handle transient connection failures
+  const session = await withRetry(
+    () => prisma.superAdminSession.findUnique({
+      where: { token },
+      include: { admin: true },
+    }),
+    'session validation'
+  )
 
   if (!session) return null
   if (session.expiresAt < new Date()) {
-    await prisma.superAdminSession.delete({ where: { id: session.id } })
+    // Non-critical cleanup - don't fail if this errors
+    prisma.superAdminSession.delete({ where: { id: session.id } }).catch(console.error)
     return null
   }
   if (!session.admin.isActive) return null
@@ -171,9 +183,11 @@ export async function authenticateSuperAdmin(
   userAgent?: string
 ) {
   try {
-    const admin = await prisma.superAdmin.findUnique({
-      where: { email },
-    })
+    // Use retry wrapper for database lookup to handle transient connection failures
+    const admin = await withRetry(
+      () => prisma.superAdmin.findUnique({ where: { email } }),
+      'admin lookup'
+    )
 
     if (!admin || !admin.isActive) {
       return { success: false, error: 'Invalid credentials' }
