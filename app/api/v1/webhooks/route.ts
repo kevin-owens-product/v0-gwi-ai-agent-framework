@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getValidatedOrgId, getUserMembership } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import crypto from 'crypto'
 
@@ -8,23 +9,20 @@ import crypto from 'crypto'
  * GET /api/v1/webhooks
  * Get webhook endpoints
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const session = await auth()
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: 'Organization ID required' }, { status: 400 })
+      return NextResponse.json({ error: 'No organization access' }, { status: 403 })
     }
 
-    const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
-    })
-
-    if (!member || !hasPermission(member.role, 'webhooks:view')) {
+    const membership = await getUserMembership(session.user.id, orgId)
+    if (!membership || !hasPermission(membership.role, 'webhooks:view')) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -44,23 +42,20 @@ export async function GET(request: Request) {
  * POST /api/v1/webhooks
  * Create webhook endpoint
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await auth()
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: 'Organization ID required' }, { status: 400 })
+      return NextResponse.json({ error: 'No organization access' }, { status: 403 })
     }
 
-    const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
-    })
-
-    if (!member || !hasPermission(member.role, 'webhooks:manage')) {
+    const membership = await getUserMembership(session.user.id, orgId)
+    if (!membership || !hasPermission(membership.role, 'webhooks:manage')) {
       return NextResponse.json(
         { error: 'You do not have permission to manage webhooks' },
         { status: 403 }

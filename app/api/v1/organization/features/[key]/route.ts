@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { checkFeatureAccess } from '@/lib/features'
@@ -8,10 +8,11 @@ import { checkFeatureAccess } from '@/lib/features'
  * Check access to a specific feature
  */
 export async function GET(
-  request: Request,
-  { params }: { params: { key: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ key: string }> }
 ) {
   try {
+    const { key } = await params
     const session = await auth()
 
     if (!session?.user) {
@@ -44,7 +45,7 @@ export async function GET(
     }
 
     // Check feature access
-    const featureAccess = await checkFeatureAccess(orgId, params.key)
+    const featureAccess = await checkFeatureAccess(orgId, key)
 
     return NextResponse.json(featureAccess)
   } catch (error) {

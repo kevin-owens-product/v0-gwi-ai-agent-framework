@@ -1,26 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/db'
-import { cookies } from 'next/headers'
-import { getUserMembership } from '@/lib/tenant'
+import { getValidatedOrgId, getUserMembership } from '@/lib/tenant'
 import { hasPermission, type Permission } from '@/lib/permissions'
 import { compareEntityVersions, type VersionedEntityType } from '@/lib/change-tracking'
-
-// Helper to get org ID from header or cookies
-async function getOrgId(request: NextRequest, userId: string): Promise<string | null> {
-  const headerOrgId = request.headers.get('x-organization-id')
-  if (headerOrgId) return headerOrgId
-
-  const cookieStore = await cookies()
-  const memberships = await prisma.organizationMember.findMany({
-    where: { userId },
-    include: { organization: true },
-    orderBy: { joinedAt: 'asc' },
-  })
-
-  if (memberships.length === 0) return null
-  return cookieStore.get('currentOrgId')?.value || memberships[0].organization.id
-}
 
 // Valid entity types
 const VALID_ENTITY_TYPES: VersionedEntityType[] = [
@@ -64,9 +46,9 @@ export async function GET(
       )
     }
 
-    const orgId = await getOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: 'No organization found' }, { status: 404 })
+      return NextResponse.json({ error: 'No organization access' }, { status: 403 })
     }
 
     const membership = await getUserMembership(session.user.id, orgId)

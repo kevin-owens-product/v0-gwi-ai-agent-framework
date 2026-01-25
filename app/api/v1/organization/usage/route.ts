@@ -1,12 +1,13 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getValidatedOrgId } from '@/lib/tenant'
 
 /**
  * GET /api/v1/organization/usage
  * Get organization usage metrics
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const session = await auth()
 
@@ -14,28 +15,11 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get organization ID from header
-    const orgId = request.headers.get('x-organization-id')
-
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
       return NextResponse.json(
-        { error: 'Organization ID required in X-Organization-Id header' },
-        { status: 400 }
-      )
-    }
-
-    // Verify user is a member
-    const member = await prisma.organizationMember.findFirst({
-      where: {
-        userId: session.user.id,
-        organizationId: orgId,
-      },
-    })
-
-    if (!member) {
-      return NextResponse.json(
-        { error: 'Not a member of this organization' },
-        { status: 403 }
+        { error: 'No organization found' },
+        { status: 404 }
       )
     }
 

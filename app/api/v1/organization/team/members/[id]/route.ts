@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { hasPermission, canManageRole } from '@/lib/permissions'
@@ -8,10 +8,11 @@ import { hasPermission, canManageRole } from '@/lib/permissions'
  * Update member role
  */
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -49,7 +50,7 @@ export async function PUT(
 
     // Get target member
     const targetMember = await prisma.organizationMember.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!targetMember || targetMember.organizationId !== orgId) {
@@ -69,7 +70,7 @@ export async function PUT(
 
     // Update role
     const updatedMember = await prisma.organizationMember.update({
-      where: { id: params.id },
+      where: { id },
       data: { role },
       include: {
         user: {
@@ -87,7 +88,7 @@ export async function PUT(
       data: {
         action: 'MEMBER_ROLE_CHANGED',
         entityType: 'ORGANIZATION_MEMBER',
-        entityId: params.id,
+        entityId: id,
         userId: session.user.id,
         organizationId: orgId,
         metadata: {
@@ -113,10 +114,11 @@ export async function PUT(
  * Remove member from organization
  */
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -144,7 +146,7 @@ export async function DELETE(
 
     // Get target member
     const targetMember = await prisma.organizationMember.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!targetMember || targetMember.organizationId !== orgId) {
@@ -172,7 +174,7 @@ export async function DELETE(
 
     // Remove member
     await prisma.organizationMember.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     // Log action
@@ -180,7 +182,7 @@ export async function DELETE(
       data: {
         action: 'MEMBER_REMOVED',
         entityType: 'ORGANIZATION_MEMBER',
-        entityId: params.id,
+        entityId: id,
         userId: session.user.id,
         organizationId: orgId,
         metadata: {

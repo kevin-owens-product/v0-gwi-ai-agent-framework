@@ -1,12 +1,13 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getValidatedOrgId } from '@/lib/tenant'
 
 /**
  * POST /api/v1/organization/plan/upgrade
  * Request a plan upgrade
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await auth()
 
@@ -14,17 +15,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get organization ID from header
-    const orgId = request.headers.get('x-organization-id')
+    // Get validated organization ID (validates user membership)
+    const orgId = await getValidatedOrgId(request, session.user.id)
 
     if (!orgId) {
       return NextResponse.json(
-        { error: 'Organization ID required in X-Organization-Id header' },
-        { status: 400 }
+        { error: 'Organization not found or access denied' },
+        { status: 403 }
       )
     }
 
-    // Verify user is owner or admin
+    // Verify user is owner or admin (additional permission check)
     const member = await prisma.organizationMember.findFirst({
       where: {
         userId: session.user.id,

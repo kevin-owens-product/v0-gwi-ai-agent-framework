@@ -2,27 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import { cookies } from 'next/headers'
-import { getUserMembership } from '@/lib/tenant'
+import { getUserMembership, getValidatedOrgId } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
-
-async function getOrgId(request: NextRequest, userId: string): Promise<string | null> {
-  const headerOrgId = request.headers.get('x-organization-id')
-  if (headerOrgId) return headerOrgId
-
-  const cookieStore = await cookies()
-  const memberships = await prisma.organizationMember.findMany({
-    where: { userId },
-    include: { organization: true },
-    orderBy: { joinedAt: 'asc' },
-  })
-
-  if (memberships.length === 0) return null
-
-  return cookieStore.get('currentOrgId')?.value || memberships[0].organization.id
-}
 
 // Generate mock brand tracking metrics
 function generateBrandMetrics(_brandName: string, competitors: any[]) {
@@ -80,9 +63,9 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = await getOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: 'No organization found' }, { status: 404 })
+      return NextResponse.json({ error: 'Organization not found or access denied' }, { status: 404 })
     }
 
     const membership = await getUserMembership(session.user.id, orgId)

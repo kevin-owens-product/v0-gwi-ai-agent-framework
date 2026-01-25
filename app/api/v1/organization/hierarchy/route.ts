@@ -1,30 +1,26 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getValidatedOrgId } from '@/lib/tenant'
 
 /**
  * GET /api/v1/organization/hierarchy
  * Get organization hierarchy tree
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    // Get validated organization ID (validates user membership)
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
-      return NextResponse.json({ error: 'Organization ID required' }, { status: 400 })
-    }
-
-    // Verify membership
-    const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
-    })
-
-    if (!member) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return NextResponse.json(
+        { error: 'Organization not found or access denied' },
+        { status: 403 }
+      )
     }
 
     // Get current organization

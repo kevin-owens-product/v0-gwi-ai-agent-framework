@@ -1,29 +1,31 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { hasPermission } from '@/lib/permissions'
+import { getValidatedOrgId } from '@/lib/tenant'
 import crypto from 'crypto'
 
 /**
  * GET /api/v1/organization/domains
  * Get verified domains
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    // Get validated organization ID (validates user membership)
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
       return NextResponse.json(
-        { error: 'Organization ID required' },
-        { status: 400 }
+        { error: 'Organization not found or access denied' },
+        { status: 403 }
       )
     }
 
-    // Verify membership
+    // Check permission
     const member = await prisma.organizationMember.findFirst({
       where: { userId: session.user.id, organizationId: orgId },
     })
@@ -52,22 +54,23 @@ export async function GET(request: Request) {
  * POST /api/v1/organization/domains
  * Add a domain for verification
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    // Get validated organization ID (validates user membership)
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
       return NextResponse.json(
-        { error: 'Organization ID required' },
-        { status: 400 }
+        { error: 'Organization not found or access denied' },
+        { status: 403 }
       )
     }
 
-    // Verify membership and permission
+    // Check permission
     const member = await prisma.organizationMember.findFirst({
       where: { userId: session.user.id, organizationId: orgId },
     })

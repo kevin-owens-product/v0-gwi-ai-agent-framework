@@ -1,24 +1,25 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { hasPermission } from '@/lib/permissions'
+import { getValidatedOrgId } from '@/lib/tenant'
 
 /**
  * POST /api/v1/organization/team/invite
  * Invite team members
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
       return NextResponse.json(
-        { error: 'Organization ID required in X-Organization-Id header' },
-        { status: 400 }
+        { error: 'No organization found' },
+        { status: 404 }
       )
     }
 

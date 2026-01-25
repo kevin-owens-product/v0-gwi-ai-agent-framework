@@ -1,28 +1,29 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { hasPermission } from '@/lib/permissions'
+import { getValidatedOrgId } from '@/lib/tenant'
 
 /**
  * GET /api/v1/organization/security/policies
  * Get security policies for the organization
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
       return NextResponse.json(
-        { error: 'Organization ID required' },
-        { status: 400 }
+        { error: 'No organization found' },
+        { status: 404 }
       )
     }
 
-    // Verify membership
+    // Verify membership and permission
     const member = await prisma.organizationMember.findFirst({
       where: { userId: session.user.id, organizationId: orgId },
     })
@@ -60,18 +61,18 @@ export async function GET(request: Request) {
  * PUT /api/v1/organization/security/policies
  * Update security policies
  */
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = request.headers.get('x-organization-id')
+    const orgId = await getValidatedOrgId(request, session.user.id)
     if (!orgId) {
       return NextResponse.json(
-        { error: 'Organization ID required' },
-        { status: 400 }
+        { error: 'No organization found' },
+        { status: 404 }
       )
     }
 

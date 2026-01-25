@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { hasPermission } from '@/lib/permissions'
@@ -8,10 +8,11 @@ import { hasPermission } from '@/lib/permissions'
  * Cancel an invitation
  */
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -39,7 +40,7 @@ export async function DELETE(
 
     // Cancel invitation
     const invitation = await prisma.invitation.update({
-      where: { id: params.id },
+      where: { id },
       data: { status: 'CANCELLED' },
     })
 

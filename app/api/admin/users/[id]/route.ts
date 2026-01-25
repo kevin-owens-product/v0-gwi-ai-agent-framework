@@ -22,85 +22,89 @@ export async function GET(
 
     const { id } = await params
 
-    const user = await prisma.user.findUnique({
-      where: { id },
-      include: {
-        memberships: {
-          include: {
-            organization: {
-              select: {
-                id: true,
-                name: true,
-                slug: true,
-                planTier: true,
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+    const now = new Date()
+
+    // Run all queries in parallel to avoid N+1 problem
+    const [user, activeBan, banHistory, activeSessions, auditLogs] = await Promise.all([
+      // Main user query with relations
+      prisma.user.findUnique({
+        where: { id },
+        include: {
+          memberships: {
+            include: {
+              organization: {
+                select: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                  planTier: true,
+                },
               },
             },
           },
-        },
-        _count: {
-          select: {
-            sessions: true,
+          _count: {
+            select: {
+              sessions: true,
+            },
+          },
+          sessions: {
+            select: {
+              id: true,
+              expires: true,
+              ipAddress: true,
+              userAgent: true,
+            },
+            orderBy: { expires: "desc" },
+            take: 5,
           },
         },
-        sessions: {
-          select: {
-            id: true,
-            expires: true,
-            ipAddress: true,
-            userAgent: true,
-          },
-          orderBy: { expires: "desc" },
-          take: 5,
+      }),
+      // Get active ban
+      prisma.userBan.findFirst({
+        where: {
+          userId: id,
+          OR: [
+            { expiresAt: null },
+            { expiresAt: { gt: now } },
+          ],
         },
-      },
-    })
+      }),
+      // Get ban history
+      prisma.userBan.findMany({
+        where: { userId: id },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      }),
+      // Count active sessions
+      prisma.session.count({
+        where: {
+          userId: id,
+          expires: { gte: now },
+        },
+      }),
+      // Get audit logs
+      prisma.platformAuditLog.findMany({
+        where: { targetUserId: id },
+        orderBy: { timestamp: "desc" },
+        take: 10,
+      }),
+    ])
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    // Get ban status
-    const activeBan = await prisma.userBan.findFirst({
-      where: {
-        userId: id,
-        OR: [
-          { expiresAt: null },
-          { expiresAt: { gt: new Date() } },
-        ],
-      },
-    })
-
-    // Get ban history
-    const banHistory = await prisma.userBan.findMany({
-      where: { userId: id },
-      orderBy: { createdAt: "desc" },
-      take: 10,
-    })
-
-    // Get recent activity - count active sessions (those not yet expired)
-    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-    const activeSessions = await prisma.session.count({
-      where: {
-        userId: id,
-        expires: { gte: new Date() },
-      },
-    })
-
-    // Get user's agent runs count across all orgs
+    // Get agent runs count (depends on user.memberships, so runs after)
     const orgIds = user.memberships.map(m => m.organization.id)
-    const agentRunsCount = await prisma.agentRun.count({
-      where: {
-        orgId: { in: orgIds },
-        startedAt: { gte: thirtyDaysAgo },
-      },
-    })
-
-    // Get audit log entries for this user
-    const auditLogs = await prisma.platformAuditLog.findMany({
-      where: { targetUserId: id },
-      orderBy: { timestamp: "desc" },
-      take: 10,
-    })
+    const agentRunsCount = orgIds.length > 0
+      ? await prisma.agentRun.count({
+          where: {
+            orgId: { in: orgIds },
+            startedAt: { gte: thirtyDaysAgo },
+          },
+        })
+      : 0
 
     return NextResponse.json({
       user: {

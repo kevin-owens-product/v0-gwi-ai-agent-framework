@@ -1,12 +1,13 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getValidatedOrgId } from '@/lib/tenant'
 
 /**
  * GET /api/v1/organization/members/me
  * Get current user's membership in the organization
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const session = await auth()
 
@@ -14,13 +15,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get organization ID from header
-    const orgId = request.headers.get('x-organization-id')
+    // Get validated organization ID (validates user membership)
+    const orgId = await getValidatedOrgId(request, session.user.id)
 
     if (!orgId) {
       return NextResponse.json(
-        { error: 'Organization ID required in X-Organization-Id header' },
-        { status: 400 }
+        { error: 'Organization not found or access denied' },
+        { status: 403 }
       )
     }
 
