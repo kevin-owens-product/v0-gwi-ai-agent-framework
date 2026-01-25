@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
+import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
 import { cookies } from "next/headers"
 
 export async function GET(
@@ -154,6 +155,19 @@ export async function PATCH(
     const tenant = await prisma.organization.update({
       where: { id },
       data: updateData,
+    })
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.TENANT_UPDATE,
+      resourceType: AdminResourceType.TENANT,
+      resourceId: id,
+      description: `Updated tenant: ${tenant.name}`,
+      metadata: {
+        updatedFields: Object.keys(updateData),
+        tenantSlug: tenant.slug,
+      },
     })
 
     return NextResponse.json({ tenant })

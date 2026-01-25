@@ -3,11 +3,33 @@
 import { Bell, Search, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { useState, useEffect } from "react"
 import { MobileSidebar } from "./mobile-sidebar"
+import { StatusBadge, type SystemStatus } from "@/components/status"
+import Link from "next/link"
 
 export function DashboardHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [systemStatus, setSystemStatus] = useState<SystemStatus>("operational")
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const response = await fetch("/api/status")
+        const data = await response.json()
+        setSystemStatus(data.status || "operational")
+      } catch (error) {
+        // Default to operational if fetch fails
+        setSystemStatus("operational")
+      }
+    }
+
+    fetchStatus()
+    // Refresh status every 5 minutes
+    const interval = setInterval(fetchStatus, 5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <>
@@ -30,6 +52,10 @@ export function DashboardHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          <Link href="/status" className="hidden sm:block">
+            <StatusBadge status={systemStatus} size="sm" showLabel={systemStatus !== "operational"} />
+          </Link>
+          <ThemeToggle />
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-4 w-4" />
             <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-accent" />

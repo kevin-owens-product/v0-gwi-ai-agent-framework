@@ -1,0 +1,458 @@
+/**
+ * @prompt-id forge-v4.1:feature:scheduled-exports:009
+ * @generated-at 2026-01-25T00:00:00Z
+ * @model claude-opus-4.5
+ */
+
+"use client"
+
+import { useState, useCallback } from "react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { toast } from "sonner"
+import {
+  Plus,
+  MoreHorizontal,
+  Play,
+  Pause,
+  Pencil,
+  Trash2,
+  Loader2,
+  Clock,
+  FileText,
+  FileSpreadsheet,
+  FileImage,
+  FileJson,
+  File,
+  Calendar,
+  CheckCircle2,
+  XCircle,
+  History,
+  Mail,
+} from "lucide-react"
+import { PageTracker } from "@/components/tracking/PageTracker"
+import { ScheduledExportForm } from "@/components/scheduled-exports/ScheduledExportForm"
+import { ExportHistoryTable } from "@/components/scheduled-exports/ExportHistoryTable"
+import { describeCronExpression } from "@/components/scheduled-exports/CronScheduleBuilder"
+import {
+  useScheduledExports,
+  useScheduledExport,
+  type ScheduledExport,
+  type ExportFormat,
+  type ExportStatus,
+  type CreateScheduledExportInput,
+  type UpdateScheduledExportInput,
+} from "@/hooks/use-scheduled-exports"
+
+const FORMAT_ICONS: Record<ExportFormat, React.ReactNode> = {
+  PDF: <FileText className="h-4 w-4" />,
+  EXCEL: <FileSpreadsheet className="h-4 w-4" />,
+  CSV: <File className="h-4 w-4" />,
+  POWERPOINT: <FileText className="h-4 w-4" />,
+  PNG: <FileImage className="h-4 w-4" />,
+  JSON: <FileJson className="h-4 w-4" />,
+}
+
+const STATUS_CONFIG: Record<ExportStatus | 'never', { label: string; className: string; icon: React.ReactNode }> = {
+  PENDING: {
+    label: 'Pending',
+    className: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20',
+    icon: <Clock className="h-3 w-3" />,
+  },
+  PROCESSING: {
+    label: 'Running',
+    className: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+    icon: <Loader2 className="h-3 w-3 animate-spin" />,
+  },
+  COMPLETED: {
+    label: 'Success',
+    className: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+    icon: <CheckCircle2 className="h-3 w-3" />,
+  },
+  FAILED: {
+    label: 'Failed',
+    className: 'bg-red-500/10 text-red-600 border-red-500/20',
+    icon: <XCircle className="h-3 w-3" />,
+  },
+  never: {
+    label: 'Never Run',
+    className: 'bg-muted text-muted-foreground border-muted',
+    icon: <Clock className="h-3 w-3" />,
+  },
+}
+
+function formatDate(dateString: string | null): string {
+  if (!dateString) return 'Never'
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+function formatRelativeDate(dateString: string | null): string {
+  if (!dateString) return 'Never'
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = date.getTime() - now.getTime()
+  const absDiffMs = Math.abs(diffMs)
+
+  const isPast = diffMs < 0
+
+  if (absDiffMs < 60000) return isPast ? 'Just now' : 'In less than a minute'
+  if (absDiffMs < 3600000) {
+    const mins = Math.round(absDiffMs / 60000)
+    return isPast ? `${mins}m ago` : `In ${mins}m`
+  }
+  if (absDiffMs < 86400000) {
+    const hours = Math.round(absDiffMs / 3600000)
+    return isPast ? `${hours}h ago` : `In ${hours}h`
+  }
+  const days = Math.round(absDiffMs / 86400000)
+  return isPast ? `${days}d ago` : `In ${days}d`
+}
+
+export default function ScheduledExportsPage() {
+  const [formOpen, setFormOpen] = useState(false)
+  const [editingExport, setEditingExport] = useState<ScheduledExport | null>(null)
+  const [deleteExport, setDeleteExport] = useState<ScheduledExport | null>(null)
+  const [historyExportId, setHistoryExportId] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
+
+  const {
+    exports,
+    isLoading,
+    createExport,
+    updateExport,
+    deleteExport: removeExport,
+    runExport,
+    refresh,
+  } = useScheduledExports({
+    status: statusFilter === 'all' ? undefined : statusFilter,
+  })
+
+  const { export: historyExportDetails, isLoading: historyLoading } = useScheduledExport(historyExportId)
+
+  const handleCreate = useCallback(async (data: CreateScheduledExportInput | UpdateScheduledExportInput) => {
+    setIsSubmitting(true)
+    try {
+      await createExport(data as CreateScheduledExportInput)
+      toast.success('Scheduled export created')
+      setFormOpen(false)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to create export')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [createExport])
+
+  const handleUpdate = useCallback(async (data: CreateScheduledExportInput | UpdateScheduledExportInput) => {
+    if (!editingExport) return
+    setIsSubmitting(true)
+    try {
+      await updateExport(editingExport.id, data as UpdateScheduledExportInput)
+      toast.success('Scheduled export updated')
+      setEditingExport(null)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to update export')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [editingExport, updateExport])
+
+  const handleDelete = useCallback(async () => {
+    if (!deleteExport) return
+    try {
+      await removeExport(deleteExport.id)
+      toast.success('Scheduled export deleted')
+      setDeleteExport(null)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to delete export')
+    }
+  }, [deleteExport, removeExport])
+
+  const handleToggleActive = useCallback(async (exportItem: ScheduledExport) => {
+    try {
+      await updateExport(exportItem.id, { isActive: !exportItem.isActive })
+      toast.success(exportItem.isActive ? 'Export paused' : 'Export activated')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to update export')
+    }
+  }, [updateExport])
+
+  const handleRunNow = useCallback(async (exportItem: ScheduledExport) => {
+    try {
+      await runExport(exportItem.id)
+      toast.success('Export started')
+      refresh()
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to start export')
+    }
+  }, [runExport, refresh])
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-6 max-w-6xl">
+      <PageTracker pageName="Settings - Scheduled Exports" metadata={{ totalExports: exports.length }} />
+
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold">Scheduled Exports</h1>
+        <p className="text-muted-foreground">
+          Set up automatic exports of reports, dashboards, and data on a recurring schedule
+        </p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Your Scheduled Exports</CardTitle>
+              <CardDescription>
+                Manage automatic exports that run on a schedule
+              </CardDescription>
+            </div>
+            <Button onClick={() => setFormOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              New Export
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* Filters */}
+          <Tabs value={statusFilter} onValueChange={(v) => setStatusFilter(v as typeof statusFilter)} className="mb-4">
+            <TabsList>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="active">Active</TabsTrigger>
+              <TabsTrigger value="inactive">Paused</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {exports.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+              <Calendar className="h-12 w-12 mb-4 opacity-50" />
+              <p className="font-medium">No scheduled exports</p>
+              <p className="text-sm">Create your first scheduled export to get started</p>
+              <Button className="mt-4" onClick={() => setFormOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Create Export
+              </Button>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Schedule</TableHead>
+                  <TableHead>Format</TableHead>
+                  <TableHead>Last Run</TableHead>
+                  <TableHead>Next Run</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="w-20"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {exports.map((exportItem) => {
+                  const lastStatus = exportItem.lastStatus || 'never'
+                  const statusConfig = STATUS_CONFIG[lastStatus]
+                  return (
+                    <TableRow key={exportItem.id}>
+                      <TableCell>
+                        <div>
+                          <p className="font-medium">{exportItem.name}</p>
+                          <p className="text-xs text-muted-foreground capitalize">
+                            {exportItem.entityType}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">
+                            {describeCronExpression(exportItem.schedule)}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          {FORMAT_ICONS[exportItem.format]}
+                          <span>{exportItem.format}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {formatRelativeDate(exportItem.lastRunAt)}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {exportItem.isActive
+                          ? formatRelativeDate(exportItem.nextRunAt)
+                          : <span className="text-amber-500">Paused</span>}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className={statusConfig.className}>
+                            {statusConfig.icon}
+                            <span className="ml-1">{statusConfig.label}</span>
+                          </Badge>
+                          {exportItem.recipients.length > 0 && (
+                            <Badge variant="secondary" className="text-xs">
+                              <Mail className="h-3 w-3 mr-1" />
+                              {exportItem.recipients.length}
+                            </Badge>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleRunNow(exportItem)}>
+                              <Play className="mr-2 h-4 w-4" />
+                              Run Now
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setHistoryExportId(exportItem.id)}>
+                              <History className="mr-2 h-4 w-4" />
+                              View History
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => setEditingExport(exportItem)}>
+                              <Pencil className="mr-2 h-4 w-4" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleToggleActive(exportItem)}>
+                              {exportItem.isActive ? (
+                                <>
+                                  <Pause className="mr-2 h-4 w-4" />
+                                  Pause
+                                </>
+                              ) : (
+                                <>
+                                  <Play className="mr-2 h-4 w-4" />
+                                  Activate
+                                </>
+                              )}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              className="text-destructive"
+                              onClick={() => setDeleteExport(exportItem)}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Create Form */}
+      <ScheduledExportForm
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        onSubmit={handleCreate}
+        isLoading={isSubmitting}
+      />
+
+      {/* Edit Form */}
+      <ScheduledExportForm
+        open={!!editingExport}
+        onOpenChange={(open) => !open && setEditingExport(null)}
+        export={editingExport}
+        onSubmit={handleUpdate}
+        isLoading={isSubmitting}
+      />
+
+      {/* Delete Confirmation */}
+      <AlertDialog open={!!deleteExport} onOpenChange={() => setDeleteExport(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Scheduled Export</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete &quot;{deleteExport?.name}&quot;? This will also delete all export history. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* History Sheet */}
+      <Sheet open={!!historyExportId} onOpenChange={(open) => !open && setHistoryExportId(null)}>
+        <SheetContent className="w-[600px] sm:max-w-[600px]">
+          <SheetHeader>
+            <SheetTitle>Export History</SheetTitle>
+            <SheetDescription>
+              {historyExportDetails?.name || 'Loading...'}
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-6">
+            {historyLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
+            ) : historyExportDetails ? (
+              <ExportHistoryTable history={historyExportDetails.exportHistory || []} />
+            ) : null}
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  )
+}

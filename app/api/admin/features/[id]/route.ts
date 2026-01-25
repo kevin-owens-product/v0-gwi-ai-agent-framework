@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
+import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
 import { cookies } from "next/headers"
 
 export async function GET(
@@ -97,6 +98,20 @@ export async function PATCH(
       data: body,
     })
 
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.FEATURE_FLAG_UPDATE,
+      resourceType: AdminResourceType.FEATURE_FLAG,
+      resourceId: id,
+      description: `Updated feature flag: ${flag.name}`,
+      metadata: {
+        flagKey: flag.key,
+        isEnabled: flag.isEnabled,
+        updatedFields: Object.keys(body),
+      },
+    })
+
     return NextResponse.json({ flag })
   } catch (error) {
     console.error("Update feature flag error:", error)
@@ -126,8 +141,26 @@ export async function DELETE(
 
     const { id } = await params
 
+    // Get flag info before deletion for logging
+    const flagToDelete = await prisma.featureFlag.findUnique({
+      where: { id },
+      select: { key: true, name: true },
+    })
+
     await prisma.featureFlag.delete({
       where: { id },
+    })
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.FEATURE_FLAG_DELETE,
+      resourceType: AdminResourceType.FEATURE_FLAG,
+      resourceId: id,
+      description: `Deleted feature flag: ${flagToDelete?.name || 'Unknown'}`,
+      metadata: {
+        deletedFlagKey: flagToDelete?.key,
+      },
     })
 
     return NextResponse.json({ success: true })

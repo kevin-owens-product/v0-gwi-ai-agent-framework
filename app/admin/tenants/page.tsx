@@ -36,8 +36,8 @@ import {
   Network,
   GitBranch,
   Trash2,
-  Settings,
-  AlertTriangle,
+  CreditCard,
+  FolderTree,
 } from "lucide-react"
 import Link from "next/link"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
@@ -328,6 +328,73 @@ export default function TenantsPage() {
     }
   }
 
+  const handleBulkChangePlan = async (ids: string[], planTier: string) => {
+    try {
+      const response = await fetch("/api/admin/tenants/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "updatePlan",
+          tenantIds: ids,
+          data: { planTier },
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk plan change failed")
+      }
+      fetchTenants()
+    } catch (error) {
+      console.error("Bulk plan change failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk plan change failed")
+    }
+  }
+
+  const handleBulkEnableHierarchy = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/tenants/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "enableHierarchy",
+          tenantIds: ids,
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk enable hierarchy failed")
+      }
+      fetchTenants()
+    } catch (error) {
+      console.error("Bulk enable hierarchy failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk enable hierarchy failed")
+    }
+  }
+
+  const handleBulkDisableHierarchy = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/tenants/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "disableHierarchy",
+          tenantIds: ids,
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk disable hierarchy failed")
+      }
+      fetchTenants()
+    } catch (error) {
+      console.error("Bulk disable hierarchy failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk disable hierarchy failed")
+    }
+  }
+
   const handleCreateTenant = async () => {
     if (!newTenant.name) return
     setIsSubmitting(true)
@@ -524,6 +591,43 @@ export default function TenantsPage() {
       onClick: handleBulkUnsuspend,
       confirmTitle: "Unsuspend Selected Organizations",
       confirmDescription: "Are you sure you want to unsuspend all selected organizations?",
+    },
+    {
+      label: "Upgrade to Starter",
+      icon: <CreditCard className="h-4 w-4" />,
+      onClick: (ids) => handleBulkChangePlan(ids, "STARTER"),
+      separator: true,
+      confirmTitle: "Change Plan to Starter",
+      confirmDescription: "Are you sure you want to change the plan to Starter for all selected organizations?",
+    },
+    {
+      label: "Upgrade to Professional",
+      icon: <CreditCard className="h-4 w-4" />,
+      onClick: (ids) => handleBulkChangePlan(ids, "PROFESSIONAL"),
+      confirmTitle: "Change Plan to Professional",
+      confirmDescription: "Are you sure you want to upgrade all selected organizations to Professional?",
+    },
+    {
+      label: "Upgrade to Enterprise",
+      icon: <CreditCard className="h-4 w-4" />,
+      onClick: (ids) => handleBulkChangePlan(ids, "ENTERPRISE"),
+      confirmTitle: "Change Plan to Enterprise",
+      confirmDescription: "Are you sure you want to upgrade all selected organizations to Enterprise?",
+    },
+    {
+      label: "Enable Hierarchy",
+      icon: <FolderTree className="h-4 w-4" />,
+      onClick: handleBulkEnableHierarchy,
+      separator: true,
+      confirmTitle: "Enable Hierarchy",
+      confirmDescription: "Are you sure you want to enable hierarchy features for all selected organizations?",
+    },
+    {
+      label: "Disable Hierarchy",
+      icon: <FolderTree className="h-4 w-4" />,
+      onClick: handleBulkDisableHierarchy,
+      confirmTitle: "Disable Hierarchy",
+      confirmDescription: "Are you sure you want to disable hierarchy features? Organizations with child organizations cannot be disabled.",
     },
     {
       label: "Delete All",

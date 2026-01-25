@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { validateSuperAdminSession, banUser, liftUserBan } from "@/lib/super-admin"
+import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
+import { prisma } from "@/lib/db"
 
 export async function POST(
   request: NextRequest,
@@ -30,6 +32,12 @@ export async function POST(
       )
     }
 
+    // Get user info for logging
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: { name: true, email: true },
+    })
+
     const ban = await banUser({
       userId: id,
       orgId,
@@ -37,6 +45,22 @@ export async function POST(
       bannedBy: session.admin.id,
       banType,
       expiresAt: expiresAt ? new Date(expiresAt) : undefined,
+    })
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.USER_BAN,
+      resourceType: AdminResourceType.USER,
+      resourceId: id,
+      description: `Banned user: ${user?.name || user?.email || 'Unknown'}`,
+      metadata: {
+        reason,
+        banType,
+        expiresAt,
+        userEmail: user?.email,
+        orgId,
+      },
     })
 
     return NextResponse.json({ ban })

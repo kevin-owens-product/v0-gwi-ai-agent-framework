@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 import { Bell, Search, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { useAdmin } from "@/components/providers/admin-provider"
 
 const pageTitles: Record<string, string> = {
@@ -44,6 +45,8 @@ export function AdminHeader() {
             className="w-64 pl-9"
           />
         </div>
+
+        <ThemeToggle />
 
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />

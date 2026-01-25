@@ -90,6 +90,12 @@ export const PERMISSIONS = {
   // Audit
   'audit:read': 'View audit logs',
 
+  // Compliance / Data Exports
+  'compliance:view': 'View compliance data',
+  'data-exports:request': 'Request data exports',
+  'data-exports:download': 'Download data exports',
+  'data-exports:manage': 'Manage all data exports',
+
   // Admin
   'admin:*': 'Full admin access',
 
@@ -158,6 +164,8 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'integrations:read', 'integrations:write', 'integrations:delete',
     'settings:read', 'settings:manage',
     'audit:read',
+    // Compliance / Data Exports permissions for ADMIN
+    'compliance:view', 'data-exports:request', 'data-exports:download', 'data-exports:manage',
     // Hierarchy permissions for ADMIN
     'hierarchy:read', 'hierarchy:write',
     'relationships:read', 'relationships:write', 'relationships:approve',
@@ -183,6 +191,8 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'apiKeys:read',
     'analytics:read',
     'integrations:read',
+    // Compliance / Data Exports permissions for MEMBER
+    'compliance:view', 'data-exports:request', 'data-exports:download',
     // Hierarchy permissions for MEMBER
     'hierarchy:read',
     'relationships:read',
@@ -202,6 +212,8 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'memory:read',
     'insights:read',
     'analytics:read',
+    // Compliance / Data Exports permissions for VIEWER (can only view own exports)
+    'data-exports:request', 'data-exports:download',
     // Hierarchy permissions for VIEWER
     'hierarchy:read',
     'sharing:read',

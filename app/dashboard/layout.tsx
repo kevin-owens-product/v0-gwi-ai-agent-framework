@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db"
 import { cookies } from "next/headers"
 import { DashboardSidebar } from "@/components/dashboard/sidebar"
 import { DashboardHeader } from "@/components/dashboard/header"
+import { DashboardShell } from "@/components/dashboard/dashboard-shell"
 import { OrganizationProvider } from "@/components/providers/organization-provider"
 
 export default async function DashboardLayout({
@@ -79,13 +80,15 @@ export default async function DashboardLayout({
         image: session.user.image || undefined,
       }}
     >
-      <div className="min-h-screen bg-background">
-        <DashboardSidebar />
-        <div className="lg:pl-60">
-          <DashboardHeader />
-          <main className="p-6">{children}</main>
+      <DashboardShell>
+        <div className="min-h-screen bg-background">
+          <DashboardSidebar />
+          <div className="lg:pl-60">
+            <DashboardHeader />
+            <main className="p-6">{children}</main>
+          </div>
         </div>
-      </div>
+      </DashboardShell>
     </OrganizationProvider>
   )
 }

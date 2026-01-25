@@ -54,6 +54,15 @@ export async function POST(request: NextRequest) {
       case "enableHierarchy":
         result = await bulkEnableHierarchy(tenantIds, session.adminId)
         break
+      case "disableHierarchy":
+        result = await bulkDisableHierarchy(tenantIds, session.adminId)
+        break
+      case "updateOrgType":
+        result = await bulkUpdateOrgType(tenantIds, data?.orgType, session.adminId)
+        break
+      case "sendNotification":
+        result = await bulkSendNotification(tenantIds, data, session.adminId)
+        break
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 })
     }
@@ -226,6 +235,136 @@ async function bulkEnableHierarchy(tenantIds: string[], adminId: string) {
         resourceType: "organization",
         resourceId: tenantId,
         targetOrgId: tenantId,
+      })
+
+      result.success++
+    } catch (error) {
+      result.failed++
+      result.errors.push(`${tenantId}: ${error instanceof Error ? error.message : "Unknown error"}`)
+    }
+  }
+
+  return result
+}
+
+async function bulkDisableHierarchy(tenantIds: string[], adminId: string) {
+  const result = { success: 0, failed: 0, errors: [] as string[] }
+
+  for (const tenantId of tenantIds) {
+    try {
+      // Check if tenant has children
+      const childCount = await prisma.organization.count({
+        where: { parentOrgId: tenantId },
+      })
+
+      if (childCount > 0) {
+        result.failed++
+        result.errors.push(`${tenantId}: Cannot disable - has ${childCount} child organizations`)
+        continue
+      }
+
+      await prisma.organization.update({
+        where: { id: tenantId },
+        data: { allowChildOrgs: false },
+      })
+
+      await logPlatformAudit({
+        adminId,
+        action: "bulk_disable_hierarchy",
+        resourceType: "organization",
+        resourceId: tenantId,
+        targetOrgId: tenantId,
+      })
+
+      result.success++
+    } catch (error) {
+      result.failed++
+      result.errors.push(`${tenantId}: ${error instanceof Error ? error.message : "Unknown error"}`)
+    }
+  }
+
+  return result
+}
+
+async function bulkUpdateOrgType(
+  tenantIds: string[],
+  orgType: string,
+  adminId: string
+) {
+  const result = { success: 0, failed: 0, errors: [] as string[] }
+
+  const validOrgTypes = [
+    "STANDARD", "AGENCY", "HOLDING_COMPANY", "SUBSIDIARY", "BRAND",
+    "SUB_BRAND", "DIVISION", "DEPARTMENT", "FRANCHISE", "FRANCHISEE",
+    "RESELLER", "CLIENT", "REGIONAL", "PORTFOLIO_COMPANY"
+  ]
+
+  if (!orgType || !validOrgTypes.includes(orgType)) {
+    result.errors.push(`Invalid org type: ${orgType}`)
+    result.failed = tenantIds.length
+    return result
+  }
+
+  for (const tenantId of tenantIds) {
+    try {
+      await prisma.organization.update({
+        where: { id: tenantId },
+        data: { orgType: orgType as "STANDARD" | "AGENCY" | "HOLDING_COMPANY" | "SUBSIDIARY" | "BRAND" | "SUB_BRAND" | "DIVISION" | "DEPARTMENT" | "FRANCHISE" | "FRANCHISEE" | "RESELLER" | "CLIENT" | "REGIONAL" | "PORTFOLIO_COMPANY" },
+      })
+
+      await logPlatformAudit({
+        adminId,
+        action: "bulk_update_org_type",
+        resourceType: "organization",
+        resourceId: tenantId,
+        targetOrgId: tenantId,
+        details: { orgType },
+      })
+
+      result.success++
+    } catch (error) {
+      result.failed++
+      result.errors.push(`${tenantId}: ${error instanceof Error ? error.message : "Unknown error"}`)
+    }
+  }
+
+  return result
+}
+
+async function bulkSendNotification(
+  tenantIds: string[],
+  data: { title: string; message: string; type?: string },
+  adminId: string
+) {
+  const result = { success: 0, failed: 0, errors: [] as string[] }
+
+  if (!data?.title || !data?.message) {
+    result.errors.push("title and message are required")
+    result.failed = tenantIds.length
+    return result
+  }
+
+  for (const tenantId of tenantIds) {
+    try {
+      // Create a system notification for the tenant
+      await prisma.systemNotification.create({
+        data: {
+          title: data.title,
+          message: data.message,
+          type: (data.type as "INFO" | "WARNING" | "ALERT" | "MAINTENANCE" | "FEATURE" | "PROMOTION") || "INFO",
+          targetType: "SPECIFIC_ORGS",
+          targetOrgs: [tenantId],
+          createdBy: adminId,
+        },
+      })
+
+      await logPlatformAudit({
+        adminId,
+        action: "bulk_send_notification",
+        resourceType: "organization",
+        resourceId: tenantId,
+        targetOrgId: tenantId,
+        details: { title: data.title, type: data.type || "INFO" },
       })
 
       result.success++

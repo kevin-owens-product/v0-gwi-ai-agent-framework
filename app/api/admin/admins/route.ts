@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession, hashPassword, hasSuperAdminPermission } from "@/lib/super-admin"
+import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
 import { cookies } from "next/headers"
 
 export async function GET() {
@@ -87,7 +88,7 @@ export async function POST(request: NextRequest) {
       data: {
         email,
         name,
-        passwordHash: hashPassword(password),
+        passwordHash: await hashPassword(password),
         role,
         isActive,
       },
@@ -98,6 +99,19 @@ export async function POST(request: NextRequest) {
         role: true,
         isActive: true,
         createdAt: true,
+      },
+    })
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.ADMIN_CREATE,
+      resourceType: AdminResourceType.ADMIN,
+      resourceId: admin.id,
+      description: `Created new admin: ${admin.name}`,
+      metadata: {
+        newAdminEmail: admin.email,
+        newAdminRole: admin.role,
       },
     })
 

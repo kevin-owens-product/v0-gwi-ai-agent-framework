@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession, createFeatureFlag } from "@/lib/super-admin"
+import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
 import { cookies } from "next/headers"
 
 export async function GET() {
@@ -50,6 +51,20 @@ export async function POST(request: NextRequest) {
     const flag = await createFeatureFlag({
       ...body,
       createdBy: session.admin.id,
+    })
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.FEATURE_FLAG_CREATE,
+      resourceType: AdminResourceType.FEATURE_FLAG,
+      resourceId: flag.id,
+      description: `Created feature flag: ${flag.name}`,
+      metadata: {
+        flagKey: flag.key,
+        isEnabled: flag.isEnabled,
+        rolloutPercentage: flag.rolloutPercentage,
+      },
     })
 
     return NextResponse.json({ flag })

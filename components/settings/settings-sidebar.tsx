@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { User, Building2, Users, CreditCard, Bell, Shield, Key, Palette, FileText, Zap, Webhook, Download } from "lucide-react"
+import { User, Building2, Users, CreditCard, Bell, Shield, Key, Palette, FileText, Zap, Webhook, Download, Keyboard } from "lucide-react"
 
 const settingsNav = [
   { name: "General", href: "/dashboard/settings/general", icon: Building2 },
@@ -14,6 +14,7 @@ const settingsNav = [
   { name: "Security", href: "/dashboard/settings/security", icon: Shield },
   { name: "API Keys", href: "/dashboard/settings/api-keys", icon: Key },
   { name: "Webhooks", href: "/dashboard/settings/webhooks", icon: Webhook },
+  { name: "Shortcuts", href: "/dashboard/settings/shortcuts", icon: Keyboard },
   { name: "Data Exports", href: "/dashboard/settings/security/data-exports", icon: Download },
   { name: "Audit Log", href: "/dashboard/settings/audit-log", icon: FileText },
   { name: "Appearance", href: "/dashboard/settings/appearance", icon: Palette },

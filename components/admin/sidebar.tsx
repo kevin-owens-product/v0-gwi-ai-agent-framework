@@ -42,6 +42,8 @@ import {
   Smartphone,
   UserCog,
   ChevronsUpDown,
+  Activity,
+  Mail,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAdmin } from "@/components/providers/admin-provider"
@@ -119,7 +121,7 @@ const navSections: NavSection[] = [
       { name: "Tenants", href: "/admin/tenants", icon: Building2 },
       { name: "Users", href: "/admin/users", icon: Users },
       { name: "Hierarchy", href: "/admin/hierarchy", icon: Network },
-      { name: "Health Scores", href: "/admin/health", icon: HeartPulse },
+      { name: "Health Scores", href: "/admin/health-scores", icon: HeartPulse },
     ],
   },
   {
@@ -164,6 +166,7 @@ const navSections: NavSection[] = [
     items: [
       { name: "Operations Center", href: "/admin/operations", icon: Server },
       { name: "Incidents", href: "/admin/operations/incidents", icon: AlertCircle },
+      { name: "Status Page", href: "/admin/status", icon: Activity },
       { name: "Maintenance", href: "/admin/operations/maintenance", icon: Calendar },
       { name: "Releases", href: "/admin/operations/releases", icon: Rocket },
       { name: "Capacity", href: "/admin/operations/capacity", icon: Gauge },
@@ -192,6 +195,7 @@ const navSections: NavSection[] = [
     defaultOpen: false,
     items: [
       { name: "Broadcast Center", href: "/admin/broadcast", icon: Megaphone },
+      { name: "Email Templates", href: "/admin/email-templates", icon: Mail },
       { name: "Notifications", href: "/admin/notifications", icon: Bell },
       { name: "Support Tickets", href: "/admin/support", icon: TicketCheck },
     ],
@@ -201,6 +205,7 @@ const navSections: NavSection[] = [
     defaultOpen: false,
     items: [
       { name: "System Rules", href: "/admin/rules", icon: Scale },
+      { name: "Admin Activity", href: "/admin/activity", icon: BarChart3 },
       { name: "Audit Log", href: "/admin/audit", icon: FileText },
       { name: "Admins", href: "/admin/admins", icon: Shield },
       { name: "Settings", href: "/admin/settings", icon: Settings },

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession, logPlatformAudit } from "@/lib/super-admin"
+import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
 
 export async function GET(request: NextRequest) {
   try {
@@ -120,6 +121,21 @@ export async function POST(request: NextRequest) {
       resourceType: "security_policy",
       resourceId: policy.id,
       details: { name, type, scope, enforcementMode },
+    })
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.adminId,
+      action: AdminActivityAction.SECURITY_POLICY_CREATE,
+      resourceType: AdminResourceType.SECURITY_POLICY,
+      resourceId: policy.id,
+      description: `Created security policy: ${name}`,
+      metadata: {
+        policyType: type,
+        scope,
+        enforcementMode,
+        isActive,
+      },
     })
 
     return NextResponse.json({ policy }, { status: 201 })

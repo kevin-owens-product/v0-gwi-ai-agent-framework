@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession, hashPassword, hasSuperAdminPermission } from "@/lib/super-admin"
+import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
 import { cookies } from "next/headers"
 
 export async function GET(
@@ -160,6 +161,19 @@ export async function PATCH(
       },
     })
 
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.ADMIN_UPDATE,
+      resourceType: AdminResourceType.ADMIN,
+      resourceId: id,
+      description: `Updated admin: ${admin.name}`,
+      metadata: {
+        updatedFields: Object.keys(updateData).filter(k => k !== 'passwordHash'),
+        targetAdminEmail: admin.email,
+      },
+    })
+
     return NextResponse.json({ admin })
   } catch (error) {
     console.error("Update admin error:", error)
@@ -202,8 +216,26 @@ export async function DELETE(
       )
     }
 
+    // Get admin info before deletion for logging
+    const adminToDelete = await prisma.superAdmin.findUnique({
+      where: { id },
+      select: { email: true, name: true },
+    })
+
     await prisma.superAdmin.delete({
       where: { id },
+    })
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.ADMIN_DELETE,
+      resourceType: AdminResourceType.ADMIN,
+      resourceId: id,
+      description: `Deleted admin: ${adminToDelete?.name || 'Unknown'}`,
+      metadata: {
+        deletedAdminEmail: adminToDelete?.email,
+      },
     })
 
     return NextResponse.json({ success: true })

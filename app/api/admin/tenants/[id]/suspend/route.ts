@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { validateSuperAdminSession, suspendOrganization, liftOrganizationSuspension } from "@/lib/super-admin"
+import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
+import { prisma } from "@/lib/db"
 
 export async function POST(
   request: NextRequest,
@@ -30,6 +32,12 @@ export async function POST(
       )
     }
 
+    // Get tenant info for logging
+    const tenant = await prisma.organization.findUnique({
+      where: { id },
+      select: { name: true, slug: true },
+    })
+
     const suspension = await suspendOrganization({
       orgId: id,
       reason,
@@ -37,6 +45,21 @@ export async function POST(
       suspensionType,
       expiresAt: expiresAt ? new Date(expiresAt) : undefined,
       notes,
+    })
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.TENANT_SUSPEND,
+      resourceType: AdminResourceType.TENANT,
+      resourceId: id,
+      description: `Suspended tenant: ${tenant?.name || 'Unknown'}`,
+      metadata: {
+        reason,
+        suspensionType,
+        expiresAt,
+        tenantSlug: tenant?.slug,
+      },
     })
 
     return NextResponse.json({ suspension })
@@ -68,7 +91,25 @@ export async function DELETE(
 
     const { id } = await params
 
+    // Get tenant info for logging
+    const tenant = await prisma.organization.findUnique({
+      where: { id },
+      select: { name: true, slug: true },
+    })
+
     await liftOrganizationSuspension(id, session.admin.id)
+
+    // Log admin activity
+    await logAdminActivity({
+      adminId: session.admin.id,
+      action: AdminActivityAction.TENANT_UNSUSPEND,
+      resourceType: AdminResourceType.TENANT,
+      resourceId: id,
+      description: `Lifted suspension for tenant: ${tenant?.name || 'Unknown'}`,
+      metadata: {
+        tenantSlug: tenant?.slug,
+      },
+    })
 
     return NextResponse.json({ success: true })
   } catch (error) {

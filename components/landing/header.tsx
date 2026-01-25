@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export function LandingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -79,6 +80,7 @@ export function LandingHeader() {
             </nav>
           </div>
           <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle variant="ghost" />
             <Link href="/login">
               <Button variant="ghost" size="sm">
                 Sign in
@@ -139,6 +141,10 @@ export function LandingHeader() {
               Docs
             </Link>
             <div className="flex flex-col gap-2 pt-4 border-t border-border">
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <ThemeToggle variant="outline" size="sm" />
+              </div>
               <Link href="/login">
                 <Button variant="ghost" className="w-full">
                   Sign in

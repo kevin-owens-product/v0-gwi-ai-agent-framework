@@ -14,6 +14,7 @@ export type AuditAction =
   | 'join'
   | 'leave'
   | 'analyze'
+  | 'acknowledge'
 
 export type AuditResourceType =
   | 'agent'
@@ -37,6 +38,9 @@ export type AuditResourceType =
   | 'team_member'
   | 'team_invitation'
   | 'memory'
+  | 'comment'
+  | 'shared_link'
+  | 'alert'
 
 export interface AuditEvent {
   orgId: string

@@ -35,7 +35,9 @@ import {
   Mail,
   Plus,
   Trash2,
-  UserX,
+  KeyRound,
+  LogOut,
+  BadgeCheck,
 } from "lucide-react"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
@@ -277,6 +279,73 @@ export default function UsersPage() {
     }
   }
 
+  const handleBulkVerifyEmail = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/users/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "verifyEmail",
+          userIds: ids,
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk verify failed")
+      }
+      fetchUsers()
+    } catch (error) {
+      console.error("Bulk verify failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk verify failed")
+    }
+  }
+
+  const handleBulkResetPassword = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/users/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "resetPassword",
+          userIds: ids,
+          data: { sendEmail: true },
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk reset password failed")
+      }
+      fetchUsers()
+    } catch (error) {
+      console.error("Bulk reset password failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk reset password failed")
+    }
+  }
+
+  const handleBulkRevokeSessions = async (ids: string[]) => {
+    try {
+      const response = await fetch("/api/admin/users/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "revokeAllSessions",
+          userIds: ids,
+        }),
+      })
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Bulk revoke sessions failed")
+      }
+      fetchUsers()
+    } catch (error) {
+      console.error("Bulk revoke sessions failed:", error)
+      alert(error instanceof Error ? error.message : "Bulk revoke sessions failed")
+    }
+  }
+
   const getInitials = (name: string | null, email: string) => {
     if (name) {
       return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
@@ -483,6 +552,28 @@ export default function UsersPage() {
       onClick: handleBulkUnban,
       confirmTitle: "Unban Selected Users",
       confirmDescription: "Are you sure you want to unban all selected users?",
+    },
+    {
+      label: "Verify Emails",
+      icon: <BadgeCheck className="h-4 w-4" />,
+      onClick: handleBulkVerifyEmail,
+      separator: true,
+      confirmTitle: "Verify Selected Emails",
+      confirmDescription: "Are you sure you want to mark all selected users as email verified?",
+    },
+    {
+      label: "Reset Passwords",
+      icon: <KeyRound className="h-4 w-4" />,
+      onClick: handleBulkResetPassword,
+      confirmTitle: "Reset Passwords",
+      confirmDescription: "Are you sure you want to reset passwords for all selected users? They will receive new temporary passwords.",
+    },
+    {
+      label: "Revoke Sessions",
+      icon: <LogOut className="h-4 w-4" />,
+      onClick: handleBulkRevokeSessions,
+      confirmTitle: "Revoke All Sessions",
+      confirmDescription: "Are you sure you want to revoke all active sessions for selected users? They will be logged out immediately.",
     },
     {
       label: "Delete Selected",

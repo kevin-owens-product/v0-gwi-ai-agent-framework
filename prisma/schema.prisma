@@ -442,6 +442,17 @@ model User {
   auditLogs     AuditLog[]
   agentsCreated Agent[]
   templatesCreated Template[]
+
+  // New feature relations
+  savedViews         SavedView[]
+  scheduledExports   ScheduledExport[]
+  comments           Comment[]
+  sharedLinks        SharedLink[]
+  customAlerts       CustomAlert[]
+  feedbackItems      FeedbackItem[]
+  npsResponses       NPSResponse[]
+  preferences        UserPreferences?
+  onboardingProgress OnboardingProgress[]
 }
 
 model Account {
@@ -2980,4 +2991,763 @@ enum BroadcastStatus {
   SENDING
   SENT
   CANCELLED
+}
+
+// ==================== USER PORTAL FEATURES ====================
+
+// Saved Views & Favorites
+model SavedView {
+  id          String        @id @default(cuid())
+  userId      String
+  orgId       String
+  name        String
+  description String?
+  type        SavedViewType
+  entityType  String        // dashboard, report, agent, audience, etc.
+  entityId    String
+  isPinned    Boolean       @default(false)
+  sortOrder   Int           @default(0)
+  metadata    Json          @default("{}")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, entityType, entityId])
+  @@index([userId])
+  @@index([orgId])
+  @@index([type])
+  @@index([isPinned])
+}
+
+enum SavedViewType {
+  FAVORITE
+  RECENT
+  PINNED
+}
+
+// Scheduled Reports & Exports
+model ScheduledExport {
+  id              String              @id @default(cuid())
+  orgId           String
+  userId          String
+  name            String
+  description     String?
+  entityType      String              // report, dashboard, audience, crosstab
+  entityId        String
+  format          ExportFormat
+  schedule        String              // Cron expression
+  timezone        String              @default("UTC")
+  recipients      String[]            @default([])
+  isActive        Boolean             @default(true)
+  lastRunAt       DateTime?
+  nextRunAt       DateTime?
+  lastStatus      ExportStatus?
+  lastError       String?
+  metadata        Json                @default("{}")
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exportHistory   ExportHistory[]
+
+  @@index([orgId])
+  @@index([userId])
+  @@index([isActive])
+  @@index([nextRunAt])
+}
+
+model ExportHistory {
+  id                String          @id @default(cuid())
+  scheduledExportId String
+  status            ExportStatus
+  format            ExportFormat
+  fileUrl           String?
+  fileSize          Int?
+  error             String?
+  startedAt         DateTime        @default(now())
+  completedAt       DateTime?
+  recipientCount    Int             @default(0)
+  metadata          Json            @default("{}")
+
+  scheduledExport   ScheduledExport @relation(fields: [scheduledExportId], references: [id], onDelete: Cascade)
+
+  @@index([scheduledExportId])
+  @@index([status])
+  @@index([startedAt])
+}
+
+enum ExportFormat {
+  PDF
+  EXCEL
+  CSV
+  POWERPOINT
+  PNG
+  JSON
+}
+
+enum ExportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+// Collaboration & Sharing
+model Comment {
+  id          String      @id @default(cuid())
+  orgId       String
+  userId      String
+  entityType  String      // report, dashboard, insight, etc.
+  entityId    String
+  parentId    String?     // For threaded replies
+  content     String      @db.Text
+  mentions    String[]    @default([]) // User IDs mentioned
+  isResolved  Boolean     @default(false)
+  resolvedBy  String?
+  resolvedAt  DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent      Comment?    @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     Comment[]   @relation("CommentReplies")
+
+  @@index([orgId])
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([parentId])
+}
+
+model SharedLink {
+  id          String          @id @default(cuid())
+  orgId       String
+  userId      String
+  entityType  String          // report, dashboard
+  entityId    String
+  token       String          @unique
+  password    String?         // Optional password protection
+  expiresAt   DateTime?
+  maxViews    Int?
+  viewCount   Int             @default(0)
+  allowedEmails String[]      @default([])
+  permissions SharedLinkPermission @default(VIEW)
+  isActive    Boolean         @default(true)
+  lastViewedAt DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  views       SharedLinkView[]
+
+  @@index([orgId])
+  @@index([token])
+  @@index([entityType, entityId])
+  @@index([isActive])
+}
+
+model SharedLinkView {
+  id            String      @id @default(cuid())
+  sharedLinkId  String
+  viewerEmail   String?
+  viewerIp      String?
+  userAgent     String?
+  viewedAt      DateTime    @default(now())
+
+  sharedLink    SharedLink  @relation(fields: [sharedLinkId], references: [id], onDelete: Cascade)
+
+  @@index([sharedLinkId])
+  @@index([viewedAt])
+}
+
+enum SharedLinkPermission {
+  VIEW
+  COMMENT
+  DOWNLOAD
+}
+
+// Custom Alerts & Monitoring
+model CustomAlert {
+  id              String          @id @default(cuid())
+  orgId           String
+  userId          String
+  name            String
+  description     String?
+  entityType      String          // metric, audience, brand, report
+  entityId        String?
+  condition       Json            // { metric: "sentiment", operator: "lt", value: 60 }
+  channels        AlertChannel[]  @default([EMAIL])
+  recipients      String[]        @default([])
+  webhookUrl      String?
+  isActive        Boolean         @default(true)
+  cooldownMinutes Int             @default(60) // Minimum time between alerts
+  lastTriggeredAt DateTime?
+  triggerCount    Int             @default(0)
+  metadata        Json            @default("{}")
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  alertHistory    AlertHistory[]
+
+  @@index([orgId])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([isActive])
+}
+
+model AlertHistory {
+  id            String        @id @default(cuid())
+  alertId       String
+  triggeredAt   DateTime      @default(now())
+  condition     Json          // Snapshot of condition at trigger time
+  currentValue  Json          // The value that triggered the alert
+  previousValue Json?         // Previous value for comparison
+  status        AlertStatus   @default(TRIGGERED)
+  notifiedVia   AlertChannel[]
+  acknowledgedBy String?
+  acknowledgedAt DateTime?
+  resolvedAt    DateTime?
+  notes         String?
+
+  alert         CustomAlert   @relation(fields: [alertId], references: [id], onDelete: Cascade)
+
+  @@index([alertId])
+  @@index([triggeredAt])
+  @@index([status])
+}
+
+enum AlertChannel {
+  EMAIL
+  SLACK
+  WEBHOOK
+  IN_APP
+  SMS
+}
+
+enum AlertStatus {
+  TRIGGERED
+  ACKNOWLEDGED
+  RESOLVED
+  IGNORED
+}
+
+// Data Connectors Hub
+model DataConnector {
+  id              String              @id @default(cuid())
+  orgId           String
+  name            String
+  description     String?
+  type            DataConnectorType
+  provider        String              // google_analytics, salesforce, etc.
+  credentials     Json                @default("{}") // Encrypted credentials
+  config          Json                @default("{}") // Connection config
+  syncSchedule    String?             // Cron expression
+  lastSyncAt      DateTime?
+  lastSyncStatus  DataSyncStatus?
+  isActive        Boolean             @default(true)
+  errorCount      Int                 @default(0)
+  metadata        Json                @default("{}")
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  syncLogs        DataSyncLog[]
+
+  @@unique([orgId, name])
+  @@index([orgId])
+  @@index([type])
+  @@index([provider])
+  @@index([isActive])
+}
+
+model DataSyncLog {
+  id              String          @id @default(cuid())
+  connectorId     String
+  status          DataSyncStatus
+  recordsProcessed Int            @default(0)
+  recordsFailed   Int             @default(0)
+  bytesTransferred Int            @default(0)
+  startedAt       DateTime        @default(now())
+  completedAt     DateTime?
+  error           String?
+  metadata        Json            @default("{}")
+
+  connector       DataConnector   @relation(fields: [connectorId], references: [id], onDelete: Cascade)
+
+  @@index([connectorId])
+  @@index([status])
+  @@index([startedAt])
+}
+
+enum DataConnectorType {
+  ANALYTICS
+  CRM
+  SOCIAL
+  ADVERTISING
+  DATABASE
+  FILE
+  API
+}
+
+enum DataSyncStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+// ==================== ADMIN PORTAL FEATURES ====================
+
+// Customer Health Scoring
+model CustomerHealthScore {
+  id                String      @id @default(cuid())
+  orgId             String
+  overallScore      Int         // 0-100
+  usageScore        Int         // 0-100
+  engagementScore   Int         // 0-100
+  supportScore      Int         // 0-100
+  paymentScore      Int         // 0-100
+  growthScore       Int         // 0-100
+  churnRisk         ChurnRisk
+  lastActivityAt    DateTime?
+  monthlyActiveUsers Int        @default(0)
+  weeklyActiveUsers Int         @default(0)
+  featureAdoption   Json        @default("{}") // { feature: percentAdopted }
+  trendsData        Json        @default("{}") // Historical trend data
+  calculatedAt      DateTime    @default(now())
+  nextCalculationAt DateTime?
+  metadata          Json        @default("{}")
+
+  @@unique([orgId, calculatedAt])
+  @@index([orgId])
+  @@index([overallScore])
+  @@index([churnRisk])
+  @@index([calculatedAt])
+}
+
+enum ChurnRisk {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// Revenue & Billing Analytics
+model RevenueMetric {
+  id              String          @id @default(cuid())
+  date            DateTime
+  period          MetricPeriod
+  mrr             Decimal         @db.Decimal(12, 2)
+  arr             Decimal         @db.Decimal(12, 2)
+  newMrr          Decimal         @db.Decimal(12, 2)
+  expansionMrr    Decimal         @db.Decimal(12, 2)
+  contractionMrr  Decimal         @db.Decimal(12, 2)
+  churnMrr        Decimal         @db.Decimal(12, 2)
+  netNewMrr       Decimal         @db.Decimal(12, 2)
+  totalCustomers  Int
+  newCustomers    Int
+  churnedCustomers Int
+  arpu            Decimal         @db.Decimal(10, 2)
+  ltv             Decimal         @db.Decimal(12, 2)
+  cac             Decimal?        @db.Decimal(10, 2)
+  byPlan          Json            @default("{}") // Revenue by plan tier
+  byRegion        Json            @default("{}") // Revenue by region
+  byCohort        Json            @default("{}") // Revenue by signup cohort
+  metadata        Json            @default("{}")
+  createdAt       DateTime        @default(now())
+
+  @@unique([date, period])
+  @@index([date])
+  @@index([period])
+}
+
+enum MetricPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+// Feature Usage Analytics
+model FeatureUsageMetric {
+  id              String        @id @default(cuid())
+  date            DateTime
+  period          MetricPeriod
+  featureKey      String
+  featureName     String
+  totalUsers      Int           @default(0)
+  activeUsers     Int           @default(0)
+  totalEvents     Int           @default(0)
+  uniqueSessions  Int           @default(0)
+  avgTimeSpent    Int           @default(0) // seconds
+  byPlan          Json          @default("{}") // Usage by plan tier
+  byUserRole      Json          @default("{}") // Usage by user role
+  adoptionRate    Decimal       @db.Decimal(5, 2) // Percentage
+  retentionRate   Decimal       @db.Decimal(5, 2) // Percentage
+  metadata        Json          @default("{}")
+  createdAt       DateTime      @default(now())
+
+  @@unique([date, period, featureKey])
+  @@index([date])
+  @@index([featureKey])
+  @@index([period])
+}
+
+// Email Template Management
+model EmailTemplate {
+  id              String              @id @default(cuid())
+  name            String              @unique
+  slug            String              @unique
+  subject         String
+  description     String?
+  category        EmailTemplateCategory
+  htmlContent     String              @db.Text
+  textContent     String?             @db.Text
+  variables       Json                @default("[]") // Available template variables
+  previewData     Json                @default("{}") // Sample data for preview
+  isActive        Boolean             @default(true)
+  isSystem        Boolean             @default(false) // System templates can't be deleted
+  version         Int                 @default(1)
+  lastEditedBy    String?
+  metadata        Json                @default("{}")
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  versions        EmailTemplateVersion[]
+
+  @@index([category])
+  @@index([isActive])
+}
+
+model EmailTemplateVersion {
+  id              String        @id @default(cuid())
+  templateId      String
+  version         Int
+  subject         String
+  htmlContent     String        @db.Text
+  textContent     String?       @db.Text
+  changedBy       String?
+  changeNote      String?
+  createdAt       DateTime      @default(now())
+
+  template        EmailTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, version])
+  @@index([templateId])
+}
+
+enum EmailTemplateCategory {
+  AUTHENTICATION
+  ONBOARDING
+  NOTIFICATION
+  MARKETING
+  TRANSACTIONAL
+  SYSTEM
+}
+
+// Customer Feedback & NPS
+model FeedbackItem {
+  id              String          @id @default(cuid())
+  orgId           String?
+  userId          String?
+  type            FeedbackType
+  category        String?
+  title           String?
+  content         String          @db.Text
+  rating          Int?            // 1-5 for general feedback
+  npsScore        Int?            // 0-10 for NPS
+  sentiment       FeedbackSentiment?
+  source          String?         // in_app, email, support_ticket
+  pageUrl         String?
+  userAgent       String?
+  status          FeedbackStatus  @default(NEW)
+  priority        FeedbackPriority @default(MEDIUM)
+  assignedTo      String?
+  responseContent String?         @db.Text
+  respondedAt     DateTime?
+  votes           Int             @default(0)
+  isPublic        Boolean         @default(false)
+  tags            String[]        @default([])
+  metadata        Json            @default("{}")
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user            User?           @relation(fields: [userId], references: [id])
+
+  @@index([orgId])
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+}
+
+model NPSSurvey {
+  id              String        @id @default(cuid())
+  name            String
+  description     String?
+  question        String        @default("How likely are you to recommend us to a friend or colleague?")
+  followUpQuestion String?
+  targetType      NotificationTargetType @default(ALL)
+  targetOrgs      String[]      @default([])
+  targetPlans     PlanTier[]    @default([])
+  isActive        Boolean       @default(true)
+  startDate       DateTime?
+  endDate         DateTime?
+  totalResponses  Int           @default(0)
+  promoters       Int           @default(0)
+  passives        Int           @default(0)
+  detractors      Int           @default(0)
+  npsScore        Decimal?      @db.Decimal(5, 2)
+  metadata        Json          @default("{}")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  responses       NPSResponse[]
+
+  @@index([isActive])
+  @@index([startDate, endDate])
+}
+
+model NPSResponse {
+  id              String      @id @default(cuid())
+  surveyId        String
+  userId          String?
+  orgId           String?
+  score           Int         // 0-10
+  feedback        String?     @db.Text
+  category        NPSCategory // promoter, passive, detractor
+  followUpResponse String?    @db.Text
+  respondedAt     DateTime    @default(now())
+  metadata        Json        @default("{}")
+
+  survey          NPSSurvey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  user            User?       @relation(fields: [userId], references: [id])
+
+  @@index([surveyId])
+  @@index([userId])
+  @@index([category])
+  @@index([respondedAt])
+}
+
+enum FeedbackType {
+  BUG_REPORT
+  FEATURE_REQUEST
+  GENERAL
+  COMPLAINT
+  PRAISE
+  NPS
+}
+
+enum FeedbackSentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+enum FeedbackStatus {
+  NEW
+  UNDER_REVIEW
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  WONT_DO
+  DUPLICATE
+}
+
+enum FeedbackPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum NPSCategory {
+  PROMOTER    // 9-10
+  PASSIVE     // 7-8
+  DETRACTOR   // 0-6
+}
+
+// ==================== QUICK WINS ====================
+
+// User Preferences (Dark Mode, Keyboard Shortcuts)
+model UserPreferences {
+  id                  String    @id @default(cuid())
+  userId              String    @unique
+  theme               Theme     @default(SYSTEM)
+  language            String    @default("en")
+  timezone            String    @default("UTC")
+  dateFormat          String    @default("MMM dd, yyyy")
+  timeFormat          String    @default("HH:mm")
+  keyboardShortcuts   Boolean   @default(true)
+  customShortcuts     Json      @default("{}") // Custom keyboard shortcut mappings
+  emailNotifications  Boolean   @default(true)
+  pushNotifications   Boolean   @default(true)
+  inAppNotifications  Boolean   @default(true)
+  weeklyDigest        Boolean   @default(true)
+  compactMode         Boolean   @default(false)
+  sidebarCollapsed    Boolean   @default(false)
+  defaultDashboard    String?
+  recentItems         Json      @default("[]") // Last 10 viewed items
+  pinnedItems         Json      @default("[]") // Pinned quick access items
+  tourCompleted       Boolean   @default(false)
+  metadata            Json      @default("{}")
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  SYSTEM
+}
+
+// Onboarding Progress
+model OnboardingProgress {
+  id              String            @id @default(cuid())
+  userId          String
+  orgId           String
+  templateId      String?           // Which onboarding template to use
+  currentStep     Int               @default(0)
+  totalSteps      Int               @default(0)
+  completedSteps  Json              @default("[]") // Array of completed step IDs
+  skippedSteps    Json              @default("[]") // Array of skipped step IDs
+  status          OnboardingStatus  @default(IN_PROGRESS)
+  startedAt       DateTime          @default(now())
+  completedAt     DateTime?
+  lastActivityAt  DateTime          @default(now())
+  metadata        Json              @default("{}")
+
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, orgId])
+  @@index([userId])
+  @@index([orgId])
+  @@index([status])
+}
+
+model OnboardingTemplate {
+  id              String    @id @default(cuid())
+  name            String
+  description     String?
+  targetUserType  String?   // new_user, new_admin, etc.
+  targetPlanTier  PlanTier?
+  steps           Json      // Array of step definitions
+  isActive        Boolean   @default(true)
+  isDefault       Boolean   @default(false)
+  estimatedTime   Int?      // Minutes to complete
+  metadata        Json      @default("{}")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([isActive])
+  @@index([isDefault])
+}
+
+enum OnboardingStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+}
+
+// Status Page Integration
+model StatusPageIncident {
+  id              String                @id @default(cuid())
+  externalId      String?               @unique // ID from external status page provider
+  title           String
+  description     String                @db.Text
+  status          StatusPageIncidentStatus
+  impact          StatusPageImpact
+  affectedSystems String[]              @default([])
+  startedAt       DateTime
+  resolvedAt      DateTime?
+  postmortemUrl   String?
+  isPublic        Boolean               @default(true)
+  source          String                @default("internal") // internal, statuspage, etc.
+  metadata        Json                  @default("{}")
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  updates         StatusPageUpdate[]
+
+  @@index([status])
+  @@index([impact])
+  @@index([startedAt])
+  @@index([isPublic])
+}
+
+model StatusPageUpdate {
+  id              String              @id @default(cuid())
+  incidentId      String
+  status          StatusPageIncidentStatus
+  message         String              @db.Text
+  isPublic        Boolean             @default(true)
+  createdBy       String?
+  createdAt       DateTime            @default(now())
+
+  incident        StatusPageIncident  @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId])
+  @@index([createdAt])
+}
+
+model StatusPageSubscription {
+  id              String    @id @default(cuid())
+  email           String
+  userId          String?
+  orgId           String?
+  isVerified      Boolean   @default(false)
+  verifyToken     String?
+  subscribedAt    DateTime  @default(now())
+  unsubscribedAt  DateTime?
+  preferences     Json      @default("{}") // Which systems/impacts to notify about
+
+  @@unique([email])
+  @@index([userId])
+  @@index([orgId])
+  @@index([isVerified])
+}
+
+enum StatusPageIncidentStatus {
+  INVESTIGATING
+  IDENTIFIED
+  MONITORING
+  RESOLVED
+  POSTMORTEM
+}
+
+enum StatusPageImpact {
+  NONE
+  MINOR
+  MAJOR
+  CRITICAL
+}
+
+// Admin Activity Dashboard
+model AdminActivity {
+  id              String          @id @default(cuid())
+  adminId         String
+  action          String
+  resourceType    String
+  resourceId      String?
+  description     String?
+  ipAddress       String?
+  userAgent       String?
+  duration        Int?            // milliseconds
+  status          String          @default("success")
+  errorMessage    String?
+  metadata        Json            @default("{}")
+  createdAt       DateTime        @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([resourceType])
+  @@index([createdAt])
 }
