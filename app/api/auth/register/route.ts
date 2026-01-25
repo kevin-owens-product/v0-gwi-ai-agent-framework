@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hashPassword } from '@/lib/auth'
 import { generateUniqueSlug } from '@/lib/tenant'
+import { checkAuthRateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
 import { z } from 'zod'
 
 const registerSchema = z.object({
@@ -17,6 +18,15 @@ const registerSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Check rate limit (3 registrations per hour per IP)
+    const rateLimit = await checkAuthRateLimit(request, 'register')
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: 'Too many registration attempts. Please try again later.' },
+        { status: 429, headers: getRateLimitHeaders(rateLimit) }
+      )
+    }
+
     const body = await request.json()
 
     // Validate input

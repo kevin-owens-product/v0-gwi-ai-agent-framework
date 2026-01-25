@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hashPassword } from '@/lib/auth'
+import { checkAuthRateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
 import { z } from 'zod'
 
 const resetPasswordSchema = z.object({
@@ -15,6 +16,15 @@ const resetPasswordSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Check rate limit (5 attempts per 15 minutes per IP)
+    const rateLimit = await checkAuthRateLimit(request, 'resetPassword')
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: 'Too many password reset attempts. Please try again later.' },
+        { status: 429, headers: getRateLimitHeaders(rateLimit) }
+      )
+    }
+
     const body = await request.json()
 
     const validationResult = resetPasswordSchema.safeParse(body)

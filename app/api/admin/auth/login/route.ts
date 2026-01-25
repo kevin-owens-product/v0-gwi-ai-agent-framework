@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { authenticateSuperAdmin } from "@/lib/super-admin"
+import { checkAuthRateLimit, getRateLimitHeaders } from "@/lib/rate-limit"
 import { cookies } from "next/headers"
 import { Prisma } from "@prisma/client"
 
@@ -40,6 +41,15 @@ function isServiceUnavailableError(error: unknown): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check rate limit (5 attempts per 15 minutes per IP)
+    const rateLimit = await checkAuthRateLimit(request, 'adminLogin')
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: 'Too many login attempts. Please try again later.' },
+        { status: 429, headers: getRateLimitHeaders(rateLimit) }
+      )
+    }
+
     const body = await request.json().catch(() => null)
 
     if (!body) {

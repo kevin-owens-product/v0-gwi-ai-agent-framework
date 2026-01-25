@@ -124,10 +124,82 @@ export function getRateLimitIdentifier(request: Request, userId?: string, orgId?
   }
 
   // Fall back to IP address
+  return getIpFromRequest(request)
+}
+
+// Extract IP address from request
+export function getIpFromRequest(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for')
   const ip = forwarded?.split(',')[0]?.trim()
     || request.headers.get('x-real-ip')
     || 'anonymous'
 
   return `ip:${ip}`
+}
+
+// Auth endpoint rate limit configurations
+const AUTH_RATE_LIMITS = {
+  // Login: 5 attempts per 15 minutes per IP
+  login: { requests: 5, window: '15 m' as const },
+  // Admin login: 5 attempts per 15 minutes per IP (stricter due to higher privilege)
+  adminLogin: { requests: 5, window: '15 m' as const },
+  // Registration: 3 accounts per hour per IP
+  register: { requests: 3, window: '1 h' as const },
+  // Forgot password: 3 requests per 15 minutes per IP (prevent email spam)
+  forgotPassword: { requests: 3, window: '15 m' as const },
+  // Reset password: 5 attempts per 15 minutes per IP
+  resetPassword: { requests: 5, window: '15 m' as const },
+} as const
+
+type AuthRateLimitType = keyof typeof AUTH_RATE_LIMITS
+
+// Create auth rate limiters lazily to avoid creating all at startup
+const authRateLimiters: Partial<Record<AuthRateLimitType, Ratelimit>> = {}
+
+function getAuthRateLimiter(type: AuthRateLimitType): Ratelimit | null {
+  if (!redis) return null
+
+  if (!authRateLimiters[type]) {
+    const config = AUTH_RATE_LIMITS[type]
+    authRateLimiters[type] = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(config.requests, config.window),
+      analytics: true,
+      prefix: `ratelimit:auth:${type}`,
+    })
+  }
+
+  return authRateLimiters[type]!
+}
+
+/**
+ * Check rate limit for authentication endpoints.
+ * Uses IP-based limiting to prevent brute force attacks.
+ */
+export async function checkAuthRateLimit(
+  request: Request,
+  type: AuthRateLimitType
+): Promise<RateLimitResult> {
+  const config = AUTH_RATE_LIMITS[type]
+  const limiter = getAuthRateLimiter(type)
+  const identifier = getIpFromRequest(request)
+
+  // If rate limiting is not configured, allow all requests
+  if (!limiter) {
+    return {
+      success: true,
+      limit: config.requests,
+      remaining: config.requests,
+      reset: Date.now() + 60000,
+    }
+  }
+
+  const result = await limiter.limit(identifier)
+
+  return {
+    success: result.success,
+    limit: result.limit,
+    remaining: result.remaining,
+    reset: result.reset,
+  }
 }
