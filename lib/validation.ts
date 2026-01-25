@@ -127,3 +127,39 @@ export function createPaginationMeta(
     hasMore: params.page < totalPages,
   }
 }
+
+/**
+ * Sanitize HTML content to prevent XSS attacks.
+ * Allows safe tags for rich text content while removing potentially dangerous elements.
+ */
+export function sanitizeHtml(html: string | null | undefined): string | null {
+  if (!html) return null
+
+  // Use DOMPurify for robust HTML sanitization
+  const DOMPurify = require('isomorphic-dompurify')
+
+  // Configure DOMPurify with safe defaults
+  const clean = DOMPurify.sanitize(html, {
+    // Allow common formatting tags
+    ALLOWED_TAGS: [
+      'p', 'br', 'b', 'i', 'u', 'strong', 'em', 'strike', 's',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'ul', 'ol', 'li',
+      'a', 'blockquote', 'code', 'pre',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td',
+      'div', 'span', 'hr',
+    ],
+    // Allow safe attributes
+    ALLOWED_ATTR: [
+      'href', 'target', 'rel', 'class', 'id',
+      'colspan', 'rowspan',
+    ],
+    // Force all links to open in new tab with noopener
+    ADD_ATTR: ['target', 'rel'],
+    // Prevent protocol-based attacks
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
+  })
+
+  // Post-process to add security attributes to links
+  return clean.replace(/<a\s/gi, '<a target="_blank" rel="noopener noreferrer" ')
+}

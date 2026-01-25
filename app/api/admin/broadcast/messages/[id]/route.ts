@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
+import { sanitizeHtml } from "@/lib/validation"
 import { cookies } from "next/headers"
 
 export async function GET(
@@ -143,7 +144,7 @@ export async function PUT(
 
     if (body.title !== undefined) updateData.title = body.title.trim()
     if (body.content !== undefined) updateData.content = body.content.trim()
-    if (body.contentHtml !== undefined) updateData.contentHtml = body.contentHtml
+    if (body.contentHtml !== undefined) updateData.contentHtml = sanitizeHtml(body.contentHtml)
     if (body.type !== undefined) updateData.type = body.type
     if (body.priority !== undefined) updateData.priority = body.priority
     if (body.targetType !== undefined) updateData.targetType = body.targetType

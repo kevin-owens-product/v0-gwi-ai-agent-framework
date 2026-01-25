@@ -313,16 +313,13 @@ export function CalculatedFieldsManager({
         .replace(/POWER\(/gi, "Math.pow(")
         .replace(/INDEX\(/gi, "index(")
 
-      // Define helper functions
-      const avg = (...args: number[]) => args.reduce((a, b) => a + b, 0) / args.length
-      const sum = (...args: number[]) => args.reduce((a, b) => a + b, 0)
-      const round = (val: number, decimals: number = 0) => Math.round(val * Math.pow(10, decimals)) / Math.pow(10, decimals)
-      const index = (val: number, base: number) => (val / base) * 100
+      // Use safe expression parser to prevent code injection
+      // Import dynamically to avoid bundling issues
+      const { safeEvaluate } = require('@/lib/safe-expression')
 
-      // Evaluate (this is simplified - in production, use a proper expression parser)
-       
-      const result = new Function("avg", "sum", "round", "index", `return ${expression}`)(avg, sum, round, index)
-      return typeof result === "number" && !isNaN(result) ? result : null
+      // Evaluate safely - returns null if expression is invalid
+      const result = safeEvaluate(expression)
+      return result
     } catch {
       return null
     }

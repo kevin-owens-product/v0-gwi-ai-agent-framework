@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
+import { sanitizeHtml } from "@/lib/validation"
 import { cookies } from "next/headers"
 import { Prisma } from "@prisma/client"
 
@@ -164,7 +165,7 @@ export async function POST(request: NextRequest) {
       data: {
         title: body.title.trim(),
         content: body.content.trim(),
-        contentHtml: body.contentHtml || null,
+        contentHtml: sanitizeHtml(body.contentHtml),
         type: body.type,
         priority: body.priority || "NORMAL",
         targetType: body.targetType || "ALL",
