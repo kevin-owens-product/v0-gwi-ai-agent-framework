@@ -1,5 +1,40 @@
-import { headers } from 'next/headers'
+import { headers, cookies } from 'next/headers'
 import { prisma } from './db'
+import { NextRequest } from 'next/server'
+
+/**
+ * Get validated organization ID from request.
+ * SECURITY: Always validates that the user is a member of the requested organization.
+ * Never trusts client-provided headers/cookies without verification.
+ */
+export async function getValidatedOrgId(request: NextRequest, userId: string): Promise<string | null> {
+  // Get all organizations the user is a member of
+  const memberships = await prisma.organizationMember.findMany({
+    where: { userId },
+    select: { orgId: true },
+    orderBy: { joinedAt: 'asc' },
+  })
+
+  if (memberships.length === 0) return null
+
+  const memberOrgIds = new Set(memberships.map(m => m.orgId))
+
+  // Check header first, but VALIDATE membership
+  const headerOrgId = request.headers.get('x-organization-id')
+  if (headerOrgId && memberOrgIds.has(headerOrgId)) {
+    return headerOrgId
+  }
+
+  // Check cookie, but VALIDATE membership
+  const cookieStore = await cookies()
+  const cookieOrgId = cookieStore.get('currentOrgId')?.value
+  if (cookieOrgId && memberOrgIds.has(cookieOrgId)) {
+    return cookieOrgId
+  }
+
+  // Fall back to first organization
+  return memberships[0].orgId
+}
 
 export async function getCurrentOrganization() {
   const headersList = await headers()

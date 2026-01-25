@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
 import { PlanTier, OrganizationType, CompanySize, Prisma } from "@prisma/client"
+import { parsePaginationParams, sanitizeString } from "@/lib/validation"
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,9 +20,9 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "20")
-    const search = searchParams.get("search")
+    const { page, limit, offset } = parsePaginationParams(searchParams, { maxLimit: 100 })
+    const rawSearch = searchParams.get("search")
+    const search = rawSearch ? sanitizeString(rawSearch, 200) : null
     const planTier = searchParams.get("planTier")
     const status = searchParams.get("status")
 
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
           subscription: true,
         },
         orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
+        skip: offset,
         take: limit,
       }),
       prisma.organization.count({ where }),

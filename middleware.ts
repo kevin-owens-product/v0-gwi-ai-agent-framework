@@ -41,6 +41,11 @@ function isApiRoute(pathname: string): boolean {
          !pathname.startsWith('/api/health')
 }
 
+// Check if path is an admin route (admin portal has its own auth via adminToken cookie)
+function isAdminRoute(pathname: string): boolean {
+  return pathname.startsWith('/admin') && pathname !== '/admin/login'
+}
+
 // Check if path matches any public path
 function isPublicPath(pathname: string): boolean {
   return publicPaths.some(path =>
@@ -108,6 +113,16 @@ export async function middleware(request: NextRequest) {
     return addSecurityHeaders(NextResponse.next())
   }
 
+  // Admin routes use their own authentication (adminToken cookie)
+  if (isAdminRoute(pathname)) {
+    const adminToken = request.cookies.get('adminToken')?.value
+    if (!adminToken) {
+      const adminLoginUrl = new URL('/admin/login', request.url)
+      return NextResponse.redirect(adminLoginUrl)
+    }
+    return addSecurityHeaders(NextResponse.next())
+  }
+
   // Check authentication for protected browser routes
   const session = await auth()
 
@@ -150,6 +165,31 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
 
   // XSS Protection (legacy but still useful)
   response.headers.set('X-XSS-Protection', '1; mode=block')
+
+  // Content Security Policy - helps prevent XSS, clickjacking, and other injection attacks
+  // Note: 'unsafe-inline' and 'unsafe-eval' are needed for Next.js but should be reviewed
+  response.headers.set(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https: blob:",
+      "font-src 'self' data:",
+      "connect-src 'self' https://api.globalwebindex.com wss:",
+      "frame-ancestors 'self'",
+      "form-action 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+    ].join('; ')
+  )
+
+  // Cross-Origin policies
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin')
+  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin')
+
+  // Prevent Adobe cross-domain policies
+  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none')
 
   return response
 }

@@ -70,14 +70,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Set cookie
+    // Set secure cookie for admin authentication
     const cookieStore = await cookies()
+    const isProduction = process.env.NODE_ENV === "production"
     cookieStore.set("adminToken", result.token!, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction, // Secure in production (localhost doesn't support secure cookies)
+      sameSite: "strict", // Strict to prevent CSRF on admin routes
       expires: result.expiresAt,
-      path: "/",
+      path: "/", // Needed for both /admin pages and /api/admin routes
     })
 
     return NextResponse.json({

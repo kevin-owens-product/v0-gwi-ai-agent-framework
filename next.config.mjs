@@ -6,6 +6,11 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const nextConfig = {
   output: 'standalone',
   typescript: {
+    // TODO: Fix TypeScript errors and set to false
+    // Known issues:
+    // 1. Next.js 16 async params migration (params is now Promise<T>)
+    // 2. Unused imports after enabling noUnusedLocals
+    // Run `npx tsc --noEmit` to see all errors
     ignoreBuildErrors: true,
   },
   images: {

@@ -1,7 +1,16 @@
 import { prisma, withRetry } from './db'
-import { createHash, randomBytes } from 'crypto'
+import { randomBytes } from 'crypto'
+import { createHash } from 'crypto'
+import bcrypt from 'bcryptjs'
 import type { SuperAdminRole } from '@prisma/client'
 import { Prisma } from '@prisma/client'
+
+// Account lockout configuration
+const MAX_LOGIN_ATTEMPTS = 5
+const LOCKOUT_DURATION_MS = 30 * 60 * 1000 // 30 minutes
+
+// In-memory store for login attempts (in production, use Redis)
+const loginAttempts = new Map<string, { count: number; lockedUntil?: Date }>()
 
 // Super Admin Permissions
 export const SUPER_ADMIN_PERMISSIONS = {
@@ -105,9 +114,54 @@ export function hasSuperAdminPermission(
   return permissions.includes(permission)
 }
 
-// Hash password for super admin
-export function hashPassword(password: string): string {
-  return createHash('sha256').update(password).digest('hex')
+// Hash password for super admin using bcrypt
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 12)
+}
+
+// Verify password against hash
+export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  // Support legacy SHA256 hashes during migration
+  if (hash.length === 64 && /^[a-f0-9]+$/.test(hash)) {
+    const sha256Hash = createHash('sha256').update(password).digest('hex')
+    return sha256Hash === hash
+  }
+  return bcrypt.compare(password, hash)
+}
+
+// Check if account is locked
+function isAccountLocked(email: string): { locked: boolean; remainingMs?: number } {
+  const attempt = loginAttempts.get(email)
+  if (!attempt?.lockedUntil) return { locked: false }
+
+  const now = new Date()
+  if (attempt.lockedUntil > now) {
+    return { locked: true, remainingMs: attempt.lockedUntil.getTime() - now.getTime() }
+  }
+
+  // Lockout expired, reset attempts
+  loginAttempts.delete(email)
+  return { locked: false }
+}
+
+// Record failed login attempt
+function recordFailedAttempt(email: string): { locked: boolean; attemptsRemaining: number } {
+  const attempt = loginAttempts.get(email) || { count: 0 }
+  attempt.count++
+
+  if (attempt.count >= MAX_LOGIN_ATTEMPTS) {
+    attempt.lockedUntil = new Date(Date.now() + LOCKOUT_DURATION_MS)
+    loginAttempts.set(email, attempt)
+    return { locked: true, attemptsRemaining: 0 }
+  }
+
+  loginAttempts.set(email, attempt)
+  return { locked: false, attemptsRemaining: MAX_LOGIN_ATTEMPTS - attempt.count }
+}
+
+// Clear login attempts on successful login
+function clearLoginAttempts(email: string): void {
+  loginAttempts.delete(email)
 }
 
 // Generate session token
@@ -183,6 +237,16 @@ export async function authenticateSuperAdmin(
   userAgent?: string
 ) {
   try {
+    // Check if account is locked
+    const lockStatus = isAccountLocked(email)
+    if (lockStatus.locked) {
+      const remainingMinutes = Math.ceil((lockStatus.remainingMs || 0) / 60000)
+      return {
+        success: false,
+        error: `Account temporarily locked. Try again in ${remainingMinutes} minutes.`
+      }
+    }
+
     // Use retry wrapper for database lookup to handle transient connection failures
     const admin = await withRetry(
       () => prisma.superAdmin.findUnique({ where: { email } }),
@@ -190,22 +254,43 @@ export async function authenticateSuperAdmin(
     )
 
     if (!admin || !admin.isActive) {
+      // Record failed attempt even for non-existent users (prevent user enumeration)
+      recordFailedAttempt(email)
       return { success: false, error: 'Invalid credentials' }
     }
 
-    const passwordHash = hashPassword(password)
-    if (admin.passwordHash !== passwordHash) {
+    // Verify password using bcrypt (with legacy SHA256 support)
+    const isValidPassword = await verifyPassword(password, admin.passwordHash)
+    if (!isValidPassword) {
+      const attemptResult = recordFailedAttempt(email)
+
       // Log failed attempt (non-blocking)
       logPlatformAudit({
         action: 'login_failed',
         resourceType: 'super_admin',
         resourceId: admin.id,
-        details: { email, reason: 'invalid_password' },
+        details: {
+          email,
+          reason: 'invalid_password',
+          attemptsRemaining: attemptResult.attemptsRemaining,
+          accountLocked: attemptResult.locked
+        },
         ipAddress,
         userAgent,
-      }).catch(console.error)
+      }).catch(() => {}) // Silently ignore audit failures
+
+      if (attemptResult.locked) {
+        return {
+          success: false,
+          error: 'Too many failed attempts. Account locked for 30 minutes.'
+        }
+      }
+
       return { success: false, error: 'Invalid credentials' }
     }
+
+    // Clear failed attempts on successful login
+    clearLoginAttempts(email)
 
     const { session, token } = await createSuperAdminSession(admin.id, ipAddress, userAgent)
 
@@ -218,7 +303,7 @@ export async function authenticateSuperAdmin(
       details: { email },
       ipAddress,
       userAgent,
-    }).catch(console.error)
+    }).catch(() => {}) // Silently ignore audit failures
 
     return {
       success: true,
@@ -232,6 +317,7 @@ export async function authenticateSuperAdmin(
       expiresAt: session.expiresAt,
     }
   } catch (error) {
+    // Log error server-side only, don't expose details to client
     console.error('authenticateSuperAdmin error:', error)
     throw error
   }
