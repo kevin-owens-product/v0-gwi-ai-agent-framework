@@ -76,7 +76,7 @@ export default function SignupPage() {
         // Account created but auto-login failed
         router.push("/login?message=Account created successfully. Please sign in.")
       } else {
-        router.push("/onboarding")
+        router.push("/dashboard")
         router.refresh()
       }
     } catch (err) {
@@ -88,7 +88,7 @@ export default function SignupPage() {
 
   const handleOAuthSignIn = async (provider: string) => {
     setIsOAuthLoading(provider)
-    await signIn(provider, { callbackUrl: "/onboarding" })
+    await signIn(provider, { callbackUrl: "/dashboard" })
   }
 
   return (

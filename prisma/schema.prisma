@@ -452,7 +452,6 @@ model User {
   feedbackItems      FeedbackItem[]
   npsResponses       NPSResponse[]
   preferences        UserPreferences?
-  onboardingProgress OnboardingProgress[]
 }
 
 model Account {
@@ -3606,55 +3605,6 @@ enum Theme {
   LIGHT
   DARK
   SYSTEM
-}
-
-// Onboarding Progress
-model OnboardingProgress {
-  id              String            @id @default(cuid())
-  userId          String
-  orgId           String
-  templateId      String?           // Which onboarding template to use
-  currentStep     Int               @default(0)
-  totalSteps      Int               @default(0)
-  completedSteps  Json              @default("[]") // Array of completed step IDs
-  skippedSteps    Json              @default("[]") // Array of skipped step IDs
-  status          OnboardingStatus  @default(IN_PROGRESS)
-  startedAt       DateTime          @default(now())
-  completedAt     DateTime?
-  lastActivityAt  DateTime          @default(now())
-  metadata        Json              @default("{}")
-
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, orgId])
-  @@index([userId])
-  @@index([orgId])
-  @@index([status])
-}
-
-model OnboardingTemplate {
-  id              String    @id @default(cuid())
-  name            String
-  description     String?
-  targetUserType  String?   // new_user, new_admin, etc.
-  targetPlanTier  PlanTier?
-  steps           Json      // Array of step definitions
-  isActive        Boolean   @default(true)
-  isDefault       Boolean   @default(false)
-  estimatedTime   Int?      // Minutes to complete
-  metadata        Json      @default("{}")
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  @@index([isActive])
-  @@index([isDefault])
-}
-
-enum OnboardingStatus {
-  NOT_STARTED
-  IN_PROGRESS
-  COMPLETED
-  SKIPPED
 }
 
 // Status Page Integration

@@ -11,7 +11,6 @@ import { RecentWorkflows } from "@/components/dashboard/recent-workflows"
 import { RecentReports } from "@/components/dashboard/recent-reports"
 import { ProjectsOverview } from "@/components/dashboard/projects-overview"
 import { PlatformOverview } from "@/components/dashboard/platform-overview"
-import { OnboardingChecklist } from "@/components/onboarding"
 
 async function getDashboardData(orgId: string) {
   const now = new Date()
@@ -252,14 +251,6 @@ export default async function DashboardPage() {
   const currentOrgId = cookieStore.get("currentOrgId")?.value || memberships[0].organization.id
   const dashboardData = await getDashboardData(currentOrgId)
 
-  // Check onboarding progress
-  const onboardingProgress = await prisma.onboardingProgress.findUnique({
-    where: {
-      userId_orgId: { userId: session.user.id, orgId: currentOrgId },
-    },
-  })
-  const showOnboarding = !onboardingProgress || onboardingProgress.status !== "COMPLETED"
-
   const formattedActivities = dashboardData.recentRuns.map(run => ({
     id: run.id,
     type: run.status === "COMPLETED" ? "completed" as const :
@@ -277,9 +268,6 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <DashboardHeader />
-
-      {/* Onboarding Checklist for users with incomplete onboarding */}
-      {showOnboarding && <OnboardingChecklist />}
 
       <HeroMetrics metrics={dashboardData.metrics} />
 

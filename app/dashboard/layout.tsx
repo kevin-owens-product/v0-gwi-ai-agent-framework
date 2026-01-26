@@ -32,9 +32,9 @@ export default async function DashboardLayout({
     orderBy: { joinedAt: "asc" },
   })
 
-  // If user has no organizations, redirect to onboarding
+  // If user has no organizations, redirect to home
   if (memberships.length === 0) {
-    redirect("/onboarding")
+    redirect("/")
   }
 
   // Get current organization from cookie or use first org
