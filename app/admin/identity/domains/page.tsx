@@ -37,6 +37,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
+import Link from "next/link"
 
 interface Domain {
   id: string
@@ -297,13 +298,13 @@ export default function DomainManagementPage() {
             Verify and manage organization domains for SSO and auto-provisioning
           </p>
         </div>
+        <Button asChild>
+          <Link href="/admin/identity/domains/new">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Domain
+          </Link>
+        </Button>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Domain
-            </Button>
-          </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Domain Verification</DialogTitle>

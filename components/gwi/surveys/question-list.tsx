@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -38,6 +39,7 @@ import {
   Calendar,
   BarChart3,
   Grid3X3,
+  ExternalLink,
 } from "lucide-react"
 
 interface Question {
@@ -285,7 +287,7 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
       <CardContent>
         {questions.length > 0 ? (
           <div className="space-y-2">
-            {questions.map((question, index) => {
+            {questions.map((question) => {
               const Icon =
                 questionTypeIcons[question.type as keyof typeof questionTypeIcons] ||
                 Type
@@ -322,6 +324,11 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                         ) : (
                           <ChevronDown className="h-4 w-4" />
                         )}
+                      </Button>
+                      <Button variant="ghost" size="icon" asChild>
+                        <Link href={`/gwi/surveys/${surveyId}/questions/${question.id}`}>
+                          <ExternalLink className="h-4 w-4" />
+                        </Link>
                       </Button>
                       <Button
                         variant="ghost"

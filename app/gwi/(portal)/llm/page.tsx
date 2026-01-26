@@ -79,7 +79,7 @@ async function LLMContent() {
           </p>
         </div>
         <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
-          <Link href="/gwi/llm/models/new">
+          <Link href="/gwi/llm/configurations/new">
             <Plus className="mr-2 h-4 w-4" />
             Add Model
           </Link>
@@ -145,11 +145,11 @@ async function LLMContent() {
       </div>
 
       {/* Quick Links */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <Button variant="outline" asChild>
-          <Link href="/gwi/llm/models">
+          <Link href="/gwi/llm/configurations/new">
             <Brain className="mr-2 h-4 w-4" />
-            Manage Models
+            Add Model
           </Link>
         </Button>
         <Button variant="outline" asChild>
@@ -182,9 +182,10 @@ async function LLMContent() {
           {stats.configurations.length > 0 ? (
             <div className="space-y-4">
               {stats.configurations.map((config) => (
-                <div
+                <Link
                   key={config.id}
-                  className="flex items-center justify-between p-4 border rounded-lg"
+                  href={`/gwi/llm/configurations/${config.id}`}
+                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <div className="h-10 w-10 rounded-lg bg-slate-100 flex items-center justify-center">
@@ -210,7 +211,7 @@ async function LLMContent() {
                       {config.isActive ? "Active" : "Inactive"}
                     </Badge>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           ) : (
@@ -218,7 +219,7 @@ async function LLMContent() {
               <Brain className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
               <p className="text-muted-foreground">No model configurations yet</p>
               <Button asChild className="mt-4">
-                <Link href="/gwi/llm/models/new">
+                <Link href="/gwi/llm/configurations/new">
                   <Plus className="mr-2 h-4 w-4" />
                   Add First Model
                 </Link>

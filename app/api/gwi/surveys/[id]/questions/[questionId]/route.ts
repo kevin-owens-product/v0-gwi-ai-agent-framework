@@ -5,7 +5,7 @@ import { validateSuperAdminSession } from "@/lib/super-admin"
 import { hasGWIPermission } from "@/lib/gwi-permissions"
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string; questionId: string }> }
 ) {
   try {
@@ -31,13 +31,86 @@ export async function GET(
         id: questionId,
         surveyId: id,
       },
+      include: {
+        survey: {
+          select: {
+            id: true,
+            name: true,
+            status: true,
+          },
+        },
+      },
     })
 
     if (!question) {
       return NextResponse.json({ error: "Question not found" }, { status: 404 })
     }
 
-    return NextResponse.json(question)
+    // Fetch response statistics for this question
+    const responses = await prisma.surveyResponse.findMany({
+      where: { surveyId: id },
+      select: { answers: true, completedAt: true },
+    })
+
+    // Calculate statistics based on question type
+    const questionCode = question.code
+    const answeredResponses = responses.filter((r) => {
+      const answers = r.answers as Record<string, unknown>
+      return answers && answers[questionCode] !== undefined
+    })
+
+    const completedResponses = answeredResponses.filter((r) => r.completedAt)
+
+    // Build response distribution for select-type questions
+    let responseDistribution: Record<string, number> = {}
+    if (
+      question.type === "SINGLE_SELECT" ||
+      question.type === "MULTI_SELECT"
+    ) {
+      answeredResponses.forEach((r) => {
+        const answers = r.answers as Record<string, unknown>
+        const answer = answers[questionCode]
+        if (Array.isArray(answer)) {
+          // Multi-select
+          answer.forEach((a) => {
+            const key = String(a)
+            responseDistribution[key] = (responseDistribution[key] || 0) + 1
+          })
+        } else if (answer !== undefined && answer !== null) {
+          // Single-select
+          const key = String(answer)
+          responseDistribution[key] = (responseDistribution[key] || 0) + 1
+        }
+      })
+    } else if (question.type === "SCALE" || question.type === "NUMERIC") {
+      // For scale/numeric, calculate average and distribution
+      const values: number[] = []
+      answeredResponses.forEach((r) => {
+        const answers = r.answers as Record<string, unknown>
+        const answer = answers[questionCode]
+        if (typeof answer === "number") {
+          values.push(answer)
+          const key = String(answer)
+          responseDistribution[key] = (responseDistribution[key] || 0) + 1
+        }
+      })
+    }
+
+    const stats = {
+      totalResponses: responses.length,
+      answeredCount: answeredResponses.length,
+      completedCount: completedResponses.length,
+      responseRate:
+        responses.length > 0
+          ? Math.round((answeredResponses.length / responses.length) * 100)
+          : 0,
+      distribution: responseDistribution,
+    }
+
+    return NextResponse.json({
+      ...question,
+      stats,
+    })
   } catch (error) {
     console.error("Failed to fetch question:", error)
     return NextResponse.json(
@@ -119,7 +192,7 @@ export async function PATCH(
           text: existingQuestion.text,
           type: existingQuestion.type,
         },
-        newState: updateData,
+        newState: updateData as Record<string, string | number | boolean | null>,
       },
     })
 
@@ -134,7 +207,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string; questionId: string }> }
 ) {
   try {

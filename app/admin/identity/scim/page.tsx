@@ -405,16 +405,16 @@ export default function SCIMListingPage() {
             Manage automated user provisioning with SCIM 2.0
           </p>
         </div>
+        <Button asChild>
+          <Link href="/admin/identity/scim/new">
+            <Plus className="h-4 w-4 mr-2" />
+            Add SCIM Integration
+          </Link>
+        </Button>
         <Dialog open={isCreateOpen} onOpenChange={(open) => {
           setIsCreateOpen(open)
           if (!open) setNewToken(null)
         }}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add SCIM Integration
-            </Button>
-          </DialogTrigger>
           <DialogContent className="max-w-lg">
             {newToken ? (
               <>

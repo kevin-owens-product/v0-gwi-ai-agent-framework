@@ -418,13 +418,15 @@ export default function SSOListingPage() {
             Manage enterprise Single Sign-On configurations
           </p>
         </div>
-        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button>
+        <div className="flex gap-2">
+          <Button asChild>
+            <Link href="/admin/identity/sso/new">
               <Plus className="h-4 w-4 mr-2" />
               Add SSO Configuration
-            </Button>
-          </DialogTrigger>
+            </Link>
+          </Button>
+        </div>
+        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle>Create SSO Configuration</DialogTitle>

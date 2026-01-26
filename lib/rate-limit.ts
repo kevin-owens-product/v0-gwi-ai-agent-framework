@@ -143,6 +143,8 @@ const AUTH_RATE_LIMITS = {
   login: { requests: 5, window: '15 m' as const },
   // Admin login: 5 attempts per 15 minutes per IP (stricter due to higher privilege)
   adminLogin: { requests: 5, window: '15 m' as const },
+  // GWI login: 5 attempts per 15 minutes per IP (same as admin due to privileged access)
+  gwiLogin: { requests: 5, window: '15 m' as const },
   // Registration: 3 accounts per hour per IP
   register: { requests: 3, window: '1 h' as const },
   // Forgot password: 3 requests per 15 minutes per IP (prevent email spam)

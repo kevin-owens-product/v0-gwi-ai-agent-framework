@@ -141,7 +141,7 @@ export default function ComplianceOverviewPage() {
             </Link>
           </Button>
           <Button asChild>
-            <Link href="/admin/compliance/exports">
+            <Link href="/admin/compliance/data-exports">
               <Download className="h-4 w-4 mr-2" />
               Data Exports
             </Link>
@@ -237,7 +237,7 @@ export default function ComplianceOverviewPage() {
               Data export requests
             </p>
             <Link
-              href="/admin/compliance/exports"
+              href="/admin/compliance/data-exports"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
               Process exports <ArrowRight className="h-3 w-3 ml-1" />
@@ -256,7 +256,7 @@ export default function ComplianceOverviewPage() {
               Active data retention rules
             </p>
             <Link
-              href="/admin/compliance/retention"
+              href="/admin/compliance/retention-policies"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
               Manage policies <ArrowRight className="h-3 w-3 ml-1" />

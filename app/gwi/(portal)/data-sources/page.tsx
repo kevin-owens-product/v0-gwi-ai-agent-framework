@@ -67,9 +67,11 @@ async function DataSourcesContent() {
             Manage external data connections and integrations
           </p>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700">
-          <Plus className="mr-2 h-4 w-4" />
-          Add Data Source
+        <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
+          <Link href="/gwi/data-sources/new">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Data Source
+          </Link>
         </Button>
       </div>
 
@@ -199,9 +201,11 @@ async function DataSourcesContent() {
               <p className="text-muted-foreground mb-4">
                 Connect external data sources to your platform
               </p>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Add First Data Source
+              <Button asChild>
+                <Link href="/gwi/data-sources/new">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add First Data Source
+                </Link>
               </Button>
             </div>
           )}

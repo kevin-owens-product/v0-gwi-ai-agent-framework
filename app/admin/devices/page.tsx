@@ -18,6 +18,7 @@ import {
   Trash,
   RefreshCw,
   Settings,
+  Plus,
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -427,10 +428,16 @@ export default function DevicesPage() {
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button asChild>
+          <Button asChild variant="outline">
             <Link href="/admin/devices/policies">
               <Settings className="h-4 w-4 mr-2" />
               Manage Policies
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link href="/admin/devices/new">
+              <Plus className="h-4 w-4 mr-2" />
+              Register Device
             </Link>
           </Button>
         </div>

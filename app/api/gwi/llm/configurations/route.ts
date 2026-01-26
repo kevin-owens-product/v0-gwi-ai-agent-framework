@@ -7,7 +7,7 @@ import { hasGWIPermission } from "@/lib/gwi-permissions"
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get("adminToken")?.value
+    const token = cookieStore.get("gwiToken")?.value
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get("adminToken")?.value
+    const token = cookieStore.get("gwiToken")?.value
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

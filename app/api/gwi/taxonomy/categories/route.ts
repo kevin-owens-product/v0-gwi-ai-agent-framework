@@ -4,10 +4,15 @@ import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { hasGWIPermission } from "@/lib/gwi-permissions"
 
+// Helper to get organization ID from request
+function getOrganizationId(request: NextRequest): string | null {
+  return request.headers.get("X-Organization-Id")
+}
+
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get("adminToken")?.value
+    const token = cookieStore.get("gwiToken")?.value
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -22,8 +27,22 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
+    const orgId = getOrganizationId(request)
+
+    // For taxonomy categories, show both global (orgId=null) and org-specific categories
+    const where: Record<string, unknown> = orgId
+      ? {
+          OR: [
+            { orgId: null },  // Global categories
+            { orgId: orgId }, // Org-specific categories
+          ],
+        }
+      : {}
+
     const categories = await prisma.taxonomyCategory.findMany({
+      where,
       include: {
+        organization: { select: { id: true, name: true, slug: true } },
         _count: {
           select: {
             attributes: true,
@@ -47,7 +66,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get("adminToken")?.value
+    const token = cookieStore.get("gwiToken")?.value
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -63,7 +82,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, code, description, parentId, isActive = true } = body
+    const { name, code, description, parentId, isActive = true, orgId, isGlobal = false } = body
+    const headerOrgId = getOrganizationId(request)
+    // If isGlobal is true, don't set orgId; otherwise use provided orgId or header
+    const organizationId = isGlobal ? null : (orgId || headerOrgId)
 
     if (!name || !code) {
       return NextResponse.json(
@@ -84,6 +106,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validate organization exists if provided
+    if (organizationId) {
+      const org = await prisma.organization.findUnique({
+        where: { id: organizationId },
+      })
+      if (!org) {
+        return NextResponse.json(
+          { error: "Organization not found" },
+          { status: 404 }
+        )
+      }
+    }
+
     const category = await prisma.taxonomyCategory.create({
       data: {
         name,
@@ -91,6 +126,10 @@ export async function POST(request: NextRequest) {
         description,
         parentId,
         isActive,
+        orgId: organizationId,
+      },
+      include: {
+        organization: { select: { id: true, name: true, slug: true } },
       },
     })
 
@@ -100,7 +139,7 @@ export async function POST(request: NextRequest) {
         action: "CREATE_CATEGORY",
         resourceType: "taxonomy_category",
         resourceId: category.id,
-        newState: { name, code, parentId },
+        newState: { name, code, parentId, orgId: organizationId, isGlobal },
       },
     })
 

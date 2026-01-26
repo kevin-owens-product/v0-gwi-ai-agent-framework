@@ -81,6 +81,14 @@ model Organization {
   brandTrackings BrandTracking[]
   brandSnapshots BrandTrackingSnapshot[]
 
+  // GWI Portal resources
+  surveys                Survey[]                  @relation("OrgSurveys")
+  dataPipelines          DataPipeline[]            @relation("OrgDataPipelines")
+  taxonomyCategories     TaxonomyCategory[]        @relation("OrgTaxonomyCategories")
+  agentTemplates         SystemAgentTemplate[]     @relation("OrgAgentTemplates")
+  dataSourceConnections  GWIDataSourceConnection[] @relation("OrgDataSourceConnections")
+  promptTemplates        PromptTemplate[]          @relation("OrgPromptTemplates")
+
   @@index([parentOrgId])
   @@index([rootOrgId])
   @@index([hierarchyPath])
@@ -3734,9 +3742,14 @@ model Survey {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  // Organization scoping
+  orgId           String?
+  organization    Organization? @relation("OrgSurveys", fields: [orgId], references: [id])
+
   @@index([status])
   @@index([createdById])
   @@index([createdAt])
+  @@index([orgId])
 }
 
 enum SurveyStatus {
@@ -3823,8 +3836,13 @@ model TaxonomyCategory {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  // Organization scoping (null = global/platform-wide category)
+  orgId           String?
+  organization    Organization? @relation("OrgTaxonomyCategories", fields: [orgId], references: [id])
+
   @@index([parentId])
   @@index([isActive])
+  @@index([orgId])
 }
 
 model TaxonomyAttribute {
@@ -3876,9 +3894,14 @@ model DataPipeline {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  // Organization scoping
+  orgId           String?
+  organization    Organization? @relation("OrgDataPipelines", fields: [orgId], references: [id])
+
   @@index([type])
   @@index([isActive])
   @@index([createdById])
+  @@index([orgId])
 }
 
 enum PipelineType {
@@ -3960,9 +3983,14 @@ model PromptTemplate {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  // Organization scoping (null = global/platform-wide template)
+  orgId           String?
+  organization    Organization? @relation("OrgPromptTemplates", fields: [orgId], references: [id])
+
   @@index([category])
   @@index([isActive])
   @@index([createdById])
+  @@index([orgId])
 }
 
 model LLMUsageRecord {
@@ -3996,9 +4024,14 @@ model SystemAgentTemplate {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  // Organization scoping (null = global/system-wide template)
+  orgId           String?
+  organization    Organization? @relation("OrgAgentTemplates", fields: [orgId], references: [id])
+
   @@index([category])
   @@index([isPublished])
   @@index([createdById])
+  @@index([orgId])
 }
 
 model SystemToolConfiguration {
@@ -4033,9 +4066,14 @@ model GWIDataSourceConnection {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  // Organization scoping
+  orgId           String?
+  organization    Organization? @relation("OrgDataSourceConnections", fields: [orgId], references: [id])
+
   @@index([type])
   @@index([isActive])
   @@index([syncStatus])
+  @@index([orgId])
 }
 
 // Monitoring & Alerts
@@ -4129,4 +4167,36 @@ model GWIApiKey {
   @@index([keyPrefix])
   @@index([isActive])
   @@index([createdById])
+}
+
+// ==================== UNIFIED CROSS-PORTAL AUDIT LOG ====================
+
+// Unified audit log for all three portals (User Dashboard, Admin Portal, GWI Portal)
+model PortalAuditLog {
+  id            String      @id @default(cuid())
+  portal        PortalType  // USER, ADMIN, GWI
+  userId        String?     // User ID for user portal
+  adminId       String?     // SuperAdmin ID for admin/gwi portals
+  action        String
+  resourceType  String
+  resourceId    String?
+  previousState Json?
+  newState      Json?
+  metadata      Json?       // Additional context (IP, user agent, etc.)
+  orgId         String?     // Organization context
+  createdAt     DateTime    @default(now())
+
+  @@index([portal])
+  @@index([userId])
+  @@index([adminId])
+  @@index([action])
+  @@index([resourceType])
+  @@index([orgId])
+  @@index([createdAt])
+}
+
+enum PortalType {
+  USER
+  ADMIN
+  GWI
 }

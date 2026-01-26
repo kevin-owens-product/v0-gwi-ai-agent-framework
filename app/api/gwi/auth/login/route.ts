@@ -4,9 +4,55 @@ import { prisma } from "@/lib/db"
 import bcrypt from "bcryptjs"
 import { randomBytes } from "crypto"
 import { canAccessGWIPortal } from "@/lib/gwi-permissions"
+import { checkAuthRateLimit, getRateLimitHeaders } from "@/lib/rate-limit"
+import { Prisma } from "@prisma/client"
+
+// Error codes that indicate transient/retriable database issues
+const TRANSIENT_ERROR_CODES = new Set([
+  'P1001', // Can't reach database server
+  'P1002', // Database server reached but timed out
+  'P1008', // Operations timed out
+  'P1017', // Server closed the connection
+  'P2024', // Timed out fetching a new connection from the pool
+])
+
+function isServiceUnavailableError(error: unknown): boolean {
+  // Check for Prisma-specific errors
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    return TRANSIENT_ERROR_CODES.has(error.code)
+  }
+  if (error instanceof Prisma.PrismaClientInitializationError) {
+    return true
+  }
+
+  // Check error message for connection-related issues
+  if (error instanceof Error) {
+    const message = error.message.toLowerCase()
+    return (
+      message.includes('connection') ||
+      message.includes('timeout') ||
+      message.includes('econnrefused') ||
+      message.includes('econnreset') ||
+      message.includes('prisma') ||
+      message.includes('database') ||
+      message.includes('socket')
+    )
+  }
+
+  return false
+}
 
 export async function POST(request: NextRequest) {
   try {
+    // Check rate limit (5 attempts per 15 minutes per IP)
+    const rateLimit = await checkAuthRateLimit(request, 'gwiLogin')
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: 'Too many login attempts. Please try again later.' },
+        { status: 429, headers: getRateLimitHeaders(rateLimit) }
+      )
+    }
+
     const body = await request.json().catch(() => null)
 
     if (!body) {
@@ -100,6 +146,23 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error("GWI login error:", error)
+
+    // Check for transient database/connection errors
+    if (isServiceUnavailableError(error)) {
+      return NextResponse.json(
+        {
+          error: "Service temporarily unavailable. Please try again in a moment.",
+          retryable: true
+        },
+        {
+          status: 503,
+          headers: {
+            'Retry-After': '5', // Suggest client retry after 5 seconds
+          }
+        }
+      )
+    }
+
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

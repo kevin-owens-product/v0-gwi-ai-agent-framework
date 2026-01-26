@@ -4,10 +4,15 @@ import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { hasGWIPermission } from "@/lib/gwi-permissions"
 
+// Helper to get organization ID from request
+function getOrganizationId(request: NextRequest): string | null {
+  return request.headers.get("X-Organization-Id")
+}
+
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get("adminToken")?.value
+    const token = cookieStore.get("gwiToken")?.value
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -26,8 +31,14 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const status = searchParams.get("status")
     const search = searchParams.get("search")
+    const orgId = getOrganizationId(request)
 
     const where: Record<string, unknown> = {}
+
+    // Filter by organization if provided
+    if (orgId) {
+      where.orgId = orgId
+    }
 
     if (status && status !== "all") {
       where.status = status
@@ -44,6 +55,7 @@ export async function GET(request: NextRequest) {
       where,
       include: {
         createdBy: { select: { id: true, name: true, email: true } },
+        organization: { select: { id: true, name: true, slug: true } },
         _count: {
           select: {
             questions: true,
@@ -68,7 +80,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get("adminToken")?.value
+    const token = cookieStore.get("gwiToken")?.value
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -85,7 +97,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, status = "DRAFT" } = body
+    const { name, description, status = "DRAFT", orgId } = body
+    const headerOrgId = getOrganizationId(request)
+    const organizationId = orgId || headerOrgId
 
     if (!name) {
       return NextResponse.json(
@@ -94,15 +108,30 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validate organization exists if provided
+    if (organizationId) {
+      const org = await prisma.organization.findUnique({
+        where: { id: organizationId },
+      })
+      if (!org) {
+        return NextResponse.json(
+          { error: "Organization not found" },
+          { status: 404 }
+        )
+      }
+    }
+
     const survey = await prisma.survey.create({
       data: {
         name,
         description,
         status,
         createdById: session.admin.id,
+        orgId: organizationId,
       },
       include: {
         createdBy: { select: { id: true, name: true, email: true } },
+        organization: { select: { id: true, name: true, slug: true } },
       },
     })
 
@@ -113,7 +142,7 @@ export async function POST(request: NextRequest) {
         action: "CREATE_SURVEY",
         resourceType: "survey",
         resourceId: survey.id,
-        newState: { name, description, status },
+        newState: { name, description, status, orgId: organizationId },
       },
     })
 
