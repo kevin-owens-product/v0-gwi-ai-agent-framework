@@ -161,7 +161,11 @@ export function matchesKeyBinding(
   const target = keys[0]
 
   const modMatches = target.modifiers.mod ? hasModifier : (!event.metaKey && !event.ctrlKey)
-  const shiftMatches = target.modifiers.shift ? event.shiftKey : !event.shiftKey
+  // Special case: "?" key naturally requires shift on most keyboards
+  const isQuestionMark = target.key === "?"
+  const shiftMatches = target.modifiers.shift
+    ? event.shiftKey
+    : (isQuestionMark ? true : !event.shiftKey)
   const altMatches = target.modifiers.alt ? event.altKey : !event.altKey
   const keyMatches = eventKey === target.key ||
     (target.key === "?" && eventKey === "/" && event.shiftKey)

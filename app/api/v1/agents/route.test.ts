@@ -37,6 +37,7 @@ vi.mock('@/lib/rate-limit', () => ({
 
 vi.mock('@/lib/tenant', () => ({
   getUserMembership: vi.fn(),
+  getValidatedOrgId: vi.fn(),
 }))
 
 vi.mock('@/lib/audit', () => ({
@@ -62,7 +63,7 @@ vi.mock('next/headers', () => ({
 import { GET, POST } from './route'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import { getUserMembership } from '@/lib/tenant'
+import { getUserMembership, getValidatedOrgId } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 
 describe('GET /api/v1/agents', () => {
@@ -86,13 +87,14 @@ describe('GET /api/v1/agents', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
     } as any)
+    vi.mocked(getValidatedOrgId).mockResolvedValue(null)
 
     const request = new NextRequest('http://localhost/api/v1/agents')
     const response = await GET(request)
 
     expect(response.status).toBe(404)
     const data = await response.json()
-    expect(data.error).toBe('No organization found')
+    expect(data.error).toContain('organization')
   })
 
   it('returns 403 when user is not a member of the organization', async () => {
@@ -100,6 +102,7 @@ describe('GET /api/v1/agents', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
     } as any)
+    vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
     vi.mocked(prisma.organization.findUnique).mockResolvedValue({
       id: 'org-1',
       planTier: 'STARTER',
@@ -121,6 +124,7 @@ describe('GET /api/v1/agents', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
     } as any)
+    vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
     vi.mocked(prisma.organization.findUnique).mockResolvedValue({
       id: 'org-1',
       planTier: 'STARTER',
@@ -152,6 +156,7 @@ describe('GET /api/v1/agents', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
     } as any)
+    vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
     vi.mocked(prisma.organization.findUnique).mockResolvedValue({
       id: 'org-1',
       planTier: 'PROFESSIONAL',
@@ -193,6 +198,7 @@ describe('GET /api/v1/agents', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
     } as any)
+    vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
     vi.mocked(prisma.organization.findUnique).mockResolvedValue({
       id: 'org-1',
       planTier: 'STARTER',
@@ -241,6 +247,7 @@ describe('POST /api/v1/agents', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
     } as any)
+    vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'ADMIN',
@@ -266,6 +273,7 @@ describe('POST /api/v1/agents', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
     } as any)
+    vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'ADMIN',
@@ -305,6 +313,7 @@ describe('POST /api/v1/agents', () => {
       user: { id: 'user-1', email: 'test@example.com' },
       expires: new Date(Date.now() + 86400000).toISOString(),
     } as any)
+    vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
     vi.mocked(getUserMembership).mockResolvedValue({
       id: 'member-1',
       role: 'VIEWER', // VIEWER doesn't have agents:write

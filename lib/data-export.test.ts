@@ -8,47 +8,49 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-// Mock Prisma client
-const mockPrisma = {
-  user: {
-    findUnique: vi.fn(),
+// Mock Prisma client - use vi.hoisted to ensure it's available when vi.mock runs
+const { mockPrisma } = vi.hoisted(() => ({
+  mockPrisma: {
+    user: {
+      findUnique: vi.fn(),
+    },
+    userPreferences: {
+      findUnique: vi.fn(),
+    },
+    organizationMember: {
+      findMany: vi.fn(),
+    },
+    agent: {
+      findMany: vi.fn(),
+    },
+    report: {
+      findMany: vi.fn(),
+    },
+    dashboard: {
+      findMany: vi.fn(),
+    },
+    auditLog: {
+      findMany: vi.fn(),
+    },
+    apiKey: {
+      findMany: vi.fn(),
+    },
+    comment: {
+      findMany: vi.fn(),
+    },
+    savedView: {
+      findMany: vi.fn(),
+    },
+    dataExport: {
+      findUnique: vi.fn(),
+      findFirst: vi.fn(),
+      findMany: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+      updateMany: vi.fn(),
+    },
   },
-  userPreferences: {
-    findUnique: vi.fn(),
-  },
-  organizationMember: {
-    findMany: vi.fn(),
-  },
-  agent: {
-    findMany: vi.fn(),
-  },
-  report: {
-    findMany: vi.fn(),
-  },
-  dashboard: {
-    findMany: vi.fn(),
-  },
-  auditLog: {
-    findMany: vi.fn(),
-  },
-  apiKey: {
-    findMany: vi.fn(),
-  },
-  comment: {
-    findMany: vi.fn(),
-  },
-  savedView: {
-    findMany: vi.fn(),
-  },
-  dataExport: {
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    findMany: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-    updateMany: vi.fn(),
-  },
-}
+}))
 
 vi.mock('./db', () => ({
   prisma: mockPrisma,

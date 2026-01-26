@@ -210,7 +210,7 @@ export function useKeyboardShortcuts(
         target.tagName === "INPUT" ||
         target.tagName === "TEXTAREA" ||
         target.isContentEditable ||
-        target.closest('[role="textbox"]')
+        (target.closest && target.closest('[role="textbox"]'))
 
       // Allow escape in inputs for closing
       if (isInput && event.key !== "Escape") return

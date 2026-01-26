@@ -175,6 +175,7 @@ describe("keyboard-shortcuts", () => {
     })
 
     it("matches ? shortcut with shift+/", () => {
+      // Test that pressing Shift+/ matches the "?" binding
       const event = createKeyboardEvent({ key: "/", shiftKey: true })
       const result = matchesKeyBinding(event, "?")
       expect(result.matches).toBe(true)
