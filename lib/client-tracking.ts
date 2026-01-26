@@ -214,7 +214,7 @@ interface TrackingConfig {
  */
 const DEFAULT_CONFIG: TrackingConfig = {
   enabled: true,
-  debug: process.env.NODE_ENV === 'development',
+  debug: false, // Disable console logging
   endpoint: '/api/v1/tracking',
   batchSize: 10,
   flushInterval: 5000, // 5 seconds
