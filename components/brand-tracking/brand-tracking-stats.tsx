@@ -12,6 +12,54 @@ interface StatsData {
   competitorsTracked: number
 }
 
+// Demo brand tracking data for fallback stats calculation
+const demoBrandTrackingStats = {
+  brands: [
+    { status: "ACTIVE", snapshotCount: 47, competitors: ["Adidas", "Under Armour", "Puma", "Reebok"], brandHealth: 82.5 },
+    { status: "ACTIVE", snapshotCount: 124, competitors: ["Pepsi", "Dr Pepper", "Sprite"], brandHealth: 88.2 },
+    { status: "ACTIVE", snapshotCount: 89, competitors: ["Ford", "GM", "Rivian", "Lucid"], brandHealth: 76.8 },
+  ]
+}
+
+// Helper to calculate stats from brand tracking data
+function calculateStatsFromData(brandTrackings: any[]): StatsData {
+  const activeTrackings = brandTrackings.filter((bt) => bt.status === 'ACTIVE').length
+  const totalSnapshots = brandTrackings.reduce((sum, bt) =>
+    sum + (bt._count?.snapshots || bt.snapshotCount || 0), 0)
+
+  // Calculate competitors tracked (unique across all brands)
+  const allCompetitors = new Set<string>()
+  brandTrackings.forEach((bt) => {
+    if (Array.isArray(bt.competitors)) {
+      bt.competitors.forEach((c: string) => allCompetitors.add(c))
+    }
+  })
+
+  // Calculate average brand health from latest snapshots
+  let totalHealth = 0
+  let healthCount = 0
+  brandTrackings.forEach((bt) => {
+    const health = bt.snapshots?.[0]?.brandHealth || bt.brandHealth
+    if (health) {
+      totalHealth += health
+      healthCount++
+    }
+  })
+  const avgBrandHealth = healthCount > 0 ? totalHealth / healthCount : 0
+  const healthTrend = healthCount > 0 ? 3.2 : 0 // Static trend to avoid random values
+
+  return {
+    activeTrackings,
+    totalSnapshots,
+    avgBrandHealth,
+    healthTrend,
+    competitorsTracked: allCompetitors.size
+  }
+}
+
+// Calculate demo stats
+const demoStats = calculateStatsFromData(demoBrandTrackingStats.brands)
+
 export function BrandTrackingStats() {
   const [stats, setStats] = useState<StatsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -24,59 +72,18 @@ export function BrandTrackingStats() {
           const data = await response.json()
           const brandTrackings = data.brandTrackings || data.data || []
 
-          // Calculate stats from the data
-          const activeTrackings = brandTrackings.filter((bt: any) => bt.status === 'ACTIVE').length
-          const totalSnapshots = brandTrackings.reduce((sum: number, bt: any) =>
-            sum + (bt._count?.snapshots || bt.snapshotCount || 0), 0)
-
-          // Calculate competitors tracked (unique across all brands)
-          const allCompetitors = new Set<string>()
-          brandTrackings.forEach((bt: any) => {
-            if (Array.isArray(bt.competitors)) {
-              bt.competitors.forEach((c: string) => allCompetitors.add(c))
-            }
-          })
-
-          // Calculate average brand health from latest snapshots
-          let totalHealth = 0
-          let healthCount = 0
-          brandTrackings.forEach((bt: any) => {
-            const latestSnapshot = bt.snapshots?.[0]
-            if (latestSnapshot?.brandHealth) {
-              totalHealth += latestSnapshot.brandHealth
-              healthCount++
-            }
-          })
-          const avgBrandHealth = healthCount > 0 ? totalHealth / healthCount : 78.5
-          const healthTrend = healthCount > 0 ? 2.5 + Math.random() * 2 : 3.2
-
-          setStats({
-            activeTrackings: activeTrackings || 8,
-            totalSnapshots: totalSnapshots || 378,
-            avgBrandHealth,
-            healthTrend,
-            competitorsTracked: allCompetitors.size || 38
-          })
+          if (brandTrackings.length > 0) {
+            setStats(calculateStatsFromData(brandTrackings))
+          } else {
+            // Use demo stats calculated from demo data
+            setStats(demoStats)
+          }
         } else {
-          // Fallback to demo stats
-          setStats({
-            activeTrackings: 8,
-            totalSnapshots: 378,
-            avgBrandHealth: 78.5,
-            healthTrend: 3.2,
-            competitorsTracked: 38
-          })
+          setStats(demoStats)
         }
       } catch (error) {
         console.error('Failed to fetch stats:', error)
-        // Fallback to demo stats
-        setStats({
-          activeTrackings: 8,
-          totalSnapshots: 378,
-          avgBrandHealth: 78.5,
-          healthTrend: 3.2,
-          competitorsTracked: 38
-        })
+        setStats(demoStats)
       } finally {
         setIsLoading(false)
       }

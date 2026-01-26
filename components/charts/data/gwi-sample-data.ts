@@ -378,6 +378,93 @@ export function generateAdvancedSampleData(
   }
 }
 
+// =============================================================================
+// ADVANCED CHART DATA SETS
+// =============================================================================
+
+// Multi-year trend data for time-series analysis
+export const multiYearTrendData = [
+  { year: "2020", socialMedia: 62, streaming: 58, ecommerce: 52, mobileBank: 45 },
+  { year: "2021", socialMedia: 68, streaming: 72, ecommerce: 68, mobileBank: 55 },
+  { year: "2022", socialMedia: 72, streaming: 78, ecommerce: 75, mobileBank: 62 },
+  { year: "2023", socialMedia: 75, streaming: 82, ecommerce: 82, mobileBank: 72 },
+  { year: "2024", socialMedia: 78, streaming: 85, ecommerce: 88, mobileBank: 78 },
+  { year: "2025 (proj)", socialMedia: 82, streaming: 88, ecommerce: 92, mobileBank: 85, projected: true },
+]
+
+// Detailed platform comparison across metrics
+export const platformComparisonMatrix: GWIDataPoint[] = [
+  { name: "Instagram", value: 78, category: "Reach", segment: "18-34" },
+  { name: "Instagram", value: 65, category: "Engagement", segment: "18-34" },
+  { name: "Instagram", value: 42, category: "Purchase Intent", segment: "18-34" },
+  { name: "TikTok", value: 72, category: "Reach", segment: "18-34" },
+  { name: "TikTok", value: 82, category: "Engagement", segment: "18-34" },
+  { name: "TikTok", value: 38, category: "Purchase Intent", segment: "18-34" },
+  { name: "YouTube", value: 88, category: "Reach", segment: "18-34" },
+  { name: "YouTube", value: 58, category: "Engagement", segment: "18-34" },
+  { name: "YouTube", value: 35, category: "Purchase Intent", segment: "18-34" },
+  { name: "Facebook", value: 52, category: "Reach", segment: "18-34" },
+  { name: "Facebook", value: 35, category: "Engagement", segment: "18-34" },
+  { name: "Facebook", value: 28, category: "Purchase Intent", segment: "18-34" },
+]
+
+// Category-level breakdown for treemap
+export const categoryBreakdownData = [
+  { name: "Social Media", value: 35, category: "Digital", children: [
+    { name: "Instagram", value: 12 },
+    { name: "TikTok", value: 10 },
+    { name: "YouTube", value: 8 },
+    { name: "Other", value: 5 },
+  ]},
+  { name: "Streaming", value: 28, category: "Entertainment", children: [
+    { name: "Netflix", value: 10 },
+    { name: "YouTube TV", value: 8 },
+    { name: "Disney+", value: 6 },
+    { name: "Other", value: 4 },
+  ]},
+  { name: "E-commerce", value: 22, category: "Shopping", children: [
+    { name: "Amazon", value: 12 },
+    { name: "Social Commerce", value: 5 },
+    { name: "DTC Brands", value: 5 },
+  ]},
+  { name: "Gaming", value: 15, category: "Entertainment", children: [
+    { name: "Mobile", value: 8 },
+    { name: "Console", value: 5 },
+    { name: "PC", value: 2 },
+  ]},
+]
+
+// Comprehensive audience segment data
+export const audienceSegmentData = [
+  { segment: "Gen Z Digital Natives", awareness: 82, consideration: 65, purchase: 48, loyalty: 72, nps: 45 },
+  { segment: "Millennial Parents", awareness: 75, consideration: 72, purchase: 58, loyalty: 78, nps: 52 },
+  { segment: "Gen X Professionals", awareness: 68, consideration: 58, purchase: 52, loyalty: 82, nps: 48 },
+  { segment: "Boomer Traditionalists", awareness: 55, consideration: 42, purchase: 38, loyalty: 88, nps: 42 },
+  { segment: "Eco-Conscious Shoppers", awareness: 72, consideration: 68, purchase: 55, loyalty: 75, nps: 58 },
+  { segment: "Tech Early Adopters", awareness: 88, consideration: 78, purchase: 62, loyalty: 68, nps: 62 },
+  { segment: "Budget-Conscious", awareness: 62, consideration: 55, purchase: 72, loyalty: 58, nps: 35 },
+  { segment: "Luxury Seekers", awareness: 78, consideration: 62, purchase: 45, loyalty: 85, nps: 55 },
+]
+
+// Day-part analysis data
+export const daypartAnalysisData = [
+  { time: "6-9 AM", social: 35, streaming: 22, news: 48, shopping: 12 },
+  { time: "9-12 PM", social: 42, streaming: 18, news: 35, shopping: 28 },
+  { time: "12-3 PM", social: 55, streaming: 25, news: 28, shopping: 35 },
+  { time: "3-6 PM", social: 62, streaming: 32, news: 22, shopping: 42 },
+  { time: "6-9 PM", social: 72, streaming: 65, news: 38, shopping: 48 },
+  { time: "9-12 AM", social: 58, streaming: 78, news: 25, shopping: 28 },
+]
+
+// Cross-platform journey data
+export const customerJourneyData = [
+  { stage: "Discovery", social: 45, search: 35, display: 12, referral: 8 },
+  { stage: "Research", social: 28, search: 52, display: 8, referral: 12 },
+  { stage: "Consideration", social: 22, search: 38, display: 15, referral: 25 },
+  { stage: "Purchase", social: 18, search: 28, display: 22, referral: 32 },
+  { stage: "Advocacy", social: 55, search: 12, display: 8, referral: 25 },
+]
+
 // Export color palettes
 export const gwiColorPalettes = {
   default: ["#6366f1", "#8b5cf6", "#a855f7", "#d946ef", "#ec4899", "#f43f5e"],
@@ -388,6 +475,7 @@ export const gwiColorPalettes = {
   gwiBrand: ["#4F46E5", "#7C3AED", "#EC4899", "#F59E0B", "#10B981", "#3B82F6"],
   comparison: ["#6366f1", "#94a3b8", "#22c55e"],
   sentiment: ["#22c55e", "#f59e0b", "#ef4444"],
+  generational: ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981"],
 }
 
 // Export formatting utilities

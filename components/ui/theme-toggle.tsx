@@ -15,7 +15,9 @@
 
 import * as React from "react"
 import { Moon, Sun, Monitor, Check } from "lucide-react"
-import { useTheme, type Theme } from "@/components/providers/theme-provider"
+import { useTheme as useNextTheme } from "next-themes"
+
+type Theme = "light" | "dark" | "system"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -117,7 +119,7 @@ export function ThemeToggle({
   align = "end",
   onThemeChange,
 }: ThemeToggleProps) {
-  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useNextTheme()
   const [mounted, setMounted] = React.useState(false)
 
   // Prevent hydration mismatch
@@ -227,7 +229,7 @@ export function ThemeToggleSimple({
   size = "icon",
   variant = "ghost",
 }: Pick<ThemeToggleProps, "className" | "size" | "variant">) {
-  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useNextTheme()
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {

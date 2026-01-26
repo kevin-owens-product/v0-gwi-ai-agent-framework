@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, Table2, Download, Eye, Clock } from "lucide-react"
+import { Plus, Table2, Download, Eye, Clock, Sparkles, TrendingUp } from "lucide-react"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { DATA_SUMMARY } from "@/components/crosstabs/data/comprehensive-crosstab-data"
 
 interface Crosstab {
   id: string
@@ -15,37 +17,46 @@ interface Crosstab {
   audiences: number
   metrics: number
   lastModified: string
+  category?: string
+  isFeatured?: boolean
 }
 
-// Demo crosstabs for fallback - organized by category
+// Demo crosstabs for fallback - organized by category with realistic audience/metric counts
 const demoCrosstabs: Crosstab[] = [
+  // Featured comprehensive analysis
+  { id: "analysis", name: "Comprehensive Consumer Insights Analysis", audiences: DATA_SUMMARY.totalAudiences, metrics: DATA_SUMMARY.totalMetrics, lastModified: "Just now", category: "Featured", isFeatured: true },
+
   // Social & Platform Analysis
-  { id: "social-1", name: "Generational Social Media Platform Analysis", audiences: 4, metrics: 8, lastModified: "1 hour ago" },
-  { id: "social-2", name: "TikTok vs Instagram Engagement by Age", audiences: 5, metrics: 6, lastModified: "3 hours ago" },
-  { id: "social-3", name: "Content Format Preferences by Generation", audiences: 4, metrics: 7, lastModified: "1 day ago" },
+  { id: "social-1", name: "Generational Social Media Platform Analysis", audiences: 21, metrics: 20, lastModified: "1 hour ago", category: "Social" },
+  { id: "social-2", name: "TikTok vs Instagram Engagement by Age", audiences: 5, metrics: 12, lastModified: "3 hours ago", category: "Social" },
+  { id: "social-3", name: "Content Format Preferences by Generation", audiences: 8, metrics: 15, lastModified: "1 day ago", category: "Social" },
 
   // Commerce & Purchase Behavior
-  { id: "commerce-1", name: "Income Segment Purchase Channel Preferences", audiences: 5, metrics: 8, lastModified: "4 hours ago" },
-  { id: "commerce-2", name: "E-commerce vs In-Store by Product Category", audiences: 6, metrics: 5, lastModified: "2 hours ago" },
-  { id: "commerce-3", name: "Subscription Service Adoption by Segment", audiences: 5, metrics: 6, lastModified: "6 hours ago" },
+  { id: "commerce-1", name: "Income Segment Purchase Channel Preferences", audiences: 12, metrics: 15, lastModified: "4 hours ago", category: "Commerce" },
+  { id: "commerce-2", name: "E-commerce vs In-Store by Product Category", audiences: 8, metrics: 18, lastModified: "2 hours ago", category: "Commerce" },
+  { id: "commerce-3", name: "Subscription Service Adoption by Segment", audiences: 10, metrics: 12, lastModified: "6 hours ago", category: "Commerce" },
 
   // Brand & Competitive Intelligence
-  { id: "brand-1", name: "Brand Awareness Competitive Landscape", audiences: 6, metrics: 8, lastModified: "3 hours ago" },
-  { id: "brand-2", name: "Brand Health Funnel by Market", audiences: 5, metrics: 5, lastModified: "5 hours ago" },
-  { id: "brand-3", name: "Competitive NPS Benchmarking", audiences: 4, metrics: 4, lastModified: "8 hours ago" },
+  { id: "brand-1", name: "Brand Awareness Competitive Landscape", audiences: 15, metrics: 8, lastModified: "3 hours ago", category: "Brand" },
+  { id: "brand-2", name: "Brand Health Funnel by Market", audiences: 6, metrics: 6, lastModified: "5 hours ago", category: "Brand" },
+  { id: "brand-3", name: "Competitive NPS Benchmarking", audiences: 8, metrics: 5, lastModified: "8 hours ago", category: "Brand" },
 
   // Media & Content Consumption
-  { id: "media-1", name: "Media Consumption by Daypart", audiences: 5, metrics: 8, lastModified: "8 hours ago" },
-  { id: "media-2", name: "Streaming Service Preferences by Age", audiences: 4, metrics: 6, lastModified: "12 hours ago" },
-  { id: "media-3", name: "News Source Trust by Demographics", audiences: 5, metrics: 7, lastModified: "1 day ago" },
+  { id: "media-1", name: "Media Consumption by Daypart", audiences: 12, metrics: 15, lastModified: "8 hours ago", category: "Media" },
+  { id: "media-2", name: "Streaming Service Preferences by Age", audiences: 8, metrics: 12, lastModified: "12 hours ago", category: "Media" },
+  { id: "media-3", name: "News Source Trust by Demographics", audiences: 10, metrics: 8, lastModified: "1 day ago", category: "Media" },
 
   // Demographics & Segmentation
-  { id: "demo-1", name: "Sustainability Attitudes by Consumer Segment", audiences: 5, metrics: 8, lastModified: "6 hours ago" },
-  { id: "demo-2", name: "Tech Adoption by Income Level", audiences: 4, metrics: 5, lastModified: "2 days ago" },
+  { id: "demo-1", name: "Sustainability Attitudes by Consumer Segment", audiences: 15, metrics: 10, lastModified: "6 hours ago", category: "Values" },
+  { id: "demo-2", name: "Tech Adoption by Income Level", audiences: 8, metrics: 11, lastModified: "2 days ago", category: "Technology" },
+
+  // Health & Lifestyle
+  { id: "health-1", name: "Health & Fitness Behavior Analysis", audiences: 12, metrics: 8, lastModified: "4 hours ago", category: "Health" },
+  { id: "food-1", name: "Food & Dining Preferences by Segment", audiences: 10, metrics: 5, lastModified: "1 day ago", category: "Food" },
 
   // Market & Geographic Analysis
-  { id: "market-1", name: "Global Market Digital Behavior Comparison", audiences: 8, metrics: 8, lastModified: "2 days ago" },
-  { id: "market-2", name: "US vs UK vs Germany Consumer Attitudes", audiences: 3, metrics: 10, lastModified: "1 day ago" },
+  { id: "market-1", name: "Global Market Digital Behavior Comparison", audiences: 18, metrics: 25, lastModified: "2 days ago", category: "Global" },
+  { id: "market-2", name: "US vs UK vs Germany Consumer Attitudes", audiences: 6, metrics: 30, lastModified: "1 day ago", category: "Global" },
 ]
 
 function formatTimeAgo(dateString: string): string {
@@ -84,27 +95,32 @@ export default function CrosstabsPage() {
         if (response.ok) {
           const data = await response.json()
           const apiCrosstabs = data.crosstabs || data.data || []
-          if (apiCrosstabs.length > 0) {
-            const mapped = apiCrosstabs.map(mapApiCrosstab)
-            setCrosstabs(mapped)
-            setStats({
-              total: mapped.length,
-              views: Math.floor(mapped.length * 76),
-              exports: Math.floor(mapped.length * 3.7),
-              usedToday: Math.min(8, mapped.length),
-            })
-          } else {
-            setCrosstabs(demoCrosstabs)
-            setStats({ total: 42, views: 3200, exports: 156, usedToday: 8 })
-          }
+
+          // Map API crosstabs but only include ones with valid configuration
+          const validApiCrosstabs = apiCrosstabs
+            .map(mapApiCrosstab)
+            .filter((ct: Crosstab) => ct.audiences > 0 || ct.metrics > 0)
+
+          // Always include demoCrosstabs, then add any valid API crosstabs that aren't duplicates
+          const existingIds = new Set(demoCrosstabs.map(ct => ct.id))
+          const uniqueApiCrosstabs = validApiCrosstabs.filter((ct: Crosstab) => !existingIds.has(ct.id))
+          const allCrosstabs = [...demoCrosstabs, ...uniqueApiCrosstabs]
+
+          setCrosstabs(allCrosstabs)
+          setStats({
+            total: allCrosstabs.length,
+            views: Math.floor(allCrosstabs.length * 200),
+            exports: Math.floor(allCrosstabs.length * 10),
+            usedToday: Math.min(12, allCrosstabs.length),
+          })
         } else {
           setCrosstabs(demoCrosstabs)
-          setStats({ total: 42, views: 3200, exports: 156, usedToday: 8 })
+          setStats({ total: demoCrosstabs.length, views: 3200, exports: 156, usedToday: 12 })
         }
       } catch (error) {
         console.error('Failed to fetch crosstabs:', error)
         setCrosstabs(demoCrosstabs)
-        setStats({ total: 42, views: 3200, exports: 156, usedToday: 8 })
+        setStats({ total: demoCrosstabs.length, views: 3200, exports: 156, usedToday: 12 })
       } finally {
         setIsLoading(false)
       }
@@ -239,20 +255,85 @@ function CrosstabsGrid({ crosstabs }: { crosstabs: Crosstab[] }) {
     )
   }
 
+  // Separate featured from regular crosstabs
+  const featured = crosstabs.filter(c => c.isFeatured)
+  const regular = crosstabs.filter(c => !c.isFeatured)
+
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {crosstabs.map((crosstab) => (
-        <Link key={crosstab.id} href={`/dashboard/crosstabs/${crosstab.id}`}>
-          <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer">
-            <h3 className="font-semibold">{crosstab.name}</h3>
-            <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
-              <span>{crosstab.audiences} audiences</span>
-              <span>{crosstab.metrics} metrics</span>
+    <div className="space-y-6">
+      {/* Featured Crosstab - Full Width */}
+      {featured.map((crosstab) => (
+        <Link key={crosstab.id} href="/dashboard/crosstabs/analysis">
+          <Card className="p-6 hover:bg-accent/50 transition-colors cursor-pointer border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="default" className="bg-primary">
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    Featured
+                  </Badge>
+                  <Badge variant="outline">
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                    Live Data
+                  </Badge>
+                </div>
+                <h3 className="font-semibold text-lg">{crosstab.name}</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Explore {DATA_SUMMARY.categories.length} categories of consumer behavior data
+                </p>
+                <div className="flex items-center gap-6 mt-4 text-sm">
+                  <span className="flex items-center gap-1">
+                    <span className="font-semibold text-primary">{crosstab.audiences}</span>
+                    <span className="text-muted-foreground">audience segments</span>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="font-semibold text-primary">{crosstab.metrics}</span>
+                    <span className="text-muted-foreground">metrics</span>
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {DATA_SUMMARY.categories.slice(0, 6).map((cat) => (
+                    <Badge key={cat} variant="secondary" className="text-xs">
+                      {cat}
+                    </Badge>
+                  ))}
+                  {DATA_SUMMARY.categories.length > 6 && (
+                    <Badge variant="secondary" className="text-xs">
+                      +{DATA_SUMMARY.categories.length - 6} more
+                    </Badge>
+                  )}
+                </div>
+              </div>
+              <Button variant="default" size="sm" className="ml-4">
+                Open Analysis
+              </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">Modified {crosstab.lastModified}</p>
           </Card>
         </Link>
       ))}
+
+      {/* Regular Crosstabs Grid */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {regular.map((crosstab) => (
+          <Link key={crosstab.id} href={crosstab.id === "analysis" ? "/dashboard/crosstabs/analysis" : `/dashboard/crosstabs/${crosstab.id}`}>
+            <Card className="p-4 hover:bg-accent/50 transition-colors cursor-pointer h-full">
+              <div className="flex items-start justify-between">
+                <h3 className="font-semibold">{crosstab.name}</h3>
+                {crosstab.category && (
+                  <Badge variant="outline" className="text-xs ml-2 shrink-0">
+                    {crosstab.category}
+                  </Badge>
+                )}
+              </div>
+              <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
+                <span>{crosstab.audiences} audiences</span>
+                <span>{crosstab.metrics} metrics</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Modified {crosstab.lastModified}</p>
+            </Card>
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }

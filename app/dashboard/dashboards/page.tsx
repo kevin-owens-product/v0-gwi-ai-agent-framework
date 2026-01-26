@@ -59,32 +59,40 @@ export default function DashboardsPage() {
 
   useEffect(() => {
     async function fetchDashboards() {
+      // Helper to calculate stats from dashboard list
+      const calculateStats = (dashboardList: Dashboard[]) => {
+        const totalViews = dashboardList.reduce((sum, d) => sum + d.views, 0)
+        return {
+          total: dashboardList.length,
+          views: totalViews,
+          shared: Math.floor(totalViews * 0.05), // ~5% share rate
+          exports: Math.floor(totalViews * 0.02), // ~2% export rate
+        }
+      }
+
       try {
         const response = await fetch('/api/v1/dashboards')
         if (response.ok) {
           const data = await response.json()
           const apiDashboards = data.dashboards || data.data || []
-          if (apiDashboards.length > 0) {
-            const mapped = apiDashboards.map(mapApiDashboard)
-            setDashboards(mapped)
-            setStats({
-              total: mapped.length,
-              views: mapped.reduce((sum: number, d: Dashboard) => sum + d.views, 0),
-              shared: Math.floor(mapped.length * 5.2),
-              exports: Math.floor(mapped.length * 2.4),
-            })
-          } else {
-            setDashboards(demoDashboards)
-            setStats({ total: 28, views: 8900, shared: 145, exports: 67 })
-          }
+
+          // Always include demo dashboards, then add valid API dashboards
+          const existingIds = new Set(demoDashboards.map(d => d.id))
+          const validApiDashboards = apiDashboards
+            .map(mapApiDashboard)
+            .filter((d: Dashboard) => !existingIds.has(d.id))
+          const allDashboards = [...demoDashboards, ...validApiDashboards]
+
+          setDashboards(allDashboards)
+          setStats(calculateStats(allDashboards))
         } else {
           setDashboards(demoDashboards)
-          setStats({ total: 28, views: 8900, shared: 145, exports: 67 })
+          setStats(calculateStats(demoDashboards))
         }
       } catch (error) {
         console.error('Failed to fetch dashboards:', error)
         setDashboards(demoDashboards)
-        setStats({ total: 28, views: 8900, shared: 145, exports: 67 })
+        setStats(calculateStats(demoDashboards))
       } finally {
         setIsLoading(false)
       }

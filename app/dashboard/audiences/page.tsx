@@ -226,37 +226,62 @@ export default function AudiencesPage() {
 
   useEffect(() => {
     async function fetchAudiences() {
+      // Helper to calculate stats from audience list
+      const calculateStats = (audienceList: Audience[]) => {
+        const allMarkets = new Set<string>()
+        let totalSize = 0
+
+        audienceList.forEach((a) => {
+          a.markets.forEach((m) => allMarkets.add(m))
+          // Parse size string like "1.2M", "850K" to number
+          const sizeStr = a.size
+          if (sizeStr.includes('M')) {
+            totalSize += parseFloat(sizeStr) * 1000000
+          } else if (sizeStr.includes('K')) {
+            totalSize += parseFloat(sizeStr) * 1000
+          } else {
+            totalSize += parseInt(sizeStr) || 0
+          }
+        })
+
+        const avgReach = audienceList.length > 0 ? totalSize / audienceList.length : 0
+        const avgReachFormatted = avgReach >= 1000000
+          ? `${(avgReach / 1000000).toFixed(1)}M`
+          : avgReach >= 1000
+            ? `${(avgReach / 1000).toFixed(0)}K`
+            : avgReach.toString()
+
+        return {
+          total: audienceList.length,
+          avgReach: avgReachFormatted,
+          markets: allMarkets.size,
+          usedThisWeek: Math.min(audienceList.length, Math.ceil(audienceList.length * 0.75)),
+        }
+      }
+
       try {
         const response = await fetch('/api/v1/audiences')
         if (response.ok) {
           const data = await response.json()
           const apiAudiences = data.audiences || data.data || []
-          if (apiAudiences.length > 0) {
-            const mapped = apiAudiences.map(mapApiAudience)
-            setAudiences(mapped)
 
-            // Calculate stats
-            const allMarkets = new Set<string>()
-            mapped.forEach((a: Audience) => a.markets.forEach((m: string) => allMarkets.add(m)))
+          // Always include demo audiences, then add valid API audiences
+          const existingIds = new Set(demoAudiences.map(a => a.id))
+          const validApiAudiences = apiAudiences
+            .map(mapApiAudience)
+            .filter((a: Audience) => !existingIds.has(a.id))
+          const allAudiences = [...demoAudiences, ...validApiAudiences]
 
-            setStats({
-              total: mapped.length,
-              avgReach: '2.4M',
-              markets: allMarkets.size,
-              usedThisWeek: Math.min(12, mapped.length),
-            })
-          } else {
-            setAudiences(demoAudiences)
-            setStats({ total: 24, avgReach: '2.4M', markets: 48, usedThisWeek: 12 })
-          }
+          setAudiences(allAudiences)
+          setStats(calculateStats(allAudiences))
         } else {
           setAudiences(demoAudiences)
-          setStats({ total: 24, avgReach: '2.4M', markets: 48, usedThisWeek: 12 })
+          setStats(calculateStats(demoAudiences))
         }
       } catch (error) {
         console.error('Failed to fetch audiences:', error)
         setAudiences(demoAudiences)
-        setStats({ total: 24, avgReach: '2.4M', markets: 48, usedThisWeek: 12 })
+        setStats(calculateStats(demoAudiences))
       } finally {
         setIsLoading(false)
       }

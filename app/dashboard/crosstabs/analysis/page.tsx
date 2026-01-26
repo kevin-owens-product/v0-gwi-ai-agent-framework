@@ -23,49 +23,14 @@ import {
 import Link from "next/link"
 import { toast } from "sonner"
 
-// Sample data for demonstration
-const SAMPLE_COLUMNS: CrosstabColumn[] = [
-  { id: "genz", key: "Gen Z (18-24)", label: "Gen Z (18-24)", category: "Generation" },
-  { id: "mill", key: "Millennials (25-40)", label: "Millennials", category: "Generation" },
-  { id: "genx", key: "Gen X (41-56)", label: "Gen X", category: "Generation" },
-  { id: "boom", key: "Boomers (57-75)", label: "Boomers", category: "Generation" },
-]
-
-const SAMPLE_DATA: CrosstabRow[] = [
-  { id: "1", metric: "TikTok Usage", category: "Social Media", values: { "Gen Z (18-24)": 87, "Millennials (25-40)": 52, "Gen X (41-56)": 24, "Boomers (57-75)": 8 } },
-  { id: "2", metric: "Instagram Usage", category: "Social Media", values: { "Gen Z (18-24)": 82, "Millennials (25-40)": 71, "Gen X (41-56)": 48, "Boomers (57-75)": 28 } },
-  { id: "3", metric: "Facebook Usage", category: "Social Media", values: { "Gen Z (18-24)": 42, "Millennials (25-40)": 68, "Gen X (41-56)": 78, "Boomers (57-75)": 72 } },
-  { id: "4", metric: "YouTube Usage", category: "Social Media", values: { "Gen Z (18-24)": 91, "Millennials (25-40)": 85, "Gen X (41-56)": 76, "Boomers (57-75)": 62 } },
-  { id: "5", metric: "LinkedIn Usage", category: "Professional", values: { "Gen Z (18-24)": 28, "Millennials (25-40)": 52, "Gen X (41-56)": 48, "Boomers (57-75)": 35 } },
-  { id: "6", metric: "Twitter/X Usage", category: "Social Media", values: { "Gen Z (18-24)": 38, "Millennials (25-40)": 42, "Gen X (41-56)": 35, "Boomers (57-75)": 22 } },
-  { id: "7", metric: "Snapchat Usage", category: "Social Media", values: { "Gen Z (18-24)": 72, "Millennials (25-40)": 35, "Gen X (41-56)": 12, "Boomers (57-75)": 4 } },
-  { id: "8", metric: "Pinterest Usage", category: "Social Media", values: { "Gen Z (18-24)": 45, "Millennials (25-40)": 48, "Gen X (41-56)": 42, "Boomers (57-75)": 38 } },
-  { id: "9", metric: "Online Shopping", category: "E-commerce", values: { "Gen Z (18-24)": 78, "Millennials (25-40)": 82, "Gen X (41-56)": 75, "Boomers (57-75)": 58 } },
-  { id: "10", metric: "Mobile Banking", category: "Finance", values: { "Gen Z (18-24)": 72, "Millennials (25-40)": 85, "Gen X (41-56)": 68, "Boomers (57-75)": 42 } },
-  { id: "11", metric: "Streaming Video", category: "Entertainment", values: { "Gen Z (18-24)": 92, "Millennials (25-40)": 88, "Gen X (41-56)": 72, "Boomers (57-75)": 55 } },
-  { id: "12", metric: "Podcast Listening", category: "Entertainment", values: { "Gen Z (18-24)": 48, "Millennials (25-40)": 55, "Gen X (41-56)": 42, "Boomers (57-75)": 25 } },
-]
-
-const SAMPLE_FILTER_FIELDS: FilterField[] = [
-  { id: "metric", name: "metric", label: "Metric Name", type: "text", category: "Dimensions" },
-  { id: "category", name: "category", label: "Category", type: "select", category: "Dimensions", options: [
-    { value: "Social Media", label: "Social Media" },
-    { value: "E-commerce", label: "E-commerce" },
-    { value: "Finance", label: "Finance" },
-    { value: "Entertainment", label: "Entertainment" },
-    { value: "Professional", label: "Professional" },
-  ]},
-  { id: "value", name: "value", label: "Value", type: "number", category: "Metrics", min: 0, max: 100 },
-]
-
-const SAMPLE_VARIABLES: FieldVariable[] = [
-  { id: "genz", name: "Gen_Z", label: "Gen Z (18-24)", type: "audience", value: 65 },
-  { id: "mill", name: "Millennials", label: "Millennials (25-40)", type: "audience", value: 58 },
-  { id: "genx", name: "Gen_X", label: "Gen X (41-56)", type: "audience", value: 48 },
-  { id: "boom", name: "Boomers", label: "Boomers (57-75)", type: "audience", value: 38 },
-  { id: "total", name: "Total_Sample", label: "Total Sample", type: "constant", value: 10000 },
-  { id: "base", name: "Base_Index", label: "Base Index", type: "constant", value: 100 },
-]
+// Import comprehensive sample data (150+ metrics, 21 audience segments)
+import {
+  COMPREHENSIVE_COLUMNS,
+  COMPREHENSIVE_DATA,
+  COMPREHENSIVE_FILTER_FIELDS,
+  COMPREHENSIVE_VARIABLES,
+  DATA_SUMMARY,
+} from "@/components/crosstabs/data/comprehensive-crosstab-data"
 
 function CrosstabAnalysisContent() {
   const searchParams = useSearchParams()
@@ -73,8 +38,8 @@ function CrosstabAnalysisContent() {
   const _crosstabId = searchParams.get("id")
 
   const [activeTab, setActiveTab] = useState<"grid" | "calculated" | "filters" | "visualize">("grid")
-  const [data, setData] = useState<CrosstabRow[]>(SAMPLE_DATA)
-  const [columns] = useState<CrosstabColumn[]>(SAMPLE_COLUMNS)
+  const [data, setData] = useState<CrosstabRow[]>(COMPREHENSIVE_DATA)
+  const [columns] = useState<CrosstabColumn[]>(COMPREHENSIVE_COLUMNS)
   const [calculatedFields, setCalculatedFields] = useState<CalculatedField[]>([])
   const [activeFilters, setActiveFilters] = useState<FilterGroup[]>([])
 
@@ -181,10 +146,11 @@ function CrosstabAnalysisContent() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-semibold">Advanced Crosstab Analysis</h1>
-              <Badge variant="secondary">Beta</Badge>
+              <Badge variant="secondary">{DATA_SUMMARY.totalMetrics} metrics</Badge>
+              <Badge variant="outline">{DATA_SUMMARY.totalAudiences} audiences</Badge>
             </div>
             <p className="text-sm text-muted-foreground">
-              Interactive grid with editing, drill-down, and calculated fields
+              {DATA_SUMMARY.categories.length} categories: {DATA_SUMMARY.categories.slice(0, 5).join(", ")}{DATA_SUMMARY.categories.length > 5 ? ` +${DATA_SUMMARY.categories.length - 5} more` : ""}
             </p>
           </div>
         </div>
@@ -251,8 +217,8 @@ function CrosstabAnalysisContent() {
             <AdvancedCrosstabGrid
               columns={columns}
               data={data}
-              title="Generational Social Media Usage"
-              description="Comprehensive analysis of platform usage across generations"
+              title={`Consumer Insights Analysis (${DATA_SUMMARY.totalMetrics} metrics × ${DATA_SUMMARY.totalAudiences} segments)`}
+              description="Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
               onCellClick={handleCellClick}
               onCellEdit={handleCellEdit}
               onDrillDown={handleDrillDown}
@@ -265,6 +231,7 @@ function CrosstabAnalysisContent() {
                 showTotals: true,
                 highlightOnHover: true,
                 editMode: false,
+                groupByCategory: true,
               }}
             />
           </TabsContent>
@@ -272,7 +239,7 @@ function CrosstabAnalysisContent() {
           <TabsContent value="calculated" className="h-full m-0 p-6 overflow-auto">
             <CalculatedFieldsManager
               fields={calculatedFields}
-              availableVariables={SAMPLE_VARIABLES}
+              availableVariables={COMPREHENSIVE_VARIABLES}
               onFieldAdd={handleFieldAdd}
               onFieldUpdate={handleFieldUpdate}
               onFieldDelete={handleFieldDelete}
@@ -282,7 +249,7 @@ function CrosstabAnalysisContent() {
 
           <TabsContent value="filters" className="h-full m-0 p-6 overflow-auto">
             <AdvancedFilters
-              fields={SAMPLE_FILTER_FIELDS}
+              fields={COMPREHENSIVE_FILTER_FIELDS}
               activeFilters={activeFilters}
               onFiltersChange={handleFiltersChange}
               onFilterApply={handleFiltersApply}
@@ -293,12 +260,24 @@ function CrosstabAnalysisContent() {
             <InteractiveChartEditor
               initialConfig={{
                 type: "BAR",
-                title: "Platform Usage by Generation",
+                title: "Consumer Behavior Across Key Metrics",
               }}
-              initialData={data.slice(0, 6).map(row => ({
-                name: row.metric,
-                value: Math.round(Object.values(row.values).reduce((a: number, b) => a + (b || 0), 0) / columns.length),
-              }))}
+              initialData={
+                // Select representative metrics from different categories
+                data
+                  .filter(row => [
+                    "Instagram - Daily Active Use",
+                    "TikTok - Daily Active Use",
+                    "Amazon - Monthly Purchase",
+                    "Netflix - Active Subscriber",
+                    "Mobile Banking - Weekly User",
+                    "Sustainability - Major Purchase Factor",
+                  ].includes(row.metric))
+                  .map(row => ({
+                    name: row.metric.split(" - ")[0],
+                    value: row.values["Total Population"] || 0,
+                  }))
+              }
               onSave={(_config, _chartData) => {
                 toast.success("Chart saved!")
               }}

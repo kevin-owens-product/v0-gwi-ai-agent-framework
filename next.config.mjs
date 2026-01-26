@@ -29,35 +29,53 @@ const nextConfig = {
   },
   // Add cache-control headers to prevent stale HTML caching
   async headers() {
+    const commonNoCacheHeaders = [
+      {
+        key: 'Cache-Control',
+        value: 'no-cache, no-store, must-revalidate, max-age=0',
+      },
+      {
+        key: 'Pragma',
+        value: 'no-cache',
+      },
+      {
+        key: 'Expires',
+        value: '0',
+      },
+      {
+        key: 'Surrogate-Control',
+        value: 'no-store',
+      },
+    ];
+
     return [
       {
         // HTML pages should not be cached to ensure fresh chunk references
         source: '/((?!_next/static|_next/image|favicon.ico).*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
-          {
-            key: 'Pragma',
-            value: 'no-cache',
-          },
-          {
-            key: 'Expires',
-            value: '0',
-          },
-        ],
+        headers: commonNoCacheHeaders,
       },
-      {
-        // Static assets with hashed filenames can be cached forever
-        source: '/_next/static/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
+      // In development, don't cache JS chunks either for faster iteration
+      ...(isDevelopment ? [
+        {
+          source: '/_next/static/chunks/:path*',
+          headers: commonNoCacheHeaders,
+        },
+        {
+          source: '/_next/static/development/:path*',
+          headers: commonNoCacheHeaders,
+        },
+      ] : [
+        {
+          // Static assets with hashed filenames can be cached forever in production
+          source: '/_next/static/:path*',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'public, max-age=31536000, immutable',
+            },
+          ],
+        },
+      ]),
     ];
   },
   // Optimize webpack for memory-constrained environments

@@ -202,49 +202,38 @@ export default function ChartsPage() {
 
   useEffect(() => {
     async function fetchCharts() {
+      // Helper to calculate stats from chart data
+      const calculateStats = (chartList: Chart[]) => {
+        const totalViews = chartList.reduce((sum, c) => sum + (c.views || 0), 0)
+        return {
+          total: chartList.length,
+          views: totalViews,
+          shares: Math.floor(totalViews * 0.15), // ~15% share rate
+          exports: Math.floor(totalViews * 0.06), // ~6% export rate
+        }
+      }
+
       try {
         const response = await fetch("/api/v1/charts")
         if (response.ok) {
           const data = await response.json()
           const chartsData = data.charts || data.data || []
-          if (chartsData.length > 0) {
-            setCharts(chartsData)
-            setStats({
-              total: data.total || chartsData.length,
-              views: chartsData.reduce((sum: number, c: any) => sum + (c.views || 0), 0),
-              shares: 234,
-              exports: 89,
-            })
-          } else {
-            // Use advanced demo data
-            setCharts(advancedDemoCharts)
-            setStats({
-              total: advancedDemoCharts.length,
-              views: advancedDemoCharts.reduce((sum, c) => sum + (c.views || 0), 0),
-              shares: 234,
-              exports: 89,
-            })
-          }
+
+          // Always include demo charts, then add valid API charts
+          const existingIds = new Set(advancedDemoCharts.map(c => c.id))
+          const validApiCharts = chartsData.filter((c: Chart) => !existingIds.has(c.id))
+          const allCharts = [...advancedDemoCharts, ...validApiCharts]
+
+          setCharts(allCharts)
+          setStats(calculateStats(allCharts))
         } else {
-          // Fallback to demo data
           setCharts(advancedDemoCharts)
-          setStats({
-            total: advancedDemoCharts.length,
-            views: advancedDemoCharts.reduce((sum, c) => sum + (c.views || 0), 0),
-            shares: 234,
-            exports: 89,
-          })
+          setStats(calculateStats(advancedDemoCharts))
         }
       } catch (error) {
         console.error("Failed to fetch charts:", error)
-        // Fallback to demo data
         setCharts(advancedDemoCharts)
-        setStats({
-          total: advancedDemoCharts.length,
-          views: advancedDemoCharts.reduce((sum, c) => sum + (c.views || 0), 0),
-          shares: 234,
-          exports: 89,
-        })
+        setStats(calculateStats(advancedDemoCharts))
       } finally {
         setIsLoading(false)
       }
