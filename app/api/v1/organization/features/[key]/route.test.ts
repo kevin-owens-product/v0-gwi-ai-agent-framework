@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { GET } from './route'
-import { getServerSession } from 'next-auth'
-import { prisma } from '@/lib/prisma'
-import { checkFeatureAccess } from '@/lib/features'
 
-vi.mock('next-auth')
+// Mock auth module before importing route
+vi.mock('@/lib/auth', () => ({
+  auth: vi.fn(),
+}))
+
 vi.mock('@/lib/prisma', () => ({
   prisma: {
     organizationMember: {
@@ -12,9 +12,16 @@ vi.mock('@/lib/prisma', () => ({
     },
   },
 }))
+
 vi.mock('@/lib/features', () => ({
   checkFeatureAccess: vi.fn(),
 }))
+
+// Import after mocking
+import { GET } from './route'
+import { auth } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
+import { checkFeatureAccess } from '@/lib/features'
 
 describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
   beforeEach(() => {
@@ -23,13 +30,13 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
 
   describe('Authentication', () => {
     it('should return 401 for unauthenticated requests', async () => {
-      vi.mocked(getServerSession).mockResolvedValue(null)
+      vi.mocked(auth).mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization/features/ADVANCED_ANALYTICS', {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      const response = await GET(request, { params: { key: 'ADVANCED_ANALYTICS' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'ADVANCED_ANALYTICS' }) })
       const data = await response.json()
 
       expect(response.status).toBe(401)
@@ -37,14 +44,14 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should require X-Organization-Id header', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
 
       const request = new Request('http://localhost:3000/api/v1/organization/features/ADVANCED_ANALYTICS')
 
-      const response = await GET(request, { params: { key: 'ADVANCED_ANALYTICS' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'ADVANCED_ANALYTICS' }) })
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -52,18 +59,17 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should verify user membership', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization/features/ADVANCED_ANALYTICS', {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      const response = await GET(request, { params: { key: 'ADVANCED_ANALYTICS' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'ADVANCED_ANALYTICS' }) })
       const data = await response.json()
 
       expect(response.status).toBe(403)
@@ -73,11 +79,10 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
 
   describe('Feature Access Check', () => {
     it('should return access granted with no limits', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockResolvedValue({
         id: 'member-1',
         userId: 'user-1',
@@ -85,7 +90,6 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         role: 'MEMBER',
         joinedAt: new Date(),
       } as any)
-
       vi.mocked(checkFeatureAccess).mockResolvedValue({
         hasAccess: true,
         value: true,
@@ -96,7 +100,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      const response = await GET(request, { params: { key: 'ADVANCED_ANALYTICS' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'ADVANCED_ANALYTICS' }) })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -109,11 +113,10 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should return access denied for unavailable feature', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockResolvedValue({
         id: 'member-1',
         userId: 'user-1',
@@ -121,7 +124,6 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         role: 'MEMBER',
         joinedAt: new Date(),
       } as any)
-
       vi.mocked(checkFeatureAccess).mockResolvedValue({
         hasAccess: false,
       })
@@ -130,7 +132,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      const response = await GET(request, { params: { key: 'ENTERPRISE_FEATURE' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'ENTERPRISE_FEATURE' }) })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -140,11 +142,10 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should return usage tracking for limited features', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockResolvedValue({
         id: 'member-1',
         userId: 'user-1',
@@ -152,7 +153,6 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         role: 'MEMBER',
         joinedAt: new Date(),
       } as any)
-
       vi.mocked(checkFeatureAccess).mockResolvedValue({
         hasAccess: true,
         value: true,
@@ -167,7 +167,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      const response = await GET(request, { params: { key: 'API_REQUESTS' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'API_REQUESTS' }) })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -183,11 +183,10 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should indicate near limit status', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockResolvedValue({
         id: 'member-1',
         userId: 'user-1',
@@ -195,7 +194,6 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         role: 'MEMBER',
         joinedAt: new Date(),
       } as any)
-
       vi.mocked(checkFeatureAccess).mockResolvedValue({
         hasAccess: true,
         value: true,
@@ -210,7 +208,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      const response = await GET(request, { params: { key: 'WORKFLOW_RUNS' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'WORKFLOW_RUNS' }) })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -219,11 +217,10 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should indicate at limit status', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockResolvedValue({
         id: 'member-1',
         userId: 'user-1',
@@ -231,7 +228,6 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         role: 'MEMBER',
         joinedAt: new Date(),
       } as any)
-
       vi.mocked(checkFeatureAccess).mockResolvedValue({
         hasAccess: true,
         value: true,
@@ -246,7 +242,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      const response = await GET(request, { params: { key: 'TEAM_MEMBERS' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'TEAM_MEMBERS' }) })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -256,11 +252,10 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
 
   describe('Different Feature Keys', () => {
     it('should check ADVANCED_ANALYTICS feature', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockResolvedValue({
         id: 'member-1',
         userId: 'user-1',
@@ -268,7 +263,6 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         role: 'MEMBER',
         joinedAt: new Date(),
       } as any)
-
       vi.mocked(checkFeatureAccess).mockResolvedValue({
         hasAccess: true,
         value: true,
@@ -279,17 +273,16 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      await GET(request, { params: { key: 'ADVANCED_ANALYTICS' } })
+      await GET(request as any, { params: Promise.resolve({ key: 'ADVANCED_ANALYTICS' }) })
 
       expect(checkFeatureAccess).toHaveBeenCalledWith('org-1', 'ADVANCED_ANALYTICS')
     })
 
     it('should check CUSTOM_INTEGRATIONS feature', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockResolvedValue({
         id: 'member-1',
         userId: 'user-1',
@@ -297,7 +290,6 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         role: 'MEMBER',
         joinedAt: new Date(),
       } as any)
-
       vi.mocked(checkFeatureAccess).mockResolvedValue({
         hasAccess: false,
       })
@@ -306,7 +298,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      await GET(request, { params: { key: 'CUSTOM_INTEGRATIONS' } })
+      await GET(request as any, { params: Promise.resolve({ key: 'CUSTOM_INTEGRATIONS' }) })
 
       expect(checkFeatureAccess).toHaveBeenCalledWith('org-1', 'CUSTOM_INTEGRATIONS')
     })
@@ -314,11 +306,10 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
 
   describe('Error Handling', () => {
     it('should return 500 for database errors', async () => {
-      vi.mocked(getServerSession).mockResolvedValue({
+      vi.mocked(auth).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-
       vi.mocked(prisma.organizationMember.findFirst).mockRejectedValue(
         new Error('Database error')
       )
@@ -327,7 +318,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
         headers: { 'x-organization-id': 'org-1' },
       })
 
-      const response = await GET(request, { params: { key: 'ADVANCED_ANALYTICS' } })
+      const response = await GET(request as any, { params: Promise.resolve({ key: 'ADVANCED_ANALYTICS' }) })
       const data = await response.json()
 
       expect(response.status).toBe(500)
