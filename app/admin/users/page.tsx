@@ -110,7 +110,7 @@ export default function UsersPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         throw new Error(`HTTP error: ${response.status}`)
@@ -153,7 +153,7 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         const data = await response.json()
@@ -178,7 +178,7 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         const data = await response.json()
@@ -199,7 +199,7 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         const data = await response.json()
@@ -360,7 +360,7 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         throw new Error(`HTTP error: ${response.status}`)
@@ -394,7 +394,7 @@ export default function UsersPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         const data = await response.json()

@@ -295,7 +295,7 @@ export default function HierarchyPage() {
       if (!response.ok) {
         if (response.status === 401) {
           console.error("Unauthorized - redirecting to login")
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         throw new Error(`HTTP error: ${response.status}`)
@@ -321,7 +321,7 @@ export default function HierarchyPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         throw new Error(`HTTP error: ${response.status}`)
@@ -343,7 +343,7 @@ export default function HierarchyPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         throw new Error(`HTTP error: ${response.status}`)
@@ -385,7 +385,7 @@ export default function HierarchyPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         const data = await response.json()
@@ -423,7 +423,7 @@ export default function HierarchyPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         const data = await response.json()
@@ -461,7 +461,7 @@ export default function HierarchyPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         const data = await response.json()
@@ -490,7 +490,7 @@ export default function HierarchyPage() {
       })
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         const data = await response.json()

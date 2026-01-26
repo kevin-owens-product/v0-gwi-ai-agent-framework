@@ -96,7 +96,7 @@ export default function FrameworkDetailPage() {
       })
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = "/admin/login"
+          window.location.href = "/login?type=admin"
           return
         }
         throw new Error("Failed to fetch framework")

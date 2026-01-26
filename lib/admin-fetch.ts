@@ -44,7 +44,7 @@ export async function adminFetch<T = unknown>(
   if (response.status === 401) {
     // Redirect to login on auth failure
     if (typeof window !== "undefined") {
-      window.location.href = "/admin/login"
+      window.location.href = "/login?type=admin"
     }
     throw new AdminAuthError()
   }

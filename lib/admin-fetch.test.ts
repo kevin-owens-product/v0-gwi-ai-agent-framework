@@ -355,8 +355,8 @@ describe('admin-fetch', () => {
     })
 
     it('should redirect on 401 to login', () => {
-      const redirectUrl = '/admin/login'
-      expect(redirectUrl).toBe('/admin/login')
+      const redirectUrl = '/login?type=admin'
+      expect(redirectUrl).toBe('/login?type=admin')
     })
 
     it('should handle 404 errors', () => {

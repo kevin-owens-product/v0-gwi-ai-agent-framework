@@ -103,7 +103,7 @@ const mockLogoutFetch = vi.fn().mockResolvedValue({ ok: true })
 function AdminSidebar({ navSections }: { navSections: NavSection[] }) {
   const handleLogout = async () => {
     await mockLogoutFetch("/api/admin/auth/logout", { method: "POST" })
-    window.location.href = "/admin/login"
+    window.location.href = "/login?type=admin"
   }
 
   return (
@@ -374,7 +374,7 @@ describe('AdminSidebar Component', () => {
       fireEvent.click(screen.getByTestId('logout-button'))
 
       await waitFor(() => {
-        expect(mockLocationHref).toBe('/admin/login')
+        expect(mockLocationHref).toBe('/login?type=admin')
       })
     })
   })

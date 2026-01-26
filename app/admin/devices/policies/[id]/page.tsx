@@ -118,7 +118,7 @@ export default function DevicePolicyDetailPage() {
       const response = await fetch(`/api/admin/devices/policies/${policyId}`)
       if (!response.ok) {
         if (response.status === 401) {
-          router.push("/admin/login")
+          router.push("/login?type=admin")
           return
         }
         throw new Error("Failed to fetch policy")
