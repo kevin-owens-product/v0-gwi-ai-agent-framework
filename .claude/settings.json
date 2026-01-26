@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "GWI AI Agent Framework",
+    "description": "Market research data platform with AI agents",
+    "primaryLanguage": "typescript"
+  },
+  "context": {
+    "alwaysInclude": [
+      "CLAUDE.md",
+      "docs/adr/*.md"
+    ],
+    "additionalPaths": {
+      "/app/gwi": "app/gwi/CONTEXT.md"
+    }
+  },
+  "permissions": {
+    "allowedBashCommands": [
+      "npm *",
+      "npx *",
+      "pnpm *",
+      "git *",
+      "ls *",
+      "cat *",
+      "head *",
+      "tail *",
+      "grep *",
+      "find *",
+      "mkdir *",
+      "rm -rf .next",
+      "rm -rf node_modules/.cache"
+    ],
+    "blockedPatterns": [
+      "rm -rf /",
+      "rm -rf ~",
+      "sudo *",
+      "> /etc/*",
+      "curl * | sh",
+      "wget * | sh"
+    ]
+  },
+  "codeGeneration": {
+    "preferredTestFramework": "vitest",
+    "preferredORM": "prisma",
+    "styleGuide": {
+      "indentation": 2,
+      "quotes": "double",
+      "semicolons": false,
+      "trailingComma": "es5"
+    }
+  }
+}

@@ -1266,6 +1266,16 @@ model SuperAdmin {
   createdRoles  AdminRole[]     @relation("RoleCreator")
   roleAuditLogs RoleAuditLog[]  @relation("RoleAuditPerformer")
 
+  // GWI Portal Relations
+  surveys       Survey[]        @relation("SurveyCreator")
+  pipelines     DataPipeline[]  @relation("PipelineCreator")
+  prompts       PromptTemplate[] @relation("PromptCreator")
+  agentTemplates SystemAgentTemplate[] @relation("AgentTemplateCreator")
+  dataSourceConnections GWIDataSourceConnection[] @relation("DataSourceCreator")
+  monitoringAlerts GWIMonitoringAlert[] @relation("AlertCreator")
+  gwiAuditLogs  GWIAuditLog[]   @relation("GWIAuditPerformer")
+  gwiApiKeys    GWIApiKey[]     @relation("GWIApiKeyCreator")
+
   @@index([email])
   @@index([role])
   @@index([adminRoleId])
@@ -1276,6 +1286,11 @@ enum SuperAdminRole {
   ADMIN          // Standard admin access
   SUPPORT        // Customer success/support
   ANALYST        // Read-only analytics access
+  // GWI Team Portal roles
+  GWI_ADMIN      // Full GWI portal access
+  DATA_ENGINEER  // Pipeline and data source management
+  TAXONOMY_MANAGER // Taxonomy and survey management
+  ML_ENGINEER    // LLM and agent configuration
 }
 
 // ==================== DYNAMIC ROLES & PERMISSIONS ====================
@@ -3700,4 +3715,418 @@ model AdminActivity {
   @@index([action])
   @@index([resourceType])
   @@index([createdAt])
+}
+
+// ==================== GWI TEAM PORTAL ====================
+
+// Survey Management
+model Survey {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  version         Int      @default(1)
+  status          SurveyStatus @default(DRAFT)
+  questions       SurveyQuestion[]
+  responses       SurveyResponse[]
+  distributions   SurveyDistribution[]
+  createdById     String
+  createdBy       SuperAdmin @relation("SurveyCreator", fields: [createdById], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdById])
+  @@index([createdAt])
+}
+
+enum SurveyStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+model SurveyQuestion {
+  id              String   @id @default(cuid())
+  surveyId        String
+  survey          Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  code            String
+  text            String   @db.Text
+  type            QuestionType
+  options         Json?
+  validationRules Json?
+  order           Int
+  required        Boolean  @default(true)
+  taxonomyLinks   Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([surveyId, code])
+  @@index([surveyId])
+  @@index([type])
+}
+
+enum QuestionType {
+  SINGLE_SELECT
+  MULTI_SELECT
+  SCALE
+  OPEN_TEXT
+  NUMERIC
+  DATE
+  MATRIX
+}
+
+model SurveyResponse {
+  id              String   @id @default(cuid())
+  surveyId        String
+  survey          Survey   @relation(fields: [surveyId], references: [id])
+  respondentId    String
+  answers         Json
+  metadata        Json?
+  completedAt     DateTime?
+  createdAt       DateTime @default(now())
+
+  @@index([surveyId])
+  @@index([respondentId])
+  @@index([completedAt])
+}
+
+model SurveyDistribution {
+  id              String   @id @default(cuid())
+  surveyId        String
+  survey          Survey   @relation(fields: [surveyId], references: [id])
+  channel         String
+  targetCount     Int
+  completedCount  Int      @default(0)
+  startDate       DateTime
+  endDate         DateTime?
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+
+  @@index([surveyId])
+  @@index([status])
+}
+
+// Taxonomy Management
+model TaxonomyCategory {
+  id              String   @id @default(cuid())
+  name            String
+  code            String   @unique
+  description     String?
+  parentId        String?
+  parent          TaxonomyCategory? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children        TaxonomyCategory[] @relation("CategoryHierarchy")
+  attributes      TaxonomyAttribute[]
+  version         Int      @default(1)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([isActive])
+}
+
+model TaxonomyAttribute {
+  id              String   @id @default(cuid())
+  categoryId      String
+  category        TaxonomyCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name            String
+  code            String
+  dataType        String
+  allowedValues   Json?
+  validationRules Json?
+  isRequired      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([categoryId, code])
+  @@index([categoryId])
+}
+
+model TaxonomyMappingRule {
+  id                  String   @id @default(cuid())
+  name                String
+  sourceField         String
+  targetCategoryCode  String
+  targetAttributeCode String?
+  transformationRule  Json?
+  priority            Int      @default(0)
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([targetCategoryCode])
+  @@index([isActive])
+}
+
+// Data Pipelines
+model DataPipeline {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  type            PipelineType
+  configuration   Json
+  schedule        String?
+  isActive        Boolean  @default(true)
+  runs            PipelineRun[]
+  validationRules PipelineValidationRule[]
+  createdById     String
+  createdBy       SuperAdmin @relation("PipelineCreator", fields: [createdById], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+  @@index([createdById])
+}
+
+enum PipelineType {
+  ETL
+  TRANSFORMATION
+  AGGREGATION
+  EXPORT
+  SYNC
+}
+
+model PipelineRun {
+  id              String   @id @default(cuid())
+  pipelineId      String
+  pipeline        DataPipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  status          PipelineRunStatus
+  startedAt       DateTime @default(now())
+  completedAt     DateTime?
+  recordsProcessed Int?
+  recordsFailed   Int?
+  errorLog        Json?
+  metrics         Json?
+
+  @@index([pipelineId])
+  @@index([status])
+  @@index([startedAt])
+}
+
+enum PipelineRunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model PipelineValidationRule {
+  id              String   @id @default(cuid())
+  pipelineId      String
+  pipeline        DataPipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  name            String
+  rule            Json
+  severity        String   @default("error")
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  @@index([pipelineId])
+  @@index([isActive])
+}
+
+// LLM Configuration
+model LLMConfiguration {
+  id              String   @id @default(cuid())
+  name            String
+  provider        String
+  model           String
+  apiKeyRef       String
+  defaultParams   Json?
+  rateLimits      Json?
+  isActive        Boolean  @default(true)
+  usageRecords    LLMUsageRecord[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([provider, model])
+  @@index([isActive])
+}
+
+model PromptTemplate {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  category        String
+  template        String   @db.Text
+  variables       Json?
+  version         Int      @default(1)
+  isActive        Boolean  @default(true)
+  createdById     String
+  createdBy       SuperAdmin @relation("PromptCreator", fields: [createdById], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([category])
+  @@index([isActive])
+  @@index([createdById])
+}
+
+model LLMUsageRecord {
+  id              String   @id @default(cuid())
+  configurationId String
+  configuration   LLMConfiguration @relation(fields: [configurationId], references: [id])
+  promptTokens    Int
+  completionTokens Int
+  totalCost       Decimal  @db.Decimal(10, 6)
+  latencyMs       Int
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  @@index([configurationId])
+  @@index([createdAt])
+}
+
+// Agent & Tool Configuration
+model SystemAgentTemplate {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  category        String
+  configuration   Json
+  defaultTools    Json?
+  defaultPrompts  Json?
+  isPublished     Boolean  @default(false)
+  version         Int      @default(1)
+  createdById     String
+  createdBy       SuperAdmin @relation("AgentTemplateCreator", fields: [createdById], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([category])
+  @@index([isPublished])
+  @@index([createdById])
+}
+
+model SystemToolConfiguration {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  description     String?
+  type            String
+  configuration   Json
+  permissions     Json?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+}
+
+// Data Source Management
+model GWIDataSourceConnection {
+  id              String   @id @default(cuid())
+  name            String
+  type            String
+  connectionString String?
+  configuration   Json
+  credentials     Json?
+  isActive        Boolean  @default(true)
+  lastSyncAt      DateTime?
+  syncStatus      String   @default("pending")
+  errorLog        Json?
+  createdById     String
+  createdBy       SuperAdmin @relation("DataSourceCreator", fields: [createdById], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+  @@index([syncStatus])
+}
+
+// Monitoring & Alerts
+model GWIMonitoringAlert {
+  id              String   @id @default(cuid())
+  name            String
+  type            String   // pipeline, llm, data_quality, system
+  condition       Json
+  threshold       Json?
+  recipients      String[]
+  isActive        Boolean  @default(true)
+  lastTriggeredAt DateTime?
+  triggerCount    Int      @default(0)
+  createdById     String
+  createdBy       SuperAdmin @relation("AlertCreator", fields: [createdById], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+}
+
+model GWIErrorLog {
+  id              String   @id @default(cuid())
+  source          String   // pipeline, llm, agent, data_source
+  sourceId        String?
+  errorType       String
+  message         String   @db.Text
+  stackTrace      String?  @db.Text
+  context         Json?
+  resolvedAt      DateTime?
+  resolvedById    String?
+  resolution      String?
+  createdAt       DateTime @default(now())
+
+  @@index([source])
+  @@index([sourceId])
+  @@index([errorType])
+  @@index([createdAt])
+  @@index([resolvedAt])
+}
+
+// GWI Portal Audit Log
+model GWIAuditLog {
+  id              String   @id @default(cuid())
+  adminId         String
+  admin           SuperAdmin @relation("GWIAuditPerformer", fields: [adminId], references: [id])
+  action          String
+  resourceType    String
+  resourceId      String?
+  previousState   Json?
+  newState        Json?
+  ipAddress       String?
+  userAgent       String?
+  createdAt       DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([resourceType])
+  @@index([createdAt])
+}
+
+// GWI Portal Settings
+model GWIPortalSettings {
+  id              String   @id @default(cuid())
+  key             String   @unique
+  value           Json
+  category        String
+  description     String?
+  updatedById     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([category])
+}
+
+// GWI API Keys
+model GWIApiKey {
+  id              String   @id @default(cuid())
+  name            String
+  keyHash         String   @unique
+  keyPrefix       String
+  permissions     String[]
+  expiresAt       DateTime?
+  lastUsedAt      DateTime?
+  isActive        Boolean  @default(true)
+  createdById     String
+  createdBy       SuperAdmin @relation("GWIApiKeyCreator", fields: [createdById], references: [id])
+  createdAt       DateTime @default(now())
+
+  @@index([keyPrefix])
+  @@index([isActive])
+  @@index([createdById])
 }

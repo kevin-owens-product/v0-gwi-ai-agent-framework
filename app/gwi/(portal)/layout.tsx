@@ -2,34 +2,40 @@ import type React from "react"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/db"
-import { AdminSidebar } from "@/components/admin/sidebar"
-import { AdminHeader } from "@/components/admin/header"
-import { AdminProvider } from "@/components/providers/admin-provider"
+import { GWISidebar } from "@/components/gwi/sidebar"
+import { GWIHeader } from "@/components/gwi/header"
+import { GWIProvider } from "@/components/providers/gwi-provider"
+import { canAccessGWIPortal } from "@/lib/gwi-permissions"
 
-export default async function AdminLayout({
+export default async function GWILayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const cookieStore = await cookies()
-  const adminToken = cookieStore.get("adminToken")?.value
+  const gwiToken = cookieStore.get("gwiToken")?.value
 
-  if (!adminToken) {
-    redirect("/login?type=admin")
+  if (!gwiToken) {
+    redirect("/login?type=gwi")
   }
 
-  // Validate admin session
+  // Validate GWI session
   const session = await prisma.superAdminSession.findUnique({
-    where: { token: adminToken },
+    where: { token: gwiToken },
     include: { admin: true },
   })
 
   if (!session || session.expiresAt < new Date() || !session.admin.isActive) {
-    redirect("/login?type=admin")
+    redirect("/login?type=gwi")
+  }
+
+  // Check if user has GWI portal access
+  if (!canAccessGWIPortal(session.admin.role)) {
+    redirect("/login?type=gwi&error=unauthorized")
   }
 
   return (
-    <AdminProvider
+    <GWIProvider
       admin={{
         id: session.admin.id,
         email: session.admin.email,
@@ -39,12 +45,12 @@ export default async function AdminLayout({
       }}
     >
       <div className="min-h-screen bg-background">
-        <AdminSidebar />
+        <GWISidebar />
         <div className="lg:pl-64">
-          <AdminHeader />
+          <GWIHeader />
           <main className="p-6">{children}</main>
         </div>
       </div>
-    </AdminProvider>
+    </GWIProvider>
   )
 }

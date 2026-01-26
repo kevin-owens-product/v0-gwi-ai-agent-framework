@@ -102,6 +102,23 @@ export const SUPER_ADMIN_ROLE_PERMISSIONS: Record<SuperAdminRole, SuperAdminPerm
     'features:read',
     'audit:read',
   ],
+  // GWI Team Portal Roles
+  GWI_ADMIN: ['super:*'],  // Full access to both admin and GWI portals
+  DATA_ENGINEER: [
+    'tenants:read',
+    'analytics:read',
+    'audit:read',
+  ],
+  TAXONOMY_MANAGER: [
+    'tenants:read',
+    'analytics:read',
+    'audit:read',
+  ],
+  ML_ENGINEER: [
+    'tenants:read',
+    'analytics:read',
+    'audit:read',
+  ],
 }
 
 // Check if admin has permission

@@ -1,0 +1,162 @@
+import { prisma } from "@/lib/db"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { FileText, HelpCircle } from "lucide-react"
+import Link from "next/link"
+
+const questionTypeLabels: Record<string, string> = {
+  SINGLE_SELECT: "Single Select",
+  MULTI_SELECT: "Multi Select",
+  SCALE: "Scale",
+  OPEN_TEXT: "Open Text",
+  NUMERIC: "Numeric",
+  DATE: "Date",
+  MATRIX: "Matrix",
+}
+
+async function getQuestions() {
+  const questions = await prisma.surveyQuestion.findMany({
+    include: {
+      survey: { select: { id: true, name: true, status: true } },
+    },
+    orderBy: [{ survey: { name: "asc" } }, { order: "asc" }],
+    take: 100,
+  })
+
+  const stats = await prisma.surveyQuestion.groupBy({
+    by: ["type"],
+    _count: true,
+  })
+
+  return { questions, stats }
+}
+
+export default async function SurveyQuestionsPage() {
+  const { questions, stats } = await getQuestions()
+
+  const totalQuestions = questions.length
+  const typeStats = stats.reduce(
+    (acc, s) => ({ ...acc, [s.type]: s._count }),
+    {} as Record<string, number>
+  )
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Survey Questions</h1>
+        <p className="text-muted-foreground">
+          Browse and manage questions across all surveys
+        </p>
+      </div>
+
+      {/* Stats */}
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Questions</CardTitle>
+            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalQuestions}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Single Select</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{typeStats.SINGLE_SELECT || 0}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Multi Select</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{typeStats.MULTI_SELECT || 0}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Open Text</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{typeStats.OPEN_TEXT || 0}</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Questions Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>All Questions</CardTitle>
+          <CardDescription>Questions from all surveys</CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          {questions.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Code</TableHead>
+                  <TableHead>Question Text</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Survey</TableHead>
+                  <TableHead>Required</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {questions.map((question) => (
+                  <TableRow key={question.id}>
+                    <TableCell className="font-mono text-sm">
+                      {question.code}
+                    </TableCell>
+                    <TableCell className="max-w-md truncate">
+                      {question.text}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        {questionTypeLabels[question.type] || question.type}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        href={`/gwi/surveys/${question.survey.id}`}
+                        className="text-emerald-600 hover:underline"
+                      >
+                        {question.survey.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      {question.required ? (
+                        <Badge className="bg-red-100 text-red-700">Required</Badge>
+                      ) : (
+                        <Badge variant="outline">Optional</Badge>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12">
+              <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium">No questions found</h3>
+              <p className="text-muted-foreground">
+                Questions will appear here once you create surveys
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}

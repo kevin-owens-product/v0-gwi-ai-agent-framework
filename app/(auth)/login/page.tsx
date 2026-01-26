@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, Suspense } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
@@ -10,18 +10,25 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Brain, Loader2, Eye, EyeOff, AlertCircle, Shield, Users } from "lucide-react"
+import { Brain, Loader2, Eye, EyeOff, AlertCircle, Shield, Users, Database } from "lucide-react"
 
-type LoginType = "platform" | "admin"
+type LoginType = "platform" | "admin" | "gwi"
 
 function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
   const error = searchParams.get("error")
-  const loginTypeParam = searchParams.get("type") as LoginType | null
 
-  const [loginType, setLoginType] = useState<LoginType>(loginTypeParam || "platform")
+  const [loginType, setLoginType] = useState<LoginType>("platform")
+
+  // Set login type from URL after mount to avoid hydration mismatch
+  useEffect(() => {
+    const typeParam = searchParams.get("type") as LoginType | null
+    if (typeParam && ["platform", "admin", "gwi"].includes(typeParam)) {
+      setLoginType(typeParam)
+    }
+  }, [searchParams])
   const [isLoading, setIsLoading] = useState(false)
   const [isOAuthLoading, setIsOAuthLoading] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
@@ -53,6 +60,23 @@ function LoginForm() {
         }
 
         router.push("/admin")
+        router.refresh()
+      } else if (loginType === "gwi") {
+        // GWI login uses separate API endpoint
+        const response = await fetch("/api/gwi/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: formData.email, password: formData.password }),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          setFormError(data.error || "Invalid credentials. Please try again.")
+          return
+        }
+
+        router.push("/gwi")
         router.refresh()
       } else {
         // Platform login uses NextAuth
@@ -106,14 +130,19 @@ function LoginForm() {
 
       {/* Login Type Tabs */}
       <Tabs value={loginType} onValueChange={handleTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="platform" className="flex items-center gap-2">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="platform" className="flex items-center gap-1.5 text-xs sm:text-sm">
             <Users className="h-4 w-4" />
-            Platform
+            <span className="hidden sm:inline">Platform</span>
+            <span className="sm:hidden">User</span>
           </TabsTrigger>
-          <TabsTrigger value="admin" className="flex items-center gap-2">
+          <TabsTrigger value="admin" className="flex items-center gap-1.5 text-xs sm:text-sm">
             <Shield className="h-4 w-4" />
             Admin
+          </TabsTrigger>
+          <TabsTrigger value="gwi" className="flex items-center gap-1.5 text-xs sm:text-sm">
+            <Database className="h-4 w-4" />
+            GWI
           </TabsTrigger>
         </TabsList>
 
@@ -320,6 +349,83 @@ function LoginForm() {
 
           <p className="text-center text-xs text-muted-foreground">
             Admin access is logged and monitored for security purposes.
+          </p>
+        </TabsContent>
+
+        <TabsContent value="gwi" className="mt-6 space-y-6">
+          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
+            <div className="flex items-start gap-3">
+              <Database className="h-5 w-5 text-emerald-500 mt-0.5" />
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-emerald-500">GWI Team Portal</p>
+                <p className="text-xs text-muted-foreground">
+                  Access for GWI team members: Data Engineers, Taxonomy Managers, ML Engineers, and GWI Admins.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Error messages */}
+          {formError && (
+            <div className="flex items-center gap-2 p-3 text-sm text-destructive bg-destructive/10 rounded-md">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span>{formError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="gwi-email">GWI Email</Label>
+              <Input
+                id="gwi-email"
+                type="email"
+                placeholder="you@gwi.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="gwi-password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="gwi-password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  required
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  <Database className="mr-2 h-4 w-4" />
+                  Sign in to GWI Portal
+                </>
+              )}
+            </Button>
+          </form>
+
+          <p className="text-center text-xs text-muted-foreground">
+            Manage surveys, taxonomy, pipelines, LLMs, and data tools.
           </p>
         </TabsContent>
       </Tabs>

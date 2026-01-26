@@ -1,0 +1,62 @@
+{
+  "version": "1.0",
+  "hooks": {
+    "preFileWrite": {
+      "patterns": {
+        "app/api/gwi/**/*.ts": {
+          "reminder": "GWI API routes must: 1) Use gwiToken cookie, 2) Check permissions with hasGWIPermission(), 3) Log write actions to GWIAuditLog"
+        },
+        "prisma/schema.prisma": {
+          "reminder": "After schema changes, run: npx prisma generate && npx prisma migrate dev"
+        },
+        "**/*.test.ts": {
+          "reminder": "Tests should use vitest. Run with: npx vitest run [path]"
+        }
+      }
+    },
+    "postFileWrite": {
+      "patterns": {
+        "prisma/schema.prisma": {
+          "command": "npx prisma generate",
+          "description": "Regenerate Prisma client after schema changes"
+        },
+        "lib/gwi-permissions.ts": {
+          "reminder": "Permission changes may require updating sidebar navigation in components/gwi/sidebar.tsx"
+        }
+      }
+    },
+    "preCommit": {
+      "checks": [
+        {
+          "name": "TypeScript check",
+          "command": "npx tsc --noEmit",
+          "blocking": true
+        },
+        {
+          "name": "Lint check",
+          "command": "npm run lint",
+          "blocking": false
+        },
+        {
+          "name": "Test check",
+          "command": "npx vitest run --reporter=basic",
+          "blocking": false
+        }
+      ]
+    }
+  },
+  "automations": {
+    "onNewGWIFeature": {
+      "description": "Checklist when adding a new GWI feature",
+      "steps": [
+        "1. Add Prisma models if needed",
+        "2. Create API routes at app/api/gwi/[feature]/",
+        "3. Create page at app/gwi/(portal)/[feature]/",
+        "4. Add permissions to lib/gwi-permissions.ts",
+        "5. Update sidebar navigation",
+        "6. Add tests",
+        "7. Update CLAUDE.md if significant"
+      ]
+    }
+  }
+}

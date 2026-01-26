@@ -8,7 +8,7 @@ const publicPaths = [
   '/login',
   '/signup',
   '/forgot-password',
-  '/admin/login',
+  '/login?type=admin',
   '/api/auth',
   '/api/admin/auth',
   '/api/webhooks',
@@ -43,7 +43,7 @@ function isApiRoute(pathname: string): boolean {
 
 // Check if path is an admin route (admin portal has its own auth via adminToken cookie)
 function isAdminRoute(pathname: string): boolean {
-  return pathname.startsWith('/admin') && pathname !== '/admin/login'
+  return pathname.startsWith('/admin') && pathname !== '/login?type=admin'
 }
 
 // Check if path matches any public path
@@ -117,7 +117,7 @@ export async function middleware(request: NextRequest) {
   if (isAdminRoute(pathname)) {
     const adminToken = request.cookies.get('adminToken')?.value
     if (!adminToken) {
-      const adminLoginUrl = new URL('/admin/login', request.url)
+      const adminLoginUrl = new URL('/login?type=admin', request.url)
       return NextResponse.redirect(adminLoginUrl)
     }
     return addSecurityHeaders(NextResponse.next())
