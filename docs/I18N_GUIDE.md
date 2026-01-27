@@ -1,87 +1,37 @@
 # Internationalization (i18n) Guide
 
-This guide covers the multi-lingual implementation for the GWI platform.
+This guide covers the multi-lingual implementation and enforcement system for the GWI platform.
 
 ## Overview
 
-The platform supports **10 languages** with **5,118+ translation keys** using the `next-intl` library.
+The platform supports **11 languages** with **5,500+ translation keys** using the `next-intl` library. We have a comprehensive i18n enforcement system to ensure all user-facing strings are properly internationalized.
 
 ### Supported Languages
 
-| Code | Language | RTL |
-|------|----------|-----|
-| `en` | English (Base) | No |
-| `es` | Spanish | No |
-| `zh` | Chinese (Simplified) | No |
-| `hi` | Hindi | No |
-| `fr` | French | No |
-| `ar` | Arabic | Yes |
-| `pt` | Portuguese | No |
-| `ru` | Russian | No |
-| `ja` | Japanese | No |
-| `bn` | Bengali | No |
+| Code | Language | Native Name | RTL | Flag |
+|------|----------|-------------|-----|------|
+| `en` | English (Base) | English | No | US |
+| `es` | Spanish | Espanol | No | ES |
+| `zh` | Chinese (Simplified) | Zhongwen | No | CN |
+| `hi` | Hindi | Hindi | No | IN |
+| `fr` | French | Francais | No | FR |
+| `ar` | Arabic | Arabic | Yes | SA |
+| `pt` | Portuguese | Portugues | No | BR |
+| `ru` | Russian | Russian | No | RU |
+| `ja` | Japanese | Japanese | No | JP |
+| `bn` | Bengali | Bengali | No | BD |
+| `el` | Greek | Greek | No | GR |
 
-## Architecture
+## Quick Start
 
-### Translation Files
+### Using Translations in Components
 
-All translations are stored in `/messages/`:
-
-```
-messages/
-├── en.json    # Base language (source of truth)
-├── es.json
-├── zh.json
-├── hi.json
-├── fr.json
-├── ar.json
-├── pt.json
-├── ru.json
-├── ja.json
-└── bn.json
-```
-
-### Namespace Structure
-
-Translations are organized hierarchically by portal and feature:
-
-```
-{
-  "common": { ... },           // Shared terms across all portals
-  "auth": { ... },             // Authentication pages
-  "navigation": { ... },       // Navigation labels
-  "admin": {                   // Admin Portal
-    "settings": { ... },
-    "entitlementFeatures": { ... },
-    "identity": {
-      "sso": { ... },
-      "domains": { ... }
-    }
-  },
-  "gwi": {                     // GWI Portal
-    "surveys": { ... },
-    "pipelines": { ... },
-    "llm": {
-      "configurations": { ... },
-      "prompts": { ... }
-    }
-  },
-  "dashboard": {               // User Dashboard
-    "audiences": { ... },
-    "charts": { ... }
-  }
-}
-```
-
-## Usage
-
-### Client Components ("use client")
-
+**Client Components:**
 ```typescript
 "use client"
 import { useTranslations } from "next-intl"
 
-export default function SurveysPage() {
+export default function MyPage() {
   const t = useTranslations("gwi.surveys")
   const tCommon = useTranslations("common")
 
@@ -90,18 +40,16 @@ export default function SurveysPage() {
       <h1>{t("title")}</h1>
       <p>{t("description")}</p>
       <button>{tCommon("save")}</button>
-      <button>{tCommon("cancel")}</button>
     </div>
   )
 }
 ```
 
-### Server Components
-
+**Server Components:**
 ```typescript
 import { getTranslations } from "@/lib/i18n/server"
 
-export default async function PipelinesPage() {
+export default async function MyPage() {
   const t = await getTranslations("gwi.pipelines")
   const tCommon = await getTranslations("common")
 
@@ -120,26 +68,99 @@ export default async function PipelinesPage() {
 // In en.json: "welcome": "Hello, {name}!"
 t("welcome", { name: user.name })
 
-// In en.json: "itemCount": "{count, plural, one {# item} other {# items}}"
+// Pluralization: "itemCount": "{count, plural, one {# item} other {# items}}"
 t("itemCount", { count: items.length })
 ```
 
-### Translating Arrays/Objects
+## i18n Enforcement System
 
-Convert hardcoded arrays to use translations:
+We have multiple layers of enforcement to catch hardcoded strings:
 
-```typescript
-// Before (hardcoded)
-const CATEGORIES = [
-  { value: "CORE", label: "Core" },
-  { value: "ANALYTICS", label: "Analytics" },
-]
+### 1. Hardcoded String Scanner
 
-// After (translated)
-const CATEGORIES = [
-  { value: "CORE", label: t("categories.core") },
-  { value: "ANALYTICS", label: t("categories.analytics") },
-]
+A script that scans all TSX/TS files for potential i18n violations.
+
+```bash
+# Basic scan (reports findings)
+npm run i18n:scan
+
+# With suggested translation keys
+npm run i18n:scan:fix
+
+# Strict mode (exits with error if findings, for CI)
+npm run i18n:scan:strict
+
+# Scan specific directory
+node scripts/scan-hardcoded-strings.js app/admin
+
+# JSON output for tooling
+node scripts/scan-hardcoded-strings.js --json
+```
+
+**What it detects:**
+- Hardcoded strings in JSX (text between tags)
+- Hardcoded strings in props (placeholder, title, aria-label, alt, etc.)
+- Hardcoded strings in toast() calls
+- Hardcoded strings in arrays/objects that are rendered (label, description, etc.)
+
+**What it ignores:**
+- URLs, paths, file extensions
+- CSS classes, technical identifiers
+- Import statements, console.log
+- Translation function calls
+- Numbers, single characters
+- Constants (ALL_CAPS)
+
+### 2. ESLint Custom Rule
+
+Real-time detection in your editor via ESLint.
+
+**Enabled for:** `app/**/*.tsx`, `components/**/*.tsx`
+
+The rule flags:
+- JSX text content that should be translated
+- String literals in translatable props
+- Template literals with static user-facing text
+
+**Configuration** (in `eslint.config.mjs`):
+```javascript
+'local/no-hardcoded-strings': ['warn', {
+  allowedStrings: ['GWI', 'GlobalWebIndex', 'Spark'],
+  translatableProps: [
+    'placeholder', 'title', 'aria-label', 'alt',
+    'label', 'description', 'helperText', 'tooltip',
+  ],
+}]
+```
+
+### 3. Translation Validation
+
+Ensures all translation files are in sync.
+
+```bash
+# Validate all translation files
+npm run i18n:validate
+
+# Add missing keys as placeholders
+npm run i18n:fix
+
+# Remove orphaned keys
+npm run i18n:clean
+
+# Fix + clean combined
+npm run i18n:sync
+```
+
+### 4. Full Audit
+
+Run all checks together:
+
+```bash
+# Run all i18n checks
+npm run i18n:audit
+
+# Strict mode (fails on any issue)
+npm run i18n:audit:strict
 ```
 
 ## Adding New Translations
@@ -160,9 +181,11 @@ Add your keys to `/messages/en.json` under the appropriate namespace:
         "submit": "Submit"
       },
       "table": {
-        "name": "Name",
-        "status": "Status",
-        "actions": "Actions"
+        "columns": {
+          "name": "Name",
+          "status": "Status",
+          "actions": "Actions"
+        }
       },
       "confirmations": {
         "deleteTitle": "Delete Item",
@@ -181,15 +204,10 @@ npm run i18n:fix
 
 This adds placeholder keys (prefixed with `[XX]`) to all other language files.
 
-### Step 3: Verify Coverage
+### Step 3: Verify
 
 ```bash
 npm run i18n:validate
-```
-
-Expected output:
-```
-All translations are valid!
 ```
 
 ### Step 4: Translate Placeholders
@@ -201,136 +219,241 @@ Search for `[XX]` markers in language files and replace with proper translations
 "title": "[ES] My Feature"
 
 // After
-"title": "Mi Función"
+"title": "Mi Funcion"
 ```
 
-## Common Namespace
+## Naming Conventions for Keys
 
-Use `common.*` for frequently used terms to avoid duplication:
+### Namespace Structure
 
-| Key | English |
-|-----|---------|
-| `common.save` | Save |
-| `common.cancel` | Cancel |
-| `common.delete` | Delete |
-| `common.edit` | Edit |
-| `common.create` | Create |
-| `common.search` | Search |
-| `common.filter` | Filter |
-| `common.loading` | Loading... |
-| `common.error` | Error |
-| `common.success` | Success |
-| `common.confirm` | Confirm |
-| `common.status` | Status |
-| `common.actions` | Actions |
-| `common.name` | Name |
-| `common.description` | Description |
+```
+{portal}.{feature}.{section}.{key}
+```
 
-## Best Practices
+Examples:
+- `admin.settings.general.title`
+- `gwi.surveys.form.namePlaceholder`
+- `dashboard.audiences.table.columns.name`
 
-### 1. Never Hardcode User-Facing Strings
+### Key Naming Guidelines
 
+1. **Use camelCase** for key names
+2. **Be descriptive but concise**
+3. **Group related keys** under common parents
+4. **Use standard suffixes** for common patterns:
+   - `*Title` - Headings/titles
+   - `*Description` - Longer descriptive text
+   - `*Placeholder` - Input placeholders
+   - `*Label` - Form labels
+   - `*Error` - Error messages
+   - `*Success` - Success messages
+   - `*Empty` - Empty state messages
+   - `*Loading` - Loading messages
+   - `*Confirm*` - Confirmation dialogs
+
+### Common Namespace
+
+Use `common.*` for frequently used terms:
+
+| Key | English | Usage |
+|-----|---------|-------|
+| `common.save` | Save | Save buttons |
+| `common.cancel` | Cancel | Cancel buttons |
+| `common.delete` | Delete | Delete buttons |
+| `common.edit` | Edit | Edit buttons |
+| `common.create` | Create | Create buttons |
+| `common.search` | Search | Search inputs |
+| `common.loading` | Loading... | Loading states |
+| `common.error` | Error | Error states |
+| `common.success` | Success | Success states |
+| `common.confirm` | Confirm | Confirm actions |
+| `common.actions` | Actions | Table headers |
+
+## Common Patterns
+
+### Translating Arrays/Objects
+
+**Before (hardcoded):**
 ```typescript
-// Bad
-<button>Save Changes</button>
-
-// Good
-<button>{tCommon("save")}</button>
+const CATEGORIES = [
+  { value: "CORE", label: "Core" },
+  { value: "ANALYTICS", label: "Analytics" },
+]
 ```
 
-### 2. Use Hierarchical Keys
-
+**After (translated):**
 ```typescript
-// Bad
-t("surveyTitle")
-t("surveyDescription")
+const t = useTranslations("features")
 
-// Good
-t("survey.title")
-t("survey.description")
+const CATEGORIES = [
+  { value: "CORE", label: t("categories.core") },
+  { value: "ANALYTICS", label: t("categories.analytics") },
+]
 ```
 
-### 3. Keep Keys Descriptive but Concise
+### Translating Toast Messages
 
+**Before:**
 ```typescript
-// Bad
-t("theMainTitleOfTheSurveyListPage")
-
-// Good
-t("title")  // Context from namespace: gwi.surveys.title
+toast.success("Changes saved successfully!")
 ```
 
-### 4. Group Related Keys
-
-```json
-{
-  "form": {
-    "name": "Name",
-    "email": "Email",
-    "submit": "Submit"
-  },
-  "validation": {
-    "required": "This field is required",
-    "invalidEmail": "Invalid email address"
-  }
-}
+**After:**
+```typescript
+const t = useTranslations("common")
+toast.success(t("notifications.saveSuccess"))
 ```
 
-### 5. Include All UI Text
+### Translating Form Validation
 
-Don't forget:
-- Page titles and descriptions
-- Button labels
-- Form labels and placeholders
-- Table headers
-- Error messages
-- Success/toast messages
-- Confirmation dialogs
-- Empty states
-- Loading states
+**Before:**
+```typescript
+const schema = z.object({
+  name: z.string().min(1, "Name is required"),
+})
+```
 
-## NPM Scripts
+**After:**
+```typescript
+const t = useTranslations("validation")
+
+const schema = z.object({
+  name: z.string().min(1, t("required")),
+})
+```
+
+### Translating Table Headers
+
+**Before:**
+```typescript
+const columns = [
+  { header: "Name", accessorKey: "name" },
+  { header: "Status", accessorKey: "status" },
+]
+```
+
+**After:**
+```typescript
+const t = useTranslations("myFeature.table")
+
+const columns = [
+  { header: t("columns.name"), accessorKey: "name" },
+  { header: t("columns.status"), accessorKey: "status" },
+]
+```
+
+## Pre-Commit Checklist
+
+Before committing code with UI changes:
+
+- [ ] All user-facing strings use translation functions
+- [ ] New keys added to `messages/en.json`
+- [ ] Keys synced to other languages (`npm run i18n:fix`)
+- [ ] No ESLint warnings from `local/no-hardcoded-strings`
+- [ ] Scanner finds no new issues (`npm run i18n:scan`)
+- [ ] Translations validated (`npm run i18n:validate`)
+
+## CI/CD Integration
+
+The CI pipeline includes:
+
+1. **ESLint check** - Catches hardcoded strings (currently as warnings)
+2. **Translation validation** - Ensures all language files are in sync
+3. **Full audit** (optional) - Can run `i18n:audit:strict` for strict enforcement
+
+## Troubleshooting
+
+### Issue: Translation key shows as raw text
+
+**Symptom:** UI shows `gwi.surveys.title` instead of actual text
+
+**Causes:**
+1. Key doesn't exist in `messages/en.json`
+2. Wrong namespace in `useTranslations()`
+3. Typo in key name
+
+**Fix:**
+1. Verify key exists: `grep -r "surveys.title" messages/en.json`
+2. Check namespace matches file path
+3. Run `npm run i18n:validate` to find issues
+
+### Issue: Scanner reports false positives
+
+**Solution:** Add to allowlist in the script or ESLint config:
+
+For scanner (`scripts/scan-hardcoded-strings.js`):
+```javascript
+const ALLOWLIST_EXACT = new Set([
+  'MyBrandName',
+  // ...
+])
+```
+
+For ESLint (`eslint.config.mjs`):
+```javascript
+'local/no-hardcoded-strings': ['warn', {
+  allowedStrings: ['MyBrandName'],
+}]
+```
+
+### Issue: Type errors with translations
+
+**Symptom:** TypeScript errors when using `t()` function
+
+**Fix:** Ensure you're using the correct import:
+```typescript
+// Client components
+import { useTranslations } from "next-intl"
+
+// Server components
+import { getTranslations } from "@/lib/i18n/server"
+```
+
+## NPM Scripts Reference
 
 | Command | Description |
 |---------|-------------|
-| `npm run i18n:validate` | Check translation coverage |
+| `npm run i18n:validate` | Check translation file coverage |
 | `npm run i18n:validate:verbose` | Detailed validation output |
 | `npm run i18n:fix` | Add missing keys as placeholders |
 | `npm run i18n:clean` | Remove orphaned keys |
 | `npm run i18n:sync` | Fix + clean combined |
+| `npm run i18n:scan` | Scan for hardcoded strings |
+| `npm run i18n:scan:fix` | Scan with suggested keys |
+| `npm run i18n:scan:strict` | Scan and exit with error if found |
+| `npm run i18n:audit` | Run all validations |
+| `npm run i18n:audit:strict` | Run all validations in strict mode |
 
-## CI/CD Integration
+## File Structure
 
-Translation validation runs automatically:
-- **Pre-commit hook**: Validates translations before commit
-- **CI Pipeline**: Blocks deployment if translations are invalid
-
-## Troubleshooting
-
-### Missing Translation Key
-
-If you see `gwi.surveys.title` rendered as text, the key is missing. Add it to en.json and run `npm run i18n:fix`.
-
-### Type Mismatch
-
-Ensure the value type matches across all languages (string vs object vs array).
-
-### RTL Languages
-
-Arabic (`ar`) requires RTL layout. Check `lib/i18n/config.ts` for RTL detection:
-
-```typescript
-export function isRtlLocale(locale: string): boolean {
-  return locale === 'ar'
-}
+```
+/
+├── messages/
+│   ├── en.json          # Base language (source of truth)
+│   ├── es.json
+│   ├── zh.json
+│   └── ...
+├── lib/i18n/
+│   ├── config.ts        # Locale configuration
+│   ├── client.ts        # Client-side utilities
+│   ├── server.ts        # Server-side utilities
+│   └── request.ts       # Request handling
+├── scripts/
+│   ├── scan-hardcoded-strings.js   # Hardcoded string scanner
+│   └── validate-translations.js    # Translation validator
+├── eslint-local-rules/
+│   ├── index.js                    # Rule exports
+│   └── no-hardcoded-strings.js     # ESLint rule
+└── eslint.config.mjs               # ESLint configuration
 ```
 
-## Parallel Development Learnings
+## Best Practices Summary
 
-From our multi-lingual implementation project:
-
-1. **Run validation scripts frequently** - Catch issues early
-2. **Use parallel agents for large-scale i18n work** - Admin, GWI, Dashboard can be translated simultaneously
-3. **Add keys to en.json first** - It's the source of truth
-4. **Common namespace reduces duplication** - Saves translation effort
-5. **Hierarchical namespaces make keys discoverable** - Easy to find and maintain
+1. **Never hardcode user-facing strings** - Always use `t()` or `tCommon()`
+2. **Use hierarchical keys** - Makes them discoverable and maintainable
+3. **Group related keys** - Keep translations organized
+4. **Use common namespace** - Reduces duplication
+5. **Run scanner regularly** - Catch issues early
+6. **Add keys to en.json first** - It's the source of truth
+7. **Include all UI text** - Don't forget error messages, empty states, etc.
+8. **Review ESLint warnings** - They indicate potential i18n issues

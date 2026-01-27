@@ -4,6 +4,9 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
+// Import local rules
+import localRules from './eslint-local-rules/index.js';
+
 const eslintConfig = [
   // Global ignores
   {
@@ -17,6 +20,7 @@ const eslintConfig = [
       'out/**',
       'build/**',
       'dist/**',
+      'eslint-local-rules/**',
     ],
   },
   // Base ESLint recommended rules
@@ -71,6 +75,39 @@ const eslintConfig = [
       'prefer-const': 'warn',
       'no-empty-pattern': 'warn',
       'no-constant-binary-expression': 'warn',
+    },
+  },
+  // i18n enforcement for TSX files in app/ and components/
+  {
+    files: ['app/**/*.tsx', 'components/**/*.tsx'],
+    plugins: {
+      'local': localRules,
+    },
+    rules: {
+      // Enable the no-hardcoded-strings rule as a warning
+      // Change to 'error' when ready to enforce strictly
+      'local/no-hardcoded-strings': ['warn', {
+        // Additional allowed strings specific to this project
+        allowedStrings: [
+          // Brand names
+          'GWI', 'GlobalWebIndex', 'Spark',
+          // Common UI elements
+          'vs', 'or', 'and', 'of',
+        ],
+        // Props that should be translated
+        translatableProps: [
+          'placeholder',
+          'title',
+          'aria-label',
+          'alt',
+          'label',
+          'description',
+          'helperText',
+          'errorMessage',
+          'tooltip',
+          'hint',
+        ],
+      }],
     },
   },
 ];

@@ -37,6 +37,11 @@
     "i18n:fix": "node scripts/validate-translations.js --fix",
     "i18n:clean": "node scripts/validate-translations.js --clean",
     "i18n:sync": "node scripts/validate-translations.js --fix --clean",
+    "i18n:scan": "node scripts/scan-hardcoded-strings.js",
+    "i18n:scan:fix": "node scripts/scan-hardcoded-strings.js --fix",
+    "i18n:scan:strict": "node scripts/scan-hardcoded-strings.js --strict",
+    "i18n:audit": "npm run i18n:validate && npm run i18n:scan",
+    "i18n:audit:strict": "npm run i18n:validate --strict && npm run i18n:scan --strict",
     "ci": "npm run type-check && npm run lint && npm run i18n:validate && npm run test:coverage && npm run build",
     "prepare": "husky"
   },
@@ -144,7 +149,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix --max-warnings 0"
+      "eslint --fix --max-warnings 0 --no-warn-ignored"
     ]
   }
 }
