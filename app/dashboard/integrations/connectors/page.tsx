@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -34,10 +35,12 @@ import {
 import { ConnectorCard } from '@/components/connectors/ConnectorCard'
 import { ConnectorTypeSelector } from '@/components/connectors/ConnectorTypeSelector'
 import { useConnectors } from '@/hooks/use-connectors'
+import type { DataConnectorType } from '@prisma/client'
 import { CONNECTOR_CATEGORIES, type ConnectorProviderConfig } from '@/lib/connectors'
 import { PageTracker } from '@/components/tracking/PageTracker'
 
 export default function ConnectorsPage() {
+  const t = useTranslations('dashboard.integrations.connectors')
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'configured' | 'available'>('configured')
   const [search, setSearch] = useState('')
@@ -55,7 +58,7 @@ export default function ConnectorsPage() {
     testConnection,
   } = useConnectors({
     search: search || undefined,
-    type: typeFilter !== 'all' ? (typeFilter as any) : undefined,
+    type: typeFilter !== 'all' ? (typeFilter as DataConnectorType) : undefined,
   })
 
   useEffect(() => {
@@ -65,30 +68,30 @@ export default function ConnectorsPage() {
   const handleSync = async (id: string) => {
     try {
       await triggerSync(id)
-      toast.success('Sync started')
+      toast.success(t('toast.syncStarted'))
       // Refresh after a short delay to show updated status
       setTimeout(() => fetchConnectors(), 2000)
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to start sync')
+      toast.error(err instanceof Error ? err.message : t('toast.syncFailed'))
     }
   }
 
   const handleToggle = async (id: string, isActive: boolean) => {
     try {
       await updateConnector(id, { isActive })
-      toast.success(isActive ? 'Connector enabled' : 'Connector disabled')
+      toast.success(isActive ? t('toast.connectorEnabled') : t('toast.connectorDisabled'))
       fetchConnectors()
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update connector')
+      toast.error(err instanceof Error ? err.message : t('toast.updateFailed'))
     }
   }
 
   const handleDelete = async (id: string) => {
     try {
       await deleteConnector(id)
-      toast.success('Connector deleted')
+      toast.success(t('toast.connectorDeleted'))
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to delete connector')
+      toast.error(err instanceof Error ? err.message : t('toast.deleteFailed'))
     }
   }
 
@@ -101,7 +104,7 @@ export default function ConnectorsPage() {
         toast.error(result.message)
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to test connection')
+      toast.error(err instanceof Error ? err.message : t('toast.testFailed'))
     }
   }
 
@@ -120,15 +123,15 @@ export default function ConnectorsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Data Connectors</h1>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Connect external data sources to enrich your insights
+            {t('description')}
           </p>
         </div>
         <Link href="/dashboard/integrations/connectors/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            Add Connector
+            {t('addConnector')}
           </Button>
         </Link>
       </div>
@@ -137,45 +140,45 @@ export default function ConnectorsPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <StatsCard
           icon={Plug}
-          label="Total Connectors"
+          label={t('stats.totalConnectors')}
           value={connectors.length}
           isLoading={isLoading}
         />
         <StatsCard
           icon={RefreshCw}
-          label="Active"
+          label={t('stats.active')}
           value={activeConnectors.length}
           isLoading={isLoading}
           className="text-emerald-600"
         />
         <StatsCard
           icon={AlertTriangle}
-          label="With Errors"
+          label={t('stats.withErrors')}
           value={errorConnectors.length}
           isLoading={isLoading}
           className={errorConnectors.length > 0 ? 'text-destructive' : ''}
         />
         <StatsCard
           icon={Database}
-          label="Data Sources"
+          label={t('stats.dataSources')}
           value={new Set(connectors.map((c) => c.type)).size}
           isLoading={isLoading}
         />
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'configured' | 'available')}>
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <TabsList>
             <TabsTrigger value="configured">
-              Configured
+              {t('tabs.configured')}
               {connectors.length > 0 && (
                 <Badge variant="secondary" className="ml-2">
                   {connectors.length}
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="available">Available</TabsTrigger>
+            <TabsTrigger value="available">{t('tabs.available')}</TabsTrigger>
           </TabsList>
 
           {activeTab === 'configured' && (
@@ -183,7 +186,7 @@ export default function ConnectorsPage() {
               <div className="relative flex-1 sm:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search connectors..."
+                  placeholder={t('searchPlaceholder')}
                   className="pl-10"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -191,10 +194,10 @@ export default function ConnectorsPage() {
               </div>
               <Select value={typeFilter} onValueChange={setTypeFilter}>
                 <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="All types" />
+                  <SelectValue placeholder={t('filters.allTypes')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All types</SelectItem>
+                  <SelectItem value="all">{t('filters.allTypes')}</SelectItem>
                   {CONNECTOR_CATEGORIES.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
                       {cat.label}
@@ -223,14 +226,14 @@ export default function ConnectorsPage() {
           ) : connectors.length === 0 ? (
             <div className="text-center py-12">
               <Plug className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-              <h3 className="text-lg font-medium mb-2">No connectors configured</h3>
+              <h3 className="text-lg font-medium mb-2">{t('empty.title')}</h3>
               <p className="text-muted-foreground mb-4">
-                Connect your first data source to get started
+                {t('empty.description')}
               </p>
               <Link href="/dashboard/integrations/connectors/new">
                 <Button>
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Connector
+                  {t('addConnector')}
                 </Button>
               </Link>
             </div>
@@ -260,10 +263,10 @@ export default function ConnectorsPage() {
                   /* TODO: implement pagination */
                 }}
               >
-                Previous
+                {t('pagination.previous')}
               </Button>
               <span className="text-sm text-muted-foreground">
-                Page {meta.page} of {meta.totalPages}
+                {t('pagination.pageOf', { page: meta.page, total: meta.totalPages })}
               </span>
               <Button
                 variant="outline"
@@ -273,7 +276,7 @@ export default function ConnectorsPage() {
                   /* TODO: implement pagination */
                 }}
               >
-                Next
+                {t('pagination.next')}
               </Button>
             </div>
           )}

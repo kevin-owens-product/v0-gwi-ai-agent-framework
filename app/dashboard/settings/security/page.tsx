@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -41,6 +42,7 @@ const sessions = [
 ]
 
 export default function SecuritySettingsPage() {
+  const t = useTranslations("settings.security")
   const [isSaving, setIsSaving] = useState(false)
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(true)
 
@@ -54,38 +56,38 @@ export default function SecuritySettingsPage() {
     <div className="p-6 max-w-3xl">
       <PageTracker pageName="Settings - Security" metadata={{ twoFactorEnabled }} />
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Security Settings</h1>
-        <p className="text-muted-foreground">Manage your account security and active sessions</p>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
 
       <div className="space-y-6">
         {/* Password */}
         <Card>
           <CardHeader>
-            <CardTitle>Change Password</CardTitle>
-            <CardDescription>Update your password regularly to keep your account secure</CardDescription>
+            <CardTitle>{t("changePassword")}</CardTitle>
+            <CardDescription>{t("changePasswordDescription")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="current-password">Current Password</Label>
+              <Label htmlFor="current-password">{t("currentPassword")}</Label>
               <Input id="current-password" type="password" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="new-password">New Password</Label>
+              <Label htmlFor="new-password">{t("newPassword")}</Label>
               <Input id="new-password" type="password" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm New Password</Label>
+              <Label htmlFor="confirm-password">{t("confirmNewPassword")}</Label>
               <Input id="confirm-password" type="password" />
             </div>
             <Button onClick={handleSave} disabled={isSaving}>
               {isSaving ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Updating...
+                  {t("updating")}
                 </>
               ) : (
-                "Update Password"
+                t("updatePassword")
               )}
             </Button>
           </CardContent>
@@ -98,9 +100,9 @@ export default function SecuritySettingsPage() {
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5" />
-                  Two-Factor Authentication
+                  {t("twoFactorAuth")}
                 </CardTitle>
-                <CardDescription>Add an extra layer of security to your account</CardDescription>
+                <CardDescription>{t("twoFactorDescription")}</CardDescription>
               </div>
               <Switch checked={twoFactorEnabled} onCheckedChange={setTwoFactorEnabled} />
             </div>
@@ -110,16 +112,16 @@ export default function SecuritySettingsPage() {
               <div className="flex items-center gap-4 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                 <Shield className="h-8 w-8 text-emerald-500" />
                 <div>
-                  <p className="font-medium text-emerald-600">2FA is enabled</p>
-                  <p className="text-sm text-muted-foreground">Your account is protected with authenticator app</p>
+                  <p className="font-medium text-emerald-600">{t("twoFactorEnabled")}</p>
+                  <p className="text-sm text-muted-foreground">{t("twoFactorProtected")}</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center gap-2">
                 <Button variant="outline" size="sm">
-                  Change Method
+                  {t("changeMethod")}
                 </Button>
                 <Button variant="outline" size="sm">
-                  View Backup Codes
+                  {t("viewBackupCodes")}
                 </Button>
               </div>
             </CardContent>
@@ -131,11 +133,11 @@ export default function SecuritySettingsPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Active Sessions</CardTitle>
-                <CardDescription>Manage devices where you&apos;re currently logged in</CardDescription>
+                <CardTitle>{t("activeSessions")}</CardTitle>
+                <CardDescription>{t("activeSessionsDescription")}</CardDescription>
               </div>
               <Button variant="outline" size="sm" className="text-destructive bg-transparent">
-                Sign Out All
+                {t("signOutAll")}
               </Button>
             </div>
           </CardHeader>
@@ -153,7 +155,7 @@ export default function SecuritySettingsPage() {
                       <p className="font-medium">{session.device}</p>
                       {session.current && (
                         <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
-                          Current
+                          {t("current")}
                         </Badge>
                       )}
                     </div>
@@ -168,7 +170,7 @@ export default function SecuritySettingsPage() {
                 </div>
                 {!session.current && (
                   <Button variant="ghost" size="sm" className="text-destructive">
-                    Revoke
+                    {t("revoke")}
                   </Button>
                 )}
               </div>
@@ -181,17 +183,17 @@ export default function SecuritySettingsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-5 w-5" />
-              Danger Zone
+              {t("dangerZone")}
             </CardTitle>
-            <CardDescription>Irreversible and destructive actions</CardDescription>
+            <CardDescription>{t("dangerZoneDescription")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between p-4 rounded-lg border border-destructive/20">
               <div>
-                <p className="font-medium">Delete Account</p>
-                <p className="text-sm text-muted-foreground">Permanently delete your account and all data</p>
+                <p className="font-medium">{t("deleteAccount")}</p>
+                <p className="text-sm text-muted-foreground">{t("deleteAccountDescription")}</p>
               </div>
-              <Button variant="destructive">Delete Account</Button>
+              <Button variant="destructive">{t("deleteAccount")}</Button>
             </div>
           </CardContent>
         </Card>

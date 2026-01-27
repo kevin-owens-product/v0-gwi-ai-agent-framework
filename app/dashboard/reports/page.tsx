@@ -1,6 +1,7 @@
 "use client"
 
 import { Suspense, useState } from "react"
+import { useTranslations } from "next-intl"
 import { ReportsHeader } from "@/components/reports/reports-header"
 import { ReportsFilters } from "@/components/reports/reports-filters"
 import { ReportsGrid } from "@/components/reports/reports-grid"
@@ -11,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PageTracker } from "@/components/tracking/PageTracker"
 
 export default function ReportsPage() {
+  const t = useTranslations('dashboard.reports.page')
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
@@ -23,10 +25,10 @@ export default function ReportsPage() {
       <ReportStats />
       <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="all">All Reports</TabsTrigger>
-          <TabsTrigger value="templates">Templates</TabsTrigger>
-          <TabsTrigger value="scheduled">Scheduled</TabsTrigger>
-          <TabsTrigger value="shared">Shared with Me</TabsTrigger>
+          <TabsTrigger value="all">{t('tabs.allReports')}</TabsTrigger>
+          <TabsTrigger value="templates">{t('tabs.templates')}</TabsTrigger>
+          <TabsTrigger value="scheduled">{t('tabs.scheduled')}</TabsTrigger>
+          <TabsTrigger value="shared">{t('tabs.sharedWithMe')}</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="space-y-4">
           <ReportsFilters
@@ -70,6 +72,7 @@ function ReportsGridSkeleton() {
 }
 
 function ScheduledReports() {
+  const t = useTranslations('dashboard.reports.page.scheduled')
   return (
     <div className="space-y-4">
       <ScheduledReportCard
@@ -79,6 +82,7 @@ function ScheduledReports() {
         recipients={["team@company.com"]}
         type="dashboard"
         status="active"
+        t={t}
       />
       <ScheduledReportCard
         title="Monthly Market Overview"
@@ -87,6 +91,7 @@ function ScheduledReports() {
         recipients={["executives@company.com", "strategy@company.com"]}
         type="presentation"
         status="active"
+        t={t}
       />
       <ScheduledReportCard
         title="Quarterly Trend Report"
@@ -95,6 +100,7 @@ function ScheduledReports() {
         recipients={["all-hands@company.com"]}
         type="pdf"
         status="paused"
+        t={t}
       />
     </div>
   )
@@ -107,6 +113,7 @@ function ScheduledReportCard({
   recipients,
   type,
   status,
+  t,
 }: {
   title: string
   schedule: string
@@ -114,6 +121,7 @@ function ScheduledReportCard({
   recipients: string[]
   type: string
   status: "active" | "paused"
+  t: ReturnType<typeof useTranslations>
 }) {
   return (
     <div className="flex items-center justify-between p-4 border rounded-lg bg-card">
@@ -122,9 +130,9 @@ function ScheduledReportCard({
         <div>
           <h3 className="font-medium">{title}</h3>
           <p className="text-sm text-muted-foreground">
-            {schedule} - Next: {nextRun}
+            {schedule} - {t('nextRun', { date: nextRun })}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">{recipients.length} recipient(s)</p>
+          <p className="text-xs text-muted-foreground mt-1">{t('recipientsCount', { count: recipients.length })}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -140,6 +148,7 @@ function ScheduledReportCard({
 }
 
 function SharedReports() {
+  const t = useTranslations('dashboard.reports.page.shared')
   return (
     <div className="space-y-4">
       <SharedReportCard
@@ -147,18 +156,21 @@ function SharedReports() {
         sharedBy="Alex Johnson"
         sharedAt="Dec 2, 2024"
         permission="view"
+        t={t}
       />
       <SharedReportCard
         title="Competitor Benchmark Analysis"
         sharedBy="Maria Garcia"
         sharedAt="Nov 28, 2024"
         permission="edit"
+        t={t}
       />
       <SharedReportCard
         title="Gen Z Brand Perception Study"
         sharedBy="Chris Lee"
         sharedAt="Nov 15, 2024"
         permission="comment"
+        t={t}
       />
     </div>
   )
@@ -169,26 +181,33 @@ function SharedReportCard({
   sharedBy,
   sharedAt,
   permission,
+  t,
 }: {
   title: string
   sharedBy: string
   sharedAt: string
   permission: "view" | "edit" | "comment"
+  t: ReturnType<typeof useTranslations>
 }) {
   const permissionColors = {
     view: "bg-blue-500/10 text-blue-500",
     edit: "bg-emerald-500/10 text-emerald-500",
     comment: "bg-amber-500/10 text-amber-500",
   }
+  const permissionLabels = {
+    view: t('canView'),
+    edit: t('canEdit'),
+    comment: t('canComment'),
+  }
   return (
     <div className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent/50 transition-colors cursor-pointer">
       <div>
         <h3 className="font-medium">{title}</h3>
         <p className="text-sm text-muted-foreground">
-          Shared by {sharedBy} on {sharedAt}
+          {t('sharedBy', { name: sharedBy, date: sharedAt })}
         </p>
       </div>
-      <span className={`text-xs px-2 py-1 rounded capitalize ${permissionColors[permission]}`}>Can {permission}</span>
+      <span className={`text-xs px-2 py-1 rounded ${permissionColors[permission]}`}>{permissionLabels[permission]}</span>
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -40,6 +41,7 @@ const categories = [
 ]
 
 export default function AgentStorePage() {
+  const t = useTranslations("dashboard.store")
   const router = useRouter()
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
@@ -72,6 +74,7 @@ export default function AgentStorePage() {
       window.removeEventListener("agent-installed", handleChange)
       window.removeEventListener("agent-uninstalled", handleChange)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const filteredAgents = allAgents
@@ -115,8 +118,8 @@ export default function AgentStorePage() {
       <PageTracker pageName="Agent Store" metadata={{ selectedCategory, sortBy, searchQuery: !!searchQuery }} />
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold mb-2">Agent Store</h1>
-        <p className="text-muted-foreground">Discover and install pre-built agents to supercharge your research</p>
+        <h1 className="text-3xl font-bold mb-2">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
 
       {/* Search and Filters */}
@@ -124,7 +127,7 @@ export default function AgentStorePage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search agents..."
+            placeholder={t("searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -132,13 +135,13 @@ export default function AgentStorePage() {
         </div>
         <Select value={sortBy} onValueChange={setSortBy}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by" />
+            <SelectValue placeholder={t("sortBy.placeholder")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="popular">Most Popular</SelectItem>
-            <SelectItem value="rating">Highest Rated</SelectItem>
-            <SelectItem value="newest">Newest</SelectItem>
-            <SelectItem value="name">Name A-Z</SelectItem>
+            <SelectItem value="popular">{t("sortBy.popular")}</SelectItem>
+            <SelectItem value="rating">{t("sortBy.rating")}</SelectItem>
+            <SelectItem value="newest">{t("sortBy.newest")}</SelectItem>
+            <SelectItem value="name">{t("sortBy.name")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -147,7 +150,7 @@ export default function AgentStorePage() {
       <section>
         <div className="flex items-center gap-2 mb-4">
           <Sparkles className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Featured Agents</h2>
+          <h2 className="text-xl font-semibold">{t("featuredAgents")}</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {featuredAgents.map((agent) => {
@@ -156,7 +159,7 @@ export default function AgentStorePage() {
             return (
               <Card key={agent.id} className="relative overflow-hidden border-primary/20 hover:border-primary/40 transition-colors">
                 <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-bl-lg">
-                  Featured
+                  {t("featured")}
                 </div>
                 <CardHeader>
                   <div className="flex items-start gap-4">
@@ -194,7 +197,7 @@ export default function AgentStorePage() {
                     {isInstalled ? (
                       <Badge variant="outline" className="gap-1">
                         <Check className="h-3 w-3" />
-                        Installed
+                        {t("installed")}
                       </Badge>
                     ) : (
                       <Button
@@ -207,7 +210,7 @@ export default function AgentStorePage() {
                     )}
                     <Button size="sm" onClick={(e) => handleTryInPlayground(agent.id, e)}>
                       <Play className="mr-1 h-4 w-4" />
-                      Try Now
+                      {t("tryNow")}
                     </Button>
                   </div>
                 </CardFooter>
@@ -223,7 +226,7 @@ export default function AgentStorePage() {
         <aside className="space-y-2">
           <h3 className="font-medium mb-3 flex items-center gap-2">
             <Filter className="h-4 w-4" />
-            Categories
+            {t("categories")}
           </h3>
           {categories.map((category) => (
             <button
@@ -282,13 +285,13 @@ export default function AgentStorePage() {
                 </CardContent>
                 <CardFooter className="pt-0 flex items-center justify-between gap-2">
                   <Button variant="ghost" size="sm" asChild className="flex-1">
-                    <Link href={`/dashboard/store/${agent.id}`}>View Details</Link>
+                    <Link href={`/dashboard/store/${agent.id}`}>{t("viewDetails")}</Link>
                   </Button>
                   <div className="flex items-center gap-1">
                     {isInstalled ? (
                       <Badge variant="outline" className="text-xs gap-1">
                         <Check className="h-3 w-3" />
-                        Added
+                        {t("added")}
                       </Badge>
                     ) : null}
                     <Button
@@ -316,14 +319,14 @@ export default function AgentStorePage() {
                 <Building2 className="h-8 w-8 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-2">Build Your Own Agent</h3>
+                <h3 className="text-xl font-semibold mb-2">{t("buildYourOwn.title")}</h3>
                 <p className="text-muted-foreground">
-                  Create custom agents tailored to your specific research needs and share them with your team.
+                  {t("buildYourOwn.description")}
                 </p>
               </div>
               <Button asChild>
                 <Link href="/dashboard/agents/new">
-                  Create Agent
+                  {t("buildYourOwn.createAgent")}
                   <ChevronRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

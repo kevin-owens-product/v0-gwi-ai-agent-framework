@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { AdvancedDashboardBuilder } from "@/components/dashboard/advanced-dashboard-builder"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
@@ -9,12 +10,14 @@ import Link from "next/link"
 import { toast } from "sonner"
 
 export default function DashboardBuilderPage() {
+  const t = useTranslations('dashboard.dashboards.builder')
   const router = useRouter()
   const searchParams = useSearchParams()
   const dashboardId = searchParams.get("id")
-  const [_isSaving, setIsSaving] = useState(false)
+  const [, setIsSaving] = useState(false)
 
-  // Handle save
+  // Handle save - the state type comes from AdvancedDashboardBuilder
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSave = useCallback(async (state: any) => {
     setIsSaving(true)
     try {
@@ -30,6 +33,7 @@ export default function DashboardBuilderPage() {
         body: JSON.stringify({
           name: state.name,
           description: state.description,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           widgets: widgetsArray.map((w: any) => ({
             id: w.id,
             type: w.type,
@@ -46,7 +50,7 @@ export default function DashboardBuilderPage() {
       })
 
       if (response.ok) {
-        toast.success("Dashboard saved successfully!")
+        toast.success(t('saveSuccess'))
         if (!dashboardId) {
           const data = await response.json()
           router.push(`/dashboard/dashboards/${data.id}`)
@@ -56,13 +60,14 @@ export default function DashboardBuilderPage() {
       }
     } catch (error) {
       console.error("Save failed:", error)
-      toast.error("Failed to save dashboard")
+      toast.error(t('saveFailed'))
     } finally {
       setIsSaving(false)
     }
-  }, [dashboardId, router])
+  }, [dashboardId, router, t])
 
-  // Handle export
+  // Handle export - the state type comes from AdvancedDashboardBuilder
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleExport = useCallback(async (format: string, state: any) => {
     try {
       // For now, export as JSON
@@ -87,12 +92,12 @@ export default function DashboardBuilderPage() {
       a.click()
       URL.revokeObjectURL(url)
 
-      toast.success(`Dashboard exported as ${format.toUpperCase()}`)
+      toast.success(t('exportSuccess', { format: format.toUpperCase() }))
     } catch (error) {
       console.error("Export failed:", error)
-      toast.error("Failed to export dashboard")
+      toast.error(t('exportFailed'))
     }
-  }, [])
+  }, [t])
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)]">
@@ -105,11 +110,11 @@ export default function DashboardBuilderPage() {
             </Button>
           </Link>
           <h1 className="font-semibold">
-            {dashboardId ? "Edit Dashboard" : "Create New Dashboard"}
+            {dashboardId ? t('editTitle') : t('title')}
           </h1>
         </div>
         <div className="text-sm text-muted-foreground">
-          Advanced Dashboard Builder with Drag & Drop
+          {t('subtitle')}
         </div>
       </div>
 
@@ -120,8 +125,8 @@ export default function DashboardBuilderPage() {
             dashboardId
               ? undefined // TODO: Load from API
               : {
-                  name: "New Dashboard",
-                  description: "Add widgets by clicking the 'Add Widget' button",
+                  name: t('initialName'),
+                  description: t('initialDescription'),
                   widgets: [],
                   gridColumns: 12,
                   gridRows: 8,

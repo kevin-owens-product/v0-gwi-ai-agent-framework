@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   Search,
   Plus,
@@ -163,6 +164,8 @@ const categories = [
 ]
 
 export default function TemplatesPage() {
+  const t = useTranslations("dashboard.templates")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
@@ -234,73 +237,73 @@ export default function TemplatesPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Prompt Templates</h1>
-          <p className="text-muted-foreground">Reusable templates for common insights tasks</p>
+          <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
         <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
               <Plus className="w-4 h-4 mr-2" />
-              Create Template
+              {t("createTemplate")}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[600px]">
             <DialogHeader>
-              <DialogTitle>Create Template</DialogTitle>
-              <DialogDescription>Save a prompt as a reusable template for your team</DialogDescription>
+              <DialogTitle>{t("createDialog.title")}</DialogTitle>
+              <DialogDescription>{t("createDialog.description")}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label>Template Name</Label>
+                <Label>{t("createDialog.templateName")}</Label>
                 <Input
-                  placeholder="e.g., Audience Deep Dive"
+                  placeholder={t("createDialog.templateNamePlaceholder")}
                   value={newTemplate.name}
                   onChange={(e) => setNewTemplate({ ...newTemplate, name: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
+                <Label>{tCommon("description")}</Label>
                 <Input
-                  placeholder="What does this template do?"
+                  placeholder={t("createDialog.descriptionPlaceholder")}
                   value={newTemplate.description}
                   onChange={(e) => setNewTemplate({ ...newTemplate, description: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Category</Label>
+                <Label>{t("createDialog.category")}</Label>
                 <select
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   value={newTemplate.category}
                   onChange={(e) => setNewTemplate({ ...newTemplate, category: e.target.value })}
                 >
-                  <option value="research">Research</option>
-                  <option value="analysis">Analysis</option>
-                  <option value="briefs">Briefs & Docs</option>
+                  <option value="research">{t("categories.research")}</option>
+                  <option value="analysis">{t("categories.analysis")}</option>
+                  <option value="briefs">{t("categories.briefs")}</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <Label>Prompt Template</Label>
+                <Label>{t("createDialog.promptTemplate")}</Label>
                 <Textarea
-                  placeholder="Use [BRACKETS] for variables that users will fill in..."
+                  placeholder={t("createDialog.promptPlaceholder")}
                   className="min-h-[120px]"
                   value={newTemplate.prompt}
                   onChange={(e) => setNewTemplate({ ...newTemplate, prompt: e.target.value })}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template
+                  {t("createDialog.promptTip")}
                 </p>
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setCreateDialogOpen(false)} disabled={isSaving}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button
                 className="bg-accent text-accent-foreground hover:bg-accent/90"
                 onClick={handleCreateTemplate}
                 disabled={isSaving || !newTemplate.name.trim() || !newTemplate.prompt.trim()}
               >
-                {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating...</> : "Create Template"}
+                {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{tCommon("creating")}</> : t("createTemplate")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -312,7 +315,7 @@ export default function TemplatesPage() {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search templates..."
+            placeholder={t("searchPlaceholder")}
             className="pl-9 bg-background"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -334,7 +337,7 @@ export default function TemplatesPage() {
         <div className="space-y-3">
           <h2 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
             <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-            Starred Templates
+            {t("starredTemplates")}
           </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {templates
@@ -371,14 +374,14 @@ export default function TemplatesPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => handleUseTemplate(template)}>
                               <Play className="w-4 h-4 mr-2" />
-                              Use Template
+                              {t("actions.useTemplate")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleDuplicate(template)}>
                               <Copy className="w-4 h-4 mr-2" />
-                              Duplicate
+                              {t("actions.duplicate")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">{tCommon("delete")}</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -388,7 +391,7 @@ export default function TemplatesPage() {
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Sparkles className="w-3 h-3" />
-                        {template.uses} uses
+                        {t("uses", { count: template.uses })}
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
@@ -405,7 +408,7 @@ export default function TemplatesPage() {
       {/* All Templates */}
       <div className="space-y-3">
         <h2 className="text-sm font-medium text-muted-foreground">
-          {selectedCategory === "all" ? "All Templates" : categories.find((c) => c.id === selectedCategory)?.name}
+          {selectedCategory === "all" ? t("allTemplates") : categories.find((c) => c.id === selectedCategory)?.name}
         </h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredTemplates.map((template) => (
@@ -444,14 +447,14 @@ export default function TemplatesPage() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleUseTemplate(template)}>
                           <Play className="w-4 h-4 mr-2" />
-                          Use Template
+                          {t("actions.useTemplate")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDuplicate(template)}>
                           <Copy className="w-4 h-4 mr-2" />
-                          Duplicate
+                          {t("actions.duplicate")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">{tCommon("delete")}</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -26,13 +27,20 @@ import {
 import Link from "next/link"
 import { PageTracker } from "@/components/tracking/PageTracker"
 
+interface InsightData {
+  summary?: string
+  findings?: string[]
+  recommendations?: string[]
+  [key: string]: unknown
+}
+
 interface Insight {
   id: string
   title: string
   type: string
   confidenceScore: number | null
   createdAt: string
-  data: any
+  data: InsightData
   agentRun?: {
     agent?: {
       id: string
@@ -54,6 +62,7 @@ const typeIcons: Record<string, typeof Users> = {
 }
 
 export default function InsightsPage() {
+  const t = useTranslations('dashboard.insights')
   const [insights, setInsights] = useState<Insight[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
@@ -115,9 +124,9 @@ export default function InsightsPage() {
       <PageTracker pageName="Insights List" metadata={{ typeFilter, searchQuery: !!searchQuery }} />
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold mb-2">Insights</h1>
+        <h1 className="text-3xl font-bold mb-2">{t('title')}</h1>
         <p className="text-muted-foreground">
-          AI-generated insights from your agent runs
+          {t('description')}
         </p>
       </div>
 
@@ -126,7 +135,7 @@ export default function InsightsPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search insights..."
+            placeholder={t('searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -135,14 +144,14 @@ export default function InsightsPage() {
         <Select value={typeFilter} onValueChange={setTypeFilter}>
           <SelectTrigger className="w-[180px]">
             <Filter className="h-4 w-4 mr-2" />
-            <SelectValue placeholder="Filter by type" />
+            <SelectValue placeholder={t('filterByType')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="audience">Audience</SelectItem>
-            <SelectItem value="trend">Trend</SelectItem>
-            <SelectItem value="competitive">Competitive</SelectItem>
-            <SelectItem value="analysis">Analysis</SelectItem>
+            <SelectItem value="all">{t('types.all')}</SelectItem>
+            <SelectItem value="audience">{t('types.audience')}</SelectItem>
+            <SelectItem value="trend">{t('types.trend')}</SelectItem>
+            <SelectItem value="competitive">{t('types.competitive')}</SelectItem>
+            <SelectItem value="analysis">{t('types.analysis')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -150,10 +159,10 @@ export default function InsightsPage() {
       {/* Results count */}
       <div className="text-sm text-muted-foreground">
         {isLoading ? (
-          "Loading..."
+          t('loading')
         ) : (
           <>
-            Showing {filteredInsights.length} of {total} insights
+            {t('showing', { shown: filteredInsights.length, total })}
           </>
         )}
       </div>
@@ -167,13 +176,12 @@ export default function InsightsPage() {
         <Card className="bg-card/50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Sparkles className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-2">No insights yet</h3>
+            <h3 className="text-lg font-medium mb-2">{t('empty.title')}</h3>
             <p className="text-muted-foreground text-center max-w-md">
-              Run agents to generate insights. Insights are automatically
-              created when agents analyze your data.
+              {t('empty.description')}
             </p>
             <Button asChild className="mt-4">
-              <Link href="/dashboard/playground">Go to Playground</Link>
+              <Link href="/dashboard/playground">{t('empty.goToPlayground')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -197,7 +205,7 @@ export default function InsightsPage() {
                       <div className="flex items-center gap-2">
                         {insightIsNew && (
                           <Badge variant="secondary" className="text-xs">
-                            New
+                            {t('badges.new')}
                           </Badge>
                         )}
                         <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -225,7 +233,7 @@ export default function InsightsPage() {
                     </div>
                     {insight.agentRun?.agent && (
                       <p className="text-xs text-muted-foreground mt-2">
-                        via {insight.agentRun.agent.name}
+                        {t('viaAgent', { name: insight.agentRun.agent.name })}
                       </p>
                     )}
                   </CardContent>

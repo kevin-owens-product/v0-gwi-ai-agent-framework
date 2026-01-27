@@ -5,11 +5,13 @@ import { AgentPerformance } from "@/components/analytics/agent-performance"
 import { TopQueries } from "@/components/analytics/top-queries"
 import { TeamActivity } from "@/components/analytics/team-activity"
 import { AnalyticsPageTracker } from "./page-client"
+import { getTranslations } from "@/lib/i18n/server"
 
-export default function AnalyticsPage() {
+export default async function AnalyticsPage() {
+  const t = await getTranslations("dashboard.analytics")
   return (
     <div className="flex-1 space-y-6 p-6">
-      <AnalyticsPageTracker />
+      <AnalyticsPageTracker pageName={t("pageTracker")} />
       <AnalyticsHeader />
       <AnalyticsOverview />
       <div className="grid gap-6 lg:grid-cols-2">

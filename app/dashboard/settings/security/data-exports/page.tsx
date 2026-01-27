@@ -12,6 +12,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -43,6 +44,7 @@ interface ExportStats {
 }
 
 export default function DataExportsPage() {
+  const t = useTranslations("settings.security.dataExports")
   const [exports, setExports] = useState<ExportRecord[]>([])
   const [stats, setStats] = useState<ExportStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -105,9 +107,9 @@ export default function DataExportsPage() {
       {/* Header */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Data Exports</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground">
-            Request exports of your personal data for GDPR compliance
+            {t("description")}
           </p>
         </div>
         <Button
@@ -117,18 +119,16 @@ export default function DataExportsPage() {
           disabled={isRefreshing}
         >
           <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-          Refresh
+          {t("refresh")}
         </Button>
       </div>
 
       {/* GDPR Notice */}
       <Alert>
         <Shield className="h-4 w-4" />
-        <AlertTitle>Your Data Rights</AlertTitle>
+        <AlertTitle>{t("yourDataRights")}</AlertTitle>
         <AlertDescription>
-          Under GDPR Article 20, you have the right to receive your personal data in a structured,
-          commonly used, and machine-readable format. Exports are processed within 30 days and
-          remain available for download for 30 days after completion.
+          {t("yourDataRightsDescription")}
         </AlertDescription>
       </Alert>
 
@@ -148,17 +148,17 @@ export default function DataExportsPage() {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <FileJson className="h-5 w-5 text-muted-foreground" />
-                <CardTitle>No Active Exports</CardTitle>
+                <CardTitle>{t("noActiveExports")}</CardTitle>
               </div>
               <CardDescription>
-                Request an export to see its status here
+                {t("noActiveExportsDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <Info className="h-12 w-12 text-muted-foreground/50 mb-4" />
                 <p className="text-sm text-muted-foreground">
-                  Your export status will appear here after you request a data export
+                  {t("noActiveExportsHint")}
                 </p>
               </div>
             </CardContent>
@@ -171,14 +171,14 @@ export default function DataExportsPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Export History</CardTitle>
-              <CardDescription>View and download your previous data exports</CardDescription>
+              <CardTitle>{t("exportHistory")}</CardTitle>
+              <CardDescription>{t("exportHistoryDescription")}</CardDescription>
             </div>
             {stats && (
               <div className="flex gap-4 text-sm text-muted-foreground">
-                <span>Total: {stats.total}</span>
-                {stats.pending > 0 && <span>Pending: {stats.pending}</span>}
-                {stats.processing > 0 && <span>Processing: {stats.processing}</span>}
+                <span>{t("total")}: {stats.total}</span>
+                {stats.pending > 0 && <span>{t("pending")}: {stats.pending}</span>}
+                {stats.processing > 0 && <span>{t("processing")}: {stats.processing}</span>}
               </div>
             )}
           </div>
@@ -191,52 +191,52 @@ export default function DataExportsPage() {
       {/* Information Section */}
       <Card>
         <CardHeader>
-          <CardTitle>About Data Exports</CardTitle>
+          <CardTitle>{t("aboutDataExports")}</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="included" className="w-full">
             <TabsList>
-              <TabsTrigger value="included">What&apos;s Included</TabsTrigger>
-              <TabsTrigger value="format">Export Format</TabsTrigger>
-              <TabsTrigger value="faq">FAQ</TabsTrigger>
+              <TabsTrigger value="included">{t("tabs.whatsIncluded")}</TabsTrigger>
+              <TabsTrigger value="format">{t("tabs.exportFormat")}</TabsTrigger>
+              <TabsTrigger value="faq">{t("tabs.faq")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="included" className="space-y-4 pt-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <h4 className="font-medium">Profile Information</h4>
+                  <h4 className="font-medium">{t("included.profileInfo")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Your name, email, avatar, and account settings
+                    {t("included.profileInfoDesc")}
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <h4 className="font-medium">Organization Memberships</h4>
+                  <h4 className="font-medium">{t("included.orgMemberships")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    All organizations you belong to and your roles
+                    {t("included.orgMembershipsDesc")}
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <h4 className="font-medium">Created Content</h4>
+                  <h4 className="font-medium">{t("included.createdContent")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Agents, reports, dashboards, and other content you&apos;ve created
+                    {t("included.createdContentDesc")}
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <h4 className="font-medium">Activity History</h4>
+                  <h4 className="font-medium">{t("included.activityHistory")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Audit logs and activity records associated with your account
+                    {t("included.activityHistoryDesc")}
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <h4 className="font-medium">Preferences</h4>
+                  <h4 className="font-medium">{t("included.preferences")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Your theme, language, notification, and other settings
+                    {t("included.preferencesDesc")}
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <h4 className="font-medium">API Keys</h4>
+                  <h4 className="font-medium">{t("included.apiKeys")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    API key metadata (keys themselves are not exported for security)
+                    {t("included.apiKeysDesc")}
                   </p>
                 </div>
               </div>
@@ -245,17 +245,17 @@ export default function DataExportsPage() {
             <TabsContent value="format" className="space-y-4 pt-4">
               <div className="space-y-4">
                 <p className="text-muted-foreground">
-                  Your data is exported in JSON (JavaScript Object Notation) format, which is:
+                  {t("format.description")}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
-                  <li>Machine-readable and portable as required by GDPR</li>
-                  <li>Human-readable when opened in a text editor</li>
-                  <li>Compatible with most data processing tools</li>
-                  <li>Easy to import into other services</li>
+                  <li>{t("format.machineReadable")}</li>
+                  <li>{t("format.humanReadable")}</li>
+                  <li>{t("format.compatible")}</li>
+                  <li>{t("format.easyImport")}</li>
                 </ul>
                 <div className="rounded-lg border bg-muted/50 p-4">
                   <p className="text-sm font-mono text-muted-foreground">
-                    Example structure:
+                    {t("format.exampleStructure")}
                   </p>
                   <pre className="mt-2 text-xs overflow-x-auto">
 {`{
@@ -278,31 +278,27 @@ export default function DataExportsPage() {
             <TabsContent value="faq" className="space-y-4 pt-4">
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-medium">How long does an export take?</h4>
+                  <h4 className="font-medium">{t("faq.howLong")}</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Most exports complete within a few minutes. Complex requests with large amounts
-                    of data may take longer, but GDPR allows up to 30 days for processing.
+                    {t("faq.howLongAnswer")}
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium">How long is an export available?</h4>
+                  <h4 className="font-medium">{t("faq.howLongAvailable")}</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Completed exports are available for download for 30 days. After this period,
-                    you&apos;ll need to request a new export.
+                    {t("faq.howLongAvailableAnswer")}
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium">How often can I request an export?</h4>
+                  <h4 className="font-medium">{t("faq.howOften")}</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    You can request one export per 24 hours. This helps ensure system resources
-                    are available for all users.
+                    {t("faq.howOftenAnswer")}
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium">Is my export secure?</h4>
+                  <h4 className="font-medium">{t("faq.isSecure")}</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Yes. Exports are only accessible to you and require authentication to download.
-                    Sensitive data like passwords and API key secrets are never included in exports.
+                    {t("faq.isSecureAnswer")}
                   </p>
                 </div>
               </div>

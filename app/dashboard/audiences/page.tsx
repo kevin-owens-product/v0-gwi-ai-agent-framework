@@ -200,7 +200,21 @@ function formatSize(size: number): string {
   return size.toString()
 }
 
-function mapApiAudience(apiAudience: any): Audience {
+interface ApiAudience {
+  id: string
+  name: string
+  description?: string
+  size?: number
+  updatedAt?: string
+  criteria?: {
+    markets?: string[]
+    demographics?: { label: string; value: string }[]
+    behaviors?: string[]
+    interests?: string[]
+  }
+}
+
+function mapApiAudience(apiAudience: ApiAudience): Audience {
   const criteria = apiAudience.criteria || {}
   return {
     id: apiAudience.id,
@@ -208,7 +222,7 @@ function mapApiAudience(apiAudience: any): Audience {
     description: apiAudience.description || '',
     size: formatSize(apiAudience.size || 0),
     markets: criteria.markets || ['Global'],
-    lastUsed: formatTimeAgo(apiAudience.updatedAt),
+    lastUsed: formatTimeAgo(apiAudience.updatedAt || new Date().toISOString()),
     demographics: criteria.demographics || [],
     behaviors: criteria.behaviors || [],
     interests: criteria.interests || [],
@@ -296,15 +310,34 @@ export default function AudiencesPage() {
     a.description.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const handleAIAttributesGenerated = useCallback((attributes: any[]) => {
-    console.log("AI generated attributes:", attributes)
+interface ParsedAttribute {
+    dimension: string
+    operator: string
+    value: string
+    confidence: number
+    source: string
+  }
+
+  const handleAIAttributesGenerated = useCallback((_attributes: ParsedAttribute[]) => {
+    // AI attributes generated - can be used to enhance audience targeting
   }, [])
 
-  const handleEstimatedSizeChange = useCallback((size: number) => {
-    console.log("Estimated size:", size)
+  const handleEstimatedSizeChange = useCallback((_size: number) => {
+    // Size estimation updated - can be used for analytics
   }, [])
 
-  const handleAddFromMarketplace = useCallback((audience: any) => {
+interface MarketplaceAudience {
+  id: string
+  name: string
+  description: string
+  estimatedSize: string
+  markets: string[]
+  demographics?: string[]
+  behaviors?: string[]
+  interests?: string[]
+}
+
+  const handleAddFromMarketplace = useCallback((audience: MarketplaceAudience) => {
     const newAudience: Audience = {
       id: `mp-${audience.id}`,
       name: audience.name,
@@ -498,16 +531,18 @@ function AudiencesGridSkeleton() {
 }
 
 function AudiencesGrid({ audiences, onCompare }: { audiences: Audience[]; onCompare?: (audience: Audience) => void }) {
+  const t = useTranslations('dashboard.audiences')
+
   if (audiences.length === 0) {
     return (
       <div className="text-center py-12">
         <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <h3 className="font-semibold mb-2">No audiences yet</h3>
-        <p className="text-sm text-muted-foreground mb-4">Create your first audience to get started</p>
+        <h3 className="font-semibold mb-2">{t('emptyState.title')}</h3>
+        <p className="text-sm text-muted-foreground mb-4">{t('emptyState.description')}</p>
         <Link href="/dashboard/audiences/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            New Audience
+            {t('emptyState.action')}
           </Button>
         </Link>
       </div>
@@ -542,11 +577,11 @@ function AudiencesGrid({ audiences, onCompare }: { audiences: Audience[]; onComp
             </span>
             <span className="text-muted-foreground">
               <Globe className="h-4 w-4 inline mr-1" />
-              {audience.markets.length} markets
+              {t('grid.marketsCount', { count: audience.markets.length })}
             </span>
           </div>
           <div className="flex items-center justify-between mt-2">
-            <p className="text-xs text-muted-foreground">Used {audience.lastUsed}</p>
+            <p className="text-xs text-muted-foreground">{t('grid.used', { time: audience.lastUsed })}</p>
             <div className="flex gap-1">
               {audience.markets.slice(0, 3).map(market => (
                 <Badge key={market} variant="outline" className="text-xs">

@@ -8,6 +8,7 @@
 
 import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -53,42 +54,43 @@ interface ConnectorDetailPageProps {
 
 const STATUS_CONFIG: Record<DataSyncStatus | 'NEVER', {
   icon: React.ComponentType<{ className?: string }>
-  label: string
+  labelKey: string
   className: string
 }> = {
   COMPLETED: {
     icon: CheckCircle2,
-    label: 'Last sync successful',
+    labelKey: 'status.completed',
     className: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
   },
   RUNNING: {
     icon: Loader2,
-    label: 'Syncing...',
+    labelKey: 'status.running',
     className: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
   },
   PENDING: {
     icon: Clock,
-    label: 'Sync pending',
+    labelKey: 'status.pending',
     className: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20',
   },
   FAILED: {
     icon: XCircle,
-    label: 'Last sync failed',
+    labelKey: 'status.failed',
     className: 'bg-red-500/10 text-red-600 border-red-500/20',
   },
   CANCELLED: {
     icon: AlertTriangle,
-    label: 'Sync cancelled',
+    labelKey: 'status.cancelled',
     className: 'bg-gray-500/10 text-gray-600 border-gray-500/20',
   },
   NEVER: {
     icon: Clock,
-    label: 'Never synced',
+    labelKey: 'status.never',
     className: 'bg-muted text-muted-foreground',
   },
 }
 
 export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps) {
+  const t = useTranslations('dashboard.integrations.connectors.detail')
   const { id } = use(params)
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'overview' | 'configuration' | 'history'>('overview')
@@ -118,11 +120,11 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
     setIsSyncing(true)
     try {
       await triggerSync()
-      toast.success('Sync started')
+      toast.success(t('toast.syncStarted'))
       // Refresh after a short delay to show updated status
       setTimeout(() => fetchConnector(), 2000)
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to start sync')
+      toast.error(err instanceof Error ? err.message : t('toast.syncFailed'))
     } finally {
       setIsSyncing(false)
     }
@@ -142,9 +144,9 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
     } catch (err) {
       setTestResult({
         success: false,
-        message: err instanceof Error ? err.message : 'Test failed',
+        message: err instanceof Error ? err.message : t('toast.testFailed'),
       })
-      toast.error(err instanceof Error ? err.message : 'Failed to test connection')
+      toast.error(err instanceof Error ? err.message : t('toast.testFailed'))
     } finally {
       setIsTesting(false)
     }
@@ -154,10 +156,10 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
     setIsDeleting(true)
     try {
       await deleteConnector(id)
-      toast.success('Connector deleted')
+      toast.success(t('toast.connectorDeleted'))
       router.push('/dashboard/integrations/connectors')
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to delete connector')
+      toast.error(err instanceof Error ? err.message : t('toast.deleteFailed'))
       setIsDeleting(false)
     }
   }
@@ -172,13 +174,13 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
         <Link href="/dashboard/integrations/connectors">
           <Button variant="ghost" size="sm">
             <ChevronLeft className="h-4 w-4 mr-2" />
-            Back to Connectors
+            {t('backToConnectors')}
           </Button>
         </Link>
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
-            {error || 'Connector not found'}
+            {error || t('notFound')}
           </AlertDescription>
         </Alert>
       </div>
@@ -233,7 +235,7 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
             ) : (
               <Plug className="h-4 w-4 mr-2" />
             )}
-            Test
+            {t('actions.test')}
           </Button>
           <Button
             onClick={handleSync}
@@ -244,7 +246,7 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
             ) : (
               <RefreshCw className="h-4 w-4 mr-2" />
             )}
-            Sync Now
+            {t('actions.syncNow')}
           </Button>
         </div>
       </div>
@@ -268,7 +270,7 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
             <div className="flex items-center gap-3">
               <Badge className={statusConfig.className} variant="outline">
                 <StatusIcon className={`mr-1 h-3 w-3 ${status === 'RUNNING' ? 'animate-spin' : ''}`} />
-                {statusConfig.label}
+                {t(statusConfig.labelKey)}
               </Badge>
             </div>
             {connector.lastSyncAt && (
@@ -281,23 +283,23 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
 
         <Card>
           <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground">Status</p>
+            <p className="text-sm text-muted-foreground">{t('cards.status')}</p>
             <Badge variant={connector.isActive ? 'default' : 'secondary'} className="mt-1">
-              {connector.isActive ? 'Active' : 'Paused'}
+              {connector.isActive ? t('cards.active') : t('cards.paused')}
             </Badge>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground">Total Syncs</p>
+            <p className="text-sm text-muted-foreground">{t('cards.totalSyncs')}</p>
             <p className="text-2xl font-semibold">{connector._count.syncLogs}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground">Error Count</p>
+            <p className="text-sm text-muted-foreground">{t('cards.errorCount')}</p>
             <p className={`text-2xl font-semibold ${connector.errorCount > 0 ? 'text-destructive' : ''}`}>
               {connector.errorCount}
             </p>
@@ -306,19 +308,19 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "overview" | "configuration" | "history")}>
         <TabsList>
           <TabsTrigger value="overview">
             <Clock className="h-4 w-4 mr-2" />
-            Overview
+            {t('tabs.overview')}
           </TabsTrigger>
           <TabsTrigger value="configuration">
             <Settings className="h-4 w-4 mr-2" />
-            Configuration
+            {t('tabs.configuration')}
           </TabsTrigger>
           <TabsTrigger value="history">
             <History className="h-4 w-4 mr-2" />
-            Sync History
+            {t('tabs.syncHistory')}
           </TabsTrigger>
         </TabsList>
 
@@ -326,31 +328,31 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
           {/* Connector details */}
           <Card>
             <CardHeader>
-              <CardTitle>Details</CardTitle>
+              <CardTitle>{t('overview.details')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {connector.description && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Description</p>
+                  <p className="text-sm text-muted-foreground">{t('overview.description')}</p>
                   <p className="mt-1">{connector.description}</p>
                 </div>
               )}
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <p className="text-sm text-muted-foreground">Provider</p>
+                  <p className="text-sm text-muted-foreground">{t('overview.provider')}</p>
                   <p className="mt-1">{connector.providerMeta?.name || connector.provider}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Type</p>
+                  <p className="text-sm text-muted-foreground">{t('overview.type')}</p>
                   <p className="mt-1">{connector.type}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Sync Schedule</p>
-                  <p className="mt-1">{connector.syncSchedule || 'Manual only'}</p>
+                  <p className="text-sm text-muted-foreground">{t('overview.syncSchedule')}</p>
+                  <p className="mt-1">{connector.syncSchedule || t('overview.manualOnly')}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Created</p>
+                  <p className="text-sm text-muted-foreground">{t('overview.created')}</p>
                   <p className="mt-1">{format(new Date(connector.createdAt), 'PPP')}</p>
                 </div>
               </div>
@@ -360,8 +362,8 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
           {/* Recent sync logs */}
           <Card>
             <CardHeader>
-              <CardTitle>Recent Syncs</CardTitle>
-              <CardDescription>Last {connector.syncLogs?.length || 0} sync operations</CardDescription>
+              <CardTitle>{t('overview.recentSyncs')}</CardTitle>
+              <CardDescription>{t('overview.lastSyncs', { count: connector.syncLogs?.length || 0 })}</CardDescription>
             </CardHeader>
             <CardContent>
               {connector.syncLogs && connector.syncLogs.length > 0 ? (
@@ -371,7 +373,7 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
                 />
               ) : (
                 <p className="text-muted-foreground text-center py-8">
-                  No sync history yet
+                  {t('overview.noSyncHistory')}
                 </p>
               )}
             </CardContent>
@@ -392,7 +394,7 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
               isActive: connector.isActive,
             }}
             onSuccess={() => {
-              toast.success('Connector updated')
+              toast.success(t('toast.connectorUpdated'))
               fetchConnector()
             }}
           />
@@ -400,14 +402,14 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
           {/* Danger zone */}
           <Card className="mt-6 border-destructive/50">
             <CardHeader>
-              <CardTitle className="text-destructive">Danger Zone</CardTitle>
+              <CardTitle className="text-destructive">{t('dangerZone.title')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium">Delete this connector</p>
+                  <p className="font-medium">{t('dangerZone.deleteConnector')}</p>
                   <p className="text-sm text-muted-foreground">
-                    This action cannot be undone. All sync history will be deleted.
+                    {t('dangerZone.deleteWarning')}
                   </p>
                 </div>
                 <Button
@@ -415,7 +417,7 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
                   onClick={() => setShowDeleteDialog(true)}
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
-                  Delete
+                  {t('actions.delete')}
                 </Button>
               </div>
             </CardContent>
@@ -425,8 +427,8 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
         <TabsContent value="history" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Sync History</CardTitle>
-              <CardDescription>Complete history of data synchronization operations</CardDescription>
+              <CardTitle>{t('history.title')}</CardTitle>
+              <CardDescription>{t('history.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <SyncHistoryTable
@@ -443,14 +445,13 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Connector</AlertDialogTitle>
+            <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{connector.name}"? This action cannot be undone.
-              All sync history will be permanently deleted.
+              {t('deleteDialog.description', { name: connector.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('actions.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isDeleting}
@@ -459,10 +460,10 @@ export default function ConnectorDetailPage({ params }: ConnectorDetailPageProps
               {isDeleting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  {t('actions.deleting')}
                 </>
               ) : (
-                'Delete'
+                t('actions.delete')
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

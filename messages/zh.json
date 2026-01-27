@@ -203,7 +203,85 @@
     "selectLanguage": "选择语言",
     "preferences": "偏好设置",
     "notifications": "通知",
-    "security": "安全",
+    "security": {
+      "title": "[ZH] Security Settings",
+      "description": "[ZH] Manage your account security and active sessions",
+      "changePassword": "[ZH] Change Password",
+      "changePasswordDescription": "[ZH] Update your password regularly to keep your account secure",
+      "currentPassword": "[ZH] Current Password",
+      "newPassword": "[ZH] New Password",
+      "confirmNewPassword": "[ZH] Confirm New Password",
+      "updating": "[ZH] Updating...",
+      "updatePassword": "[ZH] Update Password",
+      "twoFactorAuth": "[ZH] Two-Factor Authentication",
+      "twoFactorDescription": "[ZH] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[ZH] 2FA is enabled",
+      "twoFactorProtected": "[ZH] Your account is protected with authenticator app",
+      "changeMethod": "[ZH] Change Method",
+      "viewBackupCodes": "[ZH] View Backup Codes",
+      "activeSessions": "[ZH] Active Sessions",
+      "activeSessionsDescription": "[ZH] Manage devices where you're currently logged in",
+      "signOutAll": "[ZH] Sign Out All",
+      "current": "[ZH] Current",
+      "revoke": "[ZH] Revoke",
+      "dangerZone": "[ZH] Danger Zone",
+      "dangerZoneDescription": "[ZH] Irreversible and destructive actions",
+      "deleteAccount": "[ZH] Delete Account",
+      "deleteAccountDescription": "[ZH] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[ZH] Data Exports",
+        "description": "[ZH] Request exports of your personal data for GDPR compliance",
+        "refresh": "[ZH] Refresh",
+        "yourDataRights": "[ZH] Your Data Rights",
+        "yourDataRightsDescription": "[ZH] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[ZH] No Active Exports",
+        "noActiveExportsDescription": "[ZH] Request an export to see its status here",
+        "noActiveExportsHint": "[ZH] Your export status will appear here after you request a data export",
+        "exportHistory": "[ZH] Export History",
+        "exportHistoryDescription": "[ZH] View and download your previous data exports",
+        "total": "[ZH] Total",
+        "pending": "[ZH] Pending",
+        "processing": "[ZH] Processing",
+        "aboutDataExports": "[ZH] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[ZH] What's Included",
+          "exportFormat": "[ZH] Export Format",
+          "faq": "[ZH] FAQ"
+        },
+        "included": {
+          "profileInfo": "[ZH] Profile Information",
+          "profileInfoDesc": "[ZH] Your name, email, avatar, and account settings",
+          "orgMemberships": "[ZH] Organization Memberships",
+          "orgMembershipsDesc": "[ZH] All organizations you belong to and your roles",
+          "createdContent": "[ZH] Created Content",
+          "createdContentDesc": "[ZH] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[ZH] Activity History",
+          "activityHistoryDesc": "[ZH] Audit logs and activity records associated with your account",
+          "preferences": "[ZH] Preferences",
+          "preferencesDesc": "[ZH] Your theme, language, notification, and other settings",
+          "apiKeys": "[ZH] API Keys",
+          "apiKeysDesc": "[ZH] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[ZH] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[ZH] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[ZH] Human-readable when opened in a text editor",
+          "compatible": "[ZH] Compatible with most data processing tools",
+          "easyImport": "[ZH] Easy to import into other services",
+          "exampleStructure": "[ZH] Example structure:"
+        },
+        "faq": {
+          "howLong": "[ZH] How long does an export take?",
+          "howLongAnswer": "[ZH] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[ZH] How long is an export available?",
+          "howLongAvailableAnswer": "[ZH] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[ZH] How often can I request an export?",
+          "howOftenAnswer": "[ZH] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[ZH] Is my export secure?",
+          "isSecureAnswer": "[ZH] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "账户",
     "appearance": {
       "title": "外观",
@@ -239,7 +317,35 @@
       "followingSystem": "跟随系统",
       "savingPreferences": "正在保存偏好设置..."
     },
-    "general": "常规",
+    "general": {
+      "title": "[ZH] General Settings",
+      "description": "[ZH] Manage your organization's settings and preferences",
+      "organizationDetails": "[ZH] Organization Details",
+      "updateOrgInfo": "[ZH] Update your organization's information",
+      "changeLogo": "[ZH] Change Logo",
+      "organizationName": "[ZH] Organization Name",
+      "organizationSlug": "[ZH] Organization Slug",
+      "orgDescription": "[ZH] Description",
+      "industry": "[ZH] Industry",
+      "companySize": "[ZH] Company Size",
+      "consumerGoods": "[ZH] Consumer Goods",
+      "technology": "[ZH] Technology",
+      "finance": "[ZH] Finance",
+      "healthcare": "[ZH] Healthcare",
+      "retail": "[ZH] Retail",
+      "mediaEntertainment": "[ZH] Media & Entertainment",
+      "employees1to50": "[ZH] 1-50 employees",
+      "employees50to200": "[ZH] 50-200 employees",
+      "employees200to1000": "[ZH] 200-1000 employees",
+      "employees1000to5000": "[ZH] 1000-5000 employees",
+      "employees5000plus": "[ZH] 5000+ employees",
+      "regionalSettings": "[ZH] Regional Settings",
+      "regionalDescription": "[ZH] Set your timezone and date format preferences",
+      "timezone": "[ZH] Timezone",
+      "dateFormat": "[ZH] Date Format",
+      "saving": "[ZH] Saving...",
+      "saveChanges": "[ZH] Save Changes"
+    },
     "apiKeys": {
       "title": "API 密钥",
       "description": "管理用于程序化访问的 API 密钥",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "我们能帮您什么？",
-      "subtitle": "搜索我们的知识库或浏览以下主题",
       "searchPlaceholder": "搜索帮助...",
-      "tabs": {
-        "faq": "常见问题",
-        "guides": "指南",
-        "contact": "联系我们"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "入门指南",
-          "description": "了解 GWI Agents 的基础知识"
-        },
-        "videoTutorials": {
-          "title": "视频教程",
-          "description": "观看分步教程"
-        },
-        "apiDocs": {
-          "title": "API 文档",
-          "description": "与我们的 API 集成"
-        },
-        "contactSupport": {
-          "title": "联系支持",
-          "description": "获取我们团队的帮助"
-        }
+        "gettingStarted": "[ZH] Getting Started Guide",
+        "videoTutorials": "[ZH] Video Tutorials",
+        "apiDocs": "[ZH] API Documentation",
+        "title": "[ZH] Quick Links",
+        "gettingStartedDesc": "[ZH] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[ZH] Watch step-by-step guides",
+        "apiDocsDesc": "[ZH] For developers and integrations",
+        "releaseNotes": "[ZH] Release Notes",
+        "releaseNotesDesc": "[ZH] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "入门",
-          "agentsWorkflows": "智能体与工作流",
-          "dataPrivacy": "数据与隐私",
-          "billingPlans": "账单与套餐"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "如何创建我的第一个智能体？",
-            "answer": "从侧边栏导航到智能体页面，然后点击「创建智能体」。按照分步向导配置您的智能体名称、描述、数据源和行为设置。"
-          },
-          "dataSources": {
-            "question": "有哪些可用的数据源？",
-            "answer": "GWI 提供多种数据源访问，包括 GWI Core（我们的旗舰消费者调研）、GWI USA、GWI Zeitgeist（热门话题），以及上传自定义数据的功能。数据源的可用性取决于您的订阅级别。"
-          },
-          "inviteTeam": {
-            "question": "如何邀请团队成员？",
-            "answer": "前往设置 > 团队，然后点击「邀请成员」。输入他们的邮箱地址并选择角色（管理员、编辑者或查看者）。他们将收到一封邀请邮件以加入您的工作区。"
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "智能体和工作流有什么区别？",
-            "answer": "智能体是处理特定类型研究任务的 AI 驱动专家。工作流将多个智能体按顺序组合，以自动化复杂的多步骤研究流程。"
-          },
-          "customize": {
-            "question": "我可以自定义预构建的智能体吗？",
-            "answer": "可以！您可以复制任何预构建的智能体并修改其配置，包括系统提示词、数据源和输出格式。您自定义的版本将保存到您的个人智能体库中。"
-          },
-          "schedule": {
-            "question": "如何安排工作流的定时执行？",
-            "answer": "打开您的工作流，然后点击「计划」按钮。您可以设置重复执行（每天、每周、每月）或根据新数据可用性等事件触发工作流。"
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "我的数据如何受到保护？",
-            "answer": "所有数据在静态和传输过程中都使用行业标准的 AES-256 加密进行加密。我们已获得 SOC 2 Type II 认证并符合 GDPR 要求。您的查询和自定义数据永远不会与其他客户共享。"
-          },
-          "export": {
-            "question": "我可以导出我的数据吗？",
-            "answer": "可以，您可以以多种格式导出数据，包括 CSV、Excel、PowerPoint 和 JSON。企业客户还可以使用直接数据库连接和 API 导出功能。"
-          },
-          "updateFrequency": {
-            "question": "GWI 数据多久更新一次？",
-            "answer": "GWI Core 数据每季度更新一次，包含最新的消费者调研。GWI Zeitgeist 每周提供热门话题更新。某些专业数据集可能有不同的更新频率。"
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "什么算作一次查询？",
-            "answer": "查询是指向智能体发出的任何请求，包括同一对话中的后续问题。无论涉及多少智能体，复杂的多步骤工作流都只计为一次查询。"
-          },
-          "changePlan": {
-            "question": "我可以升级或降级我的套餐吗？",
-            "answer": "可以，您可以随时从设置 > 账单中更改套餐。升级会立即生效，按比例计费。降级将在下一个计费周期开始时生效。"
-          },
-          "annualDiscount": {
-            "question": "你们提供年付折扣吗？",
-            "answer": "是的！年付可比月付节省 20%。请联系我们的销售团队设置年付或从月付切换。"
-          }
-        }
+        "title": "[ZH] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "初级",
-          "intermediate": "中级",
-          "advanced": "高级"
-        },
-        "personas": {
-          "title": "构建有效的用户画像",
-          "description": "学习如何创建详细、可操作的受众画像",
-          "duration": "15 分钟阅读"
-        },
-        "workflows": {
-          "title": "工作流自动化最佳实践",
-          "description": "为您的研究设计高效的多智能体工作流",
-          "duration": "20 分钟阅读"
-        },
-        "prompts": {
-          "title": "高级提示词工程",
-          "description": "通过优化智能体提示词获得更好的结果",
-          "duration": "25 分钟阅读"
-        },
-        "apiIntegration": {
-          "title": "API 集成指南",
-          "description": "将 GWI 智能体连接到您现有的工具",
-          "duration": "30 分钟阅读"
-        }
-      },
-      "viewAllDocs": "查看所有文档",
       "contact": {
-        "liveChat": {
-          "title": "在线聊天",
-          "description": "与我们的支持团队实时聊天",
-          "availability": "服务时间：周一至周五，美东时间上午 9 点至下午 6 点。平均响应时间：2 分钟。",
-          "button": "开始聊天"
+        "title": "[ZH] Need More Help?",
+        "description": "[ZH] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[ZH] Contact Support",
+        "responseTime": "[ZH] Typical response time: 2-4 hours"
+      },
+      "description": "[ZH] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[ZH] Browse by Category",
+        "agents": "[ZH] AI Agents",
+        "agentsDesc": "[ZH] Learn about agent capabilities",
+        "workflows": "[ZH] Workflows",
+        "workflowsDesc": "[ZH] Build automation pipelines",
+        "data": "[ZH] Data & Audiences",
+        "dataDesc": "[ZH] Understanding GWI data",
+        "reports": "[ZH] Reports & Exports",
+        "reportsDesc": "[ZH] Generate and share insights",
+        "integrations": "[ZH] Integrations",
+        "integrationsDesc": "[ZH] Connect with your tools",
+        "billing": "[ZH] Billing & Plans",
+        "billingDesc": "[ZH] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[ZH] Profile Settings",
+      "description": "[ZH] Manage your personal information",
+      "personalInfo": "[ZH] Personal Information",
+      "updateProfileDetails": "[ZH] Update your profile details",
+      "uploadPhoto": "[ZH] Upload Photo",
+      "photoHint": "[ZH] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[ZH] First Name",
+      "lastName": "[ZH] Last Name",
+      "emailAddress": "[ZH] Email Address",
+      "jobTitle": "[ZH] Job Title",
+      "bio": "[ZH] Bio",
+      "contactInfo": "[ZH] Contact Information",
+      "contactDescription": "[ZH] How colleagues can reach you",
+      "phoneNumber": "[ZH] Phone Number",
+      "location": "[ZH] Location",
+      "saving": "[ZH] Saving...",
+      "saveChanges": "[ZH] Save Changes"
+    },
+    "team": {
+      "title": "[ZH] Team Management",
+      "description": "[ZH] Manage team members and their permissions",
+      "teamMembers": "[ZH] Team Members",
+      "membersCount": "[ZH] {count} members in your organization",
+      "inviteMember": "[ZH] Invite Member",
+      "inviteTeamMember": "[ZH] Invite Team Member",
+      "inviteDescription": "[ZH] Send an invitation to join your organization",
+      "emailAddress": "[ZH] Email Address",
+      "emailPlaceholder": "[ZH] colleague@company.com",
+      "role": "[ZH] Role",
+      "sending": "[ZH] Sending...",
+      "sendInvitation": "[ZH] Send Invitation",
+      "searchMembers": "[ZH] Search members...",
+      "tableHeaders": {
+        "member": "[ZH] Member",
+        "role": "[ZH] Role",
+        "lastActive": "[ZH] Last Active",
+        "joined": "[ZH] Joined"
+      },
+      "roles": {
+        "owner": "[ZH] Owner",
+        "admin": "[ZH] Admin",
+        "member": "[ZH] Member",
+        "viewer": "[ZH] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[ZH] Make Admin",
+        "makeMember": "[ZH] Make Member",
+        "makeViewer": "[ZH] Make Viewer",
+        "removeMember": "[ZH] Remove Member"
+      },
+      "pendingInvitations": "[ZH] Pending Invitations",
+      "pendingCount": "[ZH] {count} pending invitation",
+      "pendingCountPlural": "[ZH] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[ZH] Email",
+        "role": "[ZH] Role",
+        "sent": "[ZH] Sent",
+        "expires": "[ZH] Expires"
+      },
+      "revoke": "[ZH] Revoke",
+      "rolePermissions": "[ZH] Role Permissions",
+      "rolePermissionsDescription": "[ZH] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[ZH] Full organization control",
+        "transferOwnership": "[ZH] Transfer ownership",
+        "deleteOrg": "[ZH] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[ZH] Manage team members",
+        "billing": "[ZH] Billing & subscription",
+        "allMemberPerms": "[ZH] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[ZH] Create and edit agents",
+        "generateReports": "[ZH] Generate reports",
+        "useAgents": "[ZH] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[ZH] View reports",
+        "viewDashboards": "[ZH] View dashboards",
+        "readOnly": "[ZH] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[ZH] Remove Team Member",
+        "description": "[ZH] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[ZH] Cancel",
+        "remove": "[ZH] Remove Member"
+      },
+      "unknown": "[ZH] Unknown",
+      "never": "[ZH] Never",
+      "justNow": "[ZH] Just now",
+      "minAgo": "[ZH] {count} min ago",
+      "hoursAgo": "[ZH] {count} hour ago",
+      "hoursAgoPlural": "[ZH] {count} hours ago",
+      "daysAgo": "[ZH] {count} day ago",
+      "daysAgoPlural": "[ZH] {count} days ago"
+    },
+    "billing": {
+      "title": "[ZH] Billing & Subscription",
+      "description": "[ZH] Manage your subscription and payment methods",
+      "enterprisePlan": "[ZH] Enterprise Plan",
+      "current": "[ZH] Current",
+      "planDescription": "[ZH] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[ZH] per month",
+      "planFeatures": "[ZH] Plan Features",
+      "features": {
+        "unlimitedQueries": "[ZH] Unlimited AI agent queries",
+        "allAgents": "[ZH] All pre-built domain agents",
+        "customDev": "[ZH] Custom agent development",
+        "prioritySupport": "[ZH] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[ZH] Usage This Period",
+      "usage": {
+        "agentQueries": "[ZH] Agent Queries",
+        "unlimited": "[ZH] Unlimited",
+        "reportsGenerated": "[ZH] Reports Generated",
+        "teamSeats": "[ZH] Team Seats"
+      },
+      "nextBillingDate": "[ZH] Next billing date: {date}",
+      "changePlan": "[ZH] Change Plan",
+      "cancelSubscription": "[ZH] Cancel Subscription",
+      "paymentMethod": "[ZH] Payment Method",
+      "paymentDescription": "[ZH] Manage your payment information",
+      "cardEnding": "[ZH] Visa ending in {last4}",
+      "cardExpires": "[ZH] Expires {date}",
+      "update": "[ZH] Update",
+      "billingHistory": "[ZH] Billing History",
+      "billingHistoryDescription": "[ZH] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[ZH] Invoice",
+        "date": "[ZH] Date",
+        "amount": "[ZH] Amount",
+        "status": "[ZH] Status"
+      },
+      "paid": "[ZH] Paid",
+      "needMoreCapacity": "[ZH] Need more capacity?",
+      "contactForPricing": "[ZH] Contact us for custom enterprise pricing",
+      "contactSales": "[ZH] Contact Sales",
+      "upgrade": {
+        "title": "[ZH] Choose Your Plan",
+        "description": "[ZH] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[ZH] Back to Billing",
+        "checkoutCanceled": "[ZH] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[ZH] Monthly",
+        "yearly": "[ZH] Yearly",
+        "save17": "[ZH] Save 17%",
+        "mostPopular": "[ZH] Most Popular",
+        "currentPlan": "[ZH] Current Plan",
+        "billedAnnually": "[ZH] ${price} billed annually",
+        "upgradeTo": "[ZH] Upgrade to {plan}",
+        "processing": "[ZH] Processing...",
+        "customSales": "[ZH] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[ZH] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[ZH] Starter",
+            "description": "[ZH] For individuals and small teams getting started",
+            "features": {
+              "runs": "[ZH] 100 agent runs / month",
+              "seats": "[ZH] 3 team seats",
+              "sources": "[ZH] 5 data sources",
+              "retention": "[ZH] 30 day data retention",
+              "tokens": "[ZH] 100K tokens / month",
+              "support": "[ZH] Community support"
+            }
+          },
+          "professional": {
+            "name": "[ZH] Professional",
+            "description": "[ZH] For growing teams with advanced needs",
+            "features": {
+              "runs": "[ZH] 1,000 agent runs / month",
+              "seats": "[ZH] 10 team seats",
+              "sources": "[ZH] 25 data sources",
+              "retention": "[ZH] 90 day data retention",
+              "tokens": "[ZH] 1M tokens / month",
+              "support": "[ZH] Priority email support",
+              "analytics": "[ZH] Advanced analytics",
+              "integrations": "[ZH] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[ZH] Enterprise",
+            "description": "[ZH] For large organizations with custom requirements",
+            "features": {
+              "runs": "[ZH] Unlimited agent runs",
+              "seats": "[ZH] Unlimited team seats",
+              "sources": "[ZH] Unlimited data sources",
+              "retention": "[ZH] 365 day data retention",
+              "tokens": "[ZH] Unlimited tokens",
+              "support": "[ZH] 24/7 dedicated support",
+              "customDev": "[ZH] Custom agent development",
+              "sso": "[ZH] SSO & SCIM",
+              "sla": "[ZH] SLA guarantee",
+              "accountManager": "[ZH] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[ZH] Audit Log",
+      "description": "[ZH] Track all actions and changes in your organization",
+      "activityHistory": "[ZH] Activity History",
+      "totalEvents": "[ZH] {count} total events",
+      "searchLogs": "[ZH] Search logs...",
+      "allActions": "[ZH] All Actions",
+      "allResources": "[ZH] All Resources",
+      "noAuditLogs": "[ZH] No audit logs found",
+      "activityWillAppear": "[ZH] Activity will appear here as actions are taken",
+      "showing": "[ZH] Showing {start} to {end} of {total}",
+      "previous": "[ZH] Previous",
+      "next": "[ZH] Next",
+      "actions": {
+        "create": "[ZH] Created",
+        "update": "[ZH] Updated",
+        "delete": "[ZH] Deleted",
+        "execute": "[ZH] Executed",
+        "login": "[ZH] Logged in",
+        "logout": "[ZH] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[ZH] Webhooks",
+      "description": "[ZH] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[ZH] Webhook Endpoints",
+      "endpointsDescription": "[ZH] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[ZH] Add Webhook",
+      "addWebhookEndpoint": "[ZH] Add Webhook Endpoint",
+      "addWebhookDescription": "[ZH] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[ZH] Endpoint URL",
+      "endpointUrlPlaceholder": "[ZH] https://api.example.com/webhooks",
+      "descriptionOptional": "[ZH] Description (Optional)",
+      "descriptionPlaceholder": "[ZH] Describe this webhook...",
+      "events": "[ZH] Events",
+      "creating": "[ZH] Creating...",
+      "createWebhook": "[ZH] Create Webhook",
+      "noWebhooks": "[ZH] No webhooks configured",
+      "addWebhookToStart": "[ZH] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[ZH] Endpoint",
+        "events": "[ZH] Events",
+        "status": "[ZH] Status",
+        "secret": "[ZH] Secret"
+      },
+      "eventsCount": "[ZH] {count} events",
+      "active": "[ZH] Active",
+      "disabled": "[ZH] Disabled",
+      "webhookSecurity": "[ZH] Webhook Security",
+      "securityDescription": "[ZH] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[ZH] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[ZH] Agent Run Started",
+        "agentRunCompleted": "[ZH] Agent Run Completed",
+        "agentRunFailed": "[ZH] Agent Run Failed",
+        "workflowRunStarted": "[ZH] Workflow Run Started",
+        "workflowRunCompleted": "[ZH] Workflow Run Completed",
+        "workflowRunFailed": "[ZH] Workflow Run Failed",
+        "reportGenerated": "[ZH] Report Generated",
+        "memberAdded": "[ZH] Member Added",
+        "memberRemoved": "[ZH] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[ZH] Custom Alerts",
+      "description": "[ZH] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[ZH] Total Alerts",
+      "active": "[ZH] Active",
+      "totalTriggers": "[ZH] Total Triggers",
+      "paused": "[ZH] Paused",
+      "yourAlerts": "[ZH] Your Alerts",
+      "yourAlertsDescription": "[ZH] Manage your custom alert configurations",
+      "createAlert": "[ZH] Create Alert",
+      "searchAlerts": "[ZH] Search alerts...",
+      "entityType": "[ZH] Entity Type",
+      "allTypes": "[ZH] All Types",
+      "allStatus": "[ZH] All Status",
+      "noAlertsYet": "[ZH] No alerts yet",
+      "noMatchingAlerts": "[ZH] No matching alerts",
+      "createFirstAlert": "[ZH] Create your first alert to get notified about important changes",
+      "adjustFilters": "[ZH] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[ZH] Alert",
+        "type": "[ZH] Type",
+        "condition": "[ZH] Condition",
+        "channels": "[ZH] Channels",
+        "lastTriggered": "[ZH] Last Triggered",
+        "status": "[ZH] Status"
+      },
+      "total": "[ZH] total",
+      "never": "[ZH] Never",
+      "edit": "[ZH] Edit",
+      "viewHistory": "[ZH] View History",
+      "delete": "[ZH] Delete",
+      "createNewAlert": "[ZH] Create New Alert",
+      "createNewAlertDescription": "[ZH] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[ZH] Edit Alert",
+      "editAlertDescription": "[ZH] Update the configuration for this alert",
+      "alertHistory": "[ZH] Alert History: {name}",
+      "alertHistoryDescription": "[ZH] View the history of when this alert was triggered",
+      "deleteAlert": "[ZH] Delete Alert",
+      "deleteAlertDescription": "[ZH] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[ZH] Cancel",
+      "entityTypes": {
+        "metric": "[ZH] Metric",
+        "audience": "[ZH] Audience",
+        "brand": "[ZH] Brand",
+        "report": "[ZH] Report",
+        "agent": "[ZH] Agent",
+        "workflow": "[ZH] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[ZH] Keyboard Shortcuts",
+      "description": "[ZH] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[ZH] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[ZH] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[ZH] Shortcut Conflicts Detected",
+      "conflictsDescription": "[ZH] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[ZH] Navigation",
+        "navigationDesc": "[ZH] Navigate around the application",
+        "actions": "[ZH] Actions",
+        "actionsDesc": "[ZH] Perform common actions quickly",
+        "ui": "[ZH] UI",
+        "uiDesc": "[ZH] Control the user interface",
+        "editing": "[ZH] Editing",
+        "editingDesc": "[ZH] Edit content efficiently"
+      },
+      "resetToDefaults": "[ZH] Reset to Defaults",
+      "saving": "[ZH] Saving...",
+      "saveChanges": "[ZH] Save Changes",
+      "resetDialog": {
+        "title": "[ZH] Reset Keyboard Shortcuts",
+        "description": "[ZH] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[ZH] Cancel",
+        "reset": "[ZH] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[ZH] Edit Shortcut",
+        "customizable": "[ZH] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[ZH] This shortcut cannot be customized",
+        "action": "[ZH] Action",
+        "currentBinding": "[ZH] Current Binding",
+        "newBinding": "[ZH] New Binding",
+        "pressKeys": "[ZH] Press keys...",
+        "clickToRecord": "[ZH] Click to record",
+        "record": "[ZH] Record",
+        "recording": "[ZH] Recording...",
+        "cancel": "[ZH] Cancel",
+        "save": "[ZH] Save"
+      }
+    },
+    "plan": {
+      "title": "[ZH] Plan & Billing",
+      "description": "[ZH] Manage your subscription and view usage metrics",
+      "currentPlan": "[ZH] Current Plan",
+      "currentPlanDescription": "[ZH] Your active subscription details",
+      "upgradePlan": "[ZH] Upgrade Plan",
+      "teamMembers": "[ZH] Team Members",
+      "agents": "[ZH] Agents",
+      "workflows": "[ZH] Workflows",
+      "reports": "[ZH] Reports",
+      "usageThisMonth": "[ZH] Usage This Month",
+      "usageDescription": "[ZH] Monitor your resource usage against plan limits",
+      "comparePlans": "[ZH] Compare Plans",
+      "yourFeatures": "[ZH] Your Features",
+      "yourFeaturesDescription": "[ZH] All features included in your current plan",
+      "limit": "[ZH] Limit: {limit}",
+      "requesting": "[ZH] Requesting...",
+      "upgradeTo": "[ZH] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[ZH] Starter",
+          "price": "[ZH] $49/mo",
+          "features": {
+            "members": "[ZH] Up to 5 team members",
+            "agents": "[ZH] 10 agents",
+            "runs": "[ZH] 50 workflow runs/month",
+            "analytics": "[ZH] Basic analytics",
+            "support": "[ZH] Email support"
+          }
         },
-        "ticket": {
-          "title": "提交工单",
-          "description": "通过邮件在 24 小时内获得帮助",
-          "info": "适用于复杂问题或功能请求。请尽可能提供详细信息。",
-          "button": "提交工单"
+        "professional": {
+          "name": "[ZH] Professional",
+          "price": "[ZH] $199/mo",
+          "features": {
+            "members": "[ZH] Up to 20 team members",
+            "agents": "[ZH] Unlimited agents",
+            "runs": "[ZH] Unlimited workflow runs",
+            "analytics": "[ZH] Advanced analytics",
+            "support": "[ZH] Priority support",
+            "integrations": "[ZH] Custom integrations",
+            "api": "[ZH] API access"
+          }
         },
         "enterprise": {
-          "title": "企业支持",
-          "description": "需要专属支持？企业套餐包含专属客户成功经理和优先响应服务。",
-          "button": "联系销售"
+          "name": "[ZH] Enterprise",
+          "price": "[ZH] Custom",
+          "features": {
+            "members": "[ZH] Unlimited team members",
+            "everything": "[ZH] Unlimited everything",
+            "security": "[ZH] Advanced security",
+            "sso": "[ZH] SSO & SAML",
+            "support": "[ZH] Dedicated support",
+            "sla": "[ZH] Custom SLAs",
+            "onPremise": "[ZH] On-premise option",
+            "whiteLabel": "[ZH] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[ZH] Scheduled Exports",
+      "description": "[ZH] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[ZH] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[ZH] Manage automatic exports that run on a schedule",
+      "newExport": "[ZH] New Export",
+      "all": "[ZH] All",
+      "active": "[ZH] Active",
+      "paused": "[ZH] Paused",
+      "noScheduledExports": "[ZH] No scheduled exports",
+      "createFirstExport": "[ZH] Create your first scheduled export to get started",
+      "createExport": "[ZH] Create Export",
+      "tableHeaders": {
+        "name": "[ZH] Name",
+        "schedule": "[ZH] Schedule",
+        "format": "[ZH] Format",
+        "lastRun": "[ZH] Last Run",
+        "nextRun": "[ZH] Next Run",
+        "status": "[ZH] Status"
+      },
+      "statusLabels": {
+        "pending": "[ZH] Pending",
+        "processing": "[ZH] Running",
+        "completed": "[ZH] Success",
+        "failed": "[ZH] Failed",
+        "neverRun": "[ZH] Never Run"
+      },
+      "actions": {
+        "runNow": "[ZH] Run Now",
+        "viewHistory": "[ZH] View History",
+        "edit": "[ZH] Edit",
+        "pause": "[ZH] Pause",
+        "activate": "[ZH] Activate",
+        "delete": "[ZH] Delete"
+      },
+      "deleteDialog": {
+        "title": "[ZH] Delete Scheduled Export",
+        "description": "[ZH] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[ZH] Cancel",
+        "delete": "[ZH] Delete"
+      },
+      "historySheet": {
+        "title": "[ZH] Export History",
+        "loading": "[ZH] Loading..."
+      },
+      "relativeTime": {
+        "never": "[ZH] Never",
+        "justNow": "[ZH] Just now",
+        "lessThanMinute": "[ZH] In less than a minute",
+        "minsAgo": "[ZH] {count}m ago",
+        "inMins": "[ZH] In {count}m",
+        "hoursAgo": "[ZH] {count}h ago",
+        "inHours": "[ZH] In {count}h",
+        "daysAgo": "[ZH] {count}d ago",
+        "inDays": "[ZH] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[ZH] Inbox Agents",
+      "description": "[ZH] AI agents that automatically handle incoming requests",
+      "configureChannels": "[ZH] Configure Channels",
+      "createAgent": "[ZH] Create Agent",
+      "activeAgents": "[ZH] Active Agents",
+      "status": {
+        "processing": "[ZH] Processing"
+      },
+      "stats": {
+        "processedToday": "[ZH] Processed Today",
+        "fromYesterday": "[ZH] {percent} from yesterday",
+        "avgResponseTime": "[ZH] Avg Response Time",
+        "fasterThanLastWeek": "[ZH] {percent} faster than last week",
+        "successRate": "[ZH] Success Rate",
+        "basedOnRequests": "[ZH] Based on {count} requests",
+        "pendingReview": "[ZH] Pending Review",
+        "highPriority": "[ZH] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[ZH] Success rate",
+        "processed": "[ZH] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[ZH] Incoming Requests",
+        "description": "[ZH] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[ZH] Search requests...",
+        "noRequests": "[ZH] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[ZH] Assign to Brief Handler",
+        "assignToAudienceQuery": "[ZH] Assign to Audience Query",
+        "assignToLocalization": "[ZH] Assign to Localization",
+        "reprocess": "[ZH] Reprocess",
+        "archive": "[ZH] Archive"
+      },
+      "priority": {
+        "high": "[ZH] High priority",
+        "medium": "[ZH] Medium priority",
+        "low": "[ZH] Low priority"
+      },
+      "request": {
+        "received": "[ZH] Received {time}",
+        "generatedOutput": "[ZH] Generated Output",
+        "confidence": "[ZH] {percent}% confidence",
+        "citations": "[ZH] {count} citations",
+        "viewFullReport": "[ZH] View Full Report",
+        "assignAgent": "[ZH] Assign Agent",
+        "respondManually": "[ZH] Respond Manually",
+        "viewHistory": "[ZH] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[ZH] Agent Active",
+        "agentPaused": "[ZH] Agent Paused",
+        "lastTriggered": "[ZH] Last triggered {time}",
+        "processed": "[ZH] Processed",
+        "successRate": "[ZH] Success Rate",
+        "avgTime": "[ZH] Avg Time",
+        "triggerKeywords": "[ZH] Trigger Keywords",
+        "connectedChannels": "[ZH] Connected Channels",
+        "processingPipeline": "[ZH] Processing Pipeline",
+        "configure": "[ZH] Configure",
+        "viewLogs": "[ZH] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[ZH] Create Inbox Agent",
+        "description": "[ZH] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[ZH] Agent Name",
+        "agentNamePlaceholder": "[ZH] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[ZH] Describe what this agent does...",
+        "triggerKeywords": "[ZH] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[ZH] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[ZH] Agent will activate when messages contain these keywords",
+        "channels": "[ZH] Channels",
+        "baseAgent": "[ZH] Base Agent",
+        "selectAgent": "[ZH] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[ZH] Audience Explorer",
+          "personaArchitect": "[ZH] Persona Architect",
+          "cultureTracker": "[ZH] Culture Tracker",
+          "brandRelationshipAnalyst": "[ZH] Brand Relationship Analyst"
+        },
+        "autoRespond": "[ZH] Auto-respond",
+        "autoRespondHelp": "[ZH] Automatically send responses to requesters",
+        "requireApproval": "[ZH] Require Approval",
+        "requireApprovalHelp": "[ZH] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[ZH] Prompt Templates",
+      "description": "[ZH] Reusable templates for common insights tasks",
+      "createTemplate": "[ZH] Create Template",
+      "searchPlaceholder": "[ZH] Search templates...",
+      "starredTemplates": "[ZH] Starred Templates",
+      "allTemplates": "[ZH] All Templates",
+      "uses": "[ZH] {count} uses",
+      "categories": {
+        "all": "[ZH] All",
+        "research": "[ZH] Research",
+        "analysis": "[ZH] Analysis",
+        "briefs": "[ZH] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[ZH] Use Template",
+        "duplicate": "[ZH] Duplicate"
+      },
+      "createDialog": {
+        "title": "[ZH] Create Template",
+        "description": "[ZH] Save a prompt as a reusable template for your team",
+        "templateName": "[ZH] Template Name",
+        "templateNamePlaceholder": "[ZH] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[ZH] What does this template do?",
+        "category": "[ZH] Category",
+        "promptTemplate": "[ZH] Prompt Template",
+        "promptPlaceholder": "[ZH] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[ZH] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[ZH] Agent Store",
+      "description": "[ZH] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[ZH] Search agents...",
+      "sortBy": {
+        "placeholder": "[ZH] Sort by",
+        "popular": "[ZH] Most Popular",
+        "rating": "[ZH] Highest Rated",
+        "newest": "[ZH] Newest",
+        "name": "[ZH] Name A-Z"
+      },
+      "featuredAgents": "[ZH] Featured Agents",
+      "featured": "[ZH] Featured",
+      "installed": "[ZH] Installed",
+      "tryNow": "[ZH] Try Now",
+      "categories": "[ZH] Categories",
+      "viewDetails": "[ZH] View Details",
+      "added": "[ZH] Added",
+      "buildYourOwn": {
+        "title": "[ZH] Build Your Own Agent",
+        "description": "[ZH] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[ZH] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[ZH] Back to Store",
+        "notFound": {
+          "title": "[ZH] Agent Not Found",
+          "description": "[ZH] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[ZH] {count} installs",
+        "installed": "[ZH] Installed",
+        "installing": "[ZH] Installing...",
+        "installAgent": "[ZH] Install Agent",
+        "tryInPlayground": "[ZH] Try in Playground",
+        "info": {
+          "version": "[ZH] Version",
+          "category": "[ZH] Category",
+          "dataSources": "[ZH] Data Sources"
+        },
+        "tabs": {
+          "overview": "[ZH] Overview",
+          "capabilities": "[ZH] Capabilities",
+          "examples": "[ZH] Examples",
+          "reviews": "[ZH] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[ZH] About this Agent",
+          "fastResults": "[ZH] Fast Results",
+          "fastResultsDesc": "[ZH] Avg. 3s response time",
+          "verifiedData": "[ZH] Verified Data",
+          "verifiedDataDesc": "[ZH] 100% sourced citations",
+          "alwaysUpdated": "[ZH] Always Updated",
+          "alwaysUpdatedDesc": "[ZH] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[ZH] What this agent can do",
+          "description": "[ZH] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[ZH] Example Prompts",
+          "description": "[ZH] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[ZH] Ratings",
+          "reviewsCount": "[ZH] {count} reviews"
+        },
+        "relatedAgents": "[ZH] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[ZH] Data Changes",
+      "description": "[ZH] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[ZH] Timeline",
+        "compare": "[ZH] Compare",
+        "evolution": "[ZH] Evolution",
+        "alerts": "[ZH] Alerts"
+      },
+      "compare": {
+        "title": "[ZH] Compare Versions",
+        "description": "[ZH] Select an entity to compare its versions",
+        "compareVersions": "[ZH] Compare versions",
+        "entities": {
+          "audiences": "[ZH] Audiences",
+          "crosstabs": "[ZH] Crosstabs",
+          "insights": "[ZH] Insights",
+          "charts": "[ZH] Charts",
+          "reports": "[ZH] Reports",
+          "dashboards": "[ZH] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[ZH] Analysis Evolution",
+        "description": "[ZH] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[ZH] View evolution",
+        "types": {
+          "brandHealth": "[ZH] Brand Health",
+          "audienceInsights": "[ZH] Audience Insights",
+          "marketAnalysis": "[ZH] Market Analysis",
+          "competitorAnalysis": "[ZH] Competitor Analysis",
+          "trendAnalysis": "[ZH] Trend Analysis",
+          "crosstabAnalysis": "[ZH] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[ZH] Change Alerts",
+        "loading": "[ZH] Loading alerts...",
+        "noAlerts": "[ZH] No Alerts",
+        "noAlertsDescription": "[ZH] You have no unread change alerts.",
+        "markAllRead": "[ZH] Mark All as Read",
+        "markRead": "[ZH] Mark Read",
+        "dismiss": "[ZH] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[ZH] Select {entity} to Compare",
+        "entity": "[ZH] Entity",
+        "enterIdDescription": "[ZH] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[ZH] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[ZH] Select Analysis to View Evolution",
+        "enterIdDescription": "[ZH] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[ZH] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[ZH] Crosstabs",
+      "description": "[ZH] Compare audiences across multiple dimensions",
+      "newCrosstab": "[ZH] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[ZH] Total Crosstabs",
+        "views": "[ZH] Views",
+        "exports": "[ZH] Exports",
+        "usedToday": "[ZH] Used Today"
+      },
+      "tabs": {
+        "all": "[ZH] All Crosstabs",
+        "recent": "[ZH] Recent",
+        "templates": "[ZH] Templates"
+      },
+      "empty": {
+        "title": "[ZH] No crosstabs yet",
+        "description": "[ZH] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[ZH] Featured",
+        "liveData": "[ZH] Live Data",
+        "more": "[ZH] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[ZH] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[ZH] audience segments",
+        "metrics": "[ZH] metrics",
+        "audiencesCount": "[ZH] {count} audiences",
+        "metricsCount": "[ZH] {count} metrics",
+        "modified": "[ZH] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[ZH] Open Analysis"
+      },
+      "new": {
+        "title": "[ZH] Create Crosstab",
+        "description": "[ZH] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[ZH] Crosstab Name",
+          "namePlaceholder": "[ZH] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[ZH] Select Audiences",
+          "selectMetrics": "[ZH] Select Metrics",
+          "selected": "[ZH] {count} selected"
+        },
+        "summary": {
+          "title": "[ZH] Summary",
+          "audiences": "[ZH] Audiences ({count})",
+          "metrics": "[ZH] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[ZH] Generate Crosstab",
+          "generating": "[ZH] Generating...",
+          "cancel": "[ZH] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[ZH] Please enter a crosstab name",
+          "audienceRequired": "[ZH] Please select at least one audience",
+          "metricRequired": "[ZH] Please select at least one metric",
+          "createFailed": "[ZH] Failed to create crosstab",
+          "createFailedRetry": "[ZH] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[ZH] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[ZH] {count} metrics",
+          "audiences": "[ZH] {count} audiences"
+        },
+        "categoriesCount": "[ZH] {count} categories",
+        "more": "[ZH] more",
+        "actions": {
+          "share": "[ZH] Share",
+          "generateInsights": "[ZH] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[ZH] Data Grid",
+          "calculatedFields": "[ZH] Calculated Fields",
+          "filters": "[ZH] Filters",
+          "visualize": "[ZH] Visualize"
+        },
+        "grid": {
+          "title": "[ZH] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[ZH] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[ZH] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[ZH] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[ZH] Value updated to {value}%",
+          "fieldCreated": "[ZH] Calculated field \"{name}\" created",
+          "fieldUpdated": "[ZH] Calculated field updated",
+          "fieldDeleted": "[ZH] Calculated field deleted",
+          "fieldApplied": "[ZH] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[ZH] Filters applied",
+          "chartSaved": "[ZH] Chart saved!",
+          "chartExported": "[ZH] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[ZH] Crosstab Not Found",
+          "subtitle": "[ZH] The requested crosstab could not be found",
+          "heading": "[ZH] Crosstab not found",
+          "description": "[ZH] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[ZH] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[ZH] Remove from favorites",
+          "addToFavorites": "[ZH] Add to favorites",
+          "pauseAutoRefresh": "[ZH] Pause auto-refresh",
+          "enableAutoRefresh": "[ZH] Enable auto-refresh",
+          "exitFullscreen": "[ZH] Exit fullscreen",
+          "enterFullscreen": "[ZH] Enter fullscreen",
+          "visualize": "[ZH] Visualize",
+          "share": "[ZH] Share",
+          "edit": "[ZH] Edit",
+          "duplicate": "[ZH] Duplicate",
+          "addToDashboard": "[ZH] Add to Dashboard",
+          "copyLink": "[ZH] Copy Link",
+          "copied": "[ZH] Copied!",
+          "delete": "[ZH] Delete",
+          "cancel": "[ZH] Cancel",
+          "selectAll": "[ZH] Select All",
+          "clear": "[ZH] Clear",
+          "schedule": "[ZH] Schedule"
+        },
+        "filters": {
+          "title": "[ZH] Data Filters",
+          "clearAll": "[ZH] Clear All",
+          "description": "[ZH] Filter and refine your crosstab data",
+          "quickFilters": "[ZH] Quick Filters",
+          "valueRange": "[ZH] Value Range: {min}% - {max}%",
+          "category": "[ZH] Category",
+          "allCategories": "[ZH] All Categories",
+          "activeFilters": "[ZH] Active filters"
+        },
+        "tabs": {
+          "filters": "[ZH] Filters",
+          "audiences": "[ZH] Audiences",
+          "metrics": "[ZH] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[ZH] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[ZH] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[ZH] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[ZH] Export as JSON",
+          "asCsv": "[ZH] Export as CSV",
+          "asHtml": "[ZH] Export as HTML",
+          "asPdf": "[ZH] Export as PDF",
+          "asExcel": "[ZH] Export as Excel",
+          "asPowerPoint": "[ZH] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[ZH] Delete Crosstab",
+          "description": "[ZH] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[ZH] Modified {time}",
+          "views": "[ZH] {count} views",
+          "createdBy": "[ZH] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[ZH] Data",
+          "activity": "[ZH] Activity",
+          "comments": "[ZH] Comments",
+          "history": "[ZH] History"
+        },
+        "insights": {
+          "title": "[ZH] AI-Generated Insights",
+          "topPerformer": "[ZH] Top Performer",
+          "topPerformerDesc": "[ZH] leads in most metrics with an average of {average}%.",
+          "noData": "[ZH] No data available",
+          "biggestGap": "[ZH] Biggest Gap",
+          "biggestGapDesc": "[ZH] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[ZH] Trending",
+          "trendingDesc": "[ZH] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[ZH] no"
+        },
+        "activity": {
+          "title": "[ZH] Activity Log",
+          "description": "[ZH] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[ZH] Share Crosstab",
+          "description": "[ZH] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[ZH] Email address",
+          "emailPlaceholder": "[ZH] email@example.com",
+          "role": "[ZH] Role",
+          "roles": {
+            "viewer": "[ZH] Viewer",
+            "editor": "[ZH] Editor",
+            "admin": "[ZH] Admin"
+          },
+          "shareLink": "[ZH] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[ZH] Schedule Report",
+          "description": "[ZH] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[ZH] Recipients",
+          "recipientsPlaceholder": "[ZH] email@example.com, team@example.com",
+          "frequency": "[ZH] Frequency",
+          "frequencies": {
+            "daily": "[ZH] Daily",
+            "weekly": "[ZH] Weekly",
+            "monthly": "[ZH] Monthly"
+          },
+          "format": "[ZH] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[ZH] Insights",
+      "description": "[ZH] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[ZH] Search insights...",
+      "filterByType": "[ZH] Filter by type",
+      "loading": "[ZH] Loading...",
+      "showing": "[ZH] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[ZH] All Types",
+        "audience": "[ZH] Audience",
+        "trend": "[ZH] Trend",
+        "competitive": "[ZH] Competitive",
+        "analysis": "[ZH] Analysis"
+      },
+      "empty": {
+        "title": "[ZH] No insights yet",
+        "description": "[ZH] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[ZH] Go to Playground"
+      },
+      "badges": {
+        "new": "[ZH] New"
+      },
+      "viaAgent": "[ZH] via {name}",
+      "detail": {
+        "backToInsights": "[ZH] Back to Insights",
+        "notFound": {
+          "title": "[ZH] Insight not found",
+          "description": "[ZH] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[ZH] View All Insights",
+        "confidence": "[ZH] {percent}% confidence",
+        "viaAgent": "[ZH] via {name}",
+        "actions": {
+          "copy": "[ZH] Copy",
+          "copied": "[ZH] Copied",
+          "share": "[ZH] Share",
+          "export": "[ZH] Export"
+        },
+        "detailsTitle": "[ZH] Insight Details",
+        "detailsDescription": "[ZH] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[ZH] Want to explore more?",
+          "description": "[ZH] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[ZH] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[ZH] Data Connectors",
+        "description": "[ZH] Connect external data sources to enrich your insights",
+        "addConnector": "[ZH] Add Connector",
+        "searchPlaceholder": "[ZH] Search connectors...",
+        "stats": {
+          "totalConnectors": "[ZH] Total Connectors",
+          "active": "[ZH] Active",
+          "withErrors": "[ZH] With Errors",
+          "dataSources": "[ZH] Data Sources"
+        },
+        "tabs": {
+          "configured": "[ZH] Configured",
+          "available": "[ZH] Available"
+        },
+        "filters": {
+          "allTypes": "[ZH] All types"
+        },
+        "empty": {
+          "title": "[ZH] No connectors configured",
+          "description": "[ZH] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[ZH] Previous",
+          "next": "[ZH] Next",
+          "pageOf": "[ZH] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[ZH] Sync started",
+          "syncFailed": "[ZH] Failed to start sync",
+          "connectorEnabled": "[ZH] Connector enabled",
+          "connectorDisabled": "[ZH] Connector disabled",
+          "updateFailed": "[ZH] Failed to update connector",
+          "connectorDeleted": "[ZH] Connector deleted",
+          "deleteFailed": "[ZH] Failed to delete connector",
+          "testFailed": "[ZH] Failed to test connection"
+        },
+        "new": {
+          "title": "[ZH] Add Data Connector",
+          "description": "[ZH] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[ZH] Back to Connectors",
+          "notFound": "[ZH] Connector not found",
+          "actions": {
+            "test": "[ZH] Test",
+            "syncNow": "[ZH] Sync Now",
+            "delete": "[ZH] Delete",
+            "cancel": "[ZH] Cancel",
+            "deleting": "[ZH] Deleting..."
+          },
+          "status": {
+            "completed": "[ZH] Last sync successful",
+            "running": "[ZH] Syncing...",
+            "pending": "[ZH] Sync pending",
+            "failed": "[ZH] Last sync failed",
+            "cancelled": "[ZH] Sync cancelled",
+            "never": "[ZH] Never synced"
+          },
+          "cards": {
+            "status": "[ZH] Status",
+            "active": "[ZH] Active",
+            "paused": "[ZH] Paused",
+            "totalSyncs": "[ZH] Total Syncs",
+            "errorCount": "[ZH] Error Count"
+          },
+          "tabs": {
+            "overview": "[ZH] Overview",
+            "configuration": "[ZH] Configuration",
+            "syncHistory": "[ZH] Sync History"
+          },
+          "overview": {
+            "details": "[ZH] Details",
+            "description": "[ZH] Description",
+            "provider": "[ZH] Provider",
+            "type": "[ZH] Type",
+            "syncSchedule": "[ZH] Sync Schedule",
+            "manualOnly": "[ZH] Manual only",
+            "created": "[ZH] Created",
+            "recentSyncs": "[ZH] Recent Syncs",
+            "lastSyncs": "[ZH] Last {count} sync operations",
+            "noSyncHistory": "[ZH] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[ZH] Danger Zone",
+            "deleteConnector": "[ZH] Delete this connector",
+            "deleteWarning": "[ZH] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[ZH] Sync History",
+            "description": "[ZH] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[ZH] Delete Connector",
+            "description": "[ZH] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[ZH] Sync started",
+            "syncFailed": "[ZH] Failed to start sync",
+            "testFailed": "[ZH] Test failed",
+            "connectorDeleted": "[ZH] Connector deleted",
+            "deleteFailed": "[ZH] Failed to delete connector",
+            "connectorUpdated": "[ZH] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[ZH] Memory & Context",
+      "description": "[ZH] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[ZH] Settings",
+        "clearAll": "[ZH] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "仪表板",
     "welcome": "欢迎回来",
-    "overview": "概览",
+    "overview": {
+      "activeAgents": "[ZH] Active Agents",
+      "workflowsRun": "[ZH] Workflows Run",
+      "insightsGenerated": "[ZH] Insights Generated",
+      "avgRunTime": "[ZH] Avg. Run Time",
+      "thisWeekChange": "[ZH] +{count} this week",
+      "fromLastMonthPercent": "[ZH] +{percent}% from last month",
+      "fasterPercent": "[ZH] -{percent}% faster",
+      "active": "[ZH] Active",
+      "noneActive": "[ZH] None active",
+      "last24Hours": "[ZH] Last 24 hours",
+      "noRunsYet": "[ZH] No runs yet",
+      "noInsightsYet": "[ZH] No insights yet",
+      "perWorkflow": "[ZH] Per workflow",
+      "notAvailable": "[ZH] N/A"
+    },
     "recentActivity": "最近活动",
     "quickActions": {
       "title": "快捷操作",
@@ -871,7 +1990,25 @@
       "createReport": "创建报告",
       "published": "已发布",
       "generating": "生成中",
-      "draft": "草稿"
+      "draft": "草稿",
+      "page": {
+        "tabs": {
+          "allReports": "[ZH] All Reports",
+          "templates": "[ZH] Templates",
+          "scheduled": "[ZH] Scheduled",
+          "sharedWithMe": "[ZH] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[ZH] Next: {date}",
+          "recipientsCount": "[ZH] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[ZH] Shared by {name} on {date}",
+          "canView": "[ZH] Can view",
+          "canEdit": "[ZH] Can edit",
+          "canComment": "[ZH] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "活跃项目",
@@ -1035,7 +2172,60 @@
         "title": "工作流",
         "description": "创建和管理您的自动化研究管道。",
         "newWorkflow": "新建工作流",
-        "searchPlaceholder": "搜索工作流..."
+        "searchPlaceholder": "搜索工作流...",
+        "edit": {
+          "title": "[ZH] Edit Workflow",
+          "description": "[ZH] Modify workflow settings and configuration",
+          "newWorkflowName": "[ZH] New Workflow",
+          "basicInfo": {
+            "title": "[ZH] Basic Information",
+            "description": "[ZH] Update the workflow name and description",
+            "workflowName": "[ZH] Workflow Name",
+            "workflowNamePlaceholder": "[ZH] Enter workflow name",
+            "descriptionPlaceholder": "[ZH] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[ZH] Schedule",
+            "description": "[ZH] Configure when this workflow runs",
+            "runFrequency": "[ZH] Run Frequency",
+            "selectSchedule": "[ZH] Select schedule",
+            "selectStatus": "[ZH] Select status",
+            "frequencies": {
+              "hourly": "[ZH] Hourly",
+              "daily": "[ZH] Daily",
+              "weekly": "[ZH] Weekly",
+              "monthly": "[ZH] Monthly",
+              "onDemand": "[ZH] On-demand"
+            },
+            "statuses": {
+              "active": "[ZH] Active",
+              "paused": "[ZH] Paused",
+              "scheduled": "[ZH] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[ZH] Error Handling",
+            "description": "[ZH] Configure retry behavior for failed runs",
+            "autoRetry": "[ZH] Auto-retry on failure",
+            "autoRetryDescription": "[ZH] Automatically retry the workflow if it fails",
+            "retryAttempts": "[ZH] Retry Attempts",
+            "selectAttempts": "[ZH] Select attempts",
+            "attempts": {
+              "one": "[ZH] 1 attempt",
+              "two": "[ZH] 2 attempts",
+              "three": "[ZH] 3 attempts",
+              "five": "[ZH] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[ZH] Notifications",
+            "description": "[ZH] Configure how you receive updates about this workflow",
+            "email": "[ZH] Email notifications",
+            "emailDescription": "[ZH] Receive email updates on completion or failure",
+            "slack": "[ZH] Slack notifications",
+            "slackDescription": "[ZH] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "受众",
@@ -1083,55 +2273,235 @@
         "unarchive": "取消归档",
         "workflows": "个工作流",
         "reports": "个报告",
-        "agents": "个智能体"
+        "agents": "个智能体",
+        "detail": {
+          "defaultDescription": "[ZH] Project description",
+          "projectSettings": "[ZH] Project Settings",
+          "archiveProject": "[ZH] Archive Project",
+          "deleteProject": "[ZH] Delete Project",
+          "new": "[ZH] New",
+          "stats": {
+            "teamMembers": "[ZH] Team Members",
+            "workflows": "[ZH] Workflows",
+            "running": "[ZH] {count} running",
+            "reports": "[ZH] Reports",
+            "generatedOutputs": "[ZH] Generated outputs",
+            "agentsUsed": "[ZH] Agents Used",
+            "totalRuns": "[ZH] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[ZH] Overview",
+            "workflows": "[ZH] Workflows",
+            "reports": "[ZH] Reports",
+            "agents": "[ZH] Agents",
+            "team": "[ZH] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[ZH] Recent Workflows",
+            "recentReports": "[ZH] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[ZH] Project Workflows",
+            "newWorkflow": "[ZH] New Workflow",
+            "lastRun": "[ZH] Last run",
+            "run": "[ZH] Run"
+          },
+          "reportsTab": {
+            "title": "[ZH] Project Reports",
+            "newReport": "[ZH] New Report",
+            "created": "[ZH] Created"
+          },
+          "agentsTab": {
+            "title": "[ZH] Agents Used",
+            "addAgent": "[ZH] Add Agent",
+            "runsInProject": "[ZH] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[ZH] Team Members",
+            "addMember": "[ZH] Add Member",
+            "remove": "[ZH] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "编辑受众",
-        "description": "更新该细分受众群的配置",
-        "saving": "保存...",
-        "saveChanges": "保存更改",
-        "notFound": "未找到观众",
-        "notFoundDescription": "您尝试编辑的受众群体不存在",
-        "notFoundDetailedDescription": "您要查找的受众不存在或已被删除。",
-        "backToAudiences": "回到观众",
+      "pageTracker": "[ZH] Audiences List",
+      "title": "[ZH] Audiences",
+      "description": "[ZH] Build and analyze custom consumer segments",
+      "aiBuilder": "[ZH] AI Builder",
+      "newAudience": "[ZH] New Audience",
+      "totalAudiences": "[ZH] Total Audiences",
+      "avgReach": "[ZH] Avg. Reach",
+      "markets": "[ZH] Markets",
+      "usedThisWeek": "[ZH] Used This Week",
+      "searchPlaceholder": "[ZH] Search audiences...",
+      "allAudiences": "[ZH] All Audiences",
+      "recentlyUsed": "[ZH] Recently Used",
+      "favorites": "[ZH] Favorites",
+      "marketplace": "[ZH] Marketplace",
+      "aiAudienceBuilder": "[ZH] AI Audience Builder",
+      "aiBuilderDescription": "[ZH] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[ZH] Compare Audiences",
+      "compareDescription": "[ZH] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[ZH] No audiences yet",
+        "description": "[ZH] Create your first audience to get started",
+        "action": "[ZH] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[ZH] {count} markets",
+        "used": "[ZH] Used {time}"
+      },
+      "new": {
+        "title": "[ZH] Build New Audience",
+        "description": "[ZH] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "基本信息",
-          "description": "设置该受众的名称和描述",
-          "audienceName": "观众姓名",
-          "audienceNamePlaceholder": "例如，具有生态意识的千禧一代",
-          "descriptionPlaceholder": "该受众群体的简要描述"
+          "audienceName": "[ZH] Audience Name",
+          "audienceNamePlaceholder": "[ZH] e.g., Eco-Conscious Millennials",
+          "description": "[ZH] Description",
+          "descriptionPlaceholder": "[ZH] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "人工智能支持的查询",
-          "description": "用自然语言描述您的受众",
-          "placeholder": "例如，向我展示关心可持续发展、居住在城市地区并购买环保品牌的千禧一代",
-          "generateButton": "生成属性（即将推出）"
+          "title": "[ZH] AI-Powered Query",
+          "description": "[ZH] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[ZH] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[ZH] Generate Attributes"
         },
         "attributes": {
-          "title": "定位属性",
-          "description": "为该受众定义具体标准",
-          "addAttribute": "添加属性",
-          "noAttributes": "尚未定义属性",
-          "noAttributesHint": "添加属性来定义您的受众标准",
-          "valuePlaceholder": "价值"
+          "title": "[ZH] Attributes",
+          "add": "[ZH] Add",
+          "age": "[ZH] Age",
+          "gender": "[ZH] Gender",
+          "income": "[ZH] Income",
+          "interests": "[ZH] Interests",
+          "is": "[ZH] is",
+          "between": "[ZH] between",
+          "contains": "[ZH] contains"
         },
         "markets": {
-          "title": "市场",
-          "description": "为该受众群体选择市场",
-          "selectAtLeastOne": "至少选择一个市场"
+          "title": "[ZH] Markets",
+          "global": "[ZH] Global",
+          "us": "[ZH] United States",
+          "uk": "[ZH] United Kingdom",
+          "de": "[ZH] Germany",
+          "jp": "[ZH] Japan"
         },
         "estimatedReach": {
-          "title": "预计覆盖范围",
-          "tbd": "待定",
-          "matchCriteria": "消费者符合这些标准"
+          "title": "[ZH] Estimated Reach",
+          "matchCriteria": "[ZH] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "放弃更改？",
-          "description": "您有未保存的更改。 您确定要离开吗？ 您的更改将会丢失。",
-          "keepEditing": "继续编辑",
-          "discardChanges": "放弃更改"
+        "actions": {
+          "save": "[ZH] Save Audience",
+          "saving": "[ZH] Saving...",
+          "cancel": "[ZH] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[ZH] Please enter an audience name",
+          "createFailed": "[ZH] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[ZH] Audience Detail",
+        "notFound": "[ZH] Audience Not Found",
+        "notFoundDescription": "[ZH] The requested audience could not be found",
+        "notFoundDetailedDescription": "[ZH] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[ZH] Back to Audiences",
+        "people": "[ZH] people",
+        "addToFavorites": "[ZH] Add to favorites",
+        "removeFromFavorites": "[ZH] Remove from favorites",
+        "used": "[ZH] Used {time}",
+        "tabs": {
+          "overview": "[ZH] Overview",
+          "persona": "[ZH] Persona",
+          "dayInLife": "[ZH] Day in the Life",
+          "habits": "[ZH] Habits & Behaviors",
+          "media": "[ZH] Media Consumption",
+          "brands": "[ZH] Brand Affinities",
+          "comments": "[ZH] Comments",
+          "activity": "[ZH] Activity",
+          "history": "[ZH] History"
+        },
+        "actions": {
+          "explore": "[ZH] Explore",
+          "share": "[ZH] Share",
+          "export": "[ZH] Export",
+          "edit": "[ZH] Edit",
+          "autoRefresh": "[ZH] Auto-refresh",
+          "pauseAutoRefresh": "[ZH] Pause auto-refresh",
+          "enableAutoRefresh": "[ZH] Enable auto-refresh",
+          "duplicate": "[ZH] Duplicate",
+          "createLookalike": "[ZH] Create Lookalike",
+          "addToCrosstab": "[ZH] Add to Crosstab",
+          "addToDashboard": "[ZH] Add to Dashboard",
+          "scheduleReport": "[ZH] Schedule Report",
+          "copyLink": "[ZH] Copy Link",
+          "copied": "[ZH] Copied!",
+          "delete": "[ZH] Delete"
+        },
+        "export": {
+          "asJson": "[ZH] Export as JSON",
+          "asCsv": "[ZH] Export as CSV",
+          "asPdf": "[ZH] Export as PDF",
+          "toPowerPoint": "[ZH] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[ZH] Demographics",
+          "keyBehaviors": "[ZH] Key Behaviors",
+          "interests": "[ZH] Interests",
+          "audienceSummary": "[ZH] Audience Summary",
+          "size": "[ZH] Size",
+          "markets": "[ZH] Markets",
+          "quickActions": "[ZH] Quick Actions",
+          "createChart": "[ZH] Create Chart",
+          "compareAudiences": "[ZH] Compare Audiences",
+          "exportProfile": "[ZH] Export Profile",
+          "copyLink": "[ZH] Copy Link"
+        },
+        "activity": {
+          "title": "[ZH] Activity Log",
+          "description": "[ZH] Recent activity on this audience",
+          "viewed": "[ZH] viewed",
+          "exported": "[ZH] exported",
+          "edited": "[ZH] edited",
+          "shared": "[ZH] shared",
+          "created": "[ZH] created",
+          "createdChart": "[ZH] created chart",
+          "addedToCrosstab": "[ZH] added to crosstab"
+        },
+        "share": {
+          "title": "[ZH] Share Audience",
+          "description": "[ZH] Share this audience with team members or external collaborators.",
+          "emailLabel": "[ZH] Email address",
+          "emailPlaceholder": "[ZH] email@example.com",
+          "roleLabel": "[ZH] Role",
+          "viewer": "[ZH] Viewer",
+          "editor": "[ZH] Editor",
+          "admin": "[ZH] Admin",
+          "shareLink": "[ZH] Share link",
+          "cancel": "[ZH] Cancel",
+          "share": "[ZH] Share"
+        },
+        "schedule": {
+          "title": "[ZH] Schedule Report",
+          "description": "[ZH] Set up automatic email delivery of this audience report.",
+          "recipients": "[ZH] Recipients",
+          "recipientsPlaceholder": "[ZH] email@example.com, team@example.com",
+          "frequency": "[ZH] Frequency",
+          "daily": "[ZH] Daily",
+          "weekly": "[ZH] Weekly",
+          "monthly": "[ZH] Monthly",
+          "format": "[ZH] Format",
+          "pdf": "[ZH] PDF",
+          "csv": "[ZH] CSV",
+          "json": "[ZH] JSON",
+          "cancel": "[ZH] Cancel",
+          "schedule": "[ZH] Schedule"
+        },
+        "delete": {
+          "title": "[ZH] Delete Audience",
+          "description": "[ZH] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[ZH] Cancel",
+          "delete": "[ZH] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "编辑图表",
-        "description": "修改您的图表配置和设置",
-        "saving": "保存...",
-        "saveChanges": "保存更改",
-        "backToCharts": "返回图表",
-        "preview": {
-          "title": "预览",
-          "description": "您的图表的外观"
-        },
-        "unsavedChanges": "未保存的更改",
-        "authRequired": "需要身份验证",
-        "pleaseSignIn": "请登录以编辑此图表。",
-        "signIn": "登入",
+      "pageTracker": "[ZH] Charts List",
+      "title": "[ZH] Charts",
+      "description": "[ZH] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[ZH] Templates",
+      "compare": "[ZH] Compare",
+      "newChart": "[ZH] New Chart",
+      "totalCharts": "[ZH] Total Charts",
+      "totalViews": "[ZH] Total Views",
+      "shares": "[ZH] Shares",
+      "exports": "[ZH] Exports",
+      "searchPlaceholder": "[ZH] Search charts...",
+      "allCategory": "[ZH] All",
+      "allCharts": "[ZH] All Charts",
+      "recent": "[ZH] Recent",
+      "mostViewed": "[ZH] Most Viewed",
+      "favorites": "[ZH] Favorites",
+      "emptyState": {
+        "title": "[ZH] No charts found",
+        "description": "[ZH] Create your first chart or try a different search",
+        "action": "[ZH] Create Chart"
+      },
+      "comparison": {
+        "title": "[ZH] Brand Health Comparison",
+        "description": "[ZH] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[ZH] Create New Chart",
+        "description": "[ZH] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "基本信息",
-          "description": "设置图表的名称和描述",
-          "chartName": "图表名称",
-          "chartNamePlaceholder": "输入图表名称",
-          "descriptionPlaceholder": "描述该图表显示的内容",
-          "selectStatus": "选择状态",
-          "dataSource": "数据来源",
-          "selectDataSource": "选择数据源"
+          "title": "[ZH] Basic Information",
+          "chartName": "[ZH] Chart Name",
+          "chartNamePlaceholder": "[ZH] e.g., Social Media Usage by Age Group",
+          "description": "[ZH] Description",
+          "descriptionPlaceholder": "[ZH] Describe what this chart shows"
         },
         "chartType": {
-          "title": "图表类型",
-          "description": "选择数据的可视化类型"
+          "title": "[ZH] Chart Type",
+          "description": "[ZH] Select the visualization type"
         },
         "dataConfig": {
-          "title": "数据配置",
-          "description": "配置图表的数据",
-          "targetAudience": "目标受众",
-          "selectAudience": "选择受众",
-          "timePeriod": "时间段",
-          "selectTimePeriod": "选择时间段",
-          "primaryMetric": "主要指标",
-          "primaryMetricPlaceholder": "例如，社交媒体使用率 (%)",
-          "dimensions": "方面",
-          "dimensionsHint": "用于对数据进行分组的类别（例如年龄组、区域）",
-          "addDimension": "添加维度",
-          "measures": "措施",
-          "measuresHint": "要显示的数值（例如计数、百分比）",
-          "addMeasure": "添加措施",
-          "filters": "过滤器",
-          "filtersHint": "添加条件来过滤您的数据",
-          "addFilter": "添加过滤器",
-          "field": "场地",
-          "value": "价值",
-          "operators": {
-            "equals": "等于",
-            "notEquals": "不等于",
-            "contains": "包含",
-            "greaterThan": "大于",
-            "lessThan": "少于"
-          }
+          "title": "[ZH] Data Configuration",
+          "targetAudience": "[ZH] Target Audience",
+          "selectAudience": "[ZH] Select audience",
+          "timePeriod": "[ZH] Time Period",
+          "selectTimePeriod": "[ZH] Select time period",
+          "dataSource": "[ZH] Data Source",
+          "selectDataSource": "[ZH] Select data source"
         },
-        "displayOptions": {
-          "title": "显示选项",
-          "description": "自定义图表外观",
-          "showLegend": "显示图例",
-          "showGrid": "显示网格",
-          "showTooltip": "显示工具提示"
+        "preview": {
+          "title": "[ZH] Preview",
+          "description": "[ZH] How your chart will look"
         },
-        "chartInfo": {
-          "title": "图表信息",
-          "id": "ID",
-          "created": "已创建",
-          "lastUpdated": "最后更新"
+        "actions": {
+          "save": "[ZH] Create Chart",
+          "saving": "[ZH] Creating...",
+          "cancel": "[ZH] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[ZH] Chart Detail",
+        "notFound": "[ZH] Chart Not Found",
+        "notFoundDescription": "[ZH] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[ZH] Back to Charts",
+        "views": "[ZH] views",
+        "shares": "[ZH] shares",
+        "addToFavorites": "[ZH] Add to favorites",
+        "removeFromFavorites": "[ZH] Remove from favorites",
+        "tabs": {
+          "chart": "[ZH] Chart",
+          "data": "[ZH] Data",
+          "settings": "[ZH] Settings",
+          "comments": "[ZH] Comments",
+          "activity": "[ZH] Activity",
+          "history": "[ZH] History"
         },
-        "discardDialog": {
-          "title": "放弃更改？",
-          "description": "您有未保存的更改。 您确定要离开吗？ 您的更改将会丢失。",
-          "keepEditing": "继续编辑",
-          "discardChanges": "放弃更改"
+        "actions": {
+          "share": "[ZH] Share",
+          "export": "[ZH] Export",
+          "edit": "[ZH] Edit",
+          "fullscreen": "[ZH] Fullscreen",
+          "duplicate": "[ZH] Duplicate",
+          "addToDashboard": "[ZH] Add to Dashboard",
+          "scheduleReport": "[ZH] Schedule Report",
+          "copyLink": "[ZH] Copy Link",
+          "copied": "[ZH] Copied!",
+          "delete": "[ZH] Delete"
+        },
+        "export": {
+          "asJson": "[ZH] Export as JSON",
+          "asCsv": "[ZH] Export as CSV",
+          "asPng": "[ZH] Export as PNG",
+          "asSvg": "[ZH] Export as SVG",
+          "toPowerPoint": "[ZH] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[ZH] Chart Info",
+          "type": "[ZH] Type",
+          "dataSource": "[ZH] Data Source",
+          "audience": "[ZH] Audience",
+          "timePeriod": "[ZH] Time Period",
+          "created": "[ZH] Created",
+          "lastUpdated": "[ZH] Last Updated"
+        },
+        "share": {
+          "title": "[ZH] Share Chart",
+          "description": "[ZH] Share this chart with team members or external collaborators.",
+          "emailLabel": "[ZH] Email address",
+          "emailPlaceholder": "[ZH] email@example.com",
+          "roleLabel": "[ZH] Role",
+          "viewer": "[ZH] Viewer",
+          "editor": "[ZH] Editor",
+          "admin": "[ZH] Admin",
+          "shareLink": "[ZH] Share link",
+          "embedCode": "[ZH] Embed code",
+          "cancel": "[ZH] Cancel",
+          "share": "[ZH] Share"
+        },
+        "delete": {
+          "title": "[ZH] Delete Chart",
+          "description": "[ZH] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[ZH] Cancel",
+          "delete": "[ZH] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "最低认知度 (%)",
           "minNPS": "最低 NPS 分数"
         }
+      },
+      "pageTracker": "[ZH] Brand Tracking",
+      "title": "[ZH] Brand Tracking",
+      "description": "[ZH] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[ZH] All Brands",
+        "active": "[ZH] Active",
+        "paused": "[ZH] Paused",
+        "draft": "[ZH] Draft"
+      },
+      "new": {
+        "title": "[ZH] New Brand Tracking",
+        "description": "[ZH] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[ZH] Brand Information",
+          "description": "[ZH] Provide details about the brand you want to track",
+          "brandNameLabel": "[ZH] Brand Name *",
+          "brandNamePlaceholder": "[ZH] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[ZH] Description",
+          "descriptionPlaceholder": "[ZH] Brief description of what you want to track...",
+          "industryLabel": "[ZH] Industry",
+          "industryPlaceholder": "[ZH] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[ZH] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[ZH] Daily",
+          "weekly": "[ZH] Weekly",
+          "monthly": "[ZH] Monthly",
+          "manual": "[ZH] Manual Only"
+        },
+        "competitors": {
+          "label": "[ZH] Competitors",
+          "placeholder": "[ZH] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[ZH] Metrics to Track",
+          "awareness": "[ZH] Brand Awareness",
+          "consideration": "[ZH] Consideration",
+          "preference": "[ZH] Preference",
+          "loyalty": "[ZH] Loyalty",
+          "nps": "[ZH] Net Promoter Score (NPS)",
+          "sentiment": "[ZH] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[ZH] Cancel",
+          "create": "[ZH] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[ZH] Brand Tracking Detail",
+        "title": "[ZH] Brand Health Dashboard",
+        "notFound": "[ZH] Brand Study Not Found",
+        "notFoundDescription": "[ZH] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[ZH] Back to Brand Tracking",
+        "loading": "[ZH] Loading...",
+        "people": "[ZH] people",
+        "timePeriods": {
+          "1m": "[ZH] 1 Month",
+          "3m": "[ZH] 3 Months",
+          "6m": "[ZH] 6 Months",
+          "1y": "[ZH] 1 Year",
+          "all": "[ZH] All Time"
+        },
+        "tabs": {
+          "overview": "[ZH] Overview",
+          "trends": "[ZH] Trends",
+          "competitors": "[ZH] Competitors",
+          "insights": "[ZH] Insights",
+          "comments": "[ZH] Comments",
+          "activity": "[ZH] Activity",
+          "history": "[ZH] History"
+        },
+        "actions": {
+          "explore": "[ZH] Explore",
+          "share": "[ZH] Share",
+          "export": "[ZH] Export",
+          "edit": "[ZH] Edit",
+          "refresh": "[ZH] Refresh",
+          "autoRefresh": "[ZH] Auto-refresh",
+          "pauseAutoRefresh": "[ZH] Pause auto-refresh",
+          "enableAutoRefresh": "[ZH] Enable auto-refresh",
+          "duplicate": "[ZH] Duplicate",
+          "copyLink": "[ZH] Copy Link",
+          "copied": "[ZH] Copied!",
+          "delete": "[ZH] Delete",
+          "addToFavorites": "[ZH] Add to favorites",
+          "removeFromFavorites": "[ZH] Remove from favorites",
+          "scheduleReport": "[ZH] Schedule Report"
+        },
+        "export": {
+          "asJson": "[ZH] Export as JSON",
+          "asCsv": "[ZH] Export as CSV",
+          "asPdf": "[ZH] Export as PDF",
+          "toPowerPoint": "[ZH] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[ZH] Awareness",
+          "consideration": "[ZH] Consideration",
+          "preference": "[ZH] Preference",
+          "loyalty": "[ZH] Loyalty",
+          "nps": "[ZH] NPS",
+          "sentiment": "[ZH] Sentiment",
+          "marketShare": "[ZH] Market Share",
+          "vsTarget": "[ZH] vs target",
+          "trend": "[ZH] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[ZH] Brand Health Trend",
+          "competitorComparison": "[ZH] Competitor Comparison",
+          "sentimentBreakdown": "[ZH] Sentiment Breakdown",
+          "metricsOverTime": "[ZH] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[ZH] Brand Overview",
+          "industry": "[ZH] Industry",
+          "competitors": "[ZH] Competitors",
+          "trackingFrequency": "[ZH] Tracking Frequency",
+          "lastUpdated": "[ZH] Last Updated",
+          "createdBy": "[ZH] Created By",
+          "dateRange": "[ZH] Date Range"
+        },
+        "insights": {
+          "title": "[ZH] Key Insights",
+          "aiGenerated": "[ZH] AI-Generated",
+          "noInsights": "[ZH] No insights available yet",
+          "generateInsights": "[ZH] Generate Insights"
+        },
+        "activity": {
+          "title": "[ZH] Activity Log",
+          "description": "[ZH] Recent activity on this brand study",
+          "viewed": "[ZH] viewed",
+          "exported": "[ZH] exported",
+          "edited": "[ZH] edited",
+          "shared": "[ZH] shared",
+          "created": "[ZH] created"
+        },
+        "share": {
+          "title": "[ZH] Share Brand Study",
+          "description": "[ZH] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[ZH] Email address",
+          "emailPlaceholder": "[ZH] email@example.com",
+          "roleLabel": "[ZH] Role",
+          "viewer": "[ZH] Viewer",
+          "editor": "[ZH] Editor",
+          "admin": "[ZH] Admin",
+          "shareLink": "[ZH] Share link",
+          "cancel": "[ZH] Cancel",
+          "share": "[ZH] Share"
+        },
+        "schedule": {
+          "title": "[ZH] Schedule Report",
+          "description": "[ZH] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[ZH] Recipients",
+          "recipientsPlaceholder": "[ZH] email@example.com, team@example.com",
+          "frequency": "[ZH] Frequency",
+          "daily": "[ZH] Daily",
+          "weekly": "[ZH] Weekly",
+          "monthly": "[ZH] Monthly",
+          "format": "[ZH] Format",
+          "pdf": "[ZH] PDF",
+          "csv": "[ZH] CSV",
+          "json": "[ZH] JSON",
+          "cancel": "[ZH] Cancel",
+          "schedule": "[ZH] Schedule"
+        },
+        "delete": {
+          "title": "[ZH] Delete Brand Study",
+          "description": "[ZH] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[ZH] Cancel",
+          "delete": "[ZH] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[ZH] Select organization",
+      "searchPlaceholder": "[ZH] Search organizations...",
+      "noOrganizationFound": "[ZH] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[ZH] Weekly Activity",
+      "monthlyTrend": "[ZH] Monthly Trend",
+      "workflows": "[ZH] Workflows",
+      "insights": "[ZH] Insights",
+      "days": {
+        "mon": "[ZH] Mon",
+        "tue": "[ZH] Tue",
+        "wed": "[ZH] Wed",
+        "thu": "[ZH] Thu",
+        "fri": "[ZH] Fri",
+        "sat": "[ZH] Sat",
+        "sun": "[ZH] Sun"
+      },
+      "months": {
+        "jan": "[ZH] Jan",
+        "feb": "[ZH] Feb",
+        "mar": "[ZH] Mar",
+        "apr": "[ZH] Apr",
+        "may": "[ZH] May",
+        "jun": "[ZH] Jun",
+        "jul": "[ZH] Jul",
+        "aug": "[ZH] Aug",
+        "sep": "[ZH] Sep",
+        "oct": "[ZH] Oct",
+        "nov": "[ZH] Nov",
+        "dec": "[ZH] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[ZH] Active Agents",
+      "manage": "[ZH] Manage",
+      "activeTasks": "[ZH] {count} active tasks",
+      "idle": "[ZH] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[ZH] Untitled Dashboard",
+      "addWidget": "[ZH] Add Widget",
+      "undoShortcut": "[ZH] Undo (Ctrl+Z)",
+      "redoShortcut": "[ZH] Redo (Ctrl+Y)",
+      "grid": "[ZH] Grid",
+      "snap": "[ZH] Snap",
+      "widgetsCount": "[ZH] {count} widgets",
+      "exportFormat": "[ZH] Export Format",
+      "export": {
+        "pdf": "[ZH] PDF Document",
+        "png": "[ZH] PNG Image",
+        "json": "[ZH] JSON Config"
+      },
+      "duplicate": "[ZH] Duplicate",
+      "fullscreen": "[ZH] Fullscreen",
+      "lock": "[ZH] Lock",
+      "unlock": "[ZH] Unlock",
+      "hide": "[ZH] Hide",
+      "chooseWidgetType": "[ZH] Choose a widget type to add to your dashboard",
+      "editWidget": "[ZH] Edit Widget",
+      "newWidget": "[ZH] New {type}",
+      "enterTextContent": "[ZH] Enter text content...",
+      "unknownWidgetType": "[ZH] Unknown widget type",
+      "target": "[ZH] Target",
+      "table": {
+        "name": "[ZH] Name",
+        "value": "[ZH] Value",
+        "change": "[ZH] Change",
+        "item": "[ZH] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[ZH] Chart",
+        "metric": "[ZH] Metric",
+        "table": "[ZH] Table",
+        "text": "[ZH] Text",
+        "image": "[ZH] Image",
+        "kpi": "[ZH] KPI",
+        "kpiCard": "[ZH] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[ZH] Visualize data with various chart types",
+        "kpi": "[ZH] Display key performance indicators",
+        "metric": "[ZH] Show a single metric value",
+        "table": "[ZH] Display data in tabular format",
+        "text": "[ZH] Add text content or notes",
+        "image": "[ZH] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[ZH] General",
+        "data": "[ZH] Data",
+        "style": "[ZH] Style",
+        "advanced": "[ZH] Advanced"
+      },
+      "fields": {
+        "title": "[ZH] Title",
+        "subtitle": "[ZH] Subtitle",
+        "chartType": "[ZH] Chart Type",
+        "content": "[ZH] Content",
+        "value": "[ZH] Value",
+        "changePercent": "[ZH] Change (%)",
+        "target": "[ZH] Target",
+        "dataSource": "[ZH] Data Source",
+        "refreshInterval": "[ZH] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[ZH] Bar Chart",
+        "line": "[ZH] Line Chart",
+        "area": "[ZH] Area Chart",
+        "pie": "[ZH] Pie Chart",
+        "donut": "[ZH] Donut Chart",
+        "radar": "[ZH] Radar Chart",
+        "scatter": "[ZH] Scatter Plot",
+        "funnel": "[ZH] Funnel Chart",
+        "treemap": "[ZH] Treemap",
+        "heatmap": "[ZH] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[ZH] Sample Data",
+        "api": "[ZH] API Endpoint",
+        "crosstab": "[ZH] Crosstab",
+        "custom": "[ZH] Custom Query"
+      },
+      "refreshIntervalHint": "[ZH] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[ZH] Show Legend",
+        "showGrid": "[ZH] Show Grid",
+        "showTooltip": "[ZH] Show Tooltip",
+        "backgroundColor": "[ZH] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[ZH] Lock Widget",
+        "lockWidgetHint": "[ZH] Prevent moving and resizing",
+        "zIndex": "[ZH] Z-Index"
+      },
+      "dashboardSettings": "[ZH] Dashboard Settings",
+      "saveSettings": "[ZH] Save Settings",
+      "settings": {
+        "dashboardName": "[ZH] Dashboard Name",
+        "gridColumns": "[ZH] Grid Columns",
+        "gridRows": "[ZH] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[ZH] Analytics",
+      "title": "[ZH] Analytics",
+      "description": "[ZH] Track your research performance and insights"
     }
   },
   "audiences": {

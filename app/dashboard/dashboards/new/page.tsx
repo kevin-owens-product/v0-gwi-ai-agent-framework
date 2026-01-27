@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -33,6 +34,7 @@ const ChartIcon = ({ type }: { type: "bar" | "line" | "pie" }) => {
 }
 
 export default function NewDashboardPage() {
+  const t = useTranslations('dashboard.dashboards.new')
   const router = useRouter()
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
@@ -49,11 +51,11 @@ export default function NewDashboardPage() {
 
   const handleCreate = async () => {
     if (!name.trim()) {
-      setError("Please enter a dashboard name")
+      setError(t('validation.enterName'))
       return
     }
     if (selectedCharts.length === 0) {
-      setError("Please select at least one chart")
+      setError(t('validation.selectChart'))
       return
     }
     setIsSaving(true)
@@ -72,11 +74,11 @@ export default function NewDashboardPage() {
       if (response.ok) {
         router.push("/dashboard/dashboards")
       } else {
-        setError("Failed to create dashboard")
+        setError(t('errors.createFailed'))
       }
     } catch (err) {
       console.error("Failed to create dashboard:", err)
-      setError("Failed to create dashboard. Please try again.")
+      setError(t('errors.createFailedRetry'))
     } finally {
       setIsSaving(false)
     }
@@ -91,8 +93,8 @@ export default function NewDashboardPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold">Create Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Combine charts and insights into a shareable dashboard</p>
+          <h1 className="text-3xl font-bold">{t('title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('description')}</p>
         </div>
       </div>
 
@@ -100,28 +102,28 @@ export default function NewDashboardPage() {
         <div className="lg:col-span-2 space-y-6">
           <Card className="p-6 space-y-4">
             <div>
-              <Label htmlFor="name">Dashboard Name</Label>
+              <Label htmlFor="name">{t('form.dashboardName')}</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., Q4 Campaign Performance"
+                placeholder={t('form.dashboardNamePlaceholder')}
               />
             </div>
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t('form.descriptionLabel')}</Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Brief description of this dashboard..."
+                placeholder={t('form.descriptionPlaceholder')}
                 rows={3}
               />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <Label>Public Dashboard</Label>
-                <p className="text-sm text-muted-foreground">Allow anyone with the link to view</p>
+                <Label>{t('form.publicDashboard')}</Label>
+                <p className="text-sm text-muted-foreground">{t('form.publicDescription')}</p>
               </div>
               <Switch checked={isPublic} onCheckedChange={setIsPublic} />
             </div>
@@ -129,8 +131,8 @@ export default function NewDashboardPage() {
 
           <Card className="p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <Label>Add Charts</Label>
-              <span className="text-sm text-muted-foreground">{selectedCharts.length} selected</span>
+              <Label>{t('form.addCharts')}</Label>
+              <span className="text-sm text-muted-foreground">{t('form.selectedCount', { count: selectedCharts.length })}</span>
             </div>
             <div className="grid gap-3 md:grid-cols-2">
               {availableCharts.map((chart) => (
@@ -148,31 +150,31 @@ export default function NewDashboardPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm truncate">{chart.name}</p>
-                    <p className="text-xs text-muted-foreground capitalize">{chart.type} chart</p>
+                    <p className="text-xs text-muted-foreground capitalize">{t('form.chartType', { type: chart.type })}</p>
                   </div>
                   {selectedCharts.includes(chart.id) && (
-                    <Badge variant="secondary" className="shrink-0">Added</Badge>
+                    <Badge variant="secondary" className="shrink-0">{t('form.added')}</Badge>
                   )}
                 </button>
               ))}
             </div>
             <Button variant="outline" className="w-full bg-transparent">
               <Plus className="h-4 w-4 mr-2" />
-              Create New Chart
+              {t('form.createNewChart')}
             </Button>
           </Card>
         </div>
 
         <div className="space-y-6">
           <Card className="p-6 space-y-4">
-            <h3 className="font-semibold">Dashboard Preview</h3>
+            <h3 className="font-semibold">{t('preview.title')}</h3>
             <div className="space-y-3">
               <div>
-                <p className="text-sm text-muted-foreground">Name</p>
-                <p className="font-medium">{name || "Untitled Dashboard"}</p>
+                <p className="text-sm text-muted-foreground">{t('preview.name')}</p>
+                <p className="font-medium">{name || t('preview.untitledDashboard')}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Charts ({selectedCharts.length})</p>
+                <p className="text-sm text-muted-foreground">{t('preview.chartsCount', { count: selectedCharts.length })}</p>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {selectedCharts.map((chartId) => {
                     const chart = availableCharts.find((c) => c.id === chartId)
@@ -189,14 +191,14 @@ export default function NewDashboardPage() {
                     ) : null
                   })}
                   {selectedCharts.length === 0 && (
-                    <p className="text-sm text-muted-foreground">No charts selected</p>
+                    <p className="text-sm text-muted-foreground">{t('preview.noChartsSelected')}</p>
                   )}
                 </div>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Visibility</p>
+                <p className="text-sm text-muted-foreground">{t('preview.visibility')}</p>
                 <Badge variant={isPublic ? "default" : "secondary"}>
-                  {isPublic ? "Public" : "Private"}
+                  {isPublic ? t('preview.public') : t('preview.private')}
                 </Badge>
               </div>
             </div>
@@ -209,10 +211,10 @@ export default function NewDashboardPage() {
               onClick={handleCreate}
               disabled={isSaving}
             >
-              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating...</> : "Create Dashboard"}
+              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('buttons.creating')}</> : t('buttons.createDashboard')}
             </Button>
             <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()} disabled={isSaving}>
-              Cancel
+              {t('buttons.cancel')}
             </Button>
           </div>
         </div>

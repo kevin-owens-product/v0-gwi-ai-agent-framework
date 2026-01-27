@@ -203,7 +203,85 @@
     "selectLanguage": "Selectionner la langue",
     "preferences": "Preferences",
     "notifications": "Notifications",
-    "security": "Securite",
+    "security": {
+      "title": "[FR] Security Settings",
+      "description": "[FR] Manage your account security and active sessions",
+      "changePassword": "[FR] Change Password",
+      "changePasswordDescription": "[FR] Update your password regularly to keep your account secure",
+      "currentPassword": "[FR] Current Password",
+      "newPassword": "[FR] New Password",
+      "confirmNewPassword": "[FR] Confirm New Password",
+      "updating": "[FR] Updating...",
+      "updatePassword": "[FR] Update Password",
+      "twoFactorAuth": "[FR] Two-Factor Authentication",
+      "twoFactorDescription": "[FR] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[FR] 2FA is enabled",
+      "twoFactorProtected": "[FR] Your account is protected with authenticator app",
+      "changeMethod": "[FR] Change Method",
+      "viewBackupCodes": "[FR] View Backup Codes",
+      "activeSessions": "[FR] Active Sessions",
+      "activeSessionsDescription": "[FR] Manage devices where you're currently logged in",
+      "signOutAll": "[FR] Sign Out All",
+      "current": "[FR] Current",
+      "revoke": "[FR] Revoke",
+      "dangerZone": "[FR] Danger Zone",
+      "dangerZoneDescription": "[FR] Irreversible and destructive actions",
+      "deleteAccount": "[FR] Delete Account",
+      "deleteAccountDescription": "[FR] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[FR] Data Exports",
+        "description": "[FR] Request exports of your personal data for GDPR compliance",
+        "refresh": "[FR] Refresh",
+        "yourDataRights": "[FR] Your Data Rights",
+        "yourDataRightsDescription": "[FR] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[FR] No Active Exports",
+        "noActiveExportsDescription": "[FR] Request an export to see its status here",
+        "noActiveExportsHint": "[FR] Your export status will appear here after you request a data export",
+        "exportHistory": "[FR] Export History",
+        "exportHistoryDescription": "[FR] View and download your previous data exports",
+        "total": "[FR] Total",
+        "pending": "[FR] Pending",
+        "processing": "[FR] Processing",
+        "aboutDataExports": "[FR] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[FR] What's Included",
+          "exportFormat": "[FR] Export Format",
+          "faq": "[FR] FAQ"
+        },
+        "included": {
+          "profileInfo": "[FR] Profile Information",
+          "profileInfoDesc": "[FR] Your name, email, avatar, and account settings",
+          "orgMemberships": "[FR] Organization Memberships",
+          "orgMembershipsDesc": "[FR] All organizations you belong to and your roles",
+          "createdContent": "[FR] Created Content",
+          "createdContentDesc": "[FR] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[FR] Activity History",
+          "activityHistoryDesc": "[FR] Audit logs and activity records associated with your account",
+          "preferences": "[FR] Preferences",
+          "preferencesDesc": "[FR] Your theme, language, notification, and other settings",
+          "apiKeys": "[FR] API Keys",
+          "apiKeysDesc": "[FR] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[FR] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[FR] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[FR] Human-readable when opened in a text editor",
+          "compatible": "[FR] Compatible with most data processing tools",
+          "easyImport": "[FR] Easy to import into other services",
+          "exampleStructure": "[FR] Example structure:"
+        },
+        "faq": {
+          "howLong": "[FR] How long does an export take?",
+          "howLongAnswer": "[FR] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[FR] How long is an export available?",
+          "howLongAvailableAnswer": "[FR] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[FR] How often can I request an export?",
+          "howOftenAnswer": "[FR] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[FR] Is my export secure?",
+          "isSecureAnswer": "[FR] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "Compte",
     "appearance": {
       "title": "Apparence",
@@ -239,7 +317,35 @@
       "followingSystem": "selon le systeme",
       "savingPreferences": "Enregistrement des preferences..."
     },
-    "general": "General",
+    "general": {
+      "title": "[FR] General Settings",
+      "description": "[FR] Manage your organization's settings and preferences",
+      "organizationDetails": "[FR] Organization Details",
+      "updateOrgInfo": "[FR] Update your organization's information",
+      "changeLogo": "[FR] Change Logo",
+      "organizationName": "[FR] Organization Name",
+      "organizationSlug": "[FR] Organization Slug",
+      "orgDescription": "[FR] Description",
+      "industry": "[FR] Industry",
+      "companySize": "[FR] Company Size",
+      "consumerGoods": "[FR] Consumer Goods",
+      "technology": "[FR] Technology",
+      "finance": "[FR] Finance",
+      "healthcare": "[FR] Healthcare",
+      "retail": "[FR] Retail",
+      "mediaEntertainment": "[FR] Media & Entertainment",
+      "employees1to50": "[FR] 1-50 employees",
+      "employees50to200": "[FR] 50-200 employees",
+      "employees200to1000": "[FR] 200-1000 employees",
+      "employees1000to5000": "[FR] 1000-5000 employees",
+      "employees5000plus": "[FR] 5000+ employees",
+      "regionalSettings": "[FR] Regional Settings",
+      "regionalDescription": "[FR] Set your timezone and date format preferences",
+      "timezone": "[FR] Timezone",
+      "dateFormat": "[FR] Date Format",
+      "saving": "[FR] Saving...",
+      "saveChanges": "[FR] Save Changes"
+    },
     "apiKeys": {
       "title": "Cles API",
       "description": "Gerez les cles API pour l'acces programmatique",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "Comment pouvons-nous vous aider ?",
-      "subtitle": "Recherchez dans notre base de connaissances ou parcourez les sujets ci-dessous",
       "searchPlaceholder": "Rechercher de l'aide...",
-      "tabs": {
-        "faq": "FAQ",
-        "guides": "Guides",
-        "contact": "Contact"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "Guide de demarrage",
-          "description": "Apprenez les bases de GWI Agents"
-        },
-        "videoTutorials": {
-          "title": "Tutoriels video",
-          "description": "Regardez des tutoriels etape par etape"
-        },
-        "apiDocs": {
-          "title": "Documentation API",
-          "description": "Integrez nos APIs"
-        },
-        "contactSupport": {
-          "title": "Contacter le support",
-          "description": "Obtenez de l'aide de notre equipe"
-        }
+        "gettingStarted": "[FR] Getting Started Guide",
+        "videoTutorials": "[FR] Video Tutorials",
+        "apiDocs": "[FR] API Documentation",
+        "title": "[FR] Quick Links",
+        "gettingStartedDesc": "[FR] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[FR] Watch step-by-step guides",
+        "apiDocsDesc": "[FR] For developers and integrations",
+        "releaseNotes": "[FR] Release Notes",
+        "releaseNotesDesc": "[FR] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "Demarrage",
-          "agentsWorkflows": "Agents et flux de travail",
-          "dataPrivacy": "Donnees et confidentialite",
-          "billingPlans": "Facturation et forfaits"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "Comment creer mon premier agent ?",
-            "answer": "Accedez a la page Agents depuis la barre laterale et cliquez sur 'Creer un agent'. Suivez l'assistant etape par etape pour configurer le nom, la description, les sources de donnees et les parametres de comportement de votre agent."
-          },
-          "dataSources": {
-            "question": "Quelles sources de donnees sont disponibles ?",
-            "answer": "GWI donne acces a plusieurs sources de donnees, notamment GWI Core (notre enquete consommateur phare), GWI USA, GWI Zeitgeist (sujets tendance) et la possibilite de telecharger des donnees personnalisees. La disponibilite des sources de donnees depend de votre niveau d'abonnement."
-          },
-          "inviteTeam": {
-            "question": "Comment inviter des membres de l'equipe ?",
-            "answer": "Allez dans Parametres > Equipe et cliquez sur 'Inviter un membre'. Entrez leur adresse e-mail et selectionnez leur role (Administrateur, Editeur ou Lecteur). Ils recevront un e-mail d'invitation pour rejoindre votre espace de travail."
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "Quelle est la difference entre les agents et les flux de travail ?",
-            "answer": "Les agents sont des specialistes alimentes par l'IA qui gerent des types specifiques de taches de recherche. Les flux de travail combinent plusieurs agents en sequence pour automatiser des processus de recherche complexes en plusieurs etapes."
-          },
-          "customize": {
-            "question": "Puis-je personnaliser les agents predefinis ?",
-            "answer": "Oui ! Vous pouvez dupliquer n'importe quel agent predefini et modifier sa configuration, y compris le prompt systeme, les sources de donnees et le format de sortie. Votre version personnalisee sera enregistree dans votre bibliotheque d'agents personnelle."
-          },
-          "schedule": {
-            "question": "Comment planifier un flux de travail ?",
-            "answer": "Ouvrez votre flux de travail et cliquez sur le bouton 'Planifier'. Vous pouvez configurer des executions recurrentes (quotidiennes, hebdomadaires, mensuelles) ou declencher des flux de travail en fonction d'evenements comme la disponibilite de nouvelles donnees."
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "Comment mes donnees sont-elles protegees ?",
-            "answer": "Toutes les donnees sont chiffrees au repos et en transit a l'aide du chiffrement AES-256 standard de l'industrie. Nous sommes certifies SOC 2 Type II et conformes au RGPD. Vos requetes et donnees personnalisees ne sont jamais partagees avec d'autres clients."
-          },
-          "export": {
-            "question": "Puis-je exporter mes donnees ?",
-            "answer": "Oui, vous pouvez exporter des donnees dans plusieurs formats, notamment CSV, Excel, PowerPoint et JSON. Les clients entreprise ont egalement acces aux connexions directes a la base de donnees et aux exportations API."
-          },
-          "updateFrequency": {
-            "question": "A quelle frequence les donnees GWI sont-elles mises a jour ?",
-            "answer": "Les donnees GWI Core sont mises a jour trimestriellement avec de nouvelles enquetes consommateurs. GWI Zeitgeist fournit des mises a jour hebdomadaires sur les sujets tendance. Certains ensembles de donnees specialises peuvent avoir des frequences de mise a jour differentes."
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "Qu'est-ce qui compte comme une requete ?",
-            "answer": "Une requete est toute demande faite a un agent, y compris les questions de suivi dans la meme conversation. Les flux de travail complexes en plusieurs etapes comptent comme une seule requete, quel que soit le nombre d'agents impliques."
-          },
-          "changePlan": {
-            "question": "Puis-je changer de forfait ?",
-            "answer": "Oui, vous pouvez changer de forfait a tout moment depuis Parametres > Facturation. Les mises a niveau prennent effet immediatement avec une facturation au prorata. Les reductions prennent effet au debut de votre prochain cycle de facturation."
-          },
-          "annualDiscount": {
-            "question": "Proposez-vous des reductions pour la facturation annuelle ?",
-            "answer": "Oui ! La facturation annuelle vous permet d'economiser 20% par rapport a la facturation mensuelle. Contactez notre equipe commerciale pour configurer la facturation annuelle ou passer du mensuel."
-          }
-        }
+        "title": "[FR] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "Debutant",
-          "intermediate": "Intermediaire",
-          "advanced": "Avance"
-        },
-        "personas": {
-          "title": "Creer des personas efficaces",
-          "description": "Apprenez a creer des personas d'audience detailles et exploitables",
-          "duration": "15 min de lecture"
-        },
-        "workflows": {
-          "title": "Bonnes pratiques d'automatisation des flux de travail",
-          "description": "Concevez des flux de travail multi-agents efficaces pour votre recherche",
-          "duration": "20 min de lecture"
-        },
-        "prompts": {
-          "title": "Ingenierie avancee des prompts",
-          "description": "Obtenez de meilleurs resultats avec des prompts d'agent optimises",
-          "duration": "25 min de lecture"
-        },
-        "apiIntegration": {
-          "title": "Guide d'integration API",
-          "description": "Connectez les agents GWI a vos outils existants",
-          "duration": "30 min de lecture"
-        }
-      },
-      "viewAllDocs": "Voir toute la documentation",
       "contact": {
-        "liveChat": {
-          "title": "Chat en direct",
-          "description": "Discutez avec notre equipe de support en temps reel",
-          "availability": "Disponible du lundi au vendredi, de 9h a 18h EST. Temps de reponse moyen : 2 minutes.",
-          "button": "Demarrer le chat"
+        "title": "[FR] Need More Help?",
+        "description": "[FR] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[FR] Contact Support",
+        "responseTime": "[FR] Typical response time: 2-4 hours"
+      },
+      "description": "[FR] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[FR] Browse by Category",
+        "agents": "[FR] AI Agents",
+        "agentsDesc": "[FR] Learn about agent capabilities",
+        "workflows": "[FR] Workflows",
+        "workflowsDesc": "[FR] Build automation pipelines",
+        "data": "[FR] Data & Audiences",
+        "dataDesc": "[FR] Understanding GWI data",
+        "reports": "[FR] Reports & Exports",
+        "reportsDesc": "[FR] Generate and share insights",
+        "integrations": "[FR] Integrations",
+        "integrationsDesc": "[FR] Connect with your tools",
+        "billing": "[FR] Billing & Plans",
+        "billingDesc": "[FR] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[FR] Profile Settings",
+      "description": "[FR] Manage your personal information",
+      "personalInfo": "[FR] Personal Information",
+      "updateProfileDetails": "[FR] Update your profile details",
+      "uploadPhoto": "[FR] Upload Photo",
+      "photoHint": "[FR] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[FR] First Name",
+      "lastName": "[FR] Last Name",
+      "emailAddress": "[FR] Email Address",
+      "jobTitle": "[FR] Job Title",
+      "bio": "[FR] Bio",
+      "contactInfo": "[FR] Contact Information",
+      "contactDescription": "[FR] How colleagues can reach you",
+      "phoneNumber": "[FR] Phone Number",
+      "location": "[FR] Location",
+      "saving": "[FR] Saving...",
+      "saveChanges": "[FR] Save Changes"
+    },
+    "team": {
+      "title": "[FR] Team Management",
+      "description": "[FR] Manage team members and their permissions",
+      "teamMembers": "[FR] Team Members",
+      "membersCount": "[FR] {count} members in your organization",
+      "inviteMember": "[FR] Invite Member",
+      "inviteTeamMember": "[FR] Invite Team Member",
+      "inviteDescription": "[FR] Send an invitation to join your organization",
+      "emailAddress": "[FR] Email Address",
+      "emailPlaceholder": "[FR] colleague@company.com",
+      "role": "[FR] Role",
+      "sending": "[FR] Sending...",
+      "sendInvitation": "[FR] Send Invitation",
+      "searchMembers": "[FR] Search members...",
+      "tableHeaders": {
+        "member": "[FR] Member",
+        "role": "[FR] Role",
+        "lastActive": "[FR] Last Active",
+        "joined": "[FR] Joined"
+      },
+      "roles": {
+        "owner": "[FR] Owner",
+        "admin": "[FR] Admin",
+        "member": "[FR] Member",
+        "viewer": "[FR] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[FR] Make Admin",
+        "makeMember": "[FR] Make Member",
+        "makeViewer": "[FR] Make Viewer",
+        "removeMember": "[FR] Remove Member"
+      },
+      "pendingInvitations": "[FR] Pending Invitations",
+      "pendingCount": "[FR] {count} pending invitation",
+      "pendingCountPlural": "[FR] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[FR] Email",
+        "role": "[FR] Role",
+        "sent": "[FR] Sent",
+        "expires": "[FR] Expires"
+      },
+      "revoke": "[FR] Revoke",
+      "rolePermissions": "[FR] Role Permissions",
+      "rolePermissionsDescription": "[FR] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[FR] Full organization control",
+        "transferOwnership": "[FR] Transfer ownership",
+        "deleteOrg": "[FR] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[FR] Manage team members",
+        "billing": "[FR] Billing & subscription",
+        "allMemberPerms": "[FR] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[FR] Create and edit agents",
+        "generateReports": "[FR] Generate reports",
+        "useAgents": "[FR] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[FR] View reports",
+        "viewDashboards": "[FR] View dashboards",
+        "readOnly": "[FR] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[FR] Remove Team Member",
+        "description": "[FR] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[FR] Cancel",
+        "remove": "[FR] Remove Member"
+      },
+      "unknown": "[FR] Unknown",
+      "never": "[FR] Never",
+      "justNow": "[FR] Just now",
+      "minAgo": "[FR] {count} min ago",
+      "hoursAgo": "[FR] {count} hour ago",
+      "hoursAgoPlural": "[FR] {count} hours ago",
+      "daysAgo": "[FR] {count} day ago",
+      "daysAgoPlural": "[FR] {count} days ago"
+    },
+    "billing": {
+      "title": "[FR] Billing & Subscription",
+      "description": "[FR] Manage your subscription and payment methods",
+      "enterprisePlan": "[FR] Enterprise Plan",
+      "current": "[FR] Current",
+      "planDescription": "[FR] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[FR] per month",
+      "planFeatures": "[FR] Plan Features",
+      "features": {
+        "unlimitedQueries": "[FR] Unlimited AI agent queries",
+        "allAgents": "[FR] All pre-built domain agents",
+        "customDev": "[FR] Custom agent development",
+        "prioritySupport": "[FR] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[FR] Usage This Period",
+      "usage": {
+        "agentQueries": "[FR] Agent Queries",
+        "unlimited": "[FR] Unlimited",
+        "reportsGenerated": "[FR] Reports Generated",
+        "teamSeats": "[FR] Team Seats"
+      },
+      "nextBillingDate": "[FR] Next billing date: {date}",
+      "changePlan": "[FR] Change Plan",
+      "cancelSubscription": "[FR] Cancel Subscription",
+      "paymentMethod": "[FR] Payment Method",
+      "paymentDescription": "[FR] Manage your payment information",
+      "cardEnding": "[FR] Visa ending in {last4}",
+      "cardExpires": "[FR] Expires {date}",
+      "update": "[FR] Update",
+      "billingHistory": "[FR] Billing History",
+      "billingHistoryDescription": "[FR] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[FR] Invoice",
+        "date": "[FR] Date",
+        "amount": "[FR] Amount",
+        "status": "[FR] Status"
+      },
+      "paid": "[FR] Paid",
+      "needMoreCapacity": "[FR] Need more capacity?",
+      "contactForPricing": "[FR] Contact us for custom enterprise pricing",
+      "contactSales": "[FR] Contact Sales",
+      "upgrade": {
+        "title": "[FR] Choose Your Plan",
+        "description": "[FR] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[FR] Back to Billing",
+        "checkoutCanceled": "[FR] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[FR] Monthly",
+        "yearly": "[FR] Yearly",
+        "save17": "[FR] Save 17%",
+        "mostPopular": "[FR] Most Popular",
+        "currentPlan": "[FR] Current Plan",
+        "billedAnnually": "[FR] ${price} billed annually",
+        "upgradeTo": "[FR] Upgrade to {plan}",
+        "processing": "[FR] Processing...",
+        "customSales": "[FR] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[FR] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[FR] Starter",
+            "description": "[FR] For individuals and small teams getting started",
+            "features": {
+              "runs": "[FR] 100 agent runs / month",
+              "seats": "[FR] 3 team seats",
+              "sources": "[FR] 5 data sources",
+              "retention": "[FR] 30 day data retention",
+              "tokens": "[FR] 100K tokens / month",
+              "support": "[FR] Community support"
+            }
+          },
+          "professional": {
+            "name": "[FR] Professional",
+            "description": "[FR] For growing teams with advanced needs",
+            "features": {
+              "runs": "[FR] 1,000 agent runs / month",
+              "seats": "[FR] 10 team seats",
+              "sources": "[FR] 25 data sources",
+              "retention": "[FR] 90 day data retention",
+              "tokens": "[FR] 1M tokens / month",
+              "support": "[FR] Priority email support",
+              "analytics": "[FR] Advanced analytics",
+              "integrations": "[FR] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[FR] Enterprise",
+            "description": "[FR] For large organizations with custom requirements",
+            "features": {
+              "runs": "[FR] Unlimited agent runs",
+              "seats": "[FR] Unlimited team seats",
+              "sources": "[FR] Unlimited data sources",
+              "retention": "[FR] 365 day data retention",
+              "tokens": "[FR] Unlimited tokens",
+              "support": "[FR] 24/7 dedicated support",
+              "customDev": "[FR] Custom agent development",
+              "sso": "[FR] SSO & SCIM",
+              "sla": "[FR] SLA guarantee",
+              "accountManager": "[FR] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[FR] Audit Log",
+      "description": "[FR] Track all actions and changes in your organization",
+      "activityHistory": "[FR] Activity History",
+      "totalEvents": "[FR] {count} total events",
+      "searchLogs": "[FR] Search logs...",
+      "allActions": "[FR] All Actions",
+      "allResources": "[FR] All Resources",
+      "noAuditLogs": "[FR] No audit logs found",
+      "activityWillAppear": "[FR] Activity will appear here as actions are taken",
+      "showing": "[FR] Showing {start} to {end} of {total}",
+      "previous": "[FR] Previous",
+      "next": "[FR] Next",
+      "actions": {
+        "create": "[FR] Created",
+        "update": "[FR] Updated",
+        "delete": "[FR] Deleted",
+        "execute": "[FR] Executed",
+        "login": "[FR] Logged in",
+        "logout": "[FR] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[FR] Webhooks",
+      "description": "[FR] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[FR] Webhook Endpoints",
+      "endpointsDescription": "[FR] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[FR] Add Webhook",
+      "addWebhookEndpoint": "[FR] Add Webhook Endpoint",
+      "addWebhookDescription": "[FR] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[FR] Endpoint URL",
+      "endpointUrlPlaceholder": "[FR] https://api.example.com/webhooks",
+      "descriptionOptional": "[FR] Description (Optional)",
+      "descriptionPlaceholder": "[FR] Describe this webhook...",
+      "events": "[FR] Events",
+      "creating": "[FR] Creating...",
+      "createWebhook": "[FR] Create Webhook",
+      "noWebhooks": "[FR] No webhooks configured",
+      "addWebhookToStart": "[FR] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[FR] Endpoint",
+        "events": "[FR] Events",
+        "status": "[FR] Status",
+        "secret": "[FR] Secret"
+      },
+      "eventsCount": "[FR] {count} events",
+      "active": "[FR] Active",
+      "disabled": "[FR] Disabled",
+      "webhookSecurity": "[FR] Webhook Security",
+      "securityDescription": "[FR] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[FR] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[FR] Agent Run Started",
+        "agentRunCompleted": "[FR] Agent Run Completed",
+        "agentRunFailed": "[FR] Agent Run Failed",
+        "workflowRunStarted": "[FR] Workflow Run Started",
+        "workflowRunCompleted": "[FR] Workflow Run Completed",
+        "workflowRunFailed": "[FR] Workflow Run Failed",
+        "reportGenerated": "[FR] Report Generated",
+        "memberAdded": "[FR] Member Added",
+        "memberRemoved": "[FR] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[FR] Custom Alerts",
+      "description": "[FR] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[FR] Total Alerts",
+      "active": "[FR] Active",
+      "totalTriggers": "[FR] Total Triggers",
+      "paused": "[FR] Paused",
+      "yourAlerts": "[FR] Your Alerts",
+      "yourAlertsDescription": "[FR] Manage your custom alert configurations",
+      "createAlert": "[FR] Create Alert",
+      "searchAlerts": "[FR] Search alerts...",
+      "entityType": "[FR] Entity Type",
+      "allTypes": "[FR] All Types",
+      "allStatus": "[FR] All Status",
+      "noAlertsYet": "[FR] No alerts yet",
+      "noMatchingAlerts": "[FR] No matching alerts",
+      "createFirstAlert": "[FR] Create your first alert to get notified about important changes",
+      "adjustFilters": "[FR] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[FR] Alert",
+        "type": "[FR] Type",
+        "condition": "[FR] Condition",
+        "channels": "[FR] Channels",
+        "lastTriggered": "[FR] Last Triggered",
+        "status": "[FR] Status"
+      },
+      "total": "[FR] total",
+      "never": "[FR] Never",
+      "edit": "[FR] Edit",
+      "viewHistory": "[FR] View History",
+      "delete": "[FR] Delete",
+      "createNewAlert": "[FR] Create New Alert",
+      "createNewAlertDescription": "[FR] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[FR] Edit Alert",
+      "editAlertDescription": "[FR] Update the configuration for this alert",
+      "alertHistory": "[FR] Alert History: {name}",
+      "alertHistoryDescription": "[FR] View the history of when this alert was triggered",
+      "deleteAlert": "[FR] Delete Alert",
+      "deleteAlertDescription": "[FR] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[FR] Cancel",
+      "entityTypes": {
+        "metric": "[FR] Metric",
+        "audience": "[FR] Audience",
+        "brand": "[FR] Brand",
+        "report": "[FR] Report",
+        "agent": "[FR] Agent",
+        "workflow": "[FR] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[FR] Keyboard Shortcuts",
+      "description": "[FR] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[FR] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[FR] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[FR] Shortcut Conflicts Detected",
+      "conflictsDescription": "[FR] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[FR] Navigation",
+        "navigationDesc": "[FR] Navigate around the application",
+        "actions": "[FR] Actions",
+        "actionsDesc": "[FR] Perform common actions quickly",
+        "ui": "[FR] UI",
+        "uiDesc": "[FR] Control the user interface",
+        "editing": "[FR] Editing",
+        "editingDesc": "[FR] Edit content efficiently"
+      },
+      "resetToDefaults": "[FR] Reset to Defaults",
+      "saving": "[FR] Saving...",
+      "saveChanges": "[FR] Save Changes",
+      "resetDialog": {
+        "title": "[FR] Reset Keyboard Shortcuts",
+        "description": "[FR] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[FR] Cancel",
+        "reset": "[FR] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[FR] Edit Shortcut",
+        "customizable": "[FR] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[FR] This shortcut cannot be customized",
+        "action": "[FR] Action",
+        "currentBinding": "[FR] Current Binding",
+        "newBinding": "[FR] New Binding",
+        "pressKeys": "[FR] Press keys...",
+        "clickToRecord": "[FR] Click to record",
+        "record": "[FR] Record",
+        "recording": "[FR] Recording...",
+        "cancel": "[FR] Cancel",
+        "save": "[FR] Save"
+      }
+    },
+    "plan": {
+      "title": "[FR] Plan & Billing",
+      "description": "[FR] Manage your subscription and view usage metrics",
+      "currentPlan": "[FR] Current Plan",
+      "currentPlanDescription": "[FR] Your active subscription details",
+      "upgradePlan": "[FR] Upgrade Plan",
+      "teamMembers": "[FR] Team Members",
+      "agents": "[FR] Agents",
+      "workflows": "[FR] Workflows",
+      "reports": "[FR] Reports",
+      "usageThisMonth": "[FR] Usage This Month",
+      "usageDescription": "[FR] Monitor your resource usage against plan limits",
+      "comparePlans": "[FR] Compare Plans",
+      "yourFeatures": "[FR] Your Features",
+      "yourFeaturesDescription": "[FR] All features included in your current plan",
+      "limit": "[FR] Limit: {limit}",
+      "requesting": "[FR] Requesting...",
+      "upgradeTo": "[FR] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[FR] Starter",
+          "price": "[FR] $49/mo",
+          "features": {
+            "members": "[FR] Up to 5 team members",
+            "agents": "[FR] 10 agents",
+            "runs": "[FR] 50 workflow runs/month",
+            "analytics": "[FR] Basic analytics",
+            "support": "[FR] Email support"
+          }
         },
-        "ticket": {
-          "title": "Soumettre un ticket",
-          "description": "Obtenez de l'aide par e-mail sous 24 heures",
-          "info": "Pour les problemes complexes ou les demandes de fonctionnalites. Incluez autant de details que possible.",
-          "button": "Soumettre un ticket"
+        "professional": {
+          "name": "[FR] Professional",
+          "price": "[FR] $199/mo",
+          "features": {
+            "members": "[FR] Up to 20 team members",
+            "agents": "[FR] Unlimited agents",
+            "runs": "[FR] Unlimited workflow runs",
+            "analytics": "[FR] Advanced analytics",
+            "support": "[FR] Priority support",
+            "integrations": "[FR] Custom integrations",
+            "api": "[FR] API access"
+          }
         },
         "enterprise": {
-          "title": "Support entreprise",
-          "description": "Besoin d'un support dedie ? Les forfaits entreprise incluent un Customer Success Manager dedie et des temps de reponse prioritaires.",
-          "button": "Contacter les ventes"
+          "name": "[FR] Enterprise",
+          "price": "[FR] Custom",
+          "features": {
+            "members": "[FR] Unlimited team members",
+            "everything": "[FR] Unlimited everything",
+            "security": "[FR] Advanced security",
+            "sso": "[FR] SSO & SAML",
+            "support": "[FR] Dedicated support",
+            "sla": "[FR] Custom SLAs",
+            "onPremise": "[FR] On-premise option",
+            "whiteLabel": "[FR] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[FR] Scheduled Exports",
+      "description": "[FR] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[FR] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[FR] Manage automatic exports that run on a schedule",
+      "newExport": "[FR] New Export",
+      "all": "[FR] All",
+      "active": "[FR] Active",
+      "paused": "[FR] Paused",
+      "noScheduledExports": "[FR] No scheduled exports",
+      "createFirstExport": "[FR] Create your first scheduled export to get started",
+      "createExport": "[FR] Create Export",
+      "tableHeaders": {
+        "name": "[FR] Name",
+        "schedule": "[FR] Schedule",
+        "format": "[FR] Format",
+        "lastRun": "[FR] Last Run",
+        "nextRun": "[FR] Next Run",
+        "status": "[FR] Status"
+      },
+      "statusLabels": {
+        "pending": "[FR] Pending",
+        "processing": "[FR] Running",
+        "completed": "[FR] Success",
+        "failed": "[FR] Failed",
+        "neverRun": "[FR] Never Run"
+      },
+      "actions": {
+        "runNow": "[FR] Run Now",
+        "viewHistory": "[FR] View History",
+        "edit": "[FR] Edit",
+        "pause": "[FR] Pause",
+        "activate": "[FR] Activate",
+        "delete": "[FR] Delete"
+      },
+      "deleteDialog": {
+        "title": "[FR] Delete Scheduled Export",
+        "description": "[FR] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[FR] Cancel",
+        "delete": "[FR] Delete"
+      },
+      "historySheet": {
+        "title": "[FR] Export History",
+        "loading": "[FR] Loading..."
+      },
+      "relativeTime": {
+        "never": "[FR] Never",
+        "justNow": "[FR] Just now",
+        "lessThanMinute": "[FR] In less than a minute",
+        "minsAgo": "[FR] {count}m ago",
+        "inMins": "[FR] In {count}m",
+        "hoursAgo": "[FR] {count}h ago",
+        "inHours": "[FR] In {count}h",
+        "daysAgo": "[FR] {count}d ago",
+        "inDays": "[FR] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[FR] Inbox Agents",
+      "description": "[FR] AI agents that automatically handle incoming requests",
+      "configureChannels": "[FR] Configure Channels",
+      "createAgent": "[FR] Create Agent",
+      "activeAgents": "[FR] Active Agents",
+      "status": {
+        "processing": "[FR] Processing"
+      },
+      "stats": {
+        "processedToday": "[FR] Processed Today",
+        "fromYesterday": "[FR] {percent} from yesterday",
+        "avgResponseTime": "[FR] Avg Response Time",
+        "fasterThanLastWeek": "[FR] {percent} faster than last week",
+        "successRate": "[FR] Success Rate",
+        "basedOnRequests": "[FR] Based on {count} requests",
+        "pendingReview": "[FR] Pending Review",
+        "highPriority": "[FR] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[FR] Success rate",
+        "processed": "[FR] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[FR] Incoming Requests",
+        "description": "[FR] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[FR] Search requests...",
+        "noRequests": "[FR] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[FR] Assign to Brief Handler",
+        "assignToAudienceQuery": "[FR] Assign to Audience Query",
+        "assignToLocalization": "[FR] Assign to Localization",
+        "reprocess": "[FR] Reprocess",
+        "archive": "[FR] Archive"
+      },
+      "priority": {
+        "high": "[FR] High priority",
+        "medium": "[FR] Medium priority",
+        "low": "[FR] Low priority"
+      },
+      "request": {
+        "received": "[FR] Received {time}",
+        "generatedOutput": "[FR] Generated Output",
+        "confidence": "[FR] {percent}% confidence",
+        "citations": "[FR] {count} citations",
+        "viewFullReport": "[FR] View Full Report",
+        "assignAgent": "[FR] Assign Agent",
+        "respondManually": "[FR] Respond Manually",
+        "viewHistory": "[FR] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[FR] Agent Active",
+        "agentPaused": "[FR] Agent Paused",
+        "lastTriggered": "[FR] Last triggered {time}",
+        "processed": "[FR] Processed",
+        "successRate": "[FR] Success Rate",
+        "avgTime": "[FR] Avg Time",
+        "triggerKeywords": "[FR] Trigger Keywords",
+        "connectedChannels": "[FR] Connected Channels",
+        "processingPipeline": "[FR] Processing Pipeline",
+        "configure": "[FR] Configure",
+        "viewLogs": "[FR] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[FR] Create Inbox Agent",
+        "description": "[FR] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[FR] Agent Name",
+        "agentNamePlaceholder": "[FR] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[FR] Describe what this agent does...",
+        "triggerKeywords": "[FR] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[FR] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[FR] Agent will activate when messages contain these keywords",
+        "channels": "[FR] Channels",
+        "baseAgent": "[FR] Base Agent",
+        "selectAgent": "[FR] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[FR] Audience Explorer",
+          "personaArchitect": "[FR] Persona Architect",
+          "cultureTracker": "[FR] Culture Tracker",
+          "brandRelationshipAnalyst": "[FR] Brand Relationship Analyst"
+        },
+        "autoRespond": "[FR] Auto-respond",
+        "autoRespondHelp": "[FR] Automatically send responses to requesters",
+        "requireApproval": "[FR] Require Approval",
+        "requireApprovalHelp": "[FR] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[FR] Prompt Templates",
+      "description": "[FR] Reusable templates for common insights tasks",
+      "createTemplate": "[FR] Create Template",
+      "searchPlaceholder": "[FR] Search templates...",
+      "starredTemplates": "[FR] Starred Templates",
+      "allTemplates": "[FR] All Templates",
+      "uses": "[FR] {count} uses",
+      "categories": {
+        "all": "[FR] All",
+        "research": "[FR] Research",
+        "analysis": "[FR] Analysis",
+        "briefs": "[FR] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[FR] Use Template",
+        "duplicate": "[FR] Duplicate"
+      },
+      "createDialog": {
+        "title": "[FR] Create Template",
+        "description": "[FR] Save a prompt as a reusable template for your team",
+        "templateName": "[FR] Template Name",
+        "templateNamePlaceholder": "[FR] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[FR] What does this template do?",
+        "category": "[FR] Category",
+        "promptTemplate": "[FR] Prompt Template",
+        "promptPlaceholder": "[FR] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[FR] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[FR] Agent Store",
+      "description": "[FR] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[FR] Search agents...",
+      "sortBy": {
+        "placeholder": "[FR] Sort by",
+        "popular": "[FR] Most Popular",
+        "rating": "[FR] Highest Rated",
+        "newest": "[FR] Newest",
+        "name": "[FR] Name A-Z"
+      },
+      "featuredAgents": "[FR] Featured Agents",
+      "featured": "[FR] Featured",
+      "installed": "[FR] Installed",
+      "tryNow": "[FR] Try Now",
+      "categories": "[FR] Categories",
+      "viewDetails": "[FR] View Details",
+      "added": "[FR] Added",
+      "buildYourOwn": {
+        "title": "[FR] Build Your Own Agent",
+        "description": "[FR] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[FR] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[FR] Back to Store",
+        "notFound": {
+          "title": "[FR] Agent Not Found",
+          "description": "[FR] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[FR] {count} installs",
+        "installed": "[FR] Installed",
+        "installing": "[FR] Installing...",
+        "installAgent": "[FR] Install Agent",
+        "tryInPlayground": "[FR] Try in Playground",
+        "info": {
+          "version": "[FR] Version",
+          "category": "[FR] Category",
+          "dataSources": "[FR] Data Sources"
+        },
+        "tabs": {
+          "overview": "[FR] Overview",
+          "capabilities": "[FR] Capabilities",
+          "examples": "[FR] Examples",
+          "reviews": "[FR] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[FR] About this Agent",
+          "fastResults": "[FR] Fast Results",
+          "fastResultsDesc": "[FR] Avg. 3s response time",
+          "verifiedData": "[FR] Verified Data",
+          "verifiedDataDesc": "[FR] 100% sourced citations",
+          "alwaysUpdated": "[FR] Always Updated",
+          "alwaysUpdatedDesc": "[FR] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[FR] What this agent can do",
+          "description": "[FR] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[FR] Example Prompts",
+          "description": "[FR] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[FR] Ratings",
+          "reviewsCount": "[FR] {count} reviews"
+        },
+        "relatedAgents": "[FR] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[FR] Data Changes",
+      "description": "[FR] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[FR] Timeline",
+        "compare": "[FR] Compare",
+        "evolution": "[FR] Evolution",
+        "alerts": "[FR] Alerts"
+      },
+      "compare": {
+        "title": "[FR] Compare Versions",
+        "description": "[FR] Select an entity to compare its versions",
+        "compareVersions": "[FR] Compare versions",
+        "entities": {
+          "audiences": "[FR] Audiences",
+          "crosstabs": "[FR] Crosstabs",
+          "insights": "[FR] Insights",
+          "charts": "[FR] Charts",
+          "reports": "[FR] Reports",
+          "dashboards": "[FR] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[FR] Analysis Evolution",
+        "description": "[FR] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[FR] View evolution",
+        "types": {
+          "brandHealth": "[FR] Brand Health",
+          "audienceInsights": "[FR] Audience Insights",
+          "marketAnalysis": "[FR] Market Analysis",
+          "competitorAnalysis": "[FR] Competitor Analysis",
+          "trendAnalysis": "[FR] Trend Analysis",
+          "crosstabAnalysis": "[FR] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[FR] Change Alerts",
+        "loading": "[FR] Loading alerts...",
+        "noAlerts": "[FR] No Alerts",
+        "noAlertsDescription": "[FR] You have no unread change alerts.",
+        "markAllRead": "[FR] Mark All as Read",
+        "markRead": "[FR] Mark Read",
+        "dismiss": "[FR] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[FR] Select {entity} to Compare",
+        "entity": "[FR] Entity",
+        "enterIdDescription": "[FR] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[FR] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[FR] Select Analysis to View Evolution",
+        "enterIdDescription": "[FR] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[FR] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[FR] Crosstabs",
+      "description": "[FR] Compare audiences across multiple dimensions",
+      "newCrosstab": "[FR] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[FR] Total Crosstabs",
+        "views": "[FR] Views",
+        "exports": "[FR] Exports",
+        "usedToday": "[FR] Used Today"
+      },
+      "tabs": {
+        "all": "[FR] All Crosstabs",
+        "recent": "[FR] Recent",
+        "templates": "[FR] Templates"
+      },
+      "empty": {
+        "title": "[FR] No crosstabs yet",
+        "description": "[FR] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[FR] Featured",
+        "liveData": "[FR] Live Data",
+        "more": "[FR] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[FR] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[FR] audience segments",
+        "metrics": "[FR] metrics",
+        "audiencesCount": "[FR] {count} audiences",
+        "metricsCount": "[FR] {count} metrics",
+        "modified": "[FR] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[FR] Open Analysis"
+      },
+      "new": {
+        "title": "[FR] Create Crosstab",
+        "description": "[FR] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[FR] Crosstab Name",
+          "namePlaceholder": "[FR] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[FR] Select Audiences",
+          "selectMetrics": "[FR] Select Metrics",
+          "selected": "[FR] {count} selected"
+        },
+        "summary": {
+          "title": "[FR] Summary",
+          "audiences": "[FR] Audiences ({count})",
+          "metrics": "[FR] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[FR] Generate Crosstab",
+          "generating": "[FR] Generating...",
+          "cancel": "[FR] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[FR] Please enter a crosstab name",
+          "audienceRequired": "[FR] Please select at least one audience",
+          "metricRequired": "[FR] Please select at least one metric",
+          "createFailed": "[FR] Failed to create crosstab",
+          "createFailedRetry": "[FR] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[FR] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[FR] {count} metrics",
+          "audiences": "[FR] {count} audiences"
+        },
+        "categoriesCount": "[FR] {count} categories",
+        "more": "[FR] more",
+        "actions": {
+          "share": "[FR] Share",
+          "generateInsights": "[FR] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[FR] Data Grid",
+          "calculatedFields": "[FR] Calculated Fields",
+          "filters": "[FR] Filters",
+          "visualize": "[FR] Visualize"
+        },
+        "grid": {
+          "title": "[FR] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[FR] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[FR] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[FR] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[FR] Value updated to {value}%",
+          "fieldCreated": "[FR] Calculated field \"{name}\" created",
+          "fieldUpdated": "[FR] Calculated field updated",
+          "fieldDeleted": "[FR] Calculated field deleted",
+          "fieldApplied": "[FR] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[FR] Filters applied",
+          "chartSaved": "[FR] Chart saved!",
+          "chartExported": "[FR] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[FR] Crosstab Not Found",
+          "subtitle": "[FR] The requested crosstab could not be found",
+          "heading": "[FR] Crosstab not found",
+          "description": "[FR] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[FR] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[FR] Remove from favorites",
+          "addToFavorites": "[FR] Add to favorites",
+          "pauseAutoRefresh": "[FR] Pause auto-refresh",
+          "enableAutoRefresh": "[FR] Enable auto-refresh",
+          "exitFullscreen": "[FR] Exit fullscreen",
+          "enterFullscreen": "[FR] Enter fullscreen",
+          "visualize": "[FR] Visualize",
+          "share": "[FR] Share",
+          "edit": "[FR] Edit",
+          "duplicate": "[FR] Duplicate",
+          "addToDashboard": "[FR] Add to Dashboard",
+          "copyLink": "[FR] Copy Link",
+          "copied": "[FR] Copied!",
+          "delete": "[FR] Delete",
+          "cancel": "[FR] Cancel",
+          "selectAll": "[FR] Select All",
+          "clear": "[FR] Clear",
+          "schedule": "[FR] Schedule"
+        },
+        "filters": {
+          "title": "[FR] Data Filters",
+          "clearAll": "[FR] Clear All",
+          "description": "[FR] Filter and refine your crosstab data",
+          "quickFilters": "[FR] Quick Filters",
+          "valueRange": "[FR] Value Range: {min}% - {max}%",
+          "category": "[FR] Category",
+          "allCategories": "[FR] All Categories",
+          "activeFilters": "[FR] Active filters"
+        },
+        "tabs": {
+          "filters": "[FR] Filters",
+          "audiences": "[FR] Audiences",
+          "metrics": "[FR] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[FR] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[FR] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[FR] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[FR] Export as JSON",
+          "asCsv": "[FR] Export as CSV",
+          "asHtml": "[FR] Export as HTML",
+          "asPdf": "[FR] Export as PDF",
+          "asExcel": "[FR] Export as Excel",
+          "asPowerPoint": "[FR] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[FR] Delete Crosstab",
+          "description": "[FR] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[FR] Modified {time}",
+          "views": "[FR] {count} views",
+          "createdBy": "[FR] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[FR] Data",
+          "activity": "[FR] Activity",
+          "comments": "[FR] Comments",
+          "history": "[FR] History"
+        },
+        "insights": {
+          "title": "[FR] AI-Generated Insights",
+          "topPerformer": "[FR] Top Performer",
+          "topPerformerDesc": "[FR] leads in most metrics with an average of {average}%.",
+          "noData": "[FR] No data available",
+          "biggestGap": "[FR] Biggest Gap",
+          "biggestGapDesc": "[FR] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[FR] Trending",
+          "trendingDesc": "[FR] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[FR] no"
+        },
+        "activity": {
+          "title": "[FR] Activity Log",
+          "description": "[FR] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[FR] Share Crosstab",
+          "description": "[FR] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[FR] Email address",
+          "emailPlaceholder": "[FR] email@example.com",
+          "role": "[FR] Role",
+          "roles": {
+            "viewer": "[FR] Viewer",
+            "editor": "[FR] Editor",
+            "admin": "[FR] Admin"
+          },
+          "shareLink": "[FR] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[FR] Schedule Report",
+          "description": "[FR] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[FR] Recipients",
+          "recipientsPlaceholder": "[FR] email@example.com, team@example.com",
+          "frequency": "[FR] Frequency",
+          "frequencies": {
+            "daily": "[FR] Daily",
+            "weekly": "[FR] Weekly",
+            "monthly": "[FR] Monthly"
+          },
+          "format": "[FR] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[FR] Insights",
+      "description": "[FR] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[FR] Search insights...",
+      "filterByType": "[FR] Filter by type",
+      "loading": "[FR] Loading...",
+      "showing": "[FR] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[FR] All Types",
+        "audience": "[FR] Audience",
+        "trend": "[FR] Trend",
+        "competitive": "[FR] Competitive",
+        "analysis": "[FR] Analysis"
+      },
+      "empty": {
+        "title": "[FR] No insights yet",
+        "description": "[FR] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[FR] Go to Playground"
+      },
+      "badges": {
+        "new": "[FR] New"
+      },
+      "viaAgent": "[FR] via {name}",
+      "detail": {
+        "backToInsights": "[FR] Back to Insights",
+        "notFound": {
+          "title": "[FR] Insight not found",
+          "description": "[FR] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[FR] View All Insights",
+        "confidence": "[FR] {percent}% confidence",
+        "viaAgent": "[FR] via {name}",
+        "actions": {
+          "copy": "[FR] Copy",
+          "copied": "[FR] Copied",
+          "share": "[FR] Share",
+          "export": "[FR] Export"
+        },
+        "detailsTitle": "[FR] Insight Details",
+        "detailsDescription": "[FR] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[FR] Want to explore more?",
+          "description": "[FR] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[FR] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[FR] Data Connectors",
+        "description": "[FR] Connect external data sources to enrich your insights",
+        "addConnector": "[FR] Add Connector",
+        "searchPlaceholder": "[FR] Search connectors...",
+        "stats": {
+          "totalConnectors": "[FR] Total Connectors",
+          "active": "[FR] Active",
+          "withErrors": "[FR] With Errors",
+          "dataSources": "[FR] Data Sources"
+        },
+        "tabs": {
+          "configured": "[FR] Configured",
+          "available": "[FR] Available"
+        },
+        "filters": {
+          "allTypes": "[FR] All types"
+        },
+        "empty": {
+          "title": "[FR] No connectors configured",
+          "description": "[FR] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[FR] Previous",
+          "next": "[FR] Next",
+          "pageOf": "[FR] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[FR] Sync started",
+          "syncFailed": "[FR] Failed to start sync",
+          "connectorEnabled": "[FR] Connector enabled",
+          "connectorDisabled": "[FR] Connector disabled",
+          "updateFailed": "[FR] Failed to update connector",
+          "connectorDeleted": "[FR] Connector deleted",
+          "deleteFailed": "[FR] Failed to delete connector",
+          "testFailed": "[FR] Failed to test connection"
+        },
+        "new": {
+          "title": "[FR] Add Data Connector",
+          "description": "[FR] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[FR] Back to Connectors",
+          "notFound": "[FR] Connector not found",
+          "actions": {
+            "test": "[FR] Test",
+            "syncNow": "[FR] Sync Now",
+            "delete": "[FR] Delete",
+            "cancel": "[FR] Cancel",
+            "deleting": "[FR] Deleting..."
+          },
+          "status": {
+            "completed": "[FR] Last sync successful",
+            "running": "[FR] Syncing...",
+            "pending": "[FR] Sync pending",
+            "failed": "[FR] Last sync failed",
+            "cancelled": "[FR] Sync cancelled",
+            "never": "[FR] Never synced"
+          },
+          "cards": {
+            "status": "[FR] Status",
+            "active": "[FR] Active",
+            "paused": "[FR] Paused",
+            "totalSyncs": "[FR] Total Syncs",
+            "errorCount": "[FR] Error Count"
+          },
+          "tabs": {
+            "overview": "[FR] Overview",
+            "configuration": "[FR] Configuration",
+            "syncHistory": "[FR] Sync History"
+          },
+          "overview": {
+            "details": "[FR] Details",
+            "description": "[FR] Description",
+            "provider": "[FR] Provider",
+            "type": "[FR] Type",
+            "syncSchedule": "[FR] Sync Schedule",
+            "manualOnly": "[FR] Manual only",
+            "created": "[FR] Created",
+            "recentSyncs": "[FR] Recent Syncs",
+            "lastSyncs": "[FR] Last {count} sync operations",
+            "noSyncHistory": "[FR] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[FR] Danger Zone",
+            "deleteConnector": "[FR] Delete this connector",
+            "deleteWarning": "[FR] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[FR] Sync History",
+            "description": "[FR] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[FR] Delete Connector",
+            "description": "[FR] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[FR] Sync started",
+            "syncFailed": "[FR] Failed to start sync",
+            "testFailed": "[FR] Test failed",
+            "connectorDeleted": "[FR] Connector deleted",
+            "deleteFailed": "[FR] Failed to delete connector",
+            "connectorUpdated": "[FR] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[FR] Memory & Context",
+      "description": "[FR] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[FR] Settings",
+        "clearAll": "[FR] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "Tableau de bord",
     "welcome": "Bon retour",
-    "overview": "Vue d'ensemble",
+    "overview": {
+      "activeAgents": "[FR] Active Agents",
+      "workflowsRun": "[FR] Workflows Run",
+      "insightsGenerated": "[FR] Insights Generated",
+      "avgRunTime": "[FR] Avg. Run Time",
+      "thisWeekChange": "[FR] +{count} this week",
+      "fromLastMonthPercent": "[FR] +{percent}% from last month",
+      "fasterPercent": "[FR] -{percent}% faster",
+      "active": "[FR] Active",
+      "noneActive": "[FR] None active",
+      "last24Hours": "[FR] Last 24 hours",
+      "noRunsYet": "[FR] No runs yet",
+      "noInsightsYet": "[FR] No insights yet",
+      "perWorkflow": "[FR] Per workflow",
+      "notAvailable": "[FR] N/A"
+    },
     "recentActivity": "Activite recente",
     "quickActions": {
       "title": "Actions rapides",
@@ -871,7 +1990,25 @@
       "createReport": "Creer un rapport",
       "published": "publie",
       "generating": "en generation",
-      "draft": "brouillon"
+      "draft": "brouillon",
+      "page": {
+        "tabs": {
+          "allReports": "[FR] All Reports",
+          "templates": "[FR] Templates",
+          "scheduled": "[FR] Scheduled",
+          "sharedWithMe": "[FR] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[FR] Next: {date}",
+          "recipientsCount": "[FR] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[FR] Shared by {name} on {date}",
+          "canView": "[FR] Can view",
+          "canEdit": "[FR] Can edit",
+          "canComment": "[FR] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "Projets actifs",
@@ -1035,7 +2172,60 @@
         "title": "Flux de travail",
         "description": "Creez et gerez vos pipelines de recherche automatises.",
         "newWorkflow": "Nouveau flux de travail",
-        "searchPlaceholder": "Rechercher des flux de travail..."
+        "searchPlaceholder": "Rechercher des flux de travail...",
+        "edit": {
+          "title": "[FR] Edit Workflow",
+          "description": "[FR] Modify workflow settings and configuration",
+          "newWorkflowName": "[FR] New Workflow",
+          "basicInfo": {
+            "title": "[FR] Basic Information",
+            "description": "[FR] Update the workflow name and description",
+            "workflowName": "[FR] Workflow Name",
+            "workflowNamePlaceholder": "[FR] Enter workflow name",
+            "descriptionPlaceholder": "[FR] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[FR] Schedule",
+            "description": "[FR] Configure when this workflow runs",
+            "runFrequency": "[FR] Run Frequency",
+            "selectSchedule": "[FR] Select schedule",
+            "selectStatus": "[FR] Select status",
+            "frequencies": {
+              "hourly": "[FR] Hourly",
+              "daily": "[FR] Daily",
+              "weekly": "[FR] Weekly",
+              "monthly": "[FR] Monthly",
+              "onDemand": "[FR] On-demand"
+            },
+            "statuses": {
+              "active": "[FR] Active",
+              "paused": "[FR] Paused",
+              "scheduled": "[FR] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[FR] Error Handling",
+            "description": "[FR] Configure retry behavior for failed runs",
+            "autoRetry": "[FR] Auto-retry on failure",
+            "autoRetryDescription": "[FR] Automatically retry the workflow if it fails",
+            "retryAttempts": "[FR] Retry Attempts",
+            "selectAttempts": "[FR] Select attempts",
+            "attempts": {
+              "one": "[FR] 1 attempt",
+              "two": "[FR] 2 attempts",
+              "three": "[FR] 3 attempts",
+              "five": "[FR] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[FR] Notifications",
+            "description": "[FR] Configure how you receive updates about this workflow",
+            "email": "[FR] Email notifications",
+            "emailDescription": "[FR] Receive email updates on completion or failure",
+            "slack": "[FR] Slack notifications",
+            "slackDescription": "[FR] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "Audiences",
@@ -1083,55 +2273,235 @@
         "unarchive": "Desarchiver",
         "workflows": "flux de travail",
         "reports": "rapports",
-        "agents": "agents"
+        "agents": "agents",
+        "detail": {
+          "defaultDescription": "[FR] Project description",
+          "projectSettings": "[FR] Project Settings",
+          "archiveProject": "[FR] Archive Project",
+          "deleteProject": "[FR] Delete Project",
+          "new": "[FR] New",
+          "stats": {
+            "teamMembers": "[FR] Team Members",
+            "workflows": "[FR] Workflows",
+            "running": "[FR] {count} running",
+            "reports": "[FR] Reports",
+            "generatedOutputs": "[FR] Generated outputs",
+            "agentsUsed": "[FR] Agents Used",
+            "totalRuns": "[FR] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[FR] Overview",
+            "workflows": "[FR] Workflows",
+            "reports": "[FR] Reports",
+            "agents": "[FR] Agents",
+            "team": "[FR] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[FR] Recent Workflows",
+            "recentReports": "[FR] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[FR] Project Workflows",
+            "newWorkflow": "[FR] New Workflow",
+            "lastRun": "[FR] Last run",
+            "run": "[FR] Run"
+          },
+          "reportsTab": {
+            "title": "[FR] Project Reports",
+            "newReport": "[FR] New Report",
+            "created": "[FR] Created"
+          },
+          "agentsTab": {
+            "title": "[FR] Agents Used",
+            "addAgent": "[FR] Add Agent",
+            "runsInProject": "[FR] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[FR] Team Members",
+            "addMember": "[FR] Add Member",
+            "remove": "[FR] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "Modifier le public",
-        "description": "Mettre à jour la configuration pour ce segment d'audience",
-        "saving": "Économie...",
-        "saveChanges": "Enregistrer les modifications",
-        "notFound": "Audience introuvable",
-        "notFoundDescription": "L'audience que vous essayez de modifier n'existe pas",
-        "notFoundDetailedDescription": "L'audience que vous recherchez n'existe pas ou a été supprimée.",
-        "backToAudiences": "Retour aux publics",
+      "pageTracker": "[FR] Audiences List",
+      "title": "[FR] Audiences",
+      "description": "[FR] Build and analyze custom consumer segments",
+      "aiBuilder": "[FR] AI Builder",
+      "newAudience": "[FR] New Audience",
+      "totalAudiences": "[FR] Total Audiences",
+      "avgReach": "[FR] Avg. Reach",
+      "markets": "[FR] Markets",
+      "usedThisWeek": "[FR] Used This Week",
+      "searchPlaceholder": "[FR] Search audiences...",
+      "allAudiences": "[FR] All Audiences",
+      "recentlyUsed": "[FR] Recently Used",
+      "favorites": "[FR] Favorites",
+      "marketplace": "[FR] Marketplace",
+      "aiAudienceBuilder": "[FR] AI Audience Builder",
+      "aiBuilderDescription": "[FR] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[FR] Compare Audiences",
+      "compareDescription": "[FR] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[FR] No audiences yet",
+        "description": "[FR] Create your first audience to get started",
+        "action": "[FR] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[FR] {count} markets",
+        "used": "[FR] Used {time}"
+      },
+      "new": {
+        "title": "[FR] Build New Audience",
+        "description": "[FR] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "Informations de base",
-          "description": "Définir le nom et la description de cette audience",
-          "audienceName": "Nom du public",
-          "audienceNamePlaceholder": "par exemple, les Millennials éco-conscients",
-          "descriptionPlaceholder": "Brève description de ce segment d'audience"
+          "audienceName": "[FR] Audience Name",
+          "audienceNamePlaceholder": "[FR] e.g., Eco-Conscious Millennials",
+          "description": "[FR] Description",
+          "descriptionPlaceholder": "[FR] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "Requête basée sur l'IA",
-          "description": "Décrivez votre audience en langage naturel",
-          "placeholder": "Par exemple, montrez-moi des millennials qui se soucient du développement durable, vivent dans des zones urbaines et achètent chez des marques respectueuses de l'environnement.",
-          "generateButton": "Générer des attributs (à venir)"
+          "title": "[FR] AI-Powered Query",
+          "description": "[FR] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[FR] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[FR] Generate Attributes"
         },
         "attributes": {
-          "title": "Attributs de ciblage",
-          "description": "Définir des critères spécifiques pour ce public",
-          "addAttribute": "Ajouter un attribut",
-          "noAttributes": "Aucun attribut défini pour l'instant",
-          "noAttributesHint": "Ajoutez des attributs pour définir vos critères d'audience",
-          "valuePlaceholder": "Valeur"
+          "title": "[FR] Attributes",
+          "add": "[FR] Add",
+          "age": "[FR] Age",
+          "gender": "[FR] Gender",
+          "income": "[FR] Income",
+          "interests": "[FR] Interests",
+          "is": "[FR] is",
+          "between": "[FR] between",
+          "contains": "[FR] contains"
         },
         "markets": {
-          "title": "Marchés",
-          "description": "Sélectionnez les marchés pour ce public",
-          "selectAtLeastOne": "Sélectionnez au moins un marché"
+          "title": "[FR] Markets",
+          "global": "[FR] Global",
+          "us": "[FR] United States",
+          "uk": "[FR] United Kingdom",
+          "de": "[FR] Germany",
+          "jp": "[FR] Japan"
         },
         "estimatedReach": {
-          "title": "Portée estimée",
-          "tbd": "À déterminer",
-          "matchCriteria": "les consommateurs correspondent à ces critères"
+          "title": "[FR] Estimated Reach",
+          "matchCriteria": "[FR] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "Annuler les modifications ?",
-          "description": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir partir ? Vos modifications seront perdues.",
-          "keepEditing": "Continuer à modifier",
-          "discardChanges": "Ignorer les modifications"
+        "actions": {
+          "save": "[FR] Save Audience",
+          "saving": "[FR] Saving...",
+          "cancel": "[FR] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[FR] Please enter an audience name",
+          "createFailed": "[FR] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[FR] Audience Detail",
+        "notFound": "[FR] Audience Not Found",
+        "notFoundDescription": "[FR] The requested audience could not be found",
+        "notFoundDetailedDescription": "[FR] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[FR] Back to Audiences",
+        "people": "[FR] people",
+        "addToFavorites": "[FR] Add to favorites",
+        "removeFromFavorites": "[FR] Remove from favorites",
+        "used": "[FR] Used {time}",
+        "tabs": {
+          "overview": "[FR] Overview",
+          "persona": "[FR] Persona",
+          "dayInLife": "[FR] Day in the Life",
+          "habits": "[FR] Habits & Behaviors",
+          "media": "[FR] Media Consumption",
+          "brands": "[FR] Brand Affinities",
+          "comments": "[FR] Comments",
+          "activity": "[FR] Activity",
+          "history": "[FR] History"
+        },
+        "actions": {
+          "explore": "[FR] Explore",
+          "share": "[FR] Share",
+          "export": "[FR] Export",
+          "edit": "[FR] Edit",
+          "autoRefresh": "[FR] Auto-refresh",
+          "pauseAutoRefresh": "[FR] Pause auto-refresh",
+          "enableAutoRefresh": "[FR] Enable auto-refresh",
+          "duplicate": "[FR] Duplicate",
+          "createLookalike": "[FR] Create Lookalike",
+          "addToCrosstab": "[FR] Add to Crosstab",
+          "addToDashboard": "[FR] Add to Dashboard",
+          "scheduleReport": "[FR] Schedule Report",
+          "copyLink": "[FR] Copy Link",
+          "copied": "[FR] Copied!",
+          "delete": "[FR] Delete"
+        },
+        "export": {
+          "asJson": "[FR] Export as JSON",
+          "asCsv": "[FR] Export as CSV",
+          "asPdf": "[FR] Export as PDF",
+          "toPowerPoint": "[FR] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[FR] Demographics",
+          "keyBehaviors": "[FR] Key Behaviors",
+          "interests": "[FR] Interests",
+          "audienceSummary": "[FR] Audience Summary",
+          "size": "[FR] Size",
+          "markets": "[FR] Markets",
+          "quickActions": "[FR] Quick Actions",
+          "createChart": "[FR] Create Chart",
+          "compareAudiences": "[FR] Compare Audiences",
+          "exportProfile": "[FR] Export Profile",
+          "copyLink": "[FR] Copy Link"
+        },
+        "activity": {
+          "title": "[FR] Activity Log",
+          "description": "[FR] Recent activity on this audience",
+          "viewed": "[FR] viewed",
+          "exported": "[FR] exported",
+          "edited": "[FR] edited",
+          "shared": "[FR] shared",
+          "created": "[FR] created",
+          "createdChart": "[FR] created chart",
+          "addedToCrosstab": "[FR] added to crosstab"
+        },
+        "share": {
+          "title": "[FR] Share Audience",
+          "description": "[FR] Share this audience with team members or external collaborators.",
+          "emailLabel": "[FR] Email address",
+          "emailPlaceholder": "[FR] email@example.com",
+          "roleLabel": "[FR] Role",
+          "viewer": "[FR] Viewer",
+          "editor": "[FR] Editor",
+          "admin": "[FR] Admin",
+          "shareLink": "[FR] Share link",
+          "cancel": "[FR] Cancel",
+          "share": "[FR] Share"
+        },
+        "schedule": {
+          "title": "[FR] Schedule Report",
+          "description": "[FR] Set up automatic email delivery of this audience report.",
+          "recipients": "[FR] Recipients",
+          "recipientsPlaceholder": "[FR] email@example.com, team@example.com",
+          "frequency": "[FR] Frequency",
+          "daily": "[FR] Daily",
+          "weekly": "[FR] Weekly",
+          "monthly": "[FR] Monthly",
+          "format": "[FR] Format",
+          "pdf": "[FR] PDF",
+          "csv": "[FR] CSV",
+          "json": "[FR] JSON",
+          "cancel": "[FR] Cancel",
+          "schedule": "[FR] Schedule"
+        },
+        "delete": {
+          "title": "[FR] Delete Audience",
+          "description": "[FR] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[FR] Cancel",
+          "delete": "[FR] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "Modifier le graphique",
-        "description": "Modifier la configuration et les paramètres de votre graphique",
-        "saving": "Économie...",
-        "saveChanges": "Enregistrer les modifications",
-        "backToCharts": "Retour aux graphiques",
-        "preview": {
-          "title": "Aperçu",
-          "description": "À quoi ressemblera votre graphique"
-        },
-        "unsavedChanges": "Modifications non enregistrées",
-        "authRequired": "Authentification requise",
-        "pleaseSignIn": "Veuillez vous connecter pour modifier ce graphique.",
-        "signIn": "Se connecter",
+      "pageTracker": "[FR] Charts List",
+      "title": "[FR] Charts",
+      "description": "[FR] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[FR] Templates",
+      "compare": "[FR] Compare",
+      "newChart": "[FR] New Chart",
+      "totalCharts": "[FR] Total Charts",
+      "totalViews": "[FR] Total Views",
+      "shares": "[FR] Shares",
+      "exports": "[FR] Exports",
+      "searchPlaceholder": "[FR] Search charts...",
+      "allCategory": "[FR] All",
+      "allCharts": "[FR] All Charts",
+      "recent": "[FR] Recent",
+      "mostViewed": "[FR] Most Viewed",
+      "favorites": "[FR] Favorites",
+      "emptyState": {
+        "title": "[FR] No charts found",
+        "description": "[FR] Create your first chart or try a different search",
+        "action": "[FR] Create Chart"
+      },
+      "comparison": {
+        "title": "[FR] Brand Health Comparison",
+        "description": "[FR] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[FR] Create New Chart",
+        "description": "[FR] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "Informations de base",
-          "description": "Définir le nom et la description de votre graphique",
-          "chartName": "Nom du graphique",
-          "chartNamePlaceholder": "Entrez le nom du graphique",
-          "descriptionPlaceholder": "Décrivez ce que montre ce graphique",
-          "selectStatus": "Sélectionnez le statut",
-          "dataSource": "Source de données",
-          "selectDataSource": "Sélectionnez la source de données"
+          "title": "[FR] Basic Information",
+          "chartName": "[FR] Chart Name",
+          "chartNamePlaceholder": "[FR] e.g., Social Media Usage by Age Group",
+          "description": "[FR] Description",
+          "descriptionPlaceholder": "[FR] Describe what this chart shows"
         },
         "chartType": {
-          "title": "Type de graphique",
-          "description": "Sélectionnez le type de visualisation pour vos données"
+          "title": "[FR] Chart Type",
+          "description": "[FR] Select the visualization type"
         },
         "dataConfig": {
-          "title": "Configuration des données",
-          "description": "Configurez les données de votre graphique",
-          "targetAudience": "Public cible",
-          "selectAudience": "Sélectionnez le public",
-          "timePeriod": "Période",
-          "selectTimePeriod": "Sélectionnez la période",
-          "primaryMetric": "Métrique principale",
-          "primaryMetricPlaceholder": "par exemple, utilisation des médias sociaux (%)",
-          "dimensions": "Dimensions",
-          "dimensionsHint": "Catégories pour regrouper vos données (par exemple, tranche d'âge, région)",
-          "addDimension": "Ajouter une dimension",
-          "measures": "Mesures",
-          "measuresHint": "Valeurs numériques à afficher (par exemple, nombre, pourcentage)",
-          "addMeasure": "Ajouter une mesure",
-          "filters": "Filtres",
-          "filtersHint": "Ajoutez des conditions pour filtrer vos données",
-          "addFilter": "Ajouter un filtre",
-          "field": "Champ",
-          "value": "Valeur",
-          "operators": {
-            "equals": "Égale",
-            "notEquals": "Pas égal",
-            "contains": "Contient",
-            "greaterThan": "Plus grand que",
-            "lessThan": "Moins que"
-          }
+          "title": "[FR] Data Configuration",
+          "targetAudience": "[FR] Target Audience",
+          "selectAudience": "[FR] Select audience",
+          "timePeriod": "[FR] Time Period",
+          "selectTimePeriod": "[FR] Select time period",
+          "dataSource": "[FR] Data Source",
+          "selectDataSource": "[FR] Select data source"
         },
-        "displayOptions": {
-          "title": "Options d'affichage",
-          "description": "Personnaliser l'apparence du graphique",
-          "showLegend": "Afficher la légende",
-          "showGrid": "Afficher la grille",
-          "showTooltip": "Afficher l'info-bulle"
+        "preview": {
+          "title": "[FR] Preview",
+          "description": "[FR] How your chart will look"
         },
-        "chartInfo": {
-          "title": "Informations sur le graphique",
-          "id": "IDENTIFIANT",
-          "created": "Créé",
-          "lastUpdated": "Dernière mise à jour"
+        "actions": {
+          "save": "[FR] Create Chart",
+          "saving": "[FR] Creating...",
+          "cancel": "[FR] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[FR] Chart Detail",
+        "notFound": "[FR] Chart Not Found",
+        "notFoundDescription": "[FR] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[FR] Back to Charts",
+        "views": "[FR] views",
+        "shares": "[FR] shares",
+        "addToFavorites": "[FR] Add to favorites",
+        "removeFromFavorites": "[FR] Remove from favorites",
+        "tabs": {
+          "chart": "[FR] Chart",
+          "data": "[FR] Data",
+          "settings": "[FR] Settings",
+          "comments": "[FR] Comments",
+          "activity": "[FR] Activity",
+          "history": "[FR] History"
         },
-        "discardDialog": {
-          "title": "Annuler les modifications ?",
-          "description": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir partir ? Vos modifications seront perdues.",
-          "keepEditing": "Continuer à modifier",
-          "discardChanges": "Ignorer les modifications"
+        "actions": {
+          "share": "[FR] Share",
+          "export": "[FR] Export",
+          "edit": "[FR] Edit",
+          "fullscreen": "[FR] Fullscreen",
+          "duplicate": "[FR] Duplicate",
+          "addToDashboard": "[FR] Add to Dashboard",
+          "scheduleReport": "[FR] Schedule Report",
+          "copyLink": "[FR] Copy Link",
+          "copied": "[FR] Copied!",
+          "delete": "[FR] Delete"
+        },
+        "export": {
+          "asJson": "[FR] Export as JSON",
+          "asCsv": "[FR] Export as CSV",
+          "asPng": "[FR] Export as PNG",
+          "asSvg": "[FR] Export as SVG",
+          "toPowerPoint": "[FR] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[FR] Chart Info",
+          "type": "[FR] Type",
+          "dataSource": "[FR] Data Source",
+          "audience": "[FR] Audience",
+          "timePeriod": "[FR] Time Period",
+          "created": "[FR] Created",
+          "lastUpdated": "[FR] Last Updated"
+        },
+        "share": {
+          "title": "[FR] Share Chart",
+          "description": "[FR] Share this chart with team members or external collaborators.",
+          "emailLabel": "[FR] Email address",
+          "emailPlaceholder": "[FR] email@example.com",
+          "roleLabel": "[FR] Role",
+          "viewer": "[FR] Viewer",
+          "editor": "[FR] Editor",
+          "admin": "[FR] Admin",
+          "shareLink": "[FR] Share link",
+          "embedCode": "[FR] Embed code",
+          "cancel": "[FR] Cancel",
+          "share": "[FR] Share"
+        },
+        "delete": {
+          "title": "[FR] Delete Chart",
+          "description": "[FR] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[FR] Cancel",
+          "delete": "[FR] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "Conscience minimale (%)",
           "minNPS": "Score NPS minimum"
         }
+      },
+      "pageTracker": "[FR] Brand Tracking",
+      "title": "[FR] Brand Tracking",
+      "description": "[FR] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[FR] All Brands",
+        "active": "[FR] Active",
+        "paused": "[FR] Paused",
+        "draft": "[FR] Draft"
+      },
+      "new": {
+        "title": "[FR] New Brand Tracking",
+        "description": "[FR] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[FR] Brand Information",
+          "description": "[FR] Provide details about the brand you want to track",
+          "brandNameLabel": "[FR] Brand Name *",
+          "brandNamePlaceholder": "[FR] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[FR] Description",
+          "descriptionPlaceholder": "[FR] Brief description of what you want to track...",
+          "industryLabel": "[FR] Industry",
+          "industryPlaceholder": "[FR] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[FR] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[FR] Daily",
+          "weekly": "[FR] Weekly",
+          "monthly": "[FR] Monthly",
+          "manual": "[FR] Manual Only"
+        },
+        "competitors": {
+          "label": "[FR] Competitors",
+          "placeholder": "[FR] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[FR] Metrics to Track",
+          "awareness": "[FR] Brand Awareness",
+          "consideration": "[FR] Consideration",
+          "preference": "[FR] Preference",
+          "loyalty": "[FR] Loyalty",
+          "nps": "[FR] Net Promoter Score (NPS)",
+          "sentiment": "[FR] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[FR] Cancel",
+          "create": "[FR] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[FR] Brand Tracking Detail",
+        "title": "[FR] Brand Health Dashboard",
+        "notFound": "[FR] Brand Study Not Found",
+        "notFoundDescription": "[FR] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[FR] Back to Brand Tracking",
+        "loading": "[FR] Loading...",
+        "people": "[FR] people",
+        "timePeriods": {
+          "1m": "[FR] 1 Month",
+          "3m": "[FR] 3 Months",
+          "6m": "[FR] 6 Months",
+          "1y": "[FR] 1 Year",
+          "all": "[FR] All Time"
+        },
+        "tabs": {
+          "overview": "[FR] Overview",
+          "trends": "[FR] Trends",
+          "competitors": "[FR] Competitors",
+          "insights": "[FR] Insights",
+          "comments": "[FR] Comments",
+          "activity": "[FR] Activity",
+          "history": "[FR] History"
+        },
+        "actions": {
+          "explore": "[FR] Explore",
+          "share": "[FR] Share",
+          "export": "[FR] Export",
+          "edit": "[FR] Edit",
+          "refresh": "[FR] Refresh",
+          "autoRefresh": "[FR] Auto-refresh",
+          "pauseAutoRefresh": "[FR] Pause auto-refresh",
+          "enableAutoRefresh": "[FR] Enable auto-refresh",
+          "duplicate": "[FR] Duplicate",
+          "copyLink": "[FR] Copy Link",
+          "copied": "[FR] Copied!",
+          "delete": "[FR] Delete",
+          "addToFavorites": "[FR] Add to favorites",
+          "removeFromFavorites": "[FR] Remove from favorites",
+          "scheduleReport": "[FR] Schedule Report"
+        },
+        "export": {
+          "asJson": "[FR] Export as JSON",
+          "asCsv": "[FR] Export as CSV",
+          "asPdf": "[FR] Export as PDF",
+          "toPowerPoint": "[FR] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[FR] Awareness",
+          "consideration": "[FR] Consideration",
+          "preference": "[FR] Preference",
+          "loyalty": "[FR] Loyalty",
+          "nps": "[FR] NPS",
+          "sentiment": "[FR] Sentiment",
+          "marketShare": "[FR] Market Share",
+          "vsTarget": "[FR] vs target",
+          "trend": "[FR] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[FR] Brand Health Trend",
+          "competitorComparison": "[FR] Competitor Comparison",
+          "sentimentBreakdown": "[FR] Sentiment Breakdown",
+          "metricsOverTime": "[FR] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[FR] Brand Overview",
+          "industry": "[FR] Industry",
+          "competitors": "[FR] Competitors",
+          "trackingFrequency": "[FR] Tracking Frequency",
+          "lastUpdated": "[FR] Last Updated",
+          "createdBy": "[FR] Created By",
+          "dateRange": "[FR] Date Range"
+        },
+        "insights": {
+          "title": "[FR] Key Insights",
+          "aiGenerated": "[FR] AI-Generated",
+          "noInsights": "[FR] No insights available yet",
+          "generateInsights": "[FR] Generate Insights"
+        },
+        "activity": {
+          "title": "[FR] Activity Log",
+          "description": "[FR] Recent activity on this brand study",
+          "viewed": "[FR] viewed",
+          "exported": "[FR] exported",
+          "edited": "[FR] edited",
+          "shared": "[FR] shared",
+          "created": "[FR] created"
+        },
+        "share": {
+          "title": "[FR] Share Brand Study",
+          "description": "[FR] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[FR] Email address",
+          "emailPlaceholder": "[FR] email@example.com",
+          "roleLabel": "[FR] Role",
+          "viewer": "[FR] Viewer",
+          "editor": "[FR] Editor",
+          "admin": "[FR] Admin",
+          "shareLink": "[FR] Share link",
+          "cancel": "[FR] Cancel",
+          "share": "[FR] Share"
+        },
+        "schedule": {
+          "title": "[FR] Schedule Report",
+          "description": "[FR] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[FR] Recipients",
+          "recipientsPlaceholder": "[FR] email@example.com, team@example.com",
+          "frequency": "[FR] Frequency",
+          "daily": "[FR] Daily",
+          "weekly": "[FR] Weekly",
+          "monthly": "[FR] Monthly",
+          "format": "[FR] Format",
+          "pdf": "[FR] PDF",
+          "csv": "[FR] CSV",
+          "json": "[FR] JSON",
+          "cancel": "[FR] Cancel",
+          "schedule": "[FR] Schedule"
+        },
+        "delete": {
+          "title": "[FR] Delete Brand Study",
+          "description": "[FR] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[FR] Cancel",
+          "delete": "[FR] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[FR] Select organization",
+      "searchPlaceholder": "[FR] Search organizations...",
+      "noOrganizationFound": "[FR] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[FR] Weekly Activity",
+      "monthlyTrend": "[FR] Monthly Trend",
+      "workflows": "[FR] Workflows",
+      "insights": "[FR] Insights",
+      "days": {
+        "mon": "[FR] Mon",
+        "tue": "[FR] Tue",
+        "wed": "[FR] Wed",
+        "thu": "[FR] Thu",
+        "fri": "[FR] Fri",
+        "sat": "[FR] Sat",
+        "sun": "[FR] Sun"
+      },
+      "months": {
+        "jan": "[FR] Jan",
+        "feb": "[FR] Feb",
+        "mar": "[FR] Mar",
+        "apr": "[FR] Apr",
+        "may": "[FR] May",
+        "jun": "[FR] Jun",
+        "jul": "[FR] Jul",
+        "aug": "[FR] Aug",
+        "sep": "[FR] Sep",
+        "oct": "[FR] Oct",
+        "nov": "[FR] Nov",
+        "dec": "[FR] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[FR] Active Agents",
+      "manage": "[FR] Manage",
+      "activeTasks": "[FR] {count} active tasks",
+      "idle": "[FR] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[FR] Untitled Dashboard",
+      "addWidget": "[FR] Add Widget",
+      "undoShortcut": "[FR] Undo (Ctrl+Z)",
+      "redoShortcut": "[FR] Redo (Ctrl+Y)",
+      "grid": "[FR] Grid",
+      "snap": "[FR] Snap",
+      "widgetsCount": "[FR] {count} widgets",
+      "exportFormat": "[FR] Export Format",
+      "export": {
+        "pdf": "[FR] PDF Document",
+        "png": "[FR] PNG Image",
+        "json": "[FR] JSON Config"
+      },
+      "duplicate": "[FR] Duplicate",
+      "fullscreen": "[FR] Fullscreen",
+      "lock": "[FR] Lock",
+      "unlock": "[FR] Unlock",
+      "hide": "[FR] Hide",
+      "chooseWidgetType": "[FR] Choose a widget type to add to your dashboard",
+      "editWidget": "[FR] Edit Widget",
+      "newWidget": "[FR] New {type}",
+      "enterTextContent": "[FR] Enter text content...",
+      "unknownWidgetType": "[FR] Unknown widget type",
+      "target": "[FR] Target",
+      "table": {
+        "name": "[FR] Name",
+        "value": "[FR] Value",
+        "change": "[FR] Change",
+        "item": "[FR] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[FR] Chart",
+        "metric": "[FR] Metric",
+        "table": "[FR] Table",
+        "text": "[FR] Text",
+        "image": "[FR] Image",
+        "kpi": "[FR] KPI",
+        "kpiCard": "[FR] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[FR] Visualize data with various chart types",
+        "kpi": "[FR] Display key performance indicators",
+        "metric": "[FR] Show a single metric value",
+        "table": "[FR] Display data in tabular format",
+        "text": "[FR] Add text content or notes",
+        "image": "[FR] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[FR] General",
+        "data": "[FR] Data",
+        "style": "[FR] Style",
+        "advanced": "[FR] Advanced"
+      },
+      "fields": {
+        "title": "[FR] Title",
+        "subtitle": "[FR] Subtitle",
+        "chartType": "[FR] Chart Type",
+        "content": "[FR] Content",
+        "value": "[FR] Value",
+        "changePercent": "[FR] Change (%)",
+        "target": "[FR] Target",
+        "dataSource": "[FR] Data Source",
+        "refreshInterval": "[FR] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[FR] Bar Chart",
+        "line": "[FR] Line Chart",
+        "area": "[FR] Area Chart",
+        "pie": "[FR] Pie Chart",
+        "donut": "[FR] Donut Chart",
+        "radar": "[FR] Radar Chart",
+        "scatter": "[FR] Scatter Plot",
+        "funnel": "[FR] Funnel Chart",
+        "treemap": "[FR] Treemap",
+        "heatmap": "[FR] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[FR] Sample Data",
+        "api": "[FR] API Endpoint",
+        "crosstab": "[FR] Crosstab",
+        "custom": "[FR] Custom Query"
+      },
+      "refreshIntervalHint": "[FR] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[FR] Show Legend",
+        "showGrid": "[FR] Show Grid",
+        "showTooltip": "[FR] Show Tooltip",
+        "backgroundColor": "[FR] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[FR] Lock Widget",
+        "lockWidgetHint": "[FR] Prevent moving and resizing",
+        "zIndex": "[FR] Z-Index"
+      },
+      "dashboardSettings": "[FR] Dashboard Settings",
+      "saveSettings": "[FR] Save Settings",
+      "settings": {
+        "dashboardName": "[FR] Dashboard Name",
+        "gridColumns": "[FR] Grid Columns",
+        "gridRows": "[FR] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[FR] Analytics",
+      "title": "[FR] Analytics",
+      "description": "[FR] Track your research performance and insights"
     }
   },
   "audiences": {

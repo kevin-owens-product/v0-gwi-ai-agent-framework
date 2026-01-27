@@ -7,6 +7,7 @@
 "use client"
 
 import { Suspense } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -15,6 +16,8 @@ import { ConnectorForm } from '@/components/connectors/ConnectorForm'
 import { PageTracker } from '@/components/tracking/PageTracker'
 
 export default function NewConnectorPage() {
+  const t = useTranslations('dashboard.integrations.connectors.new')
+
   return (
     <div className="space-y-6">
       <PageTracker pageName="New Connector" />
@@ -27,9 +30,9 @@ export default function NewConnectorPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold">Add Data Connector</h1>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Connect a new data source to your organization
+            {t('description')}
           </p>
         </div>
       </div>

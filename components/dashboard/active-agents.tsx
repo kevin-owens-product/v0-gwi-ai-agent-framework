@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Users, Lightbulb, Target, PieChart, Bot, Loader2 } from "lucide-react"
@@ -37,6 +38,7 @@ const demoAgents = [
 export function ActiveAgents() {
   const [agents, setAgents] = useState<Agent[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const t = useTranslations('dashboard.activeAgents')
 
   useEffect(() => {
     async function fetchAgents() {
@@ -68,10 +70,10 @@ export function ActiveAgents() {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-lg font-semibold text-foreground">Active Agents</CardTitle>
+        <CardTitle className="text-lg font-semibold text-foreground">{t('title')}</CardTitle>
         <Link href="/dashboard/agents">
           <Button variant="ghost" size="sm">
-            Manage
+            {t('manage')}
           </Button>
         </Link>
       </CardHeader>
@@ -96,7 +98,7 @@ export function ActiveAgents() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">{agent.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {isActive ? `${agent._count?.runs} active tasks` : "Idle"}
+                    {isActive ? t('activeTasks', { count: agent._count?.runs || 0 }) : t('idle')}
                   </p>
                 </div>
                 <div

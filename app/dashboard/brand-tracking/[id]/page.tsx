@@ -87,6 +87,7 @@ import {
 } from "@/components/ui/tooltip"
 import { CommentsPanel } from "@/components/shared/comments-panel"
 import { VersionHistory } from "@/components/shared/version-history"
+import { useTranslations } from "next-intl"
 
 interface BrandTracking {
   id: string
@@ -110,14 +111,53 @@ interface BrandTracking {
     nps: number | null
     sentimentScore: number | null
     marketShare: number | null
-    competitorData?: Record<string, any>
-    audienceBreakdown?: Record<string, any>
+    competitorData?: Record<string, number | string>
+    audienceBreakdown?: Record<string, number | string>
+    insights?: string[]
+  }>
+}
+
+interface ApiBrandTrackingData {
+  id: string
+  brandName: string
+  description?: string
+  industry?: string
+  status?: string
+  competitors?: string[] | string
+  audiences?: string[] | string
+  _count?: { snapshots?: number }
+  snapshotCount?: number
+  lastSnapshot?: string
+  createdAt: string
+  snapshots?: Array<{
+    id: string
+    snapshotDate: string
+    brandHealth?: number
+    awareness?: number
+    consideration?: number
+    preference?: number
+    loyalty?: number
+    nps?: number
+    sentimentScore?: number
+    marketShare?: number
+    metrics?: {
+      brandHealth?: number
+      awareness?: number
+      consideration?: number
+      preference?: number
+      loyalty?: number
+      nps?: number
+      sentimentScore?: number
+      marketShare?: number
+    }
+    competitorData?: Record<string, number | string>
+    audienceBreakdown?: Record<string, number | string>
     insights?: string[]
   }>
 }
 
 // Transform API response to frontend format
-function transformApiBrandTracking(apiData: any): BrandTracking | null {
+function transformApiBrandTracking(apiData: ApiBrandTrackingData): BrandTracking | null {
   if (!apiData || !apiData.id) return null
 
   // Ensure competitors is an array (stored as JSON in seed)
@@ -146,7 +186,7 @@ function transformApiBrandTracking(apiData: any): BrandTracking | null {
 
   // Transform snapshots if present
   const snapshots = Array.isArray(apiData.snapshots)
-    ? apiData.snapshots.map((snapshot: any) => ({
+    ? apiData.snapshots.map((snapshot) => ({
         id: snapshot.id,
         snapshotDate: snapshot.snapshotDate,
         brandHealth: snapshot.brandHealth ?? snapshot.metrics?.brandHealth ?? null,
@@ -240,10 +280,11 @@ function generateDemoSnapshots(_brandName: string) {
 export default function BrandTrackingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
+  const t = useTranslations("dashboard.brandTracking.detail")
   const [brandTracking, setBrandTracking] = useState<BrandTracking | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [_isExporting, setIsExporting] = useState(false)
+  const [, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showShareDialog, setShowShareDialog] = useState(false)
@@ -257,6 +298,7 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
 
   useEffect(() => {
     fetchBrandTracking()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   async function fetchBrandTracking() {
@@ -467,9 +509,9 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
   if (!brandTracking) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-lg font-semibold">Brand tracking not found</h3>
+        <h3 className="text-lg font-semibold">{t("notFound")}</h3>
         <Button className="mt-4" asChild>
-          <Link href="/dashboard/brand-tracking">Back to Brand Tracking</Link>
+          <Link href="/dashboard/brand-tracking">{t("backToBrandTracking")}</Link>
         </Button>
       </div>
     )
@@ -902,8 +944,8 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
               resourceId={id}
               resourceName={brandTracking.brandName}
               versions={[]}
-              onRestore={(versionId) => {
-                console.log("Restoring version:", versionId)
+              onRestore={(_versionId) => {
+                // Version restore functionality to be implemented
               }}
             />
           </Card>

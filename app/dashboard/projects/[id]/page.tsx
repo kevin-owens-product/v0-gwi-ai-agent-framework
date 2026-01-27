@@ -22,6 +22,7 @@ import {
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useTranslations } from "next-intl"
 
 const projectsData: Record<
   string,
@@ -121,6 +122,8 @@ export default function ProjectDetailPage() {
   const params = useParams()
   const id = params.id as string
   const [activeTab, setActiveTab] = useState("overview")
+  const t = useTranslations('dashboard.pages.projects.detail')
+  const tCommon = useTranslations('common')
 
   const project = projectsData[id] || {
     id,
@@ -128,7 +131,7 @@ export default function ProjectDetailPage() {
       .split("-")
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" "),
-    description: "Project description",
+    description: t('defaultDescription'),
     status: "active",
     createdAt: new Date().toISOString().split("T")[0],
     members: [],
@@ -174,10 +177,10 @@ export default function ProjectDetailPage() {
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />
-              Project Settings
+              {t('projectSettings')}
             </DropdownMenuItem>
-            <DropdownMenuItem>Archive Project</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">Delete Project</DropdownMenuItem>
+            <DropdownMenuItem>{t('archiveProject')}</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">{t('deleteProject')}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -185,7 +188,7 @@ export default function ProjectDetailPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Team Members</CardDescription>
+            <CardDescription>{t('stats.teamMembers')}</CardDescription>
             <CardTitle className="text-2xl">{project.members.length}</CardTitle>
           </CardHeader>
           <CardContent>
@@ -205,32 +208,32 @@ export default function ProjectDetailPage() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Workflows</CardDescription>
+            <CardDescription>{t('stats.workflows')}</CardDescription>
             <CardTitle className="text-2xl">{project.workflows.length}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              {project.workflows.filter((w) => w.status === "running").length} running
+              {t('stats.running', { count: project.workflows.filter((w) => w.status === "running").length })}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Reports</CardDescription>
+            <CardDescription>{t('stats.reports')}</CardDescription>
             <CardTitle className="text-2xl">{project.reports.length}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">Generated outputs</p>
+            <p className="text-sm text-muted-foreground">{t('stats.generatedOutputs')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Agents Used</CardDescription>
+            <CardDescription>{t('stats.agentsUsed')}</CardDescription>
             <CardTitle className="text-2xl">{project.agents.length}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              {project.agents.reduce((acc, a) => acc + a.runs, 0)} total runs
+              {t('stats.totalRuns', { count: project.agents.reduce((acc, a) => acc + a.runs, 0) })}
             </p>
           </CardContent>
         </Card>
@@ -238,22 +241,22 @@ export default function ProjectDetailPage() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="workflows">Workflows</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-          <TabsTrigger value="agents">Agents</TabsTrigger>
-          <TabsTrigger value="team">Team</TabsTrigger>
+          <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
+          <TabsTrigger value="workflows">{t('tabs.workflows')}</TabsTrigger>
+          <TabsTrigger value="reports">{t('tabs.reports')}</TabsTrigger>
+          <TabsTrigger value="agents">{t('tabs.agents')}</TabsTrigger>
+          <TabsTrigger value="team">{t('tabs.team')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4 mt-4">
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-base">Recent Workflows</CardTitle>
+                <CardTitle className="text-base">{t('overview.recentWorkflows')}</CardTitle>
                 <Link href="/dashboard/workflows/new">
                   <Button variant="ghost" size="sm" className="gap-1">
                     <Plus className="h-3.5 w-3.5" />
-                    New
+                    {t('new')}
                   </Button>
                 </Link>
               </CardHeader>
@@ -271,11 +274,11 @@ export default function ProjectDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-base">Recent Reports</CardTitle>
+                <CardTitle className="text-base">{t('overview.recentReports')}</CardTitle>
                 <Link href="/dashboard/reports/new">
                   <Button variant="ghost" size="sm" className="gap-1">
                     <Plus className="h-3.5 w-3.5" />
-                    New
+                    {t('new')}
                   </Button>
                 </Link>
               </CardHeader>
@@ -299,11 +302,11 @@ export default function ProjectDetailPage() {
         <TabsContent value="workflows" className="mt-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Project Workflows</CardTitle>
+              <CardTitle>{t('workflowsTab.title')}</CardTitle>
               <Link href="/dashboard/workflows/new">
                 <Button className="gap-2">
                   <Plus className="h-4 w-4" />
-                  New Workflow
+                  {t('workflowsTab.newWorkflow')}
                 </Button>
               </Link>
             </CardHeader>
@@ -315,7 +318,7 @@ export default function ProjectDetailPage() {
                       <Workflow className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <p className="font-medium">{workflow.name}</p>
-                        <p className="text-sm text-muted-foreground">Last run: {workflow.lastRun}</p>
+                        <p className="text-sm text-muted-foreground">{t('workflowsTab.lastRun')}: {workflow.lastRun}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -331,7 +334,7 @@ export default function ProjectDetailPage() {
                         {workflow.status}
                       </Badge>
                       <Button variant="outline" size="sm">
-                        Run
+                        {t('workflowsTab.run')}
                       </Button>
                     </div>
                   </div>
@@ -344,11 +347,11 @@ export default function ProjectDetailPage() {
         <TabsContent value="reports" className="mt-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Project Reports</CardTitle>
+              <CardTitle>{t('reportsTab.title')}</CardTitle>
               <Link href="/dashboard/reports/new">
                 <Button className="gap-2">
                   <Plus className="h-4 w-4" />
-                  New Report
+                  {t('reportsTab.newReport')}
                 </Button>
               </Link>
             </CardHeader>
@@ -361,14 +364,14 @@ export default function ProjectDetailPage() {
                       <div>
                         <p className="font-medium">{report.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          Created: {new Date(report.createdAt).toLocaleDateString()}
+                          {t('reportsTab.created')}: {new Date(report.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <Badge variant="outline">{report.type}</Badge>
                       <Button variant="outline" size="sm">
-                        View
+                        {tCommon('viewDetails')}
                       </Button>
                     </div>
                   </div>
@@ -381,11 +384,11 @@ export default function ProjectDetailPage() {
         <TabsContent value="agents" className="mt-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Agents Used</CardTitle>
+              <CardTitle>{t('agentsTab.title')}</CardTitle>
               <Link href="/dashboard/agents">
                 <Button className="gap-2">
                   <Plus className="h-4 w-4" />
-                  Add Agent
+                  {t('agentsTab.addAgent')}
                 </Button>
               </Link>
             </CardHeader>
@@ -397,7 +400,7 @@ export default function ProjectDetailPage() {
                       <Bot className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <p className="font-medium">{agent.name}</p>
-                        <p className="text-sm text-muted-foreground">{agent.runs} runs in this project</p>
+                        <p className="text-sm text-muted-foreground">{t('agentsTab.runsInProject', { count: agent.runs })}</p>
                       </div>
                     </div>
                     <Badge variant={agent.type === "Custom" ? "default" : "secondary"}>{agent.type}</Badge>
@@ -411,10 +414,10 @@ export default function ProjectDetailPage() {
         <TabsContent value="team" className="mt-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Team Members</CardTitle>
+              <CardTitle>{t('teamTab.title')}</CardTitle>
               <Button className="gap-2">
                 <Plus className="h-4 w-4" />
-                Add Member
+                {t('teamTab.addMember')}
               </Button>
             </CardHeader>
             <CardContent>
@@ -431,7 +434,7 @@ export default function ProjectDetailPage() {
                       </div>
                     </div>
                     <Button variant="ghost" size="sm">
-                      Remove
+                      {t('teamTab.remove')}
                     </Button>
                   </div>
                 ))}

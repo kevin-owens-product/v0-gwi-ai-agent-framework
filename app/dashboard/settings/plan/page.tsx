@@ -2,6 +2,7 @@
 
 import { useOrganizationPlan, useOrganizationUsage } from '@/hooks/useOrganization'
 import { useOrganizationFeatures } from '@/hooks/useFeatureAccess'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -12,57 +13,58 @@ import { Check, Crown, Zap, Star, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-const PLAN_FEATURES = {
-  STARTER: [
-    'Up to 5 team members',
-    '10 agents',
-    '50 workflow runs/month',
-    'Basic analytics',
-    'Email support',
-  ],
-  PROFESSIONAL: [
-    'Up to 20 team members',
-    'Unlimited agents',
-    'Unlimited workflow runs',
-    'Advanced analytics',
-    'Priority support',
-    'Custom integrations',
-    'API access',
-  ],
-  ENTERPRISE: [
-    'Unlimited team members',
-    'Unlimited everything',
-    'Advanced security',
-    'SSO & SAML',
-    'Dedicated support',
-    'Custom SLAs',
-    'On-premise option',
-    'White-label',
-  ],
-}
-
-const TIER_INFO = {
-  STARTER: {
-    name: 'Starter',
-    price: '$49/mo',
-    icon: Star,
-    color: 'blue',
-  },
-  PROFESSIONAL: {
-    name: 'Professional',
-    price: '$199/mo',
-    icon: Zap,
-    color: 'purple',
-  },
-  ENTERPRISE: {
-    name: 'Enterprise',
-    price: 'Custom',
-    icon: Crown,
-    color: 'yellow',
-  },
-}
-
 export default function PlanPage() {
+  const t = useTranslations("settings.plan")
+
+  const PLAN_FEATURES = {
+    STARTER: [
+      t("tiers.starter.features.members"),
+      t("tiers.starter.features.agents"),
+      t("tiers.starter.features.runs"),
+      t("tiers.starter.features.analytics"),
+      t("tiers.starter.features.support"),
+    ],
+    PROFESSIONAL: [
+      t("tiers.professional.features.members"),
+      t("tiers.professional.features.agents"),
+      t("tiers.professional.features.runs"),
+      t("tiers.professional.features.analytics"),
+      t("tiers.professional.features.support"),
+      t("tiers.professional.features.integrations"),
+      t("tiers.professional.features.api"),
+    ],
+    ENTERPRISE: [
+      t("tiers.enterprise.features.members"),
+      t("tiers.enterprise.features.everything"),
+      t("tiers.enterprise.features.security"),
+      t("tiers.enterprise.features.sso"),
+      t("tiers.enterprise.features.support"),
+      t("tiers.enterprise.features.sla"),
+      t("tiers.enterprise.features.onPremise"),
+      t("tiers.enterprise.features.whiteLabel"),
+    ],
+  }
+
+  const TIER_INFO = {
+    STARTER: {
+      name: t("tiers.starter.name"),
+      price: t("tiers.starter.price"),
+      icon: Star,
+      color: 'blue',
+    },
+    PROFESSIONAL: {
+      name: t("tiers.professional.name"),
+      price: t("tiers.professional.price"),
+      icon: Zap,
+      color: 'purple',
+    },
+    ENTERPRISE: {
+      name: t("tiers.enterprise.name"),
+      price: t("tiers.enterprise.price"),
+      icon: Crown,
+      color: 'yellow',
+    },
+  }
   const { tier, isLoading: planLoading } = useOrganizationPlan()
   const { usage, isLoading: usageLoading } = useOrganizationUsage()
   const counts = usage?.counts
@@ -81,7 +83,7 @@ export default function PlanPage() {
       if (!response.ok) throw new Error('Failed to request upgrade')
 
       toast.success('Upgrade request submitted! Our team will contact you shortly.')
-    } catch (error) {
+    } catch {
       toast.error('Failed to submit upgrade request')
     } finally {
       setUpgrading(false)
@@ -105,9 +107,9 @@ export default function PlanPage() {
     <div className="space-y-8">
       {/* Current Plan Section */}
       <div>
-        <h1 className="text-3xl font-bold mb-2">Plan & Billing</h1>
+        <h1 className="text-3xl font-bold mb-2">{t("title")}</h1>
         <p className="text-muted-foreground">
-          Manage your subscription and view usage metrics
+          {t("description")}
         </p>
       </div>
 
@@ -116,10 +118,10 @@ export default function PlanPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Current Plan</CardTitle>
-              <CardDescription>Your active subscription details</CardDescription>
+              <CardTitle>{t("currentPlan")}</CardTitle>
+              <CardDescription>{t("currentPlanDescription")}</CardDescription>
             </div>
-            <FeatureBadge tier={currentTier as any} />
+            <FeatureBadge tier={currentTier as 'STARTER' | 'PROFESSIONAL' | 'ENTERPRISE'} />
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -130,7 +132,7 @@ export default function PlanPage() {
             </div>
             {currentTier !== 'ENTERPRISE' && (
               <Button onClick={() => handleUpgrade(currentTier === 'STARTER' ? 'PROFESSIONAL' : 'ENTERPRISE')}>
-                Upgrade Plan
+                {t("upgradePlan")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             )}
@@ -138,19 +140,19 @@ export default function PlanPage() {
 
           <div className="grid grid-cols-2 gap-4 pt-4 border-t">
             <div>
-              <p className="text-sm text-muted-foreground">Team Members</p>
+              <p className="text-sm text-muted-foreground">{t("teamMembers")}</p>
               <p className="text-2xl font-bold">{counts?.members || 0}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Agents</p>
+              <p className="text-sm text-muted-foreground">{t("agents")}</p>
               <p className="text-2xl font-bold">{counts?.agents || 0}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Workflows</p>
+              <p className="text-sm text-muted-foreground">{t("workflows")}</p>
               <p className="text-2xl font-bold">{counts?.workflows || 0}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Reports</p>
+              <p className="text-sm text-muted-foreground">{t("reports")}</p>
               <p className="text-2xl font-bold">{counts?.reports || 0}</p>
             </div>
           </div>
@@ -160,20 +162,20 @@ export default function PlanPage() {
       {/* Usage Meters */}
       <Card>
         <CardHeader>
-          <CardTitle>Usage This Month</CardTitle>
-          <CardDescription>Monitor your resource usage against plan limits</CardDescription>
+          <CardTitle>{t("usageThisMonth")}</CardTitle>
+          <CardDescription>{t("usageDescription")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <UsageMeter feature="TEAM_MEMBERS" label="Team Members" />
-          <UsageMeter feature="AGENTS" label="Agents" />
-          <UsageMeter feature="WORKFLOW_RUNS" label="Workflow Runs" />
+          <UsageMeter feature="TEAM_MEMBERS" label={t("teamMembers")} />
+          <UsageMeter feature="AGENTS" label={t("agents")} />
+          <UsageMeter feature="WORKFLOW_RUNS" label={t("workflows")} />
           <UsageMeter feature="API_REQUESTS" label="API Requests" />
         </CardContent>
       </Card>
 
       {/* Plan Comparison */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Compare Plans</h2>
+        <h2 className="text-2xl font-bold mb-4">{t("comparePlans")}</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {Object.entries(TIER_INFO).map(([tierKey, info]) => {
             const Icon = info.icon
@@ -189,7 +191,7 @@ export default function PlanPage() {
                   <div className="flex items-center justify-between">
                     <Icon className="h-6 w-6" />
                     {isCurrentPlan && (
-                      <Badge variant="secondary">Current Plan</Badge>
+                      <Badge variant="secondary">{t("currentPlan")}</Badge>
                     )}
                   </div>
                   <CardTitle>{info.name}</CardTitle>
@@ -212,7 +214,7 @@ export default function PlanPage() {
                       onClick={() => handleUpgrade(tierKey)}
                       disabled={upgrading}
                     >
-                      {upgrading ? 'Requesting...' : `Upgrade to ${info.name}`}
+                      {upgrading ? t("requesting") : t("upgradeTo", { plan: info.name })}
                     </Button>
                   )}
                 </CardContent>
@@ -225,12 +227,12 @@ export default function PlanPage() {
       {/* Features List */}
       <Card>
         <CardHeader>
-          <CardTitle>Your Features</CardTitle>
-          <CardDescription>All features included in your current plan</CardDescription>
+          <CardTitle>{t("yourFeatures")}</CardTitle>
+          <CardDescription>{t("yourFeaturesDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-2 gap-4">
-            {features.map((feature: any) => (
+            {features.map((feature: { key: string; name: string; category: string | null; limit: number | null }) => (
               <div key={feature.key} className="flex items-start gap-3 p-3 rounded-lg border">
                 <Check className="h-4 w-4 text-green-600 mt-0.5" />
                 <div className="flex-1">
@@ -238,7 +240,7 @@ export default function PlanPage() {
                   <div className="text-sm text-muted-foreground">{feature.category}</div>
                   {feature.limit && (
                     <div className="text-sm text-muted-foreground mt-1">
-                      Limit: {feature.limit}
+                      {t("limit", { limit: feature.limit })}
                     </div>
                   )}
                 </div>

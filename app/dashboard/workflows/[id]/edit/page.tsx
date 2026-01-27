@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { ArrowLeft, Save, Loader2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface WorkflowData {
   id: string
@@ -143,6 +144,8 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false)
   const [workflow, setWorkflow] = useState<WorkflowData | null>(null)
+  const t = useTranslations('dashboard.pages.workflows.edit')
+  const tCommon = useTranslations('common')
 
   useEffect(() => {
     // Load workflow data
@@ -153,7 +156,7 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
       // For dynamically created workflows, create default values
       setWorkflow({
         id,
-        name: "New Workflow",
+        name: t('newWorkflowName'),
         description: "",
         status: "active",
         schedule: "on-demand",
@@ -163,7 +166,7 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
         retryAttempts: 3,
       })
     }
-  }, [id])
+  }, [id, t])
 
   const handleSave = async () => {
     if (!workflow) return
@@ -194,17 +197,17 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Edit Workflow</h1>
-            <p className="text-muted-foreground">Modify workflow settings and configuration</p>
+            <h1 className="text-2xl font-bold text-foreground">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('description')}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => router.push(`/dashboard/workflows/${id}`)}>
-            Cancel
+            {tCommon('cancel')}
           </Button>
           <Button onClick={handleSave} disabled={isSaving} className="gap-2">
             {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            Save Changes
+            {tCommon('saveChanges')}
           </Button>
         </div>
       </div>
@@ -212,26 +215,26 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
       {/* Basic Info */}
       <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle>Basic Information</CardTitle>
-          <CardDescription>Update the workflow name and description</CardDescription>
+          <CardTitle>{t('basicInfo.title')}</CardTitle>
+          <CardDescription>{t('basicInfo.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Workflow Name</Label>
+            <Label htmlFor="name">{t('basicInfo.workflowName')}</Label>
             <Input
               id="name"
               value={workflow.name}
               onChange={(e) => setWorkflow(prev => prev ? { ...prev, name: e.target.value } : null)}
-              placeholder="Enter workflow name"
+              placeholder={t('basicInfo.workflowNamePlaceholder')}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{tCommon('description')}</Label>
             <Textarea
               id="description"
               value={workflow.description}
               onChange={(e) => setWorkflow(prev => prev ? { ...prev, description: e.target.value } : null)}
-              placeholder="Describe what this workflow does"
+              placeholder={t('basicInfo.descriptionPlaceholder')}
               rows={3}
             />
           </div>
@@ -241,41 +244,41 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
       {/* Schedule */}
       <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle>Schedule</CardTitle>
-          <CardDescription>Configure when this workflow runs</CardDescription>
+          <CardTitle>{t('schedule.title')}</CardTitle>
+          <CardDescription>{t('schedule.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="schedule">Run Frequency</Label>
+            <Label htmlFor="schedule">{t('schedule.runFrequency')}</Label>
             <Select
               value={workflow.schedule}
               onValueChange={(value) => setWorkflow(prev => prev ? { ...prev, schedule: value } : null)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select schedule" />
+                <SelectValue placeholder={t('schedule.selectSchedule')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="hourly">Hourly</SelectItem>
-                <SelectItem value="daily">Daily</SelectItem>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="on-demand">On-demand</SelectItem>
+                <SelectItem value="hourly">{t('schedule.frequencies.hourly')}</SelectItem>
+                <SelectItem value="daily">{t('schedule.frequencies.daily')}</SelectItem>
+                <SelectItem value="weekly">{t('schedule.frequencies.weekly')}</SelectItem>
+                <SelectItem value="monthly">{t('schedule.frequencies.monthly')}</SelectItem>
+                <SelectItem value="on-demand">{t('schedule.frequencies.onDemand')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="status">{tCommon('status')}</Label>
             <Select
               value={workflow.status}
               onValueChange={(value) => setWorkflow(prev => prev ? { ...prev, status: value } : null)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select status" />
+                <SelectValue placeholder={t('schedule.selectStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="paused">Paused</SelectItem>
-                <SelectItem value="scheduled">Scheduled</SelectItem>
+                <SelectItem value="active">{t('schedule.statuses.active')}</SelectItem>
+                <SelectItem value="paused">{t('schedule.statuses.paused')}</SelectItem>
+                <SelectItem value="scheduled">{t('schedule.statuses.scheduled')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -285,14 +288,14 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
       {/* Error Handling */}
       <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle>Error Handling</CardTitle>
-          <CardDescription>Configure retry behavior for failed runs</CardDescription>
+          <CardTitle>{t('errorHandling.title')}</CardTitle>
+          <CardDescription>{t('errorHandling.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <Label>Auto-retry on failure</Label>
-              <p className="text-sm text-muted-foreground">Automatically retry the workflow if it fails</p>
+              <Label>{t('errorHandling.autoRetry')}</Label>
+              <p className="text-sm text-muted-foreground">{t('errorHandling.autoRetryDescription')}</p>
             </div>
             <Switch
               checked={workflow.autoRetry}
@@ -301,19 +304,19 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
           </div>
           {workflow.autoRetry && (
             <div className="space-y-2">
-              <Label htmlFor="retryAttempts">Retry Attempts</Label>
+              <Label htmlFor="retryAttempts">{t('errorHandling.retryAttempts')}</Label>
               <Select
                 value={workflow.retryAttempts.toString()}
                 onValueChange={(value) => setWorkflow(prev => prev ? { ...prev, retryAttempts: parseInt(value) } : null)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select attempts" />
+                  <SelectValue placeholder={t('errorHandling.selectAttempts')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">1 attempt</SelectItem>
-                  <SelectItem value="2">2 attempts</SelectItem>
-                  <SelectItem value="3">3 attempts</SelectItem>
-                  <SelectItem value="5">5 attempts</SelectItem>
+                  <SelectItem value="1">{t('errorHandling.attempts.one')}</SelectItem>
+                  <SelectItem value="2">{t('errorHandling.attempts.two')}</SelectItem>
+                  <SelectItem value="3">{t('errorHandling.attempts.three')}</SelectItem>
+                  <SelectItem value="5">{t('errorHandling.attempts.five')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -324,14 +327,14 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
       {/* Notifications */}
       <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle>Notifications</CardTitle>
-          <CardDescription>Configure how you receive updates about this workflow</CardDescription>
+          <CardTitle>{t('notifications.title')}</CardTitle>
+          <CardDescription>{t('notifications.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <Label>Email notifications</Label>
-              <p className="text-sm text-muted-foreground">Receive email updates on completion or failure</p>
+              <Label>{t('notifications.email')}</Label>
+              <p className="text-sm text-muted-foreground">{t('notifications.emailDescription')}</p>
             </div>
             <Switch
               checked={workflow.notifications.includes("email")}
@@ -348,8 +351,8 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <Label>Slack notifications</Label>
-              <p className="text-sm text-muted-foreground">Send notifications to your Slack channel</p>
+              <Label>{t('notifications.slack')}</Label>
+              <p className="text-sm text-muted-foreground">{t('notifications.slackDescription')}</p>
             </div>
             <Switch
               checked={workflow.notifications.includes("slack")}

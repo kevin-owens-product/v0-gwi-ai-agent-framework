@@ -430,6 +430,1251 @@
           "button": "Contact Sales"
         }
       }
+    },
+    "general": {
+      "title": "General Settings",
+      "description": "Manage your organization's settings and preferences",
+      "organizationDetails": "Organization Details",
+      "updateOrgInfo": "Update your organization's information",
+      "changeLogo": "Change Logo",
+      "organizationName": "Organization Name",
+      "organizationSlug": "Organization Slug",
+      "orgDescription": "Description",
+      "industry": "Industry",
+      "companySize": "Company Size",
+      "consumerGoods": "Consumer Goods",
+      "technology": "Technology",
+      "finance": "Finance",
+      "healthcare": "Healthcare",
+      "retail": "Retail",
+      "mediaEntertainment": "Media & Entertainment",
+      "employees1to50": "1-50 employees",
+      "employees50to200": "50-200 employees",
+      "employees200to1000": "200-1000 employees",
+      "employees1000to5000": "1000-5000 employees",
+      "employees5000plus": "5000+ employees",
+      "regionalSettings": "Regional Settings",
+      "regionalDescription": "Set your timezone and date format preferences",
+      "timezone": "Timezone",
+      "dateFormat": "Date Format",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "description": "Manage your personal information",
+      "personalInfo": "Personal Information",
+      "updateProfileDetails": "Update your profile details",
+      "uploadPhoto": "Upload Photo",
+      "photoHint": "JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "emailAddress": "Email Address",
+      "jobTitle": "Job Title",
+      "bio": "Bio",
+      "contactInfo": "Contact Information",
+      "contactDescription": "How colleagues can reach you",
+      "phoneNumber": "Phone Number",
+      "location": "Location",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes"
+    },
+    "security": {
+      "title": "Security Settings",
+      "description": "Manage your account security and active sessions",
+      "changePassword": "Change Password",
+      "changePasswordDescription": "Update your password regularly to keep your account secure",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password",
+      "updating": "Updating...",
+      "updatePassword": "Update Password",
+      "twoFactorAuth": "Two-Factor Authentication",
+      "twoFactorDescription": "Add an extra layer of security to your account",
+      "twoFactorEnabled": "2FA is enabled",
+      "twoFactorProtected": "Your account is protected with authenticator app",
+      "changeMethod": "Change Method",
+      "viewBackupCodes": "View Backup Codes",
+      "activeSessions": "Active Sessions",
+      "activeSessionsDescription": "Manage devices where you're currently logged in",
+      "signOutAll": "Sign Out All",
+      "current": "Current",
+      "revoke": "Revoke",
+      "dangerZone": "Danger Zone",
+      "dangerZoneDescription": "Irreversible and destructive actions",
+      "deleteAccount": "Delete Account",
+      "deleteAccountDescription": "Permanently delete your account and all data",
+      "dataExports": {
+        "title": "Data Exports",
+        "description": "Request exports of your personal data for GDPR compliance",
+        "refresh": "Refresh",
+        "yourDataRights": "Your Data Rights",
+        "yourDataRightsDescription": "Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "No Active Exports",
+        "noActiveExportsDescription": "Request an export to see its status here",
+        "noActiveExportsHint": "Your export status will appear here after you request a data export",
+        "exportHistory": "Export History",
+        "exportHistoryDescription": "View and download your previous data exports",
+        "total": "Total",
+        "pending": "Pending",
+        "processing": "Processing",
+        "aboutDataExports": "About Data Exports",
+        "tabs": {
+          "whatsIncluded": "What's Included",
+          "exportFormat": "Export Format",
+          "faq": "FAQ"
+        },
+        "included": {
+          "profileInfo": "Profile Information",
+          "profileInfoDesc": "Your name, email, avatar, and account settings",
+          "orgMemberships": "Organization Memberships",
+          "orgMembershipsDesc": "All organizations you belong to and your roles",
+          "createdContent": "Created Content",
+          "createdContentDesc": "Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "Activity History",
+          "activityHistoryDesc": "Audit logs and activity records associated with your account",
+          "preferences": "Preferences",
+          "preferencesDesc": "Your theme, language, notification, and other settings",
+          "apiKeys": "API Keys",
+          "apiKeysDesc": "API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "Machine-readable and portable as required by GDPR",
+          "humanReadable": "Human-readable when opened in a text editor",
+          "compatible": "Compatible with most data processing tools",
+          "easyImport": "Easy to import into other services",
+          "exampleStructure": "Example structure:"
+        },
+        "faq": {
+          "howLong": "How long does an export take?",
+          "howLongAnswer": "Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "How long is an export available?",
+          "howLongAvailableAnswer": "Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "How often can I request an export?",
+          "howOftenAnswer": "You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "Is my export secure?",
+          "isSecureAnswer": "Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
+    "team": {
+      "title": "Team Management",
+      "description": "Manage team members and their permissions",
+      "teamMembers": "Team Members",
+      "membersCount": "{count} members in your organization",
+      "inviteMember": "Invite Member",
+      "inviteTeamMember": "Invite Team Member",
+      "inviteDescription": "Send an invitation to join your organization",
+      "emailAddress": "Email Address",
+      "emailPlaceholder": "colleague@company.com",
+      "role": "Role",
+      "sending": "Sending...",
+      "sendInvitation": "Send Invitation",
+      "searchMembers": "Search members...",
+      "tableHeaders": {
+        "member": "Member",
+        "role": "Role",
+        "lastActive": "Last Active",
+        "joined": "Joined"
+      },
+      "roles": {
+        "owner": "Owner",
+        "admin": "Admin",
+        "member": "Member",
+        "viewer": "Viewer"
+      },
+      "actions": {
+        "makeAdmin": "Make Admin",
+        "makeMember": "Make Member",
+        "makeViewer": "Make Viewer",
+        "removeMember": "Remove Member"
+      },
+      "pendingInvitations": "Pending Invitations",
+      "pendingCount": "{count} pending invitation",
+      "pendingCountPlural": "{count} pending invitations",
+      "invitationHeaders": {
+        "email": "Email",
+        "role": "Role",
+        "sent": "Sent",
+        "expires": "Expires"
+      },
+      "revoke": "Revoke",
+      "rolePermissions": "Role Permissions",
+      "rolePermissionsDescription": "Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "Full organization control",
+        "transferOwnership": "Transfer ownership",
+        "deleteOrg": "Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "Manage team members",
+        "billing": "Billing & subscription",
+        "allMemberPerms": "All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "Create and edit agents",
+        "generateReports": "Generate reports",
+        "useAgents": "Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "View reports",
+        "viewDashboards": "View dashboards",
+        "readOnly": "Read-only access"
+      },
+      "removeDialog": {
+        "title": "Remove Team Member",
+        "description": "Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "Cancel",
+        "remove": "Remove Member"
+      },
+      "unknown": "Unknown",
+      "never": "Never",
+      "justNow": "Just now",
+      "minAgo": "{count} min ago",
+      "hoursAgo": "{count} hour ago",
+      "hoursAgoPlural": "{count} hours ago",
+      "daysAgo": "{count} day ago",
+      "daysAgoPlural": "{count} days ago"
+    },
+    "billing": {
+      "title": "Billing & Subscription",
+      "description": "Manage your subscription and payment methods",
+      "enterprisePlan": "Enterprise Plan",
+      "current": "Current",
+      "planDescription": "Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "per month",
+      "planFeatures": "Plan Features",
+      "features": {
+        "unlimitedQueries": "Unlimited AI agent queries",
+        "allAgents": "All pre-built domain agents",
+        "customDev": "Custom agent development",
+        "prioritySupport": "Priority support (24/7)"
+      },
+      "usageThisPeriod": "Usage This Period",
+      "usage": {
+        "agentQueries": "Agent Queries",
+        "unlimited": "Unlimited",
+        "reportsGenerated": "Reports Generated",
+        "teamSeats": "Team Seats"
+      },
+      "nextBillingDate": "Next billing date: {date}",
+      "changePlan": "Change Plan",
+      "cancelSubscription": "Cancel Subscription",
+      "paymentMethod": "Payment Method",
+      "paymentDescription": "Manage your payment information",
+      "cardEnding": "Visa ending in {last4}",
+      "cardExpires": "Expires {date}",
+      "update": "Update",
+      "billingHistory": "Billing History",
+      "billingHistoryDescription": "Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "Invoice",
+        "date": "Date",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "paid": "Paid",
+      "needMoreCapacity": "Need more capacity?",
+      "contactForPricing": "Contact us for custom enterprise pricing",
+      "contactSales": "Contact Sales",
+      "upgrade": {
+        "title": "Choose Your Plan",
+        "description": "Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "Back to Billing",
+        "checkoutCanceled": "Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "save17": "Save 17%",
+        "mostPopular": "Most Popular",
+        "currentPlan": "Current Plan",
+        "billedAnnually": "${price} billed annually",
+        "upgradeTo": "Upgrade to {plan}",
+        "processing": "Processing...",
+        "customSales": "All plans include our core features. Need something custom?",
+        "contactSalesTeam": "Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "Starter",
+            "description": "For individuals and small teams getting started",
+            "features": {
+              "runs": "100 agent runs / month",
+              "seats": "3 team seats",
+              "sources": "5 data sources",
+              "retention": "30 day data retention",
+              "tokens": "100K tokens / month",
+              "support": "Community support"
+            }
+          },
+          "professional": {
+            "name": "Professional",
+            "description": "For growing teams with advanced needs",
+            "features": {
+              "runs": "1,000 agent runs / month",
+              "seats": "10 team seats",
+              "sources": "25 data sources",
+              "retention": "90 day data retention",
+              "tokens": "1M tokens / month",
+              "support": "Priority email support",
+              "analytics": "Advanced analytics",
+              "integrations": "Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "Enterprise",
+            "description": "For large organizations with custom requirements",
+            "features": {
+              "runs": "Unlimited agent runs",
+              "seats": "Unlimited team seats",
+              "sources": "Unlimited data sources",
+              "retention": "365 day data retention",
+              "tokens": "Unlimited tokens",
+              "support": "24/7 dedicated support",
+              "customDev": "Custom agent development",
+              "sso": "SSO & SCIM",
+              "sla": "SLA guarantee",
+              "accountManager": "Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "Audit Log",
+      "description": "Track all actions and changes in your organization",
+      "activityHistory": "Activity History",
+      "totalEvents": "{count} total events",
+      "searchLogs": "Search logs...",
+      "allActions": "All Actions",
+      "allResources": "All Resources",
+      "noAuditLogs": "No audit logs found",
+      "activityWillAppear": "Activity will appear here as actions are taken",
+      "showing": "Showing {start} to {end} of {total}",
+      "previous": "Previous",
+      "next": "Next",
+      "actions": {
+        "create": "Created",
+        "update": "Updated",
+        "delete": "Deleted",
+        "execute": "Executed",
+        "login": "Logged in",
+        "logout": "Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "Webhooks",
+      "description": "Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "Webhook Endpoints",
+      "endpointsDescription": "Manage webhook endpoints and event subscriptions",
+      "addWebhook": "Add Webhook",
+      "addWebhookEndpoint": "Add Webhook Endpoint",
+      "addWebhookDescription": "Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "Endpoint URL",
+      "endpointUrlPlaceholder": "https://api.example.com/webhooks",
+      "descriptionOptional": "Description (Optional)",
+      "descriptionPlaceholder": "Describe this webhook...",
+      "events": "Events",
+      "creating": "Creating...",
+      "createWebhook": "Create Webhook",
+      "noWebhooks": "No webhooks configured",
+      "addWebhookToStart": "Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "Endpoint",
+        "events": "Events",
+        "status": "Status",
+        "secret": "Secret"
+      },
+      "eventsCount": "{count} events",
+      "active": "Active",
+      "disabled": "Disabled",
+      "webhookSecurity": "Webhook Security",
+      "securityDescription": "Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "Agent Run Started",
+        "agentRunCompleted": "Agent Run Completed",
+        "agentRunFailed": "Agent Run Failed",
+        "workflowRunStarted": "Workflow Run Started",
+        "workflowRunCompleted": "Workflow Run Completed",
+        "workflowRunFailed": "Workflow Run Failed",
+        "reportGenerated": "Report Generated",
+        "memberAdded": "Member Added",
+        "memberRemoved": "Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "Custom Alerts",
+      "description": "Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "Total Alerts",
+      "active": "Active",
+      "totalTriggers": "Total Triggers",
+      "paused": "Paused",
+      "yourAlerts": "Your Alerts",
+      "yourAlertsDescription": "Manage your custom alert configurations",
+      "createAlert": "Create Alert",
+      "searchAlerts": "Search alerts...",
+      "entityType": "Entity Type",
+      "allTypes": "All Types",
+      "allStatus": "All Status",
+      "noAlertsYet": "No alerts yet",
+      "noMatchingAlerts": "No matching alerts",
+      "createFirstAlert": "Create your first alert to get notified about important changes",
+      "adjustFilters": "Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "Alert",
+        "type": "Type",
+        "condition": "Condition",
+        "channels": "Channels",
+        "lastTriggered": "Last Triggered",
+        "status": "Status"
+      },
+      "total": "total",
+      "never": "Never",
+      "edit": "Edit",
+      "viewHistory": "View History",
+      "delete": "Delete",
+      "createNewAlert": "Create New Alert",
+      "createNewAlertDescription": "Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "Edit Alert",
+      "editAlertDescription": "Update the configuration for this alert",
+      "alertHistory": "Alert History: {name}",
+      "alertHistoryDescription": "View the history of when this alert was triggered",
+      "deleteAlert": "Delete Alert",
+      "deleteAlertDescription": "Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "Cancel",
+      "entityTypes": {
+        "metric": "Metric",
+        "audience": "Audience",
+        "brand": "Brand",
+        "report": "Report",
+        "agent": "Agent",
+        "workflow": "Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "Keyboard Shortcuts",
+      "description": "Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "Shortcut Conflicts Detected",
+      "conflictsDescription": "The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "Navigation",
+        "navigationDesc": "Navigate around the application",
+        "actions": "Actions",
+        "actionsDesc": "Perform common actions quickly",
+        "ui": "UI",
+        "uiDesc": "Control the user interface",
+        "editing": "Editing",
+        "editingDesc": "Edit content efficiently"
+      },
+      "resetToDefaults": "Reset to Defaults",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes",
+      "resetDialog": {
+        "title": "Reset Keyboard Shortcuts",
+        "description": "This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "Cancel",
+        "reset": "Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "Edit Shortcut",
+        "customizable": "Press the keys you want to use for this shortcut",
+        "notCustomizable": "This shortcut cannot be customized",
+        "action": "Action",
+        "currentBinding": "Current Binding",
+        "newBinding": "New Binding",
+        "pressKeys": "Press keys...",
+        "clickToRecord": "Click to record",
+        "record": "Record",
+        "recording": "Recording...",
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    },
+    "plan": {
+      "title": "Plan & Billing",
+      "description": "Manage your subscription and view usage metrics",
+      "currentPlan": "Current Plan",
+      "currentPlanDescription": "Your active subscription details",
+      "upgradePlan": "Upgrade Plan",
+      "teamMembers": "Team Members",
+      "agents": "Agents",
+      "workflows": "Workflows",
+      "reports": "Reports",
+      "usageThisMonth": "Usage This Month",
+      "usageDescription": "Monitor your resource usage against plan limits",
+      "comparePlans": "Compare Plans",
+      "yourFeatures": "Your Features",
+      "yourFeaturesDescription": "All features included in your current plan",
+      "limit": "Limit: {limit}",
+      "requesting": "Requesting...",
+      "upgradeTo": "Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "Starter",
+          "price": "$49/mo",
+          "features": {
+            "members": "Up to 5 team members",
+            "agents": "10 agents",
+            "runs": "50 workflow runs/month",
+            "analytics": "Basic analytics",
+            "support": "Email support"
+          }
+        },
+        "professional": {
+          "name": "Professional",
+          "price": "$199/mo",
+          "features": {
+            "members": "Up to 20 team members",
+            "agents": "Unlimited agents",
+            "runs": "Unlimited workflow runs",
+            "analytics": "Advanced analytics",
+            "support": "Priority support",
+            "integrations": "Custom integrations",
+            "api": "API access"
+          }
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "Custom",
+          "features": {
+            "members": "Unlimited team members",
+            "everything": "Unlimited everything",
+            "security": "Advanced security",
+            "sso": "SSO & SAML",
+            "support": "Dedicated support",
+            "sla": "Custom SLAs",
+            "onPremise": "On-premise option",
+            "whiteLabel": "White-label"
+          }
+        }
+      }
+    },
+    "scheduledExports": {
+      "title": "Scheduled Exports",
+      "description": "Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "Your Scheduled Exports",
+      "yourScheduledExportsDescription": "Manage automatic exports that run on a schedule",
+      "newExport": "New Export",
+      "all": "All",
+      "active": "Active",
+      "paused": "Paused",
+      "noScheduledExports": "No scheduled exports",
+      "createFirstExport": "Create your first scheduled export to get started",
+      "createExport": "Create Export",
+      "tableHeaders": {
+        "name": "Name",
+        "schedule": "Schedule",
+        "format": "Format",
+        "lastRun": "Last Run",
+        "nextRun": "Next Run",
+        "status": "Status"
+      },
+      "statusLabels": {
+        "pending": "Pending",
+        "processing": "Running",
+        "completed": "Success",
+        "failed": "Failed",
+        "neverRun": "Never Run"
+      },
+      "actions": {
+        "runNow": "Run Now",
+        "viewHistory": "View History",
+        "edit": "Edit",
+        "pause": "Pause",
+        "activate": "Activate",
+        "delete": "Delete"
+      },
+      "deleteDialog": {
+        "title": "Delete Scheduled Export",
+        "description": "Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      },
+      "historySheet": {
+        "title": "Export History",
+        "loading": "Loading..."
+      },
+      "relativeTime": {
+        "never": "Never",
+        "justNow": "Just now",
+        "lessThanMinute": "In less than a minute",
+        "minsAgo": "{count}m ago",
+        "inMins": "In {count}m",
+        "hoursAgo": "{count}h ago",
+        "inHours": "In {count}h",
+        "daysAgo": "{count}d ago",
+        "inDays": "In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "Inbox Agents",
+      "description": "AI agents that automatically handle incoming requests",
+      "configureChannels": "Configure Channels",
+      "createAgent": "Create Agent",
+      "activeAgents": "Active Agents",
+      "status": {
+        "processing": "Processing"
+      },
+      "stats": {
+        "processedToday": "Processed Today",
+        "fromYesterday": "{percent} from yesterday",
+        "avgResponseTime": "Avg Response Time",
+        "fasterThanLastWeek": "{percent} faster than last week",
+        "successRate": "Success Rate",
+        "basedOnRequests": "Based on {count} requests",
+        "pendingReview": "Pending Review",
+        "highPriority": "{count} high priority"
+      },
+      "agents": {
+        "successRate": "Success rate",
+        "processed": "{count} processed"
+      },
+      "incomingRequests": {
+        "title": "Incoming Requests",
+        "description": "Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "Search requests...",
+        "noRequests": "No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "Assign to Brief Handler",
+        "assignToAudienceQuery": "Assign to Audience Query",
+        "assignToLocalization": "Assign to Localization",
+        "reprocess": "Reprocess",
+        "archive": "Archive"
+      },
+      "priority": {
+        "high": "High priority",
+        "medium": "Medium priority",
+        "low": "Low priority"
+      },
+      "request": {
+        "received": "Received {time}",
+        "generatedOutput": "Generated Output",
+        "confidence": "{percent}% confidence",
+        "citations": "{count} citations",
+        "viewFullReport": "View Full Report",
+        "assignAgent": "Assign Agent",
+        "respondManually": "Respond Manually",
+        "viewHistory": "View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "Agent Active",
+        "agentPaused": "Agent Paused",
+        "lastTriggered": "Last triggered {time}",
+        "processed": "Processed",
+        "successRate": "Success Rate",
+        "avgTime": "Avg Time",
+        "triggerKeywords": "Trigger Keywords",
+        "connectedChannels": "Connected Channels",
+        "processingPipeline": "Processing Pipeline",
+        "configure": "Configure",
+        "viewLogs": "View Logs"
+      },
+      "createAgentDialog": {
+        "title": "Create Inbox Agent",
+        "description": "Configure an AI agent to automatically handle incoming requests",
+        "agentName": "Agent Name",
+        "agentNamePlaceholder": "e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "Describe what this agent does...",
+        "triggerKeywords": "Trigger Keywords",
+        "triggerKeywordsPlaceholder": "competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "Agent will activate when messages contain these keywords",
+        "channels": "Channels",
+        "baseAgent": "Base Agent",
+        "selectAgent": "Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "Audience Explorer",
+          "personaArchitect": "Persona Architect",
+          "cultureTracker": "Culture Tracker",
+          "brandRelationshipAnalyst": "Brand Relationship Analyst"
+        },
+        "autoRespond": "Auto-respond",
+        "autoRespondHelp": "Automatically send responses to requesters",
+        "requireApproval": "Require Approval",
+        "requireApprovalHelp": "Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "Prompt Templates",
+      "description": "Reusable templates for common insights tasks",
+      "createTemplate": "Create Template",
+      "searchPlaceholder": "Search templates...",
+      "starredTemplates": "Starred Templates",
+      "allTemplates": "All Templates",
+      "uses": "{count} uses",
+      "categories": {
+        "all": "All",
+        "research": "Research",
+        "analysis": "Analysis",
+        "briefs": "Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "Use Template",
+        "duplicate": "Duplicate"
+      },
+      "createDialog": {
+        "title": "Create Template",
+        "description": "Save a prompt as a reusable template for your team",
+        "templateName": "Template Name",
+        "templateNamePlaceholder": "e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "What does this template do?",
+        "category": "Category",
+        "promptTemplate": "Prompt Template",
+        "promptPlaceholder": "Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "Agent Store",
+      "description": "Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "Search agents...",
+      "sortBy": {
+        "placeholder": "Sort by",
+        "popular": "Most Popular",
+        "rating": "Highest Rated",
+        "newest": "Newest",
+        "name": "Name A-Z"
+      },
+      "featuredAgents": "Featured Agents",
+      "featured": "Featured",
+      "installed": "Installed",
+      "tryNow": "Try Now",
+      "categories": "Categories",
+      "viewDetails": "View Details",
+      "added": "Added",
+      "buildYourOwn": {
+        "title": "Build Your Own Agent",
+        "description": "Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "Create Agent"
+      },
+      "detail": {
+        "backToStore": "Back to Store",
+        "notFound": {
+          "title": "Agent Not Found",
+          "description": "The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "{count} installs",
+        "installed": "Installed",
+        "installing": "Installing...",
+        "installAgent": "Install Agent",
+        "tryInPlayground": "Try in Playground",
+        "info": {
+          "version": "Version",
+          "category": "Category",
+          "dataSources": "Data Sources"
+        },
+        "tabs": {
+          "overview": "Overview",
+          "capabilities": "Capabilities",
+          "examples": "Examples",
+          "reviews": "Reviews"
+        },
+        "overview": {
+          "aboutTitle": "About this Agent",
+          "fastResults": "Fast Results",
+          "fastResultsDesc": "Avg. 3s response time",
+          "verifiedData": "Verified Data",
+          "verifiedDataDesc": "100% sourced citations",
+          "alwaysUpdated": "Always Updated",
+          "alwaysUpdatedDesc": "Latest GWI data"
+        },
+        "capabilities": {
+          "title": "What this agent can do",
+          "description": "Key capabilities and features"
+        },
+        "examples": {
+          "title": "Example Prompts",
+          "description": "Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "Ratings",
+          "reviewsCount": "{count} reviews"
+        },
+        "relatedAgents": "Related Agents"
+      }
+    },
+    "changes": {
+      "title": "Data Changes",
+      "description": "Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "Timeline",
+        "compare": "Compare",
+        "evolution": "Evolution",
+        "alerts": "Alerts"
+      },
+      "compare": {
+        "title": "Compare Versions",
+        "description": "Select an entity to compare its versions",
+        "compareVersions": "Compare versions",
+        "entities": {
+          "audiences": "Audiences",
+          "crosstabs": "Crosstabs",
+          "insights": "Insights",
+          "charts": "Charts",
+          "reports": "Reports",
+          "dashboards": "Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "Analysis Evolution",
+        "description": "Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "View evolution",
+        "types": {
+          "brandHealth": "Brand Health",
+          "audienceInsights": "Audience Insights",
+          "marketAnalysis": "Market Analysis",
+          "competitorAnalysis": "Competitor Analysis",
+          "trendAnalysis": "Trend Analysis",
+          "crosstabAnalysis": "Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "Change Alerts",
+        "loading": "Loading alerts...",
+        "noAlerts": "No Alerts",
+        "noAlertsDescription": "You have no unread change alerts.",
+        "markAllRead": "Mark All as Read",
+        "markRead": "Mark Read",
+        "dismiss": "Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "Select {entity} to Compare",
+        "entity": "Entity",
+        "enterIdDescription": "Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "Select Analysis to View Evolution",
+        "enterIdDescription": "Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "Enter reference ID..."
+      }
+    },
+    "help": {
+      "title": "Help & Support",
+      "description": "Find answers, learn best practices, and get assistance",
+      "searchPlaceholder": "Search for help...",
+      "quickLinks": {
+        "title": "Quick Links",
+        "gettingStarted": "Getting Started Guide",
+        "gettingStartedDesc": "New to GWI Insights? Start here",
+        "videoTutorials": "Video Tutorials",
+        "videoTutorialsDesc": "Watch step-by-step guides",
+        "apiDocs": "API Documentation",
+        "apiDocsDesc": "For developers and integrations",
+        "releaseNotes": "Release Notes",
+        "releaseNotesDesc": "See what's new"
+      },
+      "categories": {
+        "title": "Browse by Category",
+        "agents": "AI Agents",
+        "agentsDesc": "Learn about agent capabilities",
+        "workflows": "Workflows",
+        "workflowsDesc": "Build automation pipelines",
+        "data": "Data & Audiences",
+        "dataDesc": "Understanding GWI data",
+        "reports": "Reports & Exports",
+        "reportsDesc": "Generate and share insights",
+        "integrations": "Integrations",
+        "integrationsDesc": "Connect with your tools",
+        "billing": "Billing & Plans",
+        "billingDesc": "Manage your subscription"
+      },
+      "contact": {
+        "title": "Need More Help?",
+        "description": "Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "Contact Support",
+        "responseTime": "Typical response time: 2-4 hours"
+      },
+      "faq": {
+        "title": "Frequently Asked Questions"
+      }
+    },
+    "crosstabs": {
+      "title": "Crosstabs",
+      "description": "Compare audiences across multiple dimensions",
+      "newCrosstab": "New Crosstab",
+      "stats": {
+        "totalCrosstabs": "Total Crosstabs",
+        "views": "Views",
+        "exports": "Exports",
+        "usedToday": "Used Today"
+      },
+      "tabs": {
+        "all": "All Crosstabs",
+        "recent": "Recent",
+        "templates": "Templates"
+      },
+      "empty": {
+        "title": "No crosstabs yet",
+        "description": "Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "Featured",
+        "liveData": "Live Data",
+        "more": "+{count} more"
+      },
+      "featured": {
+        "exploreCategories": "Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "audience segments",
+        "metrics": "metrics",
+        "audiencesCount": "{count} audiences",
+        "metricsCount": "{count} metrics",
+        "modified": "Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "Open Analysis"
+      },
+      "new": {
+        "title": "Create Crosstab",
+        "description": "Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "Crosstab Name",
+          "namePlaceholder": "e.g., Age vs Social Media Platforms",
+          "selectAudiences": "Select Audiences",
+          "selectMetrics": "Select Metrics",
+          "selected": "{count} selected"
+        },
+        "summary": {
+          "title": "Summary",
+          "audiences": "Audiences ({count})",
+          "metrics": "Metrics ({count})"
+        },
+        "actions": {
+          "generate": "Generate Crosstab",
+          "generating": "Generating...",
+          "cancel": "Cancel"
+        },
+        "errors": {
+          "nameRequired": "Please enter a crosstab name",
+          "audienceRequired": "Please select at least one audience",
+          "metricRequired": "Please select at least one metric",
+          "createFailed": "Failed to create crosstab",
+          "createFailedRetry": "Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "{count} metrics",
+          "audiences": "{count} audiences"
+        },
+        "categoriesCount": "{count} categories",
+        "more": "more",
+        "actions": {
+          "share": "Share",
+          "generateInsights": "Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "Data Grid",
+          "calculatedFields": "Calculated Fields",
+          "filters": "Filters",
+          "visualize": "Visualize"
+        },
+        "grid": {
+          "title": "Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "Calculated"
+        },
+        "toast": {
+          "valueUpdated": "Value updated to {value}%",
+          "fieldCreated": "Calculated field \"{name}\" created",
+          "fieldUpdated": "Calculated field updated",
+          "fieldDeleted": "Calculated field deleted",
+          "fieldApplied": "Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "Filters applied",
+          "chartSaved": "Chart saved!",
+          "chartExported": "Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "Crosstab Not Found",
+          "subtitle": "The requested crosstab could not be found",
+          "heading": "Crosstab not found",
+          "description": "The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "Remove from favorites",
+          "addToFavorites": "Add to favorites",
+          "pauseAutoRefresh": "Pause auto-refresh",
+          "enableAutoRefresh": "Enable auto-refresh",
+          "exitFullscreen": "Exit fullscreen",
+          "enterFullscreen": "Enter fullscreen",
+          "visualize": "Visualize",
+          "share": "Share",
+          "edit": "Edit",
+          "duplicate": "Duplicate",
+          "addToDashboard": "Add to Dashboard",
+          "copyLink": "Copy Link",
+          "copied": "Copied!",
+          "delete": "Delete",
+          "cancel": "Cancel",
+          "selectAll": "Select All",
+          "clear": "Clear",
+          "schedule": "Schedule"
+        },
+        "filters": {
+          "title": "Data Filters",
+          "clearAll": "Clear All",
+          "description": "Filter and refine your crosstab data",
+          "quickFilters": "Quick Filters",
+          "valueRange": "Value Range: {min}% - {max}%",
+          "category": "Category",
+          "allCategories": "All Categories",
+          "activeFilters": "Active filters"
+        },
+        "tabs": {
+          "filters": "Filters",
+          "audiences": "Audiences",
+          "metrics": "Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "{selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "Export as JSON",
+          "asCsv": "Export as CSV",
+          "asHtml": "Export as HTML",
+          "asPdf": "Export as PDF",
+          "asExcel": "Export as Excel",
+          "asPowerPoint": "Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "Delete Crosstab",
+          "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "Modified {time}",
+          "views": "{count} views",
+          "createdBy": "Created by {name}"
+        },
+        "mainTabs": {
+          "data": "Data",
+          "activity": "Activity",
+          "comments": "Comments",
+          "history": "History"
+        },
+        "insights": {
+          "title": "AI-Generated Insights",
+          "topPerformer": "Top Performer",
+          "topPerformerDesc": "leads in most metrics with an average of {average}%.",
+          "noData": "No data available",
+          "biggestGap": "Biggest Gap",
+          "biggestGapDesc": "The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "Trending",
+          "trendingDesc": "{metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "no"
+        },
+        "activity": {
+          "title": "Activity Log",
+          "description": "Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "Share Crosstab",
+          "description": "Share this crosstab with team members or external collaborators.",
+          "emailLabel": "Email address",
+          "emailPlaceholder": "email@example.com",
+          "role": "Role",
+          "roles": {
+            "viewer": "Viewer",
+            "editor": "Editor",
+            "admin": "Admin"
+          },
+          "shareLink": "Share link"
+        },
+        "scheduleDialog": {
+          "title": "Schedule Report",
+          "description": "Set up automatic email delivery of this crosstab report.",
+          "recipients": "Recipients",
+          "recipientsPlaceholder": "email@example.com, team@example.com",
+          "frequency": "Frequency",
+          "frequencies": {
+            "daily": "Daily",
+            "weekly": "Weekly",
+            "monthly": "Monthly"
+          },
+          "format": "Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "Insights",
+      "description": "AI-generated insights from your agent runs",
+      "searchPlaceholder": "Search insights...",
+      "filterByType": "Filter by type",
+      "loading": "Loading...",
+      "showing": "Showing {shown} of {total} insights",
+      "types": {
+        "all": "All Types",
+        "audience": "Audience",
+        "trend": "Trend",
+        "competitive": "Competitive",
+        "analysis": "Analysis"
+      },
+      "empty": {
+        "title": "No insights yet",
+        "description": "Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "Go to Playground"
+      },
+      "badges": {
+        "new": "New"
+      },
+      "viaAgent": "via {name}",
+      "detail": {
+        "backToInsights": "Back to Insights",
+        "notFound": {
+          "title": "Insight not found",
+          "description": "This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "View All Insights",
+        "confidence": "{percent}% confidence",
+        "viaAgent": "via {name}",
+        "actions": {
+          "copy": "Copy",
+          "copied": "Copied",
+          "share": "Share",
+          "export": "Export"
+        },
+        "detailsTitle": "Insight Details",
+        "detailsDescription": "Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "Want to explore more?",
+          "description": "Run more queries in the playground to generate additional insights.",
+          "openPlayground": "Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "Data Connectors",
+        "description": "Connect external data sources to enrich your insights",
+        "addConnector": "Add Connector",
+        "searchPlaceholder": "Search connectors...",
+        "stats": {
+          "totalConnectors": "Total Connectors",
+          "active": "Active",
+          "withErrors": "With Errors",
+          "dataSources": "Data Sources"
+        },
+        "tabs": {
+          "configured": "Configured",
+          "available": "Available"
+        },
+        "filters": {
+          "allTypes": "All types"
+        },
+        "empty": {
+          "title": "No connectors configured",
+          "description": "Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "Previous",
+          "next": "Next",
+          "pageOf": "Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "Sync started",
+          "syncFailed": "Failed to start sync",
+          "connectorEnabled": "Connector enabled",
+          "connectorDisabled": "Connector disabled",
+          "updateFailed": "Failed to update connector",
+          "connectorDeleted": "Connector deleted",
+          "deleteFailed": "Failed to delete connector",
+          "testFailed": "Failed to test connection"
+        },
+        "new": {
+          "title": "Add Data Connector",
+          "description": "Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "Back to Connectors",
+          "notFound": "Connector not found",
+          "actions": {
+            "test": "Test",
+            "syncNow": "Sync Now",
+            "delete": "Delete",
+            "cancel": "Cancel",
+            "deleting": "Deleting..."
+          },
+          "status": {
+            "completed": "Last sync successful",
+            "running": "Syncing...",
+            "pending": "Sync pending",
+            "failed": "Last sync failed",
+            "cancelled": "Sync cancelled",
+            "never": "Never synced"
+          },
+          "cards": {
+            "status": "Status",
+            "active": "Active",
+            "paused": "Paused",
+            "totalSyncs": "Total Syncs",
+            "errorCount": "Error Count"
+          },
+          "tabs": {
+            "overview": "Overview",
+            "configuration": "Configuration",
+            "syncHistory": "Sync History"
+          },
+          "overview": {
+            "details": "Details",
+            "description": "Description",
+            "provider": "Provider",
+            "type": "Type",
+            "syncSchedule": "Sync Schedule",
+            "manualOnly": "Manual only",
+            "created": "Created",
+            "recentSyncs": "Recent Syncs",
+            "lastSyncs": "Last {count} sync operations",
+            "noSyncHistory": "No sync history yet"
+          },
+          "dangerZone": {
+            "title": "Danger Zone",
+            "deleteConnector": "Delete this connector",
+            "deleteWarning": "This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "Sync History",
+            "description": "Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "Delete Connector",
+            "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "Sync started",
+            "syncFailed": "Failed to start sync",
+            "testFailed": "Test failed",
+            "connectorDeleted": "Connector deleted",
+            "deleteFailed": "Failed to delete connector",
+            "connectorUpdated": "Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "Memory & Context",
+      "description": "Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "Settings",
+        "clearAll": "Clear All"
+      }
     }
   },
   "landing": {
@@ -871,7 +2116,284 @@
       "createReport": "Create Report",
       "published": "published",
       "generating": "generating",
-      "draft": "draft"
+      "draft": "draft",
+      "page": {
+        "tabs": {
+          "allReports": "All Reports",
+          "templates": "Templates",
+          "scheduled": "Scheduled",
+          "sharedWithMe": "Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "Next: {date}",
+          "recipientsCount": "{count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "Shared by {name} on {date}",
+          "canView": "Can view",
+          "canEdit": "Can edit",
+          "canComment": "Can comment"
+        }
+      }
+    },
+    "dashboards": {
+      "title": "Dashboards",
+      "description": "Combine charts and insights into shareable dashboards",
+      "newDashboard": "New Dashboard",
+      "stats": {
+        "totalDashboards": "Total Dashboards",
+        "totalViews": "Total Views",
+        "shared": "Shared",
+        "exports": "Exports"
+      },
+      "tabs": {
+        "allDashboards": "All Dashboards",
+        "recent": "Recent",
+        "favorites": "Favorites"
+      },
+      "grid": {
+        "noDashboardsYet": "No dashboards yet",
+        "createFirstDashboard": "Create your first dashboard to get started",
+        "chartsCount": "{count} charts",
+        "viewsCount": "{count} views"
+      },
+      "builder": {
+        "title": "Create New Dashboard",
+        "editTitle": "Edit Dashboard",
+        "subtitle": "Advanced Dashboard Builder with Drag & Drop",
+        "saveSuccess": "Dashboard saved successfully!",
+        "saveFailed": "Failed to save dashboard",
+        "exportSuccess": "Dashboard exported as {format}",
+        "exportFailed": "Failed to export dashboard",
+        "initialName": "New Dashboard",
+        "initialDescription": "Add widgets by clicking the 'Add Widget' button"
+      },
+      "new": {
+        "title": "Create Dashboard",
+        "description": "Combine charts and insights into a shareable dashboard",
+        "form": {
+          "dashboardName": "Dashboard Name",
+          "dashboardNamePlaceholder": "e.g., Q4 Campaign Performance",
+          "descriptionLabel": "Description",
+          "descriptionPlaceholder": "Brief description of this dashboard...",
+          "publicDashboard": "Public Dashboard",
+          "publicDescription": "Allow anyone with the link to view",
+          "addCharts": "Add Charts",
+          "selectedCount": "{count} selected",
+          "chartType": "{type} chart",
+          "added": "Added",
+          "createNewChart": "Create New Chart"
+        },
+        "preview": {
+          "title": "Dashboard Preview",
+          "name": "Name",
+          "untitledDashboard": "Untitled Dashboard",
+          "chartsCount": "Charts ({count})",
+          "noChartsSelected": "No charts selected",
+          "visibility": "Visibility",
+          "public": "Public",
+          "private": "Private"
+        },
+        "validation": {
+          "enterName": "Please enter a dashboard name",
+          "selectChart": "Please select at least one chart"
+        },
+        "buttons": {
+          "createDashboard": "Create Dashboard",
+          "creating": "Creating...",
+          "cancel": "Cancel"
+        },
+        "errors": {
+          "createFailed": "Failed to create dashboard",
+          "createFailedRetry": "Failed to create dashboard. Please try again."
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "Dashboard Not Found",
+          "description": "The requested dashboard could not be found",
+          "message": "The dashboard you're looking for doesn't exist or has been deleted.",
+          "backButton": "Back to Dashboards"
+        },
+        "favorites": {
+          "addToFavorites": "Add to favorites",
+          "removeFromFavorites": "Remove from favorites"
+        },
+        "visibility": {
+          "public": "Public",
+          "private": "Private"
+        },
+        "tags": {
+          "addTag": "Add Tag",
+          "manageTags": "Manage Tags",
+          "manageTagsDescription": "Add tags to organize and find your dashboard easily",
+          "addNewTag": "Add a new tag...",
+          "noTagsAdded": "No tags added yet",
+          "done": "Done"
+        },
+        "autoRefresh": {
+          "label": "Auto-refresh",
+          "on": "Auto-refresh ON",
+          "off": "Auto-refresh",
+          "interval": "Refresh interval",
+          "every1Min": "Every 1 minute",
+          "every5Min": "Every 5 minutes",
+          "every15Min": "Every 15 minutes",
+          "every30Min": "Every 30 minutes",
+          "everyHour": "Every hour",
+          "lastRefreshed": "Last refreshed: {time}",
+          "refreshNow": "Refresh Now"
+        },
+        "filters": {
+          "title": "Filters",
+          "filterCharts": "Filter Charts",
+          "clearAll": "Clear All",
+          "filterDescription": "Filter and search through dashboard charts",
+          "searchCharts": "Search Charts",
+          "searchPlaceholder": "Search by name or category...",
+          "chartTypes": "Chart Types",
+          "clear": "Clear",
+          "categories": "Categories",
+          "dataSources": "Data Sources",
+          "showingResults": "Showing {filtered} of {total} charts",
+          "activeFilters": "Active filters:",
+          "searchLabel": "Search: \"{query}\"",
+          "chartTypesCount": "{count} chart type",
+          "chartTypesCountPlural": "{count} chart types",
+          "categoriesCount": "{count} category",
+          "categoriesCountPlural": "{count} categories",
+          "dataSourcesCount": "{count} data source",
+          "dataSourcesCountPlural": "{count} data sources",
+          "clearAllFilters": "Clear all"
+        },
+        "actions": {
+          "addChart": "Add Chart",
+          "share": "Share",
+          "export": "Export",
+          "edit": "Edit",
+          "duplicate": "Duplicate",
+          "copyLink": "Copy Link",
+          "copied": "Copied!",
+          "manageAlerts": "Manage Alerts",
+          "delete": "Delete"
+        },
+        "meta": {
+          "modified": "Modified {time}",
+          "views": "{count} views",
+          "createdBy": "Created by {name}",
+          "chartsCount": "{filtered} of {total} charts",
+          "searchCharts": "Search charts..."
+        },
+        "layout": {
+          "grid": "Grid",
+          "list": "List",
+          "compact": "Compact"
+        },
+        "tabs": {
+          "charts": "Charts ({count})",
+          "analytics": "Analytics",
+          "comments": "Comments",
+          "activity": "Activity",
+          "history": "History",
+          "settings": "Settings"
+        },
+        "chartActions": {
+          "minimize": "Minimize",
+          "expand": "Expand",
+          "refreshData": "Refresh Data",
+          "exportChart": "Export Chart",
+          "openInEditor": "Open in Editor",
+          "removeFromDashboard": "Remove from Dashboard"
+        },
+        "emptyState": {
+          "noChartsMatch": "No charts match your filters",
+          "adjustFilters": "Try adjusting your filters or search query to see more charts.",
+          "clearFilters": "Clear Filters"
+        },
+        "insights": {
+          "title": "Dashboard Insights",
+          "chartDistribution": "Chart Distribution",
+          "chartDistributionText": "{typeCount} chart types used across {categoryCount} categories. Most common: {mostCommon} charts.",
+          "dataSourcesTitle": "Data Sources",
+          "dataSourcesText": "{count} data source powering this dashboard.",
+          "dataSourcesTextPlural": "{count} data sources powering this dashboard.",
+          "primarySource": "Primary: {source}.",
+          "currentView": "Current View",
+          "currentViewText": "{filtered} of {total} charts displayed",
+          "withFilters": "with {count} active filter.",
+          "withFiltersPlural": "with {count} active filters.",
+          "source": "Source: {name}"
+        },
+        "analytics": {
+          "totalViews": "Total Views",
+          "uniqueViewers": "Unique Viewers",
+          "avgTimeOnPage": "Avg. Time on Page",
+          "exports": "Exports",
+          "fromLastWeek": "+{percent}% from last week",
+          "fromLastWeekNegative": "-{percent}% from last week",
+          "viewsOverTime": "Views Over Time",
+          "viewsChartComingSoon": "View analytics chart coming soon",
+          "mostViewedCharts": "Most Viewed Charts",
+          "viewsLabel": "{count} views",
+          "interactionsLabel": "{count} interactions"
+        },
+        "activityTab": {
+          "recentActivity": "Recent Activity"
+        },
+        "settingsTab": {
+          "generalSettings": "General Settings",
+          "publicDashboard": "Public Dashboard",
+          "publicDescription": "Allow anyone with the link to view",
+          "allowComments": "Allow Comments",
+          "allowCommentsDescription": "Enable commenting on this dashboard",
+          "showInSearch": "Show in Search",
+          "showInSearchDescription": "Include in organization search results",
+          "alertsNotifications": "Alerts & Notifications",
+          "addAlert": "Add Alert",
+          "collaborators": "Collaborators",
+          "inviteCollaborator": "Invite Collaborator",
+          "relatedDashboards": "Related Dashboards"
+        },
+        "share": {
+          "title": "Share Dashboard",
+          "description": "Invite people to view or collaborate on this dashboard",
+          "enterEmail": "Enter email address",
+          "viewer": "Viewer",
+          "editor": "Editor",
+          "admin": "Admin",
+          "peopleWithAccess": "People with access",
+          "linkSharing": "Link sharing",
+          "publicAccess": "Public access",
+          "publicAccessDescription": "Anyone with the link can view"
+        },
+        "exportDialog": {
+          "title": "Export Dashboard",
+          "description": "Choose an export format for your dashboard",
+          "json": "JSON",
+          "jsonDescription": "Full data export with all metadata",
+          "csv": "CSV",
+          "csvDescription": "Chart data in spreadsheet format",
+          "pdfHtml": "PDF / HTML",
+          "pdfHtmlDescription": "Printable report format",
+          "pngImage": "PNG Image",
+          "pngImageDescription": "Screenshot of the dashboard"
+        },
+        "alerts": {
+          "title": "Manage Alerts",
+          "description": "Set up notifications for dashboard metrics",
+          "createNewAlert": "Create New Alert",
+          "alertName": "Alert name...",
+          "alertCondition": "Condition (e.g., Views > 1000/day)",
+          "addAlertButton": "Add Alert",
+          "activeAlerts": "Active Alerts"
+        },
+        "delete": {
+          "title": "Delete Dashboard",
+          "confirmMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "Cancel",
+          "delete": "Delete"
+        }
+      }
     },
     "projects": {
       "activeProjects": "Active Projects",
@@ -891,6 +2413,165 @@
       "activate": "Activate",
       "runsCount": "{count} run",
       "runsCountPlural": "{count} runs"
+    },
+    "overview": {
+      "activeAgents": "Active Agents",
+      "workflowsRun": "Workflows Run",
+      "insightsGenerated": "Insights Generated",
+      "avgRunTime": "Avg. Run Time",
+      "thisWeekChange": "+{count} this week",
+      "fromLastMonthPercent": "+{percent}% from last month",
+      "fasterPercent": "-{percent}% faster",
+      "active": "Active",
+      "noneActive": "None active",
+      "last24Hours": "Last 24 hours",
+      "noRunsYet": "No runs yet",
+      "noInsightsYet": "No insights yet",
+      "perWorkflow": "Per workflow",
+      "notAvailable": "N/A"
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "Select organization",
+      "searchPlaceholder": "Search organizations...",
+      "noOrganizationFound": "No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "Weekly Activity",
+      "monthlyTrend": "Monthly Trend",
+      "workflows": "Workflows",
+      "insights": "Insights",
+      "days": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      },
+      "months": {
+        "jan": "Jan",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Apr",
+        "may": "May",
+        "jun": "Jun",
+        "jul": "Jul",
+        "aug": "Aug",
+        "sep": "Sep",
+        "oct": "Oct",
+        "nov": "Nov",
+        "dec": "Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "Active Agents",
+      "manage": "Manage",
+      "activeTasks": "{count} active tasks",
+      "idle": "Idle"
+    },
+    "builder": {
+      "untitledDashboard": "Untitled Dashboard",
+      "addWidget": "Add Widget",
+      "undoShortcut": "Undo (Ctrl+Z)",
+      "redoShortcut": "Redo (Ctrl+Y)",
+      "grid": "Grid",
+      "snap": "Snap",
+      "widgetsCount": "{count} widgets",
+      "exportFormat": "Export Format",
+      "export": {
+        "pdf": "PDF Document",
+        "png": "PNG Image",
+        "json": "JSON Config"
+      },
+      "duplicate": "Duplicate",
+      "fullscreen": "Fullscreen",
+      "lock": "Lock",
+      "unlock": "Unlock",
+      "hide": "Hide",
+      "chooseWidgetType": "Choose a widget type to add to your dashboard",
+      "editWidget": "Edit Widget",
+      "newWidget": "New {type}",
+      "enterTextContent": "Enter text content...",
+      "unknownWidgetType": "Unknown widget type",
+      "target": "Target",
+      "table": {
+        "name": "Name",
+        "value": "Value",
+        "change": "Change",
+        "item": "Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "Chart",
+        "metric": "Metric",
+        "table": "Table",
+        "text": "Text",
+        "image": "Image",
+        "kpi": "KPI",
+        "kpiCard": "KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "Visualize data with various chart types",
+        "kpi": "Display key performance indicators",
+        "metric": "Show a single metric value",
+        "table": "Display data in tabular format",
+        "text": "Add text content or notes",
+        "image": "Display an image or logo"
+      },
+      "tabs": {
+        "general": "General",
+        "data": "Data",
+        "style": "Style",
+        "advanced": "Advanced"
+      },
+      "fields": {
+        "title": "Title",
+        "subtitle": "Subtitle",
+        "chartType": "Chart Type",
+        "content": "Content",
+        "value": "Value",
+        "changePercent": "Change (%)",
+        "target": "Target",
+        "dataSource": "Data Source",
+        "refreshInterval": "Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "Bar Chart",
+        "line": "Line Chart",
+        "area": "Area Chart",
+        "pie": "Pie Chart",
+        "donut": "Donut Chart",
+        "radar": "Radar Chart",
+        "scatter": "Scatter Plot",
+        "funnel": "Funnel Chart",
+        "treemap": "Treemap",
+        "heatmap": "Heatmap"
+      },
+      "dataSources": {
+        "sample": "Sample Data",
+        "api": "API Endpoint",
+        "crosstab": "Crosstab",
+        "custom": "Custom Query"
+      },
+      "refreshIntervalHint": "Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "Show Legend",
+        "showGrid": "Show Grid",
+        "showTooltip": "Show Tooltip",
+        "backgroundColor": "Background Color"
+      },
+      "advanced": {
+        "lockWidget": "Lock Widget",
+        "lockWidgetHint": "Prevent moving and resizing",
+        "zIndex": "Z-Index"
+      },
+      "dashboardSettings": "Dashboard Settings",
+      "saveSettings": "Save Settings",
+      "settings": {
+        "dashboardName": "Dashboard Name",
+        "gridColumns": "Grid Columns",
+        "gridRows": "Grid Rows"
+      }
     },
     "platform": {
       "platformModules": "Platform Modules",
@@ -964,7 +2645,60 @@
         "title": "Workflows",
         "description": "Create and manage your automated research pipelines.",
         "newWorkflow": "New Workflow",
-        "searchPlaceholder": "Search workflows..."
+        "searchPlaceholder": "Search workflows...",
+        "edit": {
+          "title": "Edit Workflow",
+          "description": "Modify workflow settings and configuration",
+          "newWorkflowName": "New Workflow",
+          "basicInfo": {
+            "title": "Basic Information",
+            "description": "Update the workflow name and description",
+            "workflowName": "Workflow Name",
+            "workflowNamePlaceholder": "Enter workflow name",
+            "descriptionPlaceholder": "Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "Schedule",
+            "description": "Configure when this workflow runs",
+            "runFrequency": "Run Frequency",
+            "selectSchedule": "Select schedule",
+            "selectStatus": "Select status",
+            "frequencies": {
+              "hourly": "Hourly",
+              "daily": "Daily",
+              "weekly": "Weekly",
+              "monthly": "Monthly",
+              "onDemand": "On-demand"
+            },
+            "statuses": {
+              "active": "Active",
+              "paused": "Paused",
+              "scheduled": "Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "Error Handling",
+            "description": "Configure retry behavior for failed runs",
+            "autoRetry": "Auto-retry on failure",
+            "autoRetryDescription": "Automatically retry the workflow if it fails",
+            "retryAttempts": "Retry Attempts",
+            "selectAttempts": "Select attempts",
+            "attempts": {
+              "one": "1 attempt",
+              "two": "2 attempts",
+              "three": "3 attempts",
+              "five": "5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "Notifications",
+            "description": "Configure how you receive updates about this workflow",
+            "email": "Email notifications",
+            "emailDescription": "Receive email updates on completion or failure",
+            "slack": "Slack notifications",
+            "slackDescription": "Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "Audiences",
@@ -1012,7 +2746,55 @@
         "unarchive": "Unarchive",
         "workflows": "workflows",
         "reports": "reports",
-        "agents": "agents"
+        "agents": "agents",
+        "detail": {
+          "defaultDescription": "Project description",
+          "projectSettings": "Project Settings",
+          "archiveProject": "Archive Project",
+          "deleteProject": "Delete Project",
+          "new": "New",
+          "stats": {
+            "teamMembers": "Team Members",
+            "workflows": "Workflows",
+            "running": "{count} running",
+            "reports": "Reports",
+            "generatedOutputs": "Generated outputs",
+            "agentsUsed": "Agents Used",
+            "totalRuns": "{count} total runs"
+          },
+          "tabs": {
+            "overview": "Overview",
+            "workflows": "Workflows",
+            "reports": "Reports",
+            "agents": "Agents",
+            "team": "Team"
+          },
+          "overview": {
+            "recentWorkflows": "Recent Workflows",
+            "recentReports": "Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "Project Workflows",
+            "newWorkflow": "New Workflow",
+            "lastRun": "Last run",
+            "run": "Run"
+          },
+          "reportsTab": {
+            "title": "Project Reports",
+            "newReport": "New Report",
+            "created": "Created"
+          },
+          "agentsTab": {
+            "title": "Agents Used",
+            "addAgent": "Add Agent",
+            "runsInProject": "{count} runs in this project"
+          },
+          "teamTab": {
+            "title": "Team Members",
+            "addMember": "Add Member",
+            "remove": "Remove"
+          }
+        }
       }
     },
     "audiences": {
@@ -1434,6 +3216,489 @@
           "enableDesc": "Receive notifications when metrics fall below thresholds",
           "minAwareness": "Minimum Awareness (%)",
           "minNPS": "Minimum NPS Score"
+        }
+      },
+      "pageTracker": "Brand Tracking",
+      "title": "Brand Tracking",
+      "description": "Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "All Brands",
+        "active": "Active",
+        "paused": "Paused",
+        "draft": "Draft"
+      },
+      "new": {
+        "title": "New Brand Tracking",
+        "description": "Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "Brand Information",
+          "description": "Provide details about the brand you want to track",
+          "brandNameLabel": "Brand Name *",
+          "brandNamePlaceholder": "e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "Description",
+          "descriptionPlaceholder": "Brief description of what you want to track...",
+          "industryLabel": "Industry",
+          "industryPlaceholder": "e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "manual": "Manual Only"
+        },
+        "competitors": {
+          "label": "Competitors",
+          "placeholder": "Add competitor name..."
+        },
+        "metrics": {
+          "title": "Metrics to Track",
+          "awareness": "Brand Awareness",
+          "consideration": "Consideration",
+          "preference": "Preference",
+          "loyalty": "Loyalty",
+          "nps": "Net Promoter Score (NPS)",
+          "sentiment": "Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "create": "Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "Brand Tracking Detail",
+        "title": "Brand Health Dashboard",
+        "notFound": "Brand Study Not Found",
+        "notFoundDescription": "The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "Back to Brand Tracking",
+        "loading": "Loading...",
+        "people": "people",
+        "timePeriods": {
+          "1m": "1 Month",
+          "3m": "3 Months",
+          "6m": "6 Months",
+          "1y": "1 Year",
+          "all": "All Time"
+        },
+        "tabs": {
+          "overview": "Overview",
+          "trends": "Trends",
+          "competitors": "Competitors",
+          "insights": "Insights",
+          "comments": "Comments",
+          "activity": "Activity",
+          "history": "History"
+        },
+        "actions": {
+          "explore": "Explore",
+          "share": "Share",
+          "export": "Export",
+          "edit": "Edit",
+          "refresh": "Refresh",
+          "autoRefresh": "Auto-refresh",
+          "pauseAutoRefresh": "Pause auto-refresh",
+          "enableAutoRefresh": "Enable auto-refresh",
+          "duplicate": "Duplicate",
+          "copyLink": "Copy Link",
+          "copied": "Copied!",
+          "delete": "Delete",
+          "addToFavorites": "Add to favorites",
+          "removeFromFavorites": "Remove from favorites",
+          "scheduleReport": "Schedule Report"
+        },
+        "export": {
+          "asJson": "Export as JSON",
+          "asCsv": "Export as CSV",
+          "asPdf": "Export as PDF",
+          "toPowerPoint": "Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "Awareness",
+          "consideration": "Consideration",
+          "preference": "Preference",
+          "loyalty": "Loyalty",
+          "nps": "NPS",
+          "sentiment": "Sentiment",
+          "marketShare": "Market Share",
+          "vsTarget": "vs target",
+          "trend": "trend"
+        },
+        "charts": {
+          "brandHealthTrend": "Brand Health Trend",
+          "competitorComparison": "Competitor Comparison",
+          "sentimentBreakdown": "Sentiment Breakdown",
+          "metricsOverTime": "Metrics Over Time"
+        },
+        "overview": {
+          "title": "Brand Overview",
+          "industry": "Industry",
+          "competitors": "Competitors",
+          "trackingFrequency": "Tracking Frequency",
+          "lastUpdated": "Last Updated",
+          "createdBy": "Created By",
+          "dateRange": "Date Range"
+        },
+        "insights": {
+          "title": "Key Insights",
+          "aiGenerated": "AI-Generated",
+          "noInsights": "No insights available yet",
+          "generateInsights": "Generate Insights"
+        },
+        "activity": {
+          "title": "Activity Log",
+          "description": "Recent activity on this brand study",
+          "viewed": "viewed",
+          "exported": "exported",
+          "edited": "edited",
+          "shared": "shared",
+          "created": "created"
+        },
+        "share": {
+          "title": "Share Brand Study",
+          "description": "Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "Email address",
+          "emailPlaceholder": "email@example.com",
+          "roleLabel": "Role",
+          "viewer": "Viewer",
+          "editor": "Editor",
+          "admin": "Admin",
+          "shareLink": "Share link",
+          "cancel": "Cancel",
+          "share": "Share"
+        },
+        "schedule": {
+          "title": "Schedule Report",
+          "description": "Set up automatic email delivery of this brand tracking report.",
+          "recipients": "Recipients",
+          "recipientsPlaceholder": "email@example.com, team@example.com",
+          "frequency": "Frequency",
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "format": "Format",
+          "pdf": "PDF",
+          "csv": "CSV",
+          "json": "JSON",
+          "cancel": "Cancel",
+          "schedule": "Schedule"
+        },
+        "delete": {
+          "title": "Delete Brand Study",
+          "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "Cancel",
+          "delete": "Delete"
+        }
+      }
+    },
+    "analytics": {
+      "pageTracker": "Analytics",
+      "title": "Analytics",
+      "description": "Track your research performance and insights"
+    },
+    "audiences": {
+      "pageTracker": "Audiences List",
+      "title": "Audiences",
+      "description": "Build and analyze custom consumer segments",
+      "aiBuilder": "AI Builder",
+      "newAudience": "New Audience",
+      "totalAudiences": "Total Audiences",
+      "avgReach": "Avg. Reach",
+      "markets": "Markets",
+      "usedThisWeek": "Used This Week",
+      "searchPlaceholder": "Search audiences...",
+      "allAudiences": "All Audiences",
+      "recentlyUsed": "Recently Used",
+      "favorites": "Favorites",
+      "marketplace": "Marketplace",
+      "aiAudienceBuilder": "AI Audience Builder",
+      "aiBuilderDescription": "Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "Compare Audiences",
+      "compareDescription": "Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "No audiences yet",
+        "description": "Create your first audience to get started",
+        "action": "New Audience"
+      },
+      "grid": {
+        "marketsCount": "{count} markets",
+        "used": "Used {time}"
+      },
+      "new": {
+        "title": "Build New Audience",
+        "description": "Define your target segment using natural language or attributes",
+        "basicInfo": {
+          "audienceName": "Audience Name",
+          "audienceNamePlaceholder": "e.g., Eco-Conscious Millennials",
+          "description": "Description",
+          "descriptionPlaceholder": "Brief description of this audience segment"
+        },
+        "aiQuery": {
+          "title": "AI-Powered Query",
+          "description": "Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "Generate Attributes"
+        },
+        "attributes": {
+          "title": "Attributes",
+          "add": "Add",
+          "age": "Age",
+          "gender": "Gender",
+          "income": "Income",
+          "interests": "Interests",
+          "is": "is",
+          "between": "between",
+          "contains": "contains"
+        },
+        "markets": {
+          "title": "Markets",
+          "global": "Global",
+          "us": "United States",
+          "uk": "United Kingdom",
+          "de": "Germany",
+          "jp": "Japan"
+        },
+        "estimatedReach": {
+          "title": "Estimated Reach",
+          "matchCriteria": "consumers match these criteria"
+        },
+        "actions": {
+          "save": "Save Audience",
+          "saving": "Saving...",
+          "cancel": "Cancel"
+        },
+        "errors": {
+          "nameRequired": "Please enter an audience name",
+          "createFailed": "Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "Audience Detail",
+        "notFound": "Audience Not Found",
+        "notFoundDescription": "The requested audience could not be found",
+        "notFoundDetailedDescription": "The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "Back to Audiences",
+        "people": "people",
+        "addToFavorites": "Add to favorites",
+        "removeFromFavorites": "Remove from favorites",
+        "used": "Used {time}",
+        "tabs": {
+          "overview": "Overview",
+          "persona": "Persona",
+          "dayInLife": "Day in the Life",
+          "habits": "Habits & Behaviors",
+          "media": "Media Consumption",
+          "brands": "Brand Affinities",
+          "comments": "Comments",
+          "activity": "Activity",
+          "history": "History"
+        },
+        "actions": {
+          "explore": "Explore",
+          "share": "Share",
+          "export": "Export",
+          "edit": "Edit",
+          "autoRefresh": "Auto-refresh",
+          "pauseAutoRefresh": "Pause auto-refresh",
+          "enableAutoRefresh": "Enable auto-refresh",
+          "duplicate": "Duplicate",
+          "createLookalike": "Create Lookalike",
+          "addToCrosstab": "Add to Crosstab",
+          "addToDashboard": "Add to Dashboard",
+          "scheduleReport": "Schedule Report",
+          "copyLink": "Copy Link",
+          "copied": "Copied!",
+          "delete": "Delete"
+        },
+        "export": {
+          "asJson": "Export as JSON",
+          "asCsv": "Export as CSV",
+          "asPdf": "Export as PDF",
+          "toPowerPoint": "Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "Demographics",
+          "keyBehaviors": "Key Behaviors",
+          "interests": "Interests",
+          "audienceSummary": "Audience Summary",
+          "size": "Size",
+          "markets": "Markets",
+          "quickActions": "Quick Actions",
+          "createChart": "Create Chart",
+          "compareAudiences": "Compare Audiences",
+          "exportProfile": "Export Profile",
+          "copyLink": "Copy Link"
+        },
+        "activity": {
+          "title": "Activity Log",
+          "description": "Recent activity on this audience",
+          "viewed": "viewed",
+          "exported": "exported",
+          "edited": "edited",
+          "shared": "shared",
+          "created": "created",
+          "createdChart": "created chart",
+          "addedToCrosstab": "added to crosstab"
+        },
+        "share": {
+          "title": "Share Audience",
+          "description": "Share this audience with team members or external collaborators.",
+          "emailLabel": "Email address",
+          "emailPlaceholder": "email@example.com",
+          "roleLabel": "Role",
+          "viewer": "Viewer",
+          "editor": "Editor",
+          "admin": "Admin",
+          "shareLink": "Share link",
+          "cancel": "Cancel",
+          "share": "Share"
+        },
+        "schedule": {
+          "title": "Schedule Report",
+          "description": "Set up automatic email delivery of this audience report.",
+          "recipients": "Recipients",
+          "recipientsPlaceholder": "email@example.com, team@example.com",
+          "frequency": "Frequency",
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "format": "Format",
+          "pdf": "PDF",
+          "csv": "CSV",
+          "json": "JSON",
+          "cancel": "Cancel",
+          "schedule": "Schedule"
+        },
+        "delete": {
+          "title": "Delete Audience",
+          "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "Cancel",
+          "delete": "Delete"
+        }
+      }
+    },
+    "charts": {
+      "pageTracker": "Charts List",
+      "title": "Charts",
+      "description": "Visualize consumer insights with interactive, award-winning charts",
+      "templates": "Templates",
+      "compare": "Compare",
+      "newChart": "New Chart",
+      "totalCharts": "Total Charts",
+      "totalViews": "Total Views",
+      "shares": "Shares",
+      "exports": "Exports",
+      "searchPlaceholder": "Search charts...",
+      "allCategory": "All",
+      "allCharts": "All Charts",
+      "recent": "Recent",
+      "mostViewed": "Most Viewed",
+      "favorites": "Favorites",
+      "emptyState": {
+        "title": "No charts found",
+        "description": "Create your first chart or try a different search",
+        "action": "Create Chart"
+      },
+      "comparison": {
+        "title": "Brand Health Comparison",
+        "description": "Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "Create New Chart",
+        "description": "Choose a chart type and configure your visualization",
+        "basicInfo": {
+          "title": "Basic Information",
+          "chartName": "Chart Name",
+          "chartNamePlaceholder": "e.g., Social Media Usage by Age Group",
+          "description": "Description",
+          "descriptionPlaceholder": "Describe what this chart shows"
+        },
+        "chartType": {
+          "title": "Chart Type",
+          "description": "Select the visualization type"
+        },
+        "dataConfig": {
+          "title": "Data Configuration",
+          "targetAudience": "Target Audience",
+          "selectAudience": "Select audience",
+          "timePeriod": "Time Period",
+          "selectTimePeriod": "Select time period",
+          "dataSource": "Data Source",
+          "selectDataSource": "Select data source"
+        },
+        "preview": {
+          "title": "Preview",
+          "description": "How your chart will look"
+        },
+        "actions": {
+          "save": "Create Chart",
+          "saving": "Creating...",
+          "cancel": "Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "Chart Detail",
+        "notFound": "Chart Not Found",
+        "notFoundDescription": "The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "Back to Charts",
+        "views": "views",
+        "shares": "shares",
+        "addToFavorites": "Add to favorites",
+        "removeFromFavorites": "Remove from favorites",
+        "tabs": {
+          "chart": "Chart",
+          "data": "Data",
+          "settings": "Settings",
+          "comments": "Comments",
+          "activity": "Activity",
+          "history": "History"
+        },
+        "actions": {
+          "share": "Share",
+          "export": "Export",
+          "edit": "Edit",
+          "fullscreen": "Fullscreen",
+          "duplicate": "Duplicate",
+          "addToDashboard": "Add to Dashboard",
+          "scheduleReport": "Schedule Report",
+          "copyLink": "Copy Link",
+          "copied": "Copied!",
+          "delete": "Delete"
+        },
+        "export": {
+          "asJson": "Export as JSON",
+          "asCsv": "Export as CSV",
+          "asPng": "Export as PNG",
+          "asSvg": "Export as SVG",
+          "toPowerPoint": "Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "Chart Info",
+          "type": "Type",
+          "dataSource": "Data Source",
+          "audience": "Audience",
+          "timePeriod": "Time Period",
+          "created": "Created",
+          "lastUpdated": "Last Updated"
+        },
+        "share": {
+          "title": "Share Chart",
+          "description": "Share this chart with team members or external collaborators.",
+          "emailLabel": "Email address",
+          "emailPlaceholder": "email@example.com",
+          "roleLabel": "Role",
+          "viewer": "Viewer",
+          "editor": "Editor",
+          "admin": "Admin",
+          "shareLink": "Share link",
+          "embedCode": "Embed code",
+          "cancel": "Cancel",
+          "share": "Share"
+        },
+        "delete": {
+          "title": "Delete Chart",
+          "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "Cancel",
+          "delete": "Delete"
         }
       }
     }

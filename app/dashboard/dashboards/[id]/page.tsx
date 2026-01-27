@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo, use, useCallback, useRef } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -448,6 +449,7 @@ type LayoutView = "grid" | "list" | "compact"
 type ExportFormat = "json" | "pdf" | "png" | "csv"
 
 export default function DashboardDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = useTranslations('dashboard.dashboards.detail')
   const { id } = use(params)
   const router = useRouter()
   const [isExporting, setIsExporting] = useState(false)
@@ -515,8 +517,18 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
               return validChartTypes.includes(upperType as ChartType) ? (upperType as ChartType) : "BAR"
             }
 
+            interface WidgetData {
+              id?: string
+              type?: string
+              title?: string
+              name?: string
+              metric?: string
+              category?: string
+              dataSource?: string
+            }
+
             // Infer category from widget type/metric
-            const getCategoryFromWidget = (widget: any): string => {
+            const getCategoryFromWidget = (widget: WidgetData): string => {
               if (widget.category) return widget.category
               const type = (widget.type || "").toLowerCase()
               const metric = (widget.metric || "").toLowerCase()
@@ -546,7 +558,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
               id: apiDashboard.id,
               name: apiDashboard.name,
               description: apiDashboard.description || "",
-              charts: widgetsArray.map((w: any, i: number) => ({
+              charts: widgetsArray.map((w: WidgetData, i: number) => ({
                 id: w.id || `chart-${i}`,
                 name: w.title || w.name || `Chart ${i + 1}`,
                 type: getValidChartType(w.type),
@@ -786,18 +798,18 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Dashboard Not Found</h1>
-            <p className="text-muted-foreground mt-1">The requested dashboard could not be found</p>
+            <h1 className="text-3xl font-bold">{t('notFound.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('notFound.description')}</p>
           </div>
         </div>
         <Card className="p-12 text-center">
           <LayoutDashboard className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Dashboard not found</h2>
+          <h2 className="text-xl font-semibold mb-2">{t('notFound.title')}</h2>
           <p className="text-muted-foreground mb-4">
-            The dashboard you're looking for doesn't exist or has been deleted.
+            {t('notFound.message')}
           </p>
           <Link href="/dashboard/dashboards">
-            <Button>Back to Dashboards</Button>
+            <Button>{t('notFound.backButton')}</Button>
           </Link>
         </Card>
       </div>
@@ -844,7 +856,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
       let extension: string
 
       switch (format) {
-        case "csv":
+        case "csv": {
           // Export charts as CSV
           const csvHeaders = ["ID", "Name", "Type", "Category", "Data Source"]
           const csvRows = filteredCharts.map(chart =>
@@ -854,6 +866,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
           mimeType = "text/csv"
           extension = "csv"
           break
+        }
         case "pdf":
           // For PDF, we'll create an HTML representation (in a real app, use a PDF library)
           content = `
@@ -983,18 +996,18 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    {isFavorite ? "Remove from favorites" : "Add to favorites"}
+                    {isFavorite ? t('favorites.removeFromFavorites') : t('favorites.addToFavorites')}
                   </TooltipContent>
                 </Tooltip>
                 {dashboard.isPublic ? (
                   <Badge variant="secondary" className="gap-1">
                     <Globe className="h-3 w-3" />
-                    Public
+                    {t('visibility.public')}
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="gap-1">
                     <Lock className="h-3 w-3" />
-                    Private
+                    {t('visibility.private')}
                   </Badge>
                 )}
               </div>
@@ -1014,7 +1027,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   onClick={() => setShowTagsDialog(true)}
                 >
                   <Plus className="h-3 w-3 mr-1" />
-                  Add Tag
+                  {t('tags.addTag')}
                 </Button>
               </div>
             </div>
@@ -1029,36 +1042,36 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   ) : (
                     <Pause className="h-4 w-4 mr-2" />
                   )}
-                  {autoRefresh ? 'Auto-refresh ON' : 'Auto-refresh'}
+                  {autoRefresh ? t('autoRefresh.on') : t('autoRefresh.off')}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-64" align="end">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label>Auto-refresh</Label>
+                    <Label>{t('autoRefresh.label')}</Label>
                     <Switch checked={autoRefresh} onCheckedChange={setAutoRefresh} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Refresh interval</Label>
+                    <Label>{t('autoRefresh.interval')}</Label>
                     <Select value={refreshInterval} onValueChange={setRefreshInterval}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="1">Every 1 minute</SelectItem>
-                        <SelectItem value="5">Every 5 minutes</SelectItem>
-                        <SelectItem value="15">Every 15 minutes</SelectItem>
-                        <SelectItem value="30">Every 30 minutes</SelectItem>
-                        <SelectItem value="60">Every hour</SelectItem>
+                        <SelectItem value="1">{t('autoRefresh.every1Min')}</SelectItem>
+                        <SelectItem value="5">{t('autoRefresh.every5Min')}</SelectItem>
+                        <SelectItem value="15">{t('autoRefresh.every15Min')}</SelectItem>
+                        <SelectItem value="30">{t('autoRefresh.every30Min')}</SelectItem>
+                        <SelectItem value="60">{t('autoRefresh.everyHour')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Last refreshed: {lastRefresh.toLocaleTimeString()}
+                    {t('autoRefresh.lastRefreshed', { time: lastRefresh.toLocaleTimeString() })}
                   </div>
                   <Button size="sm" className="w-full" onClick={handleManualRefresh}>
                     <RefreshCw className="h-4 w-4 mr-2" />
-                    Refresh Now
+                    {t('autoRefresh.refreshNow')}
                   </Button>
                 </div>
               </PopoverContent>
@@ -1069,7 +1082,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <SheetTrigger asChild>
                 <Button variant="outline" size="sm" className="bg-transparent relative">
                   <SlidersHorizontal className="h-4 w-4 mr-2" />
-                  Filters
+                  {t('filters.title')}
                   {activeFilterCount > 0 && (
                     <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
                       {activeFilterCount}
@@ -1080,27 +1093,27 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <SheetContent className="w-[400px] sm:w-[450px] overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle className="flex items-center justify-between">
-                    <span>Filter Charts</span>
+                    <span>{t('filters.filterCharts')}</span>
                     {activeFilterCount > 0 && (
                       <Button variant="ghost" size="sm" onClick={handleClearFilters}>
                         <X className="h-4 w-4 mr-1" />
-                        Clear All
+                        {t('filters.clearAll')}
                       </Button>
                     )}
                   </SheetTitle>
                   <SheetDescription>
-                    Filter and search through dashboard charts
+                    {t('filters.filterDescription')}
                   </SheetDescription>
                 </SheetHeader>
 
                 <div className="mt-6 space-y-6">
                   {/* Search */}
                   <div className="space-y-2">
-                    <Label>Search Charts</Label>
+                    <Label>{t('filters.searchCharts')}</Label>
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search by name or category..."
+                        placeholder={t('filters.searchPlaceholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-9"
@@ -1121,10 +1134,10 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   {/* Chart Types */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label>Chart Types</Label>
+                      <Label>{t('filters.chartTypes')}</Label>
                       {selectedChartTypes.size > 0 && (
                         <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedChartTypes(new Set())}>
-                          Clear
+                          {t('filters.clear')}
                         </Button>
                       )}
                     </div>
@@ -1156,10 +1169,10 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   {categories.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <Label>Categories</Label>
+                        <Label>{t('filters.categories')}</Label>
                         {selectedCategories.size > 0 && (
                           <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedCategories(new Set())}>
-                            Clear
+                            {t('filters.clear')}
                           </Button>
                         )}
                       </div>
@@ -1197,10 +1210,10 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   {dataSources.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <Label>Data Sources</Label>
+                        <Label>{t('filters.dataSources')}</Label>
                         {selectedDataSources.size > 0 && (
                           <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => setSelectedDataSources(new Set())}>
-                            Clear
+                            {t('filters.clear')}
                           </Button>
                         )}
                       </div>
@@ -1235,7 +1248,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   {/* Results summary */}
                   <div className="pt-4 border-t">
                     <p className="text-sm text-muted-foreground">
-                      Showing {filteredCharts.length} of {dashboard.charts.length} charts
+                      {t('filters.showingResults', { filtered: filteredCharts.length, total: dashboard.charts.length })}
                     </p>
                   </div>
                 </div>
@@ -1244,20 +1257,20 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
 
             <Button variant="outline" size="sm" className="bg-transparent">
               <Plus className="h-4 w-4 mr-2" />
-              Add Chart
+              {t('actions.addChart')}
             </Button>
             <Button variant="outline" size="sm" className="bg-transparent" onClick={() => setShowShareDialog(true)}>
               <Share2 className="h-4 w-4 mr-2" />
-              Share
+              {t('actions.share')}
             </Button>
             <Button variant="outline" size="sm" className="bg-transparent" onClick={() => setShowExportDialog(true)}>
               <Download className="h-4 w-4 mr-2" />
-              Export
+              {t('actions.export')}
             </Button>
             <Link href={`/dashboard/dashboards/builder?id=${dashboard.id}`}>
               <Button size="sm">
                 <Edit className="h-4 w-4 mr-2" />
-                Edit
+                {t('actions.edit')}
               </Button>
             </Link>
             <DropdownMenu>
@@ -1269,24 +1282,24 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={handleDuplicate}>
                   <Copy className="h-4 w-4 mr-2" />
-                  Duplicate
+                  {t('actions.duplicate')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleCopyLink}>
                   {copied ? <Check className="h-4 w-4 mr-2" /> : <Link2 className="h-4 w-4 mr-2" />}
-                  {copied ? "Copied!" : "Copy Link"}
+                  {copied ? t('actions.copied') : t('actions.copyLink')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setShowAlertDialog(true)}>
                   <Bell className="h-4 w-4 mr-2" />
-                  Manage Alerts
+                  {t('actions.manageAlerts')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setShowTagsDialog(true)}>
                   <Tag className="h-4 w-4 mr-2" />
-                  Manage Tags
+                  {t('tags.manageTags')}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
                   <Trash2 className="h-4 w-4 mr-2" />
-                  Delete
+                  {t('actions.delete')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -1298,19 +1311,19 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Calendar className="h-4 w-4" />
-              <span>Modified {dashboard.lastModified}</span>
+              <span>{t('meta.modified', { time: dashboard.lastModified })}</span>
             </div>
             <div className="flex items-center gap-1">
               <Eye className="h-4 w-4" />
-              <span>{dashboard.views.toLocaleString()} views</span>
+              <span>{t('meta.views', { count: dashboard.views.toLocaleString() })}</span>
             </div>
             <div className="flex items-center gap-1">
               <Users className="h-4 w-4" />
-              <span>Created by {dashboard.createdBy}</span>
+              <span>{t('meta.createdBy', { name: dashboard.createdBy })}</span>
             </div>
             <div className="flex items-center gap-1">
               <BarChart3 className="h-4 w-4" />
-              <span>{filteredCharts.length} of {dashboard.charts.length} charts</span>
+              <span>{t('meta.chartsCount', { filtered: filteredCharts.length, total: dashboard.charts.length })}</span>
             </div>
             {collaborators.length > 1 && (
               <div className="flex items-center gap-1">
@@ -1334,7 +1347,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search charts..."
+                placeholder={t('meta.searchCharts')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-8 h-8 w-48"
@@ -1374,33 +1387,33 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
         {/* Active filters badges */}
         {activeFilterCount > 0 && (
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-sm text-muted-foreground">Active filters:</span>
+            <span className="text-sm text-muted-foreground">{t('filters.activeFilters')}</span>
             {searchQuery && (
               <Badge variant="secondary" className="flex items-center gap-1">
-                Search: "{searchQuery}"
+                {t('filters.searchLabel', { query: searchQuery })}
                 <X className="h-3 w-3 cursor-pointer" onClick={() => setSearchQuery("")} />
               </Badge>
             )}
             {selectedChartTypes.size > 0 && (
               <Badge variant="secondary" className="flex items-center gap-1">
-                {selectedChartTypes.size} chart type{selectedChartTypes.size > 1 ? 's' : ''}
+                {selectedChartTypes.size > 1 ? t('filters.chartTypesCountPlural', { count: selectedChartTypes.size }) : t('filters.chartTypesCount', { count: selectedChartTypes.size })}
                 <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedChartTypes(new Set())} />
               </Badge>
             )}
             {selectedCategories.size > 0 && (
               <Badge variant="secondary" className="flex items-center gap-1">
-                {selectedCategories.size} categor{selectedCategories.size > 1 ? 'ies' : 'y'}
+                {selectedCategories.size > 1 ? t('filters.categoriesCountPlural', { count: selectedCategories.size }) : t('filters.categoriesCount', { count: selectedCategories.size })}
                 <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedCategories(new Set())} />
               </Badge>
             )}
             {selectedDataSources.size > 0 && (
               <Badge variant="secondary" className="flex items-center gap-1">
-                {selectedDataSources.size} data source{selectedDataSources.size > 1 ? 's' : ''}
+                {selectedDataSources.size > 1 ? t('filters.dataSourcesCountPlural', { count: selectedDataSources.size }) : t('filters.dataSourcesCount', { count: selectedDataSources.size })}
                 <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedDataSources(new Set())} />
               </Badge>
             )}
             <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={handleClearFilters}>
-              Clear all
+              {t('filters.clearAllFilters')}
             </Button>
           </div>
         )}
@@ -1410,27 +1423,27 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
           <TabsList className="flex-wrap h-auto gap-1">
             <TabsTrigger value="charts" className="gap-2">
               <BarChart3 className="h-4 w-4" />
-              Charts ({filteredCharts.length})
+              {t('tabs.charts', { count: filteredCharts.length })}
             </TabsTrigger>
             <TabsTrigger value="analytics" className="gap-2">
               <Activity className="h-4 w-4" />
-              Analytics
+              {t('tabs.analytics')}
             </TabsTrigger>
             <TabsTrigger value="comments" className="gap-2">
               <Sparkles className="h-4 w-4" />
-              Comments
+              {t('tabs.comments')}
             </TabsTrigger>
             <TabsTrigger value="activity" className="gap-2">
               <History className="h-4 w-4" />
-              Activity
+              {t('tabs.activity')}
             </TabsTrigger>
             <TabsTrigger value="history" className="gap-2">
               <Clock className="h-4 w-4" />
-              History
+              {t('tabs.history')}
             </TabsTrigger>
             <TabsTrigger value="settings" className="gap-2">
               <Settings className="h-4 w-4" />
-              Settings
+              {t('tabs.settings')}
             </TabsTrigger>
           </TabsList>
 
@@ -1459,31 +1472,31 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                             {expandedChart === chart.id ? (
                               <>
                                 <Minimize2 className="h-4 w-4 mr-2" />
-                                Minimize
+                                {t('chartActions.minimize')}
                               </>
                             ) : (
                               <>
                                 <Maximize2 className="h-4 w-4 mr-2" />
-                                Expand
+                                {t('chartActions.expand')}
                               </>
                             )}
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <RefreshCw className="h-4 w-4 mr-2" />
-                            Refresh Data
+                            {t('chartActions.refreshData')}
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <Download className="h-4 w-4 mr-2" />
-                            Export Chart
+                            {t('chartActions.exportChart')}
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <ExternalLink className="h-4 w-4 mr-2" />
-                            Open in Editor
+                            {t('chartActions.openInEditor')}
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-destructive">
                             <Trash2 className="h-4 w-4 mr-2" />
-                            Remove from Dashboard
+                            {t('chartActions.removeFromDashboard')}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -1521,7 +1534,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                         )}
                       </div>
                       {chart.dataSource && layoutView === "list" && (
-                        <p className="text-xs text-muted-foreground mt-1">Source: {chart.dataSource}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t('insights.source', { name: chart.dataSource })}</p>
                       )}
                     </div>
                   </Card>
@@ -1541,7 +1554,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                           layoutView === "compact" ? "h-6 w-6" : "h-8 w-8"
                         }`} />
                         <p className={`text-muted-foreground ${layoutView === "compact" ? "text-xs" : "text-sm"}`}>
-                          Add Chart
+                          {t('actions.addChart')}
                         </p>
                       </div>
                     </div>
@@ -1551,13 +1564,13 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
             ) : (
               <Card className="p-12 text-center">
                 <Filter className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No charts match your filters</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('emptyState.noChartsMatch')}</h3>
                 <p className="text-muted-foreground mb-4">
-                  Try adjusting your filters or search query to see more charts.
+                  {t('emptyState.adjustFilters')}
                 </p>
                 <Button onClick={handleClearFilters}>
                   <RefreshCw className="h-4 w-4 mr-2" />
-                  Clear Filters
+                  {t('emptyState.clearFilters')}
                 </Button>
               </Card>
             )}
@@ -1566,28 +1579,27 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="h-5 w-5 text-primary" />
-                <h3 className="font-semibold">Dashboard Insights</h3>
+                <h3 className="font-semibold">{t('insights.title')}</h3>
               </div>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="p-4 rounded-lg bg-muted/50">
-                  <h4 className="font-medium text-sm mb-2">Chart Distribution</h4>
+                  <h4 className="font-medium text-sm mb-2">{t('insights.chartDistribution')}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {chartTypes.length} chart types used across {categories.length} categories.
-                    Most common: {chartTypes.length > 0 ? formatChartTypeName(chartTypes[0]) : 'N/A'} charts.
+                    {t('insights.chartDistributionText', { typeCount: chartTypes.length, categoryCount: categories.length, mostCommon: chartTypes.length > 0 ? formatChartTypeName(chartTypes[0]) : 'N/A' })}
                   </p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50">
-                  <h4 className="font-medium text-sm mb-2">Data Sources</h4>
+                  <h4 className="font-medium text-sm mb-2">{t('insights.dataSourcesTitle')}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {dataSources.length} data source{dataSources.length !== 1 ? 's' : ''} powering this dashboard.
-                    {dataSources.length > 0 && ` Primary: ${dataSources[0]}.`}
+                    {dataSources.length !== 1 ? t('insights.dataSourcesTextPlural', { count: dataSources.length }) : t('insights.dataSourcesText', { count: dataSources.length })}
+                    {dataSources.length > 0 && ` ${t('insights.primarySource', { source: dataSources[0] })}`}
                   </p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50">
-                  <h4 className="font-medium text-sm mb-2">Current View</h4>
+                  <h4 className="font-medium text-sm mb-2">{t('insights.currentView')}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {filteredCharts.length} of {dashboard.charts.length} charts displayed
-                    {activeFilterCount > 0 ? ` with ${activeFilterCount} active filter${activeFilterCount !== 1 ? 's' : ''}.` : '.'}
+                    {t('insights.currentViewText', { filtered: filteredCharts.length, total: dashboard.charts.length })}
+                    {activeFilterCount > 0 ? ` ${activeFilterCount !== 1 ? t('insights.withFiltersPlural', { count: activeFilterCount }) : t('insights.withFilters', { count: activeFilterCount })}` : '.'}
                   </p>
                 </div>
               </div>
@@ -1600,7 +1612,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <Card className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Total Views</p>
+                    <p className="text-sm text-muted-foreground">{t('analytics.totalViews')}</p>
                     <p className="text-3xl font-bold">{dashboard.views.toLocaleString()}</p>
                   </div>
                   <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
@@ -1609,13 +1621,13 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                 </div>
                 <div className="flex items-center mt-2 text-sm text-green-600">
                   <TrendingUp className="h-4 w-4 mr-1" />
-                  +12% from last week
+                  {t('analytics.fromLastWeek', { percent: 12 })}
                 </div>
               </Card>
               <Card className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Unique Viewers</p>
+                    <p className="text-sm text-muted-foreground">{t('analytics.uniqueViewers')}</p>
                     <p className="text-3xl font-bold">{Math.floor(dashboard.views * 0.6).toLocaleString()}</p>
                   </div>
                   <div className="h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
@@ -1624,13 +1636,13 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                 </div>
                 <div className="flex items-center mt-2 text-sm text-green-600">
                   <TrendingUp className="h-4 w-4 mr-1" />
-                  +8% from last week
+                  {t('analytics.fromLastWeek', { percent: 8 })}
                 </div>
               </Card>
               <Card className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Avg. Time on Page</p>
+                    <p className="text-sm text-muted-foreground">{t('analytics.avgTimeOnPage')}</p>
                     <p className="text-3xl font-bold">4:32</p>
                   </div>
                   <div className="h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
@@ -1639,13 +1651,13 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                 </div>
                 <div className="flex items-center mt-2 text-sm text-red-600">
                   <TrendingDown className="h-4 w-4 mr-1" />
-                  -5% from last week
+                  {t('analytics.fromLastWeekNegative', { percent: 5 })}
                 </div>
               </Card>
               <Card className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Exports</p>
+                    <p className="text-sm text-muted-foreground">{t('analytics.exports')}</p>
                     <p className="text-3xl font-bold">156</p>
                   </div>
                   <div className="h-12 w-12 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
@@ -1654,25 +1666,25 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                 </div>
                 <div className="flex items-center mt-2 text-sm text-green-600">
                   <TrendingUp className="h-4 w-4 mr-1" />
-                  +23% from last week
+                  {t('analytics.fromLastWeek', { percent: 23 })}
                 </div>
               </Card>
             </div>
 
             {/* Views over time chart placeholder */}
             <Card className="p-6">
-              <h3 className="font-semibold mb-4">Views Over Time</h3>
+              <h3 className="font-semibold mb-4">{t('analytics.viewsOverTime')}</h3>
               <div className="h-64 bg-muted rounded-lg flex items-center justify-center">
                 <div className="text-center text-muted-foreground">
                   <LineChart className="h-12 w-12 mx-auto mb-2" />
-                  <p>View analytics chart coming soon</p>
+                  <p>{t('analytics.viewsChartComingSoon')}</p>
                 </div>
               </div>
             </Card>
 
             {/* Popular Charts */}
             <Card className="p-6">
-              <h3 className="font-semibold mb-4">Most Viewed Charts</h3>
+              <h3 className="font-semibold mb-4">{t('analytics.mostViewedCharts')}</h3>
               <div className="space-y-4">
                 {dashboard.charts.slice(0, 5).map((chart, index) => (
                   <div key={chart.id} className="flex items-center gap-4">
@@ -1684,8 +1696,8 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                       <p className="text-xs text-muted-foreground">{chart.category}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-sm">{Math.floor(Math.random() * 500 + 100)} views</p>
-                      <p className="text-xs text-muted-foreground">{Math.floor(Math.random() * 50 + 10)} interactions</p>
+                      <p className="font-medium text-sm">{t('analytics.viewsLabel', { count: Math.floor(Math.random() * 500 + 100) })}</p>
+                      <p className="text-xs text-muted-foreground">{t('analytics.interactionsLabel', { count: Math.floor(Math.random() * 50 + 10) })}</p>
                     </div>
                   </div>
                 ))}
@@ -1707,7 +1719,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
           {/* Activity Tab */}
           <TabsContent value="activity" className="space-y-6">
             <Card className="p-6">
-              <h3 className="font-semibold mb-4">Recent Activity</h3>
+              <h3 className="font-semibold mb-4">{t('activityTab.recentActivity')}</h3>
               <div className="space-y-4">
                 {mockActivityData.map((activity) => (
                   <div key={activity.id} className="flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0">
@@ -1736,8 +1748,8 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                 resourceId={id}
                 resourceName={dashboard.name}
                 versions={[]}
-                onRestore={(versionId) => {
-                  console.log("Restoring version:", versionId)
+                onRestore={(_versionId) => {
+                  // Version restore functionality to be implemented
                 }}
               />
             </Card>
@@ -1750,29 +1762,29 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <Card className="p-6">
                 <h3 className="font-semibold mb-4 flex items-center gap-2">
                   <Settings className="h-5 w-5" />
-                  General Settings
+                  {t('settingsTab.generalSettings')}
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Public Dashboard</Label>
-                      <p className="text-xs text-muted-foreground">Allow anyone with the link to view</p>
+                      <Label>{t('settingsTab.publicDashboard')}</Label>
+                      <p className="text-xs text-muted-foreground">{t('settingsTab.publicDescription')}</p>
                     </div>
                     <Switch checked={dashboard.isPublic} />
                   </div>
                   <Separator />
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Allow Comments</Label>
-                      <p className="text-xs text-muted-foreground">Enable commenting on this dashboard</p>
+                      <Label>{t('settingsTab.allowComments')}</Label>
+                      <p className="text-xs text-muted-foreground">{t('settingsTab.allowCommentsDescription')}</p>
                     </div>
                     <Switch defaultChecked />
                   </div>
                   <Separator />
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Show in Search</Label>
-                      <p className="text-xs text-muted-foreground">Include in organization search results</p>
+                      <Label>{t('settingsTab.showInSearch')}</Label>
+                      <p className="text-xs text-muted-foreground">{t('settingsTab.showInSearchDescription')}</p>
                     </div>
                     <Switch defaultChecked />
                   </div>
@@ -1783,7 +1795,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <Card className="p-6">
                 <h3 className="font-semibold mb-4 flex items-center gap-2">
                   <Bell className="h-5 w-5" />
-                  Alerts & Notifications
+                  {t('settingsTab.alertsNotifications')}
                 </h3>
                 <div className="space-y-4">
                   {alerts.map((alert) => (
@@ -1807,7 +1819,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   ))}
                   <Button variant="outline" className="w-full" onClick={() => setShowAlertDialog(true)}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Alert
+                    {t('settingsTab.addAlert')}
                   </Button>
                 </div>
               </Card>
@@ -1816,7 +1828,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <Card className="p-6">
                 <h3 className="font-semibold mb-4 flex items-center gap-2">
                   <Users className="h-5 w-5" />
-                  Collaborators
+                  {t('settingsTab.collaborators')}
                 </h3>
                 <div className="space-y-3">
                   {collaborators.map((collab) => (
@@ -1850,7 +1862,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   ))}
                   <Button variant="outline" className="w-full" onClick={() => setShowShareDialog(true)}>
                     <UserPlus className="h-4 w-4 mr-2" />
-                    Invite Collaborator
+                    {t('settingsTab.inviteCollaborator')}
                   </Button>
                 </div>
               </Card>
@@ -1859,7 +1871,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <Card className="p-6">
                 <h3 className="font-semibold mb-4 flex items-center gap-2">
                   <LayoutDashboard className="h-5 w-5" />
-                  Related Dashboards
+                  {t('settingsTab.relatedDashboards')}
                 </h3>
                 <div className="space-y-3">
                   {relatedDashboardsData.map((related) => (
@@ -1887,15 +1899,15 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
         <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle>Share Dashboard</DialogTitle>
+              <DialogTitle>{t('share.title')}</DialogTitle>
               <DialogDescription>
-                Invite people to view or collaborate on this dashboard
+                {t('share.description')}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Enter email address"
+                  placeholder={t('share.enterEmail')}
                   value={shareEmail}
                   onChange={(e) => setShareEmail(e.target.value)}
                   className="flex-1"
@@ -1905,9 +1917,9 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="viewer">Viewer</SelectItem>
-                    <SelectItem value="editor">Editor</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="viewer">{t('share.viewer')}</SelectItem>
+                    <SelectItem value="editor">{t('share.editor')}</SelectItem>
+                    <SelectItem value="admin">{t('share.admin')}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button onClick={handleAddCollaborator}>
@@ -1918,7 +1930,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <Separator />
 
               <div className="space-y-3">
-                <Label>People with access</Label>
+                <Label>{t('share.peopleWithAccess')}</Label>
                 {collaborators.map((collab) => (
                   <div key={collab.id} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1941,7 +1953,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               <Separator />
 
               <div className="space-y-3">
-                <Label>Link sharing</Label>
+                <Label>{t('share.linkSharing')}</Label>
                 <div className="flex gap-2">
                   <Input value={typeof window !== 'undefined' ? window.location.href : ''} readOnly className="flex-1" />
                   <Button variant="outline" onClick={handleCopyLink}>
@@ -1950,8 +1962,8 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium">Public access</p>
-                    <p className="text-xs text-muted-foreground">Anyone with the link can view</p>
+                    <p className="text-sm font-medium">{t('share.publicAccess')}</p>
+                    <p className="text-xs text-muted-foreground">{t('share.publicAccessDescription')}</p>
                   </div>
                   <Switch checked={dashboard.isPublic} />
                 </div>
@@ -1964,9 +1976,9 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
         <Dialog open={showExportDialog} onOpenChange={setShowExportDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Export Dashboard</DialogTitle>
+              <DialogTitle>{t('exportDialog.title')}</DialogTitle>
               <DialogDescription>
-                Choose an export format for your dashboard
+                {t('exportDialog.description')}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -1978,8 +1990,8 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               >
                 <FileJson className="h-8 w-8 mr-4 text-blue-500" />
                 <div className="text-left">
-                  <p className="font-medium">JSON</p>
-                  <p className="text-xs text-muted-foreground">Full data export with all metadata</p>
+                  <p className="font-medium">{t('exportDialog.json')}</p>
+                  <p className="text-xs text-muted-foreground">{t('exportDialog.jsonDescription')}</p>
                 </div>
               </Button>
               <Button
@@ -1990,8 +2002,8 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               >
                 <Table className="h-8 w-8 mr-4 text-green-500" />
                 <div className="text-left">
-                  <p className="font-medium">CSV</p>
-                  <p className="text-xs text-muted-foreground">Chart data in spreadsheet format</p>
+                  <p className="font-medium">{t('exportDialog.csv')}</p>
+                  <p className="text-xs text-muted-foreground">{t('exportDialog.csvDescription')}</p>
                 </div>
               </Button>
               <Button
@@ -2002,8 +2014,8 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               >
                 <FileText className="h-8 w-8 mr-4 text-red-500" />
                 <div className="text-left">
-                  <p className="font-medium">PDF / HTML</p>
-                  <p className="text-xs text-muted-foreground">Printable report format</p>
+                  <p className="font-medium">{t('exportDialog.pdfHtml')}</p>
+                  <p className="text-xs text-muted-foreground">{t('exportDialog.pdfHtmlDescription')}</p>
                 </div>
               </Button>
               <Button
@@ -2014,8 +2026,8 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
               >
                 <FileImage className="h-8 w-8 mr-4 text-purple-500" />
                 <div className="text-left">
-                  <p className="font-medium">PNG Image</p>
-                  <p className="text-xs text-muted-foreground">Screenshot of the dashboard</p>
+                  <p className="font-medium">{t('exportDialog.pngImage')}</p>
+                  <p className="text-xs text-muted-foreground">{t('exportDialog.pngImageDescription')}</p>
                 </div>
               </Button>
             </div>
@@ -2026,15 +2038,15 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
         <Dialog open={showTagsDialog} onOpenChange={setShowTagsDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Manage Tags</DialogTitle>
+              <DialogTitle>{t('tags.manageTags')}</DialogTitle>
               <DialogDescription>
-                Add tags to organize and find your dashboard easily
+                {t('tags.manageTagsDescription')}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Add a new tag..."
+                  placeholder={t('tags.addNewTag')}
                   value={newTag}
                   onChange={(e) => setNewTag(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
@@ -2059,13 +2071,13 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
                   </Badge>
                 ))}
                 {dashboardTags.length === 0 && (
-                  <p className="text-sm text-muted-foreground">No tags added yet</p>
+                  <p className="text-sm text-muted-foreground">{t('tags.noTagsAdded')}</p>
                 )}
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowTagsDialog(false)}>
-                Done
+                {t('tags.done')}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -2075,34 +2087,34 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
         <Dialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Manage Alerts</DialogTitle>
+              <DialogTitle>{t('alerts.title')}</DialogTitle>
               <DialogDescription>
-                Set up notifications for dashboard metrics
+                {t('alerts.description')}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-3">
-                <Label>Create New Alert</Label>
+                <Label>{t('alerts.createNewAlert')}</Label>
                 <Input
-                  placeholder="Alert name..."
+                  placeholder={t('alerts.alertName')}
                   value={newAlertName}
                   onChange={(e) => setNewAlertName(e.target.value)}
                 />
                 <Input
-                  placeholder="Condition (e.g., Views > 1000/day)"
+                  placeholder={t('alerts.alertCondition')}
                   value={newAlertCondition}
                   onChange={(e) => setNewAlertCondition(e.target.value)}
                 />
                 <Button onClick={handleAddAlert} disabled={!newAlertName || !newAlertCondition}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Alert
+                  {t('alerts.addAlertButton')}
                 </Button>
               </div>
 
               <Separator />
 
               <div className="space-y-3">
-                <Label>Active Alerts</Label>
+                <Label>{t('alerts.activeAlerts')}</Label>
                 {alerts.map((alert) => (
                   <div key={alert.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                     <div className="flex items-center gap-3">
@@ -2138,16 +2150,16 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
         <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Dashboard</AlertDialogTitle>
+              <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete "{dashboard.name}"? This action cannot be undone.
+                {t('delete.confirmMessage', { name: dashboard.name })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>{t('delete.cancel')}</AlertDialogCancel>
               <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                 {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                Delete
+                {t('delete.delete')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

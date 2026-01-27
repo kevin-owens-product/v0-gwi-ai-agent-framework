@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Plus, LayoutDashboard, Eye, Share2, Download } from "lucide-react"
 import Link from "next/link"
@@ -41,7 +42,15 @@ function formatTimeAgo(dateString: string): string {
   return 'Just now'
 }
 
-function mapApiDashboard(apiDashboard: any): Dashboard {
+interface ApiDashboard {
+  id: string
+  name: string
+  chartCount?: number
+  updatedAt: string
+  views?: number
+}
+
+function mapApiDashboard(apiDashboard: ApiDashboard): Dashboard {
   return {
     id: apiDashboard.id,
     name: apiDashboard.name,
@@ -52,6 +61,7 @@ function mapApiDashboard(apiDashboard: any): Dashboard {
 }
 
 export default function DashboardsPage() {
+  const t = useTranslations('dashboard.dashboards')
   const [dashboards, setDashboards] = useState<Dashboard[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState({ total: 0, views: 0, shared: 0, exports: 0 })
@@ -110,13 +120,13 @@ export default function DashboardsPage() {
       <PageTracker pageName="Dashboards List" metadata={{ activeTab }} />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Dashboards</h1>
-          <p className="text-muted-foreground mt-1">Combine charts and insights into shareable dashboards</p>
+          <h1 className="text-3xl font-bold">{t('title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('description')}</p>
         </div>
         <Link href="/dashboard/dashboards/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            New Dashboard
+            {t('newDashboard')}
           </Button>
         </Link>
       </div>
@@ -128,7 +138,7 @@ export default function DashboardsPage() {
               <LayoutDashboard className="h-5 w-5 text-accent-foreground" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Dashboards</p>
+              <p className="text-sm text-muted-foreground">{t('stats.totalDashboards')}</p>
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
           </div>
@@ -139,7 +149,7 @@ export default function DashboardsPage() {
               <Eye className="h-5 w-5 text-blue-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Views</p>
+              <p className="text-sm text-muted-foreground">{t('stats.totalViews')}</p>
               <p className="text-2xl font-bold">{formatNumber(stats.views)}</p>
             </div>
           </div>
@@ -150,7 +160,7 @@ export default function DashboardsPage() {
               <Share2 className="h-5 w-5 text-emerald-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Shared</p>
+              <p className="text-sm text-muted-foreground">{t('stats.shared')}</p>
               <p className="text-2xl font-bold">{stats.shared}</p>
             </div>
           </div>
@@ -161,7 +171,7 @@ export default function DashboardsPage() {
               <Download className="h-5 w-5 text-amber-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Exports</p>
+              <p className="text-sm text-muted-foreground">{t('stats.exports')}</p>
               <p className="text-2xl font-bold">{stats.exports}</p>
             </div>
           </div>
@@ -170,9 +180,9 @@ export default function DashboardsPage() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="all">All Dashboards</TabsTrigger>
-          <TabsTrigger value="recent">Recent</TabsTrigger>
-          <TabsTrigger value="favorites">Favorites</TabsTrigger>
+          <TabsTrigger value="all">{t('tabs.allDashboards')}</TabsTrigger>
+          <TabsTrigger value="recent">{t('tabs.recent')}</TabsTrigger>
+          <TabsTrigger value="favorites">{t('tabs.favorites')}</TabsTrigger>
         </TabsList>
         <TabsContent value="all">
           {isLoading ? (
@@ -211,16 +221,18 @@ function DashboardsGridSkeleton() {
 }
 
 function DashboardsGrid({ dashboards }: { dashboards: Dashboard[] }) {
+  const t = useTranslations('dashboard.dashboards')
+
   if (dashboards.length === 0) {
     return (
       <div className="text-center py-12">
         <LayoutDashboard className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <h3 className="font-semibold mb-2">No dashboards yet</h3>
-        <p className="text-sm text-muted-foreground mb-4">Create your first dashboard to get started</p>
+        <h3 className="font-semibold mb-2">{t('grid.noDashboardsYet')}</h3>
+        <p className="text-sm text-muted-foreground mb-4">{t('grid.createFirstDashboard')}</p>
         <Link href="/dashboard/dashboards/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            New Dashboard
+            {t('newDashboard')}
           </Button>
         </Link>
       </div>
@@ -258,10 +270,10 @@ function DashboardsGrid({ dashboards }: { dashboards: Dashboard[] }) {
                 ))}
               </div>
               <h3 className="font-semibold">{dashboard.name}</h3>
-              <p className="text-sm text-muted-foreground">{dashboard.charts} charts</p>
+              <p className="text-sm text-muted-foreground">{t('grid.chartsCount', { count: dashboard.charts })}</p>
               <div className="flex items-center justify-between mt-3 text-xs text-muted-foreground">
                 <span>{dashboard.lastModified}</span>
-                <span>{dashboard.views} views</span>
+                <span>{t('grid.viewsCount', { count: dashboard.views })}</span>
               </div>
             </Card>
           </Link>

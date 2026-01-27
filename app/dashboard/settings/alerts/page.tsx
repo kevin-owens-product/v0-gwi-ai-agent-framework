@@ -68,6 +68,7 @@ import {
 } from "@/hooks/use-alerts"
 import { toast } from "sonner"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { useTranslations } from "next-intl"
 import {
   Bell,
   Plus,
@@ -80,16 +81,17 @@ import {
   BellOff,
 } from "lucide-react"
 
-const ENTITY_TYPE_LABELS: Record<string, string> = {
-  metric: 'Metric',
-  audience: 'Audience',
-  brand: 'Brand',
-  report: 'Report',
-  agent: 'Agent',
-  workflow: 'Workflow',
-}
-
 export default function AlertsSettingsPage() {
+  const t = useTranslations("settings.alerts")
+
+  const ENTITY_TYPE_LABELS: Record<string, string> = {
+    metric: t("entityTypes.metric"),
+    audience: t("entityTypes.audience"),
+    brand: t("entityTypes.brand"),
+    report: t("entityTypes.report"),
+    agent: t("entityTypes.agent"),
+    workflow: t("entityTypes.workflow"),
+  }
   const {
     alerts,
     isLoading,
@@ -218,9 +220,9 @@ export default function AlertsSettingsPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Custom Alerts</h1>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">
-          Configure alerts to get notified when metrics cross important thresholds
+          {t("description")}
         </p>
       </div>
 
@@ -235,7 +237,7 @@ export default function AlertsSettingsPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{alerts.length}</p>
-                  <p className="text-sm text-muted-foreground">Total Alerts</p>
+                  <p className="text-sm text-muted-foreground">{t("totalAlerts")}</p>
                 </div>
               </div>
             </CardContent>
@@ -250,7 +252,7 @@ export default function AlertsSettingsPage() {
                   <p className="text-2xl font-bold">
                     {alerts.filter(a => a.isActive).length}
                   </p>
-                  <p className="text-sm text-muted-foreground">Active</p>
+                  <p className="text-sm text-muted-foreground">{t("active")}</p>
                 </div>
               </div>
             </CardContent>
@@ -265,7 +267,7 @@ export default function AlertsSettingsPage() {
                   <p className="text-2xl font-bold">
                     {alerts.reduce((sum, a) => sum + a.triggerCount, 0)}
                   </p>
-                  <p className="text-sm text-muted-foreground">Total Triggers</p>
+                  <p className="text-sm text-muted-foreground">{t("totalTriggers")}</p>
                 </div>
               </div>
             </CardContent>
@@ -280,7 +282,7 @@ export default function AlertsSettingsPage() {
                   <p className="text-2xl font-bold">
                     {alerts.filter(a => !a.isActive).length}
                   </p>
-                  <p className="text-sm text-muted-foreground">Paused</p>
+                  <p className="text-sm text-muted-foreground">{t("paused")}</p>
                 </div>
               </div>
             </CardContent>
@@ -292,14 +294,14 @@ export default function AlertsSettingsPage() {
           <CardHeader>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <CardTitle>Your Alerts</CardTitle>
+                <CardTitle>{t("yourAlerts")}</CardTitle>
                 <CardDescription>
-                  Manage your custom alert configurations
+                  {t("yourAlertsDescription")}
                 </CardDescription>
               </div>
               <Button onClick={() => setIsCreateDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
-                Create Alert
+                {t("createAlert")}
               </Button>
             </div>
           </CardHeader>
@@ -309,7 +311,7 @@ export default function AlertsSettingsPage() {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search alerts..."
+                  placeholder={t("searchAlerts")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9"
@@ -319,10 +321,10 @@ export default function AlertsSettingsPage() {
                 <Select value={filterType} onValueChange={setFilterType}>
                   <SelectTrigger className="w-40">
                     <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Entity Type" />
+                    <SelectValue placeholder={t("entityType")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="all">{t("allTypes")}</SelectItem>
                     {Object.entries(ENTITY_TYPE_LABELS).map(([value, label]) => (
                       <SelectItem key={value} value={value}>
                         {label}
@@ -332,12 +334,12 @@ export default function AlertsSettingsPage() {
                 </Select>
                 <Select value={filterStatus} onValueChange={setFilterStatus}>
                   <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Status" />
+                    <SelectValue placeholder={t("allStatus")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
+                    <SelectItem value="all">{t("allStatus")}</SelectItem>
+                    <SelectItem value="active">{t("active")}</SelectItem>
+                    <SelectItem value="inactive">{t("paused")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -348,17 +350,17 @@ export default function AlertsSettingsPage() {
               <div className="text-center py-12">
                 <Bell className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="font-medium mb-2">
-                  {alerts.length === 0 ? 'No alerts yet' : 'No matching alerts'}
+                  {alerts.length === 0 ? t("noAlertsYet") : t("noMatchingAlerts")}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   {alerts.length === 0
-                    ? 'Create your first alert to get notified about important changes'
-                    : 'Try adjusting your filters'}
+                    ? t("createFirstAlert")
+                    : t("adjustFilters")}
                 </p>
                 {alerts.length === 0 && (
                   <Button onClick={() => setIsCreateDialogOpen(true)}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Create Alert
+                    {t("createAlert")}
                   </Button>
                 )}
               </div>
@@ -366,12 +368,12 @@ export default function AlertsSettingsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Alert</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Condition</TableHead>
-                    <TableHead>Channels</TableHead>
-                    <TableHead>Last Triggered</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>{t("tableHeaders.alert")}</TableHead>
+                    <TableHead>{t("tableHeaders.type")}</TableHead>
+                    <TableHead>{t("tableHeaders.condition")}</TableHead>
+                    <TableHead>{t("tableHeaders.channels")}</TableHead>
+                    <TableHead>{t("tableHeaders.lastTriggered")}</TableHead>
+                    <TableHead>{t("tableHeaders.status")}</TableHead>
                     <TableHead className="w-20"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -423,10 +425,10 @@ export default function AlertsSettingsPage() {
                         {alert.triggerCount > 0 ? (
                           <div>
                             <p>{formatRelativeTime(alert.lastTriggeredAt)}</p>
-                            <p className="text-xs">{alert.triggerCount} total</p>
+                            <p className="text-xs">{alert.triggerCount} {t("total")}</p>
                           </div>
                         ) : (
-                          'Never'
+                          t("never")
                         )}
                       </TableCell>
                       <TableCell>
@@ -453,11 +455,11 @@ export default function AlertsSettingsPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => setEditingAlert(alert)}>
                               <Pencil className="h-4 w-4 mr-2" />
-                              Edit
+                              {t("edit")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => setViewingHistoryAlert(alert)}>
                               <History className="h-4 w-4 mr-2" />
-                              View History
+                              {t("viewHistory")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
@@ -465,7 +467,7 @@ export default function AlertsSettingsPage() {
                               className="text-red-600"
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
+                              {t("delete")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -483,9 +485,9 @@ export default function AlertsSettingsPage() {
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Create New Alert</DialogTitle>
+            <DialogTitle>{t("createNewAlert")}</DialogTitle>
             <DialogDescription>
-              Configure an alert to get notified when metrics cross important thresholds
+              {t("createNewAlertDescription")}
             </DialogDescription>
           </DialogHeader>
           <AlertForm
@@ -500,9 +502,9 @@ export default function AlertsSettingsPage() {
       <Dialog open={!!editingAlert} onOpenChange={() => setEditingAlert(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Edit Alert</DialogTitle>
+            <DialogTitle>{t("editAlert")}</DialogTitle>
             <DialogDescription>
-              Update the configuration for this alert
+              {t("editAlertDescription")}
             </DialogDescription>
           </DialogHeader>
           {editingAlert && (
@@ -520,9 +522,9 @@ export default function AlertsSettingsPage() {
       <Dialog open={!!viewingHistoryAlert} onOpenChange={() => setViewingHistoryAlert(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Alert History: {viewingHistoryAlert?.name}</DialogTitle>
+            <DialogTitle>{t("alertHistory", { name: viewingHistoryAlert?.name || "" })}</DialogTitle>
             <DialogDescription>
-              View the history of when this alert was triggered
+              {t("alertHistoryDescription")}
             </DialogDescription>
           </DialogHeader>
           {viewingHistoryAlert && (
@@ -535,19 +537,18 @@ export default function AlertsSettingsPage() {
       <AlertDialog open={!!deletingAlert} onOpenChange={() => setDeletingAlert(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Alert</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteAlert")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{deletingAlert?.name}&quot;? This action cannot be
-              undone and all alert history will be permanently removed.
+              {t("deleteAlertDescription", { name: deletingAlert?.name || "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteAlert}
               className="bg-destructive text-destructive-foreground"
             >
-              Delete Alert
+              {t("deleteAlert")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

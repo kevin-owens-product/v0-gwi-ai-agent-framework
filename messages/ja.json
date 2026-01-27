@@ -203,7 +203,85 @@
     "selectLanguage": "言語を選択",
     "preferences": "環境設定",
     "notifications": "通知",
-    "security": "セキュリティ",
+    "security": {
+      "title": "[JA] Security Settings",
+      "description": "[JA] Manage your account security and active sessions",
+      "changePassword": "[JA] Change Password",
+      "changePasswordDescription": "[JA] Update your password regularly to keep your account secure",
+      "currentPassword": "[JA] Current Password",
+      "newPassword": "[JA] New Password",
+      "confirmNewPassword": "[JA] Confirm New Password",
+      "updating": "[JA] Updating...",
+      "updatePassword": "[JA] Update Password",
+      "twoFactorAuth": "[JA] Two-Factor Authentication",
+      "twoFactorDescription": "[JA] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[JA] 2FA is enabled",
+      "twoFactorProtected": "[JA] Your account is protected with authenticator app",
+      "changeMethod": "[JA] Change Method",
+      "viewBackupCodes": "[JA] View Backup Codes",
+      "activeSessions": "[JA] Active Sessions",
+      "activeSessionsDescription": "[JA] Manage devices where you're currently logged in",
+      "signOutAll": "[JA] Sign Out All",
+      "current": "[JA] Current",
+      "revoke": "[JA] Revoke",
+      "dangerZone": "[JA] Danger Zone",
+      "dangerZoneDescription": "[JA] Irreversible and destructive actions",
+      "deleteAccount": "[JA] Delete Account",
+      "deleteAccountDescription": "[JA] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[JA] Data Exports",
+        "description": "[JA] Request exports of your personal data for GDPR compliance",
+        "refresh": "[JA] Refresh",
+        "yourDataRights": "[JA] Your Data Rights",
+        "yourDataRightsDescription": "[JA] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[JA] No Active Exports",
+        "noActiveExportsDescription": "[JA] Request an export to see its status here",
+        "noActiveExportsHint": "[JA] Your export status will appear here after you request a data export",
+        "exportHistory": "[JA] Export History",
+        "exportHistoryDescription": "[JA] View and download your previous data exports",
+        "total": "[JA] Total",
+        "pending": "[JA] Pending",
+        "processing": "[JA] Processing",
+        "aboutDataExports": "[JA] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[JA] What's Included",
+          "exportFormat": "[JA] Export Format",
+          "faq": "[JA] FAQ"
+        },
+        "included": {
+          "profileInfo": "[JA] Profile Information",
+          "profileInfoDesc": "[JA] Your name, email, avatar, and account settings",
+          "orgMemberships": "[JA] Organization Memberships",
+          "orgMembershipsDesc": "[JA] All organizations you belong to and your roles",
+          "createdContent": "[JA] Created Content",
+          "createdContentDesc": "[JA] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[JA] Activity History",
+          "activityHistoryDesc": "[JA] Audit logs and activity records associated with your account",
+          "preferences": "[JA] Preferences",
+          "preferencesDesc": "[JA] Your theme, language, notification, and other settings",
+          "apiKeys": "[JA] API Keys",
+          "apiKeysDesc": "[JA] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[JA] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[JA] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[JA] Human-readable when opened in a text editor",
+          "compatible": "[JA] Compatible with most data processing tools",
+          "easyImport": "[JA] Easy to import into other services",
+          "exampleStructure": "[JA] Example structure:"
+        },
+        "faq": {
+          "howLong": "[JA] How long does an export take?",
+          "howLongAnswer": "[JA] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[JA] How long is an export available?",
+          "howLongAvailableAnswer": "[JA] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[JA] How often can I request an export?",
+          "howOftenAnswer": "[JA] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[JA] Is my export secure?",
+          "isSecureAnswer": "[JA] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "アカウント",
     "appearance": {
       "title": "外観",
@@ -239,7 +317,35 @@
       "followingSystem": "システムに従う",
       "savingPreferences": "設定を保存中..."
     },
-    "general": "一般",
+    "general": {
+      "title": "[JA] General Settings",
+      "description": "[JA] Manage your organization's settings and preferences",
+      "organizationDetails": "[JA] Organization Details",
+      "updateOrgInfo": "[JA] Update your organization's information",
+      "changeLogo": "[JA] Change Logo",
+      "organizationName": "[JA] Organization Name",
+      "organizationSlug": "[JA] Organization Slug",
+      "orgDescription": "[JA] Description",
+      "industry": "[JA] Industry",
+      "companySize": "[JA] Company Size",
+      "consumerGoods": "[JA] Consumer Goods",
+      "technology": "[JA] Technology",
+      "finance": "[JA] Finance",
+      "healthcare": "[JA] Healthcare",
+      "retail": "[JA] Retail",
+      "mediaEntertainment": "[JA] Media & Entertainment",
+      "employees1to50": "[JA] 1-50 employees",
+      "employees50to200": "[JA] 50-200 employees",
+      "employees200to1000": "[JA] 200-1000 employees",
+      "employees1000to5000": "[JA] 1000-5000 employees",
+      "employees5000plus": "[JA] 5000+ employees",
+      "regionalSettings": "[JA] Regional Settings",
+      "regionalDescription": "[JA] Set your timezone and date format preferences",
+      "timezone": "[JA] Timezone",
+      "dateFormat": "[JA] Date Format",
+      "saving": "[JA] Saving...",
+      "saveChanges": "[JA] Save Changes"
+    },
     "apiKeys": {
       "title": "APIキー",
       "description": "プログラムによるアクセス用のAPIキーを管理",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "お困りですか？",
-      "subtitle": "ナレッジベースを検索するか、以下のトピックを参照してください",
       "searchPlaceholder": "ヘルプを検索...",
-      "tabs": {
-        "faq": "よくある質問",
-        "guides": "ガイド",
-        "contact": "お問い合わせ"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "はじめてのガイド",
-          "description": "GWI Agentsの基本を学ぶ"
-        },
-        "videoTutorials": {
-          "title": "ビデオチュートリアル",
-          "description": "ステップバイステップのチュートリアルを視聴"
-        },
-        "apiDocs": {
-          "title": "APIドキュメント",
-          "description": "APIと連携する"
-        },
-        "contactSupport": {
-          "title": "サポートに連絡",
-          "description": "チームからサポートを受ける"
-        }
+        "gettingStarted": "[JA] Getting Started Guide",
+        "videoTutorials": "[JA] Video Tutorials",
+        "apiDocs": "[JA] API Documentation",
+        "title": "[JA] Quick Links",
+        "gettingStartedDesc": "[JA] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[JA] Watch step-by-step guides",
+        "apiDocsDesc": "[JA] For developers and integrations",
+        "releaseNotes": "[JA] Release Notes",
+        "releaseNotesDesc": "[JA] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "はじめに",
-          "agentsWorkflows": "エージェントとワークフロー",
-          "dataPrivacy": "データとプライバシー",
-          "billingPlans": "料金とプラン"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "最初のエージェントを作成するには？",
-            "answer": "サイドバーからエージェントページに移動し、「エージェント作成」をクリックします。ステップバイステップのウィザードに従って、エージェントの名前、説明、データソース、動作設定を構成します。"
-          },
-          "dataSources": {
-            "question": "どのようなデータソースが利用できますか？",
-            "answer": "GWIは、GWI Core（主力の消費者調査）、GWI USA、GWI Zeitgeist（トレンドトピック）、カスタムデータのアップロード機能など、複数のデータソースへのアクセスを提供しています。データソースの利用可否はサブスクリプション層によって異なります。"
-          },
-          "inviteTeam": {
-            "question": "チームメンバーを招待するには？",
-            "answer": "設定 > チームに移動し、「メンバーを招待」をクリックします。メールアドレスを入力し、役割（管理者、編集者、閲覧者）を選択します。ワークスペースへの招待メールが送信されます。"
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "エージェントとワークフローの違いは？",
-            "answer": "エージェントは特定のタイプの調査タスクを処理するAI搭載のスペシャリストです。ワークフローは複数のエージェントを順番に組み合わせて、複雑な複数ステップの調査プロセスを自動化します。"
-          },
-          "customize": {
-            "question": "プリビルトエージェントをカスタマイズできますか？",
-            "answer": "はい！プリビルトエージェントを複製し、システムプロンプト、データソース、出力形式などの設定を変更できます。カスタマイズしたバージョンは個人のエージェントライブラリに保存されます。"
-          },
-          "schedule": {
-            "question": "ワークフローをスケジュールするには？",
-            "answer": "ワークフローを開き、「スケジュール」ボタンをクリックします。定期実行（毎日、毎週、毎月）を設定したり、新しいデータの利用可能性などのイベントに基づいてワークフローをトリガーしたりできます。"
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "データはどのように保護されていますか？",
-            "answer": "すべてのデータは、業界標準のAES-256暗号化を使用して保存時と転送時に暗号化されています。SOC 2 Type II認定を取得し、GDPRに準拠しています。クエリとカスタムデータは他の顧客と共有されることはありません。"
-          },
-          "export": {
-            "question": "データをエクスポートできますか？",
-            "answer": "はい、CSV、Excel、PowerPoint、JSONなど複数の形式でデータをエクスポートできます。エンタープライズのお客様は、直接データベース接続とAPIエクスポートにもアクセスできます。"
-          },
-          "updateFrequency": {
-            "question": "GWIデータはどのくらいの頻度で更新されますか？",
-            "answer": "GWI Coreデータは四半期ごとに新しい消費者調査で更新されます。GWI Zeitgeistはトレンドトピックに関する週次更新を提供します。一部の専門データセットは異なる更新頻度を持つ場合があります。"
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "クエリとしてカウントされるものは？",
-            "answer": "クエリとは、同じ会話内のフォローアップ質問を含む、エージェントへのリクエストのことです。複雑な複数ステップのワークフローは、関係するエージェントの数に関係なく、1つのクエリとしてカウントされます。"
-          },
-          "changePlan": {
-            "question": "プランのアップグレードまたはダウングレードはできますか？",
-            "answer": "はい、設定 > 請求からいつでもプランを変更できます。アップグレードは日割り計算で即座に有効になります。ダウングレードは次の請求サイクルの開始時に有効になります。"
-          },
-          "annualDiscount": {
-            "question": "年間請求の割引はありますか？",
-            "answer": "はい！年間請求は月額請求と比較して20%節約できます。年間請求の設定または月額からの切り替えについては、営業チームにお問い合わせください。"
-          }
-        }
+        "title": "[JA] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "初級",
-          "intermediate": "中級",
-          "advanced": "上級"
-        },
-        "personas": {
-          "title": "効果的なペルソナの構築",
-          "description": "詳細で実用的なオーディエンスペルソナの作成方法を学ぶ",
-          "duration": "15分で読める"
-        },
-        "workflows": {
-          "title": "ワークフロー自動化のベストプラクティス",
-          "description": "調査のための効率的なマルチエージェントワークフローを設計",
-          "duration": "20分で読める"
-        },
-        "prompts": {
-          "title": "高度なプロンプトエンジニアリング",
-          "description": "最適化されたエージェントプロンプトでより良い結果を得る",
-          "duration": "25分で読める"
-        },
-        "apiIntegration": {
-          "title": "API連携ガイド",
-          "description": "GWIエージェントを既存のツールに接続",
-          "duration": "30分で読める"
-        }
-      },
-      "viewAllDocs": "すべてのドキュメントを表示",
       "contact": {
-        "liveChat": {
-          "title": "ライブチャット",
-          "description": "サポートチームとリアルタイムでチャット",
-          "availability": "月曜日〜金曜日、9:00〜18:00（EST）利用可能。平均応答時間：2分。",
-          "button": "チャットを開始"
+        "title": "[JA] Need More Help?",
+        "description": "[JA] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[JA] Contact Support",
+        "responseTime": "[JA] Typical response time: 2-4 hours"
+      },
+      "description": "[JA] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[JA] Browse by Category",
+        "agents": "[JA] AI Agents",
+        "agentsDesc": "[JA] Learn about agent capabilities",
+        "workflows": "[JA] Workflows",
+        "workflowsDesc": "[JA] Build automation pipelines",
+        "data": "[JA] Data & Audiences",
+        "dataDesc": "[JA] Understanding GWI data",
+        "reports": "[JA] Reports & Exports",
+        "reportsDesc": "[JA] Generate and share insights",
+        "integrations": "[JA] Integrations",
+        "integrationsDesc": "[JA] Connect with your tools",
+        "billing": "[JA] Billing & Plans",
+        "billingDesc": "[JA] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[JA] Profile Settings",
+      "description": "[JA] Manage your personal information",
+      "personalInfo": "[JA] Personal Information",
+      "updateProfileDetails": "[JA] Update your profile details",
+      "uploadPhoto": "[JA] Upload Photo",
+      "photoHint": "[JA] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[JA] First Name",
+      "lastName": "[JA] Last Name",
+      "emailAddress": "[JA] Email Address",
+      "jobTitle": "[JA] Job Title",
+      "bio": "[JA] Bio",
+      "contactInfo": "[JA] Contact Information",
+      "contactDescription": "[JA] How colleagues can reach you",
+      "phoneNumber": "[JA] Phone Number",
+      "location": "[JA] Location",
+      "saving": "[JA] Saving...",
+      "saveChanges": "[JA] Save Changes"
+    },
+    "team": {
+      "title": "[JA] Team Management",
+      "description": "[JA] Manage team members and their permissions",
+      "teamMembers": "[JA] Team Members",
+      "membersCount": "[JA] {count} members in your organization",
+      "inviteMember": "[JA] Invite Member",
+      "inviteTeamMember": "[JA] Invite Team Member",
+      "inviteDescription": "[JA] Send an invitation to join your organization",
+      "emailAddress": "[JA] Email Address",
+      "emailPlaceholder": "[JA] colleague@company.com",
+      "role": "[JA] Role",
+      "sending": "[JA] Sending...",
+      "sendInvitation": "[JA] Send Invitation",
+      "searchMembers": "[JA] Search members...",
+      "tableHeaders": {
+        "member": "[JA] Member",
+        "role": "[JA] Role",
+        "lastActive": "[JA] Last Active",
+        "joined": "[JA] Joined"
+      },
+      "roles": {
+        "owner": "[JA] Owner",
+        "admin": "[JA] Admin",
+        "member": "[JA] Member",
+        "viewer": "[JA] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[JA] Make Admin",
+        "makeMember": "[JA] Make Member",
+        "makeViewer": "[JA] Make Viewer",
+        "removeMember": "[JA] Remove Member"
+      },
+      "pendingInvitations": "[JA] Pending Invitations",
+      "pendingCount": "[JA] {count} pending invitation",
+      "pendingCountPlural": "[JA] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[JA] Email",
+        "role": "[JA] Role",
+        "sent": "[JA] Sent",
+        "expires": "[JA] Expires"
+      },
+      "revoke": "[JA] Revoke",
+      "rolePermissions": "[JA] Role Permissions",
+      "rolePermissionsDescription": "[JA] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[JA] Full organization control",
+        "transferOwnership": "[JA] Transfer ownership",
+        "deleteOrg": "[JA] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[JA] Manage team members",
+        "billing": "[JA] Billing & subscription",
+        "allMemberPerms": "[JA] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[JA] Create and edit agents",
+        "generateReports": "[JA] Generate reports",
+        "useAgents": "[JA] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[JA] View reports",
+        "viewDashboards": "[JA] View dashboards",
+        "readOnly": "[JA] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[JA] Remove Team Member",
+        "description": "[JA] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[JA] Cancel",
+        "remove": "[JA] Remove Member"
+      },
+      "unknown": "[JA] Unknown",
+      "never": "[JA] Never",
+      "justNow": "[JA] Just now",
+      "minAgo": "[JA] {count} min ago",
+      "hoursAgo": "[JA] {count} hour ago",
+      "hoursAgoPlural": "[JA] {count} hours ago",
+      "daysAgo": "[JA] {count} day ago",
+      "daysAgoPlural": "[JA] {count} days ago"
+    },
+    "billing": {
+      "title": "[JA] Billing & Subscription",
+      "description": "[JA] Manage your subscription and payment methods",
+      "enterprisePlan": "[JA] Enterprise Plan",
+      "current": "[JA] Current",
+      "planDescription": "[JA] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[JA] per month",
+      "planFeatures": "[JA] Plan Features",
+      "features": {
+        "unlimitedQueries": "[JA] Unlimited AI agent queries",
+        "allAgents": "[JA] All pre-built domain agents",
+        "customDev": "[JA] Custom agent development",
+        "prioritySupport": "[JA] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[JA] Usage This Period",
+      "usage": {
+        "agentQueries": "[JA] Agent Queries",
+        "unlimited": "[JA] Unlimited",
+        "reportsGenerated": "[JA] Reports Generated",
+        "teamSeats": "[JA] Team Seats"
+      },
+      "nextBillingDate": "[JA] Next billing date: {date}",
+      "changePlan": "[JA] Change Plan",
+      "cancelSubscription": "[JA] Cancel Subscription",
+      "paymentMethod": "[JA] Payment Method",
+      "paymentDescription": "[JA] Manage your payment information",
+      "cardEnding": "[JA] Visa ending in {last4}",
+      "cardExpires": "[JA] Expires {date}",
+      "update": "[JA] Update",
+      "billingHistory": "[JA] Billing History",
+      "billingHistoryDescription": "[JA] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[JA] Invoice",
+        "date": "[JA] Date",
+        "amount": "[JA] Amount",
+        "status": "[JA] Status"
+      },
+      "paid": "[JA] Paid",
+      "needMoreCapacity": "[JA] Need more capacity?",
+      "contactForPricing": "[JA] Contact us for custom enterprise pricing",
+      "contactSales": "[JA] Contact Sales",
+      "upgrade": {
+        "title": "[JA] Choose Your Plan",
+        "description": "[JA] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[JA] Back to Billing",
+        "checkoutCanceled": "[JA] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[JA] Monthly",
+        "yearly": "[JA] Yearly",
+        "save17": "[JA] Save 17%",
+        "mostPopular": "[JA] Most Popular",
+        "currentPlan": "[JA] Current Plan",
+        "billedAnnually": "[JA] ${price} billed annually",
+        "upgradeTo": "[JA] Upgrade to {plan}",
+        "processing": "[JA] Processing...",
+        "customSales": "[JA] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[JA] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[JA] Starter",
+            "description": "[JA] For individuals and small teams getting started",
+            "features": {
+              "runs": "[JA] 100 agent runs / month",
+              "seats": "[JA] 3 team seats",
+              "sources": "[JA] 5 data sources",
+              "retention": "[JA] 30 day data retention",
+              "tokens": "[JA] 100K tokens / month",
+              "support": "[JA] Community support"
+            }
+          },
+          "professional": {
+            "name": "[JA] Professional",
+            "description": "[JA] For growing teams with advanced needs",
+            "features": {
+              "runs": "[JA] 1,000 agent runs / month",
+              "seats": "[JA] 10 team seats",
+              "sources": "[JA] 25 data sources",
+              "retention": "[JA] 90 day data retention",
+              "tokens": "[JA] 1M tokens / month",
+              "support": "[JA] Priority email support",
+              "analytics": "[JA] Advanced analytics",
+              "integrations": "[JA] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[JA] Enterprise",
+            "description": "[JA] For large organizations with custom requirements",
+            "features": {
+              "runs": "[JA] Unlimited agent runs",
+              "seats": "[JA] Unlimited team seats",
+              "sources": "[JA] Unlimited data sources",
+              "retention": "[JA] 365 day data retention",
+              "tokens": "[JA] Unlimited tokens",
+              "support": "[JA] 24/7 dedicated support",
+              "customDev": "[JA] Custom agent development",
+              "sso": "[JA] SSO & SCIM",
+              "sla": "[JA] SLA guarantee",
+              "accountManager": "[JA] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[JA] Audit Log",
+      "description": "[JA] Track all actions and changes in your organization",
+      "activityHistory": "[JA] Activity History",
+      "totalEvents": "[JA] {count} total events",
+      "searchLogs": "[JA] Search logs...",
+      "allActions": "[JA] All Actions",
+      "allResources": "[JA] All Resources",
+      "noAuditLogs": "[JA] No audit logs found",
+      "activityWillAppear": "[JA] Activity will appear here as actions are taken",
+      "showing": "[JA] Showing {start} to {end} of {total}",
+      "previous": "[JA] Previous",
+      "next": "[JA] Next",
+      "actions": {
+        "create": "[JA] Created",
+        "update": "[JA] Updated",
+        "delete": "[JA] Deleted",
+        "execute": "[JA] Executed",
+        "login": "[JA] Logged in",
+        "logout": "[JA] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[JA] Webhooks",
+      "description": "[JA] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[JA] Webhook Endpoints",
+      "endpointsDescription": "[JA] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[JA] Add Webhook",
+      "addWebhookEndpoint": "[JA] Add Webhook Endpoint",
+      "addWebhookDescription": "[JA] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[JA] Endpoint URL",
+      "endpointUrlPlaceholder": "[JA] https://api.example.com/webhooks",
+      "descriptionOptional": "[JA] Description (Optional)",
+      "descriptionPlaceholder": "[JA] Describe this webhook...",
+      "events": "[JA] Events",
+      "creating": "[JA] Creating...",
+      "createWebhook": "[JA] Create Webhook",
+      "noWebhooks": "[JA] No webhooks configured",
+      "addWebhookToStart": "[JA] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[JA] Endpoint",
+        "events": "[JA] Events",
+        "status": "[JA] Status",
+        "secret": "[JA] Secret"
+      },
+      "eventsCount": "[JA] {count} events",
+      "active": "[JA] Active",
+      "disabled": "[JA] Disabled",
+      "webhookSecurity": "[JA] Webhook Security",
+      "securityDescription": "[JA] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[JA] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[JA] Agent Run Started",
+        "agentRunCompleted": "[JA] Agent Run Completed",
+        "agentRunFailed": "[JA] Agent Run Failed",
+        "workflowRunStarted": "[JA] Workflow Run Started",
+        "workflowRunCompleted": "[JA] Workflow Run Completed",
+        "workflowRunFailed": "[JA] Workflow Run Failed",
+        "reportGenerated": "[JA] Report Generated",
+        "memberAdded": "[JA] Member Added",
+        "memberRemoved": "[JA] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[JA] Custom Alerts",
+      "description": "[JA] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[JA] Total Alerts",
+      "active": "[JA] Active",
+      "totalTriggers": "[JA] Total Triggers",
+      "paused": "[JA] Paused",
+      "yourAlerts": "[JA] Your Alerts",
+      "yourAlertsDescription": "[JA] Manage your custom alert configurations",
+      "createAlert": "[JA] Create Alert",
+      "searchAlerts": "[JA] Search alerts...",
+      "entityType": "[JA] Entity Type",
+      "allTypes": "[JA] All Types",
+      "allStatus": "[JA] All Status",
+      "noAlertsYet": "[JA] No alerts yet",
+      "noMatchingAlerts": "[JA] No matching alerts",
+      "createFirstAlert": "[JA] Create your first alert to get notified about important changes",
+      "adjustFilters": "[JA] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[JA] Alert",
+        "type": "[JA] Type",
+        "condition": "[JA] Condition",
+        "channels": "[JA] Channels",
+        "lastTriggered": "[JA] Last Triggered",
+        "status": "[JA] Status"
+      },
+      "total": "[JA] total",
+      "never": "[JA] Never",
+      "edit": "[JA] Edit",
+      "viewHistory": "[JA] View History",
+      "delete": "[JA] Delete",
+      "createNewAlert": "[JA] Create New Alert",
+      "createNewAlertDescription": "[JA] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[JA] Edit Alert",
+      "editAlertDescription": "[JA] Update the configuration for this alert",
+      "alertHistory": "[JA] Alert History: {name}",
+      "alertHistoryDescription": "[JA] View the history of when this alert was triggered",
+      "deleteAlert": "[JA] Delete Alert",
+      "deleteAlertDescription": "[JA] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[JA] Cancel",
+      "entityTypes": {
+        "metric": "[JA] Metric",
+        "audience": "[JA] Audience",
+        "brand": "[JA] Brand",
+        "report": "[JA] Report",
+        "agent": "[JA] Agent",
+        "workflow": "[JA] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[JA] Keyboard Shortcuts",
+      "description": "[JA] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[JA] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[JA] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[JA] Shortcut Conflicts Detected",
+      "conflictsDescription": "[JA] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[JA] Navigation",
+        "navigationDesc": "[JA] Navigate around the application",
+        "actions": "[JA] Actions",
+        "actionsDesc": "[JA] Perform common actions quickly",
+        "ui": "[JA] UI",
+        "uiDesc": "[JA] Control the user interface",
+        "editing": "[JA] Editing",
+        "editingDesc": "[JA] Edit content efficiently"
+      },
+      "resetToDefaults": "[JA] Reset to Defaults",
+      "saving": "[JA] Saving...",
+      "saveChanges": "[JA] Save Changes",
+      "resetDialog": {
+        "title": "[JA] Reset Keyboard Shortcuts",
+        "description": "[JA] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[JA] Cancel",
+        "reset": "[JA] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[JA] Edit Shortcut",
+        "customizable": "[JA] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[JA] This shortcut cannot be customized",
+        "action": "[JA] Action",
+        "currentBinding": "[JA] Current Binding",
+        "newBinding": "[JA] New Binding",
+        "pressKeys": "[JA] Press keys...",
+        "clickToRecord": "[JA] Click to record",
+        "record": "[JA] Record",
+        "recording": "[JA] Recording...",
+        "cancel": "[JA] Cancel",
+        "save": "[JA] Save"
+      }
+    },
+    "plan": {
+      "title": "[JA] Plan & Billing",
+      "description": "[JA] Manage your subscription and view usage metrics",
+      "currentPlan": "[JA] Current Plan",
+      "currentPlanDescription": "[JA] Your active subscription details",
+      "upgradePlan": "[JA] Upgrade Plan",
+      "teamMembers": "[JA] Team Members",
+      "agents": "[JA] Agents",
+      "workflows": "[JA] Workflows",
+      "reports": "[JA] Reports",
+      "usageThisMonth": "[JA] Usage This Month",
+      "usageDescription": "[JA] Monitor your resource usage against plan limits",
+      "comparePlans": "[JA] Compare Plans",
+      "yourFeatures": "[JA] Your Features",
+      "yourFeaturesDescription": "[JA] All features included in your current plan",
+      "limit": "[JA] Limit: {limit}",
+      "requesting": "[JA] Requesting...",
+      "upgradeTo": "[JA] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[JA] Starter",
+          "price": "[JA] $49/mo",
+          "features": {
+            "members": "[JA] Up to 5 team members",
+            "agents": "[JA] 10 agents",
+            "runs": "[JA] 50 workflow runs/month",
+            "analytics": "[JA] Basic analytics",
+            "support": "[JA] Email support"
+          }
         },
-        "ticket": {
-          "title": "チケットを送信",
-          "description": "24時間以内にメールでサポートを受ける",
-          "info": "複雑な問題や機能リクエスト用。できるだけ詳細を含めてください。",
-          "button": "チケットを送信"
+        "professional": {
+          "name": "[JA] Professional",
+          "price": "[JA] $199/mo",
+          "features": {
+            "members": "[JA] Up to 20 team members",
+            "agents": "[JA] Unlimited agents",
+            "runs": "[JA] Unlimited workflow runs",
+            "analytics": "[JA] Advanced analytics",
+            "support": "[JA] Priority support",
+            "integrations": "[JA] Custom integrations",
+            "api": "[JA] API access"
+          }
         },
         "enterprise": {
-          "title": "エンタープライズサポート",
-          "description": "専任サポートが必要ですか？エンタープライズプランには専任のカスタマーサクセスマネージャーと優先対応時間が含まれます。",
-          "button": "営業に連絡"
+          "name": "[JA] Enterprise",
+          "price": "[JA] Custom",
+          "features": {
+            "members": "[JA] Unlimited team members",
+            "everything": "[JA] Unlimited everything",
+            "security": "[JA] Advanced security",
+            "sso": "[JA] SSO & SAML",
+            "support": "[JA] Dedicated support",
+            "sla": "[JA] Custom SLAs",
+            "onPremise": "[JA] On-premise option",
+            "whiteLabel": "[JA] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[JA] Scheduled Exports",
+      "description": "[JA] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[JA] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[JA] Manage automatic exports that run on a schedule",
+      "newExport": "[JA] New Export",
+      "all": "[JA] All",
+      "active": "[JA] Active",
+      "paused": "[JA] Paused",
+      "noScheduledExports": "[JA] No scheduled exports",
+      "createFirstExport": "[JA] Create your first scheduled export to get started",
+      "createExport": "[JA] Create Export",
+      "tableHeaders": {
+        "name": "[JA] Name",
+        "schedule": "[JA] Schedule",
+        "format": "[JA] Format",
+        "lastRun": "[JA] Last Run",
+        "nextRun": "[JA] Next Run",
+        "status": "[JA] Status"
+      },
+      "statusLabels": {
+        "pending": "[JA] Pending",
+        "processing": "[JA] Running",
+        "completed": "[JA] Success",
+        "failed": "[JA] Failed",
+        "neverRun": "[JA] Never Run"
+      },
+      "actions": {
+        "runNow": "[JA] Run Now",
+        "viewHistory": "[JA] View History",
+        "edit": "[JA] Edit",
+        "pause": "[JA] Pause",
+        "activate": "[JA] Activate",
+        "delete": "[JA] Delete"
+      },
+      "deleteDialog": {
+        "title": "[JA] Delete Scheduled Export",
+        "description": "[JA] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[JA] Cancel",
+        "delete": "[JA] Delete"
+      },
+      "historySheet": {
+        "title": "[JA] Export History",
+        "loading": "[JA] Loading..."
+      },
+      "relativeTime": {
+        "never": "[JA] Never",
+        "justNow": "[JA] Just now",
+        "lessThanMinute": "[JA] In less than a minute",
+        "minsAgo": "[JA] {count}m ago",
+        "inMins": "[JA] In {count}m",
+        "hoursAgo": "[JA] {count}h ago",
+        "inHours": "[JA] In {count}h",
+        "daysAgo": "[JA] {count}d ago",
+        "inDays": "[JA] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[JA] Inbox Agents",
+      "description": "[JA] AI agents that automatically handle incoming requests",
+      "configureChannels": "[JA] Configure Channels",
+      "createAgent": "[JA] Create Agent",
+      "activeAgents": "[JA] Active Agents",
+      "status": {
+        "processing": "[JA] Processing"
+      },
+      "stats": {
+        "processedToday": "[JA] Processed Today",
+        "fromYesterday": "[JA] {percent} from yesterday",
+        "avgResponseTime": "[JA] Avg Response Time",
+        "fasterThanLastWeek": "[JA] {percent} faster than last week",
+        "successRate": "[JA] Success Rate",
+        "basedOnRequests": "[JA] Based on {count} requests",
+        "pendingReview": "[JA] Pending Review",
+        "highPriority": "[JA] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[JA] Success rate",
+        "processed": "[JA] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[JA] Incoming Requests",
+        "description": "[JA] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[JA] Search requests...",
+        "noRequests": "[JA] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[JA] Assign to Brief Handler",
+        "assignToAudienceQuery": "[JA] Assign to Audience Query",
+        "assignToLocalization": "[JA] Assign to Localization",
+        "reprocess": "[JA] Reprocess",
+        "archive": "[JA] Archive"
+      },
+      "priority": {
+        "high": "[JA] High priority",
+        "medium": "[JA] Medium priority",
+        "low": "[JA] Low priority"
+      },
+      "request": {
+        "received": "[JA] Received {time}",
+        "generatedOutput": "[JA] Generated Output",
+        "confidence": "[JA] {percent}% confidence",
+        "citations": "[JA] {count} citations",
+        "viewFullReport": "[JA] View Full Report",
+        "assignAgent": "[JA] Assign Agent",
+        "respondManually": "[JA] Respond Manually",
+        "viewHistory": "[JA] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[JA] Agent Active",
+        "agentPaused": "[JA] Agent Paused",
+        "lastTriggered": "[JA] Last triggered {time}",
+        "processed": "[JA] Processed",
+        "successRate": "[JA] Success Rate",
+        "avgTime": "[JA] Avg Time",
+        "triggerKeywords": "[JA] Trigger Keywords",
+        "connectedChannels": "[JA] Connected Channels",
+        "processingPipeline": "[JA] Processing Pipeline",
+        "configure": "[JA] Configure",
+        "viewLogs": "[JA] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[JA] Create Inbox Agent",
+        "description": "[JA] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[JA] Agent Name",
+        "agentNamePlaceholder": "[JA] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[JA] Describe what this agent does...",
+        "triggerKeywords": "[JA] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[JA] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[JA] Agent will activate when messages contain these keywords",
+        "channels": "[JA] Channels",
+        "baseAgent": "[JA] Base Agent",
+        "selectAgent": "[JA] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[JA] Audience Explorer",
+          "personaArchitect": "[JA] Persona Architect",
+          "cultureTracker": "[JA] Culture Tracker",
+          "brandRelationshipAnalyst": "[JA] Brand Relationship Analyst"
+        },
+        "autoRespond": "[JA] Auto-respond",
+        "autoRespondHelp": "[JA] Automatically send responses to requesters",
+        "requireApproval": "[JA] Require Approval",
+        "requireApprovalHelp": "[JA] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[JA] Prompt Templates",
+      "description": "[JA] Reusable templates for common insights tasks",
+      "createTemplate": "[JA] Create Template",
+      "searchPlaceholder": "[JA] Search templates...",
+      "starredTemplates": "[JA] Starred Templates",
+      "allTemplates": "[JA] All Templates",
+      "uses": "[JA] {count} uses",
+      "categories": {
+        "all": "[JA] All",
+        "research": "[JA] Research",
+        "analysis": "[JA] Analysis",
+        "briefs": "[JA] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[JA] Use Template",
+        "duplicate": "[JA] Duplicate"
+      },
+      "createDialog": {
+        "title": "[JA] Create Template",
+        "description": "[JA] Save a prompt as a reusable template for your team",
+        "templateName": "[JA] Template Name",
+        "templateNamePlaceholder": "[JA] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[JA] What does this template do?",
+        "category": "[JA] Category",
+        "promptTemplate": "[JA] Prompt Template",
+        "promptPlaceholder": "[JA] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[JA] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[JA] Agent Store",
+      "description": "[JA] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[JA] Search agents...",
+      "sortBy": {
+        "placeholder": "[JA] Sort by",
+        "popular": "[JA] Most Popular",
+        "rating": "[JA] Highest Rated",
+        "newest": "[JA] Newest",
+        "name": "[JA] Name A-Z"
+      },
+      "featuredAgents": "[JA] Featured Agents",
+      "featured": "[JA] Featured",
+      "installed": "[JA] Installed",
+      "tryNow": "[JA] Try Now",
+      "categories": "[JA] Categories",
+      "viewDetails": "[JA] View Details",
+      "added": "[JA] Added",
+      "buildYourOwn": {
+        "title": "[JA] Build Your Own Agent",
+        "description": "[JA] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[JA] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[JA] Back to Store",
+        "notFound": {
+          "title": "[JA] Agent Not Found",
+          "description": "[JA] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[JA] {count} installs",
+        "installed": "[JA] Installed",
+        "installing": "[JA] Installing...",
+        "installAgent": "[JA] Install Agent",
+        "tryInPlayground": "[JA] Try in Playground",
+        "info": {
+          "version": "[JA] Version",
+          "category": "[JA] Category",
+          "dataSources": "[JA] Data Sources"
+        },
+        "tabs": {
+          "overview": "[JA] Overview",
+          "capabilities": "[JA] Capabilities",
+          "examples": "[JA] Examples",
+          "reviews": "[JA] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[JA] About this Agent",
+          "fastResults": "[JA] Fast Results",
+          "fastResultsDesc": "[JA] Avg. 3s response time",
+          "verifiedData": "[JA] Verified Data",
+          "verifiedDataDesc": "[JA] 100% sourced citations",
+          "alwaysUpdated": "[JA] Always Updated",
+          "alwaysUpdatedDesc": "[JA] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[JA] What this agent can do",
+          "description": "[JA] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[JA] Example Prompts",
+          "description": "[JA] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[JA] Ratings",
+          "reviewsCount": "[JA] {count} reviews"
+        },
+        "relatedAgents": "[JA] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[JA] Data Changes",
+      "description": "[JA] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[JA] Timeline",
+        "compare": "[JA] Compare",
+        "evolution": "[JA] Evolution",
+        "alerts": "[JA] Alerts"
+      },
+      "compare": {
+        "title": "[JA] Compare Versions",
+        "description": "[JA] Select an entity to compare its versions",
+        "compareVersions": "[JA] Compare versions",
+        "entities": {
+          "audiences": "[JA] Audiences",
+          "crosstabs": "[JA] Crosstabs",
+          "insights": "[JA] Insights",
+          "charts": "[JA] Charts",
+          "reports": "[JA] Reports",
+          "dashboards": "[JA] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[JA] Analysis Evolution",
+        "description": "[JA] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[JA] View evolution",
+        "types": {
+          "brandHealth": "[JA] Brand Health",
+          "audienceInsights": "[JA] Audience Insights",
+          "marketAnalysis": "[JA] Market Analysis",
+          "competitorAnalysis": "[JA] Competitor Analysis",
+          "trendAnalysis": "[JA] Trend Analysis",
+          "crosstabAnalysis": "[JA] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[JA] Change Alerts",
+        "loading": "[JA] Loading alerts...",
+        "noAlerts": "[JA] No Alerts",
+        "noAlertsDescription": "[JA] You have no unread change alerts.",
+        "markAllRead": "[JA] Mark All as Read",
+        "markRead": "[JA] Mark Read",
+        "dismiss": "[JA] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[JA] Select {entity} to Compare",
+        "entity": "[JA] Entity",
+        "enterIdDescription": "[JA] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[JA] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[JA] Select Analysis to View Evolution",
+        "enterIdDescription": "[JA] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[JA] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[JA] Crosstabs",
+      "description": "[JA] Compare audiences across multiple dimensions",
+      "newCrosstab": "[JA] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[JA] Total Crosstabs",
+        "views": "[JA] Views",
+        "exports": "[JA] Exports",
+        "usedToday": "[JA] Used Today"
+      },
+      "tabs": {
+        "all": "[JA] All Crosstabs",
+        "recent": "[JA] Recent",
+        "templates": "[JA] Templates"
+      },
+      "empty": {
+        "title": "[JA] No crosstabs yet",
+        "description": "[JA] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[JA] Featured",
+        "liveData": "[JA] Live Data",
+        "more": "[JA] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[JA] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[JA] audience segments",
+        "metrics": "[JA] metrics",
+        "audiencesCount": "[JA] {count} audiences",
+        "metricsCount": "[JA] {count} metrics",
+        "modified": "[JA] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[JA] Open Analysis"
+      },
+      "new": {
+        "title": "[JA] Create Crosstab",
+        "description": "[JA] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[JA] Crosstab Name",
+          "namePlaceholder": "[JA] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[JA] Select Audiences",
+          "selectMetrics": "[JA] Select Metrics",
+          "selected": "[JA] {count} selected"
+        },
+        "summary": {
+          "title": "[JA] Summary",
+          "audiences": "[JA] Audiences ({count})",
+          "metrics": "[JA] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[JA] Generate Crosstab",
+          "generating": "[JA] Generating...",
+          "cancel": "[JA] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[JA] Please enter a crosstab name",
+          "audienceRequired": "[JA] Please select at least one audience",
+          "metricRequired": "[JA] Please select at least one metric",
+          "createFailed": "[JA] Failed to create crosstab",
+          "createFailedRetry": "[JA] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[JA] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[JA] {count} metrics",
+          "audiences": "[JA] {count} audiences"
+        },
+        "categoriesCount": "[JA] {count} categories",
+        "more": "[JA] more",
+        "actions": {
+          "share": "[JA] Share",
+          "generateInsights": "[JA] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[JA] Data Grid",
+          "calculatedFields": "[JA] Calculated Fields",
+          "filters": "[JA] Filters",
+          "visualize": "[JA] Visualize"
+        },
+        "grid": {
+          "title": "[JA] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[JA] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[JA] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[JA] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[JA] Value updated to {value}%",
+          "fieldCreated": "[JA] Calculated field \"{name}\" created",
+          "fieldUpdated": "[JA] Calculated field updated",
+          "fieldDeleted": "[JA] Calculated field deleted",
+          "fieldApplied": "[JA] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[JA] Filters applied",
+          "chartSaved": "[JA] Chart saved!",
+          "chartExported": "[JA] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[JA] Crosstab Not Found",
+          "subtitle": "[JA] The requested crosstab could not be found",
+          "heading": "[JA] Crosstab not found",
+          "description": "[JA] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[JA] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[JA] Remove from favorites",
+          "addToFavorites": "[JA] Add to favorites",
+          "pauseAutoRefresh": "[JA] Pause auto-refresh",
+          "enableAutoRefresh": "[JA] Enable auto-refresh",
+          "exitFullscreen": "[JA] Exit fullscreen",
+          "enterFullscreen": "[JA] Enter fullscreen",
+          "visualize": "[JA] Visualize",
+          "share": "[JA] Share",
+          "edit": "[JA] Edit",
+          "duplicate": "[JA] Duplicate",
+          "addToDashboard": "[JA] Add to Dashboard",
+          "copyLink": "[JA] Copy Link",
+          "copied": "[JA] Copied!",
+          "delete": "[JA] Delete",
+          "cancel": "[JA] Cancel",
+          "selectAll": "[JA] Select All",
+          "clear": "[JA] Clear",
+          "schedule": "[JA] Schedule"
+        },
+        "filters": {
+          "title": "[JA] Data Filters",
+          "clearAll": "[JA] Clear All",
+          "description": "[JA] Filter and refine your crosstab data",
+          "quickFilters": "[JA] Quick Filters",
+          "valueRange": "[JA] Value Range: {min}% - {max}%",
+          "category": "[JA] Category",
+          "allCategories": "[JA] All Categories",
+          "activeFilters": "[JA] Active filters"
+        },
+        "tabs": {
+          "filters": "[JA] Filters",
+          "audiences": "[JA] Audiences",
+          "metrics": "[JA] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[JA] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[JA] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[JA] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[JA] Export as JSON",
+          "asCsv": "[JA] Export as CSV",
+          "asHtml": "[JA] Export as HTML",
+          "asPdf": "[JA] Export as PDF",
+          "asExcel": "[JA] Export as Excel",
+          "asPowerPoint": "[JA] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[JA] Delete Crosstab",
+          "description": "[JA] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[JA] Modified {time}",
+          "views": "[JA] {count} views",
+          "createdBy": "[JA] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[JA] Data",
+          "activity": "[JA] Activity",
+          "comments": "[JA] Comments",
+          "history": "[JA] History"
+        },
+        "insights": {
+          "title": "[JA] AI-Generated Insights",
+          "topPerformer": "[JA] Top Performer",
+          "topPerformerDesc": "[JA] leads in most metrics with an average of {average}%.",
+          "noData": "[JA] No data available",
+          "biggestGap": "[JA] Biggest Gap",
+          "biggestGapDesc": "[JA] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[JA] Trending",
+          "trendingDesc": "[JA] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[JA] no"
+        },
+        "activity": {
+          "title": "[JA] Activity Log",
+          "description": "[JA] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[JA] Share Crosstab",
+          "description": "[JA] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[JA] Email address",
+          "emailPlaceholder": "[JA] email@example.com",
+          "role": "[JA] Role",
+          "roles": {
+            "viewer": "[JA] Viewer",
+            "editor": "[JA] Editor",
+            "admin": "[JA] Admin"
+          },
+          "shareLink": "[JA] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[JA] Schedule Report",
+          "description": "[JA] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[JA] Recipients",
+          "recipientsPlaceholder": "[JA] email@example.com, team@example.com",
+          "frequency": "[JA] Frequency",
+          "frequencies": {
+            "daily": "[JA] Daily",
+            "weekly": "[JA] Weekly",
+            "monthly": "[JA] Monthly"
+          },
+          "format": "[JA] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[JA] Insights",
+      "description": "[JA] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[JA] Search insights...",
+      "filterByType": "[JA] Filter by type",
+      "loading": "[JA] Loading...",
+      "showing": "[JA] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[JA] All Types",
+        "audience": "[JA] Audience",
+        "trend": "[JA] Trend",
+        "competitive": "[JA] Competitive",
+        "analysis": "[JA] Analysis"
+      },
+      "empty": {
+        "title": "[JA] No insights yet",
+        "description": "[JA] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[JA] Go to Playground"
+      },
+      "badges": {
+        "new": "[JA] New"
+      },
+      "viaAgent": "[JA] via {name}",
+      "detail": {
+        "backToInsights": "[JA] Back to Insights",
+        "notFound": {
+          "title": "[JA] Insight not found",
+          "description": "[JA] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[JA] View All Insights",
+        "confidence": "[JA] {percent}% confidence",
+        "viaAgent": "[JA] via {name}",
+        "actions": {
+          "copy": "[JA] Copy",
+          "copied": "[JA] Copied",
+          "share": "[JA] Share",
+          "export": "[JA] Export"
+        },
+        "detailsTitle": "[JA] Insight Details",
+        "detailsDescription": "[JA] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[JA] Want to explore more?",
+          "description": "[JA] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[JA] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[JA] Data Connectors",
+        "description": "[JA] Connect external data sources to enrich your insights",
+        "addConnector": "[JA] Add Connector",
+        "searchPlaceholder": "[JA] Search connectors...",
+        "stats": {
+          "totalConnectors": "[JA] Total Connectors",
+          "active": "[JA] Active",
+          "withErrors": "[JA] With Errors",
+          "dataSources": "[JA] Data Sources"
+        },
+        "tabs": {
+          "configured": "[JA] Configured",
+          "available": "[JA] Available"
+        },
+        "filters": {
+          "allTypes": "[JA] All types"
+        },
+        "empty": {
+          "title": "[JA] No connectors configured",
+          "description": "[JA] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[JA] Previous",
+          "next": "[JA] Next",
+          "pageOf": "[JA] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[JA] Sync started",
+          "syncFailed": "[JA] Failed to start sync",
+          "connectorEnabled": "[JA] Connector enabled",
+          "connectorDisabled": "[JA] Connector disabled",
+          "updateFailed": "[JA] Failed to update connector",
+          "connectorDeleted": "[JA] Connector deleted",
+          "deleteFailed": "[JA] Failed to delete connector",
+          "testFailed": "[JA] Failed to test connection"
+        },
+        "new": {
+          "title": "[JA] Add Data Connector",
+          "description": "[JA] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[JA] Back to Connectors",
+          "notFound": "[JA] Connector not found",
+          "actions": {
+            "test": "[JA] Test",
+            "syncNow": "[JA] Sync Now",
+            "delete": "[JA] Delete",
+            "cancel": "[JA] Cancel",
+            "deleting": "[JA] Deleting..."
+          },
+          "status": {
+            "completed": "[JA] Last sync successful",
+            "running": "[JA] Syncing...",
+            "pending": "[JA] Sync pending",
+            "failed": "[JA] Last sync failed",
+            "cancelled": "[JA] Sync cancelled",
+            "never": "[JA] Never synced"
+          },
+          "cards": {
+            "status": "[JA] Status",
+            "active": "[JA] Active",
+            "paused": "[JA] Paused",
+            "totalSyncs": "[JA] Total Syncs",
+            "errorCount": "[JA] Error Count"
+          },
+          "tabs": {
+            "overview": "[JA] Overview",
+            "configuration": "[JA] Configuration",
+            "syncHistory": "[JA] Sync History"
+          },
+          "overview": {
+            "details": "[JA] Details",
+            "description": "[JA] Description",
+            "provider": "[JA] Provider",
+            "type": "[JA] Type",
+            "syncSchedule": "[JA] Sync Schedule",
+            "manualOnly": "[JA] Manual only",
+            "created": "[JA] Created",
+            "recentSyncs": "[JA] Recent Syncs",
+            "lastSyncs": "[JA] Last {count} sync operations",
+            "noSyncHistory": "[JA] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[JA] Danger Zone",
+            "deleteConnector": "[JA] Delete this connector",
+            "deleteWarning": "[JA] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[JA] Sync History",
+            "description": "[JA] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[JA] Delete Connector",
+            "description": "[JA] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[JA] Sync started",
+            "syncFailed": "[JA] Failed to start sync",
+            "testFailed": "[JA] Test failed",
+            "connectorDeleted": "[JA] Connector deleted",
+            "deleteFailed": "[JA] Failed to delete connector",
+            "connectorUpdated": "[JA] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[JA] Memory & Context",
+      "description": "[JA] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[JA] Settings",
+        "clearAll": "[JA] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "ダッシュボード",
     "welcome": "おかえりなさい",
-    "overview": "概要",
+    "overview": {
+      "activeAgents": "[JA] Active Agents",
+      "workflowsRun": "[JA] Workflows Run",
+      "insightsGenerated": "[JA] Insights Generated",
+      "avgRunTime": "[JA] Avg. Run Time",
+      "thisWeekChange": "[JA] +{count} this week",
+      "fromLastMonthPercent": "[JA] +{percent}% from last month",
+      "fasterPercent": "[JA] -{percent}% faster",
+      "active": "[JA] Active",
+      "noneActive": "[JA] None active",
+      "last24Hours": "[JA] Last 24 hours",
+      "noRunsYet": "[JA] No runs yet",
+      "noInsightsYet": "[JA] No insights yet",
+      "perWorkflow": "[JA] Per workflow",
+      "notAvailable": "[JA] N/A"
+    },
     "recentActivity": "最近のアクティビティ",
     "quickActions": {
       "title": "クイックアクション",
@@ -871,7 +1990,25 @@
       "createReport": "レポートを作成",
       "published": "公開済み",
       "generating": "生成中",
-      "draft": "下書き"
+      "draft": "下書き",
+      "page": {
+        "tabs": {
+          "allReports": "[JA] All Reports",
+          "templates": "[JA] Templates",
+          "scheduled": "[JA] Scheduled",
+          "sharedWithMe": "[JA] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[JA] Next: {date}",
+          "recipientsCount": "[JA] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[JA] Shared by {name} on {date}",
+          "canView": "[JA] Can view",
+          "canEdit": "[JA] Can edit",
+          "canComment": "[JA] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "アクティブなプロジェクト",
@@ -1035,7 +2172,60 @@
         "title": "ワークフロー",
         "description": "自動化された調査パイプラインを作成・管理。",
         "newWorkflow": "新規ワークフロー",
-        "searchPlaceholder": "ワークフローを検索..."
+        "searchPlaceholder": "ワークフローを検索...",
+        "edit": {
+          "title": "[JA] Edit Workflow",
+          "description": "[JA] Modify workflow settings and configuration",
+          "newWorkflowName": "[JA] New Workflow",
+          "basicInfo": {
+            "title": "[JA] Basic Information",
+            "description": "[JA] Update the workflow name and description",
+            "workflowName": "[JA] Workflow Name",
+            "workflowNamePlaceholder": "[JA] Enter workflow name",
+            "descriptionPlaceholder": "[JA] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[JA] Schedule",
+            "description": "[JA] Configure when this workflow runs",
+            "runFrequency": "[JA] Run Frequency",
+            "selectSchedule": "[JA] Select schedule",
+            "selectStatus": "[JA] Select status",
+            "frequencies": {
+              "hourly": "[JA] Hourly",
+              "daily": "[JA] Daily",
+              "weekly": "[JA] Weekly",
+              "monthly": "[JA] Monthly",
+              "onDemand": "[JA] On-demand"
+            },
+            "statuses": {
+              "active": "[JA] Active",
+              "paused": "[JA] Paused",
+              "scheduled": "[JA] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[JA] Error Handling",
+            "description": "[JA] Configure retry behavior for failed runs",
+            "autoRetry": "[JA] Auto-retry on failure",
+            "autoRetryDescription": "[JA] Automatically retry the workflow if it fails",
+            "retryAttempts": "[JA] Retry Attempts",
+            "selectAttempts": "[JA] Select attempts",
+            "attempts": {
+              "one": "[JA] 1 attempt",
+              "two": "[JA] 2 attempts",
+              "three": "[JA] 3 attempts",
+              "five": "[JA] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[JA] Notifications",
+            "description": "[JA] Configure how you receive updates about this workflow",
+            "email": "[JA] Email notifications",
+            "emailDescription": "[JA] Receive email updates on completion or failure",
+            "slack": "[JA] Slack notifications",
+            "slackDescription": "[JA] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "オーディエンス",
@@ -1083,55 +2273,235 @@
         "unarchive": "アーカイブ解除",
         "workflows": "ワークフロー",
         "reports": "レポート",
-        "agents": "エージェント"
+        "agents": "エージェント",
+        "detail": {
+          "defaultDescription": "[JA] Project description",
+          "projectSettings": "[JA] Project Settings",
+          "archiveProject": "[JA] Archive Project",
+          "deleteProject": "[JA] Delete Project",
+          "new": "[JA] New",
+          "stats": {
+            "teamMembers": "[JA] Team Members",
+            "workflows": "[JA] Workflows",
+            "running": "[JA] {count} running",
+            "reports": "[JA] Reports",
+            "generatedOutputs": "[JA] Generated outputs",
+            "agentsUsed": "[JA] Agents Used",
+            "totalRuns": "[JA] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[JA] Overview",
+            "workflows": "[JA] Workflows",
+            "reports": "[JA] Reports",
+            "agents": "[JA] Agents",
+            "team": "[JA] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[JA] Recent Workflows",
+            "recentReports": "[JA] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[JA] Project Workflows",
+            "newWorkflow": "[JA] New Workflow",
+            "lastRun": "[JA] Last run",
+            "run": "[JA] Run"
+          },
+          "reportsTab": {
+            "title": "[JA] Project Reports",
+            "newReport": "[JA] New Report",
+            "created": "[JA] Created"
+          },
+          "agentsTab": {
+            "title": "[JA] Agents Used",
+            "addAgent": "[JA] Add Agent",
+            "runsInProject": "[JA] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[JA] Team Members",
+            "addMember": "[JA] Add Member",
+            "remove": "[JA] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "対象ユーザーの編集",
-        "description": "このオーディエンス セグメントの構成を更新します",
-        "saving": "保存中...",
-        "saveChanges": "変更を保存",
-        "notFound": "視聴者が見つかりません",
-        "notFoundDescription": "編集しようとしている視聴者は存在しません",
-        "notFoundDetailedDescription": "探している視聴者は存在しないか、削除されています。",
-        "backToAudiences": "視聴者に戻る",
+      "pageTracker": "[JA] Audiences List",
+      "title": "[JA] Audiences",
+      "description": "[JA] Build and analyze custom consumer segments",
+      "aiBuilder": "[JA] AI Builder",
+      "newAudience": "[JA] New Audience",
+      "totalAudiences": "[JA] Total Audiences",
+      "avgReach": "[JA] Avg. Reach",
+      "markets": "[JA] Markets",
+      "usedThisWeek": "[JA] Used This Week",
+      "searchPlaceholder": "[JA] Search audiences...",
+      "allAudiences": "[JA] All Audiences",
+      "recentlyUsed": "[JA] Recently Used",
+      "favorites": "[JA] Favorites",
+      "marketplace": "[JA] Marketplace",
+      "aiAudienceBuilder": "[JA] AI Audience Builder",
+      "aiBuilderDescription": "[JA] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[JA] Compare Audiences",
+      "compareDescription": "[JA] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[JA] No audiences yet",
+        "description": "[JA] Create your first audience to get started",
+        "action": "[JA] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[JA] {count} markets",
+        "used": "[JA] Used {time}"
+      },
+      "new": {
+        "title": "[JA] Build New Audience",
+        "description": "[JA] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "基本情報",
-          "description": "この対象ユーザーの名前と説明を設定します",
-          "audienceName": "視聴者名",
-          "audienceNamePlaceholder": "例: 環境意識の高いミレニアル世代",
-          "descriptionPlaceholder": "この視聴者セグメントの簡単な説明"
+          "audienceName": "[JA] Audience Name",
+          "audienceNamePlaceholder": "[JA] e.g., Eco-Conscious Millennials",
+          "description": "[JA] Description",
+          "descriptionPlaceholder": "[JA] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "AI を活用したクエリ",
-          "description": "視聴者を自然言語で説明する",
-          "placeholder": "例: サステナビリティを重視し、都市部に住み、環境に優しいブランドで買い物をするミレニアル世代を紹介してください",
-          "generateButton": "属性の生成 (近日公開予定)"
+          "title": "[JA] AI-Powered Query",
+          "description": "[JA] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[JA] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[JA] Generate Attributes"
         },
         "attributes": {
-          "title": "ターゲット属性",
-          "description": "この対象者に対する特定の基準を定義する",
-          "addAttribute": "属性の追加",
-          "noAttributes": "属性はまだ定義されていません",
-          "noAttributesHint": "属性を追加して視聴者の基準を定義する",
-          "valuePlaceholder": "価値"
+          "title": "[JA] Attributes",
+          "add": "[JA] Add",
+          "age": "[JA] Age",
+          "gender": "[JA] Gender",
+          "income": "[JA] Income",
+          "interests": "[JA] Interests",
+          "is": "[JA] is",
+          "between": "[JA] between",
+          "contains": "[JA] contains"
         },
         "markets": {
-          "title": "市場",
-          "description": "この対象者向けの市場を選択してください",
-          "selectAtLeastOne": "少なくとも 1 つの市場を選択してください"
+          "title": "[JA] Markets",
+          "global": "[JA] Global",
+          "us": "[JA] United States",
+          "uk": "[JA] United Kingdom",
+          "de": "[JA] Germany",
+          "jp": "[JA] Japan"
         },
         "estimatedReach": {
-          "title": "推定リーチ",
-          "tbd": "未定",
-          "matchCriteria": "消費者はこれらの基準に一致します"
+          "title": "[JA] Estimated Reach",
+          "matchCriteria": "[JA] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "変更を破棄しますか?",
-          "description": "未保存の変更があります。 本当に退会してもよろしいですか? 変更内容は失われます。",
-          "keepEditing": "編集を続ける",
-          "discardChanges": "変更の破棄"
+        "actions": {
+          "save": "[JA] Save Audience",
+          "saving": "[JA] Saving...",
+          "cancel": "[JA] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[JA] Please enter an audience name",
+          "createFailed": "[JA] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[JA] Audience Detail",
+        "notFound": "[JA] Audience Not Found",
+        "notFoundDescription": "[JA] The requested audience could not be found",
+        "notFoundDetailedDescription": "[JA] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[JA] Back to Audiences",
+        "people": "[JA] people",
+        "addToFavorites": "[JA] Add to favorites",
+        "removeFromFavorites": "[JA] Remove from favorites",
+        "used": "[JA] Used {time}",
+        "tabs": {
+          "overview": "[JA] Overview",
+          "persona": "[JA] Persona",
+          "dayInLife": "[JA] Day in the Life",
+          "habits": "[JA] Habits & Behaviors",
+          "media": "[JA] Media Consumption",
+          "brands": "[JA] Brand Affinities",
+          "comments": "[JA] Comments",
+          "activity": "[JA] Activity",
+          "history": "[JA] History"
+        },
+        "actions": {
+          "explore": "[JA] Explore",
+          "share": "[JA] Share",
+          "export": "[JA] Export",
+          "edit": "[JA] Edit",
+          "autoRefresh": "[JA] Auto-refresh",
+          "pauseAutoRefresh": "[JA] Pause auto-refresh",
+          "enableAutoRefresh": "[JA] Enable auto-refresh",
+          "duplicate": "[JA] Duplicate",
+          "createLookalike": "[JA] Create Lookalike",
+          "addToCrosstab": "[JA] Add to Crosstab",
+          "addToDashboard": "[JA] Add to Dashboard",
+          "scheduleReport": "[JA] Schedule Report",
+          "copyLink": "[JA] Copy Link",
+          "copied": "[JA] Copied!",
+          "delete": "[JA] Delete"
+        },
+        "export": {
+          "asJson": "[JA] Export as JSON",
+          "asCsv": "[JA] Export as CSV",
+          "asPdf": "[JA] Export as PDF",
+          "toPowerPoint": "[JA] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[JA] Demographics",
+          "keyBehaviors": "[JA] Key Behaviors",
+          "interests": "[JA] Interests",
+          "audienceSummary": "[JA] Audience Summary",
+          "size": "[JA] Size",
+          "markets": "[JA] Markets",
+          "quickActions": "[JA] Quick Actions",
+          "createChart": "[JA] Create Chart",
+          "compareAudiences": "[JA] Compare Audiences",
+          "exportProfile": "[JA] Export Profile",
+          "copyLink": "[JA] Copy Link"
+        },
+        "activity": {
+          "title": "[JA] Activity Log",
+          "description": "[JA] Recent activity on this audience",
+          "viewed": "[JA] viewed",
+          "exported": "[JA] exported",
+          "edited": "[JA] edited",
+          "shared": "[JA] shared",
+          "created": "[JA] created",
+          "createdChart": "[JA] created chart",
+          "addedToCrosstab": "[JA] added to crosstab"
+        },
+        "share": {
+          "title": "[JA] Share Audience",
+          "description": "[JA] Share this audience with team members or external collaborators.",
+          "emailLabel": "[JA] Email address",
+          "emailPlaceholder": "[JA] email@example.com",
+          "roleLabel": "[JA] Role",
+          "viewer": "[JA] Viewer",
+          "editor": "[JA] Editor",
+          "admin": "[JA] Admin",
+          "shareLink": "[JA] Share link",
+          "cancel": "[JA] Cancel",
+          "share": "[JA] Share"
+        },
+        "schedule": {
+          "title": "[JA] Schedule Report",
+          "description": "[JA] Set up automatic email delivery of this audience report.",
+          "recipients": "[JA] Recipients",
+          "recipientsPlaceholder": "[JA] email@example.com, team@example.com",
+          "frequency": "[JA] Frequency",
+          "daily": "[JA] Daily",
+          "weekly": "[JA] Weekly",
+          "monthly": "[JA] Monthly",
+          "format": "[JA] Format",
+          "pdf": "[JA] PDF",
+          "csv": "[JA] CSV",
+          "json": "[JA] JSON",
+          "cancel": "[JA] Cancel",
+          "schedule": "[JA] Schedule"
+        },
+        "delete": {
+          "title": "[JA] Delete Audience",
+          "description": "[JA] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[JA] Cancel",
+          "delete": "[JA] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "チャートの編集",
-        "description": "チャートの構成と設定を変更する",
-        "saving": "保存中...",
-        "saveChanges": "変更を保存",
-        "backToCharts": "チャートに戻る",
-        "preview": {
-          "title": "プレビュー",
-          "description": "チャートはどのように見えるか"
-        },
-        "unsavedChanges": "未保存の変更",
-        "authRequired": "認証が必要です",
-        "pleaseSignIn": "このグラフを編集するにはサインインしてください。",
-        "signIn": "サインイン",
+      "pageTracker": "[JA] Charts List",
+      "title": "[JA] Charts",
+      "description": "[JA] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[JA] Templates",
+      "compare": "[JA] Compare",
+      "newChart": "[JA] New Chart",
+      "totalCharts": "[JA] Total Charts",
+      "totalViews": "[JA] Total Views",
+      "shares": "[JA] Shares",
+      "exports": "[JA] Exports",
+      "searchPlaceholder": "[JA] Search charts...",
+      "allCategory": "[JA] All",
+      "allCharts": "[JA] All Charts",
+      "recent": "[JA] Recent",
+      "mostViewed": "[JA] Most Viewed",
+      "favorites": "[JA] Favorites",
+      "emptyState": {
+        "title": "[JA] No charts found",
+        "description": "[JA] Create your first chart or try a different search",
+        "action": "[JA] Create Chart"
+      },
+      "comparison": {
+        "title": "[JA] Brand Health Comparison",
+        "description": "[JA] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[JA] Create New Chart",
+        "description": "[JA] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "基本情報",
-          "description": "チャートの名前と説明を設定します",
-          "chartName": "チャート名",
-          "chartNamePlaceholder": "チャート名を入力してください",
-          "descriptionPlaceholder": "このグラフが何を示しているか説明してください",
-          "selectStatus": "ステータスの選択",
-          "dataSource": "データソース",
-          "selectDataSource": "データソースの選択"
+          "title": "[JA] Basic Information",
+          "chartName": "[JA] Chart Name",
+          "chartNamePlaceholder": "[JA] e.g., Social Media Usage by Age Group",
+          "description": "[JA] Description",
+          "descriptionPlaceholder": "[JA] Describe what this chart shows"
         },
         "chartType": {
-          "title": "グラフの種類",
-          "description": "データの視覚化タイプを選択します"
+          "title": "[JA] Chart Type",
+          "description": "[JA] Select the visualization type"
         },
         "dataConfig": {
-          "title": "データ構成",
-          "description": "グラフのデータを構成する",
-          "targetAudience": "対象者",
-          "selectAudience": "対象ユーザーの選択",
-          "timePeriod": "期間",
-          "selectTimePeriod": "期間を選択してください",
-          "primaryMetric": "プライマリメトリクス",
-          "primaryMetricPlaceholder": "例: ソーシャルメディアの使用率 (%)",
-          "dimensions": "寸法",
-          "dimensionsHint": "データをグループ化するためのカテゴリ (例: 年齢層、地域)",
-          "addDimension": "寸法を追加する",
-          "measures": "対策",
-          "measuresHint": "表示する数値 (例: カウント、パーセンテージ)",
-          "addMeasure": "メジャーを追加する",
-          "filters": "フィルター",
-          "filtersHint": "条件を追加してデータをフィルタリングする",
-          "addFilter": "フィルターの追加",
-          "field": "分野",
-          "value": "価値",
-          "operators": {
-            "equals": "等しい",
-            "notEquals": "等しくない",
-            "contains": "含まれています",
-            "greaterThan": "より大きい",
-            "lessThan": "未満"
-          }
+          "title": "[JA] Data Configuration",
+          "targetAudience": "[JA] Target Audience",
+          "selectAudience": "[JA] Select audience",
+          "timePeriod": "[JA] Time Period",
+          "selectTimePeriod": "[JA] Select time period",
+          "dataSource": "[JA] Data Source",
+          "selectDataSource": "[JA] Select data source"
         },
-        "displayOptions": {
-          "title": "表示オプション",
-          "description": "グラフの外観をカスタマイズする",
-          "showLegend": "凡例を表示",
-          "showGrid": "グリッドを表示",
-          "showTooltip": "ツールチップを表示"
+        "preview": {
+          "title": "[JA] Preview",
+          "description": "[JA] How your chart will look"
         },
-        "chartInfo": {
-          "title": "チャート情報",
-          "id": "ID",
-          "created": "作成されました",
-          "lastUpdated": "最終更新日"
+        "actions": {
+          "save": "[JA] Create Chart",
+          "saving": "[JA] Creating...",
+          "cancel": "[JA] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[JA] Chart Detail",
+        "notFound": "[JA] Chart Not Found",
+        "notFoundDescription": "[JA] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[JA] Back to Charts",
+        "views": "[JA] views",
+        "shares": "[JA] shares",
+        "addToFavorites": "[JA] Add to favorites",
+        "removeFromFavorites": "[JA] Remove from favorites",
+        "tabs": {
+          "chart": "[JA] Chart",
+          "data": "[JA] Data",
+          "settings": "[JA] Settings",
+          "comments": "[JA] Comments",
+          "activity": "[JA] Activity",
+          "history": "[JA] History"
         },
-        "discardDialog": {
-          "title": "変更を破棄しますか?",
-          "description": "未保存の変更があります。 本当に退会してもよろしいですか? 変更内容は失われます。",
-          "keepEditing": "編集を続ける",
-          "discardChanges": "変更の破棄"
+        "actions": {
+          "share": "[JA] Share",
+          "export": "[JA] Export",
+          "edit": "[JA] Edit",
+          "fullscreen": "[JA] Fullscreen",
+          "duplicate": "[JA] Duplicate",
+          "addToDashboard": "[JA] Add to Dashboard",
+          "scheduleReport": "[JA] Schedule Report",
+          "copyLink": "[JA] Copy Link",
+          "copied": "[JA] Copied!",
+          "delete": "[JA] Delete"
+        },
+        "export": {
+          "asJson": "[JA] Export as JSON",
+          "asCsv": "[JA] Export as CSV",
+          "asPng": "[JA] Export as PNG",
+          "asSvg": "[JA] Export as SVG",
+          "toPowerPoint": "[JA] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[JA] Chart Info",
+          "type": "[JA] Type",
+          "dataSource": "[JA] Data Source",
+          "audience": "[JA] Audience",
+          "timePeriod": "[JA] Time Period",
+          "created": "[JA] Created",
+          "lastUpdated": "[JA] Last Updated"
+        },
+        "share": {
+          "title": "[JA] Share Chart",
+          "description": "[JA] Share this chart with team members or external collaborators.",
+          "emailLabel": "[JA] Email address",
+          "emailPlaceholder": "[JA] email@example.com",
+          "roleLabel": "[JA] Role",
+          "viewer": "[JA] Viewer",
+          "editor": "[JA] Editor",
+          "admin": "[JA] Admin",
+          "shareLink": "[JA] Share link",
+          "embedCode": "[JA] Embed code",
+          "cancel": "[JA] Cancel",
+          "share": "[JA] Share"
+        },
+        "delete": {
+          "title": "[JA] Delete Chart",
+          "description": "[JA] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[JA] Cancel",
+          "delete": "[JA] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "最小認知度 (%)",
           "minNPS": "最小 NPS スコア"
         }
+      },
+      "pageTracker": "[JA] Brand Tracking",
+      "title": "[JA] Brand Tracking",
+      "description": "[JA] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[JA] All Brands",
+        "active": "[JA] Active",
+        "paused": "[JA] Paused",
+        "draft": "[JA] Draft"
+      },
+      "new": {
+        "title": "[JA] New Brand Tracking",
+        "description": "[JA] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[JA] Brand Information",
+          "description": "[JA] Provide details about the brand you want to track",
+          "brandNameLabel": "[JA] Brand Name *",
+          "brandNamePlaceholder": "[JA] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[JA] Description",
+          "descriptionPlaceholder": "[JA] Brief description of what you want to track...",
+          "industryLabel": "[JA] Industry",
+          "industryPlaceholder": "[JA] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[JA] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[JA] Daily",
+          "weekly": "[JA] Weekly",
+          "monthly": "[JA] Monthly",
+          "manual": "[JA] Manual Only"
+        },
+        "competitors": {
+          "label": "[JA] Competitors",
+          "placeholder": "[JA] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[JA] Metrics to Track",
+          "awareness": "[JA] Brand Awareness",
+          "consideration": "[JA] Consideration",
+          "preference": "[JA] Preference",
+          "loyalty": "[JA] Loyalty",
+          "nps": "[JA] Net Promoter Score (NPS)",
+          "sentiment": "[JA] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[JA] Cancel",
+          "create": "[JA] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[JA] Brand Tracking Detail",
+        "title": "[JA] Brand Health Dashboard",
+        "notFound": "[JA] Brand Study Not Found",
+        "notFoundDescription": "[JA] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[JA] Back to Brand Tracking",
+        "loading": "[JA] Loading...",
+        "people": "[JA] people",
+        "timePeriods": {
+          "1m": "[JA] 1 Month",
+          "3m": "[JA] 3 Months",
+          "6m": "[JA] 6 Months",
+          "1y": "[JA] 1 Year",
+          "all": "[JA] All Time"
+        },
+        "tabs": {
+          "overview": "[JA] Overview",
+          "trends": "[JA] Trends",
+          "competitors": "[JA] Competitors",
+          "insights": "[JA] Insights",
+          "comments": "[JA] Comments",
+          "activity": "[JA] Activity",
+          "history": "[JA] History"
+        },
+        "actions": {
+          "explore": "[JA] Explore",
+          "share": "[JA] Share",
+          "export": "[JA] Export",
+          "edit": "[JA] Edit",
+          "refresh": "[JA] Refresh",
+          "autoRefresh": "[JA] Auto-refresh",
+          "pauseAutoRefresh": "[JA] Pause auto-refresh",
+          "enableAutoRefresh": "[JA] Enable auto-refresh",
+          "duplicate": "[JA] Duplicate",
+          "copyLink": "[JA] Copy Link",
+          "copied": "[JA] Copied!",
+          "delete": "[JA] Delete",
+          "addToFavorites": "[JA] Add to favorites",
+          "removeFromFavorites": "[JA] Remove from favorites",
+          "scheduleReport": "[JA] Schedule Report"
+        },
+        "export": {
+          "asJson": "[JA] Export as JSON",
+          "asCsv": "[JA] Export as CSV",
+          "asPdf": "[JA] Export as PDF",
+          "toPowerPoint": "[JA] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[JA] Awareness",
+          "consideration": "[JA] Consideration",
+          "preference": "[JA] Preference",
+          "loyalty": "[JA] Loyalty",
+          "nps": "[JA] NPS",
+          "sentiment": "[JA] Sentiment",
+          "marketShare": "[JA] Market Share",
+          "vsTarget": "[JA] vs target",
+          "trend": "[JA] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[JA] Brand Health Trend",
+          "competitorComparison": "[JA] Competitor Comparison",
+          "sentimentBreakdown": "[JA] Sentiment Breakdown",
+          "metricsOverTime": "[JA] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[JA] Brand Overview",
+          "industry": "[JA] Industry",
+          "competitors": "[JA] Competitors",
+          "trackingFrequency": "[JA] Tracking Frequency",
+          "lastUpdated": "[JA] Last Updated",
+          "createdBy": "[JA] Created By",
+          "dateRange": "[JA] Date Range"
+        },
+        "insights": {
+          "title": "[JA] Key Insights",
+          "aiGenerated": "[JA] AI-Generated",
+          "noInsights": "[JA] No insights available yet",
+          "generateInsights": "[JA] Generate Insights"
+        },
+        "activity": {
+          "title": "[JA] Activity Log",
+          "description": "[JA] Recent activity on this brand study",
+          "viewed": "[JA] viewed",
+          "exported": "[JA] exported",
+          "edited": "[JA] edited",
+          "shared": "[JA] shared",
+          "created": "[JA] created"
+        },
+        "share": {
+          "title": "[JA] Share Brand Study",
+          "description": "[JA] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[JA] Email address",
+          "emailPlaceholder": "[JA] email@example.com",
+          "roleLabel": "[JA] Role",
+          "viewer": "[JA] Viewer",
+          "editor": "[JA] Editor",
+          "admin": "[JA] Admin",
+          "shareLink": "[JA] Share link",
+          "cancel": "[JA] Cancel",
+          "share": "[JA] Share"
+        },
+        "schedule": {
+          "title": "[JA] Schedule Report",
+          "description": "[JA] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[JA] Recipients",
+          "recipientsPlaceholder": "[JA] email@example.com, team@example.com",
+          "frequency": "[JA] Frequency",
+          "daily": "[JA] Daily",
+          "weekly": "[JA] Weekly",
+          "monthly": "[JA] Monthly",
+          "format": "[JA] Format",
+          "pdf": "[JA] PDF",
+          "csv": "[JA] CSV",
+          "json": "[JA] JSON",
+          "cancel": "[JA] Cancel",
+          "schedule": "[JA] Schedule"
+        },
+        "delete": {
+          "title": "[JA] Delete Brand Study",
+          "description": "[JA] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[JA] Cancel",
+          "delete": "[JA] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[JA] Select organization",
+      "searchPlaceholder": "[JA] Search organizations...",
+      "noOrganizationFound": "[JA] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[JA] Weekly Activity",
+      "monthlyTrend": "[JA] Monthly Trend",
+      "workflows": "[JA] Workflows",
+      "insights": "[JA] Insights",
+      "days": {
+        "mon": "[JA] Mon",
+        "tue": "[JA] Tue",
+        "wed": "[JA] Wed",
+        "thu": "[JA] Thu",
+        "fri": "[JA] Fri",
+        "sat": "[JA] Sat",
+        "sun": "[JA] Sun"
+      },
+      "months": {
+        "jan": "[JA] Jan",
+        "feb": "[JA] Feb",
+        "mar": "[JA] Mar",
+        "apr": "[JA] Apr",
+        "may": "[JA] May",
+        "jun": "[JA] Jun",
+        "jul": "[JA] Jul",
+        "aug": "[JA] Aug",
+        "sep": "[JA] Sep",
+        "oct": "[JA] Oct",
+        "nov": "[JA] Nov",
+        "dec": "[JA] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[JA] Active Agents",
+      "manage": "[JA] Manage",
+      "activeTasks": "[JA] {count} active tasks",
+      "idle": "[JA] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[JA] Untitled Dashboard",
+      "addWidget": "[JA] Add Widget",
+      "undoShortcut": "[JA] Undo (Ctrl+Z)",
+      "redoShortcut": "[JA] Redo (Ctrl+Y)",
+      "grid": "[JA] Grid",
+      "snap": "[JA] Snap",
+      "widgetsCount": "[JA] {count} widgets",
+      "exportFormat": "[JA] Export Format",
+      "export": {
+        "pdf": "[JA] PDF Document",
+        "png": "[JA] PNG Image",
+        "json": "[JA] JSON Config"
+      },
+      "duplicate": "[JA] Duplicate",
+      "fullscreen": "[JA] Fullscreen",
+      "lock": "[JA] Lock",
+      "unlock": "[JA] Unlock",
+      "hide": "[JA] Hide",
+      "chooseWidgetType": "[JA] Choose a widget type to add to your dashboard",
+      "editWidget": "[JA] Edit Widget",
+      "newWidget": "[JA] New {type}",
+      "enterTextContent": "[JA] Enter text content...",
+      "unknownWidgetType": "[JA] Unknown widget type",
+      "target": "[JA] Target",
+      "table": {
+        "name": "[JA] Name",
+        "value": "[JA] Value",
+        "change": "[JA] Change",
+        "item": "[JA] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[JA] Chart",
+        "metric": "[JA] Metric",
+        "table": "[JA] Table",
+        "text": "[JA] Text",
+        "image": "[JA] Image",
+        "kpi": "[JA] KPI",
+        "kpiCard": "[JA] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[JA] Visualize data with various chart types",
+        "kpi": "[JA] Display key performance indicators",
+        "metric": "[JA] Show a single metric value",
+        "table": "[JA] Display data in tabular format",
+        "text": "[JA] Add text content or notes",
+        "image": "[JA] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[JA] General",
+        "data": "[JA] Data",
+        "style": "[JA] Style",
+        "advanced": "[JA] Advanced"
+      },
+      "fields": {
+        "title": "[JA] Title",
+        "subtitle": "[JA] Subtitle",
+        "chartType": "[JA] Chart Type",
+        "content": "[JA] Content",
+        "value": "[JA] Value",
+        "changePercent": "[JA] Change (%)",
+        "target": "[JA] Target",
+        "dataSource": "[JA] Data Source",
+        "refreshInterval": "[JA] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[JA] Bar Chart",
+        "line": "[JA] Line Chart",
+        "area": "[JA] Area Chart",
+        "pie": "[JA] Pie Chart",
+        "donut": "[JA] Donut Chart",
+        "radar": "[JA] Radar Chart",
+        "scatter": "[JA] Scatter Plot",
+        "funnel": "[JA] Funnel Chart",
+        "treemap": "[JA] Treemap",
+        "heatmap": "[JA] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[JA] Sample Data",
+        "api": "[JA] API Endpoint",
+        "crosstab": "[JA] Crosstab",
+        "custom": "[JA] Custom Query"
+      },
+      "refreshIntervalHint": "[JA] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[JA] Show Legend",
+        "showGrid": "[JA] Show Grid",
+        "showTooltip": "[JA] Show Tooltip",
+        "backgroundColor": "[JA] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[JA] Lock Widget",
+        "lockWidgetHint": "[JA] Prevent moving and resizing",
+        "zIndex": "[JA] Z-Index"
+      },
+      "dashboardSettings": "[JA] Dashboard Settings",
+      "saveSettings": "[JA] Save Settings",
+      "settings": {
+        "dashboardName": "[JA] Dashboard Name",
+        "gridColumns": "[JA] Grid Columns",
+        "gridRows": "[JA] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[JA] Analytics",
+      "title": "[JA] Analytics",
+      "description": "[JA] Track your research performance and insights"
     }
   },
   "audiences": {

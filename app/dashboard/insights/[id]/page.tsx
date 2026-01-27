@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, use } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -21,13 +22,20 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
+interface InsightData {
+  summary?: string
+  findings?: string[]
+  recommendations?: string[]
+  [key: string]: unknown
+}
+
 interface Insight {
   id: string
   title: string
   type: string
   confidenceScore: number | null
   createdAt: string
-  data: any
+  data: InsightData
   agentRun?: {
     id: string
     agent?: {
@@ -54,6 +62,7 @@ export default function InsightDetailPage({
 }: {
   params: Promise<{ id: string }>
 }) {
+  const t = useTranslations('dashboard.insights.detail')
   const { id } = use(params)
   const [insight, setInsight] = useState<Insight | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -120,18 +129,18 @@ export default function InsightDetailPage({
         <Button variant="ghost" size="sm" asChild>
           <Link href="/dashboard/insights">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Insights
+            {t('backToInsights')}
           </Link>
         </Button>
         <Card className="bg-card/50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Lightbulb className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-2">{error || "Insight not found"}</h3>
+            <h3 className="text-lg font-medium mb-2">{error || t('notFound.title')}</h3>
             <p className="text-muted-foreground text-center">
-              This insight may have been deleted or you don&apos;t have access to it.
+              {t('notFound.description')}
             </p>
             <Button asChild className="mt-4">
-              <Link href="/dashboard/insights">View All Insights</Link>
+              <Link href="/dashboard/insights">{t('viewAllInsights')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -150,7 +159,7 @@ export default function InsightDetailPage({
       <Button variant="ghost" size="sm" asChild>
         <Link href="/dashboard/insights">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Insights
+          {t('backToInsights')}
         </Link>
       </Button>
 
@@ -167,7 +176,7 @@ export default function InsightDetailPage({
             {confidence && (
               <Badge variant="secondary" className="text-emerald-500">
                 <BarChart3 className="h-3 w-3 mr-1" />
-                {confidence}% confidence
+                {t('confidence', { percent: confidence })}
               </Badge>
             )}
           </div>
@@ -180,7 +189,7 @@ export default function InsightDetailPage({
             {insight.agentRun?.agent && (
               <div className="flex items-center gap-1">
                 <Bot className="h-4 w-4" />
-                via {insight.agentRun.agent.name}
+                {t('viaAgent', { name: insight.agentRun.agent.name })}
               </div>
             )}
           </div>
@@ -191,22 +200,22 @@ export default function InsightDetailPage({
             {copied ? (
               <>
                 <Check className="h-4 w-4 mr-2" />
-                Copied
+                {t('actions.copied')}
               </>
             ) : (
               <>
                 <Copy className="h-4 w-4 mr-2" />
-                Copy
+                {t('actions.copy')}
               </>
             )}
           </Button>
           <Button variant="outline" size="sm">
             <Share2 className="h-4 w-4 mr-2" />
-            Share
+            {t('actions.share')}
           </Button>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Export
+            {t('actions.export')}
           </Button>
         </div>
       </div>
@@ -214,9 +223,9 @@ export default function InsightDetailPage({
       {/* Content */}
       <Card>
         <CardHeader>
-          <CardTitle>Insight Details</CardTitle>
+          <CardTitle>{t('detailsTitle')}</CardTitle>
           <CardDescription>
-            Raw data and findings from this insight
+            {t('detailsDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -259,13 +268,13 @@ export default function InsightDetailPage({
               <Bot className="h-6 w-6 text-primary" />
             </div>
             <div className="flex-1">
-              <h3 className="font-medium">Want to explore more?</h3>
+              <h3 className="font-medium">{t('exploreMore.title')}</h3>
               <p className="text-sm text-muted-foreground">
-                Run more queries in the playground to generate additional insights.
+                {t('exploreMore.description')}
               </p>
             </div>
             <Button asChild>
-              <Link href="/dashboard/playground">Open Playground</Link>
+              <Link href="/dashboard/playground">{t('exploreMore.openPlayground')}</Link>
             </Button>
           </div>
         </CardContent>

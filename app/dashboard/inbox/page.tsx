@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Mail,
   MessageSquare,
@@ -253,6 +254,8 @@ const inboxItems = [
 ]
 
 export default function InboxPage() {
+  const t = useTranslations("dashboard.inbox")
+  const tCommon = useTranslations("common")
   const [selectedTab, setSelectedTab] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedRequest, setSelectedRequest] = useState<(typeof inboxItems)[0] | null>(null)
@@ -281,21 +284,21 @@ export default function InboxPage() {
         return (
           <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
             <CheckCircle2 className="w-3 h-3 mr-1" />
-            Completed
+            {tCommon("completed")}
           </Badge>
         )
       case "processing":
         return (
           <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20">
             <Sparkles className="w-3 h-3 mr-1 animate-pulse" />
-            Processing
+            {t("status.processing")}
           </Badge>
         )
       case "pending":
         return (
           <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20">
             <Clock className="w-3 h-3 mr-1" />
-            Pending
+            {tCommon("pending")}
           </Badge>
         )
       default:
@@ -323,9 +326,8 @@ export default function InboxPage() {
     }))
   }
 
-  const handleAssignAgent = (requestId: number, agentId: string) => {
-    // In a real app, this would trigger the agent
-    console.log(`Assigning agent ${agentId} to request ${requestId}`)
+  const handleAssignAgent = (_requestId: number, _agentId: string) => {
+    // In a real app, this would trigger the agent assignment
   }
 
   const filteredItems = inboxItems
@@ -343,13 +345,13 @@ export default function InboxPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Inbox Agents</h1>
-          <p className="text-muted-foreground">AI agents that automatically handle incoming requests</p>
+          <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
             <Settings className="w-4 h-4 mr-2" />
-            Configure Channels
+            {t("configureChannels")}
           </Button>
           <Button
             size="sm"
@@ -357,7 +359,7 @@ export default function InboxPage() {
             onClick={() => setShowCreateAgent(true)}
           >
             <Plus className="w-4 h-4 mr-2" />
-            Create Agent
+            {t("createAgent")}
           </Button>
         </div>
       </div>
@@ -368,56 +370,56 @@ export default function InboxPage() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Processed Today</p>
+                <p className="text-xs text-muted-foreground">{t("stats.processedToday")}</p>
                 <p className="text-2xl font-bold text-foreground">127</p>
               </div>
               <div className="p-2 rounded-lg bg-emerald-500/10">
                 <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               </div>
             </div>
-            <p className="text-xs text-emerald-400 mt-2">+23% from yesterday</p>
+            <p className="text-xs text-emerald-400 mt-2">{t("stats.fromYesterday", { percent: "+23%" })}</p>
           </CardContent>
         </Card>
         <Card className="bg-card border-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Avg Response Time</p>
+                <p className="text-xs text-muted-foreground">{t("stats.avgResponseTime")}</p>
                 <p className="text-2xl font-bold text-foreground">1.2m</p>
               </div>
               <div className="p-2 rounded-lg bg-blue-500/10">
                 <Zap className="w-5 h-5 text-blue-400" />
               </div>
             </div>
-            <p className="text-xs text-blue-400 mt-2">-18% faster than last week</p>
+            <p className="text-xs text-blue-400 mt-2">{t("stats.fasterThanLastWeek", { percent: "-18%" })}</p>
           </CardContent>
         </Card>
         <Card className="bg-card border-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Success Rate</p>
+                <p className="text-xs text-muted-foreground">{t("stats.successRate")}</p>
                 <p className="text-2xl font-bold text-foreground">96.4%</p>
               </div>
               <div className="p-2 rounded-lg bg-accent/10">
                 <BarChart3 className="w-5 h-5 text-accent" />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">Based on 315 requests</p>
+            <p className="text-xs text-muted-foreground mt-2">{t("stats.basedOnRequests", { count: 315 })}</p>
           </CardContent>
         </Card>
         <Card className="bg-card border-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Pending Review</p>
+                <p className="text-xs text-muted-foreground">{t("stats.pendingReview")}</p>
                 <p className="text-2xl font-bold text-foreground">3</p>
               </div>
               <div className="p-2 rounded-lg bg-amber-500/10">
                 <AlertCircle className="w-5 h-5 text-amber-400" />
               </div>
             </div>
-            <p className="text-xs text-amber-400 mt-2">1 high priority</p>
+            <p className="text-xs text-amber-400 mt-2">{t("stats.highPriority", { count: 1 })}</p>
           </CardContent>
         </Card>
       </div>
@@ -425,9 +427,9 @@ export default function InboxPage() {
       {/* Active Agents */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-foreground">Active Agents</h2>
+          <h2 className="text-lg font-semibold text-foreground">{t("activeAgents")}</h2>
           <Button variant="ghost" size="sm" className="text-muted-foreground">
-            View All
+            {tCommon("viewAll")}
             <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
@@ -454,14 +456,14 @@ export default function InboxPage() {
 
                 <div className="mb-3">
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-muted-foreground">Success rate</span>
+                    <span className="text-muted-foreground">{t("agents.successRate")}</span>
                     <span className="text-foreground">{agent.successRate}%</span>
                   </div>
                   <Progress value={agent.successRate} className="h-1" />
                 </div>
 
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">{agent.processed} processed</span>
+                  <span className="text-muted-foreground">{t("agents.processed", { count: agent.processed })}</span>
                   <span className="text-muted-foreground">~{agent.avgTime}</span>
                 </div>
                 <div className="flex gap-1 mt-2">
@@ -482,14 +484,14 @@ export default function InboxPage() {
         <CardHeader className="pb-3">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <CardTitle>Incoming Requests</CardTitle>
-              <CardDescription>Requests from Slack, Email, and other channels</CardDescription>
+              <CardTitle>{t("incomingRequests.title")}</CardTitle>
+              <CardDescription>{t("incomingRequests.description")}</CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search requests..."
+                  placeholder={t("incomingRequests.searchPlaceholder")}
                   className="pl-9 w-[200px] bg-background"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -497,7 +499,7 @@ export default function InboxPage() {
               </div>
               <Button variant="outline" size="sm">
                 <Filter className="w-4 h-4 mr-2" />
-                Filter
+                {tCommon("filter")}
               </Button>
             </div>
           </div>
@@ -506,25 +508,25 @@ export default function InboxPage() {
           <Tabs value={selectedTab} onValueChange={setSelectedTab}>
             <TabsList className="bg-muted/50 mb-4">
               <TabsTrigger value="all">
-                All
+                {tCommon("all")}
                 <Badge variant="secondary" className="ml-2 text-[10px] px-1.5">
                   {inboxItems.length}
                 </Badge>
               </TabsTrigger>
               <TabsTrigger value="pending">
-                Pending
+                {tCommon("pending")}
                 <Badge variant="secondary" className="ml-2 text-[10px] px-1.5">
                   {inboxItems.filter((i) => i.status === "pending").length}
                 </Badge>
               </TabsTrigger>
               <TabsTrigger value="processing">
-                Processing
+                {t("status.processing")}
                 <Badge variant="secondary" className="ml-2 text-[10px] px-1.5">
                   {inboxItems.filter((i) => i.status === "processing").length}
                 </Badge>
               </TabsTrigger>
               <TabsTrigger value="completed">
-                Completed
+                {tCommon("completed")}
                 <Badge variant="secondary" className="ml-2 text-[10px] px-1.5">
                   {inboxItems.filter((i) => i.status === "completed").length}
                 </Badge>
@@ -536,7 +538,7 @@ export default function InboxPage() {
                 {filteredItems.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground">
                     <Mail className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>No requests found</p>
+                    <p>{t("incomingRequests.noRequests")}</p>
                   </div>
                 ) : (
                   filteredItems.map((item) => (
@@ -601,29 +603,29 @@ export default function InboxPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => setSelectedRequest(item)}>
                               <Eye className="w-4 h-4 mr-2" />
-                              View Details
+                              {tCommon("viewDetails")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
                               <Bot className="w-4 h-4 mr-2" />
-                              Assign to Brief Handler
+                              {t("actions.assignToBriefHandler")}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <Users className="w-4 h-4 mr-2" />
-                              Assign to Audience Query
+                              {t("actions.assignToAudienceQuery")}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <Globe className="w-4 h-4 mr-2" />
-                              Assign to Localization
+                              {t("actions.assignToLocalization")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
                               <RotateCcw className="w-4 h-4 mr-2" />
-                              Reprocess
+                              {t("actions.reprocess")}
                             </DropdownMenuItem>
                             <DropdownMenuItem className="text-red-400">
                               <Trash2 className="w-4 h-4 mr-2" />
-                              Archive
+                              {t("actions.archive")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -674,7 +676,7 @@ export default function InboxPage() {
                   {getStatusBadge(selectedRequest.status)}
                   <div className="flex items-center gap-1">
                     {getPriorityIndicator(selectedRequest.priority)}
-                    <span className="text-muted-foreground capitalize">{selectedRequest.priority} priority</span>
+                    <span className="text-muted-foreground capitalize">{t(`priority.${selectedRequest.priority}`)}</span>
                   </div>
                 </div>
 
@@ -684,7 +686,7 @@ export default function InboxPage() {
                   <div className="p-4 rounded-lg bg-muted/50 border border-border">
                     <p className="text-sm text-foreground whitespace-pre-wrap">{selectedRequest.fullMessage}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-2">Received {selectedRequest.time}</p>
+                  <p className="text-xs text-muted-foreground mt-2">{t("request.received", { time: selectedRequest.time })}</p>
                 </div>
 
                 {/* Processing Steps */}
@@ -730,7 +732,7 @@ export default function InboxPage() {
                 {/* Response Output */}
                 {selectedRequest.response && (
                   <div>
-                    <h4 className="text-sm font-medium text-foreground mb-3">Generated Output</h4>
+                    <h4 className="text-sm font-medium text-foreground mb-3">{t("request.generatedOutput")}</h4>
                     <Card className="bg-emerald-500/5 border-emerald-500/20">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-3">
@@ -739,15 +741,15 @@ export default function InboxPage() {
                             <p className="text-sm text-muted-foreground">{selectedRequest.response.summary}</p>
                           </div>
                           <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
-                            {selectedRequest.response.confidence}% confidence
+                            {t("request.confidence", { percent: selectedRequest.response.confidence })}
                           </Badge>
                         </div>
                         <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          <span>{selectedRequest.response.citations} citations</span>
+                          <span>{t("request.citations", { count: selectedRequest.response.citations })}</span>
                         </div>
                         <Button className="w-full mt-4 bg-transparent" variant="outline" asChild>
                           <a href={selectedRequest.response.link}>
-                            View Full Report
+                            {t("request.viewFullReport")}
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </a>
                         </Button>
@@ -759,7 +761,7 @@ export default function InboxPage() {
                 {/* Actions for Pending */}
                 {selectedRequest.status === "pending" && (
                   <div>
-                    <h4 className="text-sm font-medium text-foreground mb-3">Assign Agent</h4>
+                    <h4 className="text-sm font-medium text-foreground mb-3">{t("request.assignAgent")}</h4>
                     <div className="grid gap-2">
                       {inboxAgents
                         .filter((a) => agentStatuses[a.id])
@@ -781,7 +783,7 @@ export default function InboxPage() {
                     <Separator className="my-4" />
                     <Button className="w-full" variant="secondary">
                       <Send className="w-4 h-4 mr-2" />
-                      Respond Manually
+                      {t("request.respondManually")}
                     </Button>
                   </div>
                 )}
@@ -790,7 +792,7 @@ export default function InboxPage() {
                 <div>
                   <Button variant="ghost" className="w-full justify-start text-muted-foreground">
                     <History className="w-4 h-4 mr-2" />
-                    View Request History
+                    {t("request.viewHistory")}
                   </Button>
                 </div>
               </div>
@@ -829,9 +831,9 @@ export default function InboxPage() {
                     )}
                     <div>
                       <p className="font-medium text-foreground">
-                        {agentStatuses[selectedAgent.id] ? "Agent Active" : "Agent Paused"}
+                        {agentStatuses[selectedAgent.id] ? t("agentDetail.agentActive") : t("agentDetail.agentPaused")}
                       </p>
-                      <p className="text-xs text-muted-foreground">Last triggered {selectedAgent.lastTriggered}</p>
+                      <p className="text-xs text-muted-foreground">{t("agentDetail.lastTriggered", { time: selectedAgent.lastTriggered })}</p>
                     </div>
                   </div>
                   <Switch
@@ -844,21 +846,21 @@ export default function InboxPage() {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center p-3 rounded-lg bg-muted/30">
                     <p className="text-2xl font-bold text-foreground">{selectedAgent.processed}</p>
-                    <p className="text-xs text-muted-foreground">Processed</p>
+                    <p className="text-xs text-muted-foreground">{t("agentDetail.processed")}</p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/30">
                     <p className="text-2xl font-bold text-foreground">{selectedAgent.successRate}%</p>
-                    <p className="text-xs text-muted-foreground">Success Rate</p>
+                    <p className="text-xs text-muted-foreground">{t("agentDetail.successRate")}</p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/30">
                     <p className="text-2xl font-bold text-foreground">{selectedAgent.avgTime}</p>
-                    <p className="text-xs text-muted-foreground">Avg Time</p>
+                    <p className="text-xs text-muted-foreground">{t("agentDetail.avgTime")}</p>
                   </div>
                 </div>
 
                 {/* Triggers */}
                 <div>
-                  <h4 className="text-sm font-medium text-foreground mb-3">Trigger Keywords</h4>
+                  <h4 className="text-sm font-medium text-foreground mb-3">{t("agentDetail.triggerKeywords")}</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedAgent.triggers.map((trigger, idx) => (
                       <Badge key={idx} variant="secondary">
@@ -870,7 +872,7 @@ export default function InboxPage() {
 
                 {/* Channels */}
                 <div>
-                  <h4 className="text-sm font-medium text-foreground mb-3">Connected Channels</h4>
+                  <h4 className="text-sm font-medium text-foreground mb-3">{t("agentDetail.connectedChannels")}</h4>
                   <div className="flex gap-2">
                     {selectedAgent.channels.map((channel) => (
                       <Badge key={channel} variant="outline" className="px-3 py-1">
@@ -885,7 +887,7 @@ export default function InboxPage() {
 
                 {/* Actions Pipeline */}
                 <div>
-                  <h4 className="text-sm font-medium text-foreground mb-3">Processing Pipeline</h4>
+                  <h4 className="text-sm font-medium text-foreground mb-3">{t("agentDetail.processingPipeline")}</h4>
                   <div className="space-y-2">
                     {selectedAgent.actions.map((action, idx) => (
                       <div
@@ -905,11 +907,11 @@ export default function InboxPage() {
                 <div className="flex gap-2">
                   <Button variant="outline" className="flex-1 bg-transparent">
                     <Settings className="w-4 h-4 mr-2" />
-                    Configure
+                    {t("agentDetail.configure")}
                   </Button>
                   <Button variant="outline" className="flex-1 bg-transparent">
                     <History className="w-4 h-4 mr-2" />
-                    View Logs
+                    {t("agentDetail.viewLogs")}
                   </Button>
                 </div>
               </div>
@@ -922,44 +924,44 @@ export default function InboxPage() {
       <Dialog open={showCreateAgent} onOpenChange={setShowCreateAgent}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Create Inbox Agent</DialogTitle>
-            <DialogDescription>Configure an AI agent to automatically handle incoming requests</DialogDescription>
+            <DialogTitle>{t("createAgentDialog.title")}</DialogTitle>
+            <DialogDescription>{t("createAgentDialog.description")}</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="agent-name">Agent Name</Label>
+              <Label htmlFor="agent-name">{t("createAgentDialog.agentName")}</Label>
               <Input
                 id="agent-name"
-                placeholder="e.g., Competitive Analysis Handler"
+                placeholder={t("createAgentDialog.agentNamePlaceholder")}
                 value={newAgent.name}
                 onChange={(e) => setNewAgent({ ...newAgent, name: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="agent-description">Description</Label>
+              <Label htmlFor="agent-description">{tCommon("description")}</Label>
               <Textarea
                 id="agent-description"
-                placeholder="Describe what this agent does..."
+                placeholder={t("createAgentDialog.descriptionPlaceholder")}
                 value={newAgent.description}
                 onChange={(e) => setNewAgent({ ...newAgent, description: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="agent-triggers">Trigger Keywords</Label>
+              <Label htmlFor="agent-triggers">{t("createAgentDialog.triggerKeywords")}</Label>
               <Input
                 id="agent-triggers"
-                placeholder="competitor, competitive, market share (comma separated)"
+                placeholder={t("createAgentDialog.triggerKeywordsPlaceholder")}
                 value={newAgent.triggers}
                 onChange={(e) => setNewAgent({ ...newAgent, triggers: e.target.value })}
               />
-              <p className="text-xs text-muted-foreground">Agent will activate when messages contain these keywords</p>
+              <p className="text-xs text-muted-foreground">{t("createAgentDialog.triggerKeywordsHelp")}</p>
             </div>
 
             <div className="space-y-2">
-              <Label>Channels</Label>
+              <Label>{t("createAgentDialog.channels")}</Label>
               <div className="flex gap-4">
                 {["Slack", "Email", "Teams"].map((channel) => (
                   <div key={channel} className="flex items-center space-x-2">
@@ -983,16 +985,16 @@ export default function InboxPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Base Agent</Label>
+              <Label>{t("createAgentDialog.baseAgent")}</Label>
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select an agent to start from" />
+                  <SelectValue placeholder={t("createAgentDialog.selectAgent")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="audience">Audience Explorer</SelectItem>
-                  <SelectItem value="persona">Persona Architect</SelectItem>
-                  <SelectItem value="culture">Culture Tracker</SelectItem>
-                  <SelectItem value="brand">Brand Relationship Analyst</SelectItem>
+                  <SelectItem value="audience">{t("createAgentDialog.agents.audienceExplorer")}</SelectItem>
+                  <SelectItem value="persona">{t("createAgentDialog.agents.personaArchitect")}</SelectItem>
+                  <SelectItem value="culture">{t("createAgentDialog.agents.cultureTracker")}</SelectItem>
+                  <SelectItem value="brand">{t("createAgentDialog.agents.brandRelationshipAnalyst")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1002,8 +1004,8 @@ export default function InboxPage() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Auto-respond</Label>
-                  <p className="text-xs text-muted-foreground">Automatically send responses to requesters</p>
+                  <Label>{t("createAgentDialog.autoRespond")}</Label>
+                  <p className="text-xs text-muted-foreground">{t("createAgentDialog.autoRespondHelp")}</p>
                 </div>
                 <Switch
                   checked={newAgent.autoRespond}
@@ -1012,8 +1014,8 @@ export default function InboxPage() {
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Require Approval</Label>
-                  <p className="text-xs text-muted-foreground">Review responses before sending</p>
+                  <Label>{t("createAgentDialog.requireApproval")}</Label>
+                  <p className="text-xs text-muted-foreground">{t("createAgentDialog.requireApprovalHelp")}</p>
                 </div>
                 <Switch
                   checked={newAgent.requireApproval}
@@ -1025,11 +1027,11 @@ export default function InboxPage() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowCreateAgent(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
               <Bot className="w-4 h-4 mr-2" />
-              Create Agent
+              {t("createAgent")}
             </Button>
           </DialogFooter>
         </DialogContent>

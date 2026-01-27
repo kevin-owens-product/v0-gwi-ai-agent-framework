@@ -203,7 +203,85 @@
     "selectLanguage": "اختر اللغة",
     "preferences": "التفضيلات",
     "notifications": "الإشعارات",
-    "security": "الأمان",
+    "security": {
+      "title": "[AR] Security Settings",
+      "description": "[AR] Manage your account security and active sessions",
+      "changePassword": "[AR] Change Password",
+      "changePasswordDescription": "[AR] Update your password regularly to keep your account secure",
+      "currentPassword": "[AR] Current Password",
+      "newPassword": "[AR] New Password",
+      "confirmNewPassword": "[AR] Confirm New Password",
+      "updating": "[AR] Updating...",
+      "updatePassword": "[AR] Update Password",
+      "twoFactorAuth": "[AR] Two-Factor Authentication",
+      "twoFactorDescription": "[AR] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[AR] 2FA is enabled",
+      "twoFactorProtected": "[AR] Your account is protected with authenticator app",
+      "changeMethod": "[AR] Change Method",
+      "viewBackupCodes": "[AR] View Backup Codes",
+      "activeSessions": "[AR] Active Sessions",
+      "activeSessionsDescription": "[AR] Manage devices where you're currently logged in",
+      "signOutAll": "[AR] Sign Out All",
+      "current": "[AR] Current",
+      "revoke": "[AR] Revoke",
+      "dangerZone": "[AR] Danger Zone",
+      "dangerZoneDescription": "[AR] Irreversible and destructive actions",
+      "deleteAccount": "[AR] Delete Account",
+      "deleteAccountDescription": "[AR] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[AR] Data Exports",
+        "description": "[AR] Request exports of your personal data for GDPR compliance",
+        "refresh": "[AR] Refresh",
+        "yourDataRights": "[AR] Your Data Rights",
+        "yourDataRightsDescription": "[AR] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[AR] No Active Exports",
+        "noActiveExportsDescription": "[AR] Request an export to see its status here",
+        "noActiveExportsHint": "[AR] Your export status will appear here after you request a data export",
+        "exportHistory": "[AR] Export History",
+        "exportHistoryDescription": "[AR] View and download your previous data exports",
+        "total": "[AR] Total",
+        "pending": "[AR] Pending",
+        "processing": "[AR] Processing",
+        "aboutDataExports": "[AR] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[AR] What's Included",
+          "exportFormat": "[AR] Export Format",
+          "faq": "[AR] FAQ"
+        },
+        "included": {
+          "profileInfo": "[AR] Profile Information",
+          "profileInfoDesc": "[AR] Your name, email, avatar, and account settings",
+          "orgMemberships": "[AR] Organization Memberships",
+          "orgMembershipsDesc": "[AR] All organizations you belong to and your roles",
+          "createdContent": "[AR] Created Content",
+          "createdContentDesc": "[AR] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[AR] Activity History",
+          "activityHistoryDesc": "[AR] Audit logs and activity records associated with your account",
+          "preferences": "[AR] Preferences",
+          "preferencesDesc": "[AR] Your theme, language, notification, and other settings",
+          "apiKeys": "[AR] API Keys",
+          "apiKeysDesc": "[AR] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[AR] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[AR] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[AR] Human-readable when opened in a text editor",
+          "compatible": "[AR] Compatible with most data processing tools",
+          "easyImport": "[AR] Easy to import into other services",
+          "exampleStructure": "[AR] Example structure:"
+        },
+        "faq": {
+          "howLong": "[AR] How long does an export take?",
+          "howLongAnswer": "[AR] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[AR] How long is an export available?",
+          "howLongAvailableAnswer": "[AR] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[AR] How often can I request an export?",
+          "howOftenAnswer": "[AR] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[AR] Is my export secure?",
+          "isSecureAnswer": "[AR] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "الحساب",
     "appearance": {
       "title": "المظهر",
@@ -239,7 +317,35 @@
       "followingSystem": "يتبع النظام",
       "savingPreferences": "جارٍ حفظ التفضيلات..."
     },
-    "general": "عام",
+    "general": {
+      "title": "[AR] General Settings",
+      "description": "[AR] Manage your organization's settings and preferences",
+      "organizationDetails": "[AR] Organization Details",
+      "updateOrgInfo": "[AR] Update your organization's information",
+      "changeLogo": "[AR] Change Logo",
+      "organizationName": "[AR] Organization Name",
+      "organizationSlug": "[AR] Organization Slug",
+      "orgDescription": "[AR] Description",
+      "industry": "[AR] Industry",
+      "companySize": "[AR] Company Size",
+      "consumerGoods": "[AR] Consumer Goods",
+      "technology": "[AR] Technology",
+      "finance": "[AR] Finance",
+      "healthcare": "[AR] Healthcare",
+      "retail": "[AR] Retail",
+      "mediaEntertainment": "[AR] Media & Entertainment",
+      "employees1to50": "[AR] 1-50 employees",
+      "employees50to200": "[AR] 50-200 employees",
+      "employees200to1000": "[AR] 200-1000 employees",
+      "employees1000to5000": "[AR] 1000-5000 employees",
+      "employees5000plus": "[AR] 5000+ employees",
+      "regionalSettings": "[AR] Regional Settings",
+      "regionalDescription": "[AR] Set your timezone and date format preferences",
+      "timezone": "[AR] Timezone",
+      "dateFormat": "[AR] Date Format",
+      "saving": "[AR] Saving...",
+      "saveChanges": "[AR] Save Changes"
+    },
     "apiKeys": {
       "title": "مفاتيح API",
       "description": "إدارة مفاتيح API للوصول البرمجي",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "كيف يمكننا مساعدتك؟",
-      "subtitle": "ابحث في قاعدة المعرفة أو تصفح المواضيع أدناه",
       "searchPlaceholder": "ابحث عن المساعدة...",
-      "tabs": {
-        "faq": "الأسئلة الشائعة",
-        "guides": "الأدلة",
-        "contact": "اتصل بنا"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "دليل البدء",
-          "description": "تعلم أساسيات وكلاء GWI"
-        },
-        "videoTutorials": {
-          "title": "دروس فيديو",
-          "description": "شاهد الدروس التعليمية خطوة بخطوة"
-        },
-        "apiDocs": {
-          "title": "وثائق API",
-          "description": "التكامل مع واجهات برمجة التطبيقات"
-        },
-        "contactSupport": {
-          "title": "تواصل مع الدعم",
-          "description": "احصل على المساعدة من فريقنا"
-        }
+        "gettingStarted": "[AR] Getting Started Guide",
+        "videoTutorials": "[AR] Video Tutorials",
+        "apiDocs": "[AR] API Documentation",
+        "title": "[AR] Quick Links",
+        "gettingStartedDesc": "[AR] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[AR] Watch step-by-step guides",
+        "apiDocsDesc": "[AR] For developers and integrations",
+        "releaseNotes": "[AR] Release Notes",
+        "releaseNotesDesc": "[AR] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "البدء",
-          "agentsWorkflows": "الوكلاء وسير العمل",
-          "dataPrivacy": "البيانات والخصوصية",
-          "billingPlans": "الفواتير والخطط"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "كيف أنشئ أول وكيل؟",
-            "answer": "انتقل إلى صفحة الوكلاء من الشريط الجانبي وانقر على 'إنشاء وكيل'. اتبع المعالج خطوة بخطوة لتكوين اسم الوكيل والوصف ومصادر البيانات وإعدادات السلوك."
-          },
-          "dataSources": {
-            "question": "ما هي مصادر البيانات المتاحة؟",
-            "answer": "توفر GWI الوصول إلى مصادر بيانات متعددة بما في ذلك GWI Core (استطلاع المستهلكين الرئيسي)، وGWI USA، وGWI Zeitgeist (المواضيع الرائجة)، وإمكانية رفع بيانات مخصصة. يعتمد توفر مصادر البيانات على مستوى اشتراكك."
-          },
-          "inviteTeam": {
-            "question": "كيف أدعو أعضاء الفريق؟",
-            "answer": "اذهب إلى الإعدادات > الفريق وانقر على 'دعوة عضو'. أدخل عنوان بريدهم الإلكتروني واختر دورهم (مسؤول أو محرر أو مشاهد). سيتلقون بريداً إلكترونياً للانضمام إلى مساحة العمل."
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "ما الفرق بين الوكلاء وسير العمل؟",
-            "answer": "الوكلاء هم متخصصون مدعومون بالذكاء الاصطناعي يتعاملون مع أنواع محددة من مهام البحث. سير العمل يجمع بين وكلاء متعددين في تسلسل لأتمتة عمليات البحث المعقدة متعددة الخطوات."
-          },
-          "customize": {
-            "question": "هل يمكنني تخصيص الوكلاء الجاهزين؟",
-            "answer": "نعم! يمكنك نسخ أي وكيل جاهز وتعديل تكوينه، بما في ذلك موجه النظام ومصادر البيانات وتنسيق الإخراج. سيتم حفظ نسختك المخصصة في مكتبة الوكلاء الشخصية."
-          },
-          "schedule": {
-            "question": "كيف أجدول سير عمل؟",
-            "answer": "افتح سير العمل وانقر على زر 'جدولة'. يمكنك إعداد عمليات تشغيل متكررة (يومية أو أسبوعية أو شهرية) أو تشغيل سير العمل بناءً على أحداث مثل توفر بيانات جديدة."
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "كيف يتم حماية بياناتي؟",
-            "answer": "جميع البيانات مشفرة في حالة السكون وأثناء النقل باستخدام تشفير AES-256 القياسي. نحن حاصلون على شهادة SOC 2 Type II ومتوافقون مع GDPR. استفساراتك وبياناتك المخصصة لا تتم مشاركتها أبداً مع عملاء آخرين."
-          },
-          "export": {
-            "question": "هل يمكنني تصدير بياناتي؟",
-            "answer": "نعم، يمكنك تصدير البيانات بتنسيقات متعددة بما في ذلك CSV وExcel وPowerPoint وJSON. عملاء المؤسسات لديهم أيضاً إمكانية الوصول إلى اتصالات قاعدة البيانات المباشرة وتصدير API."
-          },
-          "updateFrequency": {
-            "question": "كم مرة يتم تحديث بيانات GWI؟",
-            "answer": "يتم تحديث بيانات GWI Core كل ربع سنة باستطلاعات مستهلكين جديدة. يوفر GWI Zeitgeist تحديثات أسبوعية حول المواضيع الرائجة. بعض مجموعات البيانات المتخصصة قد تكون لها ترددات تحديث مختلفة."
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "ما الذي يُعتبر استعلاماً؟",
-            "answer": "الاستعلام هو أي طلب يتم إجراؤه لوكيل، بما في ذلك الأسئلة المتابعة ضمن نفس المحادثة. سير العمل المعقد متعدد الخطوات يُحتسب كاستعلام واحد بغض النظر عن عدد الوكلاء المعنيين."
-          },
-          "changePlan": {
-            "question": "هل يمكنني ترقية أو تخفيض خطتي؟",
-            "answer": "نعم، يمكنك تغيير خطتك في أي وقت من الإعدادات > الفواتير. تدخل الترقيات حيز التنفيذ فوراً مع فوترة تناسبية. تدخل التخفيضات حيز التنفيذ في بداية دورة الفوترة التالية."
-          },
-          "annualDiscount": {
-            "question": "هل تقدمون خصومات على الفوترة السنوية؟",
-            "answer": "نعم! الفوترة السنوية توفر لك 20% مقارنة بالفوترة الشهرية. تواصل مع فريق المبيعات لإعداد الفوترة السنوية أو التحويل من الشهرية."
-          }
-        }
+        "title": "[AR] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "مبتدئ",
-          "intermediate": "متوسط",
-          "advanced": "متقدم"
-        },
-        "personas": {
-          "title": "بناء شخصيات فعالة",
-          "description": "تعلم كيفية إنشاء شخصيات جمهور مفصلة وقابلة للتنفيذ",
-          "duration": "قراءة 15 دقيقة"
-        },
-        "workflows": {
-          "title": "أفضل ممارسات أتمتة سير العمل",
-          "description": "صمم سير عمل فعال متعدد الوكلاء لأبحاثك",
-          "duration": "قراءة 20 دقيقة"
-        },
-        "prompts": {
-          "title": "هندسة الموجهات المتقدمة",
-          "description": "احصل على نتائج أفضل مع موجهات الوكيل المحسنة",
-          "duration": "قراءة 25 دقيقة"
-        },
-        "apiIntegration": {
-          "title": "دليل تكامل API",
-          "description": "ربط وكلاء GWI بأدواتك الحالية",
-          "duration": "قراءة 30 دقيقة"
-        }
-      },
-      "viewAllDocs": "عرض جميع الوثائق",
       "contact": {
-        "liveChat": {
-          "title": "الدردشة المباشرة",
-          "description": "تحدث مع فريق الدعم في الوقت الفعلي",
-          "availability": "متاح من الاثنين إلى الجمعة، 9 صباحاً - 6 مساءً بتوقيت EST. متوسط وقت الاستجابة: دقيقتان.",
-          "button": "بدء الدردشة"
+        "title": "[AR] Need More Help?",
+        "description": "[AR] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[AR] Contact Support",
+        "responseTime": "[AR] Typical response time: 2-4 hours"
+      },
+      "description": "[AR] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[AR] Browse by Category",
+        "agents": "[AR] AI Agents",
+        "agentsDesc": "[AR] Learn about agent capabilities",
+        "workflows": "[AR] Workflows",
+        "workflowsDesc": "[AR] Build automation pipelines",
+        "data": "[AR] Data & Audiences",
+        "dataDesc": "[AR] Understanding GWI data",
+        "reports": "[AR] Reports & Exports",
+        "reportsDesc": "[AR] Generate and share insights",
+        "integrations": "[AR] Integrations",
+        "integrationsDesc": "[AR] Connect with your tools",
+        "billing": "[AR] Billing & Plans",
+        "billingDesc": "[AR] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[AR] Profile Settings",
+      "description": "[AR] Manage your personal information",
+      "personalInfo": "[AR] Personal Information",
+      "updateProfileDetails": "[AR] Update your profile details",
+      "uploadPhoto": "[AR] Upload Photo",
+      "photoHint": "[AR] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[AR] First Name",
+      "lastName": "[AR] Last Name",
+      "emailAddress": "[AR] Email Address",
+      "jobTitle": "[AR] Job Title",
+      "bio": "[AR] Bio",
+      "contactInfo": "[AR] Contact Information",
+      "contactDescription": "[AR] How colleagues can reach you",
+      "phoneNumber": "[AR] Phone Number",
+      "location": "[AR] Location",
+      "saving": "[AR] Saving...",
+      "saveChanges": "[AR] Save Changes"
+    },
+    "team": {
+      "title": "[AR] Team Management",
+      "description": "[AR] Manage team members and their permissions",
+      "teamMembers": "[AR] Team Members",
+      "membersCount": "[AR] {count} members in your organization",
+      "inviteMember": "[AR] Invite Member",
+      "inviteTeamMember": "[AR] Invite Team Member",
+      "inviteDescription": "[AR] Send an invitation to join your organization",
+      "emailAddress": "[AR] Email Address",
+      "emailPlaceholder": "[AR] colleague@company.com",
+      "role": "[AR] Role",
+      "sending": "[AR] Sending...",
+      "sendInvitation": "[AR] Send Invitation",
+      "searchMembers": "[AR] Search members...",
+      "tableHeaders": {
+        "member": "[AR] Member",
+        "role": "[AR] Role",
+        "lastActive": "[AR] Last Active",
+        "joined": "[AR] Joined"
+      },
+      "roles": {
+        "owner": "[AR] Owner",
+        "admin": "[AR] Admin",
+        "member": "[AR] Member",
+        "viewer": "[AR] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[AR] Make Admin",
+        "makeMember": "[AR] Make Member",
+        "makeViewer": "[AR] Make Viewer",
+        "removeMember": "[AR] Remove Member"
+      },
+      "pendingInvitations": "[AR] Pending Invitations",
+      "pendingCount": "[AR] {count} pending invitation",
+      "pendingCountPlural": "[AR] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[AR] Email",
+        "role": "[AR] Role",
+        "sent": "[AR] Sent",
+        "expires": "[AR] Expires"
+      },
+      "revoke": "[AR] Revoke",
+      "rolePermissions": "[AR] Role Permissions",
+      "rolePermissionsDescription": "[AR] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[AR] Full organization control",
+        "transferOwnership": "[AR] Transfer ownership",
+        "deleteOrg": "[AR] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[AR] Manage team members",
+        "billing": "[AR] Billing & subscription",
+        "allMemberPerms": "[AR] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[AR] Create and edit agents",
+        "generateReports": "[AR] Generate reports",
+        "useAgents": "[AR] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[AR] View reports",
+        "viewDashboards": "[AR] View dashboards",
+        "readOnly": "[AR] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[AR] Remove Team Member",
+        "description": "[AR] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[AR] Cancel",
+        "remove": "[AR] Remove Member"
+      },
+      "unknown": "[AR] Unknown",
+      "never": "[AR] Never",
+      "justNow": "[AR] Just now",
+      "minAgo": "[AR] {count} min ago",
+      "hoursAgo": "[AR] {count} hour ago",
+      "hoursAgoPlural": "[AR] {count} hours ago",
+      "daysAgo": "[AR] {count} day ago",
+      "daysAgoPlural": "[AR] {count} days ago"
+    },
+    "billing": {
+      "title": "[AR] Billing & Subscription",
+      "description": "[AR] Manage your subscription and payment methods",
+      "enterprisePlan": "[AR] Enterprise Plan",
+      "current": "[AR] Current",
+      "planDescription": "[AR] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[AR] per month",
+      "planFeatures": "[AR] Plan Features",
+      "features": {
+        "unlimitedQueries": "[AR] Unlimited AI agent queries",
+        "allAgents": "[AR] All pre-built domain agents",
+        "customDev": "[AR] Custom agent development",
+        "prioritySupport": "[AR] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[AR] Usage This Period",
+      "usage": {
+        "agentQueries": "[AR] Agent Queries",
+        "unlimited": "[AR] Unlimited",
+        "reportsGenerated": "[AR] Reports Generated",
+        "teamSeats": "[AR] Team Seats"
+      },
+      "nextBillingDate": "[AR] Next billing date: {date}",
+      "changePlan": "[AR] Change Plan",
+      "cancelSubscription": "[AR] Cancel Subscription",
+      "paymentMethod": "[AR] Payment Method",
+      "paymentDescription": "[AR] Manage your payment information",
+      "cardEnding": "[AR] Visa ending in {last4}",
+      "cardExpires": "[AR] Expires {date}",
+      "update": "[AR] Update",
+      "billingHistory": "[AR] Billing History",
+      "billingHistoryDescription": "[AR] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[AR] Invoice",
+        "date": "[AR] Date",
+        "amount": "[AR] Amount",
+        "status": "[AR] Status"
+      },
+      "paid": "[AR] Paid",
+      "needMoreCapacity": "[AR] Need more capacity?",
+      "contactForPricing": "[AR] Contact us for custom enterprise pricing",
+      "contactSales": "[AR] Contact Sales",
+      "upgrade": {
+        "title": "[AR] Choose Your Plan",
+        "description": "[AR] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[AR] Back to Billing",
+        "checkoutCanceled": "[AR] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[AR] Monthly",
+        "yearly": "[AR] Yearly",
+        "save17": "[AR] Save 17%",
+        "mostPopular": "[AR] Most Popular",
+        "currentPlan": "[AR] Current Plan",
+        "billedAnnually": "[AR] ${price} billed annually",
+        "upgradeTo": "[AR] Upgrade to {plan}",
+        "processing": "[AR] Processing...",
+        "customSales": "[AR] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[AR] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[AR] Starter",
+            "description": "[AR] For individuals and small teams getting started",
+            "features": {
+              "runs": "[AR] 100 agent runs / month",
+              "seats": "[AR] 3 team seats",
+              "sources": "[AR] 5 data sources",
+              "retention": "[AR] 30 day data retention",
+              "tokens": "[AR] 100K tokens / month",
+              "support": "[AR] Community support"
+            }
+          },
+          "professional": {
+            "name": "[AR] Professional",
+            "description": "[AR] For growing teams with advanced needs",
+            "features": {
+              "runs": "[AR] 1,000 agent runs / month",
+              "seats": "[AR] 10 team seats",
+              "sources": "[AR] 25 data sources",
+              "retention": "[AR] 90 day data retention",
+              "tokens": "[AR] 1M tokens / month",
+              "support": "[AR] Priority email support",
+              "analytics": "[AR] Advanced analytics",
+              "integrations": "[AR] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[AR] Enterprise",
+            "description": "[AR] For large organizations with custom requirements",
+            "features": {
+              "runs": "[AR] Unlimited agent runs",
+              "seats": "[AR] Unlimited team seats",
+              "sources": "[AR] Unlimited data sources",
+              "retention": "[AR] 365 day data retention",
+              "tokens": "[AR] Unlimited tokens",
+              "support": "[AR] 24/7 dedicated support",
+              "customDev": "[AR] Custom agent development",
+              "sso": "[AR] SSO & SCIM",
+              "sla": "[AR] SLA guarantee",
+              "accountManager": "[AR] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[AR] Audit Log",
+      "description": "[AR] Track all actions and changes in your organization",
+      "activityHistory": "[AR] Activity History",
+      "totalEvents": "[AR] {count} total events",
+      "searchLogs": "[AR] Search logs...",
+      "allActions": "[AR] All Actions",
+      "allResources": "[AR] All Resources",
+      "noAuditLogs": "[AR] No audit logs found",
+      "activityWillAppear": "[AR] Activity will appear here as actions are taken",
+      "showing": "[AR] Showing {start} to {end} of {total}",
+      "previous": "[AR] Previous",
+      "next": "[AR] Next",
+      "actions": {
+        "create": "[AR] Created",
+        "update": "[AR] Updated",
+        "delete": "[AR] Deleted",
+        "execute": "[AR] Executed",
+        "login": "[AR] Logged in",
+        "logout": "[AR] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[AR] Webhooks",
+      "description": "[AR] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[AR] Webhook Endpoints",
+      "endpointsDescription": "[AR] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[AR] Add Webhook",
+      "addWebhookEndpoint": "[AR] Add Webhook Endpoint",
+      "addWebhookDescription": "[AR] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[AR] Endpoint URL",
+      "endpointUrlPlaceholder": "[AR] https://api.example.com/webhooks",
+      "descriptionOptional": "[AR] Description (Optional)",
+      "descriptionPlaceholder": "[AR] Describe this webhook...",
+      "events": "[AR] Events",
+      "creating": "[AR] Creating...",
+      "createWebhook": "[AR] Create Webhook",
+      "noWebhooks": "[AR] No webhooks configured",
+      "addWebhookToStart": "[AR] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[AR] Endpoint",
+        "events": "[AR] Events",
+        "status": "[AR] Status",
+        "secret": "[AR] Secret"
+      },
+      "eventsCount": "[AR] {count} events",
+      "active": "[AR] Active",
+      "disabled": "[AR] Disabled",
+      "webhookSecurity": "[AR] Webhook Security",
+      "securityDescription": "[AR] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[AR] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[AR] Agent Run Started",
+        "agentRunCompleted": "[AR] Agent Run Completed",
+        "agentRunFailed": "[AR] Agent Run Failed",
+        "workflowRunStarted": "[AR] Workflow Run Started",
+        "workflowRunCompleted": "[AR] Workflow Run Completed",
+        "workflowRunFailed": "[AR] Workflow Run Failed",
+        "reportGenerated": "[AR] Report Generated",
+        "memberAdded": "[AR] Member Added",
+        "memberRemoved": "[AR] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[AR] Custom Alerts",
+      "description": "[AR] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[AR] Total Alerts",
+      "active": "[AR] Active",
+      "totalTriggers": "[AR] Total Triggers",
+      "paused": "[AR] Paused",
+      "yourAlerts": "[AR] Your Alerts",
+      "yourAlertsDescription": "[AR] Manage your custom alert configurations",
+      "createAlert": "[AR] Create Alert",
+      "searchAlerts": "[AR] Search alerts...",
+      "entityType": "[AR] Entity Type",
+      "allTypes": "[AR] All Types",
+      "allStatus": "[AR] All Status",
+      "noAlertsYet": "[AR] No alerts yet",
+      "noMatchingAlerts": "[AR] No matching alerts",
+      "createFirstAlert": "[AR] Create your first alert to get notified about important changes",
+      "adjustFilters": "[AR] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[AR] Alert",
+        "type": "[AR] Type",
+        "condition": "[AR] Condition",
+        "channels": "[AR] Channels",
+        "lastTriggered": "[AR] Last Triggered",
+        "status": "[AR] Status"
+      },
+      "total": "[AR] total",
+      "never": "[AR] Never",
+      "edit": "[AR] Edit",
+      "viewHistory": "[AR] View History",
+      "delete": "[AR] Delete",
+      "createNewAlert": "[AR] Create New Alert",
+      "createNewAlertDescription": "[AR] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[AR] Edit Alert",
+      "editAlertDescription": "[AR] Update the configuration for this alert",
+      "alertHistory": "[AR] Alert History: {name}",
+      "alertHistoryDescription": "[AR] View the history of when this alert was triggered",
+      "deleteAlert": "[AR] Delete Alert",
+      "deleteAlertDescription": "[AR] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[AR] Cancel",
+      "entityTypes": {
+        "metric": "[AR] Metric",
+        "audience": "[AR] Audience",
+        "brand": "[AR] Brand",
+        "report": "[AR] Report",
+        "agent": "[AR] Agent",
+        "workflow": "[AR] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[AR] Keyboard Shortcuts",
+      "description": "[AR] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[AR] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[AR] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[AR] Shortcut Conflicts Detected",
+      "conflictsDescription": "[AR] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[AR] Navigation",
+        "navigationDesc": "[AR] Navigate around the application",
+        "actions": "[AR] Actions",
+        "actionsDesc": "[AR] Perform common actions quickly",
+        "ui": "[AR] UI",
+        "uiDesc": "[AR] Control the user interface",
+        "editing": "[AR] Editing",
+        "editingDesc": "[AR] Edit content efficiently"
+      },
+      "resetToDefaults": "[AR] Reset to Defaults",
+      "saving": "[AR] Saving...",
+      "saveChanges": "[AR] Save Changes",
+      "resetDialog": {
+        "title": "[AR] Reset Keyboard Shortcuts",
+        "description": "[AR] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[AR] Cancel",
+        "reset": "[AR] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[AR] Edit Shortcut",
+        "customizable": "[AR] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[AR] This shortcut cannot be customized",
+        "action": "[AR] Action",
+        "currentBinding": "[AR] Current Binding",
+        "newBinding": "[AR] New Binding",
+        "pressKeys": "[AR] Press keys...",
+        "clickToRecord": "[AR] Click to record",
+        "record": "[AR] Record",
+        "recording": "[AR] Recording...",
+        "cancel": "[AR] Cancel",
+        "save": "[AR] Save"
+      }
+    },
+    "plan": {
+      "title": "[AR] Plan & Billing",
+      "description": "[AR] Manage your subscription and view usage metrics",
+      "currentPlan": "[AR] Current Plan",
+      "currentPlanDescription": "[AR] Your active subscription details",
+      "upgradePlan": "[AR] Upgrade Plan",
+      "teamMembers": "[AR] Team Members",
+      "agents": "[AR] Agents",
+      "workflows": "[AR] Workflows",
+      "reports": "[AR] Reports",
+      "usageThisMonth": "[AR] Usage This Month",
+      "usageDescription": "[AR] Monitor your resource usage against plan limits",
+      "comparePlans": "[AR] Compare Plans",
+      "yourFeatures": "[AR] Your Features",
+      "yourFeaturesDescription": "[AR] All features included in your current plan",
+      "limit": "[AR] Limit: {limit}",
+      "requesting": "[AR] Requesting...",
+      "upgradeTo": "[AR] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[AR] Starter",
+          "price": "[AR] $49/mo",
+          "features": {
+            "members": "[AR] Up to 5 team members",
+            "agents": "[AR] 10 agents",
+            "runs": "[AR] 50 workflow runs/month",
+            "analytics": "[AR] Basic analytics",
+            "support": "[AR] Email support"
+          }
         },
-        "ticket": {
-          "title": "إرسال تذكرة",
-          "description": "احصل على المساعدة عبر البريد الإلكتروني خلال 24 ساعة",
-          "info": "للمشكلات المعقدة أو طلبات الميزات. قم بتضمين أكبر قدر ممكن من التفاصيل.",
-          "button": "إرسال تذكرة"
+        "professional": {
+          "name": "[AR] Professional",
+          "price": "[AR] $199/mo",
+          "features": {
+            "members": "[AR] Up to 20 team members",
+            "agents": "[AR] Unlimited agents",
+            "runs": "[AR] Unlimited workflow runs",
+            "analytics": "[AR] Advanced analytics",
+            "support": "[AR] Priority support",
+            "integrations": "[AR] Custom integrations",
+            "api": "[AR] API access"
+          }
         },
         "enterprise": {
-          "title": "دعم المؤسسات",
-          "description": "تحتاج دعماً مخصصاً؟ خطط المؤسسات تشمل مدير نجاح عملاء مخصص وأوقات استجابة ذات أولوية.",
-          "button": "تواصل مع المبيعات"
+          "name": "[AR] Enterprise",
+          "price": "[AR] Custom",
+          "features": {
+            "members": "[AR] Unlimited team members",
+            "everything": "[AR] Unlimited everything",
+            "security": "[AR] Advanced security",
+            "sso": "[AR] SSO & SAML",
+            "support": "[AR] Dedicated support",
+            "sla": "[AR] Custom SLAs",
+            "onPremise": "[AR] On-premise option",
+            "whiteLabel": "[AR] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[AR] Scheduled Exports",
+      "description": "[AR] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[AR] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[AR] Manage automatic exports that run on a schedule",
+      "newExport": "[AR] New Export",
+      "all": "[AR] All",
+      "active": "[AR] Active",
+      "paused": "[AR] Paused",
+      "noScheduledExports": "[AR] No scheduled exports",
+      "createFirstExport": "[AR] Create your first scheduled export to get started",
+      "createExport": "[AR] Create Export",
+      "tableHeaders": {
+        "name": "[AR] Name",
+        "schedule": "[AR] Schedule",
+        "format": "[AR] Format",
+        "lastRun": "[AR] Last Run",
+        "nextRun": "[AR] Next Run",
+        "status": "[AR] Status"
+      },
+      "statusLabels": {
+        "pending": "[AR] Pending",
+        "processing": "[AR] Running",
+        "completed": "[AR] Success",
+        "failed": "[AR] Failed",
+        "neverRun": "[AR] Never Run"
+      },
+      "actions": {
+        "runNow": "[AR] Run Now",
+        "viewHistory": "[AR] View History",
+        "edit": "[AR] Edit",
+        "pause": "[AR] Pause",
+        "activate": "[AR] Activate",
+        "delete": "[AR] Delete"
+      },
+      "deleteDialog": {
+        "title": "[AR] Delete Scheduled Export",
+        "description": "[AR] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[AR] Cancel",
+        "delete": "[AR] Delete"
+      },
+      "historySheet": {
+        "title": "[AR] Export History",
+        "loading": "[AR] Loading..."
+      },
+      "relativeTime": {
+        "never": "[AR] Never",
+        "justNow": "[AR] Just now",
+        "lessThanMinute": "[AR] In less than a minute",
+        "minsAgo": "[AR] {count}m ago",
+        "inMins": "[AR] In {count}m",
+        "hoursAgo": "[AR] {count}h ago",
+        "inHours": "[AR] In {count}h",
+        "daysAgo": "[AR] {count}d ago",
+        "inDays": "[AR] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[AR] Inbox Agents",
+      "description": "[AR] AI agents that automatically handle incoming requests",
+      "configureChannels": "[AR] Configure Channels",
+      "createAgent": "[AR] Create Agent",
+      "activeAgents": "[AR] Active Agents",
+      "status": {
+        "processing": "[AR] Processing"
+      },
+      "stats": {
+        "processedToday": "[AR] Processed Today",
+        "fromYesterday": "[AR] {percent} from yesterday",
+        "avgResponseTime": "[AR] Avg Response Time",
+        "fasterThanLastWeek": "[AR] {percent} faster than last week",
+        "successRate": "[AR] Success Rate",
+        "basedOnRequests": "[AR] Based on {count} requests",
+        "pendingReview": "[AR] Pending Review",
+        "highPriority": "[AR] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[AR] Success rate",
+        "processed": "[AR] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[AR] Incoming Requests",
+        "description": "[AR] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[AR] Search requests...",
+        "noRequests": "[AR] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[AR] Assign to Brief Handler",
+        "assignToAudienceQuery": "[AR] Assign to Audience Query",
+        "assignToLocalization": "[AR] Assign to Localization",
+        "reprocess": "[AR] Reprocess",
+        "archive": "[AR] Archive"
+      },
+      "priority": {
+        "high": "[AR] High priority",
+        "medium": "[AR] Medium priority",
+        "low": "[AR] Low priority"
+      },
+      "request": {
+        "received": "[AR] Received {time}",
+        "generatedOutput": "[AR] Generated Output",
+        "confidence": "[AR] {percent}% confidence",
+        "citations": "[AR] {count} citations",
+        "viewFullReport": "[AR] View Full Report",
+        "assignAgent": "[AR] Assign Agent",
+        "respondManually": "[AR] Respond Manually",
+        "viewHistory": "[AR] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[AR] Agent Active",
+        "agentPaused": "[AR] Agent Paused",
+        "lastTriggered": "[AR] Last triggered {time}",
+        "processed": "[AR] Processed",
+        "successRate": "[AR] Success Rate",
+        "avgTime": "[AR] Avg Time",
+        "triggerKeywords": "[AR] Trigger Keywords",
+        "connectedChannels": "[AR] Connected Channels",
+        "processingPipeline": "[AR] Processing Pipeline",
+        "configure": "[AR] Configure",
+        "viewLogs": "[AR] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[AR] Create Inbox Agent",
+        "description": "[AR] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[AR] Agent Name",
+        "agentNamePlaceholder": "[AR] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[AR] Describe what this agent does...",
+        "triggerKeywords": "[AR] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[AR] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[AR] Agent will activate when messages contain these keywords",
+        "channels": "[AR] Channels",
+        "baseAgent": "[AR] Base Agent",
+        "selectAgent": "[AR] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[AR] Audience Explorer",
+          "personaArchitect": "[AR] Persona Architect",
+          "cultureTracker": "[AR] Culture Tracker",
+          "brandRelationshipAnalyst": "[AR] Brand Relationship Analyst"
+        },
+        "autoRespond": "[AR] Auto-respond",
+        "autoRespondHelp": "[AR] Automatically send responses to requesters",
+        "requireApproval": "[AR] Require Approval",
+        "requireApprovalHelp": "[AR] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[AR] Prompt Templates",
+      "description": "[AR] Reusable templates for common insights tasks",
+      "createTemplate": "[AR] Create Template",
+      "searchPlaceholder": "[AR] Search templates...",
+      "starredTemplates": "[AR] Starred Templates",
+      "allTemplates": "[AR] All Templates",
+      "uses": "[AR] {count} uses",
+      "categories": {
+        "all": "[AR] All",
+        "research": "[AR] Research",
+        "analysis": "[AR] Analysis",
+        "briefs": "[AR] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[AR] Use Template",
+        "duplicate": "[AR] Duplicate"
+      },
+      "createDialog": {
+        "title": "[AR] Create Template",
+        "description": "[AR] Save a prompt as a reusable template for your team",
+        "templateName": "[AR] Template Name",
+        "templateNamePlaceholder": "[AR] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[AR] What does this template do?",
+        "category": "[AR] Category",
+        "promptTemplate": "[AR] Prompt Template",
+        "promptPlaceholder": "[AR] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[AR] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[AR] Agent Store",
+      "description": "[AR] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[AR] Search agents...",
+      "sortBy": {
+        "placeholder": "[AR] Sort by",
+        "popular": "[AR] Most Popular",
+        "rating": "[AR] Highest Rated",
+        "newest": "[AR] Newest",
+        "name": "[AR] Name A-Z"
+      },
+      "featuredAgents": "[AR] Featured Agents",
+      "featured": "[AR] Featured",
+      "installed": "[AR] Installed",
+      "tryNow": "[AR] Try Now",
+      "categories": "[AR] Categories",
+      "viewDetails": "[AR] View Details",
+      "added": "[AR] Added",
+      "buildYourOwn": {
+        "title": "[AR] Build Your Own Agent",
+        "description": "[AR] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[AR] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[AR] Back to Store",
+        "notFound": {
+          "title": "[AR] Agent Not Found",
+          "description": "[AR] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[AR] {count} installs",
+        "installed": "[AR] Installed",
+        "installing": "[AR] Installing...",
+        "installAgent": "[AR] Install Agent",
+        "tryInPlayground": "[AR] Try in Playground",
+        "info": {
+          "version": "[AR] Version",
+          "category": "[AR] Category",
+          "dataSources": "[AR] Data Sources"
+        },
+        "tabs": {
+          "overview": "[AR] Overview",
+          "capabilities": "[AR] Capabilities",
+          "examples": "[AR] Examples",
+          "reviews": "[AR] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[AR] About this Agent",
+          "fastResults": "[AR] Fast Results",
+          "fastResultsDesc": "[AR] Avg. 3s response time",
+          "verifiedData": "[AR] Verified Data",
+          "verifiedDataDesc": "[AR] 100% sourced citations",
+          "alwaysUpdated": "[AR] Always Updated",
+          "alwaysUpdatedDesc": "[AR] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[AR] What this agent can do",
+          "description": "[AR] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[AR] Example Prompts",
+          "description": "[AR] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[AR] Ratings",
+          "reviewsCount": "[AR] {count} reviews"
+        },
+        "relatedAgents": "[AR] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[AR] Data Changes",
+      "description": "[AR] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[AR] Timeline",
+        "compare": "[AR] Compare",
+        "evolution": "[AR] Evolution",
+        "alerts": "[AR] Alerts"
+      },
+      "compare": {
+        "title": "[AR] Compare Versions",
+        "description": "[AR] Select an entity to compare its versions",
+        "compareVersions": "[AR] Compare versions",
+        "entities": {
+          "audiences": "[AR] Audiences",
+          "crosstabs": "[AR] Crosstabs",
+          "insights": "[AR] Insights",
+          "charts": "[AR] Charts",
+          "reports": "[AR] Reports",
+          "dashboards": "[AR] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[AR] Analysis Evolution",
+        "description": "[AR] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[AR] View evolution",
+        "types": {
+          "brandHealth": "[AR] Brand Health",
+          "audienceInsights": "[AR] Audience Insights",
+          "marketAnalysis": "[AR] Market Analysis",
+          "competitorAnalysis": "[AR] Competitor Analysis",
+          "trendAnalysis": "[AR] Trend Analysis",
+          "crosstabAnalysis": "[AR] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[AR] Change Alerts",
+        "loading": "[AR] Loading alerts...",
+        "noAlerts": "[AR] No Alerts",
+        "noAlertsDescription": "[AR] You have no unread change alerts.",
+        "markAllRead": "[AR] Mark All as Read",
+        "markRead": "[AR] Mark Read",
+        "dismiss": "[AR] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[AR] Select {entity} to Compare",
+        "entity": "[AR] Entity",
+        "enterIdDescription": "[AR] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[AR] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[AR] Select Analysis to View Evolution",
+        "enterIdDescription": "[AR] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[AR] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[AR] Crosstabs",
+      "description": "[AR] Compare audiences across multiple dimensions",
+      "newCrosstab": "[AR] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[AR] Total Crosstabs",
+        "views": "[AR] Views",
+        "exports": "[AR] Exports",
+        "usedToday": "[AR] Used Today"
+      },
+      "tabs": {
+        "all": "[AR] All Crosstabs",
+        "recent": "[AR] Recent",
+        "templates": "[AR] Templates"
+      },
+      "empty": {
+        "title": "[AR] No crosstabs yet",
+        "description": "[AR] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[AR] Featured",
+        "liveData": "[AR] Live Data",
+        "more": "[AR] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[AR] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[AR] audience segments",
+        "metrics": "[AR] metrics",
+        "audiencesCount": "[AR] {count} audiences",
+        "metricsCount": "[AR] {count} metrics",
+        "modified": "[AR] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[AR] Open Analysis"
+      },
+      "new": {
+        "title": "[AR] Create Crosstab",
+        "description": "[AR] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[AR] Crosstab Name",
+          "namePlaceholder": "[AR] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[AR] Select Audiences",
+          "selectMetrics": "[AR] Select Metrics",
+          "selected": "[AR] {count} selected"
+        },
+        "summary": {
+          "title": "[AR] Summary",
+          "audiences": "[AR] Audiences ({count})",
+          "metrics": "[AR] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[AR] Generate Crosstab",
+          "generating": "[AR] Generating...",
+          "cancel": "[AR] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[AR] Please enter a crosstab name",
+          "audienceRequired": "[AR] Please select at least one audience",
+          "metricRequired": "[AR] Please select at least one metric",
+          "createFailed": "[AR] Failed to create crosstab",
+          "createFailedRetry": "[AR] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[AR] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[AR] {count} metrics",
+          "audiences": "[AR] {count} audiences"
+        },
+        "categoriesCount": "[AR] {count} categories",
+        "more": "[AR] more",
+        "actions": {
+          "share": "[AR] Share",
+          "generateInsights": "[AR] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[AR] Data Grid",
+          "calculatedFields": "[AR] Calculated Fields",
+          "filters": "[AR] Filters",
+          "visualize": "[AR] Visualize"
+        },
+        "grid": {
+          "title": "[AR] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[AR] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[AR] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[AR] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[AR] Value updated to {value}%",
+          "fieldCreated": "[AR] Calculated field \"{name}\" created",
+          "fieldUpdated": "[AR] Calculated field updated",
+          "fieldDeleted": "[AR] Calculated field deleted",
+          "fieldApplied": "[AR] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[AR] Filters applied",
+          "chartSaved": "[AR] Chart saved!",
+          "chartExported": "[AR] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[AR] Crosstab Not Found",
+          "subtitle": "[AR] The requested crosstab could not be found",
+          "heading": "[AR] Crosstab not found",
+          "description": "[AR] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[AR] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[AR] Remove from favorites",
+          "addToFavorites": "[AR] Add to favorites",
+          "pauseAutoRefresh": "[AR] Pause auto-refresh",
+          "enableAutoRefresh": "[AR] Enable auto-refresh",
+          "exitFullscreen": "[AR] Exit fullscreen",
+          "enterFullscreen": "[AR] Enter fullscreen",
+          "visualize": "[AR] Visualize",
+          "share": "[AR] Share",
+          "edit": "[AR] Edit",
+          "duplicate": "[AR] Duplicate",
+          "addToDashboard": "[AR] Add to Dashboard",
+          "copyLink": "[AR] Copy Link",
+          "copied": "[AR] Copied!",
+          "delete": "[AR] Delete",
+          "cancel": "[AR] Cancel",
+          "selectAll": "[AR] Select All",
+          "clear": "[AR] Clear",
+          "schedule": "[AR] Schedule"
+        },
+        "filters": {
+          "title": "[AR] Data Filters",
+          "clearAll": "[AR] Clear All",
+          "description": "[AR] Filter and refine your crosstab data",
+          "quickFilters": "[AR] Quick Filters",
+          "valueRange": "[AR] Value Range: {min}% - {max}%",
+          "category": "[AR] Category",
+          "allCategories": "[AR] All Categories",
+          "activeFilters": "[AR] Active filters"
+        },
+        "tabs": {
+          "filters": "[AR] Filters",
+          "audiences": "[AR] Audiences",
+          "metrics": "[AR] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[AR] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[AR] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[AR] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[AR] Export as JSON",
+          "asCsv": "[AR] Export as CSV",
+          "asHtml": "[AR] Export as HTML",
+          "asPdf": "[AR] Export as PDF",
+          "asExcel": "[AR] Export as Excel",
+          "asPowerPoint": "[AR] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[AR] Delete Crosstab",
+          "description": "[AR] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[AR] Modified {time}",
+          "views": "[AR] {count} views",
+          "createdBy": "[AR] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[AR] Data",
+          "activity": "[AR] Activity",
+          "comments": "[AR] Comments",
+          "history": "[AR] History"
+        },
+        "insights": {
+          "title": "[AR] AI-Generated Insights",
+          "topPerformer": "[AR] Top Performer",
+          "topPerformerDesc": "[AR] leads in most metrics with an average of {average}%.",
+          "noData": "[AR] No data available",
+          "biggestGap": "[AR] Biggest Gap",
+          "biggestGapDesc": "[AR] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[AR] Trending",
+          "trendingDesc": "[AR] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[AR] no"
+        },
+        "activity": {
+          "title": "[AR] Activity Log",
+          "description": "[AR] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[AR] Share Crosstab",
+          "description": "[AR] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[AR] Email address",
+          "emailPlaceholder": "[AR] email@example.com",
+          "role": "[AR] Role",
+          "roles": {
+            "viewer": "[AR] Viewer",
+            "editor": "[AR] Editor",
+            "admin": "[AR] Admin"
+          },
+          "shareLink": "[AR] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[AR] Schedule Report",
+          "description": "[AR] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[AR] Recipients",
+          "recipientsPlaceholder": "[AR] email@example.com, team@example.com",
+          "frequency": "[AR] Frequency",
+          "frequencies": {
+            "daily": "[AR] Daily",
+            "weekly": "[AR] Weekly",
+            "monthly": "[AR] Monthly"
+          },
+          "format": "[AR] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[AR] Insights",
+      "description": "[AR] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[AR] Search insights...",
+      "filterByType": "[AR] Filter by type",
+      "loading": "[AR] Loading...",
+      "showing": "[AR] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[AR] All Types",
+        "audience": "[AR] Audience",
+        "trend": "[AR] Trend",
+        "competitive": "[AR] Competitive",
+        "analysis": "[AR] Analysis"
+      },
+      "empty": {
+        "title": "[AR] No insights yet",
+        "description": "[AR] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[AR] Go to Playground"
+      },
+      "badges": {
+        "new": "[AR] New"
+      },
+      "viaAgent": "[AR] via {name}",
+      "detail": {
+        "backToInsights": "[AR] Back to Insights",
+        "notFound": {
+          "title": "[AR] Insight not found",
+          "description": "[AR] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[AR] View All Insights",
+        "confidence": "[AR] {percent}% confidence",
+        "viaAgent": "[AR] via {name}",
+        "actions": {
+          "copy": "[AR] Copy",
+          "copied": "[AR] Copied",
+          "share": "[AR] Share",
+          "export": "[AR] Export"
+        },
+        "detailsTitle": "[AR] Insight Details",
+        "detailsDescription": "[AR] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[AR] Want to explore more?",
+          "description": "[AR] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[AR] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[AR] Data Connectors",
+        "description": "[AR] Connect external data sources to enrich your insights",
+        "addConnector": "[AR] Add Connector",
+        "searchPlaceholder": "[AR] Search connectors...",
+        "stats": {
+          "totalConnectors": "[AR] Total Connectors",
+          "active": "[AR] Active",
+          "withErrors": "[AR] With Errors",
+          "dataSources": "[AR] Data Sources"
+        },
+        "tabs": {
+          "configured": "[AR] Configured",
+          "available": "[AR] Available"
+        },
+        "filters": {
+          "allTypes": "[AR] All types"
+        },
+        "empty": {
+          "title": "[AR] No connectors configured",
+          "description": "[AR] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[AR] Previous",
+          "next": "[AR] Next",
+          "pageOf": "[AR] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[AR] Sync started",
+          "syncFailed": "[AR] Failed to start sync",
+          "connectorEnabled": "[AR] Connector enabled",
+          "connectorDisabled": "[AR] Connector disabled",
+          "updateFailed": "[AR] Failed to update connector",
+          "connectorDeleted": "[AR] Connector deleted",
+          "deleteFailed": "[AR] Failed to delete connector",
+          "testFailed": "[AR] Failed to test connection"
+        },
+        "new": {
+          "title": "[AR] Add Data Connector",
+          "description": "[AR] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[AR] Back to Connectors",
+          "notFound": "[AR] Connector not found",
+          "actions": {
+            "test": "[AR] Test",
+            "syncNow": "[AR] Sync Now",
+            "delete": "[AR] Delete",
+            "cancel": "[AR] Cancel",
+            "deleting": "[AR] Deleting..."
+          },
+          "status": {
+            "completed": "[AR] Last sync successful",
+            "running": "[AR] Syncing...",
+            "pending": "[AR] Sync pending",
+            "failed": "[AR] Last sync failed",
+            "cancelled": "[AR] Sync cancelled",
+            "never": "[AR] Never synced"
+          },
+          "cards": {
+            "status": "[AR] Status",
+            "active": "[AR] Active",
+            "paused": "[AR] Paused",
+            "totalSyncs": "[AR] Total Syncs",
+            "errorCount": "[AR] Error Count"
+          },
+          "tabs": {
+            "overview": "[AR] Overview",
+            "configuration": "[AR] Configuration",
+            "syncHistory": "[AR] Sync History"
+          },
+          "overview": {
+            "details": "[AR] Details",
+            "description": "[AR] Description",
+            "provider": "[AR] Provider",
+            "type": "[AR] Type",
+            "syncSchedule": "[AR] Sync Schedule",
+            "manualOnly": "[AR] Manual only",
+            "created": "[AR] Created",
+            "recentSyncs": "[AR] Recent Syncs",
+            "lastSyncs": "[AR] Last {count} sync operations",
+            "noSyncHistory": "[AR] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[AR] Danger Zone",
+            "deleteConnector": "[AR] Delete this connector",
+            "deleteWarning": "[AR] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[AR] Sync History",
+            "description": "[AR] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[AR] Delete Connector",
+            "description": "[AR] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[AR] Sync started",
+            "syncFailed": "[AR] Failed to start sync",
+            "testFailed": "[AR] Test failed",
+            "connectorDeleted": "[AR] Connector deleted",
+            "deleteFailed": "[AR] Failed to delete connector",
+            "connectorUpdated": "[AR] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[AR] Memory & Context",
+      "description": "[AR] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[AR] Settings",
+        "clearAll": "[AR] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "لوحة التحكم",
     "welcome": "مرحباً بعودتك",
-    "overview": "نظرة عامة",
+    "overview": {
+      "activeAgents": "[AR] Active Agents",
+      "workflowsRun": "[AR] Workflows Run",
+      "insightsGenerated": "[AR] Insights Generated",
+      "avgRunTime": "[AR] Avg. Run Time",
+      "thisWeekChange": "[AR] +{count} this week",
+      "fromLastMonthPercent": "[AR] +{percent}% from last month",
+      "fasterPercent": "[AR] -{percent}% faster",
+      "active": "[AR] Active",
+      "noneActive": "[AR] None active",
+      "last24Hours": "[AR] Last 24 hours",
+      "noRunsYet": "[AR] No runs yet",
+      "noInsightsYet": "[AR] No insights yet",
+      "perWorkflow": "[AR] Per workflow",
+      "notAvailable": "[AR] N/A"
+    },
     "recentActivity": "النشاط الأخير",
     "quickActions": {
       "title": "إجراءات سريعة",
@@ -871,7 +1990,25 @@
       "createReport": "إنشاء تقرير",
       "published": "منشور",
       "generating": "جارٍ الإنشاء",
-      "draft": "مسودة"
+      "draft": "مسودة",
+      "page": {
+        "tabs": {
+          "allReports": "[AR] All Reports",
+          "templates": "[AR] Templates",
+          "scheduled": "[AR] Scheduled",
+          "sharedWithMe": "[AR] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[AR] Next: {date}",
+          "recipientsCount": "[AR] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[AR] Shared by {name} on {date}",
+          "canView": "[AR] Can view",
+          "canEdit": "[AR] Can edit",
+          "canComment": "[AR] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "المشاريع النشطة",
@@ -1035,7 +2172,60 @@
         "title": "سير العمل",
         "description": "إنشاء وإدارة خطوط أنابيب البحث الآلية.",
         "newWorkflow": "سير عمل جديد",
-        "searchPlaceholder": "البحث عن سير العمل..."
+        "searchPlaceholder": "البحث عن سير العمل...",
+        "edit": {
+          "title": "[AR] Edit Workflow",
+          "description": "[AR] Modify workflow settings and configuration",
+          "newWorkflowName": "[AR] New Workflow",
+          "basicInfo": {
+            "title": "[AR] Basic Information",
+            "description": "[AR] Update the workflow name and description",
+            "workflowName": "[AR] Workflow Name",
+            "workflowNamePlaceholder": "[AR] Enter workflow name",
+            "descriptionPlaceholder": "[AR] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[AR] Schedule",
+            "description": "[AR] Configure when this workflow runs",
+            "runFrequency": "[AR] Run Frequency",
+            "selectSchedule": "[AR] Select schedule",
+            "selectStatus": "[AR] Select status",
+            "frequencies": {
+              "hourly": "[AR] Hourly",
+              "daily": "[AR] Daily",
+              "weekly": "[AR] Weekly",
+              "monthly": "[AR] Monthly",
+              "onDemand": "[AR] On-demand"
+            },
+            "statuses": {
+              "active": "[AR] Active",
+              "paused": "[AR] Paused",
+              "scheduled": "[AR] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[AR] Error Handling",
+            "description": "[AR] Configure retry behavior for failed runs",
+            "autoRetry": "[AR] Auto-retry on failure",
+            "autoRetryDescription": "[AR] Automatically retry the workflow if it fails",
+            "retryAttempts": "[AR] Retry Attempts",
+            "selectAttempts": "[AR] Select attempts",
+            "attempts": {
+              "one": "[AR] 1 attempt",
+              "two": "[AR] 2 attempts",
+              "three": "[AR] 3 attempts",
+              "five": "[AR] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[AR] Notifications",
+            "description": "[AR] Configure how you receive updates about this workflow",
+            "email": "[AR] Email notifications",
+            "emailDescription": "[AR] Receive email updates on completion or failure",
+            "slack": "[AR] Slack notifications",
+            "slackDescription": "[AR] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "الجماهير",
@@ -1083,55 +2273,235 @@
         "unarchive": "إلغاء الأرشفة",
         "workflows": "سير العمل",
         "reports": "التقارير",
-        "agents": "الوكلاء"
+        "agents": "الوكلاء",
+        "detail": {
+          "defaultDescription": "[AR] Project description",
+          "projectSettings": "[AR] Project Settings",
+          "archiveProject": "[AR] Archive Project",
+          "deleteProject": "[AR] Delete Project",
+          "new": "[AR] New",
+          "stats": {
+            "teamMembers": "[AR] Team Members",
+            "workflows": "[AR] Workflows",
+            "running": "[AR] {count} running",
+            "reports": "[AR] Reports",
+            "generatedOutputs": "[AR] Generated outputs",
+            "agentsUsed": "[AR] Agents Used",
+            "totalRuns": "[AR] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[AR] Overview",
+            "workflows": "[AR] Workflows",
+            "reports": "[AR] Reports",
+            "agents": "[AR] Agents",
+            "team": "[AR] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[AR] Recent Workflows",
+            "recentReports": "[AR] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[AR] Project Workflows",
+            "newWorkflow": "[AR] New Workflow",
+            "lastRun": "[AR] Last run",
+            "run": "[AR] Run"
+          },
+          "reportsTab": {
+            "title": "[AR] Project Reports",
+            "newReport": "[AR] New Report",
+            "created": "[AR] Created"
+          },
+          "agentsTab": {
+            "title": "[AR] Agents Used",
+            "addAgent": "[AR] Add Agent",
+            "runsInProject": "[AR] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[AR] Team Members",
+            "addMember": "[AR] Add Member",
+            "remove": "[AR] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "تحرير الجمهور",
-        "description": "قم بتحديث التكوين لشريحة الجمهور هذه",
-        "saving": "توفير...",
-        "saveChanges": "حفظ التغييرات",
-        "notFound": "لم يتم العثور على الجمهور",
-        "notFoundDescription": "الجمهور الذي تحاول تعديله غير موجود",
-        "notFoundDetailedDescription": "الجمهور الذي تبحث عنه غير موجود أو تم حذفه.",
-        "backToAudiences": "العودة إلى الجماهير",
+      "pageTracker": "[AR] Audiences List",
+      "title": "[AR] Audiences",
+      "description": "[AR] Build and analyze custom consumer segments",
+      "aiBuilder": "[AR] AI Builder",
+      "newAudience": "[AR] New Audience",
+      "totalAudiences": "[AR] Total Audiences",
+      "avgReach": "[AR] Avg. Reach",
+      "markets": "[AR] Markets",
+      "usedThisWeek": "[AR] Used This Week",
+      "searchPlaceholder": "[AR] Search audiences...",
+      "allAudiences": "[AR] All Audiences",
+      "recentlyUsed": "[AR] Recently Used",
+      "favorites": "[AR] Favorites",
+      "marketplace": "[AR] Marketplace",
+      "aiAudienceBuilder": "[AR] AI Audience Builder",
+      "aiBuilderDescription": "[AR] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[AR] Compare Audiences",
+      "compareDescription": "[AR] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[AR] No audiences yet",
+        "description": "[AR] Create your first audience to get started",
+        "action": "[AR] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[AR] {count} markets",
+        "used": "[AR] Used {time}"
+      },
+      "new": {
+        "title": "[AR] Build New Audience",
+        "description": "[AR] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "المعلومات الأساسية",
-          "description": "قم بتعيين الاسم والوصف لهذا الجمهور",
-          "audienceName": "اسم الجمهور",
-          "audienceNamePlaceholder": "على سبيل المثال، جيل الألفية المهتمين بالبيئة",
-          "descriptionPlaceholder": "وصف موجز لهذه الشريحة من الجمهور"
+          "audienceName": "[AR] Audience Name",
+          "audienceNamePlaceholder": "[AR] e.g., Eco-Conscious Millennials",
+          "description": "[AR] Description",
+          "descriptionPlaceholder": "[AR] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "استعلام مدعوم بالذكاء الاصطناعي",
-          "description": "صِف جمهورك باللغة الطبيعية",
-          "placeholder": "على سبيل المثال، أرني جيل الألفية الذين يهتمون بالاستدامة، ويعيشون في المناطق الحضرية، ويتسوقون في العلامات التجارية الصديقة للبيئة",
-          "generateButton": "إنشاء السمات (قريبًا)"
+          "title": "[AR] AI-Powered Query",
+          "description": "[AR] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[AR] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[AR] Generate Attributes"
         },
         "attributes": {
-          "title": "سمات الاستهداف",
-          "description": "تحديد معايير محددة لهذا الجمهور",
-          "addAttribute": "أضف سمة",
-          "noAttributes": "لم يتم تحديد السمات حتى الآن",
-          "noAttributesHint": "أضف سمات لتحديد معايير جمهورك",
-          "valuePlaceholder": "قيمة"
+          "title": "[AR] Attributes",
+          "add": "[AR] Add",
+          "age": "[AR] Age",
+          "gender": "[AR] Gender",
+          "income": "[AR] Income",
+          "interests": "[AR] Interests",
+          "is": "[AR] is",
+          "between": "[AR] between",
+          "contains": "[AR] contains"
         },
         "markets": {
-          "title": "الأسواق",
-          "description": "حدد الأسواق لهذا الجمهور",
-          "selectAtLeastOne": "اختر سوقًا واحدًا على الأقل"
+          "title": "[AR] Markets",
+          "global": "[AR] Global",
+          "us": "[AR] United States",
+          "uk": "[AR] United Kingdom",
+          "de": "[AR] Germany",
+          "jp": "[AR] Japan"
         },
         "estimatedReach": {
-          "title": "الوصول المقدر",
-          "tbd": "سيتم تحديده لاحقًا",
-          "matchCriteria": "يتطابق المستهلكون مع هذه المعايير"
+          "title": "[AR] Estimated Reach",
+          "matchCriteria": "[AR] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "هل تريد تجاهل التغييرات؟",
-          "description": "لديك تغييرات غير محفوظة. هل أنت متأكد أنك تريد المغادرة؟ سيتم فقدان التغييرات الخاصة بك.",
-          "keepEditing": "استمر في التحرير",
-          "discardChanges": "تجاهل التغييرات"
+        "actions": {
+          "save": "[AR] Save Audience",
+          "saving": "[AR] Saving...",
+          "cancel": "[AR] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[AR] Please enter an audience name",
+          "createFailed": "[AR] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[AR] Audience Detail",
+        "notFound": "[AR] Audience Not Found",
+        "notFoundDescription": "[AR] The requested audience could not be found",
+        "notFoundDetailedDescription": "[AR] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[AR] Back to Audiences",
+        "people": "[AR] people",
+        "addToFavorites": "[AR] Add to favorites",
+        "removeFromFavorites": "[AR] Remove from favorites",
+        "used": "[AR] Used {time}",
+        "tabs": {
+          "overview": "[AR] Overview",
+          "persona": "[AR] Persona",
+          "dayInLife": "[AR] Day in the Life",
+          "habits": "[AR] Habits & Behaviors",
+          "media": "[AR] Media Consumption",
+          "brands": "[AR] Brand Affinities",
+          "comments": "[AR] Comments",
+          "activity": "[AR] Activity",
+          "history": "[AR] History"
+        },
+        "actions": {
+          "explore": "[AR] Explore",
+          "share": "[AR] Share",
+          "export": "[AR] Export",
+          "edit": "[AR] Edit",
+          "autoRefresh": "[AR] Auto-refresh",
+          "pauseAutoRefresh": "[AR] Pause auto-refresh",
+          "enableAutoRefresh": "[AR] Enable auto-refresh",
+          "duplicate": "[AR] Duplicate",
+          "createLookalike": "[AR] Create Lookalike",
+          "addToCrosstab": "[AR] Add to Crosstab",
+          "addToDashboard": "[AR] Add to Dashboard",
+          "scheduleReport": "[AR] Schedule Report",
+          "copyLink": "[AR] Copy Link",
+          "copied": "[AR] Copied!",
+          "delete": "[AR] Delete"
+        },
+        "export": {
+          "asJson": "[AR] Export as JSON",
+          "asCsv": "[AR] Export as CSV",
+          "asPdf": "[AR] Export as PDF",
+          "toPowerPoint": "[AR] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[AR] Demographics",
+          "keyBehaviors": "[AR] Key Behaviors",
+          "interests": "[AR] Interests",
+          "audienceSummary": "[AR] Audience Summary",
+          "size": "[AR] Size",
+          "markets": "[AR] Markets",
+          "quickActions": "[AR] Quick Actions",
+          "createChart": "[AR] Create Chart",
+          "compareAudiences": "[AR] Compare Audiences",
+          "exportProfile": "[AR] Export Profile",
+          "copyLink": "[AR] Copy Link"
+        },
+        "activity": {
+          "title": "[AR] Activity Log",
+          "description": "[AR] Recent activity on this audience",
+          "viewed": "[AR] viewed",
+          "exported": "[AR] exported",
+          "edited": "[AR] edited",
+          "shared": "[AR] shared",
+          "created": "[AR] created",
+          "createdChart": "[AR] created chart",
+          "addedToCrosstab": "[AR] added to crosstab"
+        },
+        "share": {
+          "title": "[AR] Share Audience",
+          "description": "[AR] Share this audience with team members or external collaborators.",
+          "emailLabel": "[AR] Email address",
+          "emailPlaceholder": "[AR] email@example.com",
+          "roleLabel": "[AR] Role",
+          "viewer": "[AR] Viewer",
+          "editor": "[AR] Editor",
+          "admin": "[AR] Admin",
+          "shareLink": "[AR] Share link",
+          "cancel": "[AR] Cancel",
+          "share": "[AR] Share"
+        },
+        "schedule": {
+          "title": "[AR] Schedule Report",
+          "description": "[AR] Set up automatic email delivery of this audience report.",
+          "recipients": "[AR] Recipients",
+          "recipientsPlaceholder": "[AR] email@example.com, team@example.com",
+          "frequency": "[AR] Frequency",
+          "daily": "[AR] Daily",
+          "weekly": "[AR] Weekly",
+          "monthly": "[AR] Monthly",
+          "format": "[AR] Format",
+          "pdf": "[AR] PDF",
+          "csv": "[AR] CSV",
+          "json": "[AR] JSON",
+          "cancel": "[AR] Cancel",
+          "schedule": "[AR] Schedule"
+        },
+        "delete": {
+          "title": "[AR] Delete Audience",
+          "description": "[AR] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[AR] Cancel",
+          "delete": "[AR] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "تحرير الرسم البياني",
-        "description": "قم بتعديل تكوين الرسم البياني الخاص بك وإعداداته",
-        "saving": "توفير...",
-        "saveChanges": "حفظ التغييرات",
-        "backToCharts": "العودة إلى الرسوم البيانية",
-        "preview": {
-          "title": "معاينة",
-          "description": "كيف سيبدو الرسم البياني الخاص بك"
-        },
-        "unsavedChanges": "التغييرات غير المحفوظة",
-        "authRequired": "المصادقة مطلوبة",
-        "pleaseSignIn": "الرجاء تسجيل الدخول لتعديل هذا المخطط.",
-        "signIn": "تسجيل الدخول",
+      "pageTracker": "[AR] Charts List",
+      "title": "[AR] Charts",
+      "description": "[AR] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[AR] Templates",
+      "compare": "[AR] Compare",
+      "newChart": "[AR] New Chart",
+      "totalCharts": "[AR] Total Charts",
+      "totalViews": "[AR] Total Views",
+      "shares": "[AR] Shares",
+      "exports": "[AR] Exports",
+      "searchPlaceholder": "[AR] Search charts...",
+      "allCategory": "[AR] All",
+      "allCharts": "[AR] All Charts",
+      "recent": "[AR] Recent",
+      "mostViewed": "[AR] Most Viewed",
+      "favorites": "[AR] Favorites",
+      "emptyState": {
+        "title": "[AR] No charts found",
+        "description": "[AR] Create your first chart or try a different search",
+        "action": "[AR] Create Chart"
+      },
+      "comparison": {
+        "title": "[AR] Brand Health Comparison",
+        "description": "[AR] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[AR] Create New Chart",
+        "description": "[AR] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "المعلومات الأساسية",
-          "description": "قم بتعيين الاسم والوصف للمخطط الخاص بك",
-          "chartName": "اسم المخطط",
-          "chartNamePlaceholder": "أدخل اسم المخطط",
-          "descriptionPlaceholder": "صف ما يظهره هذا الرسم البياني",
-          "selectStatus": "اختر الحالة",
-          "dataSource": "مصدر البيانات",
-          "selectDataSource": "حدد مصدر البيانات"
+          "title": "[AR] Basic Information",
+          "chartName": "[AR] Chart Name",
+          "chartNamePlaceholder": "[AR] e.g., Social Media Usage by Age Group",
+          "description": "[AR] Description",
+          "descriptionPlaceholder": "[AR] Describe what this chart shows"
         },
         "chartType": {
-          "title": "نوع الرسم البياني",
-          "description": "حدد نوع التمثيل المرئي لبياناتك"
+          "title": "[AR] Chart Type",
+          "description": "[AR] Select the visualization type"
         },
         "dataConfig": {
-          "title": "تكوين البيانات",
-          "description": "قم بتكوين البيانات للمخطط الخاص بك",
-          "targetAudience": "الجمهور المستهدف",
-          "selectAudience": "حدد الجمهور",
-          "timePeriod": "الفترة الزمنية",
-          "selectTimePeriod": "اختر الفترة الزمنية",
-          "primaryMetric": "المقياس الأساسي",
-          "primaryMetricPlaceholder": "على سبيل المثال، استخدام وسائل التواصل الاجتماعي (%)",
-          "dimensions": "أبعاد",
-          "dimensionsHint": "فئات لتجميع بياناتك (على سبيل المثال، الفئة العمرية، المنطقة)",
-          "addDimension": "أضف بُعدًا",
-          "measures": "مقاسات",
-          "measuresHint": "القيم الرقمية المراد عرضها (على سبيل المثال، العدد، النسبة المئوية)",
-          "addMeasure": "أضف مقياسًا",
-          "filters": "المرشحات",
-          "filtersHint": "أضف شروطًا لتصفية بياناتك",
-          "addFilter": "إضافة عامل تصفية",
-          "field": "مجال",
-          "value": "قيمة",
-          "operators": {
-            "equals": "يساوي",
-            "notEquals": "لا يساوي",
-            "contains": "يتضمن",
-            "greaterThan": "أعظم من",
-            "lessThan": "أقل من"
-          }
+          "title": "[AR] Data Configuration",
+          "targetAudience": "[AR] Target Audience",
+          "selectAudience": "[AR] Select audience",
+          "timePeriod": "[AR] Time Period",
+          "selectTimePeriod": "[AR] Select time period",
+          "dataSource": "[AR] Data Source",
+          "selectDataSource": "[AR] Select data source"
         },
-        "displayOptions": {
-          "title": "خيارات العرض",
-          "description": "تخصيص مظهر الرسم البياني",
-          "showLegend": "عرض الأسطورة",
-          "showGrid": "إظهار الشبكة",
-          "showTooltip": "إظهار تلميح الأدوات"
+        "preview": {
+          "title": "[AR] Preview",
+          "description": "[AR] How your chart will look"
         },
-        "chartInfo": {
-          "title": "معلومات الرسم البياني",
-          "id": "بطاقة تعريف",
-          "created": "مخلوق",
-          "lastUpdated": "آخر تحديث"
+        "actions": {
+          "save": "[AR] Create Chart",
+          "saving": "[AR] Creating...",
+          "cancel": "[AR] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[AR] Chart Detail",
+        "notFound": "[AR] Chart Not Found",
+        "notFoundDescription": "[AR] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[AR] Back to Charts",
+        "views": "[AR] views",
+        "shares": "[AR] shares",
+        "addToFavorites": "[AR] Add to favorites",
+        "removeFromFavorites": "[AR] Remove from favorites",
+        "tabs": {
+          "chart": "[AR] Chart",
+          "data": "[AR] Data",
+          "settings": "[AR] Settings",
+          "comments": "[AR] Comments",
+          "activity": "[AR] Activity",
+          "history": "[AR] History"
         },
-        "discardDialog": {
-          "title": "هل تريد تجاهل التغييرات؟",
-          "description": "لديك تغييرات غير محفوظة. هل أنت متأكد أنك تريد المغادرة؟ سيتم فقدان التغييرات الخاصة بك.",
-          "keepEditing": "استمر في التحرير",
-          "discardChanges": "تجاهل التغييرات"
+        "actions": {
+          "share": "[AR] Share",
+          "export": "[AR] Export",
+          "edit": "[AR] Edit",
+          "fullscreen": "[AR] Fullscreen",
+          "duplicate": "[AR] Duplicate",
+          "addToDashboard": "[AR] Add to Dashboard",
+          "scheduleReport": "[AR] Schedule Report",
+          "copyLink": "[AR] Copy Link",
+          "copied": "[AR] Copied!",
+          "delete": "[AR] Delete"
+        },
+        "export": {
+          "asJson": "[AR] Export as JSON",
+          "asCsv": "[AR] Export as CSV",
+          "asPng": "[AR] Export as PNG",
+          "asSvg": "[AR] Export as SVG",
+          "toPowerPoint": "[AR] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[AR] Chart Info",
+          "type": "[AR] Type",
+          "dataSource": "[AR] Data Source",
+          "audience": "[AR] Audience",
+          "timePeriod": "[AR] Time Period",
+          "created": "[AR] Created",
+          "lastUpdated": "[AR] Last Updated"
+        },
+        "share": {
+          "title": "[AR] Share Chart",
+          "description": "[AR] Share this chart with team members or external collaborators.",
+          "emailLabel": "[AR] Email address",
+          "emailPlaceholder": "[AR] email@example.com",
+          "roleLabel": "[AR] Role",
+          "viewer": "[AR] Viewer",
+          "editor": "[AR] Editor",
+          "admin": "[AR] Admin",
+          "shareLink": "[AR] Share link",
+          "embedCode": "[AR] Embed code",
+          "cancel": "[AR] Cancel",
+          "share": "[AR] Share"
+        },
+        "delete": {
+          "title": "[AR] Delete Chart",
+          "description": "[AR] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[AR] Cancel",
+          "delete": "[AR] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "الحد الأدنى من الوعي (%)",
           "minNPS": "الحد الأدنى من نقاط NPS"
         }
+      },
+      "pageTracker": "[AR] Brand Tracking",
+      "title": "[AR] Brand Tracking",
+      "description": "[AR] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[AR] All Brands",
+        "active": "[AR] Active",
+        "paused": "[AR] Paused",
+        "draft": "[AR] Draft"
+      },
+      "new": {
+        "title": "[AR] New Brand Tracking",
+        "description": "[AR] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[AR] Brand Information",
+          "description": "[AR] Provide details about the brand you want to track",
+          "brandNameLabel": "[AR] Brand Name *",
+          "brandNamePlaceholder": "[AR] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[AR] Description",
+          "descriptionPlaceholder": "[AR] Brief description of what you want to track...",
+          "industryLabel": "[AR] Industry",
+          "industryPlaceholder": "[AR] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[AR] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[AR] Daily",
+          "weekly": "[AR] Weekly",
+          "monthly": "[AR] Monthly",
+          "manual": "[AR] Manual Only"
+        },
+        "competitors": {
+          "label": "[AR] Competitors",
+          "placeholder": "[AR] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[AR] Metrics to Track",
+          "awareness": "[AR] Brand Awareness",
+          "consideration": "[AR] Consideration",
+          "preference": "[AR] Preference",
+          "loyalty": "[AR] Loyalty",
+          "nps": "[AR] Net Promoter Score (NPS)",
+          "sentiment": "[AR] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[AR] Cancel",
+          "create": "[AR] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[AR] Brand Tracking Detail",
+        "title": "[AR] Brand Health Dashboard",
+        "notFound": "[AR] Brand Study Not Found",
+        "notFoundDescription": "[AR] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[AR] Back to Brand Tracking",
+        "loading": "[AR] Loading...",
+        "people": "[AR] people",
+        "timePeriods": {
+          "1m": "[AR] 1 Month",
+          "3m": "[AR] 3 Months",
+          "6m": "[AR] 6 Months",
+          "1y": "[AR] 1 Year",
+          "all": "[AR] All Time"
+        },
+        "tabs": {
+          "overview": "[AR] Overview",
+          "trends": "[AR] Trends",
+          "competitors": "[AR] Competitors",
+          "insights": "[AR] Insights",
+          "comments": "[AR] Comments",
+          "activity": "[AR] Activity",
+          "history": "[AR] History"
+        },
+        "actions": {
+          "explore": "[AR] Explore",
+          "share": "[AR] Share",
+          "export": "[AR] Export",
+          "edit": "[AR] Edit",
+          "refresh": "[AR] Refresh",
+          "autoRefresh": "[AR] Auto-refresh",
+          "pauseAutoRefresh": "[AR] Pause auto-refresh",
+          "enableAutoRefresh": "[AR] Enable auto-refresh",
+          "duplicate": "[AR] Duplicate",
+          "copyLink": "[AR] Copy Link",
+          "copied": "[AR] Copied!",
+          "delete": "[AR] Delete",
+          "addToFavorites": "[AR] Add to favorites",
+          "removeFromFavorites": "[AR] Remove from favorites",
+          "scheduleReport": "[AR] Schedule Report"
+        },
+        "export": {
+          "asJson": "[AR] Export as JSON",
+          "asCsv": "[AR] Export as CSV",
+          "asPdf": "[AR] Export as PDF",
+          "toPowerPoint": "[AR] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[AR] Awareness",
+          "consideration": "[AR] Consideration",
+          "preference": "[AR] Preference",
+          "loyalty": "[AR] Loyalty",
+          "nps": "[AR] NPS",
+          "sentiment": "[AR] Sentiment",
+          "marketShare": "[AR] Market Share",
+          "vsTarget": "[AR] vs target",
+          "trend": "[AR] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[AR] Brand Health Trend",
+          "competitorComparison": "[AR] Competitor Comparison",
+          "sentimentBreakdown": "[AR] Sentiment Breakdown",
+          "metricsOverTime": "[AR] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[AR] Brand Overview",
+          "industry": "[AR] Industry",
+          "competitors": "[AR] Competitors",
+          "trackingFrequency": "[AR] Tracking Frequency",
+          "lastUpdated": "[AR] Last Updated",
+          "createdBy": "[AR] Created By",
+          "dateRange": "[AR] Date Range"
+        },
+        "insights": {
+          "title": "[AR] Key Insights",
+          "aiGenerated": "[AR] AI-Generated",
+          "noInsights": "[AR] No insights available yet",
+          "generateInsights": "[AR] Generate Insights"
+        },
+        "activity": {
+          "title": "[AR] Activity Log",
+          "description": "[AR] Recent activity on this brand study",
+          "viewed": "[AR] viewed",
+          "exported": "[AR] exported",
+          "edited": "[AR] edited",
+          "shared": "[AR] shared",
+          "created": "[AR] created"
+        },
+        "share": {
+          "title": "[AR] Share Brand Study",
+          "description": "[AR] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[AR] Email address",
+          "emailPlaceholder": "[AR] email@example.com",
+          "roleLabel": "[AR] Role",
+          "viewer": "[AR] Viewer",
+          "editor": "[AR] Editor",
+          "admin": "[AR] Admin",
+          "shareLink": "[AR] Share link",
+          "cancel": "[AR] Cancel",
+          "share": "[AR] Share"
+        },
+        "schedule": {
+          "title": "[AR] Schedule Report",
+          "description": "[AR] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[AR] Recipients",
+          "recipientsPlaceholder": "[AR] email@example.com, team@example.com",
+          "frequency": "[AR] Frequency",
+          "daily": "[AR] Daily",
+          "weekly": "[AR] Weekly",
+          "monthly": "[AR] Monthly",
+          "format": "[AR] Format",
+          "pdf": "[AR] PDF",
+          "csv": "[AR] CSV",
+          "json": "[AR] JSON",
+          "cancel": "[AR] Cancel",
+          "schedule": "[AR] Schedule"
+        },
+        "delete": {
+          "title": "[AR] Delete Brand Study",
+          "description": "[AR] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[AR] Cancel",
+          "delete": "[AR] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[AR] Select organization",
+      "searchPlaceholder": "[AR] Search organizations...",
+      "noOrganizationFound": "[AR] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[AR] Weekly Activity",
+      "monthlyTrend": "[AR] Monthly Trend",
+      "workflows": "[AR] Workflows",
+      "insights": "[AR] Insights",
+      "days": {
+        "mon": "[AR] Mon",
+        "tue": "[AR] Tue",
+        "wed": "[AR] Wed",
+        "thu": "[AR] Thu",
+        "fri": "[AR] Fri",
+        "sat": "[AR] Sat",
+        "sun": "[AR] Sun"
+      },
+      "months": {
+        "jan": "[AR] Jan",
+        "feb": "[AR] Feb",
+        "mar": "[AR] Mar",
+        "apr": "[AR] Apr",
+        "may": "[AR] May",
+        "jun": "[AR] Jun",
+        "jul": "[AR] Jul",
+        "aug": "[AR] Aug",
+        "sep": "[AR] Sep",
+        "oct": "[AR] Oct",
+        "nov": "[AR] Nov",
+        "dec": "[AR] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[AR] Active Agents",
+      "manage": "[AR] Manage",
+      "activeTasks": "[AR] {count} active tasks",
+      "idle": "[AR] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[AR] Untitled Dashboard",
+      "addWidget": "[AR] Add Widget",
+      "undoShortcut": "[AR] Undo (Ctrl+Z)",
+      "redoShortcut": "[AR] Redo (Ctrl+Y)",
+      "grid": "[AR] Grid",
+      "snap": "[AR] Snap",
+      "widgetsCount": "[AR] {count} widgets",
+      "exportFormat": "[AR] Export Format",
+      "export": {
+        "pdf": "[AR] PDF Document",
+        "png": "[AR] PNG Image",
+        "json": "[AR] JSON Config"
+      },
+      "duplicate": "[AR] Duplicate",
+      "fullscreen": "[AR] Fullscreen",
+      "lock": "[AR] Lock",
+      "unlock": "[AR] Unlock",
+      "hide": "[AR] Hide",
+      "chooseWidgetType": "[AR] Choose a widget type to add to your dashboard",
+      "editWidget": "[AR] Edit Widget",
+      "newWidget": "[AR] New {type}",
+      "enterTextContent": "[AR] Enter text content...",
+      "unknownWidgetType": "[AR] Unknown widget type",
+      "target": "[AR] Target",
+      "table": {
+        "name": "[AR] Name",
+        "value": "[AR] Value",
+        "change": "[AR] Change",
+        "item": "[AR] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[AR] Chart",
+        "metric": "[AR] Metric",
+        "table": "[AR] Table",
+        "text": "[AR] Text",
+        "image": "[AR] Image",
+        "kpi": "[AR] KPI",
+        "kpiCard": "[AR] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[AR] Visualize data with various chart types",
+        "kpi": "[AR] Display key performance indicators",
+        "metric": "[AR] Show a single metric value",
+        "table": "[AR] Display data in tabular format",
+        "text": "[AR] Add text content or notes",
+        "image": "[AR] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[AR] General",
+        "data": "[AR] Data",
+        "style": "[AR] Style",
+        "advanced": "[AR] Advanced"
+      },
+      "fields": {
+        "title": "[AR] Title",
+        "subtitle": "[AR] Subtitle",
+        "chartType": "[AR] Chart Type",
+        "content": "[AR] Content",
+        "value": "[AR] Value",
+        "changePercent": "[AR] Change (%)",
+        "target": "[AR] Target",
+        "dataSource": "[AR] Data Source",
+        "refreshInterval": "[AR] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[AR] Bar Chart",
+        "line": "[AR] Line Chart",
+        "area": "[AR] Area Chart",
+        "pie": "[AR] Pie Chart",
+        "donut": "[AR] Donut Chart",
+        "radar": "[AR] Radar Chart",
+        "scatter": "[AR] Scatter Plot",
+        "funnel": "[AR] Funnel Chart",
+        "treemap": "[AR] Treemap",
+        "heatmap": "[AR] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[AR] Sample Data",
+        "api": "[AR] API Endpoint",
+        "crosstab": "[AR] Crosstab",
+        "custom": "[AR] Custom Query"
+      },
+      "refreshIntervalHint": "[AR] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[AR] Show Legend",
+        "showGrid": "[AR] Show Grid",
+        "showTooltip": "[AR] Show Tooltip",
+        "backgroundColor": "[AR] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[AR] Lock Widget",
+        "lockWidgetHint": "[AR] Prevent moving and resizing",
+        "zIndex": "[AR] Z-Index"
+      },
+      "dashboardSettings": "[AR] Dashboard Settings",
+      "saveSettings": "[AR] Save Settings",
+      "settings": {
+        "dashboardName": "[AR] Dashboard Name",
+        "gridColumns": "[AR] Grid Columns",
+        "gridRows": "[AR] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[AR] Analytics",
+      "title": "[AR] Analytics",
+      "description": "[AR] Track your research performance and insights"
     }
   },
   "audiences": {

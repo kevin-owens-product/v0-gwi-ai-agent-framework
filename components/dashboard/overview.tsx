@@ -1,50 +1,58 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bot, Workflow, Zap, Clock, Loader2 } from "lucide-react"
 
 interface Stat {
-  title: string
+  titleKey: string
   value: string
-  change: string
+  changeKey: string
+  changeParams?: Record<string, string | number>
   icon: typeof Bot
   trend: string
 }
 
-// Demo stats shown when API returns empty or errors
-const demoStats: Stat[] = [
-  {
-    title: "Active Agents",
-    value: "12",
-    change: "+2 this week",
-    icon: Bot,
-    trend: "up",
-  },
-  {
-    title: "Workflows Run",
-    value: "847",
-    change: "+23% from last month",
-    icon: Workflow,
-    trend: "up",
-  },
-  {
-    title: "Insights Generated",
-    value: "3,241",
-    change: "+18% from last month",
-    icon: Zap,
-    trend: "up",
-  },
-  {
-    title: "Avg. Run Time",
-    value: "2.4m",
-    change: "-12% faster",
-    icon: Clock,
-    trend: "up",
-  },
-]
-
 export function DashboardOverview() {
+  const t = useTranslations('dashboard.overview')
+
+  // Demo stats shown when API returns empty or errors
+  const demoStats: Stat[] = [
+    {
+      titleKey: "activeAgents",
+      value: "12",
+      changeKey: "thisWeekChange",
+      changeParams: { count: 2 },
+      icon: Bot,
+      trend: "up",
+    },
+    {
+      titleKey: "workflowsRun",
+      value: "847",
+      changeKey: "fromLastMonthPercent",
+      changeParams: { percent: 23 },
+      icon: Workflow,
+      trend: "up",
+    },
+    {
+      titleKey: "insightsGenerated",
+      value: "3,241",
+      changeKey: "fromLastMonthPercent",
+      changeParams: { percent: 18 },
+      icon: Zap,
+      trend: "up",
+    },
+    {
+      titleKey: "avgRunTime",
+      value: "2.4m",
+      changeKey: "fasterPercent",
+      changeParams: { percent: 12 },
+      icon: Clock,
+      trend: "up",
+    },
+  ]
+
   const [stats, setStats] = useState<Stat[]>(demoStats)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -74,30 +82,30 @@ export function DashboardOverview() {
 
         const newStats: Stat[] = [
           {
-            title: "Active Agents",
+            titleKey: "activeAgents",
             value: agentCount.toString(),
-            change: agentCount > 0 ? "Active" : "None active",
+            changeKey: agentCount > 0 ? "active" : "noneActive",
             icon: Bot,
             trend: agentCount > 0 ? "up" : "neutral",
           },
           {
-            title: "Workflows Run",
+            titleKey: "workflowsRun",
             value: totalRuns.toLocaleString(),
-            change: totalRuns > 0 ? "Last 24 hours" : "No runs yet",
+            changeKey: totalRuns > 0 ? "last24Hours" : "noRunsYet",
             icon: Workflow,
             trend: totalRuns > 0 ? "up" : "neutral",
           },
           {
-            title: "Insights Generated",
+            titleKey: "insightsGenerated",
             value: totalInsights.toLocaleString(),
-            change: totalInsights > 0 ? "Last 24 hours" : "No insights yet",
+            changeKey: totalInsights > 0 ? "last24Hours" : "noInsightsYet",
             icon: Zap,
             trend: totalInsights > 0 ? "up" : "neutral",
           },
           {
-            title: "Avg. Run Time",
+            titleKey: "avgRunTime",
             value: avgRunTime,
-            change: totalRuns > 0 ? "Per workflow" : "N/A",
+            changeKey: totalRuns > 0 ? "perWorkflow" : "notAvailable",
             icon: Clock,
             trend: "up",
           },
@@ -118,6 +126,7 @@ export function DashboardOverview() {
     }
 
     fetchStats()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) {
@@ -137,14 +146,14 @@ export function DashboardOverview() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map((stat) => (
-        <Card key={stat.title} className="bg-card border-border">
+        <Card key={stat.titleKey} className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{t(stat.titleKey)}</CardTitle>
             <stat.icon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-            <p className="text-xs text-chart-5 mt-1">{stat.change}</p>
+            <p className="text-xs text-chart-5 mt-1">{t(stat.changeKey, stat.changeParams)}</p>
           </CardContent>
         </Card>
       ))}

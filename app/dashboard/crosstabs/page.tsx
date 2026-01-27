@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Plus, Table2, Download, Eye, Clock, Sparkles, TrendingUp } from "lucide-react"
 import Link from "next/link"
@@ -71,7 +72,17 @@ function formatTimeAgo(dateString: string): string {
   return 'Just now'
 }
 
-function mapApiCrosstab(apiCrosstab: any): Crosstab {
+interface ApiCrosstab {
+  id: string
+  name: string
+  updatedAt: string
+  configuration?: {
+    audiences?: string[]
+    metrics?: string[]
+  }
+}
+
+function mapApiCrosstab(apiCrosstab: ApiCrosstab): Crosstab {
   const config = apiCrosstab.configuration || {}
   return {
     id: apiCrosstab.id,
@@ -83,6 +94,7 @@ function mapApiCrosstab(apiCrosstab: any): Crosstab {
 }
 
 export default function CrosstabsPage() {
+  const t = useTranslations('dashboard.crosstabs')
   const [crosstabs, setCrosstabs] = useState<Crosstab[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState({ total: 0, views: 0, exports: 0, usedToday: 0 })
@@ -138,13 +150,13 @@ export default function CrosstabsPage() {
       <PageTracker pageName="Crosstabs List" metadata={{ activeTab }} />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Crosstabs</h1>
-          <p className="text-muted-foreground mt-1">Compare audiences across multiple dimensions</p>
+          <h1 className="text-3xl font-bold">{t('title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('description')}</p>
         </div>
         <Link href="/dashboard/crosstabs/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            New Crosstab
+            {t('newCrosstab')}
           </Button>
         </Link>
       </div>
@@ -156,7 +168,7 @@ export default function CrosstabsPage() {
               <Table2 className="h-5 w-5 text-accent-foreground" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Crosstabs</p>
+              <p className="text-sm text-muted-foreground">{t('stats.totalCrosstabs')}</p>
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
           </div>
@@ -167,7 +179,7 @@ export default function CrosstabsPage() {
               <Eye className="h-5 w-5 text-blue-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Views</p>
+              <p className="text-sm text-muted-foreground">{t('stats.views')}</p>
               <p className="text-2xl font-bold">{formatNumber(stats.views)}</p>
             </div>
           </div>
@@ -178,7 +190,7 @@ export default function CrosstabsPage() {
               <Download className="h-5 w-5 text-emerald-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Exports</p>
+              <p className="text-sm text-muted-foreground">{t('stats.exports')}</p>
               <p className="text-2xl font-bold">{stats.exports}</p>
             </div>
           </div>
@@ -189,7 +201,7 @@ export default function CrosstabsPage() {
               <Clock className="h-5 w-5 text-amber-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Used Today</p>
+              <p className="text-sm text-muted-foreground">{t('stats.usedToday')}</p>
               <p className="text-2xl font-bold">{stats.usedToday}</p>
             </div>
           </div>
@@ -198,9 +210,9 @@ export default function CrosstabsPage() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="all">All Crosstabs</TabsTrigger>
-          <TabsTrigger value="recent">Recent</TabsTrigger>
-          <TabsTrigger value="templates">Templates</TabsTrigger>
+          <TabsTrigger value="all">{t('tabs.all')}</TabsTrigger>
+          <TabsTrigger value="recent">{t('tabs.recent')}</TabsTrigger>
+          <TabsTrigger value="templates">{t('tabs.templates')}</TabsTrigger>
         </TabsList>
         <TabsContent value="all">
           {isLoading ? (
@@ -239,16 +251,18 @@ function CrosstabsGridSkeleton() {
 }
 
 function CrosstabsGrid({ crosstabs }: { crosstabs: Crosstab[] }) {
+  const t = useTranslations('dashboard.crosstabs')
+
   if (crosstabs.length === 0) {
     return (
       <div className="text-center py-12">
         <Table2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <h3 className="font-semibold mb-2">No crosstabs yet</h3>
-        <p className="text-sm text-muted-foreground mb-4">Create your first crosstab to compare audiences</p>
+        <h3 className="font-semibold mb-2">{t('empty.title')}</h3>
+        <p className="text-sm text-muted-foreground mb-4">{t('empty.description')}</p>
         <Link href="/dashboard/crosstabs/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            New Crosstab
+            {t('newCrosstab')}
           </Button>
         </Link>
       </div>
@@ -270,25 +284,25 @@ function CrosstabsGrid({ crosstabs }: { crosstabs: Crosstab[] }) {
                 <div className="flex items-center gap-2 mb-2">
                   <Badge variant="default" className="bg-primary">
                     <Sparkles className="h-3 w-3 mr-1" />
-                    Featured
+                    {t('badges.featured')}
                   </Badge>
                   <Badge variant="outline">
                     <TrendingUp className="h-3 w-3 mr-1" />
-                    Live Data
+                    {t('badges.liveData')}
                   </Badge>
                 </div>
                 <h3 className="font-semibold text-lg">{crosstab.name}</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Explore {DATA_SUMMARY.categories.length} categories of consumer behavior data
+                  {t('featured.exploreCategories', { count: DATA_SUMMARY.categories.length })}
                 </p>
                 <div className="flex items-center gap-6 mt-4 text-sm">
                   <span className="flex items-center gap-1">
                     <span className="font-semibold text-primary">{crosstab.audiences}</span>
-                    <span className="text-muted-foreground">audience segments</span>
+                    <span className="text-muted-foreground">{t('labels.audienceSegments')}</span>
                   </span>
                   <span className="flex items-center gap-1">
                     <span className="font-semibold text-primary">{crosstab.metrics}</span>
-                    <span className="text-muted-foreground">metrics</span>
+                    <span className="text-muted-foreground">{t('labels.metrics')}</span>
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3">
@@ -299,13 +313,13 @@ function CrosstabsGrid({ crosstabs }: { crosstabs: Crosstab[] }) {
                   ))}
                   {DATA_SUMMARY.categories.length > 6 && (
                     <Badge variant="secondary" className="text-xs">
-                      +{DATA_SUMMARY.categories.length - 6} more
+                      {t('badges.more', { count: DATA_SUMMARY.categories.length - 6 })}
                     </Badge>
                   )}
                 </div>
               </div>
               <Button variant="default" size="sm" className="ml-4">
-                Open Analysis
+                {t('actions.openAnalysis')}
               </Button>
             </div>
           </Card>
@@ -326,10 +340,10 @@ function CrosstabsGrid({ crosstabs }: { crosstabs: Crosstab[] }) {
                 )}
               </div>
               <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
-                <span>{crosstab.audiences} audiences</span>
-                <span>{crosstab.metrics} metrics</span>
+                <span>{t('labels.audiencesCount', { count: crosstab.audiences })}</span>
+                <span>{t('labels.metricsCount', { count: crosstab.metrics })}</span>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Modified {crosstab.lastModified}</p>
+              <p className="text-xs text-muted-foreground mt-2">{t('labels.modified', { time: crosstab.lastModified })}</p>
             </Card>
           </Link>
         ))}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Check, ChevronsUpDown, Building2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -22,6 +23,7 @@ import { FeatureBadge } from '@/components/features/FeatureBadge'
 export function OrganizationSwitcher() {
   const { organization, organizations, setCurrentOrganization } = useOrganizationContext()
   const [open, setOpen] = useState(false)
+  const t = useTranslations('dashboard.organizationSwitcher')
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -30,6 +32,7 @@ export function OrganizationSwitcher() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-label={t('selectOrganization')}
           className="w-full justify-between"
         >
           <div className="flex items-center gap-2 truncate">
@@ -41,8 +44,8 @@ export function OrganizationSwitcher() {
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
-          <CommandInput placeholder="Search organizations..." />
-          <CommandEmpty>No organization found.</CommandEmpty>
+          <CommandInput placeholder={t('searchPlaceholder')} />
+          <CommandEmpty>{t('noOrganizationFound')}</CommandEmpty>
           <CommandGroup>
             {organizations.map((org) => (
               <CommandItem

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, use, useCallback, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -492,8 +493,32 @@ const audienceKeyMap: Record<string, string> = {
 // Row identifier keys used in seed data
 const ROW_IDENTIFIER_KEYS = ['platform', 'metric', 'format', 'channel', 'category', 'brand', 'market', 'segment', 'name', 'daypart', 'service', 'attitude', 'source', 'tech']
 
+interface ApiCrosstabData {
+  id: string
+  name: string
+  description?: string
+  category?: string
+  dataSource?: string
+  views?: number
+  updatedAt?: string
+  createdBy?: string
+  createdByName?: string
+  configuration?: {
+    baseAudience?: string
+    metrics?: string[]
+    audiences?: string[]
+  }
+  results?: {
+    rows?: Array<Record<string, string | number>>
+    updatedAt?: string
+    metadata?: {
+      metric?: string
+    }
+  }
+}
+
 // Transform API response to frontend format
-function transformApiCrosstab(apiData: any): CrosstabData | null {
+function transformApiCrosstab(apiData: ApiCrosstabData): CrosstabData | null {
   if (!apiData) return null
 
   const results = apiData.results || {}
@@ -523,13 +548,14 @@ function transformApiCrosstab(apiData: any): CrosstabData | null {
   })
 
   // Build the transformed data structure
-  const data: { metric: string; category?: string; values: Record<string, number> }[] = rows.map((row: any) => {
-    const metricName = row[rowIdKey] || 'Unknown'
+  const data: { metric: string; category?: string; values: Record<string, number> }[] = rows.map((row: Record<string, string | number>) => {
+    const metricName = String(row[rowIdKey] || 'Unknown')
     const values: Record<string, number> = {}
 
     numericColumns.forEach((col, index) => {
       const audienceName = audienceNames[index]
-      values[audienceName] = row[col]
+      const value = row[col]
+      values[audienceName] = typeof value === 'number' ? value : 0
     })
 
     return {
@@ -572,6 +598,7 @@ function formatTimeAgo(dateString: string): string {
 }
 
 export default function CrosstabDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = useTranslations('dashboard.crosstabs.detail')
   const { id } = use(params)
   const router = useRouter()
   const [crosstab, setCrosstab] = useState<CrosstabData | null>(null)
@@ -644,6 +671,7 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
     if (crosstab && selectedMetrics.size === 0) {
       setSelectedMetrics(new Set(crosstab.metrics))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [crosstab])
 
   // Get unique categories
@@ -854,18 +882,18 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Crosstab Not Found</h1>
-            <p className="text-muted-foreground mt-1">The requested crosstab could not be found</p>
+            <h1 className="text-3xl font-bold">{t('notFound.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('notFound.subtitle')}</p>
           </div>
         </div>
         <Card className="p-12 text-center">
           <Table2 className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Crosstab not found</h2>
+          <h2 className="text-xl font-semibold mb-2">{t('notFound.heading')}</h2>
           <p className="text-muted-foreground mb-4">
-            The crosstab you're looking for doesn't exist or has been deleted.
+            {t('notFound.description')}
           </p>
           <Link href="/dashboard/crosstabs">
-            <Button>Back to Crosstabs</Button>
+            <Button>{t('notFound.backButton')}</Button>
           </Link>
         </Card>
       </div>
@@ -959,8 +987,7 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
         a.click()
         URL.revokeObjectURL(url)
 
-        // Show toast that full export would require server-side processing
-        console.log(`${format.toUpperCase()} export initiated. Full rendering requires server-side processing.`)
+        // Full rendering for PDF/XLSX would require server-side processing
       } else {
         // JSON export
         const exportData = {
@@ -1043,7 +1070,7 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
                     {isFavorite ? <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" /> : <StarOff className="h-4 w-4" />}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>{isFavorite ? "Remove from favorites" : "Add to favorites"}</TooltipContent>
+                <TooltipContent>{isFavorite ? t('actions.removeFromFavorites') : t('actions.addToFavorites')}</TooltipContent>
               </Tooltip>
             </div>
             <p className="text-sm text-muted-foreground max-w-2xl">{crosstab.description}</p>
@@ -1063,7 +1090,7 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
                 {autoRefresh ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>{autoRefresh ? "Pause auto-refresh" : "Enable auto-refresh"}</TooltipContent>
+            <TooltipContent>{autoRefresh ? t('actions.pauseAutoRefresh') : t('actions.enableAutoRefresh')}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -1072,7 +1099,7 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
                 {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>{isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}</TooltipContent>
+            <TooltipContent>{isFullscreen ? t('actions.exitFullscreen') : t('actions.enterFullscreen')}</TooltipContent>
           </Tooltip>
 
           {/* Filter Button */}
@@ -1091,44 +1118,44 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
             <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
               <SheetHeader>
                 <SheetTitle className="flex items-center justify-between">
-                  <span>Data Filters</span>
+                  <span>{t('filters.title')}</span>
                   {activeFilterCount > 0 && (
                     <Button variant="ghost" size="sm" onClick={handleClearFilters}>
                       <X className="h-4 w-4 mr-1" />
-                      Clear All
+                      {t('filters.clearAll')}
                     </Button>
                   )}
                 </SheetTitle>
                 <SheetDescription>
-                  Filter and refine your crosstab data
+                  {t('filters.description')}
                 </SheetDescription>
               </SheetHeader>
 
-              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="mt-6">
+              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "filters" | "audiences" | "metrics")} className="mt-6">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="filters">
                     <Filter className="h-4 w-4 mr-2" />
-                    Filters
+                    {t('tabs.filters')}
                   </TabsTrigger>
                   <TabsTrigger value="audiences">
                     <Users className="h-4 w-4 mr-2" />
-                    Audiences
+                    {t('tabs.audiences')}
                   </TabsTrigger>
                   <TabsTrigger value="metrics">
                     <BarChart3 className="h-4 w-4 mr-2" />
-                    Metrics
+                    {t('tabs.metrics')}
                   </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="filters" className="mt-4 space-y-4">
                   {/* Quick Filters */}
                   <Card className="p-4">
-                    <h4 className="font-medium mb-3">Quick Filters</h4>
+                    <h4 className="font-medium mb-3">{t('filters.quickFilters')}</h4>
 
                     {/* Value Range */}
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label className="text-sm">Value Range: {valueRange[0]}% - {valueRange[1]}%</Label>
+                        <Label className="text-sm">{t('filters.valueRange', { min: valueRange[0], max: valueRange[1] })}</Label>
                         <Slider
                           value={valueRange}
                           onValueChange={(v) => setValueRange(v as [number, number])}
@@ -1141,13 +1168,13 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
                       {/* Category Filter */}
                       {categories.length > 0 && (
                         <div className="space-y-2">
-                          <Label className="text-sm">Category</Label>
+                          <Label className="text-sm">{t('filters.category')}</Label>
                           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                             <SelectTrigger>
-                              <SelectValue placeholder="All Categories" />
+                              <SelectValue placeholder={t('filters.allCategories')} />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="all">All Categories</SelectItem>
+                              <SelectItem value="all">{t('filters.allCategories')}</SelectItem>
                               {categories.map(cat => (
                                 <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                               ))}
@@ -1176,21 +1203,21 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
                 <TabsContent value="audiences" className="mt-4">
                   <Card className="p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-medium">Select Audiences</h4>
+                      <h4 className="font-medium">{t('audiences.selectAudiences')}</h4>
                       <div className="flex gap-2">
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedAudiences(new Set(crosstab.audiences))}
                         >
-                          Select All
+                          {t('actions.selectAll')}
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedAudiences(new Set())}
                         >
-                          Clear
+                          {t('actions.clear')}
                         </Button>
                       </div>
                     </div>
@@ -1219,7 +1246,7 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
                       </div>
                     </ScrollArea>
                     <div className="mt-3 pt-3 border-t text-sm text-muted-foreground">
-                      {selectedAudiences.size} of {crosstab.audiences.length} selected
+                      {t('selection.ofSelected', { selected: selectedAudiences.size, total: crosstab.audiences.length })}
                     </div>
                   </Card>
                 </TabsContent>
@@ -1227,21 +1254,21 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
                 <TabsContent value="metrics" className="mt-4">
                   <Card className="p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-medium">Select Metrics</h4>
+                      <h4 className="font-medium">{t('metrics.selectMetrics')}</h4>
                       <div className="flex gap-2">
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedMetrics(new Set(crosstab.metrics))}
                         >
-                          Select All
+                          {t('actions.selectAll')}
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedMetrics(new Set())}
                         >
-                          Clear
+                          {t('actions.clear')}
                         </Button>
                       </div>
                     </div>
@@ -1280,7 +1307,7 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
                       </div>
                     </ScrollArea>
                     <div className="mt-3 pt-3 border-t text-sm text-muted-foreground">
-                      {selectedMetrics.size} of {crosstab.metrics.length} selected
+                      {t('selection.ofSelected', { selected: selectedMetrics.size, total: crosstab.metrics.length })}
                     </div>
                   </Card>
                 </TabsContent>
@@ -1290,11 +1317,11 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
 
           <Button variant="outline" size="sm" className="bg-transparent">
             <BarChart3 className="h-4 w-4 mr-2" />
-            Visualize
+            {t('actions.visualize')}
           </Button>
           <Button variant="outline" size="sm" className="bg-transparent">
             <Share2 className="h-4 w-4 mr-2" />
-            Share
+            {t('actions.share')}
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -1306,30 +1333,30 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => handleExport("json")}>
-                Export as JSON
+                {t('export.asJson')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport("csv")}>
-                Export as CSV
+                {t('export.asCsv')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport("html")}>
-                Export as HTML
+                {t('export.asHtml')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => handleExport("pdf")}>
-                Export as PDF
+                {t('export.asPdf')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport("excel")}>
-                Export as Excel
+                {t('export.asExcel')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport("pptx")}>
-                Export as PowerPoint
+                {t('export.asPowerPoint')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <Link href={`/dashboard/crosstabs/new?edit=${crosstab.id}`}>
             <Button size="sm">
               <Edit className="h-4 w-4 mr-2" />
-              Edit
+              {t('actions.edit')}
             </Button>
           </Link>
           <DropdownMenu>
@@ -1339,19 +1366,19 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleDuplicate}>Duplicate</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDuplicate}>{t('actions.duplicate')}</DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/dashboards/new?crosstab=${crosstab.id}`}>Add to Dashboard</Link>
+                <Link href={`/dashboard/dashboards/new?crosstab=${crosstab.id}`}>{t('actions.addToDashboard')}</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleCopyLink}>
                 {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-                {copied ? "Copied!" : "Copy Link"}
+                {copied ? t('actions.copied') : t('actions.copyLink')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete
+                {t('actions.delete')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -1359,16 +1386,16 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
           <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete Crosstab</AlertDialogTitle>
+                <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete "{crosstab.name}"? This action cannot be undone.
+                  {t('deleteDialog.description', { name: crosstab.name })}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{t('actions.cancel')}</AlertDialogCancel>
                 <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                   {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                  Delete
+                  {t('actions.delete')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -1381,22 +1408,22 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
-            <span>Modified {crosstab.lastModified}</span>
+            <span>{t('meta.modified', { time: crosstab.lastModified })}</span>
           </div>
           <div className="flex items-center gap-1">
             <Eye className="h-4 w-4" />
-            <span>{crosstab.views} views</span>
+            <span>{t('meta.views', { count: crosstab.views })}</span>
           </div>
           <div className="flex items-center gap-1">
             <Users className="h-4 w-4" />
-            <span>Created by {crosstab.createdBy}</span>
+            <span>{t('meta.createdBy', { name: crosstab.createdBy })}</span>
           </div>
         </div>
 
         {/* Active filter badges */}
         {activeFilterCount > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Active filters:</span>
+            <span className="text-sm text-muted-foreground">{t('filters.activeFilters')}:</span>
             {selectedAudiences.size < crosstab.audiences.length && (
               <Badge variant="secondary" className="text-xs">
                 {selectedAudiences.size} audiences
@@ -1446,16 +1473,16 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
       <Tabs value={mainTab} onValueChange={(v) => setMainTab(v as typeof mainTab)} className="space-y-4">
         <TabsList>
           <TabsTrigger value="data" className="flex items-center gap-2">
-            <Table2 className="h-4 w-4" /> Data
+            <Table2 className="h-4 w-4" /> {t('mainTabs.data')}
           </TabsTrigger>
           <TabsTrigger value="activity" className="flex items-center gap-2">
-            <Activity className="h-4 w-4" /> Activity
+            <Activity className="h-4 w-4" /> {t('mainTabs.activity')}
           </TabsTrigger>
           <TabsTrigger value="comments" className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4" /> Comments
+            <Sparkles className="h-4 w-4" /> {t('mainTabs.comments')}
           </TabsTrigger>
           <TabsTrigger value="history" className="flex items-center gap-2">
-            <History className="h-4 w-4" /> History
+            <History className="h-4 w-4" /> {t('mainTabs.history')}
           </TabsTrigger>
         </TabsList>
 
@@ -1465,31 +1492,29 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
           <Card className="p-6">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold">AI-Generated Insights</h3>
+              <h3 className="font-semibold">{t('insights.title')}</h3>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               <div className="p-4 rounded-lg bg-muted/50">
-                <h4 className="font-medium text-sm mb-2">Top Performer</h4>
+                <h4 className="font-medium text-sm mb-2">{t('insights.topPerformer')}</h4>
                 <p className="text-sm text-muted-foreground">
                   {gridData.length > 0 && gridColumns.length > 0 ? (
                     <>
-                      <span className="font-semibold text-foreground">{gridColumns[0]?.label}</span> leads in most metrics with an average of {
-                        Math.round(gridData.reduce((sum, row) => sum + (row.values[gridColumns[0]?.key] || 0), 0) / gridData.length)
-                      }%.
+                      <span className="font-semibold text-foreground">{gridColumns[0]?.label}</span> {t('insights.topPerformerDesc', { average: Math.round(gridData.reduce((sum, row) => sum + (row.values[gridColumns[0]?.key] || 0), 0) / gridData.length) })}
                     </>
-                  ) : "No data available"}
+                  ) : t('insights.noData')}
                 </p>
               </div>
               <div className="p-4 rounded-lg bg-muted/50">
-                <h4 className="font-medium text-sm mb-2">Biggest Gap</h4>
+                <h4 className="font-medium text-sm mb-2">{t('insights.biggestGap')}</h4>
                 <p className="text-sm text-muted-foreground">
-                  The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.
+                  {t('insights.biggestGapDesc')}
                 </p>
               </div>
               <div className="p-4 rounded-lg bg-muted/50">
-                <h4 className="font-medium text-sm mb-2">Trending</h4>
+                <h4 className="font-medium text-sm mb-2">{t('insights.trending')}</h4>
                 <p className="text-sm text-muted-foreground">
-                  {filteredData.length} metrics currently displayed after applying {activeFilterCount > 0 ? activeFilterCount : "no"} filters.
+                  {t('insights.trendingDesc', { metrics: filteredData.length, filters: activeFilterCount > 0 ? activeFilterCount : t('insights.noFilters') })}
                 </p>
               </div>
             </div>
@@ -1500,8 +1525,8 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
         <TabsContent value="activity">
           <Card>
             <CardHeader>
-              <CardTitle>Activity Log</CardTitle>
-              <CardDescription>Recent activity on this crosstab</CardDescription>
+              <CardTitle>{t('activity.title')}</CardTitle>
+              <CardDescription>{t('activity.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[500px]">
@@ -1562,8 +1587,8 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
               resourceId={id}
               resourceName={crosstab.name}
               versions={[]}
-              onRestore={(versionId) => {
-                console.log("Restoring version:", versionId)
+              onRestore={(_versionId) => {
+                // Version restore functionality to be implemented
               }}
             />
           </Card>
@@ -1574,39 +1599,39 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Share Crosstab</DialogTitle>
+            <DialogTitle>{t('shareDialog.title')}</DialogTitle>
             <DialogDescription>
-              Share this crosstab with team members or external collaborators.
+              {t('shareDialog.description')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="flex gap-2">
               <div className="flex-1">
-                <Label htmlFor="shareEmail">Email address</Label>
+                <Label htmlFor="shareEmail">{t('shareDialog.emailLabel')}</Label>
                 <Input
                   id="shareEmail"
-                  placeholder="email@example.com"
+                  placeholder={t('shareDialog.emailPlaceholder')}
                   value={shareEmail}
                   onChange={(e) => setShareEmail(e.target.value)}
                   className="mt-2"
                 />
               </div>
               <div>
-                <Label>Role</Label>
+                <Label>{t('shareDialog.role')}</Label>
                 <Select value={shareRole} onValueChange={setShareRole}>
                   <SelectTrigger className="mt-2 w-[120px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="viewer">Viewer</SelectItem>
-                    <SelectItem value="editor">Editor</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="viewer">{t('shareDialog.roles.viewer')}</SelectItem>
+                    <SelectItem value="editor">{t('shareDialog.roles.editor')}</SelectItem>
+                    <SelectItem value="admin">{t('shareDialog.roles.admin')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div className="p-3 bg-muted rounded-lg">
-              <Label className="text-xs text-muted-foreground">Share link</Label>
+              <Label className="text-xs text-muted-foreground">{t('shareDialog.shareLink')}</Label>
               <div className="flex items-center gap-2 mt-1">
                 <Input value={typeof window !== 'undefined' ? window.location.href : ''} readOnly className="text-xs" />
                 <Button size="sm" variant="outline" onClick={handleCopyLink}>
@@ -1616,9 +1641,9 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowShareDialog(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowShareDialog(false)}>{t('actions.cancel')}</Button>
             <Button onClick={() => { setShowShareDialog(false); setShareEmail(""); }}>
-              <UserPlus className="h-4 w-4 mr-2" /> Share
+              <UserPlus className="h-4 w-4 mr-2" /> {t('actions.share')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1628,27 +1653,27 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
       <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Schedule Report</DialogTitle>
-            <DialogDescription>Set up automatic email delivery of this crosstab report.</DialogDescription>
+            <DialogTitle>{t('scheduleDialog.title')}</DialogTitle>
+            <DialogDescription>{t('scheduleDialog.description')}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label>Recipients</Label>
-              <Input placeholder="email@example.com, team@example.com" className="mt-2" />
+              <Label>{t('scheduleDialog.recipients')}</Label>
+              <Input placeholder={t('scheduleDialog.recipientsPlaceholder')} className="mt-2" />
             </div>
             <div>
-              <Label>Frequency</Label>
+              <Label>{t('scheduleDialog.frequency')}</Label>
               <Select defaultValue="weekly">
                 <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="daily">{t('scheduleDialog.frequencies.daily')}</SelectItem>
+                  <SelectItem value="weekly">{t('scheduleDialog.frequencies.weekly')}</SelectItem>
+                  <SelectItem value="monthly">{t('scheduleDialog.frequencies.monthly')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label>Format</Label>
+              <Label>{t('scheduleDialog.format')}</Label>
               <Select defaultValue="csv">
                 <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -1660,8 +1685,8 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>Cancel</Button>
-            <Button><Mail className="h-4 w-4 mr-2" /> Schedule</Button>
+            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>{t('actions.cancel')}</Button>
+            <Button><Mail className="h-4 w-4 mr-2" /> {t('actions.schedule')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

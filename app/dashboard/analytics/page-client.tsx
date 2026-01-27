@@ -5,6 +5,10 @@
 
 import { PageTracker } from "@/components/tracking/PageTracker";
 
-export function AnalyticsPageTracker() {
-  return <PageTracker pageName="Analytics" />;
+interface AnalyticsPageTrackerProps {
+  pageName?: string;
+}
+
+export function AnalyticsPageTracker({ pageName = "Analytics" }: AnalyticsPageTrackerProps) {
+  return <PageTracker pageName={pageName} />;
 }

@@ -11,9 +11,11 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ChartRenderer, generateSampleData } from "@/components/charts"
 import type { ChartType } from "@/components/charts"
+import { useTranslations } from "next-intl"
 
 export default function NewChartPage() {
   const router = useRouter()
+  const t = useTranslations("dashboard.charts.new")
   const [chartType, setChartType] = useState<ChartType>("BAR")
   const [chartName, setChartName] = useState("")
   const [selectedAudience, setSelectedAudience] = useState("")
@@ -65,8 +67,8 @@ export default function NewChartPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold">Create New Chart</h1>
-          <p className="text-muted-foreground mt-1">Visualize your audience data</p>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
+          <p className="text-muted-foreground mt-1">{t("description")}</p>
         </div>
       </div>
 
@@ -74,7 +76,7 @@ export default function NewChartPage() {
         <div className="lg:col-span-2 space-y-6">
           <Card className="p-6 space-y-4">
             <div>
-              <Label>Chart Type</Label>
+              <Label>{t("chartType.title")}</Label>
               <div className="grid grid-cols-5 gap-3 mt-2">
                 <button
                   onClick={() => setChartType("BAR")}
@@ -170,15 +172,15 @@ export default function NewChartPage() {
             </div>
 
             <div>
-              <Label htmlFor="name">Chart Name</Label>
-              <Input id="name" placeholder="e.g., Social Media Usage by Age" value={chartName} onChange={(e) => setChartName(e.target.value)} />
+              <Label htmlFor="name">{t("basicInfo.chartName")}</Label>
+              <Input id="name" placeholder={t("basicInfo.chartNamePlaceholder")} value={chartName} onChange={(e) => setChartName(e.target.value)} />
             </div>
 
             <div>
-              <Label>Select Audience</Label>
+              <Label>{t("dataConfig.targetAudience")}</Label>
               <Select value={selectedAudience} onValueChange={setSelectedAudience}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose an audience" />
+                  <SelectValue placeholder={t("dataConfig.selectAudience")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="eco-millennials">Eco-Conscious Millennials</SelectItem>
@@ -189,10 +191,10 @@ export default function NewChartPage() {
             </div>
 
             <div>
-              <Label>Select Metric</Label>
+              <Label>{t("dataConfig.dataSource")}</Label>
               <Select value={selectedMetric} onValueChange={setSelectedMetric}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose a metric" />
+                  <SelectValue placeholder={t("dataConfig.selectDataSource")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="social-usage">Social Media Usage</SelectItem>
@@ -204,7 +206,7 @@ export default function NewChartPage() {
           </Card>
 
           <Card className="p-6">
-            <h3 className="font-semibold mb-4">Preview</h3>
+            <h3 className="font-semibold mb-4">{t("preview.title")}</h3>
             <div className="aspect-video bg-muted rounded-lg overflow-hidden">
               <ChartRenderer
                 type={chartType}
@@ -222,9 +224,9 @@ export default function NewChartPage() {
 
         <div className="space-y-6">
           <Card className="p-6 space-y-4">
-            <h3 className="font-semibold">Chart Options</h3>
+            <h3 className="font-semibold">{t("dataConfig.timePeriod")}</h3>
             <div>
-              <Label>Time Period</Label>
+              <Label>{t("dataConfig.selectTimePeriod")}</Label>
               <Select value={timePeriod} onValueChange={setTimePeriod}>
                 <SelectTrigger>
                   <SelectValue placeholder="Last 12 months" />
@@ -241,10 +243,10 @@ export default function NewChartPage() {
           <div className="space-y-2">
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button className="w-full" onClick={handleCreate} disabled={isSaving}>
-              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating...</> : "Create Chart"}
+              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("actions.saving")}</> : t("actions.save")}
             </Button>
             <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()} disabled={isSaving}>
-              Cancel
+              {t("actions.cancel")}
             </Button>
           </div>
         </div>

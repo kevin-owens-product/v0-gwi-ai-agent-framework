@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -70,6 +71,7 @@ const roleColors: Record<string, string> = {
 }
 
 export default function TeamSettingsPage() {
+  const t = useTranslations("settings.team")
   const [members, setMembers] = useState<TeamMember[]>([])
   const [invitations, setInvitations] = useState<Invitation[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -206,7 +208,7 @@ export default function TeamSettingsPage() {
   )
 
   const formatRelativeTime = (dateString: string | null) => {
-    if (!dateString) return 'Never'
+    if (!dateString) return t("never")
     const date = new Date(dateString)
     const now = new Date()
     const diffMs = now.getTime() - date.getTime()
@@ -214,10 +216,10 @@ export default function TeamSettingsPage() {
     const diffHours = Math.floor(diffMs / 3600000)
     const diffDays = Math.floor(diffMs / 86400000)
 
-    if (diffMins < 1) return 'Just now'
-    if (diffMins < 60) return `${diffMins} min ago`
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
-    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+    if (diffMins < 1) return t("justNow")
+    if (diffMins < 60) return t("minAgo", { count: diffMins })
+    if (diffHours < 24) return diffHours > 1 ? t("hoursAgoPlural", { count: diffHours }) : t("hoursAgo", { count: diffHours })
+    return diffDays > 1 ? t("daysAgoPlural", { count: diffDays }) : t("daysAgo", { count: diffDays })
   }
 
   if (isLoading) {
@@ -232,8 +234,8 @@ export default function TeamSettingsPage() {
     <div className="p-6 max-w-5xl">
       <PageTracker pageName="Settings - Team" metadata={{ totalMembers: members.length, pendingInvitations: invitations.length }} />
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Team Management</h1>
-        <p className="text-muted-foreground">Manage team members and their permissions</p>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
 
       <div className="space-y-6">
@@ -241,42 +243,42 @@ export default function TeamSettingsPage() {
           <CardHeader>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <CardTitle>Team Members</CardTitle>
-                <CardDescription>{members.length} members in your organization</CardDescription>
+                <CardTitle>{t("teamMembers")}</CardTitle>
+                <CardDescription>{t("membersCount", { count: members.length })}</CardDescription>
               </div>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
-                    Invite Member
+                    {t("inviteMember")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Invite Team Member</DialogTitle>
-                    <DialogDescription>Send an invitation to join your organization</DialogDescription>
+                    <DialogTitle>{t("inviteTeamMember")}</DialogTitle>
+                    <DialogDescription>{t("inviteDescription")}</DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
                     <div className="space-y-2">
-                      <Label htmlFor="invite-email">Email Address</Label>
+                      <Label htmlFor="invite-email">{t("emailAddress")}</Label>
                       <Input
                         id="invite-email"
                         type="email"
-                        placeholder="colleague@company.com"
+                        placeholder={t("emailPlaceholder")}
                         value={inviteEmail}
                         onChange={(e) => setInviteEmail(e.target.value)}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="invite-role">Role</Label>
+                      <Label htmlFor="invite-role">{t("role")}</Label>
                       <Select value={inviteRole} onValueChange={setInviteRole}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="ADMIN">Admin</SelectItem>
-                          <SelectItem value="MEMBER">Member</SelectItem>
-                          <SelectItem value="VIEWER">Viewer</SelectItem>
+                          <SelectItem value="ADMIN">{t("roles.admin")}</SelectItem>
+                          <SelectItem value="MEMBER">{t("roles.member")}</SelectItem>
+                          <SelectItem value="VIEWER">{t("roles.viewer")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -286,12 +288,12 @@ export default function TeamSettingsPage() {
                       {isInviting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Sending...
+                          {t("sending")}
                         </>
                       ) : (
                         <>
                           <Mail className="mr-2 h-4 w-4" />
-                          Send Invitation
+                          {t("sendInvitation")}
                         </>
                       )}
                     </Button>
@@ -305,7 +307,7 @@ export default function TeamSettingsPage() {
               <div className="relative max-w-sm">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search members..."
+                  placeholder={t("searchMembers")}
                   className="pl-9"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -316,10 +318,10 @@ export default function TeamSettingsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Member</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Last Active</TableHead>
-                  <TableHead>Joined</TableHead>
+                  <TableHead>{t("tableHeaders.member")}</TableHead>
+                  <TableHead>{t("tableHeaders.role")}</TableHead>
+                  <TableHead>{t("tableHeaders.lastActive")}</TableHead>
+                  <TableHead>{t("tableHeaders.joined")}</TableHead>
                   <TableHead className="w-10"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -340,14 +342,14 @@ export default function TeamSettingsPage() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium">{member.user.name || 'Unknown'}</p>
+                          <p className="font-medium">{member.user.name || t("unknown")}</p>
                           <p className="text-sm text-muted-foreground">{member.user.email}</p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline" className={roleColors[member.role]}>
-                        {member.role.charAt(0) + member.role.slice(1).toLowerCase()}
+                        {t(`roles.${member.role.toLowerCase()}`)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground">
@@ -371,15 +373,15 @@ export default function TeamSettingsPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => handleRoleChange(member.id, 'ADMIN')}>
                               <Shield className="mr-2 h-4 w-4" />
-                              Make Admin
+                              {t("actions.makeAdmin")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleRoleChange(member.id, 'MEMBER')}>
                               <Shield className="mr-2 h-4 w-4" />
-                              Make Member
+                              {t("actions.makeMember")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleRoleChange(member.id, 'VIEWER')}>
                               <Shield className="mr-2 h-4 w-4" />
-                              Make Viewer
+                              {t("actions.makeViewer")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
@@ -387,7 +389,7 @@ export default function TeamSettingsPage() {
                               onClick={() => setRemoveMember(member)}
                             >
                               <UserMinus className="mr-2 h-4 w-4" />
-                              Remove Member
+                              {t("actions.removeMember")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -403,17 +405,21 @@ export default function TeamSettingsPage() {
         {invitations.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle>Pending Invitations</CardTitle>
-              <CardDescription>{invitations.length} pending invitation{invitations.length !== 1 ? 's' : ''}</CardDescription>
+              <CardTitle>{t("pendingInvitations")}</CardTitle>
+              <CardDescription>
+                {invitations.length !== 1
+                  ? t("pendingCountPlural", { count: invitations.length })
+                  : t("pendingCount", { count: invitations.length })}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Sent</TableHead>
-                    <TableHead>Expires</TableHead>
+                    <TableHead>{t("invitationHeaders.email")}</TableHead>
+                    <TableHead>{t("invitationHeaders.role")}</TableHead>
+                    <TableHead>{t("invitationHeaders.sent")}</TableHead>
+                    <TableHead>{t("invitationHeaders.expires")}</TableHead>
                     <TableHead className="w-10"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -423,7 +429,7 @@ export default function TeamSettingsPage() {
                       <TableCell className="font-medium">{invitation.email}</TableCell>
                       <TableCell>
                         <Badge variant="outline" className={roleColors[invitation.role]}>
-                          {invitation.role.charAt(0) + invitation.role.slice(1).toLowerCase()}
+                          {t(`roles.${invitation.role.toLowerCase()}`)}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-muted-foreground">
@@ -439,7 +445,7 @@ export default function TeamSettingsPage() {
                           className="text-destructive"
                           onClick={() => handleRevokeInvitation(invitation.id)}
                         >
-                          Revoke
+                          {t("revoke")}
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -452,49 +458,49 @@ export default function TeamSettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Role Permissions</CardTitle>
-            <CardDescription>Overview of what each role can do</CardDescription>
+            <CardTitle>{t("rolePermissions")}</CardTitle>
+            <CardDescription>{t("rolePermissionsDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-4">
               <div className="rounded-lg border p-4">
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <Badge variant="outline" className={roleColors.OWNER}>Owner</Badge>
+                  <Badge variant="outline" className={roleColors.OWNER}>{t("roles.owner")}</Badge>
                 </h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>Full organization control</li>
-                  <li>Transfer ownership</li>
-                  <li>Delete organization</li>
+                  <li>{t("ownerPermissions.fullControl")}</li>
+                  <li>{t("ownerPermissions.transferOwnership")}</li>
+                  <li>{t("ownerPermissions.deleteOrg")}</li>
                 </ul>
               </div>
               <div className="rounded-lg border p-4">
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <Badge variant="outline" className={roleColors.ADMIN}>Admin</Badge>
+                  <Badge variant="outline" className={roleColors.ADMIN}>{t("roles.admin")}</Badge>
                 </h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>Manage team members</li>
-                  <li>Billing & subscription</li>
-                  <li>All member permissions</li>
+                  <li>{t("adminPermissions.manageMembers")}</li>
+                  <li>{t("adminPermissions.billing")}</li>
+                  <li>{t("adminPermissions.allMemberPerms")}</li>
                 </ul>
               </div>
               <div className="rounded-lg border p-4">
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <Badge variant="outline" className={roleColors.MEMBER}>Member</Badge>
+                  <Badge variant="outline" className={roleColors.MEMBER}>{t("roles.member")}</Badge>
                 </h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>Create and edit agents</li>
-                  <li>Generate reports</li>
-                  <li>Use all agents</li>
+                  <li>{t("memberPermissions.createAgents")}</li>
+                  <li>{t("memberPermissions.generateReports")}</li>
+                  <li>{t("memberPermissions.useAgents")}</li>
                 </ul>
               </div>
               <div className="rounded-lg border p-4">
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <Badge variant="outline" className={roleColors.VIEWER}>Viewer</Badge>
+                  <Badge variant="outline" className={roleColors.VIEWER}>{t("roles.viewer")}</Badge>
                 </h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>View reports</li>
-                  <li>View dashboards</li>
-                  <li>Read-only access</li>
+                  <li>{t("viewerPermissions.viewReports")}</li>
+                  <li>{t("viewerPermissions.viewDashboards")}</li>
+                  <li>{t("viewerPermissions.readOnly")}</li>
                 </ul>
               </div>
             </div>
@@ -505,15 +511,15 @@ export default function TeamSettingsPage() {
       <AlertDialog open={!!removeMember} onOpenChange={() => setRemoveMember(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove Team Member</AlertDialogTitle>
+            <AlertDialogTitle>{t("removeDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove {removeMember?.user.name || removeMember?.user.email} from the organization? They will lose access immediately.
+              {t("removeDialog.description", { name: removeMember?.user.name || removeMember?.user.email || "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("removeDialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleRemoveMember} className="bg-destructive text-destructive-foreground">
-              Remove Member
+              {t("removeDialog.remove")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

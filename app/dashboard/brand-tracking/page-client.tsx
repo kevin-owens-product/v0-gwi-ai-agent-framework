@@ -5,6 +5,10 @@
 
 import { PageTracker } from "@/components/tracking/PageTracker";
 
-export function BrandTrackingPageTracker() {
-  return <PageTracker pageName="Brand Tracking" />;
+interface BrandTrackingPageTrackerProps {
+  pageName?: string;
+}
+
+export function BrandTrackingPageTracker({ pageName = "Brand Tracking" }: BrandTrackingPageTrackerProps) {
+  return <PageTracker pageName={pageName} />;
 }

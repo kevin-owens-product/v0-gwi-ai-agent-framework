@@ -17,9 +17,11 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Plus, X, Loader2, Target } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 export default function NewBrandTrackingPage() {
   const router = useRouter()
+  const t = useTranslations("dashboard.brandTracking.new")
   const [isLoading, setIsLoading] = useState(false)
   const [brandName, setBrandName] = useState("")
   const [description, setDescription] = useState("")
@@ -88,10 +90,10 @@ export default function NewBrandTrackingPage() {
         <div>
           <div className="flex items-center gap-2">
             <Target className="h-6 w-6 text-primary" />
-            <h1 className="text-3xl font-bold tracking-tight">New Brand Tracking</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           </div>
           <p className="text-muted-foreground mt-1">
-            Set up tracking for your brand and monitor its health over time.
+            {t("description")}
           </p>
         </div>
       </div>
@@ -99,17 +101,17 @@ export default function NewBrandTrackingPage() {
       <form onSubmit={handleSubmit}>
         <Card>
           <CardHeader>
-            <CardTitle>Brand Information</CardTitle>
+            <CardTitle>{t("brandInfo.title")}</CardTitle>
             <CardDescription>
-              Provide details about the brand you want to track
+              {t("brandInfo.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="brandName">Brand Name *</Label>
+              <Label htmlFor="brandName">{t("brandInfo.brandNameLabel")}</Label>
               <Input
                 id="brandName"
-                placeholder="e.g., Nike, Apple, Coca-Cola"
+                placeholder={t("brandInfo.brandNamePlaceholder")}
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value)}
                 required
@@ -117,10 +119,10 @@ export default function NewBrandTrackingPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("brandInfo.descriptionLabel")}</Label>
               <Textarea
                 id="description"
-                placeholder="Brief description of what you want to track..."
+                placeholder={t("brandInfo.descriptionPlaceholder")}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
@@ -129,37 +131,37 @@ export default function NewBrandTrackingPage() {
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="industry">Industry</Label>
+                <Label htmlFor="industry">{t("brandInfo.industryLabel")}</Label>
                 <Input
                   id="industry"
-                  placeholder="e.g., Sportswear, Technology, Beverages"
+                  placeholder={t("brandInfo.industryPlaceholder")}
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="schedule">Tracking Frequency</Label>
+                <Label htmlFor="schedule">{t("brandInfo.frequencyLabel")}</Label>
                 <Select value={schedule} onValueChange={setSchedule}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="daily">Daily</SelectItem>
-                    <SelectItem value="weekly">Weekly</SelectItem>
-                    <SelectItem value="monthly">Monthly</SelectItem>
-                    <SelectItem value="manual">Manual Only</SelectItem>
+                    <SelectItem value="daily">{t("frequency.daily")}</SelectItem>
+                    <SelectItem value="weekly">{t("frequency.weekly")}</SelectItem>
+                    <SelectItem value="monthly">{t("frequency.monthly")}</SelectItem>
+                    <SelectItem value="manual">{t("frequency.manual")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="competitors">Competitors</Label>
+              <Label htmlFor="competitors">{t("competitors.label")}</Label>
               <div className="flex gap-2">
                 <Input
                   id="competitors"
-                  placeholder="Add competitor name..."
+                  placeholder={t("competitors.placeholder")}
                   value={competitorInput}
                   onChange={(e) => setCompetitorInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCompetitor())}
@@ -191,42 +193,42 @@ export default function NewBrandTrackingPage() {
             </div>
 
             <div className="border-t pt-6">
-              <h3 className="text-sm font-medium mb-3">Metrics to Track</h3>
+              <h3 className="text-sm font-medium mb-3">{t("metrics.title")}</h3>
               <div className="grid gap-3 md:grid-cols-2">
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-sm">Brand Awareness</span>
+                  <span className="text-sm">{t("metrics.awareness")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-sm">Consideration</span>
+                  <span className="text-sm">{t("metrics.consideration")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-sm">Preference</span>
+                  <span className="text-sm">{t("metrics.preference")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-sm">Loyalty</span>
+                  <span className="text-sm">{t("metrics.loyalty")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-sm">Net Promoter Score (NPS)</span>
+                  <span className="text-sm">{t("metrics.nps")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-sm">Sentiment Analysis</span>
+                  <span className="text-sm">{t("metrics.sentiment")}</span>
                 </div>
               </div>
             </div>
 
             <div className="flex justify-end gap-3 pt-6">
               <Button type="button" variant="outline" asChild>
-                <Link href="/dashboard/brand-tracking">Cancel</Link>
+                <Link href="/dashboard/brand-tracking">{t("actions.cancel")}</Link>
               </Button>
               <Button type="submit" disabled={isLoading || !brandName}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Create Brand Tracking
+                {t("actions.create")}
               </Button>
             </div>
           </CardContent>

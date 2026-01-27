@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -29,6 +30,8 @@ import { storeAgents, iconMap, installAgent, isAgentInstalled } from "@/lib/stor
 
 export default function StoreAgentDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
+  const t = useTranslations("dashboard.store.detail")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const [isInstalled, setIsInstalled] = useState(false)
   const [isInstalling, setIsInstalling] = useState(false)
@@ -65,12 +68,12 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
         <Button variant="ghost" size="sm" asChild>
           <Link href="/dashboard/store">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Store
+            {t("backToStore")}
           </Link>
         </Button>
         <div className="text-center py-12">
-          <h1 className="text-2xl font-bold mb-2">Agent Not Found</h1>
-          <p className="text-muted-foreground">The agent you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+          <h1 className="text-2xl font-bold mb-2">{t("notFound.title")}</h1>
+          <p className="text-muted-foreground">{t("notFound.description")}</p>
         </div>
       </div>
     )
@@ -85,7 +88,7 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
       <Button variant="ghost" size="sm" asChild>
         <Link href="/dashboard/store">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Store
+          {t("backToStore")}
         </Link>
       </Button>
 
@@ -115,7 +118,7 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
             </div>
             <div className="flex items-center gap-1 text-muted-foreground">
               <Download className="h-5 w-5" />
-              <span>{agentDetails.installs} installs</span>
+              <span>{t("installs", { count: agentDetails.installs })}</span>
             </div>
             <Badge>{agentDetails.category}</Badge>
             <Badge variant={agentDetails.price === "Included" ? "secondary" : "outline"}>{agentDetails.price}</Badge>
@@ -126,11 +129,11 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
               <>
                 <Button variant="outline" disabled className="gap-2 bg-transparent">
                   <Check className="h-4 w-4" />
-                  Installed
+                  {t("installed")}
                 </Button>
                 <Button onClick={handleTryInPlayground}>
                   <Play className="mr-2 h-4 w-4" />
-                  Try in Playground
+                  {t("tryInPlayground")}
                 </Button>
               </>
             ) : (
@@ -141,11 +144,11 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
                   ) : (
                     <Download className="h-4 w-4" />
                   )}
-                  {isInstalling ? "Installing..." : "Install Agent"}
+                  {isInstalling ? t("installing") : t("installAgent")}
                 </Button>
                 <Button onClick={handleTryInPlayground} className="gap-2">
                   <Play className="h-4 w-4" />
-                  Try in Playground
+                  {t("tryInPlayground")}
                 </Button>
               </>
             )}
@@ -156,20 +159,20 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
         <Card className="lg:w-80">
           <CardContent className="pt-6 space-y-4">
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Version</span>
+              <span className="text-muted-foreground">{t("info.version")}</span>
               <span>{agentDetails.version}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Last Updated</span>
+              <span className="text-muted-foreground">{tCommon("lastUpdated")}</span>
               <span>{agentDetails.lastUpdated}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Category</span>
+              <span className="text-muted-foreground">{t("info.category")}</span>
               <span>{agentDetails.category}</span>
             </div>
             <hr />
             <div>
-              <span className="text-sm text-muted-foreground">Data Sources</span>
+              <span className="text-sm text-muted-foreground">{t("info.dataSources")}</span>
               <div className="flex flex-wrap gap-1 mt-2">
                 {agentDetails.dataSources.map((source) => (
                   <Badge key={source} variant="outline" className="text-xs">
@@ -185,16 +188,16 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="capabilities">Capabilities</TabsTrigger>
-          <TabsTrigger value="examples">Examples</TabsTrigger>
-          <TabsTrigger value="reviews">Reviews</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="capabilities">{t("tabs.capabilities")}</TabsTrigger>
+          <TabsTrigger value="examples">{t("tabs.examples")}</TabsTrigger>
+          <TabsTrigger value="reviews">{t("tabs.reviews")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>About this Agent</CardTitle>
+              <CardTitle>{t("overview.aboutTitle")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="prose prose-sm max-w-none text-muted-foreground whitespace-pre-line">
@@ -210,8 +213,8 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
                   <Zap className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <div className="font-medium">Fast Results</div>
-                  <div className="text-sm text-muted-foreground">Avg. 3s response time</div>
+                  <div className="font-medium">{t("overview.fastResults")}</div>
+                  <div className="text-sm text-muted-foreground">{t("overview.fastResultsDesc")}</div>
                 </div>
               </CardContent>
             </Card>
@@ -221,8 +224,8 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
                   <Shield className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <div className="font-medium">Verified Data</div>
-                  <div className="text-sm text-muted-foreground">100% sourced citations</div>
+                  <div className="font-medium">{t("overview.verifiedData")}</div>
+                  <div className="text-sm text-muted-foreground">{t("overview.verifiedDataDesc")}</div>
                 </div>
               </CardContent>
             </Card>
@@ -232,8 +235,8 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
                   <Clock className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <div className="font-medium">Always Updated</div>
-                  <div className="text-sm text-muted-foreground">Latest GWI data</div>
+                  <div className="font-medium">{t("overview.alwaysUpdated")}</div>
+                  <div className="text-sm text-muted-foreground">{t("overview.alwaysUpdatedDesc")}</div>
                 </div>
               </CardContent>
             </Card>
@@ -243,8 +246,8 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
         <TabsContent value="capabilities" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>What this agent can do</CardTitle>
-              <CardDescription>Key capabilities and features</CardDescription>
+              <CardTitle>{t("capabilities.title")}</CardTitle>
+              <CardDescription>{t("capabilities.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
@@ -262,8 +265,8 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
         <TabsContent value="examples" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Example Prompts</CardTitle>
-              <CardDescription>Try these prompts to get started</CardDescription>
+              <CardTitle>{t("examples.title")}</CardTitle>
+              <CardDescription>{t("examples.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {agentDetails.examplePrompts.map((prompt, index) => (
@@ -283,7 +286,7 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
             {/* Rating Summary */}
             <Card>
               <CardHeader>
-                <CardTitle>Ratings</CardTitle>
+                <CardTitle>{t("reviews.ratings")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center">
@@ -296,7 +299,7 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
                       />
                     ))}
                   </div>
-                  <div className="text-sm text-muted-foreground mt-1">{totalRatings} reviews</div>
+                  <div className="text-sm text-muted-foreground mt-1">{t("reviews.reviewsCount", { count: totalRatings })}</div>
                 </div>
                 <div className="space-y-2">
                   {[5, 4, 3, 2, 1].map((rating) => (
@@ -365,7 +368,7 @@ export default function StoreAgentDetailPage({ params }: { params: Promise<{ id:
 
       {/* Related Agents */}
       <section>
-        <h2 className="text-xl font-semibold mb-4">Related Agents</h2>
+        <h2 className="text-xl font-semibold mb-4">{t("relatedAgents")}</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {agentDetails.relatedAgents.map((agent) => (
             <Link key={agent.id} href={`/dashboard/store/${agent.id}`}>

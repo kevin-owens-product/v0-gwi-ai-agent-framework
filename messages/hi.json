@@ -203,7 +203,85 @@
     "selectLanguage": "भाषा चुनें",
     "preferences": "प्राथमिकताएं",
     "notifications": "सूचनाएं",
-    "security": "सुरक्षा",
+    "security": {
+      "title": "[HI] Security Settings",
+      "description": "[HI] Manage your account security and active sessions",
+      "changePassword": "[HI] Change Password",
+      "changePasswordDescription": "[HI] Update your password regularly to keep your account secure",
+      "currentPassword": "[HI] Current Password",
+      "newPassword": "[HI] New Password",
+      "confirmNewPassword": "[HI] Confirm New Password",
+      "updating": "[HI] Updating...",
+      "updatePassword": "[HI] Update Password",
+      "twoFactorAuth": "[HI] Two-Factor Authentication",
+      "twoFactorDescription": "[HI] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[HI] 2FA is enabled",
+      "twoFactorProtected": "[HI] Your account is protected with authenticator app",
+      "changeMethod": "[HI] Change Method",
+      "viewBackupCodes": "[HI] View Backup Codes",
+      "activeSessions": "[HI] Active Sessions",
+      "activeSessionsDescription": "[HI] Manage devices where you're currently logged in",
+      "signOutAll": "[HI] Sign Out All",
+      "current": "[HI] Current",
+      "revoke": "[HI] Revoke",
+      "dangerZone": "[HI] Danger Zone",
+      "dangerZoneDescription": "[HI] Irreversible and destructive actions",
+      "deleteAccount": "[HI] Delete Account",
+      "deleteAccountDescription": "[HI] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[HI] Data Exports",
+        "description": "[HI] Request exports of your personal data for GDPR compliance",
+        "refresh": "[HI] Refresh",
+        "yourDataRights": "[HI] Your Data Rights",
+        "yourDataRightsDescription": "[HI] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[HI] No Active Exports",
+        "noActiveExportsDescription": "[HI] Request an export to see its status here",
+        "noActiveExportsHint": "[HI] Your export status will appear here after you request a data export",
+        "exportHistory": "[HI] Export History",
+        "exportHistoryDescription": "[HI] View and download your previous data exports",
+        "total": "[HI] Total",
+        "pending": "[HI] Pending",
+        "processing": "[HI] Processing",
+        "aboutDataExports": "[HI] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[HI] What's Included",
+          "exportFormat": "[HI] Export Format",
+          "faq": "[HI] FAQ"
+        },
+        "included": {
+          "profileInfo": "[HI] Profile Information",
+          "profileInfoDesc": "[HI] Your name, email, avatar, and account settings",
+          "orgMemberships": "[HI] Organization Memberships",
+          "orgMembershipsDesc": "[HI] All organizations you belong to and your roles",
+          "createdContent": "[HI] Created Content",
+          "createdContentDesc": "[HI] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[HI] Activity History",
+          "activityHistoryDesc": "[HI] Audit logs and activity records associated with your account",
+          "preferences": "[HI] Preferences",
+          "preferencesDesc": "[HI] Your theme, language, notification, and other settings",
+          "apiKeys": "[HI] API Keys",
+          "apiKeysDesc": "[HI] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[HI] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[HI] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[HI] Human-readable when opened in a text editor",
+          "compatible": "[HI] Compatible with most data processing tools",
+          "easyImport": "[HI] Easy to import into other services",
+          "exampleStructure": "[HI] Example structure:"
+        },
+        "faq": {
+          "howLong": "[HI] How long does an export take?",
+          "howLongAnswer": "[HI] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[HI] How long is an export available?",
+          "howLongAvailableAnswer": "[HI] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[HI] How often can I request an export?",
+          "howOftenAnswer": "[HI] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[HI] Is my export secure?",
+          "isSecureAnswer": "[HI] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "खाता",
     "appearance": {
       "title": "दिखावट",
@@ -239,7 +317,35 @@
       "followingSystem": "सिस्टम का अनुसरण",
       "savingPreferences": "प्राथमिकताएं सहेजी जा रही हैं..."
     },
-    "general": "सामान्य",
+    "general": {
+      "title": "[HI] General Settings",
+      "description": "[HI] Manage your organization's settings and preferences",
+      "organizationDetails": "[HI] Organization Details",
+      "updateOrgInfo": "[HI] Update your organization's information",
+      "changeLogo": "[HI] Change Logo",
+      "organizationName": "[HI] Organization Name",
+      "organizationSlug": "[HI] Organization Slug",
+      "orgDescription": "[HI] Description",
+      "industry": "[HI] Industry",
+      "companySize": "[HI] Company Size",
+      "consumerGoods": "[HI] Consumer Goods",
+      "technology": "[HI] Technology",
+      "finance": "[HI] Finance",
+      "healthcare": "[HI] Healthcare",
+      "retail": "[HI] Retail",
+      "mediaEntertainment": "[HI] Media & Entertainment",
+      "employees1to50": "[HI] 1-50 employees",
+      "employees50to200": "[HI] 50-200 employees",
+      "employees200to1000": "[HI] 200-1000 employees",
+      "employees1000to5000": "[HI] 1000-5000 employees",
+      "employees5000plus": "[HI] 5000+ employees",
+      "regionalSettings": "[HI] Regional Settings",
+      "regionalDescription": "[HI] Set your timezone and date format preferences",
+      "timezone": "[HI] Timezone",
+      "dateFormat": "[HI] Date Format",
+      "saving": "[HI] Saving...",
+      "saveChanges": "[HI] Save Changes"
+    },
     "apiKeys": {
       "title": "API कुंजियां",
       "description": "प्रोग्रामेटिक एक्सेस के लिए API कुंजियां प्रबंधित करें",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "हम कैसे मदद कर सकते हैं?",
-      "subtitle": "हमारे ज्ञान आधार में खोजें या नीचे विषय ब्राउज़ करें",
       "searchPlaceholder": "सहायता खोजें...",
-      "tabs": {
-        "faq": "अक्सर पूछे जाने वाले प्रश्न",
-        "guides": "गाइड",
-        "contact": "संपर्क"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "शुरुआत गाइड",
-          "description": "GWI Agents की मूल बातें सीखें"
-        },
-        "videoTutorials": {
-          "title": "वीडियो ट्यूटोरियल",
-          "description": "चरण-दर-चरण ट्यूटोरियल देखें"
-        },
-        "apiDocs": {
-          "title": "API दस्तावेज़ीकरण",
-          "description": "हमारे API के साथ एकीकृत करें"
-        },
-        "contactSupport": {
-          "title": "सहायता से संपर्क करें",
-          "description": "हमारी टीम से मदद लें"
-        }
+        "gettingStarted": "[HI] Getting Started Guide",
+        "videoTutorials": "[HI] Video Tutorials",
+        "apiDocs": "[HI] API Documentation",
+        "title": "[HI] Quick Links",
+        "gettingStartedDesc": "[HI] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[HI] Watch step-by-step guides",
+        "apiDocsDesc": "[HI] For developers and integrations",
+        "releaseNotes": "[HI] Release Notes",
+        "releaseNotesDesc": "[HI] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "शुरुआत करना",
-          "agentsWorkflows": "एजेंट्स और वर्कफ़्लो",
-          "dataPrivacy": "डेटा और गोपनीयता",
-          "billingPlans": "बिलिंग और योजनाएं"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "मैं अपना पहला एजेंट कैसे बनाऊं?",
-            "answer": "साइडबार से एजेंट्स पेज पर जाएं और 'एजेंट बनाएं' पर क्लिक करें। अपने एजेंट का नाम, विवरण, डेटा स्रोत और व्यवहार सेटिंग्स कॉन्फ़िगर करने के लिए चरण-दर-चरण विज़ार्ड का पालन करें।"
-          },
-          "dataSources": {
-            "question": "कौन से डेटा स्रोत उपलब्ध हैं?",
-            "answer": "GWI कई डेटा स्रोतों तक पहुंच प्रदान करता है जिसमें GWI Core (हमारा प्रमुख उपभोक्ता सर्वेक्षण), GWI USA, GWI Zeitgeist (ट्रेंडिंग टॉपिक्स), और कस्टम डेटा अपलोड करने की क्षमता शामिल है। डेटा स्रोत उपलब्धता आपके सदस्यता स्तर पर निर्भर करती है।"
-          },
-          "inviteTeam": {
-            "question": "मैं टीम सदस्यों को कैसे आमंत्रित करूं?",
-            "answer": "सेटिंग्स > टीम पर जाएं और 'सदस्य आमंत्रित करें' पर क्लिक करें। उनका ईमेल पता दर्ज करें और उनकी भूमिका (व्यवस्थापक, संपादक, या दर्शक) चुनें। उन्हें आपके कार्यक्षेत्र में शामिल होने के लिए एक आमंत्रण ईमेल प्राप्त होगा।"
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "एजेंट्स और वर्कफ़्लो में क्या अंतर है?",
-            "answer": "एजेंट्स AI-संचालित विशेषज्ञ हैं जो विशिष्ट प्रकार के शोध कार्यों को संभालते हैं। वर्कफ़्लो कई एजेंट्स को एक क्रम में जोड़ते हैं ताकि जटिल, बहु-चरणीय शोध प्रक्रियाओं को स्वचालित किया जा सके।"
-          },
-          "customize": {
-            "question": "क्या मैं पूर्व-निर्मित एजेंट्स को अनुकूलित कर सकता हूं?",
-            "answer": "हां! आप किसी भी पूर्व-निर्मित एजेंट को डुप्लिकेट कर सकते हैं और इसके कॉन्फ़िगरेशन को संशोधित कर सकते हैं, जिसमें सिस्टम प्रॉम्प्ट, डेटा स्रोत और आउटपुट प्रारूप शामिल हैं। आपका अनुकूलित संस्करण आपकी व्यक्तिगत एजेंट लाइब्रेरी में सहेजा जाएगा।"
-          },
-          "schedule": {
-            "question": "मैं वर्कफ़्लो को कैसे शेड्यूल करूं?",
-            "answer": "अपना वर्कफ़्लो खोलें और 'शेड्यूल' बटन पर क्लिक करें। आप आवर्ती रन (दैनिक, साप्ताहिक, मासिक) सेट कर सकते हैं या नए डेटा उपलब्धता जैसी घटनाओं के आधार पर वर्कफ़्लो ट्रिगर कर सकते हैं।"
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "मेरा डेटा कैसे सुरक्षित है?",
-            "answer": "सभी डेटा उद्योग-मानक AES-256 एन्क्रिप्शन का उपयोग करके आराम पर और ट्रांजिट में एन्क्रिप्टेड है। हम SOC 2 Type II प्रमाणित और GDPR अनुपालन हैं। आपकी क्वेरी और कस्टम डेटा कभी अन्य ग्राहकों के साथ साझा नहीं की जाती।"
-          },
-          "export": {
-            "question": "क्या मैं अपना डेटा निर्यात कर सकता हूं?",
-            "answer": "हां, आप CSV, Excel, PowerPoint और JSON सहित कई प्रारूपों में डेटा निर्यात कर सकते हैं। एंटरप्राइज ग्राहकों के पास सीधे डेटाबेस कनेक्शन और API निर्यात तक भी पहुंच है।"
-          },
-          "updateFrequency": {
-            "question": "GWI डेटा कितनी बार अपडेट होता है?",
-            "answer": "GWI Core डेटा त्रैमासिक रूप से ताज़ा उपभोक्ता सर्वेक्षणों के साथ अपडेट होता है। GWI Zeitgeist ट्रेंडिंग टॉपिक्स पर साप्ताहिक अपडेट प्रदान करता है। कुछ विशेष डेटासेट की अलग-अलग अपडेट फ्रीक्वेंसी हो सकती है।"
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "क्वेरी के रूप में क्या गिना जाता है?",
-            "answer": "क्वेरी एजेंट को किया गया कोई भी अनुरोध है, जिसमें उसी बातचीत में फॉलो-अप प्रश्न शामिल हैं। जटिल बहु-चरणीय वर्कफ़्लो एक ही क्वेरी के रूप में गिने जाते हैं, चाहे कितने भी एजेंट शामिल हों।"
-          },
-          "changePlan": {
-            "question": "क्या मैं अपनी योजना अपग्रेड या डाउनग्रेड कर सकता हूं?",
-            "answer": "हां, आप सेटिंग्स > बिलिंग से किसी भी समय अपनी योजना बदल सकते हैं। अपग्रेड आनुपातिक बिलिंग के साथ तुरंत प्रभावी होते हैं। डाउनग्रेड आपके अगले बिलिंग चक्र की शुरुआत में प्रभावी होते हैं।"
-          },
-          "annualDiscount": {
-            "question": "क्या आप वार्षिक बिलिंग छूट प्रदान करते हैं?",
-            "answer": "हां! वार्षिक बिलिंग मासिक बिलिंग की तुलना में 20% बचाती है। वार्षिक बिलिंग सेट करने या मासिक से बदलने के लिए हमारी बिक्री टीम से संपर्क करें।"
-          }
-        }
+        "title": "[HI] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "शुरुआती",
-          "intermediate": "मध्यवर्ती",
-          "advanced": "उन्नत"
-        },
-        "personas": {
-          "title": "प्रभावी पर्सोना निर्माण",
-          "description": "विस्तृत, कार्रवाई योग्य दर्शक पर्सोना बनाना सीखें",
-          "duration": "15 मिनट पढ़ें"
-        },
-        "workflows": {
-          "title": "वर्कफ़्लो ऑटोमेशन सर्वोत्तम प्रथाएं",
-          "description": "अपने शोध के लिए कुशल मल्टी-एजेंट वर्कफ़्लो डिज़ाइन करें",
-          "duration": "20 मिनट पढ़ें"
-        },
-        "prompts": {
-          "title": "उन्नत प्रॉम्प्ट इंजीनियरिंग",
-          "description": "अनुकूलित एजेंट प्रॉम्प्ट के साथ बेहतर परिणाम प्राप्त करें",
-          "duration": "25 मिनट पढ़ें"
-        },
-        "apiIntegration": {
-          "title": "API एकीकरण गाइड",
-          "description": "GWI एजेंट्स को अपने मौजूदा टूल्स से कनेक्ट करें",
-          "duration": "30 मिनट पढ़ें"
-        }
-      },
-      "viewAllDocs": "सभी दस्तावेज़ देखें",
       "contact": {
-        "liveChat": {
-          "title": "लाइव चैट",
-          "description": "हमारी सहायता टीम के साथ रीयल-टाइम में चैट करें",
-          "availability": "सोमवार-शुक्रवार, सुबह 9 बजे - शाम 6 बजे EST उपलब्ध। औसत प्रतिक्रिया समय: 2 मिनट।",
-          "button": "चैट शुरू करें"
+        "title": "[HI] Need More Help?",
+        "description": "[HI] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[HI] Contact Support",
+        "responseTime": "[HI] Typical response time: 2-4 hours"
+      },
+      "description": "[HI] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[HI] Browse by Category",
+        "agents": "[HI] AI Agents",
+        "agentsDesc": "[HI] Learn about agent capabilities",
+        "workflows": "[HI] Workflows",
+        "workflowsDesc": "[HI] Build automation pipelines",
+        "data": "[HI] Data & Audiences",
+        "dataDesc": "[HI] Understanding GWI data",
+        "reports": "[HI] Reports & Exports",
+        "reportsDesc": "[HI] Generate and share insights",
+        "integrations": "[HI] Integrations",
+        "integrationsDesc": "[HI] Connect with your tools",
+        "billing": "[HI] Billing & Plans",
+        "billingDesc": "[HI] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[HI] Profile Settings",
+      "description": "[HI] Manage your personal information",
+      "personalInfo": "[HI] Personal Information",
+      "updateProfileDetails": "[HI] Update your profile details",
+      "uploadPhoto": "[HI] Upload Photo",
+      "photoHint": "[HI] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[HI] First Name",
+      "lastName": "[HI] Last Name",
+      "emailAddress": "[HI] Email Address",
+      "jobTitle": "[HI] Job Title",
+      "bio": "[HI] Bio",
+      "contactInfo": "[HI] Contact Information",
+      "contactDescription": "[HI] How colleagues can reach you",
+      "phoneNumber": "[HI] Phone Number",
+      "location": "[HI] Location",
+      "saving": "[HI] Saving...",
+      "saveChanges": "[HI] Save Changes"
+    },
+    "team": {
+      "title": "[HI] Team Management",
+      "description": "[HI] Manage team members and their permissions",
+      "teamMembers": "[HI] Team Members",
+      "membersCount": "[HI] {count} members in your organization",
+      "inviteMember": "[HI] Invite Member",
+      "inviteTeamMember": "[HI] Invite Team Member",
+      "inviteDescription": "[HI] Send an invitation to join your organization",
+      "emailAddress": "[HI] Email Address",
+      "emailPlaceholder": "[HI] colleague@company.com",
+      "role": "[HI] Role",
+      "sending": "[HI] Sending...",
+      "sendInvitation": "[HI] Send Invitation",
+      "searchMembers": "[HI] Search members...",
+      "tableHeaders": {
+        "member": "[HI] Member",
+        "role": "[HI] Role",
+        "lastActive": "[HI] Last Active",
+        "joined": "[HI] Joined"
+      },
+      "roles": {
+        "owner": "[HI] Owner",
+        "admin": "[HI] Admin",
+        "member": "[HI] Member",
+        "viewer": "[HI] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[HI] Make Admin",
+        "makeMember": "[HI] Make Member",
+        "makeViewer": "[HI] Make Viewer",
+        "removeMember": "[HI] Remove Member"
+      },
+      "pendingInvitations": "[HI] Pending Invitations",
+      "pendingCount": "[HI] {count} pending invitation",
+      "pendingCountPlural": "[HI] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[HI] Email",
+        "role": "[HI] Role",
+        "sent": "[HI] Sent",
+        "expires": "[HI] Expires"
+      },
+      "revoke": "[HI] Revoke",
+      "rolePermissions": "[HI] Role Permissions",
+      "rolePermissionsDescription": "[HI] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[HI] Full organization control",
+        "transferOwnership": "[HI] Transfer ownership",
+        "deleteOrg": "[HI] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[HI] Manage team members",
+        "billing": "[HI] Billing & subscription",
+        "allMemberPerms": "[HI] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[HI] Create and edit agents",
+        "generateReports": "[HI] Generate reports",
+        "useAgents": "[HI] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[HI] View reports",
+        "viewDashboards": "[HI] View dashboards",
+        "readOnly": "[HI] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[HI] Remove Team Member",
+        "description": "[HI] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[HI] Cancel",
+        "remove": "[HI] Remove Member"
+      },
+      "unknown": "[HI] Unknown",
+      "never": "[HI] Never",
+      "justNow": "[HI] Just now",
+      "minAgo": "[HI] {count} min ago",
+      "hoursAgo": "[HI] {count} hour ago",
+      "hoursAgoPlural": "[HI] {count} hours ago",
+      "daysAgo": "[HI] {count} day ago",
+      "daysAgoPlural": "[HI] {count} days ago"
+    },
+    "billing": {
+      "title": "[HI] Billing & Subscription",
+      "description": "[HI] Manage your subscription and payment methods",
+      "enterprisePlan": "[HI] Enterprise Plan",
+      "current": "[HI] Current",
+      "planDescription": "[HI] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[HI] per month",
+      "planFeatures": "[HI] Plan Features",
+      "features": {
+        "unlimitedQueries": "[HI] Unlimited AI agent queries",
+        "allAgents": "[HI] All pre-built domain agents",
+        "customDev": "[HI] Custom agent development",
+        "prioritySupport": "[HI] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[HI] Usage This Period",
+      "usage": {
+        "agentQueries": "[HI] Agent Queries",
+        "unlimited": "[HI] Unlimited",
+        "reportsGenerated": "[HI] Reports Generated",
+        "teamSeats": "[HI] Team Seats"
+      },
+      "nextBillingDate": "[HI] Next billing date: {date}",
+      "changePlan": "[HI] Change Plan",
+      "cancelSubscription": "[HI] Cancel Subscription",
+      "paymentMethod": "[HI] Payment Method",
+      "paymentDescription": "[HI] Manage your payment information",
+      "cardEnding": "[HI] Visa ending in {last4}",
+      "cardExpires": "[HI] Expires {date}",
+      "update": "[HI] Update",
+      "billingHistory": "[HI] Billing History",
+      "billingHistoryDescription": "[HI] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[HI] Invoice",
+        "date": "[HI] Date",
+        "amount": "[HI] Amount",
+        "status": "[HI] Status"
+      },
+      "paid": "[HI] Paid",
+      "needMoreCapacity": "[HI] Need more capacity?",
+      "contactForPricing": "[HI] Contact us for custom enterprise pricing",
+      "contactSales": "[HI] Contact Sales",
+      "upgrade": {
+        "title": "[HI] Choose Your Plan",
+        "description": "[HI] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[HI] Back to Billing",
+        "checkoutCanceled": "[HI] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[HI] Monthly",
+        "yearly": "[HI] Yearly",
+        "save17": "[HI] Save 17%",
+        "mostPopular": "[HI] Most Popular",
+        "currentPlan": "[HI] Current Plan",
+        "billedAnnually": "[HI] ${price} billed annually",
+        "upgradeTo": "[HI] Upgrade to {plan}",
+        "processing": "[HI] Processing...",
+        "customSales": "[HI] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[HI] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[HI] Starter",
+            "description": "[HI] For individuals and small teams getting started",
+            "features": {
+              "runs": "[HI] 100 agent runs / month",
+              "seats": "[HI] 3 team seats",
+              "sources": "[HI] 5 data sources",
+              "retention": "[HI] 30 day data retention",
+              "tokens": "[HI] 100K tokens / month",
+              "support": "[HI] Community support"
+            }
+          },
+          "professional": {
+            "name": "[HI] Professional",
+            "description": "[HI] For growing teams with advanced needs",
+            "features": {
+              "runs": "[HI] 1,000 agent runs / month",
+              "seats": "[HI] 10 team seats",
+              "sources": "[HI] 25 data sources",
+              "retention": "[HI] 90 day data retention",
+              "tokens": "[HI] 1M tokens / month",
+              "support": "[HI] Priority email support",
+              "analytics": "[HI] Advanced analytics",
+              "integrations": "[HI] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[HI] Enterprise",
+            "description": "[HI] For large organizations with custom requirements",
+            "features": {
+              "runs": "[HI] Unlimited agent runs",
+              "seats": "[HI] Unlimited team seats",
+              "sources": "[HI] Unlimited data sources",
+              "retention": "[HI] 365 day data retention",
+              "tokens": "[HI] Unlimited tokens",
+              "support": "[HI] 24/7 dedicated support",
+              "customDev": "[HI] Custom agent development",
+              "sso": "[HI] SSO & SCIM",
+              "sla": "[HI] SLA guarantee",
+              "accountManager": "[HI] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[HI] Audit Log",
+      "description": "[HI] Track all actions and changes in your organization",
+      "activityHistory": "[HI] Activity History",
+      "totalEvents": "[HI] {count} total events",
+      "searchLogs": "[HI] Search logs...",
+      "allActions": "[HI] All Actions",
+      "allResources": "[HI] All Resources",
+      "noAuditLogs": "[HI] No audit logs found",
+      "activityWillAppear": "[HI] Activity will appear here as actions are taken",
+      "showing": "[HI] Showing {start} to {end} of {total}",
+      "previous": "[HI] Previous",
+      "next": "[HI] Next",
+      "actions": {
+        "create": "[HI] Created",
+        "update": "[HI] Updated",
+        "delete": "[HI] Deleted",
+        "execute": "[HI] Executed",
+        "login": "[HI] Logged in",
+        "logout": "[HI] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[HI] Webhooks",
+      "description": "[HI] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[HI] Webhook Endpoints",
+      "endpointsDescription": "[HI] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[HI] Add Webhook",
+      "addWebhookEndpoint": "[HI] Add Webhook Endpoint",
+      "addWebhookDescription": "[HI] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[HI] Endpoint URL",
+      "endpointUrlPlaceholder": "[HI] https://api.example.com/webhooks",
+      "descriptionOptional": "[HI] Description (Optional)",
+      "descriptionPlaceholder": "[HI] Describe this webhook...",
+      "events": "[HI] Events",
+      "creating": "[HI] Creating...",
+      "createWebhook": "[HI] Create Webhook",
+      "noWebhooks": "[HI] No webhooks configured",
+      "addWebhookToStart": "[HI] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[HI] Endpoint",
+        "events": "[HI] Events",
+        "status": "[HI] Status",
+        "secret": "[HI] Secret"
+      },
+      "eventsCount": "[HI] {count} events",
+      "active": "[HI] Active",
+      "disabled": "[HI] Disabled",
+      "webhookSecurity": "[HI] Webhook Security",
+      "securityDescription": "[HI] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[HI] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[HI] Agent Run Started",
+        "agentRunCompleted": "[HI] Agent Run Completed",
+        "agentRunFailed": "[HI] Agent Run Failed",
+        "workflowRunStarted": "[HI] Workflow Run Started",
+        "workflowRunCompleted": "[HI] Workflow Run Completed",
+        "workflowRunFailed": "[HI] Workflow Run Failed",
+        "reportGenerated": "[HI] Report Generated",
+        "memberAdded": "[HI] Member Added",
+        "memberRemoved": "[HI] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[HI] Custom Alerts",
+      "description": "[HI] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[HI] Total Alerts",
+      "active": "[HI] Active",
+      "totalTriggers": "[HI] Total Triggers",
+      "paused": "[HI] Paused",
+      "yourAlerts": "[HI] Your Alerts",
+      "yourAlertsDescription": "[HI] Manage your custom alert configurations",
+      "createAlert": "[HI] Create Alert",
+      "searchAlerts": "[HI] Search alerts...",
+      "entityType": "[HI] Entity Type",
+      "allTypes": "[HI] All Types",
+      "allStatus": "[HI] All Status",
+      "noAlertsYet": "[HI] No alerts yet",
+      "noMatchingAlerts": "[HI] No matching alerts",
+      "createFirstAlert": "[HI] Create your first alert to get notified about important changes",
+      "adjustFilters": "[HI] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[HI] Alert",
+        "type": "[HI] Type",
+        "condition": "[HI] Condition",
+        "channels": "[HI] Channels",
+        "lastTriggered": "[HI] Last Triggered",
+        "status": "[HI] Status"
+      },
+      "total": "[HI] total",
+      "never": "[HI] Never",
+      "edit": "[HI] Edit",
+      "viewHistory": "[HI] View History",
+      "delete": "[HI] Delete",
+      "createNewAlert": "[HI] Create New Alert",
+      "createNewAlertDescription": "[HI] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[HI] Edit Alert",
+      "editAlertDescription": "[HI] Update the configuration for this alert",
+      "alertHistory": "[HI] Alert History: {name}",
+      "alertHistoryDescription": "[HI] View the history of when this alert was triggered",
+      "deleteAlert": "[HI] Delete Alert",
+      "deleteAlertDescription": "[HI] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[HI] Cancel",
+      "entityTypes": {
+        "metric": "[HI] Metric",
+        "audience": "[HI] Audience",
+        "brand": "[HI] Brand",
+        "report": "[HI] Report",
+        "agent": "[HI] Agent",
+        "workflow": "[HI] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[HI] Keyboard Shortcuts",
+      "description": "[HI] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[HI] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[HI] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[HI] Shortcut Conflicts Detected",
+      "conflictsDescription": "[HI] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[HI] Navigation",
+        "navigationDesc": "[HI] Navigate around the application",
+        "actions": "[HI] Actions",
+        "actionsDesc": "[HI] Perform common actions quickly",
+        "ui": "[HI] UI",
+        "uiDesc": "[HI] Control the user interface",
+        "editing": "[HI] Editing",
+        "editingDesc": "[HI] Edit content efficiently"
+      },
+      "resetToDefaults": "[HI] Reset to Defaults",
+      "saving": "[HI] Saving...",
+      "saveChanges": "[HI] Save Changes",
+      "resetDialog": {
+        "title": "[HI] Reset Keyboard Shortcuts",
+        "description": "[HI] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[HI] Cancel",
+        "reset": "[HI] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[HI] Edit Shortcut",
+        "customizable": "[HI] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[HI] This shortcut cannot be customized",
+        "action": "[HI] Action",
+        "currentBinding": "[HI] Current Binding",
+        "newBinding": "[HI] New Binding",
+        "pressKeys": "[HI] Press keys...",
+        "clickToRecord": "[HI] Click to record",
+        "record": "[HI] Record",
+        "recording": "[HI] Recording...",
+        "cancel": "[HI] Cancel",
+        "save": "[HI] Save"
+      }
+    },
+    "plan": {
+      "title": "[HI] Plan & Billing",
+      "description": "[HI] Manage your subscription and view usage metrics",
+      "currentPlan": "[HI] Current Plan",
+      "currentPlanDescription": "[HI] Your active subscription details",
+      "upgradePlan": "[HI] Upgrade Plan",
+      "teamMembers": "[HI] Team Members",
+      "agents": "[HI] Agents",
+      "workflows": "[HI] Workflows",
+      "reports": "[HI] Reports",
+      "usageThisMonth": "[HI] Usage This Month",
+      "usageDescription": "[HI] Monitor your resource usage against plan limits",
+      "comparePlans": "[HI] Compare Plans",
+      "yourFeatures": "[HI] Your Features",
+      "yourFeaturesDescription": "[HI] All features included in your current plan",
+      "limit": "[HI] Limit: {limit}",
+      "requesting": "[HI] Requesting...",
+      "upgradeTo": "[HI] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[HI] Starter",
+          "price": "[HI] $49/mo",
+          "features": {
+            "members": "[HI] Up to 5 team members",
+            "agents": "[HI] 10 agents",
+            "runs": "[HI] 50 workflow runs/month",
+            "analytics": "[HI] Basic analytics",
+            "support": "[HI] Email support"
+          }
         },
-        "ticket": {
-          "title": "टिकट जमा करें",
-          "description": "24 घंटे के भीतर ईमेल द्वारा सहायता प्राप्त करें",
-          "info": "जटिल मुद्दों या फीचर अनुरोधों के लिए। जितना संभव हो उतना विवरण शामिल करें।",
-          "button": "टिकट जमा करें"
+        "professional": {
+          "name": "[HI] Professional",
+          "price": "[HI] $199/mo",
+          "features": {
+            "members": "[HI] Up to 20 team members",
+            "agents": "[HI] Unlimited agents",
+            "runs": "[HI] Unlimited workflow runs",
+            "analytics": "[HI] Advanced analytics",
+            "support": "[HI] Priority support",
+            "integrations": "[HI] Custom integrations",
+            "api": "[HI] API access"
+          }
         },
         "enterprise": {
-          "title": "एंटरप्राइज सपोर्ट",
-          "description": "समर्पित सहायता चाहिए? एंटरप्राइज योजनाओं में एक समर्पित ग्राहक सफलता प्रबंधक और प्राथमिकता प्रतिक्रिया समय शामिल है।",
-          "button": "बिक्री से संपर्क करें"
+          "name": "[HI] Enterprise",
+          "price": "[HI] Custom",
+          "features": {
+            "members": "[HI] Unlimited team members",
+            "everything": "[HI] Unlimited everything",
+            "security": "[HI] Advanced security",
+            "sso": "[HI] SSO & SAML",
+            "support": "[HI] Dedicated support",
+            "sla": "[HI] Custom SLAs",
+            "onPremise": "[HI] On-premise option",
+            "whiteLabel": "[HI] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[HI] Scheduled Exports",
+      "description": "[HI] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[HI] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[HI] Manage automatic exports that run on a schedule",
+      "newExport": "[HI] New Export",
+      "all": "[HI] All",
+      "active": "[HI] Active",
+      "paused": "[HI] Paused",
+      "noScheduledExports": "[HI] No scheduled exports",
+      "createFirstExport": "[HI] Create your first scheduled export to get started",
+      "createExport": "[HI] Create Export",
+      "tableHeaders": {
+        "name": "[HI] Name",
+        "schedule": "[HI] Schedule",
+        "format": "[HI] Format",
+        "lastRun": "[HI] Last Run",
+        "nextRun": "[HI] Next Run",
+        "status": "[HI] Status"
+      },
+      "statusLabels": {
+        "pending": "[HI] Pending",
+        "processing": "[HI] Running",
+        "completed": "[HI] Success",
+        "failed": "[HI] Failed",
+        "neverRun": "[HI] Never Run"
+      },
+      "actions": {
+        "runNow": "[HI] Run Now",
+        "viewHistory": "[HI] View History",
+        "edit": "[HI] Edit",
+        "pause": "[HI] Pause",
+        "activate": "[HI] Activate",
+        "delete": "[HI] Delete"
+      },
+      "deleteDialog": {
+        "title": "[HI] Delete Scheduled Export",
+        "description": "[HI] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[HI] Cancel",
+        "delete": "[HI] Delete"
+      },
+      "historySheet": {
+        "title": "[HI] Export History",
+        "loading": "[HI] Loading..."
+      },
+      "relativeTime": {
+        "never": "[HI] Never",
+        "justNow": "[HI] Just now",
+        "lessThanMinute": "[HI] In less than a minute",
+        "minsAgo": "[HI] {count}m ago",
+        "inMins": "[HI] In {count}m",
+        "hoursAgo": "[HI] {count}h ago",
+        "inHours": "[HI] In {count}h",
+        "daysAgo": "[HI] {count}d ago",
+        "inDays": "[HI] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[HI] Inbox Agents",
+      "description": "[HI] AI agents that automatically handle incoming requests",
+      "configureChannels": "[HI] Configure Channels",
+      "createAgent": "[HI] Create Agent",
+      "activeAgents": "[HI] Active Agents",
+      "status": {
+        "processing": "[HI] Processing"
+      },
+      "stats": {
+        "processedToday": "[HI] Processed Today",
+        "fromYesterday": "[HI] {percent} from yesterday",
+        "avgResponseTime": "[HI] Avg Response Time",
+        "fasterThanLastWeek": "[HI] {percent} faster than last week",
+        "successRate": "[HI] Success Rate",
+        "basedOnRequests": "[HI] Based on {count} requests",
+        "pendingReview": "[HI] Pending Review",
+        "highPriority": "[HI] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[HI] Success rate",
+        "processed": "[HI] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[HI] Incoming Requests",
+        "description": "[HI] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[HI] Search requests...",
+        "noRequests": "[HI] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[HI] Assign to Brief Handler",
+        "assignToAudienceQuery": "[HI] Assign to Audience Query",
+        "assignToLocalization": "[HI] Assign to Localization",
+        "reprocess": "[HI] Reprocess",
+        "archive": "[HI] Archive"
+      },
+      "priority": {
+        "high": "[HI] High priority",
+        "medium": "[HI] Medium priority",
+        "low": "[HI] Low priority"
+      },
+      "request": {
+        "received": "[HI] Received {time}",
+        "generatedOutput": "[HI] Generated Output",
+        "confidence": "[HI] {percent}% confidence",
+        "citations": "[HI] {count} citations",
+        "viewFullReport": "[HI] View Full Report",
+        "assignAgent": "[HI] Assign Agent",
+        "respondManually": "[HI] Respond Manually",
+        "viewHistory": "[HI] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[HI] Agent Active",
+        "agentPaused": "[HI] Agent Paused",
+        "lastTriggered": "[HI] Last triggered {time}",
+        "processed": "[HI] Processed",
+        "successRate": "[HI] Success Rate",
+        "avgTime": "[HI] Avg Time",
+        "triggerKeywords": "[HI] Trigger Keywords",
+        "connectedChannels": "[HI] Connected Channels",
+        "processingPipeline": "[HI] Processing Pipeline",
+        "configure": "[HI] Configure",
+        "viewLogs": "[HI] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[HI] Create Inbox Agent",
+        "description": "[HI] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[HI] Agent Name",
+        "agentNamePlaceholder": "[HI] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[HI] Describe what this agent does...",
+        "triggerKeywords": "[HI] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[HI] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[HI] Agent will activate when messages contain these keywords",
+        "channels": "[HI] Channels",
+        "baseAgent": "[HI] Base Agent",
+        "selectAgent": "[HI] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[HI] Audience Explorer",
+          "personaArchitect": "[HI] Persona Architect",
+          "cultureTracker": "[HI] Culture Tracker",
+          "brandRelationshipAnalyst": "[HI] Brand Relationship Analyst"
+        },
+        "autoRespond": "[HI] Auto-respond",
+        "autoRespondHelp": "[HI] Automatically send responses to requesters",
+        "requireApproval": "[HI] Require Approval",
+        "requireApprovalHelp": "[HI] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[HI] Prompt Templates",
+      "description": "[HI] Reusable templates for common insights tasks",
+      "createTemplate": "[HI] Create Template",
+      "searchPlaceholder": "[HI] Search templates...",
+      "starredTemplates": "[HI] Starred Templates",
+      "allTemplates": "[HI] All Templates",
+      "uses": "[HI] {count} uses",
+      "categories": {
+        "all": "[HI] All",
+        "research": "[HI] Research",
+        "analysis": "[HI] Analysis",
+        "briefs": "[HI] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[HI] Use Template",
+        "duplicate": "[HI] Duplicate"
+      },
+      "createDialog": {
+        "title": "[HI] Create Template",
+        "description": "[HI] Save a prompt as a reusable template for your team",
+        "templateName": "[HI] Template Name",
+        "templateNamePlaceholder": "[HI] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[HI] What does this template do?",
+        "category": "[HI] Category",
+        "promptTemplate": "[HI] Prompt Template",
+        "promptPlaceholder": "[HI] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[HI] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[HI] Agent Store",
+      "description": "[HI] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[HI] Search agents...",
+      "sortBy": {
+        "placeholder": "[HI] Sort by",
+        "popular": "[HI] Most Popular",
+        "rating": "[HI] Highest Rated",
+        "newest": "[HI] Newest",
+        "name": "[HI] Name A-Z"
+      },
+      "featuredAgents": "[HI] Featured Agents",
+      "featured": "[HI] Featured",
+      "installed": "[HI] Installed",
+      "tryNow": "[HI] Try Now",
+      "categories": "[HI] Categories",
+      "viewDetails": "[HI] View Details",
+      "added": "[HI] Added",
+      "buildYourOwn": {
+        "title": "[HI] Build Your Own Agent",
+        "description": "[HI] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[HI] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[HI] Back to Store",
+        "notFound": {
+          "title": "[HI] Agent Not Found",
+          "description": "[HI] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[HI] {count} installs",
+        "installed": "[HI] Installed",
+        "installing": "[HI] Installing...",
+        "installAgent": "[HI] Install Agent",
+        "tryInPlayground": "[HI] Try in Playground",
+        "info": {
+          "version": "[HI] Version",
+          "category": "[HI] Category",
+          "dataSources": "[HI] Data Sources"
+        },
+        "tabs": {
+          "overview": "[HI] Overview",
+          "capabilities": "[HI] Capabilities",
+          "examples": "[HI] Examples",
+          "reviews": "[HI] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[HI] About this Agent",
+          "fastResults": "[HI] Fast Results",
+          "fastResultsDesc": "[HI] Avg. 3s response time",
+          "verifiedData": "[HI] Verified Data",
+          "verifiedDataDesc": "[HI] 100% sourced citations",
+          "alwaysUpdated": "[HI] Always Updated",
+          "alwaysUpdatedDesc": "[HI] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[HI] What this agent can do",
+          "description": "[HI] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[HI] Example Prompts",
+          "description": "[HI] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[HI] Ratings",
+          "reviewsCount": "[HI] {count} reviews"
+        },
+        "relatedAgents": "[HI] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[HI] Data Changes",
+      "description": "[HI] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[HI] Timeline",
+        "compare": "[HI] Compare",
+        "evolution": "[HI] Evolution",
+        "alerts": "[HI] Alerts"
+      },
+      "compare": {
+        "title": "[HI] Compare Versions",
+        "description": "[HI] Select an entity to compare its versions",
+        "compareVersions": "[HI] Compare versions",
+        "entities": {
+          "audiences": "[HI] Audiences",
+          "crosstabs": "[HI] Crosstabs",
+          "insights": "[HI] Insights",
+          "charts": "[HI] Charts",
+          "reports": "[HI] Reports",
+          "dashboards": "[HI] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[HI] Analysis Evolution",
+        "description": "[HI] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[HI] View evolution",
+        "types": {
+          "brandHealth": "[HI] Brand Health",
+          "audienceInsights": "[HI] Audience Insights",
+          "marketAnalysis": "[HI] Market Analysis",
+          "competitorAnalysis": "[HI] Competitor Analysis",
+          "trendAnalysis": "[HI] Trend Analysis",
+          "crosstabAnalysis": "[HI] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[HI] Change Alerts",
+        "loading": "[HI] Loading alerts...",
+        "noAlerts": "[HI] No Alerts",
+        "noAlertsDescription": "[HI] You have no unread change alerts.",
+        "markAllRead": "[HI] Mark All as Read",
+        "markRead": "[HI] Mark Read",
+        "dismiss": "[HI] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[HI] Select {entity} to Compare",
+        "entity": "[HI] Entity",
+        "enterIdDescription": "[HI] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[HI] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[HI] Select Analysis to View Evolution",
+        "enterIdDescription": "[HI] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[HI] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[HI] Crosstabs",
+      "description": "[HI] Compare audiences across multiple dimensions",
+      "newCrosstab": "[HI] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[HI] Total Crosstabs",
+        "views": "[HI] Views",
+        "exports": "[HI] Exports",
+        "usedToday": "[HI] Used Today"
+      },
+      "tabs": {
+        "all": "[HI] All Crosstabs",
+        "recent": "[HI] Recent",
+        "templates": "[HI] Templates"
+      },
+      "empty": {
+        "title": "[HI] No crosstabs yet",
+        "description": "[HI] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[HI] Featured",
+        "liveData": "[HI] Live Data",
+        "more": "[HI] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[HI] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[HI] audience segments",
+        "metrics": "[HI] metrics",
+        "audiencesCount": "[HI] {count} audiences",
+        "metricsCount": "[HI] {count} metrics",
+        "modified": "[HI] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[HI] Open Analysis"
+      },
+      "new": {
+        "title": "[HI] Create Crosstab",
+        "description": "[HI] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[HI] Crosstab Name",
+          "namePlaceholder": "[HI] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[HI] Select Audiences",
+          "selectMetrics": "[HI] Select Metrics",
+          "selected": "[HI] {count} selected"
+        },
+        "summary": {
+          "title": "[HI] Summary",
+          "audiences": "[HI] Audiences ({count})",
+          "metrics": "[HI] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[HI] Generate Crosstab",
+          "generating": "[HI] Generating...",
+          "cancel": "[HI] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[HI] Please enter a crosstab name",
+          "audienceRequired": "[HI] Please select at least one audience",
+          "metricRequired": "[HI] Please select at least one metric",
+          "createFailed": "[HI] Failed to create crosstab",
+          "createFailedRetry": "[HI] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[HI] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[HI] {count} metrics",
+          "audiences": "[HI] {count} audiences"
+        },
+        "categoriesCount": "[HI] {count} categories",
+        "more": "[HI] more",
+        "actions": {
+          "share": "[HI] Share",
+          "generateInsights": "[HI] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[HI] Data Grid",
+          "calculatedFields": "[HI] Calculated Fields",
+          "filters": "[HI] Filters",
+          "visualize": "[HI] Visualize"
+        },
+        "grid": {
+          "title": "[HI] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[HI] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[HI] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[HI] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[HI] Value updated to {value}%",
+          "fieldCreated": "[HI] Calculated field \"{name}\" created",
+          "fieldUpdated": "[HI] Calculated field updated",
+          "fieldDeleted": "[HI] Calculated field deleted",
+          "fieldApplied": "[HI] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[HI] Filters applied",
+          "chartSaved": "[HI] Chart saved!",
+          "chartExported": "[HI] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[HI] Crosstab Not Found",
+          "subtitle": "[HI] The requested crosstab could not be found",
+          "heading": "[HI] Crosstab not found",
+          "description": "[HI] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[HI] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[HI] Remove from favorites",
+          "addToFavorites": "[HI] Add to favorites",
+          "pauseAutoRefresh": "[HI] Pause auto-refresh",
+          "enableAutoRefresh": "[HI] Enable auto-refresh",
+          "exitFullscreen": "[HI] Exit fullscreen",
+          "enterFullscreen": "[HI] Enter fullscreen",
+          "visualize": "[HI] Visualize",
+          "share": "[HI] Share",
+          "edit": "[HI] Edit",
+          "duplicate": "[HI] Duplicate",
+          "addToDashboard": "[HI] Add to Dashboard",
+          "copyLink": "[HI] Copy Link",
+          "copied": "[HI] Copied!",
+          "delete": "[HI] Delete",
+          "cancel": "[HI] Cancel",
+          "selectAll": "[HI] Select All",
+          "clear": "[HI] Clear",
+          "schedule": "[HI] Schedule"
+        },
+        "filters": {
+          "title": "[HI] Data Filters",
+          "clearAll": "[HI] Clear All",
+          "description": "[HI] Filter and refine your crosstab data",
+          "quickFilters": "[HI] Quick Filters",
+          "valueRange": "[HI] Value Range: {min}% - {max}%",
+          "category": "[HI] Category",
+          "allCategories": "[HI] All Categories",
+          "activeFilters": "[HI] Active filters"
+        },
+        "tabs": {
+          "filters": "[HI] Filters",
+          "audiences": "[HI] Audiences",
+          "metrics": "[HI] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[HI] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[HI] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[HI] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[HI] Export as JSON",
+          "asCsv": "[HI] Export as CSV",
+          "asHtml": "[HI] Export as HTML",
+          "asPdf": "[HI] Export as PDF",
+          "asExcel": "[HI] Export as Excel",
+          "asPowerPoint": "[HI] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[HI] Delete Crosstab",
+          "description": "[HI] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[HI] Modified {time}",
+          "views": "[HI] {count} views",
+          "createdBy": "[HI] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[HI] Data",
+          "activity": "[HI] Activity",
+          "comments": "[HI] Comments",
+          "history": "[HI] History"
+        },
+        "insights": {
+          "title": "[HI] AI-Generated Insights",
+          "topPerformer": "[HI] Top Performer",
+          "topPerformerDesc": "[HI] leads in most metrics with an average of {average}%.",
+          "noData": "[HI] No data available",
+          "biggestGap": "[HI] Biggest Gap",
+          "biggestGapDesc": "[HI] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[HI] Trending",
+          "trendingDesc": "[HI] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[HI] no"
+        },
+        "activity": {
+          "title": "[HI] Activity Log",
+          "description": "[HI] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[HI] Share Crosstab",
+          "description": "[HI] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[HI] Email address",
+          "emailPlaceholder": "[HI] email@example.com",
+          "role": "[HI] Role",
+          "roles": {
+            "viewer": "[HI] Viewer",
+            "editor": "[HI] Editor",
+            "admin": "[HI] Admin"
+          },
+          "shareLink": "[HI] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[HI] Schedule Report",
+          "description": "[HI] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[HI] Recipients",
+          "recipientsPlaceholder": "[HI] email@example.com, team@example.com",
+          "frequency": "[HI] Frequency",
+          "frequencies": {
+            "daily": "[HI] Daily",
+            "weekly": "[HI] Weekly",
+            "monthly": "[HI] Monthly"
+          },
+          "format": "[HI] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[HI] Insights",
+      "description": "[HI] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[HI] Search insights...",
+      "filterByType": "[HI] Filter by type",
+      "loading": "[HI] Loading...",
+      "showing": "[HI] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[HI] All Types",
+        "audience": "[HI] Audience",
+        "trend": "[HI] Trend",
+        "competitive": "[HI] Competitive",
+        "analysis": "[HI] Analysis"
+      },
+      "empty": {
+        "title": "[HI] No insights yet",
+        "description": "[HI] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[HI] Go to Playground"
+      },
+      "badges": {
+        "new": "[HI] New"
+      },
+      "viaAgent": "[HI] via {name}",
+      "detail": {
+        "backToInsights": "[HI] Back to Insights",
+        "notFound": {
+          "title": "[HI] Insight not found",
+          "description": "[HI] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[HI] View All Insights",
+        "confidence": "[HI] {percent}% confidence",
+        "viaAgent": "[HI] via {name}",
+        "actions": {
+          "copy": "[HI] Copy",
+          "copied": "[HI] Copied",
+          "share": "[HI] Share",
+          "export": "[HI] Export"
+        },
+        "detailsTitle": "[HI] Insight Details",
+        "detailsDescription": "[HI] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[HI] Want to explore more?",
+          "description": "[HI] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[HI] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[HI] Data Connectors",
+        "description": "[HI] Connect external data sources to enrich your insights",
+        "addConnector": "[HI] Add Connector",
+        "searchPlaceholder": "[HI] Search connectors...",
+        "stats": {
+          "totalConnectors": "[HI] Total Connectors",
+          "active": "[HI] Active",
+          "withErrors": "[HI] With Errors",
+          "dataSources": "[HI] Data Sources"
+        },
+        "tabs": {
+          "configured": "[HI] Configured",
+          "available": "[HI] Available"
+        },
+        "filters": {
+          "allTypes": "[HI] All types"
+        },
+        "empty": {
+          "title": "[HI] No connectors configured",
+          "description": "[HI] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[HI] Previous",
+          "next": "[HI] Next",
+          "pageOf": "[HI] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[HI] Sync started",
+          "syncFailed": "[HI] Failed to start sync",
+          "connectorEnabled": "[HI] Connector enabled",
+          "connectorDisabled": "[HI] Connector disabled",
+          "updateFailed": "[HI] Failed to update connector",
+          "connectorDeleted": "[HI] Connector deleted",
+          "deleteFailed": "[HI] Failed to delete connector",
+          "testFailed": "[HI] Failed to test connection"
+        },
+        "new": {
+          "title": "[HI] Add Data Connector",
+          "description": "[HI] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[HI] Back to Connectors",
+          "notFound": "[HI] Connector not found",
+          "actions": {
+            "test": "[HI] Test",
+            "syncNow": "[HI] Sync Now",
+            "delete": "[HI] Delete",
+            "cancel": "[HI] Cancel",
+            "deleting": "[HI] Deleting..."
+          },
+          "status": {
+            "completed": "[HI] Last sync successful",
+            "running": "[HI] Syncing...",
+            "pending": "[HI] Sync pending",
+            "failed": "[HI] Last sync failed",
+            "cancelled": "[HI] Sync cancelled",
+            "never": "[HI] Never synced"
+          },
+          "cards": {
+            "status": "[HI] Status",
+            "active": "[HI] Active",
+            "paused": "[HI] Paused",
+            "totalSyncs": "[HI] Total Syncs",
+            "errorCount": "[HI] Error Count"
+          },
+          "tabs": {
+            "overview": "[HI] Overview",
+            "configuration": "[HI] Configuration",
+            "syncHistory": "[HI] Sync History"
+          },
+          "overview": {
+            "details": "[HI] Details",
+            "description": "[HI] Description",
+            "provider": "[HI] Provider",
+            "type": "[HI] Type",
+            "syncSchedule": "[HI] Sync Schedule",
+            "manualOnly": "[HI] Manual only",
+            "created": "[HI] Created",
+            "recentSyncs": "[HI] Recent Syncs",
+            "lastSyncs": "[HI] Last {count} sync operations",
+            "noSyncHistory": "[HI] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[HI] Danger Zone",
+            "deleteConnector": "[HI] Delete this connector",
+            "deleteWarning": "[HI] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[HI] Sync History",
+            "description": "[HI] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[HI] Delete Connector",
+            "description": "[HI] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[HI] Sync started",
+            "syncFailed": "[HI] Failed to start sync",
+            "testFailed": "[HI] Test failed",
+            "connectorDeleted": "[HI] Connector deleted",
+            "deleteFailed": "[HI] Failed to delete connector",
+            "connectorUpdated": "[HI] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[HI] Memory & Context",
+      "description": "[HI] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[HI] Settings",
+        "clearAll": "[HI] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "डैशबोर्ड",
     "welcome": "वापस स्वागत है",
-    "overview": "अवलोकन",
+    "overview": {
+      "activeAgents": "[HI] Active Agents",
+      "workflowsRun": "[HI] Workflows Run",
+      "insightsGenerated": "[HI] Insights Generated",
+      "avgRunTime": "[HI] Avg. Run Time",
+      "thisWeekChange": "[HI] +{count} this week",
+      "fromLastMonthPercent": "[HI] +{percent}% from last month",
+      "fasterPercent": "[HI] -{percent}% faster",
+      "active": "[HI] Active",
+      "noneActive": "[HI] None active",
+      "last24Hours": "[HI] Last 24 hours",
+      "noRunsYet": "[HI] No runs yet",
+      "noInsightsYet": "[HI] No insights yet",
+      "perWorkflow": "[HI] Per workflow",
+      "notAvailable": "[HI] N/A"
+    },
     "recentActivity": "हाल की गतिविधि",
     "quickActions": {
       "title": "त्वरित कार्य",
@@ -871,7 +1990,25 @@
       "createReport": "रिपोर्ट बनाएं",
       "published": "प्रकाशित",
       "generating": "जनरेट हो रहा है",
-      "draft": "ड्राफ्ट"
+      "draft": "ड्राफ्ट",
+      "page": {
+        "tabs": {
+          "allReports": "[HI] All Reports",
+          "templates": "[HI] Templates",
+          "scheduled": "[HI] Scheduled",
+          "sharedWithMe": "[HI] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[HI] Next: {date}",
+          "recipientsCount": "[HI] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[HI] Shared by {name} on {date}",
+          "canView": "[HI] Can view",
+          "canEdit": "[HI] Can edit",
+          "canComment": "[HI] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "सक्रिय प्रोजेक्ट्स",
@@ -1035,7 +2172,60 @@
         "title": "वर्कफ़्लो",
         "description": "अपने स्वचालित शोध पाइपलाइन बनाएं और प्रबंधित करें।",
         "newWorkflow": "नया वर्कफ़्लो",
-        "searchPlaceholder": "वर्कफ़्लो खोजें..."
+        "searchPlaceholder": "वर्कफ़्लो खोजें...",
+        "edit": {
+          "title": "[HI] Edit Workflow",
+          "description": "[HI] Modify workflow settings and configuration",
+          "newWorkflowName": "[HI] New Workflow",
+          "basicInfo": {
+            "title": "[HI] Basic Information",
+            "description": "[HI] Update the workflow name and description",
+            "workflowName": "[HI] Workflow Name",
+            "workflowNamePlaceholder": "[HI] Enter workflow name",
+            "descriptionPlaceholder": "[HI] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[HI] Schedule",
+            "description": "[HI] Configure when this workflow runs",
+            "runFrequency": "[HI] Run Frequency",
+            "selectSchedule": "[HI] Select schedule",
+            "selectStatus": "[HI] Select status",
+            "frequencies": {
+              "hourly": "[HI] Hourly",
+              "daily": "[HI] Daily",
+              "weekly": "[HI] Weekly",
+              "monthly": "[HI] Monthly",
+              "onDemand": "[HI] On-demand"
+            },
+            "statuses": {
+              "active": "[HI] Active",
+              "paused": "[HI] Paused",
+              "scheduled": "[HI] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[HI] Error Handling",
+            "description": "[HI] Configure retry behavior for failed runs",
+            "autoRetry": "[HI] Auto-retry on failure",
+            "autoRetryDescription": "[HI] Automatically retry the workflow if it fails",
+            "retryAttempts": "[HI] Retry Attempts",
+            "selectAttempts": "[HI] Select attempts",
+            "attempts": {
+              "one": "[HI] 1 attempt",
+              "two": "[HI] 2 attempts",
+              "three": "[HI] 3 attempts",
+              "five": "[HI] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[HI] Notifications",
+            "description": "[HI] Configure how you receive updates about this workflow",
+            "email": "[HI] Email notifications",
+            "emailDescription": "[HI] Receive email updates on completion or failure",
+            "slack": "[HI] Slack notifications",
+            "slackDescription": "[HI] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "दर्शक",
@@ -1083,55 +2273,235 @@
         "unarchive": "असंग्रहित करें",
         "workflows": "वर्कफ़्लो",
         "reports": "रिपोर्ट्स",
-        "agents": "एजेंट्स"
+        "agents": "एजेंट्स",
+        "detail": {
+          "defaultDescription": "[HI] Project description",
+          "projectSettings": "[HI] Project Settings",
+          "archiveProject": "[HI] Archive Project",
+          "deleteProject": "[HI] Delete Project",
+          "new": "[HI] New",
+          "stats": {
+            "teamMembers": "[HI] Team Members",
+            "workflows": "[HI] Workflows",
+            "running": "[HI] {count} running",
+            "reports": "[HI] Reports",
+            "generatedOutputs": "[HI] Generated outputs",
+            "agentsUsed": "[HI] Agents Used",
+            "totalRuns": "[HI] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[HI] Overview",
+            "workflows": "[HI] Workflows",
+            "reports": "[HI] Reports",
+            "agents": "[HI] Agents",
+            "team": "[HI] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[HI] Recent Workflows",
+            "recentReports": "[HI] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[HI] Project Workflows",
+            "newWorkflow": "[HI] New Workflow",
+            "lastRun": "[HI] Last run",
+            "run": "[HI] Run"
+          },
+          "reportsTab": {
+            "title": "[HI] Project Reports",
+            "newReport": "[HI] New Report",
+            "created": "[HI] Created"
+          },
+          "agentsTab": {
+            "title": "[HI] Agents Used",
+            "addAgent": "[HI] Add Agent",
+            "runsInProject": "[HI] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[HI] Team Members",
+            "addMember": "[HI] Add Member",
+            "remove": "[HI] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "श्रोतागण संपादित करें",
-        "description": "इस ऑडियंस सेगमेंट के लिए कॉन्फ़िगरेशन अपडेट करें",
-        "saving": "सहेजा जा रहा है...",
-        "saveChanges": "परिवर्तनों को सुरक्षित करें",
-        "notFound": "दर्शक नहीं मिले",
-        "notFoundDescription": "आप जिस ऑडियंस को संपादित करने का प्रयास कर रहे हैं वह मौजूद नहीं है",
-        "notFoundDetailedDescription": "आप जिस ऑडियंस की तलाश कर रहे हैं वह मौजूद नहीं है या हटा दी गई है।",
-        "backToAudiences": "दर्शकों के पास वापस जाएँ",
+      "pageTracker": "[HI] Audiences List",
+      "title": "[HI] Audiences",
+      "description": "[HI] Build and analyze custom consumer segments",
+      "aiBuilder": "[HI] AI Builder",
+      "newAudience": "[HI] New Audience",
+      "totalAudiences": "[HI] Total Audiences",
+      "avgReach": "[HI] Avg. Reach",
+      "markets": "[HI] Markets",
+      "usedThisWeek": "[HI] Used This Week",
+      "searchPlaceholder": "[HI] Search audiences...",
+      "allAudiences": "[HI] All Audiences",
+      "recentlyUsed": "[HI] Recently Used",
+      "favorites": "[HI] Favorites",
+      "marketplace": "[HI] Marketplace",
+      "aiAudienceBuilder": "[HI] AI Audience Builder",
+      "aiBuilderDescription": "[HI] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[HI] Compare Audiences",
+      "compareDescription": "[HI] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[HI] No audiences yet",
+        "description": "[HI] Create your first audience to get started",
+        "action": "[HI] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[HI] {count} markets",
+        "used": "[HI] Used {time}"
+      },
+      "new": {
+        "title": "[HI] Build New Audience",
+        "description": "[HI] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "मूल जानकारी",
-          "description": "इस ऑडियंस के लिए नाम और विवरण सेट करें",
-          "audienceName": "श्रोता का नाम",
-          "audienceNamePlaceholder": "उदाहरण के लिए, पर्यावरण के प्रति जागरूक मिलेनियल्स",
-          "descriptionPlaceholder": "इस श्रोता वर्ग का संक्षिप्त विवरण"
+          "audienceName": "[HI] Audience Name",
+          "audienceNamePlaceholder": "[HI] e.g., Eco-Conscious Millennials",
+          "description": "[HI] Description",
+          "descriptionPlaceholder": "[HI] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "एआई-संचालित क्वेरी",
-          "description": "अपने दर्शकों का वर्णन प्राकृतिक भाषा में करें",
-          "placeholder": "उदाहरण के लिए, मुझे ऐसे सहस्राब्दी दिखाएँ जो स्थिरता की परवाह करते हैं, शहरी क्षेत्रों में रहते हैं और पर्यावरण-अनुकूल ब्रांडों पर खरीदारी करते हैं",
-          "generateButton": "विशेषताएँ उत्पन्न करें (जल्द ही आ रहा है)"
+          "title": "[HI] AI-Powered Query",
+          "description": "[HI] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[HI] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[HI] Generate Attributes"
         },
         "attributes": {
-          "title": "लक्ष्यीकरण विशेषताएँ",
-          "description": "इस श्रोतागण के लिए विशिष्ट मानदंड परिभाषित करें",
-          "addAttribute": "विशेषता जोड़ें",
-          "noAttributes": "अभी तक कोई गुण परिभाषित नहीं है",
-          "noAttributesHint": "अपने दर्शक मानदंड को परिभाषित करने के लिए विशेषताएँ जोड़ें",
-          "valuePlaceholder": "कीमत"
+          "title": "[HI] Attributes",
+          "add": "[HI] Add",
+          "age": "[HI] Age",
+          "gender": "[HI] Gender",
+          "income": "[HI] Income",
+          "interests": "[HI] Interests",
+          "is": "[HI] is",
+          "between": "[HI] between",
+          "contains": "[HI] contains"
         },
         "markets": {
-          "title": "बाज़ार",
-          "description": "इस ऑडियंस के लिए बाज़ार चुनें",
-          "selectAtLeastOne": "कम से कम एक बाज़ार चुनें"
+          "title": "[HI] Markets",
+          "global": "[HI] Global",
+          "us": "[HI] United States",
+          "uk": "[HI] United Kingdom",
+          "de": "[HI] Germany",
+          "jp": "[HI] Japan"
         },
         "estimatedReach": {
-          "title": "अनुमानित पहुंच",
-          "tbd": "टीबीडी",
-          "matchCriteria": "उपभोक्ता इन मानदंडों से मेल खाते हैं"
+          "title": "[HI] Estimated Reach",
+          "matchCriteria": "[HI] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "परिवर्तनों को निरस्त करें?",
-          "description": "आपके पास सहेजे नहीं गए परिवर्तन हैं. क्या आपकी वाकई छोड़ने की इच्छा है? आपके परिवर्तन खो जायेंगे.",
-          "keepEditing": "संपादन करते रहें",
-          "discardChanges": "परिवर्तनों को निरस्त करें"
+        "actions": {
+          "save": "[HI] Save Audience",
+          "saving": "[HI] Saving...",
+          "cancel": "[HI] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[HI] Please enter an audience name",
+          "createFailed": "[HI] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[HI] Audience Detail",
+        "notFound": "[HI] Audience Not Found",
+        "notFoundDescription": "[HI] The requested audience could not be found",
+        "notFoundDetailedDescription": "[HI] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[HI] Back to Audiences",
+        "people": "[HI] people",
+        "addToFavorites": "[HI] Add to favorites",
+        "removeFromFavorites": "[HI] Remove from favorites",
+        "used": "[HI] Used {time}",
+        "tabs": {
+          "overview": "[HI] Overview",
+          "persona": "[HI] Persona",
+          "dayInLife": "[HI] Day in the Life",
+          "habits": "[HI] Habits & Behaviors",
+          "media": "[HI] Media Consumption",
+          "brands": "[HI] Brand Affinities",
+          "comments": "[HI] Comments",
+          "activity": "[HI] Activity",
+          "history": "[HI] History"
+        },
+        "actions": {
+          "explore": "[HI] Explore",
+          "share": "[HI] Share",
+          "export": "[HI] Export",
+          "edit": "[HI] Edit",
+          "autoRefresh": "[HI] Auto-refresh",
+          "pauseAutoRefresh": "[HI] Pause auto-refresh",
+          "enableAutoRefresh": "[HI] Enable auto-refresh",
+          "duplicate": "[HI] Duplicate",
+          "createLookalike": "[HI] Create Lookalike",
+          "addToCrosstab": "[HI] Add to Crosstab",
+          "addToDashboard": "[HI] Add to Dashboard",
+          "scheduleReport": "[HI] Schedule Report",
+          "copyLink": "[HI] Copy Link",
+          "copied": "[HI] Copied!",
+          "delete": "[HI] Delete"
+        },
+        "export": {
+          "asJson": "[HI] Export as JSON",
+          "asCsv": "[HI] Export as CSV",
+          "asPdf": "[HI] Export as PDF",
+          "toPowerPoint": "[HI] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[HI] Demographics",
+          "keyBehaviors": "[HI] Key Behaviors",
+          "interests": "[HI] Interests",
+          "audienceSummary": "[HI] Audience Summary",
+          "size": "[HI] Size",
+          "markets": "[HI] Markets",
+          "quickActions": "[HI] Quick Actions",
+          "createChart": "[HI] Create Chart",
+          "compareAudiences": "[HI] Compare Audiences",
+          "exportProfile": "[HI] Export Profile",
+          "copyLink": "[HI] Copy Link"
+        },
+        "activity": {
+          "title": "[HI] Activity Log",
+          "description": "[HI] Recent activity on this audience",
+          "viewed": "[HI] viewed",
+          "exported": "[HI] exported",
+          "edited": "[HI] edited",
+          "shared": "[HI] shared",
+          "created": "[HI] created",
+          "createdChart": "[HI] created chart",
+          "addedToCrosstab": "[HI] added to crosstab"
+        },
+        "share": {
+          "title": "[HI] Share Audience",
+          "description": "[HI] Share this audience with team members or external collaborators.",
+          "emailLabel": "[HI] Email address",
+          "emailPlaceholder": "[HI] email@example.com",
+          "roleLabel": "[HI] Role",
+          "viewer": "[HI] Viewer",
+          "editor": "[HI] Editor",
+          "admin": "[HI] Admin",
+          "shareLink": "[HI] Share link",
+          "cancel": "[HI] Cancel",
+          "share": "[HI] Share"
+        },
+        "schedule": {
+          "title": "[HI] Schedule Report",
+          "description": "[HI] Set up automatic email delivery of this audience report.",
+          "recipients": "[HI] Recipients",
+          "recipientsPlaceholder": "[HI] email@example.com, team@example.com",
+          "frequency": "[HI] Frequency",
+          "daily": "[HI] Daily",
+          "weekly": "[HI] Weekly",
+          "monthly": "[HI] Monthly",
+          "format": "[HI] Format",
+          "pdf": "[HI] PDF",
+          "csv": "[HI] CSV",
+          "json": "[HI] JSON",
+          "cancel": "[HI] Cancel",
+          "schedule": "[HI] Schedule"
+        },
+        "delete": {
+          "title": "[HI] Delete Audience",
+          "description": "[HI] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[HI] Cancel",
+          "delete": "[HI] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "चार्ट संपादित करें",
-        "description": "अपने चार्ट कॉन्फ़िगरेशन और सेटिंग्स को संशोधित करें",
-        "saving": "सहेजा जा रहा है...",
-        "saveChanges": "परिवर्तनों को सुरक्षित करें",
-        "backToCharts": "चार्ट पर वापस जाएँ",
-        "preview": {
-          "title": "पूर्व दर्शन",
-          "description": "आपका चार्ट कैसा दिखेगा"
-        },
-        "unsavedChanges": "सहेजे न गए परिवर्तन",
-        "authRequired": "प्रमाणित करना",
-        "pleaseSignIn": "कृपया इस चार्ट को संपादित करने के लिए साइन इन करें।",
-        "signIn": "दाखिल करना",
+      "pageTracker": "[HI] Charts List",
+      "title": "[HI] Charts",
+      "description": "[HI] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[HI] Templates",
+      "compare": "[HI] Compare",
+      "newChart": "[HI] New Chart",
+      "totalCharts": "[HI] Total Charts",
+      "totalViews": "[HI] Total Views",
+      "shares": "[HI] Shares",
+      "exports": "[HI] Exports",
+      "searchPlaceholder": "[HI] Search charts...",
+      "allCategory": "[HI] All",
+      "allCharts": "[HI] All Charts",
+      "recent": "[HI] Recent",
+      "mostViewed": "[HI] Most Viewed",
+      "favorites": "[HI] Favorites",
+      "emptyState": {
+        "title": "[HI] No charts found",
+        "description": "[HI] Create your first chart or try a different search",
+        "action": "[HI] Create Chart"
+      },
+      "comparison": {
+        "title": "[HI] Brand Health Comparison",
+        "description": "[HI] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[HI] Create New Chart",
+        "description": "[HI] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "मूल जानकारी",
-          "description": "अपने चार्ट के लिए नाम और विवरण सेट करें",
-          "chartName": "चार्ट का नाम",
-          "chartNamePlaceholder": "चार्ट नाम दर्ज करें",
-          "descriptionPlaceholder": "बताएं कि यह चार्ट क्या दर्शाता है",
-          "selectStatus": "स्थिति चुनें",
-          "dataSource": "डेटा स्रोत",
-          "selectDataSource": "डेटा स्रोत चुनें"
+          "title": "[HI] Basic Information",
+          "chartName": "[HI] Chart Name",
+          "chartNamePlaceholder": "[HI] e.g., Social Media Usage by Age Group",
+          "description": "[HI] Description",
+          "descriptionPlaceholder": "[HI] Describe what this chart shows"
         },
         "chartType": {
-          "title": "चार्ट प्रकार",
-          "description": "अपने डेटा के लिए विज़ुअलाइज़ेशन प्रकार चुनें"
+          "title": "[HI] Chart Type",
+          "description": "[HI] Select the visualization type"
         },
         "dataConfig": {
-          "title": "डेटा कॉन्फ़िगरेशन",
-          "description": "अपने चार्ट के लिए डेटा कॉन्फ़िगर करें",
-          "targetAudience": "लक्षित दर्शक",
-          "selectAudience": "दर्शकों का चयन करें",
-          "timePeriod": "समय सीमा",
-          "selectTimePeriod": "समयावधि चुनें",
-          "primaryMetric": "प्राथमिक मीट्रिक",
-          "primaryMetricPlaceholder": "उदाहरण के लिए, सोशल मीडिया उपयोग (%)",
-          "dimensions": "DIMENSIONS",
-          "dimensionsHint": "आपके डेटा को समूहीकृत करने के लिए श्रेणियाँ (जैसे, आयु समूह, क्षेत्र)",
-          "addDimension": "एक आयाम जोड़ें",
-          "measures": "पैमाने",
-          "measuresHint": "प्रदर्शित करने के लिए संख्यात्मक मान (जैसे, गिनती, प्रतिशत)",
-          "addMeasure": "एक माप जोड़ें",
-          "filters": "फिल्टर",
-          "filtersHint": "अपने डेटा को फ़िल्टर करने के लिए शर्तें जोड़ें",
-          "addFilter": "फ़िल्टर जोड़ें",
-          "field": "मैदान",
-          "value": "कीमत",
-          "operators": {
-            "equals": "बराबर",
-            "notEquals": "बराबर नहीं",
-            "contains": "रोकना",
-            "greaterThan": "से अधिक",
-            "lessThan": "से कम"
-          }
+          "title": "[HI] Data Configuration",
+          "targetAudience": "[HI] Target Audience",
+          "selectAudience": "[HI] Select audience",
+          "timePeriod": "[HI] Time Period",
+          "selectTimePeriod": "[HI] Select time period",
+          "dataSource": "[HI] Data Source",
+          "selectDataSource": "[HI] Select data source"
         },
-        "displayOptions": {
-          "title": "प्रदर्शन चुनाव",
-          "description": "चार्ट उपस्थिति को अनुकूलित करें",
-          "showLegend": "लीजेंड दिखाओ",
-          "showGrid": "ग्रिड दिखाएँ",
-          "showTooltip": "टूलटिप दिखाएँ"
+        "preview": {
+          "title": "[HI] Preview",
+          "description": "[HI] How your chart will look"
         },
-        "chartInfo": {
-          "title": "चार्ट जानकारी",
-          "id": "पहचान",
-          "created": "बनाया था",
-          "lastUpdated": "आखरी अपडेट"
+        "actions": {
+          "save": "[HI] Create Chart",
+          "saving": "[HI] Creating...",
+          "cancel": "[HI] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[HI] Chart Detail",
+        "notFound": "[HI] Chart Not Found",
+        "notFoundDescription": "[HI] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[HI] Back to Charts",
+        "views": "[HI] views",
+        "shares": "[HI] shares",
+        "addToFavorites": "[HI] Add to favorites",
+        "removeFromFavorites": "[HI] Remove from favorites",
+        "tabs": {
+          "chart": "[HI] Chart",
+          "data": "[HI] Data",
+          "settings": "[HI] Settings",
+          "comments": "[HI] Comments",
+          "activity": "[HI] Activity",
+          "history": "[HI] History"
         },
-        "discardDialog": {
-          "title": "परिवर्तनों को निरस्त करें?",
-          "description": "आपके पास सहेजे नहीं गए परिवर्तन हैं. क्या आपकी वाकई छोड़ने की इच्छा है? आपके परिवर्तन खो जायेंगे.",
-          "keepEditing": "संपादन करते रहें",
-          "discardChanges": "परिवर्तनों को निरस्त करें"
+        "actions": {
+          "share": "[HI] Share",
+          "export": "[HI] Export",
+          "edit": "[HI] Edit",
+          "fullscreen": "[HI] Fullscreen",
+          "duplicate": "[HI] Duplicate",
+          "addToDashboard": "[HI] Add to Dashboard",
+          "scheduleReport": "[HI] Schedule Report",
+          "copyLink": "[HI] Copy Link",
+          "copied": "[HI] Copied!",
+          "delete": "[HI] Delete"
+        },
+        "export": {
+          "asJson": "[HI] Export as JSON",
+          "asCsv": "[HI] Export as CSV",
+          "asPng": "[HI] Export as PNG",
+          "asSvg": "[HI] Export as SVG",
+          "toPowerPoint": "[HI] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[HI] Chart Info",
+          "type": "[HI] Type",
+          "dataSource": "[HI] Data Source",
+          "audience": "[HI] Audience",
+          "timePeriod": "[HI] Time Period",
+          "created": "[HI] Created",
+          "lastUpdated": "[HI] Last Updated"
+        },
+        "share": {
+          "title": "[HI] Share Chart",
+          "description": "[HI] Share this chart with team members or external collaborators.",
+          "emailLabel": "[HI] Email address",
+          "emailPlaceholder": "[HI] email@example.com",
+          "roleLabel": "[HI] Role",
+          "viewer": "[HI] Viewer",
+          "editor": "[HI] Editor",
+          "admin": "[HI] Admin",
+          "shareLink": "[HI] Share link",
+          "embedCode": "[HI] Embed code",
+          "cancel": "[HI] Cancel",
+          "share": "[HI] Share"
+        },
+        "delete": {
+          "title": "[HI] Delete Chart",
+          "description": "[HI] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[HI] Cancel",
+          "delete": "[HI] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "न्यूनतम जागरूकता (%)",
           "minNPS": "न्यूनतम एनपीएस स्कोर"
         }
+      },
+      "pageTracker": "[HI] Brand Tracking",
+      "title": "[HI] Brand Tracking",
+      "description": "[HI] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[HI] All Brands",
+        "active": "[HI] Active",
+        "paused": "[HI] Paused",
+        "draft": "[HI] Draft"
+      },
+      "new": {
+        "title": "[HI] New Brand Tracking",
+        "description": "[HI] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[HI] Brand Information",
+          "description": "[HI] Provide details about the brand you want to track",
+          "brandNameLabel": "[HI] Brand Name *",
+          "brandNamePlaceholder": "[HI] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[HI] Description",
+          "descriptionPlaceholder": "[HI] Brief description of what you want to track...",
+          "industryLabel": "[HI] Industry",
+          "industryPlaceholder": "[HI] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[HI] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[HI] Daily",
+          "weekly": "[HI] Weekly",
+          "monthly": "[HI] Monthly",
+          "manual": "[HI] Manual Only"
+        },
+        "competitors": {
+          "label": "[HI] Competitors",
+          "placeholder": "[HI] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[HI] Metrics to Track",
+          "awareness": "[HI] Brand Awareness",
+          "consideration": "[HI] Consideration",
+          "preference": "[HI] Preference",
+          "loyalty": "[HI] Loyalty",
+          "nps": "[HI] Net Promoter Score (NPS)",
+          "sentiment": "[HI] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[HI] Cancel",
+          "create": "[HI] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[HI] Brand Tracking Detail",
+        "title": "[HI] Brand Health Dashboard",
+        "notFound": "[HI] Brand Study Not Found",
+        "notFoundDescription": "[HI] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[HI] Back to Brand Tracking",
+        "loading": "[HI] Loading...",
+        "people": "[HI] people",
+        "timePeriods": {
+          "1m": "[HI] 1 Month",
+          "3m": "[HI] 3 Months",
+          "6m": "[HI] 6 Months",
+          "1y": "[HI] 1 Year",
+          "all": "[HI] All Time"
+        },
+        "tabs": {
+          "overview": "[HI] Overview",
+          "trends": "[HI] Trends",
+          "competitors": "[HI] Competitors",
+          "insights": "[HI] Insights",
+          "comments": "[HI] Comments",
+          "activity": "[HI] Activity",
+          "history": "[HI] History"
+        },
+        "actions": {
+          "explore": "[HI] Explore",
+          "share": "[HI] Share",
+          "export": "[HI] Export",
+          "edit": "[HI] Edit",
+          "refresh": "[HI] Refresh",
+          "autoRefresh": "[HI] Auto-refresh",
+          "pauseAutoRefresh": "[HI] Pause auto-refresh",
+          "enableAutoRefresh": "[HI] Enable auto-refresh",
+          "duplicate": "[HI] Duplicate",
+          "copyLink": "[HI] Copy Link",
+          "copied": "[HI] Copied!",
+          "delete": "[HI] Delete",
+          "addToFavorites": "[HI] Add to favorites",
+          "removeFromFavorites": "[HI] Remove from favorites",
+          "scheduleReport": "[HI] Schedule Report"
+        },
+        "export": {
+          "asJson": "[HI] Export as JSON",
+          "asCsv": "[HI] Export as CSV",
+          "asPdf": "[HI] Export as PDF",
+          "toPowerPoint": "[HI] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[HI] Awareness",
+          "consideration": "[HI] Consideration",
+          "preference": "[HI] Preference",
+          "loyalty": "[HI] Loyalty",
+          "nps": "[HI] NPS",
+          "sentiment": "[HI] Sentiment",
+          "marketShare": "[HI] Market Share",
+          "vsTarget": "[HI] vs target",
+          "trend": "[HI] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[HI] Brand Health Trend",
+          "competitorComparison": "[HI] Competitor Comparison",
+          "sentimentBreakdown": "[HI] Sentiment Breakdown",
+          "metricsOverTime": "[HI] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[HI] Brand Overview",
+          "industry": "[HI] Industry",
+          "competitors": "[HI] Competitors",
+          "trackingFrequency": "[HI] Tracking Frequency",
+          "lastUpdated": "[HI] Last Updated",
+          "createdBy": "[HI] Created By",
+          "dateRange": "[HI] Date Range"
+        },
+        "insights": {
+          "title": "[HI] Key Insights",
+          "aiGenerated": "[HI] AI-Generated",
+          "noInsights": "[HI] No insights available yet",
+          "generateInsights": "[HI] Generate Insights"
+        },
+        "activity": {
+          "title": "[HI] Activity Log",
+          "description": "[HI] Recent activity on this brand study",
+          "viewed": "[HI] viewed",
+          "exported": "[HI] exported",
+          "edited": "[HI] edited",
+          "shared": "[HI] shared",
+          "created": "[HI] created"
+        },
+        "share": {
+          "title": "[HI] Share Brand Study",
+          "description": "[HI] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[HI] Email address",
+          "emailPlaceholder": "[HI] email@example.com",
+          "roleLabel": "[HI] Role",
+          "viewer": "[HI] Viewer",
+          "editor": "[HI] Editor",
+          "admin": "[HI] Admin",
+          "shareLink": "[HI] Share link",
+          "cancel": "[HI] Cancel",
+          "share": "[HI] Share"
+        },
+        "schedule": {
+          "title": "[HI] Schedule Report",
+          "description": "[HI] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[HI] Recipients",
+          "recipientsPlaceholder": "[HI] email@example.com, team@example.com",
+          "frequency": "[HI] Frequency",
+          "daily": "[HI] Daily",
+          "weekly": "[HI] Weekly",
+          "monthly": "[HI] Monthly",
+          "format": "[HI] Format",
+          "pdf": "[HI] PDF",
+          "csv": "[HI] CSV",
+          "json": "[HI] JSON",
+          "cancel": "[HI] Cancel",
+          "schedule": "[HI] Schedule"
+        },
+        "delete": {
+          "title": "[HI] Delete Brand Study",
+          "description": "[HI] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[HI] Cancel",
+          "delete": "[HI] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[HI] Select organization",
+      "searchPlaceholder": "[HI] Search organizations...",
+      "noOrganizationFound": "[HI] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[HI] Weekly Activity",
+      "monthlyTrend": "[HI] Monthly Trend",
+      "workflows": "[HI] Workflows",
+      "insights": "[HI] Insights",
+      "days": {
+        "mon": "[HI] Mon",
+        "tue": "[HI] Tue",
+        "wed": "[HI] Wed",
+        "thu": "[HI] Thu",
+        "fri": "[HI] Fri",
+        "sat": "[HI] Sat",
+        "sun": "[HI] Sun"
+      },
+      "months": {
+        "jan": "[HI] Jan",
+        "feb": "[HI] Feb",
+        "mar": "[HI] Mar",
+        "apr": "[HI] Apr",
+        "may": "[HI] May",
+        "jun": "[HI] Jun",
+        "jul": "[HI] Jul",
+        "aug": "[HI] Aug",
+        "sep": "[HI] Sep",
+        "oct": "[HI] Oct",
+        "nov": "[HI] Nov",
+        "dec": "[HI] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[HI] Active Agents",
+      "manage": "[HI] Manage",
+      "activeTasks": "[HI] {count} active tasks",
+      "idle": "[HI] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[HI] Untitled Dashboard",
+      "addWidget": "[HI] Add Widget",
+      "undoShortcut": "[HI] Undo (Ctrl+Z)",
+      "redoShortcut": "[HI] Redo (Ctrl+Y)",
+      "grid": "[HI] Grid",
+      "snap": "[HI] Snap",
+      "widgetsCount": "[HI] {count} widgets",
+      "exportFormat": "[HI] Export Format",
+      "export": {
+        "pdf": "[HI] PDF Document",
+        "png": "[HI] PNG Image",
+        "json": "[HI] JSON Config"
+      },
+      "duplicate": "[HI] Duplicate",
+      "fullscreen": "[HI] Fullscreen",
+      "lock": "[HI] Lock",
+      "unlock": "[HI] Unlock",
+      "hide": "[HI] Hide",
+      "chooseWidgetType": "[HI] Choose a widget type to add to your dashboard",
+      "editWidget": "[HI] Edit Widget",
+      "newWidget": "[HI] New {type}",
+      "enterTextContent": "[HI] Enter text content...",
+      "unknownWidgetType": "[HI] Unknown widget type",
+      "target": "[HI] Target",
+      "table": {
+        "name": "[HI] Name",
+        "value": "[HI] Value",
+        "change": "[HI] Change",
+        "item": "[HI] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[HI] Chart",
+        "metric": "[HI] Metric",
+        "table": "[HI] Table",
+        "text": "[HI] Text",
+        "image": "[HI] Image",
+        "kpi": "[HI] KPI",
+        "kpiCard": "[HI] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[HI] Visualize data with various chart types",
+        "kpi": "[HI] Display key performance indicators",
+        "metric": "[HI] Show a single metric value",
+        "table": "[HI] Display data in tabular format",
+        "text": "[HI] Add text content or notes",
+        "image": "[HI] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[HI] General",
+        "data": "[HI] Data",
+        "style": "[HI] Style",
+        "advanced": "[HI] Advanced"
+      },
+      "fields": {
+        "title": "[HI] Title",
+        "subtitle": "[HI] Subtitle",
+        "chartType": "[HI] Chart Type",
+        "content": "[HI] Content",
+        "value": "[HI] Value",
+        "changePercent": "[HI] Change (%)",
+        "target": "[HI] Target",
+        "dataSource": "[HI] Data Source",
+        "refreshInterval": "[HI] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[HI] Bar Chart",
+        "line": "[HI] Line Chart",
+        "area": "[HI] Area Chart",
+        "pie": "[HI] Pie Chart",
+        "donut": "[HI] Donut Chart",
+        "radar": "[HI] Radar Chart",
+        "scatter": "[HI] Scatter Plot",
+        "funnel": "[HI] Funnel Chart",
+        "treemap": "[HI] Treemap",
+        "heatmap": "[HI] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[HI] Sample Data",
+        "api": "[HI] API Endpoint",
+        "crosstab": "[HI] Crosstab",
+        "custom": "[HI] Custom Query"
+      },
+      "refreshIntervalHint": "[HI] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[HI] Show Legend",
+        "showGrid": "[HI] Show Grid",
+        "showTooltip": "[HI] Show Tooltip",
+        "backgroundColor": "[HI] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[HI] Lock Widget",
+        "lockWidgetHint": "[HI] Prevent moving and resizing",
+        "zIndex": "[HI] Z-Index"
+      },
+      "dashboardSettings": "[HI] Dashboard Settings",
+      "saveSettings": "[HI] Save Settings",
+      "settings": {
+        "dashboardName": "[HI] Dashboard Name",
+        "gridColumns": "[HI] Grid Columns",
+        "gridRows": "[HI] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[HI] Analytics",
+      "title": "[HI] Analytics",
+      "description": "[HI] Track your research performance and insights"
     }
   },
   "audiences": {

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,8 @@ import {
 } from "@/components/change-tracking"
 
 export default function ChangesPage() {
+  const t = useTranslations("dashboard.changes")
+  const tCommon = useTranslations("common")
   const [selectedTab, setSelectedTab] = useState("timeline")
   const [compareDialog, setCompareDialog] = useState<{
     entityType: string
@@ -46,14 +49,14 @@ export default function ChangesPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Data Changes</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground mt-1">
-            Track what&apos;s changed, what&apos;s new, and how your analyses have evolved
+            {t("description")}
           </p>
         </div>
         <Button variant="outline" onClick={() => window.location.reload()}>
           <RefreshCw className="h-4 w-4 mr-2" />
-          Refresh
+          {tCommon("refresh")}
         </Button>
       </div>
 
@@ -71,19 +74,19 @@ export default function ChangesPage() {
         <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
           <TabsTrigger value="timeline" className="gap-2">
             <History className="h-4 w-4" />
-            Timeline
+            {t("tabs.timeline")}
           </TabsTrigger>
           <TabsTrigger value="compare" className="gap-2">
             <ArrowLeftRight className="h-4 w-4" />
-            Compare
+            {t("tabs.compare")}
           </TabsTrigger>
           <TabsTrigger value="evolution" className="gap-2">
             <Activity className="h-4 w-4" />
-            Evolution
+            {t("tabs.evolution")}
           </TabsTrigger>
           <TabsTrigger value="alerts" className="gap-2">
             <Bell className="h-4 w-4" />
-            Alerts
+            {t("tabs.alerts")}
           </TabsTrigger>
         </TabsList>
 
@@ -102,21 +105,21 @@ export default function ChangesPage() {
               <div className="flex items-center gap-3 mb-4">
                 <ArrowLeftRight className="h-6 w-6 text-primary" />
                 <div>
-                  <h2 className="text-xl font-semibold">Compare Versions</h2>
+                  <h2 className="text-xl font-semibold">{t("compare.title")}</h2>
                   <p className="text-sm text-muted-foreground">
-                    Select an entity to compare its versions
+                    {t("compare.description")}
                   </p>
                 </div>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {[
-                  { type: "audience", label: "Audiences", icon: "👥" },
-                  { type: "crosstab", label: "Crosstabs", icon: "📊" },
-                  { type: "insight", label: "Insights", icon: "💡" },
-                  { type: "chart", label: "Charts", icon: "📈" },
-                  { type: "report", label: "Reports", icon: "📄" },
-                  { type: "dashboard", label: "Dashboards", icon: "🎛️" },
+                  { type: "audience", labelKey: "compare.entities.audiences", icon: "👥" },
+                  { type: "crosstab", labelKey: "compare.entities.crosstabs", icon: "📊" },
+                  { type: "insight", labelKey: "compare.entities.insights", icon: "💡" },
+                  { type: "chart", labelKey: "compare.entities.charts", icon: "📈" },
+                  { type: "report", labelKey: "compare.entities.reports", icon: "📄" },
+                  { type: "dashboard", labelKey: "compare.entities.dashboards", icon: "🎛️" },
                 ].map((item) => (
                   <Card
                     key={item.type}
@@ -132,9 +135,9 @@ export default function ChangesPage() {
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{item.icon}</span>
                       <div>
-                        <h3 className="font-medium">{item.label}</h3>
+                        <h3 className="font-medium">{t(item.labelKey)}</h3>
                         <p className="text-xs text-muted-foreground">
-                          Compare versions
+                          {t("compare.compareVersions")}
                         </p>
                       </div>
                     </div>
@@ -160,21 +163,21 @@ export default function ChangesPage() {
               <div className="flex items-center gap-3 mb-4">
                 <Activity className="h-6 w-6 text-primary" />
                 <div>
-                  <h2 className="text-xl font-semibold">Analysis Evolution</h2>
+                  <h2 className="text-xl font-semibold">{t("evolution.title")}</h2>
                   <p className="text-sm text-muted-foreground">
-                    Track how your AI-generated analyses have evolved over time
+                    {t("evolution.description")}
                   </p>
                 </div>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {[
-                  { type: "brand_health", label: "Brand Health", icon: "🏥" },
-                  { type: "audience_insight", label: "Audience Insights", icon: "👥" },
-                  { type: "market_analysis", label: "Market Analysis", icon: "📊" },
-                  { type: "competitor_analysis", label: "Competitor Analysis", icon: "⚔️" },
-                  { type: "trend_analysis", label: "Trend Analysis", icon: "📈" },
-                  { type: "crosstab", label: "Crosstab Analysis", icon: "🔢" },
+                  { type: "brand_health", labelKey: "evolution.types.brandHealth", icon: "🏥" },
+                  { type: "audience_insight", labelKey: "evolution.types.audienceInsights", icon: "👥" },
+                  { type: "market_analysis", labelKey: "evolution.types.marketAnalysis", icon: "📊" },
+                  { type: "competitor_analysis", labelKey: "evolution.types.competitorAnalysis", icon: "⚔️" },
+                  { type: "trend_analysis", labelKey: "evolution.types.trendAnalysis", icon: "📈" },
+                  { type: "crosstab", labelKey: "evolution.types.crosstabAnalysis", icon: "🔢" },
                 ].map((item) => (
                   <Card
                     key={item.type}
@@ -183,16 +186,16 @@ export default function ChangesPage() {
                       setEvolutionDialog({
                         analysisType: item.type,
                         referenceId: "",
-                        title: item.label,
+                        title: t(item.labelKey),
                       })
                     }
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{item.icon}</span>
                       <div>
-                        <h3 className="font-medium">{item.label}</h3>
+                        <h3 className="font-medium">{t(item.labelKey)}</h3>
                         <p className="text-xs text-muted-foreground">
-                          View evolution
+                          {t("evolution.viewEvolution")}
                         </p>
                       </div>
                     </div>
@@ -225,22 +228,20 @@ export default function ChangesPage() {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>
-              Select{" "}
-              {compareDialog?.entityType
-                ? compareDialog.entityType.charAt(0).toUpperCase() +
-                  compareDialog.entityType.slice(1)
-                : "Entity"}{" "}
-              to Compare
+              {t("compareDialog.selectTitle", {
+                entity: compareDialog?.entityType
+                  ? compareDialog.entityType.charAt(0).toUpperCase() + compareDialog.entityType.slice(1)
+                  : t("compareDialog.entity")
+              })}
             </DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              Enter the ID of the {compareDialog?.entityType} you want to compare
-              versions of:
+              {t("compareDialog.enterIdDescription", { entityType: compareDialog?.entityType ?? "" })}
             </p>
             <input
               type="text"
-              placeholder={`Enter ${compareDialog?.entityType} ID...`}
+              placeholder={t("compareDialog.enterIdPlaceholder", { entityType: compareDialog?.entityType ?? "" })}
               className="w-full px-3 py-2 border rounded-md"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.currentTarget.value) {
@@ -263,16 +264,16 @@ export default function ChangesPage() {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>
-              Select Analysis to View Evolution
+              {t("evolutionDialog.selectTitle")}
             </DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              Enter the reference ID of the {evolutionDialog?.analysisType?.replace(/_/g, " ")} analysis:
+              {t("evolutionDialog.enterIdDescription", { analysisType: evolutionDialog?.analysisType?.replace(/_/g, " ") ?? "" })}
             </p>
             <input
               type="text"
-              placeholder="Enter reference ID..."
+              placeholder={t("evolutionDialog.enterIdPlaceholder")}
               className="w-full px-3 py-2 border rounded-md"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.currentTarget.value) {
@@ -292,8 +293,20 @@ export default function ChangesPage() {
 }
 
 // Alerts Section Component
+interface Alert {
+  id: string
+  type: string
+  severity: string
+  title: string
+  message: string
+  isRead: boolean
+  createdAt: string
+  metadata?: Record<string, string | number>
+}
+
 function AlertsSection() {
-  const [alerts, setAlerts] = useState<any[]>([])
+  const t = useTranslations("dashboard.changes")
+  const [alerts, setAlerts] = useState<Alert[]>([])
   const [loading, setLoading] = useState(true)
 
   useState(() => {
@@ -345,7 +358,7 @@ function AlertsSection() {
     return (
       <Card className="p-8 text-center">
         <RefreshCw className="h-8 w-8 mx-auto text-muted-foreground animate-spin mb-4" />
-        <p>Loading alerts...</p>
+        <p>{t("alerts.loading")}</p>
       </Card>
     )
   }
@@ -354,9 +367,9 @@ function AlertsSection() {
     return (
       <Card className="p-8 text-center">
         <Bell className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <h3 className="font-medium mb-2">No Alerts</h3>
+        <h3 className="font-medium mb-2">{t("alerts.noAlerts")}</h3>
         <p className="text-sm text-muted-foreground">
-          You have no unread change alerts.
+          {t("alerts.noAlertsDescription")}
         </p>
       </Card>
     )
@@ -367,7 +380,7 @@ function AlertsSection() {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold flex items-center gap-2">
           <Bell className="h-5 w-5" />
-          Change Alerts
+          {t("alerts.title")}
         </h2>
         <Button
           variant="outline"
@@ -381,7 +394,7 @@ function AlertsSection() {
             fetchAlerts()
           }}
         >
-          Mark All as Read
+          {t("alerts.markAllRead")}
         </Button>
       </div>
 
@@ -427,7 +440,7 @@ function AlertsSection() {
                     size="sm"
                     onClick={() => markAsRead(alert.id)}
                   >
-                    Mark Read
+                    {t("alerts.markRead")}
                   </Button>
                 )}
                 <Button
@@ -435,7 +448,7 @@ function AlertsSection() {
                   size="sm"
                   onClick={() => dismissAlert(alert.id)}
                 >
-                  Dismiss
+                  {t("alerts.dismiss")}
                 </Button>
               </div>
             </div>

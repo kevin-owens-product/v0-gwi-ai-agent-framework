@@ -203,7 +203,85 @@
     "selectLanguage": "Выберите язык",
     "preferences": "Предпочтения",
     "notifications": "Уведомления",
-    "security": "Безопасность",
+    "security": {
+      "title": "[RU] Security Settings",
+      "description": "[RU] Manage your account security and active sessions",
+      "changePassword": "[RU] Change Password",
+      "changePasswordDescription": "[RU] Update your password regularly to keep your account secure",
+      "currentPassword": "[RU] Current Password",
+      "newPassword": "[RU] New Password",
+      "confirmNewPassword": "[RU] Confirm New Password",
+      "updating": "[RU] Updating...",
+      "updatePassword": "[RU] Update Password",
+      "twoFactorAuth": "[RU] Two-Factor Authentication",
+      "twoFactorDescription": "[RU] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[RU] 2FA is enabled",
+      "twoFactorProtected": "[RU] Your account is protected with authenticator app",
+      "changeMethod": "[RU] Change Method",
+      "viewBackupCodes": "[RU] View Backup Codes",
+      "activeSessions": "[RU] Active Sessions",
+      "activeSessionsDescription": "[RU] Manage devices where you're currently logged in",
+      "signOutAll": "[RU] Sign Out All",
+      "current": "[RU] Current",
+      "revoke": "[RU] Revoke",
+      "dangerZone": "[RU] Danger Zone",
+      "dangerZoneDescription": "[RU] Irreversible and destructive actions",
+      "deleteAccount": "[RU] Delete Account",
+      "deleteAccountDescription": "[RU] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[RU] Data Exports",
+        "description": "[RU] Request exports of your personal data for GDPR compliance",
+        "refresh": "[RU] Refresh",
+        "yourDataRights": "[RU] Your Data Rights",
+        "yourDataRightsDescription": "[RU] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[RU] No Active Exports",
+        "noActiveExportsDescription": "[RU] Request an export to see its status here",
+        "noActiveExportsHint": "[RU] Your export status will appear here after you request a data export",
+        "exportHistory": "[RU] Export History",
+        "exportHistoryDescription": "[RU] View and download your previous data exports",
+        "total": "[RU] Total",
+        "pending": "[RU] Pending",
+        "processing": "[RU] Processing",
+        "aboutDataExports": "[RU] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[RU] What's Included",
+          "exportFormat": "[RU] Export Format",
+          "faq": "[RU] FAQ"
+        },
+        "included": {
+          "profileInfo": "[RU] Profile Information",
+          "profileInfoDesc": "[RU] Your name, email, avatar, and account settings",
+          "orgMemberships": "[RU] Organization Memberships",
+          "orgMembershipsDesc": "[RU] All organizations you belong to and your roles",
+          "createdContent": "[RU] Created Content",
+          "createdContentDesc": "[RU] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[RU] Activity History",
+          "activityHistoryDesc": "[RU] Audit logs and activity records associated with your account",
+          "preferences": "[RU] Preferences",
+          "preferencesDesc": "[RU] Your theme, language, notification, and other settings",
+          "apiKeys": "[RU] API Keys",
+          "apiKeysDesc": "[RU] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[RU] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[RU] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[RU] Human-readable when opened in a text editor",
+          "compatible": "[RU] Compatible with most data processing tools",
+          "easyImport": "[RU] Easy to import into other services",
+          "exampleStructure": "[RU] Example structure:"
+        },
+        "faq": {
+          "howLong": "[RU] How long does an export take?",
+          "howLongAnswer": "[RU] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[RU] How long is an export available?",
+          "howLongAvailableAnswer": "[RU] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[RU] How often can I request an export?",
+          "howOftenAnswer": "[RU] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[RU] Is my export secure?",
+          "isSecureAnswer": "[RU] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "Учётная запись",
     "appearance": {
       "title": "Внешний вид",
@@ -239,7 +317,35 @@
       "followingSystem": "системная",
       "savingPreferences": "Сохранение настроек..."
     },
-    "general": "Общие",
+    "general": {
+      "title": "[RU] General Settings",
+      "description": "[RU] Manage your organization's settings and preferences",
+      "organizationDetails": "[RU] Organization Details",
+      "updateOrgInfo": "[RU] Update your organization's information",
+      "changeLogo": "[RU] Change Logo",
+      "organizationName": "[RU] Organization Name",
+      "organizationSlug": "[RU] Organization Slug",
+      "orgDescription": "[RU] Description",
+      "industry": "[RU] Industry",
+      "companySize": "[RU] Company Size",
+      "consumerGoods": "[RU] Consumer Goods",
+      "technology": "[RU] Technology",
+      "finance": "[RU] Finance",
+      "healthcare": "[RU] Healthcare",
+      "retail": "[RU] Retail",
+      "mediaEntertainment": "[RU] Media & Entertainment",
+      "employees1to50": "[RU] 1-50 employees",
+      "employees50to200": "[RU] 50-200 employees",
+      "employees200to1000": "[RU] 200-1000 employees",
+      "employees1000to5000": "[RU] 1000-5000 employees",
+      "employees5000plus": "[RU] 5000+ employees",
+      "regionalSettings": "[RU] Regional Settings",
+      "regionalDescription": "[RU] Set your timezone and date format preferences",
+      "timezone": "[RU] Timezone",
+      "dateFormat": "[RU] Date Format",
+      "saving": "[RU] Saving...",
+      "saveChanges": "[RU] Save Changes"
+    },
     "apiKeys": {
       "title": "API-ключи",
       "description": "Управление API-ключами для программного доступа",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "Чем мы можем помочь?",
-      "subtitle": "Поиск по базе знаний или просмотр тем ниже",
       "searchPlaceholder": "Поиск справки...",
-      "tabs": {
-        "faq": "ЧаВо",
-        "guides": "Руководства",
-        "contact": "Контакты"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "Руководство по началу работы",
-          "description": "Изучите основы GWI Agents"
-        },
-        "videoTutorials": {
-          "title": "Видеоуроки",
-          "description": "Смотрите пошаговые уроки"
-        },
-        "apiDocs": {
-          "title": "Документация API",
-          "description": "Интеграция с нашими API"
-        },
-        "contactSupport": {
-          "title": "Связаться с поддержкой",
-          "description": "Получите помощь от нашей команды"
-        }
+        "gettingStarted": "[RU] Getting Started Guide",
+        "videoTutorials": "[RU] Video Tutorials",
+        "apiDocs": "[RU] API Documentation",
+        "title": "[RU] Quick Links",
+        "gettingStartedDesc": "[RU] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[RU] Watch step-by-step guides",
+        "apiDocsDesc": "[RU] For developers and integrations",
+        "releaseNotes": "[RU] Release Notes",
+        "releaseNotesDesc": "[RU] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "Начало работы",
-          "agentsWorkflows": "Агенты и рабочие процессы",
-          "dataPrivacy": "Данные и конфиденциальность",
-          "billingPlans": "Тарифы и оплата"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "Как создать своего первого агента?",
-            "answer": "Перейдите на страницу Агенты в боковом меню и нажмите «Создать агента». Следуйте пошаговому мастеру для настройки имени агента, описания, источников данных и параметров поведения."
-          },
-          "dataSources": {
-            "question": "Какие источники данных доступны?",
-            "answer": "GWI предоставляет доступ к множеству источников данных, включая GWI Core (наш флагманский опрос потребителей), GWI USA, GWI Zeitgeist (актуальные темы) и возможность загрузки собственных данных. Доступность источников данных зависит от вашего тарифа."
-          },
-          "inviteTeam": {
-            "question": "Как пригласить членов команды?",
-            "answer": "Перейдите в Настройки > Команда и нажмите «Пригласить участника». Введите адрес электронной почты и выберите роль (Администратор, Редактор или Читатель). Они получат приглашение присоединиться к вашему рабочему пространству."
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "В чём разница между агентами и рабочими процессами?",
-            "answer": "Агенты — это ИИ-специалисты, которые выполняют определённые типы исследовательских задач. Рабочие процессы объединяют несколько агентов в последовательность для автоматизации сложных многоэтапных исследовательских процессов."
-          },
-          "customize": {
-            "question": "Могу ли я настроить готовых агентов?",
-            "answer": "Да! Вы можете дублировать любого готового агента и изменить его конфигурацию, включая системный промпт, источники данных и формат вывода. Ваша настроенная версия будет сохранена в личной библиотеке агентов."
-          },
-          "schedule": {
-            "question": "Как запланировать рабочий процесс?",
-            "answer": "Откройте рабочий процесс и нажмите кнопку «Расписание». Вы можете настроить повторяющиеся запуски (ежедневно, еженедельно, ежемесячно) или запускать процессы по событиям, например, при появлении новых данных."
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "Как защищены мои данные?",
-            "answer": "Все данные шифруются при хранении и передаче с использованием отраслевого стандарта шифрования AES-256. Мы сертифицированы по SOC 2 Type II и соответствуем требованиям GDPR. Ваши запросы и пользовательские данные никогда не передаются другим клиентам."
-          },
-          "export": {
-            "question": "Могу ли я экспортировать свои данные?",
-            "answer": "Да, вы можете экспортировать данные в различных форматах, включая CSV, Excel, PowerPoint и JSON. Корпоративные клиенты также имеют доступ к прямым подключениям к базам данных и API-экспорту."
-          },
-          "updateFrequency": {
-            "question": "Как часто обновляются данные GWI?",
-            "answer": "Данные GWI Core обновляются ежеквартально новыми опросами потребителей. GWI Zeitgeist предоставляет еженедельные обновления по актуальным темам. Некоторые специализированные наборы данных могут иметь другую частоту обновления."
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "Что считается запросом?",
-            "answer": "Запрос — это любое обращение к агенту, включая уточняющие вопросы в рамках одной беседы. Сложные многоэтапные рабочие процессы считаются одним запросом независимо от количества задействованных агентов."
-          },
-          "changePlan": {
-            "question": "Могу ли я изменить тариф?",
-            "answer": "Да, вы можете изменить тариф в любое время в разделе Настройки > Оплата. Повышение тарифа вступает в силу немедленно с пропорциональной оплатой. Понижение вступает в силу с начала следующего расчётного периода."
-          },
-          "annualDiscount": {
-            "question": "Есть ли скидка на годовую оплату?",
-            "answer": "Да! Годовая оплата экономит 20% по сравнению с ежемесячной. Свяжитесь с нашим отделом продаж для настройки годовой оплаты или перехода с ежемесячной."
-          }
-        }
+        "title": "[RU] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "Начальный",
-          "intermediate": "Средний",
-          "advanced": "Продвинутый"
-        },
-        "personas": {
-          "title": "Создание эффективных персон",
-          "description": "Узнайте, как создавать детальные и практичные персоны аудитории",
-          "duration": "15 мин. чтения"
-        },
-        "workflows": {
-          "title": "Лучшие практики автоматизации рабочих процессов",
-          "description": "Проектируйте эффективные многоагентные рабочие процессы для ваших исследований",
-          "duration": "20 мин. чтения"
-        },
-        "prompts": {
-          "title": "Продвинутая инженерия промптов",
-          "description": "Получайте лучшие результаты с оптимизированными промптами агентов",
-          "duration": "25 мин. чтения"
-        },
-        "apiIntegration": {
-          "title": "Руководство по интеграции API",
-          "description": "Подключите агентов GWI к вашим существующим инструментам",
-          "duration": "30 мин. чтения"
-        }
-      },
-      "viewAllDocs": "Вся документация",
       "contact": {
-        "liveChat": {
-          "title": "Онлайн-чат",
-          "description": "Общайтесь с нашей командой поддержки в реальном времени",
-          "availability": "Доступен с понедельника по пятницу, 9:00 - 18:00 (EST). Среднее время ответа: 2 минуты.",
-          "button": "Начать чат"
+        "title": "[RU] Need More Help?",
+        "description": "[RU] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[RU] Contact Support",
+        "responseTime": "[RU] Typical response time: 2-4 hours"
+      },
+      "description": "[RU] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[RU] Browse by Category",
+        "agents": "[RU] AI Agents",
+        "agentsDesc": "[RU] Learn about agent capabilities",
+        "workflows": "[RU] Workflows",
+        "workflowsDesc": "[RU] Build automation pipelines",
+        "data": "[RU] Data & Audiences",
+        "dataDesc": "[RU] Understanding GWI data",
+        "reports": "[RU] Reports & Exports",
+        "reportsDesc": "[RU] Generate and share insights",
+        "integrations": "[RU] Integrations",
+        "integrationsDesc": "[RU] Connect with your tools",
+        "billing": "[RU] Billing & Plans",
+        "billingDesc": "[RU] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[RU] Profile Settings",
+      "description": "[RU] Manage your personal information",
+      "personalInfo": "[RU] Personal Information",
+      "updateProfileDetails": "[RU] Update your profile details",
+      "uploadPhoto": "[RU] Upload Photo",
+      "photoHint": "[RU] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[RU] First Name",
+      "lastName": "[RU] Last Name",
+      "emailAddress": "[RU] Email Address",
+      "jobTitle": "[RU] Job Title",
+      "bio": "[RU] Bio",
+      "contactInfo": "[RU] Contact Information",
+      "contactDescription": "[RU] How colleagues can reach you",
+      "phoneNumber": "[RU] Phone Number",
+      "location": "[RU] Location",
+      "saving": "[RU] Saving...",
+      "saveChanges": "[RU] Save Changes"
+    },
+    "team": {
+      "title": "[RU] Team Management",
+      "description": "[RU] Manage team members and their permissions",
+      "teamMembers": "[RU] Team Members",
+      "membersCount": "[RU] {count} members in your organization",
+      "inviteMember": "[RU] Invite Member",
+      "inviteTeamMember": "[RU] Invite Team Member",
+      "inviteDescription": "[RU] Send an invitation to join your organization",
+      "emailAddress": "[RU] Email Address",
+      "emailPlaceholder": "[RU] colleague@company.com",
+      "role": "[RU] Role",
+      "sending": "[RU] Sending...",
+      "sendInvitation": "[RU] Send Invitation",
+      "searchMembers": "[RU] Search members...",
+      "tableHeaders": {
+        "member": "[RU] Member",
+        "role": "[RU] Role",
+        "lastActive": "[RU] Last Active",
+        "joined": "[RU] Joined"
+      },
+      "roles": {
+        "owner": "[RU] Owner",
+        "admin": "[RU] Admin",
+        "member": "[RU] Member",
+        "viewer": "[RU] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[RU] Make Admin",
+        "makeMember": "[RU] Make Member",
+        "makeViewer": "[RU] Make Viewer",
+        "removeMember": "[RU] Remove Member"
+      },
+      "pendingInvitations": "[RU] Pending Invitations",
+      "pendingCount": "[RU] {count} pending invitation",
+      "pendingCountPlural": "[RU] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[RU] Email",
+        "role": "[RU] Role",
+        "sent": "[RU] Sent",
+        "expires": "[RU] Expires"
+      },
+      "revoke": "[RU] Revoke",
+      "rolePermissions": "[RU] Role Permissions",
+      "rolePermissionsDescription": "[RU] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[RU] Full organization control",
+        "transferOwnership": "[RU] Transfer ownership",
+        "deleteOrg": "[RU] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[RU] Manage team members",
+        "billing": "[RU] Billing & subscription",
+        "allMemberPerms": "[RU] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[RU] Create and edit agents",
+        "generateReports": "[RU] Generate reports",
+        "useAgents": "[RU] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[RU] View reports",
+        "viewDashboards": "[RU] View dashboards",
+        "readOnly": "[RU] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[RU] Remove Team Member",
+        "description": "[RU] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[RU] Cancel",
+        "remove": "[RU] Remove Member"
+      },
+      "unknown": "[RU] Unknown",
+      "never": "[RU] Never",
+      "justNow": "[RU] Just now",
+      "minAgo": "[RU] {count} min ago",
+      "hoursAgo": "[RU] {count} hour ago",
+      "hoursAgoPlural": "[RU] {count} hours ago",
+      "daysAgo": "[RU] {count} day ago",
+      "daysAgoPlural": "[RU] {count} days ago"
+    },
+    "billing": {
+      "title": "[RU] Billing & Subscription",
+      "description": "[RU] Manage your subscription and payment methods",
+      "enterprisePlan": "[RU] Enterprise Plan",
+      "current": "[RU] Current",
+      "planDescription": "[RU] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[RU] per month",
+      "planFeatures": "[RU] Plan Features",
+      "features": {
+        "unlimitedQueries": "[RU] Unlimited AI agent queries",
+        "allAgents": "[RU] All pre-built domain agents",
+        "customDev": "[RU] Custom agent development",
+        "prioritySupport": "[RU] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[RU] Usage This Period",
+      "usage": {
+        "agentQueries": "[RU] Agent Queries",
+        "unlimited": "[RU] Unlimited",
+        "reportsGenerated": "[RU] Reports Generated",
+        "teamSeats": "[RU] Team Seats"
+      },
+      "nextBillingDate": "[RU] Next billing date: {date}",
+      "changePlan": "[RU] Change Plan",
+      "cancelSubscription": "[RU] Cancel Subscription",
+      "paymentMethod": "[RU] Payment Method",
+      "paymentDescription": "[RU] Manage your payment information",
+      "cardEnding": "[RU] Visa ending in {last4}",
+      "cardExpires": "[RU] Expires {date}",
+      "update": "[RU] Update",
+      "billingHistory": "[RU] Billing History",
+      "billingHistoryDescription": "[RU] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[RU] Invoice",
+        "date": "[RU] Date",
+        "amount": "[RU] Amount",
+        "status": "[RU] Status"
+      },
+      "paid": "[RU] Paid",
+      "needMoreCapacity": "[RU] Need more capacity?",
+      "contactForPricing": "[RU] Contact us for custom enterprise pricing",
+      "contactSales": "[RU] Contact Sales",
+      "upgrade": {
+        "title": "[RU] Choose Your Plan",
+        "description": "[RU] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[RU] Back to Billing",
+        "checkoutCanceled": "[RU] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[RU] Monthly",
+        "yearly": "[RU] Yearly",
+        "save17": "[RU] Save 17%",
+        "mostPopular": "[RU] Most Popular",
+        "currentPlan": "[RU] Current Plan",
+        "billedAnnually": "[RU] ${price} billed annually",
+        "upgradeTo": "[RU] Upgrade to {plan}",
+        "processing": "[RU] Processing...",
+        "customSales": "[RU] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[RU] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[RU] Starter",
+            "description": "[RU] For individuals and small teams getting started",
+            "features": {
+              "runs": "[RU] 100 agent runs / month",
+              "seats": "[RU] 3 team seats",
+              "sources": "[RU] 5 data sources",
+              "retention": "[RU] 30 day data retention",
+              "tokens": "[RU] 100K tokens / month",
+              "support": "[RU] Community support"
+            }
+          },
+          "professional": {
+            "name": "[RU] Professional",
+            "description": "[RU] For growing teams with advanced needs",
+            "features": {
+              "runs": "[RU] 1,000 agent runs / month",
+              "seats": "[RU] 10 team seats",
+              "sources": "[RU] 25 data sources",
+              "retention": "[RU] 90 day data retention",
+              "tokens": "[RU] 1M tokens / month",
+              "support": "[RU] Priority email support",
+              "analytics": "[RU] Advanced analytics",
+              "integrations": "[RU] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[RU] Enterprise",
+            "description": "[RU] For large organizations with custom requirements",
+            "features": {
+              "runs": "[RU] Unlimited agent runs",
+              "seats": "[RU] Unlimited team seats",
+              "sources": "[RU] Unlimited data sources",
+              "retention": "[RU] 365 day data retention",
+              "tokens": "[RU] Unlimited tokens",
+              "support": "[RU] 24/7 dedicated support",
+              "customDev": "[RU] Custom agent development",
+              "sso": "[RU] SSO & SCIM",
+              "sla": "[RU] SLA guarantee",
+              "accountManager": "[RU] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[RU] Audit Log",
+      "description": "[RU] Track all actions and changes in your organization",
+      "activityHistory": "[RU] Activity History",
+      "totalEvents": "[RU] {count} total events",
+      "searchLogs": "[RU] Search logs...",
+      "allActions": "[RU] All Actions",
+      "allResources": "[RU] All Resources",
+      "noAuditLogs": "[RU] No audit logs found",
+      "activityWillAppear": "[RU] Activity will appear here as actions are taken",
+      "showing": "[RU] Showing {start} to {end} of {total}",
+      "previous": "[RU] Previous",
+      "next": "[RU] Next",
+      "actions": {
+        "create": "[RU] Created",
+        "update": "[RU] Updated",
+        "delete": "[RU] Deleted",
+        "execute": "[RU] Executed",
+        "login": "[RU] Logged in",
+        "logout": "[RU] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[RU] Webhooks",
+      "description": "[RU] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[RU] Webhook Endpoints",
+      "endpointsDescription": "[RU] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[RU] Add Webhook",
+      "addWebhookEndpoint": "[RU] Add Webhook Endpoint",
+      "addWebhookDescription": "[RU] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[RU] Endpoint URL",
+      "endpointUrlPlaceholder": "[RU] https://api.example.com/webhooks",
+      "descriptionOptional": "[RU] Description (Optional)",
+      "descriptionPlaceholder": "[RU] Describe this webhook...",
+      "events": "[RU] Events",
+      "creating": "[RU] Creating...",
+      "createWebhook": "[RU] Create Webhook",
+      "noWebhooks": "[RU] No webhooks configured",
+      "addWebhookToStart": "[RU] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[RU] Endpoint",
+        "events": "[RU] Events",
+        "status": "[RU] Status",
+        "secret": "[RU] Secret"
+      },
+      "eventsCount": "[RU] {count} events",
+      "active": "[RU] Active",
+      "disabled": "[RU] Disabled",
+      "webhookSecurity": "[RU] Webhook Security",
+      "securityDescription": "[RU] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[RU] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[RU] Agent Run Started",
+        "agentRunCompleted": "[RU] Agent Run Completed",
+        "agentRunFailed": "[RU] Agent Run Failed",
+        "workflowRunStarted": "[RU] Workflow Run Started",
+        "workflowRunCompleted": "[RU] Workflow Run Completed",
+        "workflowRunFailed": "[RU] Workflow Run Failed",
+        "reportGenerated": "[RU] Report Generated",
+        "memberAdded": "[RU] Member Added",
+        "memberRemoved": "[RU] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[RU] Custom Alerts",
+      "description": "[RU] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[RU] Total Alerts",
+      "active": "[RU] Active",
+      "totalTriggers": "[RU] Total Triggers",
+      "paused": "[RU] Paused",
+      "yourAlerts": "[RU] Your Alerts",
+      "yourAlertsDescription": "[RU] Manage your custom alert configurations",
+      "createAlert": "[RU] Create Alert",
+      "searchAlerts": "[RU] Search alerts...",
+      "entityType": "[RU] Entity Type",
+      "allTypes": "[RU] All Types",
+      "allStatus": "[RU] All Status",
+      "noAlertsYet": "[RU] No alerts yet",
+      "noMatchingAlerts": "[RU] No matching alerts",
+      "createFirstAlert": "[RU] Create your first alert to get notified about important changes",
+      "adjustFilters": "[RU] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[RU] Alert",
+        "type": "[RU] Type",
+        "condition": "[RU] Condition",
+        "channels": "[RU] Channels",
+        "lastTriggered": "[RU] Last Triggered",
+        "status": "[RU] Status"
+      },
+      "total": "[RU] total",
+      "never": "[RU] Never",
+      "edit": "[RU] Edit",
+      "viewHistory": "[RU] View History",
+      "delete": "[RU] Delete",
+      "createNewAlert": "[RU] Create New Alert",
+      "createNewAlertDescription": "[RU] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[RU] Edit Alert",
+      "editAlertDescription": "[RU] Update the configuration for this alert",
+      "alertHistory": "[RU] Alert History: {name}",
+      "alertHistoryDescription": "[RU] View the history of when this alert was triggered",
+      "deleteAlert": "[RU] Delete Alert",
+      "deleteAlertDescription": "[RU] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[RU] Cancel",
+      "entityTypes": {
+        "metric": "[RU] Metric",
+        "audience": "[RU] Audience",
+        "brand": "[RU] Brand",
+        "report": "[RU] Report",
+        "agent": "[RU] Agent",
+        "workflow": "[RU] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[RU] Keyboard Shortcuts",
+      "description": "[RU] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[RU] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[RU] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[RU] Shortcut Conflicts Detected",
+      "conflictsDescription": "[RU] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[RU] Navigation",
+        "navigationDesc": "[RU] Navigate around the application",
+        "actions": "[RU] Actions",
+        "actionsDesc": "[RU] Perform common actions quickly",
+        "ui": "[RU] UI",
+        "uiDesc": "[RU] Control the user interface",
+        "editing": "[RU] Editing",
+        "editingDesc": "[RU] Edit content efficiently"
+      },
+      "resetToDefaults": "[RU] Reset to Defaults",
+      "saving": "[RU] Saving...",
+      "saveChanges": "[RU] Save Changes",
+      "resetDialog": {
+        "title": "[RU] Reset Keyboard Shortcuts",
+        "description": "[RU] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[RU] Cancel",
+        "reset": "[RU] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[RU] Edit Shortcut",
+        "customizable": "[RU] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[RU] This shortcut cannot be customized",
+        "action": "[RU] Action",
+        "currentBinding": "[RU] Current Binding",
+        "newBinding": "[RU] New Binding",
+        "pressKeys": "[RU] Press keys...",
+        "clickToRecord": "[RU] Click to record",
+        "record": "[RU] Record",
+        "recording": "[RU] Recording...",
+        "cancel": "[RU] Cancel",
+        "save": "[RU] Save"
+      }
+    },
+    "plan": {
+      "title": "[RU] Plan & Billing",
+      "description": "[RU] Manage your subscription and view usage metrics",
+      "currentPlan": "[RU] Current Plan",
+      "currentPlanDescription": "[RU] Your active subscription details",
+      "upgradePlan": "[RU] Upgrade Plan",
+      "teamMembers": "[RU] Team Members",
+      "agents": "[RU] Agents",
+      "workflows": "[RU] Workflows",
+      "reports": "[RU] Reports",
+      "usageThisMonth": "[RU] Usage This Month",
+      "usageDescription": "[RU] Monitor your resource usage against plan limits",
+      "comparePlans": "[RU] Compare Plans",
+      "yourFeatures": "[RU] Your Features",
+      "yourFeaturesDescription": "[RU] All features included in your current plan",
+      "limit": "[RU] Limit: {limit}",
+      "requesting": "[RU] Requesting...",
+      "upgradeTo": "[RU] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[RU] Starter",
+          "price": "[RU] $49/mo",
+          "features": {
+            "members": "[RU] Up to 5 team members",
+            "agents": "[RU] 10 agents",
+            "runs": "[RU] 50 workflow runs/month",
+            "analytics": "[RU] Basic analytics",
+            "support": "[RU] Email support"
+          }
         },
-        "ticket": {
-          "title": "Отправить заявку",
-          "description": "Получите помощь по email в течение 24 часов",
-          "info": "Для сложных вопросов или запросов на новые функции. Укажите как можно больше деталей.",
-          "button": "Отправить заявку"
+        "professional": {
+          "name": "[RU] Professional",
+          "price": "[RU] $199/mo",
+          "features": {
+            "members": "[RU] Up to 20 team members",
+            "agents": "[RU] Unlimited agents",
+            "runs": "[RU] Unlimited workflow runs",
+            "analytics": "[RU] Advanced analytics",
+            "support": "[RU] Priority support",
+            "integrations": "[RU] Custom integrations",
+            "api": "[RU] API access"
+          }
         },
         "enterprise": {
-          "title": "Корпоративная поддержка",
-          "description": "Нужна выделенная поддержка? Корпоративные планы включают персонального менеджера по успеху клиентов и приоритетное время ответа.",
-          "button": "Связаться с отделом продаж"
+          "name": "[RU] Enterprise",
+          "price": "[RU] Custom",
+          "features": {
+            "members": "[RU] Unlimited team members",
+            "everything": "[RU] Unlimited everything",
+            "security": "[RU] Advanced security",
+            "sso": "[RU] SSO & SAML",
+            "support": "[RU] Dedicated support",
+            "sla": "[RU] Custom SLAs",
+            "onPremise": "[RU] On-premise option",
+            "whiteLabel": "[RU] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[RU] Scheduled Exports",
+      "description": "[RU] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[RU] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[RU] Manage automatic exports that run on a schedule",
+      "newExport": "[RU] New Export",
+      "all": "[RU] All",
+      "active": "[RU] Active",
+      "paused": "[RU] Paused",
+      "noScheduledExports": "[RU] No scheduled exports",
+      "createFirstExport": "[RU] Create your first scheduled export to get started",
+      "createExport": "[RU] Create Export",
+      "tableHeaders": {
+        "name": "[RU] Name",
+        "schedule": "[RU] Schedule",
+        "format": "[RU] Format",
+        "lastRun": "[RU] Last Run",
+        "nextRun": "[RU] Next Run",
+        "status": "[RU] Status"
+      },
+      "statusLabels": {
+        "pending": "[RU] Pending",
+        "processing": "[RU] Running",
+        "completed": "[RU] Success",
+        "failed": "[RU] Failed",
+        "neverRun": "[RU] Never Run"
+      },
+      "actions": {
+        "runNow": "[RU] Run Now",
+        "viewHistory": "[RU] View History",
+        "edit": "[RU] Edit",
+        "pause": "[RU] Pause",
+        "activate": "[RU] Activate",
+        "delete": "[RU] Delete"
+      },
+      "deleteDialog": {
+        "title": "[RU] Delete Scheduled Export",
+        "description": "[RU] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[RU] Cancel",
+        "delete": "[RU] Delete"
+      },
+      "historySheet": {
+        "title": "[RU] Export History",
+        "loading": "[RU] Loading..."
+      },
+      "relativeTime": {
+        "never": "[RU] Never",
+        "justNow": "[RU] Just now",
+        "lessThanMinute": "[RU] In less than a minute",
+        "minsAgo": "[RU] {count}m ago",
+        "inMins": "[RU] In {count}m",
+        "hoursAgo": "[RU] {count}h ago",
+        "inHours": "[RU] In {count}h",
+        "daysAgo": "[RU] {count}d ago",
+        "inDays": "[RU] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[RU] Inbox Agents",
+      "description": "[RU] AI agents that automatically handle incoming requests",
+      "configureChannels": "[RU] Configure Channels",
+      "createAgent": "[RU] Create Agent",
+      "activeAgents": "[RU] Active Agents",
+      "status": {
+        "processing": "[RU] Processing"
+      },
+      "stats": {
+        "processedToday": "[RU] Processed Today",
+        "fromYesterday": "[RU] {percent} from yesterday",
+        "avgResponseTime": "[RU] Avg Response Time",
+        "fasterThanLastWeek": "[RU] {percent} faster than last week",
+        "successRate": "[RU] Success Rate",
+        "basedOnRequests": "[RU] Based on {count} requests",
+        "pendingReview": "[RU] Pending Review",
+        "highPriority": "[RU] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[RU] Success rate",
+        "processed": "[RU] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[RU] Incoming Requests",
+        "description": "[RU] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[RU] Search requests...",
+        "noRequests": "[RU] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[RU] Assign to Brief Handler",
+        "assignToAudienceQuery": "[RU] Assign to Audience Query",
+        "assignToLocalization": "[RU] Assign to Localization",
+        "reprocess": "[RU] Reprocess",
+        "archive": "[RU] Archive"
+      },
+      "priority": {
+        "high": "[RU] High priority",
+        "medium": "[RU] Medium priority",
+        "low": "[RU] Low priority"
+      },
+      "request": {
+        "received": "[RU] Received {time}",
+        "generatedOutput": "[RU] Generated Output",
+        "confidence": "[RU] {percent}% confidence",
+        "citations": "[RU] {count} citations",
+        "viewFullReport": "[RU] View Full Report",
+        "assignAgent": "[RU] Assign Agent",
+        "respondManually": "[RU] Respond Manually",
+        "viewHistory": "[RU] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[RU] Agent Active",
+        "agentPaused": "[RU] Agent Paused",
+        "lastTriggered": "[RU] Last triggered {time}",
+        "processed": "[RU] Processed",
+        "successRate": "[RU] Success Rate",
+        "avgTime": "[RU] Avg Time",
+        "triggerKeywords": "[RU] Trigger Keywords",
+        "connectedChannels": "[RU] Connected Channels",
+        "processingPipeline": "[RU] Processing Pipeline",
+        "configure": "[RU] Configure",
+        "viewLogs": "[RU] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[RU] Create Inbox Agent",
+        "description": "[RU] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[RU] Agent Name",
+        "agentNamePlaceholder": "[RU] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[RU] Describe what this agent does...",
+        "triggerKeywords": "[RU] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[RU] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[RU] Agent will activate when messages contain these keywords",
+        "channels": "[RU] Channels",
+        "baseAgent": "[RU] Base Agent",
+        "selectAgent": "[RU] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[RU] Audience Explorer",
+          "personaArchitect": "[RU] Persona Architect",
+          "cultureTracker": "[RU] Culture Tracker",
+          "brandRelationshipAnalyst": "[RU] Brand Relationship Analyst"
+        },
+        "autoRespond": "[RU] Auto-respond",
+        "autoRespondHelp": "[RU] Automatically send responses to requesters",
+        "requireApproval": "[RU] Require Approval",
+        "requireApprovalHelp": "[RU] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[RU] Prompt Templates",
+      "description": "[RU] Reusable templates for common insights tasks",
+      "createTemplate": "[RU] Create Template",
+      "searchPlaceholder": "[RU] Search templates...",
+      "starredTemplates": "[RU] Starred Templates",
+      "allTemplates": "[RU] All Templates",
+      "uses": "[RU] {count} uses",
+      "categories": {
+        "all": "[RU] All",
+        "research": "[RU] Research",
+        "analysis": "[RU] Analysis",
+        "briefs": "[RU] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[RU] Use Template",
+        "duplicate": "[RU] Duplicate"
+      },
+      "createDialog": {
+        "title": "[RU] Create Template",
+        "description": "[RU] Save a prompt as a reusable template for your team",
+        "templateName": "[RU] Template Name",
+        "templateNamePlaceholder": "[RU] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[RU] What does this template do?",
+        "category": "[RU] Category",
+        "promptTemplate": "[RU] Prompt Template",
+        "promptPlaceholder": "[RU] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[RU] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[RU] Agent Store",
+      "description": "[RU] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[RU] Search agents...",
+      "sortBy": {
+        "placeholder": "[RU] Sort by",
+        "popular": "[RU] Most Popular",
+        "rating": "[RU] Highest Rated",
+        "newest": "[RU] Newest",
+        "name": "[RU] Name A-Z"
+      },
+      "featuredAgents": "[RU] Featured Agents",
+      "featured": "[RU] Featured",
+      "installed": "[RU] Installed",
+      "tryNow": "[RU] Try Now",
+      "categories": "[RU] Categories",
+      "viewDetails": "[RU] View Details",
+      "added": "[RU] Added",
+      "buildYourOwn": {
+        "title": "[RU] Build Your Own Agent",
+        "description": "[RU] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[RU] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[RU] Back to Store",
+        "notFound": {
+          "title": "[RU] Agent Not Found",
+          "description": "[RU] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[RU] {count} installs",
+        "installed": "[RU] Installed",
+        "installing": "[RU] Installing...",
+        "installAgent": "[RU] Install Agent",
+        "tryInPlayground": "[RU] Try in Playground",
+        "info": {
+          "version": "[RU] Version",
+          "category": "[RU] Category",
+          "dataSources": "[RU] Data Sources"
+        },
+        "tabs": {
+          "overview": "[RU] Overview",
+          "capabilities": "[RU] Capabilities",
+          "examples": "[RU] Examples",
+          "reviews": "[RU] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[RU] About this Agent",
+          "fastResults": "[RU] Fast Results",
+          "fastResultsDesc": "[RU] Avg. 3s response time",
+          "verifiedData": "[RU] Verified Data",
+          "verifiedDataDesc": "[RU] 100% sourced citations",
+          "alwaysUpdated": "[RU] Always Updated",
+          "alwaysUpdatedDesc": "[RU] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[RU] What this agent can do",
+          "description": "[RU] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[RU] Example Prompts",
+          "description": "[RU] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[RU] Ratings",
+          "reviewsCount": "[RU] {count} reviews"
+        },
+        "relatedAgents": "[RU] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[RU] Data Changes",
+      "description": "[RU] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[RU] Timeline",
+        "compare": "[RU] Compare",
+        "evolution": "[RU] Evolution",
+        "alerts": "[RU] Alerts"
+      },
+      "compare": {
+        "title": "[RU] Compare Versions",
+        "description": "[RU] Select an entity to compare its versions",
+        "compareVersions": "[RU] Compare versions",
+        "entities": {
+          "audiences": "[RU] Audiences",
+          "crosstabs": "[RU] Crosstabs",
+          "insights": "[RU] Insights",
+          "charts": "[RU] Charts",
+          "reports": "[RU] Reports",
+          "dashboards": "[RU] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[RU] Analysis Evolution",
+        "description": "[RU] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[RU] View evolution",
+        "types": {
+          "brandHealth": "[RU] Brand Health",
+          "audienceInsights": "[RU] Audience Insights",
+          "marketAnalysis": "[RU] Market Analysis",
+          "competitorAnalysis": "[RU] Competitor Analysis",
+          "trendAnalysis": "[RU] Trend Analysis",
+          "crosstabAnalysis": "[RU] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[RU] Change Alerts",
+        "loading": "[RU] Loading alerts...",
+        "noAlerts": "[RU] No Alerts",
+        "noAlertsDescription": "[RU] You have no unread change alerts.",
+        "markAllRead": "[RU] Mark All as Read",
+        "markRead": "[RU] Mark Read",
+        "dismiss": "[RU] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[RU] Select {entity} to Compare",
+        "entity": "[RU] Entity",
+        "enterIdDescription": "[RU] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[RU] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[RU] Select Analysis to View Evolution",
+        "enterIdDescription": "[RU] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[RU] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[RU] Crosstabs",
+      "description": "[RU] Compare audiences across multiple dimensions",
+      "newCrosstab": "[RU] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[RU] Total Crosstabs",
+        "views": "[RU] Views",
+        "exports": "[RU] Exports",
+        "usedToday": "[RU] Used Today"
+      },
+      "tabs": {
+        "all": "[RU] All Crosstabs",
+        "recent": "[RU] Recent",
+        "templates": "[RU] Templates"
+      },
+      "empty": {
+        "title": "[RU] No crosstabs yet",
+        "description": "[RU] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[RU] Featured",
+        "liveData": "[RU] Live Data",
+        "more": "[RU] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[RU] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[RU] audience segments",
+        "metrics": "[RU] metrics",
+        "audiencesCount": "[RU] {count} audiences",
+        "metricsCount": "[RU] {count} metrics",
+        "modified": "[RU] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[RU] Open Analysis"
+      },
+      "new": {
+        "title": "[RU] Create Crosstab",
+        "description": "[RU] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[RU] Crosstab Name",
+          "namePlaceholder": "[RU] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[RU] Select Audiences",
+          "selectMetrics": "[RU] Select Metrics",
+          "selected": "[RU] {count} selected"
+        },
+        "summary": {
+          "title": "[RU] Summary",
+          "audiences": "[RU] Audiences ({count})",
+          "metrics": "[RU] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[RU] Generate Crosstab",
+          "generating": "[RU] Generating...",
+          "cancel": "[RU] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[RU] Please enter a crosstab name",
+          "audienceRequired": "[RU] Please select at least one audience",
+          "metricRequired": "[RU] Please select at least one metric",
+          "createFailed": "[RU] Failed to create crosstab",
+          "createFailedRetry": "[RU] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[RU] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[RU] {count} metrics",
+          "audiences": "[RU] {count} audiences"
+        },
+        "categoriesCount": "[RU] {count} categories",
+        "more": "[RU] more",
+        "actions": {
+          "share": "[RU] Share",
+          "generateInsights": "[RU] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[RU] Data Grid",
+          "calculatedFields": "[RU] Calculated Fields",
+          "filters": "[RU] Filters",
+          "visualize": "[RU] Visualize"
+        },
+        "grid": {
+          "title": "[RU] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[RU] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[RU] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[RU] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[RU] Value updated to {value}%",
+          "fieldCreated": "[RU] Calculated field \"{name}\" created",
+          "fieldUpdated": "[RU] Calculated field updated",
+          "fieldDeleted": "[RU] Calculated field deleted",
+          "fieldApplied": "[RU] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[RU] Filters applied",
+          "chartSaved": "[RU] Chart saved!",
+          "chartExported": "[RU] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[RU] Crosstab Not Found",
+          "subtitle": "[RU] The requested crosstab could not be found",
+          "heading": "[RU] Crosstab not found",
+          "description": "[RU] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[RU] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[RU] Remove from favorites",
+          "addToFavorites": "[RU] Add to favorites",
+          "pauseAutoRefresh": "[RU] Pause auto-refresh",
+          "enableAutoRefresh": "[RU] Enable auto-refresh",
+          "exitFullscreen": "[RU] Exit fullscreen",
+          "enterFullscreen": "[RU] Enter fullscreen",
+          "visualize": "[RU] Visualize",
+          "share": "[RU] Share",
+          "edit": "[RU] Edit",
+          "duplicate": "[RU] Duplicate",
+          "addToDashboard": "[RU] Add to Dashboard",
+          "copyLink": "[RU] Copy Link",
+          "copied": "[RU] Copied!",
+          "delete": "[RU] Delete",
+          "cancel": "[RU] Cancel",
+          "selectAll": "[RU] Select All",
+          "clear": "[RU] Clear",
+          "schedule": "[RU] Schedule"
+        },
+        "filters": {
+          "title": "[RU] Data Filters",
+          "clearAll": "[RU] Clear All",
+          "description": "[RU] Filter and refine your crosstab data",
+          "quickFilters": "[RU] Quick Filters",
+          "valueRange": "[RU] Value Range: {min}% - {max}%",
+          "category": "[RU] Category",
+          "allCategories": "[RU] All Categories",
+          "activeFilters": "[RU] Active filters"
+        },
+        "tabs": {
+          "filters": "[RU] Filters",
+          "audiences": "[RU] Audiences",
+          "metrics": "[RU] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[RU] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[RU] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[RU] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[RU] Export as JSON",
+          "asCsv": "[RU] Export as CSV",
+          "asHtml": "[RU] Export as HTML",
+          "asPdf": "[RU] Export as PDF",
+          "asExcel": "[RU] Export as Excel",
+          "asPowerPoint": "[RU] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[RU] Delete Crosstab",
+          "description": "[RU] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[RU] Modified {time}",
+          "views": "[RU] {count} views",
+          "createdBy": "[RU] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[RU] Data",
+          "activity": "[RU] Activity",
+          "comments": "[RU] Comments",
+          "history": "[RU] History"
+        },
+        "insights": {
+          "title": "[RU] AI-Generated Insights",
+          "topPerformer": "[RU] Top Performer",
+          "topPerformerDesc": "[RU] leads in most metrics with an average of {average}%.",
+          "noData": "[RU] No data available",
+          "biggestGap": "[RU] Biggest Gap",
+          "biggestGapDesc": "[RU] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[RU] Trending",
+          "trendingDesc": "[RU] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[RU] no"
+        },
+        "activity": {
+          "title": "[RU] Activity Log",
+          "description": "[RU] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[RU] Share Crosstab",
+          "description": "[RU] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[RU] Email address",
+          "emailPlaceholder": "[RU] email@example.com",
+          "role": "[RU] Role",
+          "roles": {
+            "viewer": "[RU] Viewer",
+            "editor": "[RU] Editor",
+            "admin": "[RU] Admin"
+          },
+          "shareLink": "[RU] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[RU] Schedule Report",
+          "description": "[RU] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[RU] Recipients",
+          "recipientsPlaceholder": "[RU] email@example.com, team@example.com",
+          "frequency": "[RU] Frequency",
+          "frequencies": {
+            "daily": "[RU] Daily",
+            "weekly": "[RU] Weekly",
+            "monthly": "[RU] Monthly"
+          },
+          "format": "[RU] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[RU] Insights",
+      "description": "[RU] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[RU] Search insights...",
+      "filterByType": "[RU] Filter by type",
+      "loading": "[RU] Loading...",
+      "showing": "[RU] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[RU] All Types",
+        "audience": "[RU] Audience",
+        "trend": "[RU] Trend",
+        "competitive": "[RU] Competitive",
+        "analysis": "[RU] Analysis"
+      },
+      "empty": {
+        "title": "[RU] No insights yet",
+        "description": "[RU] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[RU] Go to Playground"
+      },
+      "badges": {
+        "new": "[RU] New"
+      },
+      "viaAgent": "[RU] via {name}",
+      "detail": {
+        "backToInsights": "[RU] Back to Insights",
+        "notFound": {
+          "title": "[RU] Insight not found",
+          "description": "[RU] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[RU] View All Insights",
+        "confidence": "[RU] {percent}% confidence",
+        "viaAgent": "[RU] via {name}",
+        "actions": {
+          "copy": "[RU] Copy",
+          "copied": "[RU] Copied",
+          "share": "[RU] Share",
+          "export": "[RU] Export"
+        },
+        "detailsTitle": "[RU] Insight Details",
+        "detailsDescription": "[RU] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[RU] Want to explore more?",
+          "description": "[RU] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[RU] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[RU] Data Connectors",
+        "description": "[RU] Connect external data sources to enrich your insights",
+        "addConnector": "[RU] Add Connector",
+        "searchPlaceholder": "[RU] Search connectors...",
+        "stats": {
+          "totalConnectors": "[RU] Total Connectors",
+          "active": "[RU] Active",
+          "withErrors": "[RU] With Errors",
+          "dataSources": "[RU] Data Sources"
+        },
+        "tabs": {
+          "configured": "[RU] Configured",
+          "available": "[RU] Available"
+        },
+        "filters": {
+          "allTypes": "[RU] All types"
+        },
+        "empty": {
+          "title": "[RU] No connectors configured",
+          "description": "[RU] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[RU] Previous",
+          "next": "[RU] Next",
+          "pageOf": "[RU] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[RU] Sync started",
+          "syncFailed": "[RU] Failed to start sync",
+          "connectorEnabled": "[RU] Connector enabled",
+          "connectorDisabled": "[RU] Connector disabled",
+          "updateFailed": "[RU] Failed to update connector",
+          "connectorDeleted": "[RU] Connector deleted",
+          "deleteFailed": "[RU] Failed to delete connector",
+          "testFailed": "[RU] Failed to test connection"
+        },
+        "new": {
+          "title": "[RU] Add Data Connector",
+          "description": "[RU] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[RU] Back to Connectors",
+          "notFound": "[RU] Connector not found",
+          "actions": {
+            "test": "[RU] Test",
+            "syncNow": "[RU] Sync Now",
+            "delete": "[RU] Delete",
+            "cancel": "[RU] Cancel",
+            "deleting": "[RU] Deleting..."
+          },
+          "status": {
+            "completed": "[RU] Last sync successful",
+            "running": "[RU] Syncing...",
+            "pending": "[RU] Sync pending",
+            "failed": "[RU] Last sync failed",
+            "cancelled": "[RU] Sync cancelled",
+            "never": "[RU] Never synced"
+          },
+          "cards": {
+            "status": "[RU] Status",
+            "active": "[RU] Active",
+            "paused": "[RU] Paused",
+            "totalSyncs": "[RU] Total Syncs",
+            "errorCount": "[RU] Error Count"
+          },
+          "tabs": {
+            "overview": "[RU] Overview",
+            "configuration": "[RU] Configuration",
+            "syncHistory": "[RU] Sync History"
+          },
+          "overview": {
+            "details": "[RU] Details",
+            "description": "[RU] Description",
+            "provider": "[RU] Provider",
+            "type": "[RU] Type",
+            "syncSchedule": "[RU] Sync Schedule",
+            "manualOnly": "[RU] Manual only",
+            "created": "[RU] Created",
+            "recentSyncs": "[RU] Recent Syncs",
+            "lastSyncs": "[RU] Last {count} sync operations",
+            "noSyncHistory": "[RU] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[RU] Danger Zone",
+            "deleteConnector": "[RU] Delete this connector",
+            "deleteWarning": "[RU] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[RU] Sync History",
+            "description": "[RU] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[RU] Delete Connector",
+            "description": "[RU] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[RU] Sync started",
+            "syncFailed": "[RU] Failed to start sync",
+            "testFailed": "[RU] Test failed",
+            "connectorDeleted": "[RU] Connector deleted",
+            "deleteFailed": "[RU] Failed to delete connector",
+            "connectorUpdated": "[RU] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[RU] Memory & Context",
+      "description": "[RU] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[RU] Settings",
+        "clearAll": "[RU] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "Панель управления",
     "welcome": "С возвращением",
-    "overview": "Обзор",
+    "overview": {
+      "activeAgents": "[RU] Active Agents",
+      "workflowsRun": "[RU] Workflows Run",
+      "insightsGenerated": "[RU] Insights Generated",
+      "avgRunTime": "[RU] Avg. Run Time",
+      "thisWeekChange": "[RU] +{count} this week",
+      "fromLastMonthPercent": "[RU] +{percent}% from last month",
+      "fasterPercent": "[RU] -{percent}% faster",
+      "active": "[RU] Active",
+      "noneActive": "[RU] None active",
+      "last24Hours": "[RU] Last 24 hours",
+      "noRunsYet": "[RU] No runs yet",
+      "noInsightsYet": "[RU] No insights yet",
+      "perWorkflow": "[RU] Per workflow",
+      "notAvailable": "[RU] N/A"
+    },
     "recentActivity": "Недавняя активность",
     "quickActions": {
       "title": "Быстрые действия",
@@ -871,7 +1990,25 @@
       "createReport": "Создать отчёт",
       "published": "опубликован",
       "generating": "генерируется",
-      "draft": "черновик"
+      "draft": "черновик",
+      "page": {
+        "tabs": {
+          "allReports": "[RU] All Reports",
+          "templates": "[RU] Templates",
+          "scheduled": "[RU] Scheduled",
+          "sharedWithMe": "[RU] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[RU] Next: {date}",
+          "recipientsCount": "[RU] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[RU] Shared by {name} on {date}",
+          "canView": "[RU] Can view",
+          "canEdit": "[RU] Can edit",
+          "canComment": "[RU] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "Активные проекты",
@@ -1035,7 +2172,60 @@
         "title": "Рабочие процессы",
         "description": "Создание и управление автоматизированными исследовательскими конвейерами.",
         "newWorkflow": "Новый рабочий процесс",
-        "searchPlaceholder": "Поиск рабочих процессов..."
+        "searchPlaceholder": "Поиск рабочих процессов...",
+        "edit": {
+          "title": "[RU] Edit Workflow",
+          "description": "[RU] Modify workflow settings and configuration",
+          "newWorkflowName": "[RU] New Workflow",
+          "basicInfo": {
+            "title": "[RU] Basic Information",
+            "description": "[RU] Update the workflow name and description",
+            "workflowName": "[RU] Workflow Name",
+            "workflowNamePlaceholder": "[RU] Enter workflow name",
+            "descriptionPlaceholder": "[RU] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[RU] Schedule",
+            "description": "[RU] Configure when this workflow runs",
+            "runFrequency": "[RU] Run Frequency",
+            "selectSchedule": "[RU] Select schedule",
+            "selectStatus": "[RU] Select status",
+            "frequencies": {
+              "hourly": "[RU] Hourly",
+              "daily": "[RU] Daily",
+              "weekly": "[RU] Weekly",
+              "monthly": "[RU] Monthly",
+              "onDemand": "[RU] On-demand"
+            },
+            "statuses": {
+              "active": "[RU] Active",
+              "paused": "[RU] Paused",
+              "scheduled": "[RU] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[RU] Error Handling",
+            "description": "[RU] Configure retry behavior for failed runs",
+            "autoRetry": "[RU] Auto-retry on failure",
+            "autoRetryDescription": "[RU] Automatically retry the workflow if it fails",
+            "retryAttempts": "[RU] Retry Attempts",
+            "selectAttempts": "[RU] Select attempts",
+            "attempts": {
+              "one": "[RU] 1 attempt",
+              "two": "[RU] 2 attempts",
+              "three": "[RU] 3 attempts",
+              "five": "[RU] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[RU] Notifications",
+            "description": "[RU] Configure how you receive updates about this workflow",
+            "email": "[RU] Email notifications",
+            "emailDescription": "[RU] Receive email updates on completion or failure",
+            "slack": "[RU] Slack notifications",
+            "slackDescription": "[RU] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "Аудитории",
@@ -1083,55 +2273,235 @@
         "unarchive": "Разархивировать",
         "workflows": "рабочих процессов",
         "reports": "отчётов",
-        "agents": "агентов"
+        "agents": "агентов",
+        "detail": {
+          "defaultDescription": "[RU] Project description",
+          "projectSettings": "[RU] Project Settings",
+          "archiveProject": "[RU] Archive Project",
+          "deleteProject": "[RU] Delete Project",
+          "new": "[RU] New",
+          "stats": {
+            "teamMembers": "[RU] Team Members",
+            "workflows": "[RU] Workflows",
+            "running": "[RU] {count} running",
+            "reports": "[RU] Reports",
+            "generatedOutputs": "[RU] Generated outputs",
+            "agentsUsed": "[RU] Agents Used",
+            "totalRuns": "[RU] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[RU] Overview",
+            "workflows": "[RU] Workflows",
+            "reports": "[RU] Reports",
+            "agents": "[RU] Agents",
+            "team": "[RU] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[RU] Recent Workflows",
+            "recentReports": "[RU] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[RU] Project Workflows",
+            "newWorkflow": "[RU] New Workflow",
+            "lastRun": "[RU] Last run",
+            "run": "[RU] Run"
+          },
+          "reportsTab": {
+            "title": "[RU] Project Reports",
+            "newReport": "[RU] New Report",
+            "created": "[RU] Created"
+          },
+          "agentsTab": {
+            "title": "[RU] Agents Used",
+            "addAgent": "[RU] Add Agent",
+            "runsInProject": "[RU] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[RU] Team Members",
+            "addMember": "[RU] Add Member",
+            "remove": "[RU] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "Изменить аудиторию",
-        "description": "Обновите конфигурацию для этого сегмента аудитории.",
-        "saving": "Сохранение...",
-        "saveChanges": "Сохранить изменения",
-        "notFound": "Аудитория не найдена",
-        "notFoundDescription": "Аудитория, которую вы пытаетесь изменить, не существует.",
-        "notFoundDetailedDescription": "Аудитория, которую вы ищете, не существует или была удалена.",
-        "backToAudiences": "Вернуться к аудиториям",
+      "pageTracker": "[RU] Audiences List",
+      "title": "[RU] Audiences",
+      "description": "[RU] Build and analyze custom consumer segments",
+      "aiBuilder": "[RU] AI Builder",
+      "newAudience": "[RU] New Audience",
+      "totalAudiences": "[RU] Total Audiences",
+      "avgReach": "[RU] Avg. Reach",
+      "markets": "[RU] Markets",
+      "usedThisWeek": "[RU] Used This Week",
+      "searchPlaceholder": "[RU] Search audiences...",
+      "allAudiences": "[RU] All Audiences",
+      "recentlyUsed": "[RU] Recently Used",
+      "favorites": "[RU] Favorites",
+      "marketplace": "[RU] Marketplace",
+      "aiAudienceBuilder": "[RU] AI Audience Builder",
+      "aiBuilderDescription": "[RU] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[RU] Compare Audiences",
+      "compareDescription": "[RU] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[RU] No audiences yet",
+        "description": "[RU] Create your first audience to get started",
+        "action": "[RU] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[RU] {count} markets",
+        "used": "[RU] Used {time}"
+      },
+      "new": {
+        "title": "[RU] Build New Audience",
+        "description": "[RU] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "Основная информация",
-          "description": "Задайте имя и описание для этой аудитории.",
-          "audienceName": "Название аудитории",
-          "audienceNamePlaceholder": "например, экологически сознательные миллениалы",
-          "descriptionPlaceholder": "Краткое описание этого сегмента аудитории"
+          "audienceName": "[RU] Audience Name",
+          "audienceNamePlaceholder": "[RU] e.g., Eco-Conscious Millennials",
+          "description": "[RU] Description",
+          "descriptionPlaceholder": "[RU] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "Запрос на основе искусственного интеллекта",
-          "description": "Опишите свою аудиторию на естественном языке",
-          "placeholder": "например, «Покажите мне миллениалов, которые заботятся об устойчивом развитии, живут в городских районах и делают покупки в экологически чистых брендах».",
-          "generateButton": "Генерация атрибутов (скоро)"
+          "title": "[RU] AI-Powered Query",
+          "description": "[RU] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[RU] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[RU] Generate Attributes"
         },
         "attributes": {
-          "title": "Атрибуты таргетинга",
-          "description": "Определите конкретные критерии для этой аудитории",
-          "addAttribute": "Добавить атрибут",
-          "noAttributes": "Атрибуты еще не определены",
-          "noAttributesHint": "Добавьте атрибуты, чтобы определить критерии аудитории.",
-          "valuePlaceholder": "Ценить"
+          "title": "[RU] Attributes",
+          "add": "[RU] Add",
+          "age": "[RU] Age",
+          "gender": "[RU] Gender",
+          "income": "[RU] Income",
+          "interests": "[RU] Interests",
+          "is": "[RU] is",
+          "between": "[RU] between",
+          "contains": "[RU] contains"
         },
         "markets": {
-          "title": "Рынки",
-          "description": "Выберите рынки для этой аудитории",
-          "selectAtLeastOne": "Выберите хотя бы один рынок"
+          "title": "[RU] Markets",
+          "global": "[RU] Global",
+          "us": "[RU] United States",
+          "uk": "[RU] United Kingdom",
+          "de": "[RU] Germany",
+          "jp": "[RU] Japan"
         },
         "estimatedReach": {
-          "title": "Предполагаемый охват",
-          "tbd": "подлежит уточнению",
-          "matchCriteria": "потребители соответствуют этим критериям"
+          "title": "[RU] Estimated Reach",
+          "matchCriteria": "[RU] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "Отменить изменения?",
-          "description": "У вас есть несохраненные изменения. Вы уверены, что хотите уйти? Ваши изменения будут потеряны.",
-          "keepEditing": "Продолжайте редактировать",
-          "discardChanges": "Отменить изменения"
+        "actions": {
+          "save": "[RU] Save Audience",
+          "saving": "[RU] Saving...",
+          "cancel": "[RU] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[RU] Please enter an audience name",
+          "createFailed": "[RU] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[RU] Audience Detail",
+        "notFound": "[RU] Audience Not Found",
+        "notFoundDescription": "[RU] The requested audience could not be found",
+        "notFoundDetailedDescription": "[RU] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[RU] Back to Audiences",
+        "people": "[RU] people",
+        "addToFavorites": "[RU] Add to favorites",
+        "removeFromFavorites": "[RU] Remove from favorites",
+        "used": "[RU] Used {time}",
+        "tabs": {
+          "overview": "[RU] Overview",
+          "persona": "[RU] Persona",
+          "dayInLife": "[RU] Day in the Life",
+          "habits": "[RU] Habits & Behaviors",
+          "media": "[RU] Media Consumption",
+          "brands": "[RU] Brand Affinities",
+          "comments": "[RU] Comments",
+          "activity": "[RU] Activity",
+          "history": "[RU] History"
+        },
+        "actions": {
+          "explore": "[RU] Explore",
+          "share": "[RU] Share",
+          "export": "[RU] Export",
+          "edit": "[RU] Edit",
+          "autoRefresh": "[RU] Auto-refresh",
+          "pauseAutoRefresh": "[RU] Pause auto-refresh",
+          "enableAutoRefresh": "[RU] Enable auto-refresh",
+          "duplicate": "[RU] Duplicate",
+          "createLookalike": "[RU] Create Lookalike",
+          "addToCrosstab": "[RU] Add to Crosstab",
+          "addToDashboard": "[RU] Add to Dashboard",
+          "scheduleReport": "[RU] Schedule Report",
+          "copyLink": "[RU] Copy Link",
+          "copied": "[RU] Copied!",
+          "delete": "[RU] Delete"
+        },
+        "export": {
+          "asJson": "[RU] Export as JSON",
+          "asCsv": "[RU] Export as CSV",
+          "asPdf": "[RU] Export as PDF",
+          "toPowerPoint": "[RU] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[RU] Demographics",
+          "keyBehaviors": "[RU] Key Behaviors",
+          "interests": "[RU] Interests",
+          "audienceSummary": "[RU] Audience Summary",
+          "size": "[RU] Size",
+          "markets": "[RU] Markets",
+          "quickActions": "[RU] Quick Actions",
+          "createChart": "[RU] Create Chart",
+          "compareAudiences": "[RU] Compare Audiences",
+          "exportProfile": "[RU] Export Profile",
+          "copyLink": "[RU] Copy Link"
+        },
+        "activity": {
+          "title": "[RU] Activity Log",
+          "description": "[RU] Recent activity on this audience",
+          "viewed": "[RU] viewed",
+          "exported": "[RU] exported",
+          "edited": "[RU] edited",
+          "shared": "[RU] shared",
+          "created": "[RU] created",
+          "createdChart": "[RU] created chart",
+          "addedToCrosstab": "[RU] added to crosstab"
+        },
+        "share": {
+          "title": "[RU] Share Audience",
+          "description": "[RU] Share this audience with team members or external collaborators.",
+          "emailLabel": "[RU] Email address",
+          "emailPlaceholder": "[RU] email@example.com",
+          "roleLabel": "[RU] Role",
+          "viewer": "[RU] Viewer",
+          "editor": "[RU] Editor",
+          "admin": "[RU] Admin",
+          "shareLink": "[RU] Share link",
+          "cancel": "[RU] Cancel",
+          "share": "[RU] Share"
+        },
+        "schedule": {
+          "title": "[RU] Schedule Report",
+          "description": "[RU] Set up automatic email delivery of this audience report.",
+          "recipients": "[RU] Recipients",
+          "recipientsPlaceholder": "[RU] email@example.com, team@example.com",
+          "frequency": "[RU] Frequency",
+          "daily": "[RU] Daily",
+          "weekly": "[RU] Weekly",
+          "monthly": "[RU] Monthly",
+          "format": "[RU] Format",
+          "pdf": "[RU] PDF",
+          "csv": "[RU] CSV",
+          "json": "[RU] JSON",
+          "cancel": "[RU] Cancel",
+          "schedule": "[RU] Schedule"
+        },
+        "delete": {
+          "title": "[RU] Delete Audience",
+          "description": "[RU] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[RU] Cancel",
+          "delete": "[RU] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "Редактировать диаграмму",
-        "description": "Измените конфигурацию и настройки диаграммы",
-        "saving": "Сохранение...",
-        "saveChanges": "Сохранить изменения",
-        "backToCharts": "Вернуться к графикам",
-        "preview": {
-          "title": "Предварительный просмотр",
-          "description": "Как будет выглядеть ваша диаграмма"
-        },
-        "unsavedChanges": "Несохраненные изменения",
-        "authRequired": "Требуется аутентификация",
-        "pleaseSignIn": "Пожалуйста, войдите, чтобы редактировать эту диаграмму.",
-        "signIn": "Войти",
+      "pageTracker": "[RU] Charts List",
+      "title": "[RU] Charts",
+      "description": "[RU] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[RU] Templates",
+      "compare": "[RU] Compare",
+      "newChart": "[RU] New Chart",
+      "totalCharts": "[RU] Total Charts",
+      "totalViews": "[RU] Total Views",
+      "shares": "[RU] Shares",
+      "exports": "[RU] Exports",
+      "searchPlaceholder": "[RU] Search charts...",
+      "allCategory": "[RU] All",
+      "allCharts": "[RU] All Charts",
+      "recent": "[RU] Recent",
+      "mostViewed": "[RU] Most Viewed",
+      "favorites": "[RU] Favorites",
+      "emptyState": {
+        "title": "[RU] No charts found",
+        "description": "[RU] Create your first chart or try a different search",
+        "action": "[RU] Create Chart"
+      },
+      "comparison": {
+        "title": "[RU] Brand Health Comparison",
+        "description": "[RU] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[RU] Create New Chart",
+        "description": "[RU] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "Основная информация",
-          "description": "Задайте имя и описание для вашей диаграммы",
-          "chartName": "Имя диаграммы",
-          "chartNamePlaceholder": "Введите название диаграммы",
-          "descriptionPlaceholder": "Опишите, что показывает этот график",
-          "selectStatus": "Выберите статус",
-          "dataSource": "Источник данных",
-          "selectDataSource": "Выберите источник данных"
+          "title": "[RU] Basic Information",
+          "chartName": "[RU] Chart Name",
+          "chartNamePlaceholder": "[RU] e.g., Social Media Usage by Age Group",
+          "description": "[RU] Description",
+          "descriptionPlaceholder": "[RU] Describe what this chart shows"
         },
         "chartType": {
-          "title": "Тип диаграммы",
-          "description": "Выберите тип визуализации для ваших данных"
+          "title": "[RU] Chart Type",
+          "description": "[RU] Select the visualization type"
         },
         "dataConfig": {
-          "title": "Конфигурация данных",
-          "description": "Настройте данные для диаграммы",
-          "targetAudience": "Целевая аудитория",
-          "selectAudience": "Выберите аудиторию",
-          "timePeriod": "Период времени",
-          "selectTimePeriod": "Выберите период времени",
-          "primaryMetric": "Первичная метрика",
-          "primaryMetricPlaceholder": "например, использование социальных сетей (%)",
-          "dimensions": "Размеры",
-          "dimensionsHint": "Категории для группировки ваших данных (например, возрастная группа, регион)",
-          "addDimension": "Добавить измерение",
-          "measures": "Меры",
-          "measuresHint": "Числовые значения для отображения (например, количество, процент)",
-          "addMeasure": "Добавить меру",
-          "filters": "Фильтры",
-          "filtersHint": "Добавьте условия для фильтрации ваших данных",
-          "addFilter": "Добавить фильтр",
-          "field": "Поле",
-          "value": "Ценить",
-          "operators": {
-            "equals": "Равно",
-            "notEquals": "Не равно",
-            "contains": "Содержит",
-            "greaterThan": "Больше, чем",
-            "lessThan": "Меньше, чем"
-          }
+          "title": "[RU] Data Configuration",
+          "targetAudience": "[RU] Target Audience",
+          "selectAudience": "[RU] Select audience",
+          "timePeriod": "[RU] Time Period",
+          "selectTimePeriod": "[RU] Select time period",
+          "dataSource": "[RU] Data Source",
+          "selectDataSource": "[RU] Select data source"
         },
-        "displayOptions": {
-          "title": "Параметры отображения",
-          "description": "Настроить внешний вид диаграммы",
-          "showLegend": "Показать легенду",
-          "showGrid": "Показать сетку",
-          "showTooltip": "Показать подсказку"
+        "preview": {
+          "title": "[RU] Preview",
+          "description": "[RU] How your chart will look"
         },
-        "chartInfo": {
-          "title": "Информация о графике",
-          "id": "ИДЕНТИФИКАТОР",
-          "created": "Созданный",
-          "lastUpdated": "Последнее обновление"
+        "actions": {
+          "save": "[RU] Create Chart",
+          "saving": "[RU] Creating...",
+          "cancel": "[RU] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[RU] Chart Detail",
+        "notFound": "[RU] Chart Not Found",
+        "notFoundDescription": "[RU] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[RU] Back to Charts",
+        "views": "[RU] views",
+        "shares": "[RU] shares",
+        "addToFavorites": "[RU] Add to favorites",
+        "removeFromFavorites": "[RU] Remove from favorites",
+        "tabs": {
+          "chart": "[RU] Chart",
+          "data": "[RU] Data",
+          "settings": "[RU] Settings",
+          "comments": "[RU] Comments",
+          "activity": "[RU] Activity",
+          "history": "[RU] History"
         },
-        "discardDialog": {
-          "title": "Отменить изменения?",
-          "description": "У вас есть несохраненные изменения. Вы уверены, что хотите уйти? Ваши изменения будут потеряны.",
-          "keepEditing": "Продолжайте редактировать",
-          "discardChanges": "Отменить изменения"
+        "actions": {
+          "share": "[RU] Share",
+          "export": "[RU] Export",
+          "edit": "[RU] Edit",
+          "fullscreen": "[RU] Fullscreen",
+          "duplicate": "[RU] Duplicate",
+          "addToDashboard": "[RU] Add to Dashboard",
+          "scheduleReport": "[RU] Schedule Report",
+          "copyLink": "[RU] Copy Link",
+          "copied": "[RU] Copied!",
+          "delete": "[RU] Delete"
+        },
+        "export": {
+          "asJson": "[RU] Export as JSON",
+          "asCsv": "[RU] Export as CSV",
+          "asPng": "[RU] Export as PNG",
+          "asSvg": "[RU] Export as SVG",
+          "toPowerPoint": "[RU] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[RU] Chart Info",
+          "type": "[RU] Type",
+          "dataSource": "[RU] Data Source",
+          "audience": "[RU] Audience",
+          "timePeriod": "[RU] Time Period",
+          "created": "[RU] Created",
+          "lastUpdated": "[RU] Last Updated"
+        },
+        "share": {
+          "title": "[RU] Share Chart",
+          "description": "[RU] Share this chart with team members or external collaborators.",
+          "emailLabel": "[RU] Email address",
+          "emailPlaceholder": "[RU] email@example.com",
+          "roleLabel": "[RU] Role",
+          "viewer": "[RU] Viewer",
+          "editor": "[RU] Editor",
+          "admin": "[RU] Admin",
+          "shareLink": "[RU] Share link",
+          "embedCode": "[RU] Embed code",
+          "cancel": "[RU] Cancel",
+          "share": "[RU] Share"
+        },
+        "delete": {
+          "title": "[RU] Delete Chart",
+          "description": "[RU] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[RU] Cancel",
+          "delete": "[RU] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "Минимальная осведомленность (%)",
           "minNPS": "Минимальный показатель NPS"
         }
+      },
+      "pageTracker": "[RU] Brand Tracking",
+      "title": "[RU] Brand Tracking",
+      "description": "[RU] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[RU] All Brands",
+        "active": "[RU] Active",
+        "paused": "[RU] Paused",
+        "draft": "[RU] Draft"
+      },
+      "new": {
+        "title": "[RU] New Brand Tracking",
+        "description": "[RU] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[RU] Brand Information",
+          "description": "[RU] Provide details about the brand you want to track",
+          "brandNameLabel": "[RU] Brand Name *",
+          "brandNamePlaceholder": "[RU] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[RU] Description",
+          "descriptionPlaceholder": "[RU] Brief description of what you want to track...",
+          "industryLabel": "[RU] Industry",
+          "industryPlaceholder": "[RU] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[RU] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[RU] Daily",
+          "weekly": "[RU] Weekly",
+          "monthly": "[RU] Monthly",
+          "manual": "[RU] Manual Only"
+        },
+        "competitors": {
+          "label": "[RU] Competitors",
+          "placeholder": "[RU] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[RU] Metrics to Track",
+          "awareness": "[RU] Brand Awareness",
+          "consideration": "[RU] Consideration",
+          "preference": "[RU] Preference",
+          "loyalty": "[RU] Loyalty",
+          "nps": "[RU] Net Promoter Score (NPS)",
+          "sentiment": "[RU] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[RU] Cancel",
+          "create": "[RU] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[RU] Brand Tracking Detail",
+        "title": "[RU] Brand Health Dashboard",
+        "notFound": "[RU] Brand Study Not Found",
+        "notFoundDescription": "[RU] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[RU] Back to Brand Tracking",
+        "loading": "[RU] Loading...",
+        "people": "[RU] people",
+        "timePeriods": {
+          "1m": "[RU] 1 Month",
+          "3m": "[RU] 3 Months",
+          "6m": "[RU] 6 Months",
+          "1y": "[RU] 1 Year",
+          "all": "[RU] All Time"
+        },
+        "tabs": {
+          "overview": "[RU] Overview",
+          "trends": "[RU] Trends",
+          "competitors": "[RU] Competitors",
+          "insights": "[RU] Insights",
+          "comments": "[RU] Comments",
+          "activity": "[RU] Activity",
+          "history": "[RU] History"
+        },
+        "actions": {
+          "explore": "[RU] Explore",
+          "share": "[RU] Share",
+          "export": "[RU] Export",
+          "edit": "[RU] Edit",
+          "refresh": "[RU] Refresh",
+          "autoRefresh": "[RU] Auto-refresh",
+          "pauseAutoRefresh": "[RU] Pause auto-refresh",
+          "enableAutoRefresh": "[RU] Enable auto-refresh",
+          "duplicate": "[RU] Duplicate",
+          "copyLink": "[RU] Copy Link",
+          "copied": "[RU] Copied!",
+          "delete": "[RU] Delete",
+          "addToFavorites": "[RU] Add to favorites",
+          "removeFromFavorites": "[RU] Remove from favorites",
+          "scheduleReport": "[RU] Schedule Report"
+        },
+        "export": {
+          "asJson": "[RU] Export as JSON",
+          "asCsv": "[RU] Export as CSV",
+          "asPdf": "[RU] Export as PDF",
+          "toPowerPoint": "[RU] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[RU] Awareness",
+          "consideration": "[RU] Consideration",
+          "preference": "[RU] Preference",
+          "loyalty": "[RU] Loyalty",
+          "nps": "[RU] NPS",
+          "sentiment": "[RU] Sentiment",
+          "marketShare": "[RU] Market Share",
+          "vsTarget": "[RU] vs target",
+          "trend": "[RU] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[RU] Brand Health Trend",
+          "competitorComparison": "[RU] Competitor Comparison",
+          "sentimentBreakdown": "[RU] Sentiment Breakdown",
+          "metricsOverTime": "[RU] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[RU] Brand Overview",
+          "industry": "[RU] Industry",
+          "competitors": "[RU] Competitors",
+          "trackingFrequency": "[RU] Tracking Frequency",
+          "lastUpdated": "[RU] Last Updated",
+          "createdBy": "[RU] Created By",
+          "dateRange": "[RU] Date Range"
+        },
+        "insights": {
+          "title": "[RU] Key Insights",
+          "aiGenerated": "[RU] AI-Generated",
+          "noInsights": "[RU] No insights available yet",
+          "generateInsights": "[RU] Generate Insights"
+        },
+        "activity": {
+          "title": "[RU] Activity Log",
+          "description": "[RU] Recent activity on this brand study",
+          "viewed": "[RU] viewed",
+          "exported": "[RU] exported",
+          "edited": "[RU] edited",
+          "shared": "[RU] shared",
+          "created": "[RU] created"
+        },
+        "share": {
+          "title": "[RU] Share Brand Study",
+          "description": "[RU] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[RU] Email address",
+          "emailPlaceholder": "[RU] email@example.com",
+          "roleLabel": "[RU] Role",
+          "viewer": "[RU] Viewer",
+          "editor": "[RU] Editor",
+          "admin": "[RU] Admin",
+          "shareLink": "[RU] Share link",
+          "cancel": "[RU] Cancel",
+          "share": "[RU] Share"
+        },
+        "schedule": {
+          "title": "[RU] Schedule Report",
+          "description": "[RU] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[RU] Recipients",
+          "recipientsPlaceholder": "[RU] email@example.com, team@example.com",
+          "frequency": "[RU] Frequency",
+          "daily": "[RU] Daily",
+          "weekly": "[RU] Weekly",
+          "monthly": "[RU] Monthly",
+          "format": "[RU] Format",
+          "pdf": "[RU] PDF",
+          "csv": "[RU] CSV",
+          "json": "[RU] JSON",
+          "cancel": "[RU] Cancel",
+          "schedule": "[RU] Schedule"
+        },
+        "delete": {
+          "title": "[RU] Delete Brand Study",
+          "description": "[RU] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[RU] Cancel",
+          "delete": "[RU] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[RU] Select organization",
+      "searchPlaceholder": "[RU] Search organizations...",
+      "noOrganizationFound": "[RU] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[RU] Weekly Activity",
+      "monthlyTrend": "[RU] Monthly Trend",
+      "workflows": "[RU] Workflows",
+      "insights": "[RU] Insights",
+      "days": {
+        "mon": "[RU] Mon",
+        "tue": "[RU] Tue",
+        "wed": "[RU] Wed",
+        "thu": "[RU] Thu",
+        "fri": "[RU] Fri",
+        "sat": "[RU] Sat",
+        "sun": "[RU] Sun"
+      },
+      "months": {
+        "jan": "[RU] Jan",
+        "feb": "[RU] Feb",
+        "mar": "[RU] Mar",
+        "apr": "[RU] Apr",
+        "may": "[RU] May",
+        "jun": "[RU] Jun",
+        "jul": "[RU] Jul",
+        "aug": "[RU] Aug",
+        "sep": "[RU] Sep",
+        "oct": "[RU] Oct",
+        "nov": "[RU] Nov",
+        "dec": "[RU] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[RU] Active Agents",
+      "manage": "[RU] Manage",
+      "activeTasks": "[RU] {count} active tasks",
+      "idle": "[RU] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[RU] Untitled Dashboard",
+      "addWidget": "[RU] Add Widget",
+      "undoShortcut": "[RU] Undo (Ctrl+Z)",
+      "redoShortcut": "[RU] Redo (Ctrl+Y)",
+      "grid": "[RU] Grid",
+      "snap": "[RU] Snap",
+      "widgetsCount": "[RU] {count} widgets",
+      "exportFormat": "[RU] Export Format",
+      "export": {
+        "pdf": "[RU] PDF Document",
+        "png": "[RU] PNG Image",
+        "json": "[RU] JSON Config"
+      },
+      "duplicate": "[RU] Duplicate",
+      "fullscreen": "[RU] Fullscreen",
+      "lock": "[RU] Lock",
+      "unlock": "[RU] Unlock",
+      "hide": "[RU] Hide",
+      "chooseWidgetType": "[RU] Choose a widget type to add to your dashboard",
+      "editWidget": "[RU] Edit Widget",
+      "newWidget": "[RU] New {type}",
+      "enterTextContent": "[RU] Enter text content...",
+      "unknownWidgetType": "[RU] Unknown widget type",
+      "target": "[RU] Target",
+      "table": {
+        "name": "[RU] Name",
+        "value": "[RU] Value",
+        "change": "[RU] Change",
+        "item": "[RU] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[RU] Chart",
+        "metric": "[RU] Metric",
+        "table": "[RU] Table",
+        "text": "[RU] Text",
+        "image": "[RU] Image",
+        "kpi": "[RU] KPI",
+        "kpiCard": "[RU] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[RU] Visualize data with various chart types",
+        "kpi": "[RU] Display key performance indicators",
+        "metric": "[RU] Show a single metric value",
+        "table": "[RU] Display data in tabular format",
+        "text": "[RU] Add text content or notes",
+        "image": "[RU] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[RU] General",
+        "data": "[RU] Data",
+        "style": "[RU] Style",
+        "advanced": "[RU] Advanced"
+      },
+      "fields": {
+        "title": "[RU] Title",
+        "subtitle": "[RU] Subtitle",
+        "chartType": "[RU] Chart Type",
+        "content": "[RU] Content",
+        "value": "[RU] Value",
+        "changePercent": "[RU] Change (%)",
+        "target": "[RU] Target",
+        "dataSource": "[RU] Data Source",
+        "refreshInterval": "[RU] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[RU] Bar Chart",
+        "line": "[RU] Line Chart",
+        "area": "[RU] Area Chart",
+        "pie": "[RU] Pie Chart",
+        "donut": "[RU] Donut Chart",
+        "radar": "[RU] Radar Chart",
+        "scatter": "[RU] Scatter Plot",
+        "funnel": "[RU] Funnel Chart",
+        "treemap": "[RU] Treemap",
+        "heatmap": "[RU] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[RU] Sample Data",
+        "api": "[RU] API Endpoint",
+        "crosstab": "[RU] Crosstab",
+        "custom": "[RU] Custom Query"
+      },
+      "refreshIntervalHint": "[RU] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[RU] Show Legend",
+        "showGrid": "[RU] Show Grid",
+        "showTooltip": "[RU] Show Tooltip",
+        "backgroundColor": "[RU] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[RU] Lock Widget",
+        "lockWidgetHint": "[RU] Prevent moving and resizing",
+        "zIndex": "[RU] Z-Index"
+      },
+      "dashboardSettings": "[RU] Dashboard Settings",
+      "saveSettings": "[RU] Save Settings",
+      "settings": {
+        "dashboardName": "[RU] Dashboard Name",
+        "gridColumns": "[RU] Grid Columns",
+        "gridRows": "[RU] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[RU] Analytics",
+      "title": "[RU] Analytics",
+      "description": "[RU] Track your research performance and insights"
     }
   },
   "audiences": {

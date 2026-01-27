@@ -203,7 +203,85 @@
     "selectLanguage": "ভাষা নির্বাচন করুন",
     "preferences": "পছন্দসমূহ",
     "notifications": "বিজ্ঞপ্তি",
-    "security": "নিরাপত্তা",
+    "security": {
+      "title": "[BN] Security Settings",
+      "description": "[BN] Manage your account security and active sessions",
+      "changePassword": "[BN] Change Password",
+      "changePasswordDescription": "[BN] Update your password regularly to keep your account secure",
+      "currentPassword": "[BN] Current Password",
+      "newPassword": "[BN] New Password",
+      "confirmNewPassword": "[BN] Confirm New Password",
+      "updating": "[BN] Updating...",
+      "updatePassword": "[BN] Update Password",
+      "twoFactorAuth": "[BN] Two-Factor Authentication",
+      "twoFactorDescription": "[BN] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[BN] 2FA is enabled",
+      "twoFactorProtected": "[BN] Your account is protected with authenticator app",
+      "changeMethod": "[BN] Change Method",
+      "viewBackupCodes": "[BN] View Backup Codes",
+      "activeSessions": "[BN] Active Sessions",
+      "activeSessionsDescription": "[BN] Manage devices where you're currently logged in",
+      "signOutAll": "[BN] Sign Out All",
+      "current": "[BN] Current",
+      "revoke": "[BN] Revoke",
+      "dangerZone": "[BN] Danger Zone",
+      "dangerZoneDescription": "[BN] Irreversible and destructive actions",
+      "deleteAccount": "[BN] Delete Account",
+      "deleteAccountDescription": "[BN] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[BN] Data Exports",
+        "description": "[BN] Request exports of your personal data for GDPR compliance",
+        "refresh": "[BN] Refresh",
+        "yourDataRights": "[BN] Your Data Rights",
+        "yourDataRightsDescription": "[BN] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[BN] No Active Exports",
+        "noActiveExportsDescription": "[BN] Request an export to see its status here",
+        "noActiveExportsHint": "[BN] Your export status will appear here after you request a data export",
+        "exportHistory": "[BN] Export History",
+        "exportHistoryDescription": "[BN] View and download your previous data exports",
+        "total": "[BN] Total",
+        "pending": "[BN] Pending",
+        "processing": "[BN] Processing",
+        "aboutDataExports": "[BN] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[BN] What's Included",
+          "exportFormat": "[BN] Export Format",
+          "faq": "[BN] FAQ"
+        },
+        "included": {
+          "profileInfo": "[BN] Profile Information",
+          "profileInfoDesc": "[BN] Your name, email, avatar, and account settings",
+          "orgMemberships": "[BN] Organization Memberships",
+          "orgMembershipsDesc": "[BN] All organizations you belong to and your roles",
+          "createdContent": "[BN] Created Content",
+          "createdContentDesc": "[BN] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[BN] Activity History",
+          "activityHistoryDesc": "[BN] Audit logs and activity records associated with your account",
+          "preferences": "[BN] Preferences",
+          "preferencesDesc": "[BN] Your theme, language, notification, and other settings",
+          "apiKeys": "[BN] API Keys",
+          "apiKeysDesc": "[BN] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[BN] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[BN] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[BN] Human-readable when opened in a text editor",
+          "compatible": "[BN] Compatible with most data processing tools",
+          "easyImport": "[BN] Easy to import into other services",
+          "exampleStructure": "[BN] Example structure:"
+        },
+        "faq": {
+          "howLong": "[BN] How long does an export take?",
+          "howLongAnswer": "[BN] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[BN] How long is an export available?",
+          "howLongAvailableAnswer": "[BN] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[BN] How often can I request an export?",
+          "howOftenAnswer": "[BN] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[BN] Is my export secure?",
+          "isSecureAnswer": "[BN] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "অ্যাকাউন্ট",
     "appearance": {
       "title": "চেহারা",
@@ -239,7 +317,35 @@
       "followingSystem": "সিস্টেম অনুসরণ করছে",
       "savingPreferences": "পছন্দ সংরক্ষণ হচ্ছে..."
     },
-    "general": "সাধারণ",
+    "general": {
+      "title": "[BN] General Settings",
+      "description": "[BN] Manage your organization's settings and preferences",
+      "organizationDetails": "[BN] Organization Details",
+      "updateOrgInfo": "[BN] Update your organization's information",
+      "changeLogo": "[BN] Change Logo",
+      "organizationName": "[BN] Organization Name",
+      "organizationSlug": "[BN] Organization Slug",
+      "orgDescription": "[BN] Description",
+      "industry": "[BN] Industry",
+      "companySize": "[BN] Company Size",
+      "consumerGoods": "[BN] Consumer Goods",
+      "technology": "[BN] Technology",
+      "finance": "[BN] Finance",
+      "healthcare": "[BN] Healthcare",
+      "retail": "[BN] Retail",
+      "mediaEntertainment": "[BN] Media & Entertainment",
+      "employees1to50": "[BN] 1-50 employees",
+      "employees50to200": "[BN] 50-200 employees",
+      "employees200to1000": "[BN] 200-1000 employees",
+      "employees1000to5000": "[BN] 1000-5000 employees",
+      "employees5000plus": "[BN] 5000+ employees",
+      "regionalSettings": "[BN] Regional Settings",
+      "regionalDescription": "[BN] Set your timezone and date format preferences",
+      "timezone": "[BN] Timezone",
+      "dateFormat": "[BN] Date Format",
+      "saving": "[BN] Saving...",
+      "saveChanges": "[BN] Save Changes"
+    },
     "apiKeys": {
       "title": "API কী",
       "description": "প্রোগ্রামেটিক অ্যাক্সেসের জন্য API কী পরিচালনা করুন",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "আমরা কীভাবে সাহায্য করতে পারি?",
-      "subtitle": "আমাদের জ্ঞান ভাণ্ডারে অনুসন্ধান করুন বা নিচে বিষয়গুলি ব্রাউজ করুন",
       "searchPlaceholder": "সাহায্যের জন্য অনুসন্ধান করুন...",
-      "tabs": {
-        "faq": "প্রায়শই জিজ্ঞাসিত প্রশ্ন",
-        "guides": "গাইড",
-        "contact": "যোগাযোগ"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "শুরু করার গাইড",
-          "description": "GWI এজেন্টসের মূল বিষয়গুলি শিখুন"
-        },
-        "videoTutorials": {
-          "title": "ভিডিও টিউটোরিয়াল",
-          "description": "ধাপে ধাপে টিউটোরিয়াল দেখুন"
-        },
-        "apiDocs": {
-          "title": "API ডকুমেন্টেশন",
-          "description": "আমাদের API-এর সাথে ইন্টিগ্রেট করুন"
-        },
-        "contactSupport": {
-          "title": "সাপোর্টে যোগাযোগ করুন",
-          "description": "আমাদের টিমের কাছ থেকে সাহায্য নিন"
-        }
+        "gettingStarted": "[BN] Getting Started Guide",
+        "videoTutorials": "[BN] Video Tutorials",
+        "apiDocs": "[BN] API Documentation",
+        "title": "[BN] Quick Links",
+        "gettingStartedDesc": "[BN] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[BN] Watch step-by-step guides",
+        "apiDocsDesc": "[BN] For developers and integrations",
+        "releaseNotes": "[BN] Release Notes",
+        "releaseNotesDesc": "[BN] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "শুরু করা",
-          "agentsWorkflows": "এজেন্ট ও ওয়ার্কফ্লো",
-          "dataPrivacy": "ডেটা ও গোপনীয়তা",
-          "billingPlans": "বিলিং ও প্ল্যান"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "আমি কীভাবে আমার প্রথম এজেন্ট তৈরি করব?",
-            "answer": "সাইডবার থেকে এজেন্ট পেজে যান এবং 'এজেন্ট তৈরি করুন' ক্লিক করুন। আপনার এজেন্টের নাম, বিবরণ, ডেটা সোর্স এবং আচরণ সেটিংস কনফিগার করতে ধাপে ধাপে উইজার্ড অনুসরণ করুন।"
-          },
-          "dataSources": {
-            "question": "কোন ডেটা সোর্সগুলি উপলব্ধ?",
-            "answer": "GWI বিভিন্ন ডেটা সোর্সে অ্যাক্সেস প্রদান করে যার মধ্যে রয়েছে GWI Core (আমাদের প্রধান ভোক্তা সার্ভে), GWI USA, GWI Zeitgeist (ট্রেন্ডিং টপিক), এবং কাস্টম ডেটা আপলোডের সুবিধা। ডেটা সোর্সের উপলব্ধতা আপনার সাবস্ক্রিপশন স্তরের উপর নির্ভর করে।"
-          },
-          "inviteTeam": {
-            "question": "আমি কীভাবে টিম সদস্যদের আমন্ত্রণ জানাব?",
-            "answer": "সেটিংস > টিমে যান এবং 'সদস্য আমন্ত্রণ করুন' ক্লিক করুন। তাদের ইমেইল ঠিকানা লিখুন এবং তাদের ভূমিকা নির্বাচন করুন (অ্যাডমিন, এডিটর, বা ভিউয়ার)। তারা আপনার ওয়ার্কস্পেসে যোগ দেওয়ার জন্য একটি আমন্ত্রণ ইমেইল পাবেন।"
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "এজেন্ট এবং ওয়ার্কফ্লোর মধ্যে পার্থক্য কী?",
-            "answer": "এজেন্ট হল AI-চালিত বিশেষজ্ঞ যারা নির্দিষ্ট ধরনের গবেষণা কাজ পরিচালনা করে। ওয়ার্কফ্লো জটিল, বহু-পদক্ষেপ গবেষণা প্রক্রিয়া স্বয়ংক্রিয় করতে একাধিক এজেন্টকে একটি ক্রমানুসারে সংযুক্ত করে।"
-          },
-          "customize": {
-            "question": "আমি কি প্রি-বিল্ট এজেন্ট কাস্টমাইজ করতে পারি?",
-            "answer": "হ্যাঁ! আপনি যেকোনো প্রি-বিল্ট এজেন্ট ডুপ্লিকেট করতে পারেন এবং সিস্টেম প্রম্পট, ডেটা সোর্স এবং আউটপুট ফরম্যাট সহ এর কনফিগারেশন পরিবর্তন করতে পারেন। আপনার কাস্টমাইজড সংস্করণ আপনার ব্যক্তিগত এজেন্ট লাইব্রেরিতে সংরক্ষিত হবে।"
-          },
-          "schedule": {
-            "question": "আমি কীভাবে একটি ওয়ার্কফ্লো শিডিউল করব?",
-            "answer": "আপনার ওয়ার্কফ্লো খুলুন এবং 'শিডিউল' বাটনে ক্লিক করুন। আপনি পুনরাবৃত্ত রান (দৈনিক, সাপ্তাহিক, মাসিক) সেট আপ করতে পারেন বা নতুন ডেটা উপলব্ধতার মতো ইভেন্টের উপর ভিত্তি করে ওয়ার্কফ্লো ট্রিগার করতে পারেন।"
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "আমার ডেটা কীভাবে সুরক্ষিত?",
-            "answer": "সব ডেটা শিল্প-মানক AES-256 এনক্রিপশন ব্যবহার করে বিশ্রামে এবং ট্রানজিটে এনক্রিপ্ট করা হয়। আমরা SOC 2 Type II সার্টিফাইড এবং GDPR সম্মত। আপনার প্রশ্ন এবং কাস্টম ডেটা কখনই অন্য গ্রাহকদের সাথে শেয়ার করা হয় না।"
-          },
-          "export": {
-            "question": "আমি কি আমার ডেটা এক্সপোর্ট করতে পারি?",
-            "answer": "হ্যাঁ, আপনি CSV, Excel, PowerPoint এবং JSON সহ একাধিক ফরম্যাটে ডেটা এক্সপোর্ট করতে পারেন। এন্টারপ্রাইজ গ্রাহকদের সরাসরি ডেটাবেস সংযোগ এবং API এক্সপোর্টেও অ্যাক্সেস রয়েছে।"
-          },
-          "updateFrequency": {
-            "question": "GWI ডেটা কত ঘন ঘন আপডেট হয়?",
-            "answer": "GWI Core ডেটা তাজা ভোক্তা সার্ভে সহ ত্রৈমাসিকভাবে আপডেট হয়। GWI Zeitgeist ট্রেন্ডিং টপিকগুলিতে সাপ্তাহিক আপডেট প্রদান করে। কিছু বিশেষায়িত ডেটাসেটের বিভিন্ন আপডেট ফ্রিকোয়েন্সি থাকতে পারে।"
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "একটি কোয়েরি হিসাবে কী গণনা করা হয়?",
-            "answer": "একটি কোয়েরি হল একটি এজেন্টের কাছে করা যেকোনো অনুরোধ, একই কথোপকথনের মধ্যে ফলো-আপ প্রশ্ন সহ। জটিল বহু-পদক্ষেপ ওয়ার্কফ্লোগুলি কতগুলি এজেন্ট জড়িত তা নির্বিশেষে একটি একক কোয়েরি হিসাবে গণনা করা হয়।"
-          },
-          "changePlan": {
-            "question": "আমি কি আমার প্ল্যান আপগ্রেড বা ডাউনগ্রেড করতে পারি?",
-            "answer": "হ্যাঁ, আপনি সেটিংস > বিলিং থেকে যেকোনো সময় আপনার প্ল্যান পরিবর্তন করতে পারেন। আপগ্রেড প্রো-রেটেড বিলিং সহ অবিলম্বে কার্যকর হয়। ডাউনগ্রেড আপনার পরবর্তী বিলিং সাইকেলের শুরুতে কার্যকর হয়।"
-          },
-          "annualDiscount": {
-            "question": "আপনি কি বার্ষিক বিলিং ছাড় দেন?",
-            "answer": "হ্যাঁ! বার্ষিক বিলিং মাসিক বিলিংয়ের তুলনায় আপনার ২০% সাশ্রয় করে। বার্ষিক বিলিং সেট আপ করতে বা মাসিক থেকে পরিবর্তন করতে আমাদের সেলস টিমের সাথে যোগাযোগ করুন।"
-          }
-        }
+        "title": "[BN] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "শিক্ষানবিস",
-          "intermediate": "মধ্যবর্তী",
-          "advanced": "উন্নত"
-        },
-        "personas": {
-          "title": "কার্যকর পার্সোনা তৈরি করা",
-          "description": "বিস্তারিত, কার্যকরী অডিয়েন্স পার্সোনা তৈরি করতে শিখুন",
-          "duration": "১৫ মিনিট পড়া"
-        },
-        "workflows": {
-          "title": "ওয়ার্কফ্লো অটোমেশন সেরা অনুশীলন",
-          "description": "আপনার গবেষণার জন্য দক্ষ মাল্টি-এজেন্ট ওয়ার্কফ্লো ডিজাইন করুন",
-          "duration": "২০ মিনিট পড়া"
-        },
-        "prompts": {
-          "title": "উন্নত প্রম্পট ইঞ্জিনিয়ারিং",
-          "description": "অপ্টিমাইজড এজেন্ট প্রম্পট দিয়ে আরও ভালো ফলাফল পান",
-          "duration": "২৫ মিনিট পড়া"
-        },
-        "apiIntegration": {
-          "title": "API ইন্টিগ্রেশন গাইড",
-          "description": "আপনার বিদ্যমান টুলগুলির সাথে GWI এজেন্ট সংযুক্ত করুন",
-          "duration": "৩০ মিনিট পড়া"
-        }
-      },
-      "viewAllDocs": "সব ডকুমেন্টেশন দেখুন",
       "contact": {
-        "liveChat": {
-          "title": "লাইভ চ্যাট",
-          "description": "আমাদের সাপোর্ট টিমের সাথে রিয়েল-টাইমে চ্যাট করুন",
-          "availability": "সোমবার-শুক্রবার, সকাল ৯টা - সন্ধ্যা ৬টা EST উপলব্ধ। গড় প্রতিক্রিয়া সময়: ২ মিনিট।",
-          "button": "চ্যাট শুরু করুন"
+        "title": "[BN] Need More Help?",
+        "description": "[BN] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[BN] Contact Support",
+        "responseTime": "[BN] Typical response time: 2-4 hours"
+      },
+      "description": "[BN] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[BN] Browse by Category",
+        "agents": "[BN] AI Agents",
+        "agentsDesc": "[BN] Learn about agent capabilities",
+        "workflows": "[BN] Workflows",
+        "workflowsDesc": "[BN] Build automation pipelines",
+        "data": "[BN] Data & Audiences",
+        "dataDesc": "[BN] Understanding GWI data",
+        "reports": "[BN] Reports & Exports",
+        "reportsDesc": "[BN] Generate and share insights",
+        "integrations": "[BN] Integrations",
+        "integrationsDesc": "[BN] Connect with your tools",
+        "billing": "[BN] Billing & Plans",
+        "billingDesc": "[BN] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[BN] Profile Settings",
+      "description": "[BN] Manage your personal information",
+      "personalInfo": "[BN] Personal Information",
+      "updateProfileDetails": "[BN] Update your profile details",
+      "uploadPhoto": "[BN] Upload Photo",
+      "photoHint": "[BN] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[BN] First Name",
+      "lastName": "[BN] Last Name",
+      "emailAddress": "[BN] Email Address",
+      "jobTitle": "[BN] Job Title",
+      "bio": "[BN] Bio",
+      "contactInfo": "[BN] Contact Information",
+      "contactDescription": "[BN] How colleagues can reach you",
+      "phoneNumber": "[BN] Phone Number",
+      "location": "[BN] Location",
+      "saving": "[BN] Saving...",
+      "saveChanges": "[BN] Save Changes"
+    },
+    "team": {
+      "title": "[BN] Team Management",
+      "description": "[BN] Manage team members and their permissions",
+      "teamMembers": "[BN] Team Members",
+      "membersCount": "[BN] {count} members in your organization",
+      "inviteMember": "[BN] Invite Member",
+      "inviteTeamMember": "[BN] Invite Team Member",
+      "inviteDescription": "[BN] Send an invitation to join your organization",
+      "emailAddress": "[BN] Email Address",
+      "emailPlaceholder": "[BN] colleague@company.com",
+      "role": "[BN] Role",
+      "sending": "[BN] Sending...",
+      "sendInvitation": "[BN] Send Invitation",
+      "searchMembers": "[BN] Search members...",
+      "tableHeaders": {
+        "member": "[BN] Member",
+        "role": "[BN] Role",
+        "lastActive": "[BN] Last Active",
+        "joined": "[BN] Joined"
+      },
+      "roles": {
+        "owner": "[BN] Owner",
+        "admin": "[BN] Admin",
+        "member": "[BN] Member",
+        "viewer": "[BN] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[BN] Make Admin",
+        "makeMember": "[BN] Make Member",
+        "makeViewer": "[BN] Make Viewer",
+        "removeMember": "[BN] Remove Member"
+      },
+      "pendingInvitations": "[BN] Pending Invitations",
+      "pendingCount": "[BN] {count} pending invitation",
+      "pendingCountPlural": "[BN] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[BN] Email",
+        "role": "[BN] Role",
+        "sent": "[BN] Sent",
+        "expires": "[BN] Expires"
+      },
+      "revoke": "[BN] Revoke",
+      "rolePermissions": "[BN] Role Permissions",
+      "rolePermissionsDescription": "[BN] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[BN] Full organization control",
+        "transferOwnership": "[BN] Transfer ownership",
+        "deleteOrg": "[BN] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[BN] Manage team members",
+        "billing": "[BN] Billing & subscription",
+        "allMemberPerms": "[BN] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[BN] Create and edit agents",
+        "generateReports": "[BN] Generate reports",
+        "useAgents": "[BN] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[BN] View reports",
+        "viewDashboards": "[BN] View dashboards",
+        "readOnly": "[BN] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[BN] Remove Team Member",
+        "description": "[BN] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[BN] Cancel",
+        "remove": "[BN] Remove Member"
+      },
+      "unknown": "[BN] Unknown",
+      "never": "[BN] Never",
+      "justNow": "[BN] Just now",
+      "minAgo": "[BN] {count} min ago",
+      "hoursAgo": "[BN] {count} hour ago",
+      "hoursAgoPlural": "[BN] {count} hours ago",
+      "daysAgo": "[BN] {count} day ago",
+      "daysAgoPlural": "[BN] {count} days ago"
+    },
+    "billing": {
+      "title": "[BN] Billing & Subscription",
+      "description": "[BN] Manage your subscription and payment methods",
+      "enterprisePlan": "[BN] Enterprise Plan",
+      "current": "[BN] Current",
+      "planDescription": "[BN] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[BN] per month",
+      "planFeatures": "[BN] Plan Features",
+      "features": {
+        "unlimitedQueries": "[BN] Unlimited AI agent queries",
+        "allAgents": "[BN] All pre-built domain agents",
+        "customDev": "[BN] Custom agent development",
+        "prioritySupport": "[BN] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[BN] Usage This Period",
+      "usage": {
+        "agentQueries": "[BN] Agent Queries",
+        "unlimited": "[BN] Unlimited",
+        "reportsGenerated": "[BN] Reports Generated",
+        "teamSeats": "[BN] Team Seats"
+      },
+      "nextBillingDate": "[BN] Next billing date: {date}",
+      "changePlan": "[BN] Change Plan",
+      "cancelSubscription": "[BN] Cancel Subscription",
+      "paymentMethod": "[BN] Payment Method",
+      "paymentDescription": "[BN] Manage your payment information",
+      "cardEnding": "[BN] Visa ending in {last4}",
+      "cardExpires": "[BN] Expires {date}",
+      "update": "[BN] Update",
+      "billingHistory": "[BN] Billing History",
+      "billingHistoryDescription": "[BN] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[BN] Invoice",
+        "date": "[BN] Date",
+        "amount": "[BN] Amount",
+        "status": "[BN] Status"
+      },
+      "paid": "[BN] Paid",
+      "needMoreCapacity": "[BN] Need more capacity?",
+      "contactForPricing": "[BN] Contact us for custom enterprise pricing",
+      "contactSales": "[BN] Contact Sales",
+      "upgrade": {
+        "title": "[BN] Choose Your Plan",
+        "description": "[BN] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[BN] Back to Billing",
+        "checkoutCanceled": "[BN] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[BN] Monthly",
+        "yearly": "[BN] Yearly",
+        "save17": "[BN] Save 17%",
+        "mostPopular": "[BN] Most Popular",
+        "currentPlan": "[BN] Current Plan",
+        "billedAnnually": "[BN] ${price} billed annually",
+        "upgradeTo": "[BN] Upgrade to {plan}",
+        "processing": "[BN] Processing...",
+        "customSales": "[BN] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[BN] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[BN] Starter",
+            "description": "[BN] For individuals and small teams getting started",
+            "features": {
+              "runs": "[BN] 100 agent runs / month",
+              "seats": "[BN] 3 team seats",
+              "sources": "[BN] 5 data sources",
+              "retention": "[BN] 30 day data retention",
+              "tokens": "[BN] 100K tokens / month",
+              "support": "[BN] Community support"
+            }
+          },
+          "professional": {
+            "name": "[BN] Professional",
+            "description": "[BN] For growing teams with advanced needs",
+            "features": {
+              "runs": "[BN] 1,000 agent runs / month",
+              "seats": "[BN] 10 team seats",
+              "sources": "[BN] 25 data sources",
+              "retention": "[BN] 90 day data retention",
+              "tokens": "[BN] 1M tokens / month",
+              "support": "[BN] Priority email support",
+              "analytics": "[BN] Advanced analytics",
+              "integrations": "[BN] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[BN] Enterprise",
+            "description": "[BN] For large organizations with custom requirements",
+            "features": {
+              "runs": "[BN] Unlimited agent runs",
+              "seats": "[BN] Unlimited team seats",
+              "sources": "[BN] Unlimited data sources",
+              "retention": "[BN] 365 day data retention",
+              "tokens": "[BN] Unlimited tokens",
+              "support": "[BN] 24/7 dedicated support",
+              "customDev": "[BN] Custom agent development",
+              "sso": "[BN] SSO & SCIM",
+              "sla": "[BN] SLA guarantee",
+              "accountManager": "[BN] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[BN] Audit Log",
+      "description": "[BN] Track all actions and changes in your organization",
+      "activityHistory": "[BN] Activity History",
+      "totalEvents": "[BN] {count} total events",
+      "searchLogs": "[BN] Search logs...",
+      "allActions": "[BN] All Actions",
+      "allResources": "[BN] All Resources",
+      "noAuditLogs": "[BN] No audit logs found",
+      "activityWillAppear": "[BN] Activity will appear here as actions are taken",
+      "showing": "[BN] Showing {start} to {end} of {total}",
+      "previous": "[BN] Previous",
+      "next": "[BN] Next",
+      "actions": {
+        "create": "[BN] Created",
+        "update": "[BN] Updated",
+        "delete": "[BN] Deleted",
+        "execute": "[BN] Executed",
+        "login": "[BN] Logged in",
+        "logout": "[BN] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[BN] Webhooks",
+      "description": "[BN] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[BN] Webhook Endpoints",
+      "endpointsDescription": "[BN] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[BN] Add Webhook",
+      "addWebhookEndpoint": "[BN] Add Webhook Endpoint",
+      "addWebhookDescription": "[BN] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[BN] Endpoint URL",
+      "endpointUrlPlaceholder": "[BN] https://api.example.com/webhooks",
+      "descriptionOptional": "[BN] Description (Optional)",
+      "descriptionPlaceholder": "[BN] Describe this webhook...",
+      "events": "[BN] Events",
+      "creating": "[BN] Creating...",
+      "createWebhook": "[BN] Create Webhook",
+      "noWebhooks": "[BN] No webhooks configured",
+      "addWebhookToStart": "[BN] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[BN] Endpoint",
+        "events": "[BN] Events",
+        "status": "[BN] Status",
+        "secret": "[BN] Secret"
+      },
+      "eventsCount": "[BN] {count} events",
+      "active": "[BN] Active",
+      "disabled": "[BN] Disabled",
+      "webhookSecurity": "[BN] Webhook Security",
+      "securityDescription": "[BN] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[BN] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[BN] Agent Run Started",
+        "agentRunCompleted": "[BN] Agent Run Completed",
+        "agentRunFailed": "[BN] Agent Run Failed",
+        "workflowRunStarted": "[BN] Workflow Run Started",
+        "workflowRunCompleted": "[BN] Workflow Run Completed",
+        "workflowRunFailed": "[BN] Workflow Run Failed",
+        "reportGenerated": "[BN] Report Generated",
+        "memberAdded": "[BN] Member Added",
+        "memberRemoved": "[BN] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[BN] Custom Alerts",
+      "description": "[BN] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[BN] Total Alerts",
+      "active": "[BN] Active",
+      "totalTriggers": "[BN] Total Triggers",
+      "paused": "[BN] Paused",
+      "yourAlerts": "[BN] Your Alerts",
+      "yourAlertsDescription": "[BN] Manage your custom alert configurations",
+      "createAlert": "[BN] Create Alert",
+      "searchAlerts": "[BN] Search alerts...",
+      "entityType": "[BN] Entity Type",
+      "allTypes": "[BN] All Types",
+      "allStatus": "[BN] All Status",
+      "noAlertsYet": "[BN] No alerts yet",
+      "noMatchingAlerts": "[BN] No matching alerts",
+      "createFirstAlert": "[BN] Create your first alert to get notified about important changes",
+      "adjustFilters": "[BN] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[BN] Alert",
+        "type": "[BN] Type",
+        "condition": "[BN] Condition",
+        "channels": "[BN] Channels",
+        "lastTriggered": "[BN] Last Triggered",
+        "status": "[BN] Status"
+      },
+      "total": "[BN] total",
+      "never": "[BN] Never",
+      "edit": "[BN] Edit",
+      "viewHistory": "[BN] View History",
+      "delete": "[BN] Delete",
+      "createNewAlert": "[BN] Create New Alert",
+      "createNewAlertDescription": "[BN] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[BN] Edit Alert",
+      "editAlertDescription": "[BN] Update the configuration for this alert",
+      "alertHistory": "[BN] Alert History: {name}",
+      "alertHistoryDescription": "[BN] View the history of when this alert was triggered",
+      "deleteAlert": "[BN] Delete Alert",
+      "deleteAlertDescription": "[BN] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[BN] Cancel",
+      "entityTypes": {
+        "metric": "[BN] Metric",
+        "audience": "[BN] Audience",
+        "brand": "[BN] Brand",
+        "report": "[BN] Report",
+        "agent": "[BN] Agent",
+        "workflow": "[BN] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[BN] Keyboard Shortcuts",
+      "description": "[BN] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[BN] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[BN] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[BN] Shortcut Conflicts Detected",
+      "conflictsDescription": "[BN] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[BN] Navigation",
+        "navigationDesc": "[BN] Navigate around the application",
+        "actions": "[BN] Actions",
+        "actionsDesc": "[BN] Perform common actions quickly",
+        "ui": "[BN] UI",
+        "uiDesc": "[BN] Control the user interface",
+        "editing": "[BN] Editing",
+        "editingDesc": "[BN] Edit content efficiently"
+      },
+      "resetToDefaults": "[BN] Reset to Defaults",
+      "saving": "[BN] Saving...",
+      "saveChanges": "[BN] Save Changes",
+      "resetDialog": {
+        "title": "[BN] Reset Keyboard Shortcuts",
+        "description": "[BN] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[BN] Cancel",
+        "reset": "[BN] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[BN] Edit Shortcut",
+        "customizable": "[BN] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[BN] This shortcut cannot be customized",
+        "action": "[BN] Action",
+        "currentBinding": "[BN] Current Binding",
+        "newBinding": "[BN] New Binding",
+        "pressKeys": "[BN] Press keys...",
+        "clickToRecord": "[BN] Click to record",
+        "record": "[BN] Record",
+        "recording": "[BN] Recording...",
+        "cancel": "[BN] Cancel",
+        "save": "[BN] Save"
+      }
+    },
+    "plan": {
+      "title": "[BN] Plan & Billing",
+      "description": "[BN] Manage your subscription and view usage metrics",
+      "currentPlan": "[BN] Current Plan",
+      "currentPlanDescription": "[BN] Your active subscription details",
+      "upgradePlan": "[BN] Upgrade Plan",
+      "teamMembers": "[BN] Team Members",
+      "agents": "[BN] Agents",
+      "workflows": "[BN] Workflows",
+      "reports": "[BN] Reports",
+      "usageThisMonth": "[BN] Usage This Month",
+      "usageDescription": "[BN] Monitor your resource usage against plan limits",
+      "comparePlans": "[BN] Compare Plans",
+      "yourFeatures": "[BN] Your Features",
+      "yourFeaturesDescription": "[BN] All features included in your current plan",
+      "limit": "[BN] Limit: {limit}",
+      "requesting": "[BN] Requesting...",
+      "upgradeTo": "[BN] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[BN] Starter",
+          "price": "[BN] $49/mo",
+          "features": {
+            "members": "[BN] Up to 5 team members",
+            "agents": "[BN] 10 agents",
+            "runs": "[BN] 50 workflow runs/month",
+            "analytics": "[BN] Basic analytics",
+            "support": "[BN] Email support"
+          }
         },
-        "ticket": {
-          "title": "একটি টিকেট জমা দিন",
-          "description": "২৪ ঘণ্টার মধ্যে ইমেইলের মাধ্যমে সাহায্য পান",
-          "info": "জটিল সমস্যা বা বৈশিষ্ট্য অনুরোধের জন্য। যতটা সম্ভব বিস্তারিত অন্তর্ভুক্ত করুন।",
-          "button": "টিকেট জমা দিন"
+        "professional": {
+          "name": "[BN] Professional",
+          "price": "[BN] $199/mo",
+          "features": {
+            "members": "[BN] Up to 20 team members",
+            "agents": "[BN] Unlimited agents",
+            "runs": "[BN] Unlimited workflow runs",
+            "analytics": "[BN] Advanced analytics",
+            "support": "[BN] Priority support",
+            "integrations": "[BN] Custom integrations",
+            "api": "[BN] API access"
+          }
         },
         "enterprise": {
-          "title": "এন্টারপ্রাইজ সাপোর্ট",
-          "description": "ডেডিকেটেড সাপোর্ট প্রয়োজন? এন্টারপ্রাইজ প্ল্যানে একজন ডেডিকেটেড কাস্টমার সাকসেস ম্যানেজার এবং অগ্রাধিকার প্রতিক্রিয়া সময় অন্তর্ভুক্ত।",
-          "button": "সেলসে যোগাযোগ করুন"
+          "name": "[BN] Enterprise",
+          "price": "[BN] Custom",
+          "features": {
+            "members": "[BN] Unlimited team members",
+            "everything": "[BN] Unlimited everything",
+            "security": "[BN] Advanced security",
+            "sso": "[BN] SSO & SAML",
+            "support": "[BN] Dedicated support",
+            "sla": "[BN] Custom SLAs",
+            "onPremise": "[BN] On-premise option",
+            "whiteLabel": "[BN] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[BN] Scheduled Exports",
+      "description": "[BN] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[BN] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[BN] Manage automatic exports that run on a schedule",
+      "newExport": "[BN] New Export",
+      "all": "[BN] All",
+      "active": "[BN] Active",
+      "paused": "[BN] Paused",
+      "noScheduledExports": "[BN] No scheduled exports",
+      "createFirstExport": "[BN] Create your first scheduled export to get started",
+      "createExport": "[BN] Create Export",
+      "tableHeaders": {
+        "name": "[BN] Name",
+        "schedule": "[BN] Schedule",
+        "format": "[BN] Format",
+        "lastRun": "[BN] Last Run",
+        "nextRun": "[BN] Next Run",
+        "status": "[BN] Status"
+      },
+      "statusLabels": {
+        "pending": "[BN] Pending",
+        "processing": "[BN] Running",
+        "completed": "[BN] Success",
+        "failed": "[BN] Failed",
+        "neverRun": "[BN] Never Run"
+      },
+      "actions": {
+        "runNow": "[BN] Run Now",
+        "viewHistory": "[BN] View History",
+        "edit": "[BN] Edit",
+        "pause": "[BN] Pause",
+        "activate": "[BN] Activate",
+        "delete": "[BN] Delete"
+      },
+      "deleteDialog": {
+        "title": "[BN] Delete Scheduled Export",
+        "description": "[BN] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[BN] Cancel",
+        "delete": "[BN] Delete"
+      },
+      "historySheet": {
+        "title": "[BN] Export History",
+        "loading": "[BN] Loading..."
+      },
+      "relativeTime": {
+        "never": "[BN] Never",
+        "justNow": "[BN] Just now",
+        "lessThanMinute": "[BN] In less than a minute",
+        "minsAgo": "[BN] {count}m ago",
+        "inMins": "[BN] In {count}m",
+        "hoursAgo": "[BN] {count}h ago",
+        "inHours": "[BN] In {count}h",
+        "daysAgo": "[BN] {count}d ago",
+        "inDays": "[BN] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[BN] Inbox Agents",
+      "description": "[BN] AI agents that automatically handle incoming requests",
+      "configureChannels": "[BN] Configure Channels",
+      "createAgent": "[BN] Create Agent",
+      "activeAgents": "[BN] Active Agents",
+      "status": {
+        "processing": "[BN] Processing"
+      },
+      "stats": {
+        "processedToday": "[BN] Processed Today",
+        "fromYesterday": "[BN] {percent} from yesterday",
+        "avgResponseTime": "[BN] Avg Response Time",
+        "fasterThanLastWeek": "[BN] {percent} faster than last week",
+        "successRate": "[BN] Success Rate",
+        "basedOnRequests": "[BN] Based on {count} requests",
+        "pendingReview": "[BN] Pending Review",
+        "highPriority": "[BN] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[BN] Success rate",
+        "processed": "[BN] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[BN] Incoming Requests",
+        "description": "[BN] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[BN] Search requests...",
+        "noRequests": "[BN] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[BN] Assign to Brief Handler",
+        "assignToAudienceQuery": "[BN] Assign to Audience Query",
+        "assignToLocalization": "[BN] Assign to Localization",
+        "reprocess": "[BN] Reprocess",
+        "archive": "[BN] Archive"
+      },
+      "priority": {
+        "high": "[BN] High priority",
+        "medium": "[BN] Medium priority",
+        "low": "[BN] Low priority"
+      },
+      "request": {
+        "received": "[BN] Received {time}",
+        "generatedOutput": "[BN] Generated Output",
+        "confidence": "[BN] {percent}% confidence",
+        "citations": "[BN] {count} citations",
+        "viewFullReport": "[BN] View Full Report",
+        "assignAgent": "[BN] Assign Agent",
+        "respondManually": "[BN] Respond Manually",
+        "viewHistory": "[BN] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[BN] Agent Active",
+        "agentPaused": "[BN] Agent Paused",
+        "lastTriggered": "[BN] Last triggered {time}",
+        "processed": "[BN] Processed",
+        "successRate": "[BN] Success Rate",
+        "avgTime": "[BN] Avg Time",
+        "triggerKeywords": "[BN] Trigger Keywords",
+        "connectedChannels": "[BN] Connected Channels",
+        "processingPipeline": "[BN] Processing Pipeline",
+        "configure": "[BN] Configure",
+        "viewLogs": "[BN] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[BN] Create Inbox Agent",
+        "description": "[BN] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[BN] Agent Name",
+        "agentNamePlaceholder": "[BN] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[BN] Describe what this agent does...",
+        "triggerKeywords": "[BN] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[BN] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[BN] Agent will activate when messages contain these keywords",
+        "channels": "[BN] Channels",
+        "baseAgent": "[BN] Base Agent",
+        "selectAgent": "[BN] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[BN] Audience Explorer",
+          "personaArchitect": "[BN] Persona Architect",
+          "cultureTracker": "[BN] Culture Tracker",
+          "brandRelationshipAnalyst": "[BN] Brand Relationship Analyst"
+        },
+        "autoRespond": "[BN] Auto-respond",
+        "autoRespondHelp": "[BN] Automatically send responses to requesters",
+        "requireApproval": "[BN] Require Approval",
+        "requireApprovalHelp": "[BN] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[BN] Prompt Templates",
+      "description": "[BN] Reusable templates for common insights tasks",
+      "createTemplate": "[BN] Create Template",
+      "searchPlaceholder": "[BN] Search templates...",
+      "starredTemplates": "[BN] Starred Templates",
+      "allTemplates": "[BN] All Templates",
+      "uses": "[BN] {count} uses",
+      "categories": {
+        "all": "[BN] All",
+        "research": "[BN] Research",
+        "analysis": "[BN] Analysis",
+        "briefs": "[BN] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[BN] Use Template",
+        "duplicate": "[BN] Duplicate"
+      },
+      "createDialog": {
+        "title": "[BN] Create Template",
+        "description": "[BN] Save a prompt as a reusable template for your team",
+        "templateName": "[BN] Template Name",
+        "templateNamePlaceholder": "[BN] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[BN] What does this template do?",
+        "category": "[BN] Category",
+        "promptTemplate": "[BN] Prompt Template",
+        "promptPlaceholder": "[BN] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[BN] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[BN] Agent Store",
+      "description": "[BN] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[BN] Search agents...",
+      "sortBy": {
+        "placeholder": "[BN] Sort by",
+        "popular": "[BN] Most Popular",
+        "rating": "[BN] Highest Rated",
+        "newest": "[BN] Newest",
+        "name": "[BN] Name A-Z"
+      },
+      "featuredAgents": "[BN] Featured Agents",
+      "featured": "[BN] Featured",
+      "installed": "[BN] Installed",
+      "tryNow": "[BN] Try Now",
+      "categories": "[BN] Categories",
+      "viewDetails": "[BN] View Details",
+      "added": "[BN] Added",
+      "buildYourOwn": {
+        "title": "[BN] Build Your Own Agent",
+        "description": "[BN] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[BN] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[BN] Back to Store",
+        "notFound": {
+          "title": "[BN] Agent Not Found",
+          "description": "[BN] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[BN] {count} installs",
+        "installed": "[BN] Installed",
+        "installing": "[BN] Installing...",
+        "installAgent": "[BN] Install Agent",
+        "tryInPlayground": "[BN] Try in Playground",
+        "info": {
+          "version": "[BN] Version",
+          "category": "[BN] Category",
+          "dataSources": "[BN] Data Sources"
+        },
+        "tabs": {
+          "overview": "[BN] Overview",
+          "capabilities": "[BN] Capabilities",
+          "examples": "[BN] Examples",
+          "reviews": "[BN] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[BN] About this Agent",
+          "fastResults": "[BN] Fast Results",
+          "fastResultsDesc": "[BN] Avg. 3s response time",
+          "verifiedData": "[BN] Verified Data",
+          "verifiedDataDesc": "[BN] 100% sourced citations",
+          "alwaysUpdated": "[BN] Always Updated",
+          "alwaysUpdatedDesc": "[BN] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[BN] What this agent can do",
+          "description": "[BN] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[BN] Example Prompts",
+          "description": "[BN] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[BN] Ratings",
+          "reviewsCount": "[BN] {count} reviews"
+        },
+        "relatedAgents": "[BN] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[BN] Data Changes",
+      "description": "[BN] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[BN] Timeline",
+        "compare": "[BN] Compare",
+        "evolution": "[BN] Evolution",
+        "alerts": "[BN] Alerts"
+      },
+      "compare": {
+        "title": "[BN] Compare Versions",
+        "description": "[BN] Select an entity to compare its versions",
+        "compareVersions": "[BN] Compare versions",
+        "entities": {
+          "audiences": "[BN] Audiences",
+          "crosstabs": "[BN] Crosstabs",
+          "insights": "[BN] Insights",
+          "charts": "[BN] Charts",
+          "reports": "[BN] Reports",
+          "dashboards": "[BN] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[BN] Analysis Evolution",
+        "description": "[BN] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[BN] View evolution",
+        "types": {
+          "brandHealth": "[BN] Brand Health",
+          "audienceInsights": "[BN] Audience Insights",
+          "marketAnalysis": "[BN] Market Analysis",
+          "competitorAnalysis": "[BN] Competitor Analysis",
+          "trendAnalysis": "[BN] Trend Analysis",
+          "crosstabAnalysis": "[BN] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[BN] Change Alerts",
+        "loading": "[BN] Loading alerts...",
+        "noAlerts": "[BN] No Alerts",
+        "noAlertsDescription": "[BN] You have no unread change alerts.",
+        "markAllRead": "[BN] Mark All as Read",
+        "markRead": "[BN] Mark Read",
+        "dismiss": "[BN] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[BN] Select {entity} to Compare",
+        "entity": "[BN] Entity",
+        "enterIdDescription": "[BN] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[BN] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[BN] Select Analysis to View Evolution",
+        "enterIdDescription": "[BN] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[BN] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[BN] Crosstabs",
+      "description": "[BN] Compare audiences across multiple dimensions",
+      "newCrosstab": "[BN] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[BN] Total Crosstabs",
+        "views": "[BN] Views",
+        "exports": "[BN] Exports",
+        "usedToday": "[BN] Used Today"
+      },
+      "tabs": {
+        "all": "[BN] All Crosstabs",
+        "recent": "[BN] Recent",
+        "templates": "[BN] Templates"
+      },
+      "empty": {
+        "title": "[BN] No crosstabs yet",
+        "description": "[BN] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[BN] Featured",
+        "liveData": "[BN] Live Data",
+        "more": "[BN] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[BN] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[BN] audience segments",
+        "metrics": "[BN] metrics",
+        "audiencesCount": "[BN] {count} audiences",
+        "metricsCount": "[BN] {count} metrics",
+        "modified": "[BN] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[BN] Open Analysis"
+      },
+      "new": {
+        "title": "[BN] Create Crosstab",
+        "description": "[BN] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[BN] Crosstab Name",
+          "namePlaceholder": "[BN] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[BN] Select Audiences",
+          "selectMetrics": "[BN] Select Metrics",
+          "selected": "[BN] {count} selected"
+        },
+        "summary": {
+          "title": "[BN] Summary",
+          "audiences": "[BN] Audiences ({count})",
+          "metrics": "[BN] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[BN] Generate Crosstab",
+          "generating": "[BN] Generating...",
+          "cancel": "[BN] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[BN] Please enter a crosstab name",
+          "audienceRequired": "[BN] Please select at least one audience",
+          "metricRequired": "[BN] Please select at least one metric",
+          "createFailed": "[BN] Failed to create crosstab",
+          "createFailedRetry": "[BN] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[BN] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[BN] {count} metrics",
+          "audiences": "[BN] {count} audiences"
+        },
+        "categoriesCount": "[BN] {count} categories",
+        "more": "[BN] more",
+        "actions": {
+          "share": "[BN] Share",
+          "generateInsights": "[BN] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[BN] Data Grid",
+          "calculatedFields": "[BN] Calculated Fields",
+          "filters": "[BN] Filters",
+          "visualize": "[BN] Visualize"
+        },
+        "grid": {
+          "title": "[BN] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[BN] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[BN] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[BN] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[BN] Value updated to {value}%",
+          "fieldCreated": "[BN] Calculated field \"{name}\" created",
+          "fieldUpdated": "[BN] Calculated field updated",
+          "fieldDeleted": "[BN] Calculated field deleted",
+          "fieldApplied": "[BN] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[BN] Filters applied",
+          "chartSaved": "[BN] Chart saved!",
+          "chartExported": "[BN] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[BN] Crosstab Not Found",
+          "subtitle": "[BN] The requested crosstab could not be found",
+          "heading": "[BN] Crosstab not found",
+          "description": "[BN] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[BN] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[BN] Remove from favorites",
+          "addToFavorites": "[BN] Add to favorites",
+          "pauseAutoRefresh": "[BN] Pause auto-refresh",
+          "enableAutoRefresh": "[BN] Enable auto-refresh",
+          "exitFullscreen": "[BN] Exit fullscreen",
+          "enterFullscreen": "[BN] Enter fullscreen",
+          "visualize": "[BN] Visualize",
+          "share": "[BN] Share",
+          "edit": "[BN] Edit",
+          "duplicate": "[BN] Duplicate",
+          "addToDashboard": "[BN] Add to Dashboard",
+          "copyLink": "[BN] Copy Link",
+          "copied": "[BN] Copied!",
+          "delete": "[BN] Delete",
+          "cancel": "[BN] Cancel",
+          "selectAll": "[BN] Select All",
+          "clear": "[BN] Clear",
+          "schedule": "[BN] Schedule"
+        },
+        "filters": {
+          "title": "[BN] Data Filters",
+          "clearAll": "[BN] Clear All",
+          "description": "[BN] Filter and refine your crosstab data",
+          "quickFilters": "[BN] Quick Filters",
+          "valueRange": "[BN] Value Range: {min}% - {max}%",
+          "category": "[BN] Category",
+          "allCategories": "[BN] All Categories",
+          "activeFilters": "[BN] Active filters"
+        },
+        "tabs": {
+          "filters": "[BN] Filters",
+          "audiences": "[BN] Audiences",
+          "metrics": "[BN] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[BN] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[BN] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[BN] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[BN] Export as JSON",
+          "asCsv": "[BN] Export as CSV",
+          "asHtml": "[BN] Export as HTML",
+          "asPdf": "[BN] Export as PDF",
+          "asExcel": "[BN] Export as Excel",
+          "asPowerPoint": "[BN] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[BN] Delete Crosstab",
+          "description": "[BN] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[BN] Modified {time}",
+          "views": "[BN] {count} views",
+          "createdBy": "[BN] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[BN] Data",
+          "activity": "[BN] Activity",
+          "comments": "[BN] Comments",
+          "history": "[BN] History"
+        },
+        "insights": {
+          "title": "[BN] AI-Generated Insights",
+          "topPerformer": "[BN] Top Performer",
+          "topPerformerDesc": "[BN] leads in most metrics with an average of {average}%.",
+          "noData": "[BN] No data available",
+          "biggestGap": "[BN] Biggest Gap",
+          "biggestGapDesc": "[BN] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[BN] Trending",
+          "trendingDesc": "[BN] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[BN] no"
+        },
+        "activity": {
+          "title": "[BN] Activity Log",
+          "description": "[BN] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[BN] Share Crosstab",
+          "description": "[BN] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[BN] Email address",
+          "emailPlaceholder": "[BN] email@example.com",
+          "role": "[BN] Role",
+          "roles": {
+            "viewer": "[BN] Viewer",
+            "editor": "[BN] Editor",
+            "admin": "[BN] Admin"
+          },
+          "shareLink": "[BN] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[BN] Schedule Report",
+          "description": "[BN] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[BN] Recipients",
+          "recipientsPlaceholder": "[BN] email@example.com, team@example.com",
+          "frequency": "[BN] Frequency",
+          "frequencies": {
+            "daily": "[BN] Daily",
+            "weekly": "[BN] Weekly",
+            "monthly": "[BN] Monthly"
+          },
+          "format": "[BN] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[BN] Insights",
+      "description": "[BN] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[BN] Search insights...",
+      "filterByType": "[BN] Filter by type",
+      "loading": "[BN] Loading...",
+      "showing": "[BN] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[BN] All Types",
+        "audience": "[BN] Audience",
+        "trend": "[BN] Trend",
+        "competitive": "[BN] Competitive",
+        "analysis": "[BN] Analysis"
+      },
+      "empty": {
+        "title": "[BN] No insights yet",
+        "description": "[BN] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[BN] Go to Playground"
+      },
+      "badges": {
+        "new": "[BN] New"
+      },
+      "viaAgent": "[BN] via {name}",
+      "detail": {
+        "backToInsights": "[BN] Back to Insights",
+        "notFound": {
+          "title": "[BN] Insight not found",
+          "description": "[BN] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[BN] View All Insights",
+        "confidence": "[BN] {percent}% confidence",
+        "viaAgent": "[BN] via {name}",
+        "actions": {
+          "copy": "[BN] Copy",
+          "copied": "[BN] Copied",
+          "share": "[BN] Share",
+          "export": "[BN] Export"
+        },
+        "detailsTitle": "[BN] Insight Details",
+        "detailsDescription": "[BN] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[BN] Want to explore more?",
+          "description": "[BN] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[BN] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[BN] Data Connectors",
+        "description": "[BN] Connect external data sources to enrich your insights",
+        "addConnector": "[BN] Add Connector",
+        "searchPlaceholder": "[BN] Search connectors...",
+        "stats": {
+          "totalConnectors": "[BN] Total Connectors",
+          "active": "[BN] Active",
+          "withErrors": "[BN] With Errors",
+          "dataSources": "[BN] Data Sources"
+        },
+        "tabs": {
+          "configured": "[BN] Configured",
+          "available": "[BN] Available"
+        },
+        "filters": {
+          "allTypes": "[BN] All types"
+        },
+        "empty": {
+          "title": "[BN] No connectors configured",
+          "description": "[BN] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[BN] Previous",
+          "next": "[BN] Next",
+          "pageOf": "[BN] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[BN] Sync started",
+          "syncFailed": "[BN] Failed to start sync",
+          "connectorEnabled": "[BN] Connector enabled",
+          "connectorDisabled": "[BN] Connector disabled",
+          "updateFailed": "[BN] Failed to update connector",
+          "connectorDeleted": "[BN] Connector deleted",
+          "deleteFailed": "[BN] Failed to delete connector",
+          "testFailed": "[BN] Failed to test connection"
+        },
+        "new": {
+          "title": "[BN] Add Data Connector",
+          "description": "[BN] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[BN] Back to Connectors",
+          "notFound": "[BN] Connector not found",
+          "actions": {
+            "test": "[BN] Test",
+            "syncNow": "[BN] Sync Now",
+            "delete": "[BN] Delete",
+            "cancel": "[BN] Cancel",
+            "deleting": "[BN] Deleting..."
+          },
+          "status": {
+            "completed": "[BN] Last sync successful",
+            "running": "[BN] Syncing...",
+            "pending": "[BN] Sync pending",
+            "failed": "[BN] Last sync failed",
+            "cancelled": "[BN] Sync cancelled",
+            "never": "[BN] Never synced"
+          },
+          "cards": {
+            "status": "[BN] Status",
+            "active": "[BN] Active",
+            "paused": "[BN] Paused",
+            "totalSyncs": "[BN] Total Syncs",
+            "errorCount": "[BN] Error Count"
+          },
+          "tabs": {
+            "overview": "[BN] Overview",
+            "configuration": "[BN] Configuration",
+            "syncHistory": "[BN] Sync History"
+          },
+          "overview": {
+            "details": "[BN] Details",
+            "description": "[BN] Description",
+            "provider": "[BN] Provider",
+            "type": "[BN] Type",
+            "syncSchedule": "[BN] Sync Schedule",
+            "manualOnly": "[BN] Manual only",
+            "created": "[BN] Created",
+            "recentSyncs": "[BN] Recent Syncs",
+            "lastSyncs": "[BN] Last {count} sync operations",
+            "noSyncHistory": "[BN] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[BN] Danger Zone",
+            "deleteConnector": "[BN] Delete this connector",
+            "deleteWarning": "[BN] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[BN] Sync History",
+            "description": "[BN] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[BN] Delete Connector",
+            "description": "[BN] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[BN] Sync started",
+            "syncFailed": "[BN] Failed to start sync",
+            "testFailed": "[BN] Test failed",
+            "connectorDeleted": "[BN] Connector deleted",
+            "deleteFailed": "[BN] Failed to delete connector",
+            "connectorUpdated": "[BN] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[BN] Memory & Context",
+      "description": "[BN] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[BN] Settings",
+        "clearAll": "[BN] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "ড্যাশবোর্ড",
     "welcome": "স্বাগতম",
-    "overview": "সংক্ষিপ্ত বিবরণ",
+    "overview": {
+      "activeAgents": "[BN] Active Agents",
+      "workflowsRun": "[BN] Workflows Run",
+      "insightsGenerated": "[BN] Insights Generated",
+      "avgRunTime": "[BN] Avg. Run Time",
+      "thisWeekChange": "[BN] +{count} this week",
+      "fromLastMonthPercent": "[BN] +{percent}% from last month",
+      "fasterPercent": "[BN] -{percent}% faster",
+      "active": "[BN] Active",
+      "noneActive": "[BN] None active",
+      "last24Hours": "[BN] Last 24 hours",
+      "noRunsYet": "[BN] No runs yet",
+      "noInsightsYet": "[BN] No insights yet",
+      "perWorkflow": "[BN] Per workflow",
+      "notAvailable": "[BN] N/A"
+    },
     "recentActivity": "সাম্প্রতিক কার্যক্রম",
     "quickActions": {
       "title": "দ্রুত কার্যক্রম",
@@ -871,7 +1990,25 @@
       "createReport": "রিপোর্ট তৈরি করুন",
       "published": "প্রকাশিত",
       "generating": "জেনারেট হচ্ছে",
-      "draft": "খসড়া"
+      "draft": "খসড়া",
+      "page": {
+        "tabs": {
+          "allReports": "[BN] All Reports",
+          "templates": "[BN] Templates",
+          "scheduled": "[BN] Scheduled",
+          "sharedWithMe": "[BN] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[BN] Next: {date}",
+          "recipientsCount": "[BN] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[BN] Shared by {name} on {date}",
+          "canView": "[BN] Can view",
+          "canEdit": "[BN] Can edit",
+          "canComment": "[BN] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "সক্রিয় প্রকল্প",
@@ -1035,7 +2172,60 @@
         "title": "ওয়ার্কফ্লো",
         "description": "আপনার স্বয়ংক্রিয় গবেষণা পাইপলাইন তৈরি এবং পরিচালনা করুন।",
         "newWorkflow": "নতুন ওয়ার্কফ্লো",
-        "searchPlaceholder": "ওয়ার্কফ্লো অনুসন্ধান করুন..."
+        "searchPlaceholder": "ওয়ার্কফ্লো অনুসন্ধান করুন...",
+        "edit": {
+          "title": "[BN] Edit Workflow",
+          "description": "[BN] Modify workflow settings and configuration",
+          "newWorkflowName": "[BN] New Workflow",
+          "basicInfo": {
+            "title": "[BN] Basic Information",
+            "description": "[BN] Update the workflow name and description",
+            "workflowName": "[BN] Workflow Name",
+            "workflowNamePlaceholder": "[BN] Enter workflow name",
+            "descriptionPlaceholder": "[BN] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[BN] Schedule",
+            "description": "[BN] Configure when this workflow runs",
+            "runFrequency": "[BN] Run Frequency",
+            "selectSchedule": "[BN] Select schedule",
+            "selectStatus": "[BN] Select status",
+            "frequencies": {
+              "hourly": "[BN] Hourly",
+              "daily": "[BN] Daily",
+              "weekly": "[BN] Weekly",
+              "monthly": "[BN] Monthly",
+              "onDemand": "[BN] On-demand"
+            },
+            "statuses": {
+              "active": "[BN] Active",
+              "paused": "[BN] Paused",
+              "scheduled": "[BN] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[BN] Error Handling",
+            "description": "[BN] Configure retry behavior for failed runs",
+            "autoRetry": "[BN] Auto-retry on failure",
+            "autoRetryDescription": "[BN] Automatically retry the workflow if it fails",
+            "retryAttempts": "[BN] Retry Attempts",
+            "selectAttempts": "[BN] Select attempts",
+            "attempts": {
+              "one": "[BN] 1 attempt",
+              "two": "[BN] 2 attempts",
+              "three": "[BN] 3 attempts",
+              "five": "[BN] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[BN] Notifications",
+            "description": "[BN] Configure how you receive updates about this workflow",
+            "email": "[BN] Email notifications",
+            "emailDescription": "[BN] Receive email updates on completion or failure",
+            "slack": "[BN] Slack notifications",
+            "slackDescription": "[BN] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "অডিয়েন্স",
@@ -1083,55 +2273,235 @@
         "unarchive": "আনআর্কাইভ",
         "workflows": "ওয়ার্কফ্লো",
         "reports": "রিপোর্ট",
-        "agents": "এজেন্ট"
+        "agents": "এজেন্ট",
+        "detail": {
+          "defaultDescription": "[BN] Project description",
+          "projectSettings": "[BN] Project Settings",
+          "archiveProject": "[BN] Archive Project",
+          "deleteProject": "[BN] Delete Project",
+          "new": "[BN] New",
+          "stats": {
+            "teamMembers": "[BN] Team Members",
+            "workflows": "[BN] Workflows",
+            "running": "[BN] {count} running",
+            "reports": "[BN] Reports",
+            "generatedOutputs": "[BN] Generated outputs",
+            "agentsUsed": "[BN] Agents Used",
+            "totalRuns": "[BN] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[BN] Overview",
+            "workflows": "[BN] Workflows",
+            "reports": "[BN] Reports",
+            "agents": "[BN] Agents",
+            "team": "[BN] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[BN] Recent Workflows",
+            "recentReports": "[BN] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[BN] Project Workflows",
+            "newWorkflow": "[BN] New Workflow",
+            "lastRun": "[BN] Last run",
+            "run": "[BN] Run"
+          },
+          "reportsTab": {
+            "title": "[BN] Project Reports",
+            "newReport": "[BN] New Report",
+            "created": "[BN] Created"
+          },
+          "agentsTab": {
+            "title": "[BN] Agents Used",
+            "addAgent": "[BN] Add Agent",
+            "runsInProject": "[BN] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[BN] Team Members",
+            "addMember": "[BN] Add Member",
+            "remove": "[BN] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "শ্রোতা সম্পাদনা করুন",
-        "description": "এই দর্শক বিভাগের জন্য কনফিগারেশন আপডেট করুন",
-        "saving": "সংরক্ষণ করা হচ্ছে...",
-        "saveChanges": "পরিবর্তনগুলি সংরক্ষণ করুন",
-        "notFound": "শ্রোতা পাওয়া যায়নি",
-        "notFoundDescription": "আপনি যে শ্রোতা সম্পাদনা করার চেষ্টা করছেন সেটি বিদ্যমান নেই৷",
-        "notFoundDetailedDescription": "আপনি যে দর্শকদের সন্ধান করছেন সেটি বিদ্যমান নেই বা মুছে ফেলা হয়েছে৷",
-        "backToAudiences": "দর্শক-এ ফেরত যান",
+      "pageTracker": "[BN] Audiences List",
+      "title": "[BN] Audiences",
+      "description": "[BN] Build and analyze custom consumer segments",
+      "aiBuilder": "[BN] AI Builder",
+      "newAudience": "[BN] New Audience",
+      "totalAudiences": "[BN] Total Audiences",
+      "avgReach": "[BN] Avg. Reach",
+      "markets": "[BN] Markets",
+      "usedThisWeek": "[BN] Used This Week",
+      "searchPlaceholder": "[BN] Search audiences...",
+      "allAudiences": "[BN] All Audiences",
+      "recentlyUsed": "[BN] Recently Used",
+      "favorites": "[BN] Favorites",
+      "marketplace": "[BN] Marketplace",
+      "aiAudienceBuilder": "[BN] AI Audience Builder",
+      "aiBuilderDescription": "[BN] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[BN] Compare Audiences",
+      "compareDescription": "[BN] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[BN] No audiences yet",
+        "description": "[BN] Create your first audience to get started",
+        "action": "[BN] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[BN] {count} markets",
+        "used": "[BN] Used {time}"
+      },
+      "new": {
+        "title": "[BN] Build New Audience",
+        "description": "[BN] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "মৌলিক তথ্য",
-          "description": "এই দর্শকদের জন্য নাম এবং বিবরণ সেট করুন",
-          "audienceName": "দর্শকের নাম",
-          "audienceNamePlaceholder": "যেমন, ইকো-সচেতন সহস্রাব্দ",
-          "descriptionPlaceholder": "এই শ্রোতা বিভাগের সংক্ষিপ্ত বিবরণ"
+          "audienceName": "[BN] Audience Name",
+          "audienceNamePlaceholder": "[BN] e.g., Eco-Conscious Millennials",
+          "description": "[BN] Description",
+          "descriptionPlaceholder": "[BN] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "এআই-চালিত প্রশ্ন",
-          "description": "স্বাভাবিক ভাষায় আপনার শ্রোতাদের বর্ণনা করুন",
-          "placeholder": "যেমন, আমাকে সহস্রাব্দ দেখান যারা স্থায়িত্বের বিষয়ে যত্নশীল, শহুরে এলাকায় বাস করেন এবং পরিবেশ বান্ধব ব্র্যান্ডে কেনাকাটা করেন",
-          "generateButton": "গুণাবলী তৈরি করুন (শীঘ্রই আসছে)"
+          "title": "[BN] AI-Powered Query",
+          "description": "[BN] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[BN] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[BN] Generate Attributes"
         },
         "attributes": {
-          "title": "টার্গেটিং বৈশিষ্ট্য",
-          "description": "এই দর্শকদের জন্য নির্দিষ্ট মানদণ্ড সংজ্ঞায়িত করুন",
-          "addAttribute": "অ্যাট্রিবিউট যোগ করুন",
-          "noAttributes": "কোন বৈশিষ্ট্য এখনও সংজ্ঞায়িত",
-          "noAttributesHint": "আপনার শ্রোতা মানদণ্ড সংজ্ঞায়িত করতে বৈশিষ্ট্য যোগ করুন",
-          "valuePlaceholder": "মান"
+          "title": "[BN] Attributes",
+          "add": "[BN] Add",
+          "age": "[BN] Age",
+          "gender": "[BN] Gender",
+          "income": "[BN] Income",
+          "interests": "[BN] Interests",
+          "is": "[BN] is",
+          "between": "[BN] between",
+          "contains": "[BN] contains"
         },
         "markets": {
-          "title": "বাজার",
-          "description": "এই দর্শকদের জন্য বাজার নির্বাচন করুন",
-          "selectAtLeastOne": "অন্তত একটি বাজার নির্বাচন করুন"
+          "title": "[BN] Markets",
+          "global": "[BN] Global",
+          "us": "[BN] United States",
+          "uk": "[BN] United Kingdom",
+          "de": "[BN] Germany",
+          "jp": "[BN] Japan"
         },
         "estimatedReach": {
-          "title": "আনুমানিক পৌঁছান",
-          "tbd": "টিবিডি",
-          "matchCriteria": "ভোক্তারা এই মানদণ্ড মেলে"
+          "title": "[BN] Estimated Reach",
+          "matchCriteria": "[BN] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "পরিবর্তনগুলি বাতিল করবেন?",
-          "description": "আপনার অসংরক্ষিত পরিবর্তন আছে. আপনি কি নিশ্চিত আপনি চলে যেতে চান? আপনার পরিবর্তন হারিয়ে যাবে.",
-          "keepEditing": "সম্পাদনা চালিয়ে যান",
-          "discardChanges": "পরিবর্তন বাতিল করুন"
+        "actions": {
+          "save": "[BN] Save Audience",
+          "saving": "[BN] Saving...",
+          "cancel": "[BN] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[BN] Please enter an audience name",
+          "createFailed": "[BN] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[BN] Audience Detail",
+        "notFound": "[BN] Audience Not Found",
+        "notFoundDescription": "[BN] The requested audience could not be found",
+        "notFoundDetailedDescription": "[BN] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[BN] Back to Audiences",
+        "people": "[BN] people",
+        "addToFavorites": "[BN] Add to favorites",
+        "removeFromFavorites": "[BN] Remove from favorites",
+        "used": "[BN] Used {time}",
+        "tabs": {
+          "overview": "[BN] Overview",
+          "persona": "[BN] Persona",
+          "dayInLife": "[BN] Day in the Life",
+          "habits": "[BN] Habits & Behaviors",
+          "media": "[BN] Media Consumption",
+          "brands": "[BN] Brand Affinities",
+          "comments": "[BN] Comments",
+          "activity": "[BN] Activity",
+          "history": "[BN] History"
+        },
+        "actions": {
+          "explore": "[BN] Explore",
+          "share": "[BN] Share",
+          "export": "[BN] Export",
+          "edit": "[BN] Edit",
+          "autoRefresh": "[BN] Auto-refresh",
+          "pauseAutoRefresh": "[BN] Pause auto-refresh",
+          "enableAutoRefresh": "[BN] Enable auto-refresh",
+          "duplicate": "[BN] Duplicate",
+          "createLookalike": "[BN] Create Lookalike",
+          "addToCrosstab": "[BN] Add to Crosstab",
+          "addToDashboard": "[BN] Add to Dashboard",
+          "scheduleReport": "[BN] Schedule Report",
+          "copyLink": "[BN] Copy Link",
+          "copied": "[BN] Copied!",
+          "delete": "[BN] Delete"
+        },
+        "export": {
+          "asJson": "[BN] Export as JSON",
+          "asCsv": "[BN] Export as CSV",
+          "asPdf": "[BN] Export as PDF",
+          "toPowerPoint": "[BN] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[BN] Demographics",
+          "keyBehaviors": "[BN] Key Behaviors",
+          "interests": "[BN] Interests",
+          "audienceSummary": "[BN] Audience Summary",
+          "size": "[BN] Size",
+          "markets": "[BN] Markets",
+          "quickActions": "[BN] Quick Actions",
+          "createChart": "[BN] Create Chart",
+          "compareAudiences": "[BN] Compare Audiences",
+          "exportProfile": "[BN] Export Profile",
+          "copyLink": "[BN] Copy Link"
+        },
+        "activity": {
+          "title": "[BN] Activity Log",
+          "description": "[BN] Recent activity on this audience",
+          "viewed": "[BN] viewed",
+          "exported": "[BN] exported",
+          "edited": "[BN] edited",
+          "shared": "[BN] shared",
+          "created": "[BN] created",
+          "createdChart": "[BN] created chart",
+          "addedToCrosstab": "[BN] added to crosstab"
+        },
+        "share": {
+          "title": "[BN] Share Audience",
+          "description": "[BN] Share this audience with team members or external collaborators.",
+          "emailLabel": "[BN] Email address",
+          "emailPlaceholder": "[BN] email@example.com",
+          "roleLabel": "[BN] Role",
+          "viewer": "[BN] Viewer",
+          "editor": "[BN] Editor",
+          "admin": "[BN] Admin",
+          "shareLink": "[BN] Share link",
+          "cancel": "[BN] Cancel",
+          "share": "[BN] Share"
+        },
+        "schedule": {
+          "title": "[BN] Schedule Report",
+          "description": "[BN] Set up automatic email delivery of this audience report.",
+          "recipients": "[BN] Recipients",
+          "recipientsPlaceholder": "[BN] email@example.com, team@example.com",
+          "frequency": "[BN] Frequency",
+          "daily": "[BN] Daily",
+          "weekly": "[BN] Weekly",
+          "monthly": "[BN] Monthly",
+          "format": "[BN] Format",
+          "pdf": "[BN] PDF",
+          "csv": "[BN] CSV",
+          "json": "[BN] JSON",
+          "cancel": "[BN] Cancel",
+          "schedule": "[BN] Schedule"
+        },
+        "delete": {
+          "title": "[BN] Delete Audience",
+          "description": "[BN] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[BN] Cancel",
+          "delete": "[BN] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "চার্ট সম্পাদনা করুন",
-        "description": "আপনার চার্ট কনফিগারেশন এবং সেটিংস পরিবর্তন করুন",
-        "saving": "সংরক্ষণ করা হচ্ছে...",
-        "saveChanges": "পরিবর্তনগুলি সংরক্ষণ করুন",
-        "backToCharts": "চার্টে ফিরে যান",
-        "preview": {
-          "title": "পূর্বরূপ",
-          "description": "আপনার চার্ট দেখতে কেমন হবে"
-        },
-        "unsavedChanges": "অসংরক্ষিত পরিবর্তন",
-        "authRequired": "প্রমাণীকরণ প্রয়োজন",
-        "pleaseSignIn": "এই চার্ট সম্পাদনা করতে সাইন ইন করুন.",
-        "signIn": "সাইন ইন করুন",
+      "pageTracker": "[BN] Charts List",
+      "title": "[BN] Charts",
+      "description": "[BN] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[BN] Templates",
+      "compare": "[BN] Compare",
+      "newChart": "[BN] New Chart",
+      "totalCharts": "[BN] Total Charts",
+      "totalViews": "[BN] Total Views",
+      "shares": "[BN] Shares",
+      "exports": "[BN] Exports",
+      "searchPlaceholder": "[BN] Search charts...",
+      "allCategory": "[BN] All",
+      "allCharts": "[BN] All Charts",
+      "recent": "[BN] Recent",
+      "mostViewed": "[BN] Most Viewed",
+      "favorites": "[BN] Favorites",
+      "emptyState": {
+        "title": "[BN] No charts found",
+        "description": "[BN] Create your first chart or try a different search",
+        "action": "[BN] Create Chart"
+      },
+      "comparison": {
+        "title": "[BN] Brand Health Comparison",
+        "description": "[BN] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[BN] Create New Chart",
+        "description": "[BN] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "মৌলিক তথ্য",
-          "description": "আপনার চার্টের জন্য নাম এবং বিবরণ সেট করুন",
-          "chartName": "চার্টের নাম",
-          "chartNamePlaceholder": "চার্টের নাম লিখুন",
-          "descriptionPlaceholder": "এই চার্টটি কী দেখায় তা বর্ণনা করুন",
-          "selectStatus": "স্থিতি নির্বাচন করুন",
-          "dataSource": "ডাটা সোর্স",
-          "selectDataSource": "ডেটা উত্স নির্বাচন করুন"
+          "title": "[BN] Basic Information",
+          "chartName": "[BN] Chart Name",
+          "chartNamePlaceholder": "[BN] e.g., Social Media Usage by Age Group",
+          "description": "[BN] Description",
+          "descriptionPlaceholder": "[BN] Describe what this chart shows"
         },
         "chartType": {
-          "title": "চার্টের ধরন",
-          "description": "আপনার ডেটার জন্য ভিজ্যুয়ালাইজেশন টাইপ নির্বাচন করুন"
+          "title": "[BN] Chart Type",
+          "description": "[BN] Select the visualization type"
         },
         "dataConfig": {
-          "title": "ডেটা কনফিগারেশন",
-          "description": "আপনার চার্টের জন্য ডেটা কনফিগার করুন",
-          "targetAudience": "লক্ষ্য শ্রোতা",
-          "selectAudience": "দর্শক নির্বাচন করুন",
-          "timePeriod": "সময়কাল",
-          "selectTimePeriod": "সময়কাল নির্বাচন করুন",
-          "primaryMetric": "প্রাথমিক মেট্রিক",
-          "primaryMetricPlaceholder": "যেমন, সোশ্যাল মিডিয়া ব্যবহার (%)",
-          "dimensions": "মাত্রা",
-          "dimensionsHint": "আপনার ডেটা গ্রুপ করার জন্য বিভাগগুলি (যেমন, বয়স গোষ্ঠী, অঞ্চল)",
-          "addDimension": "একটি মাত্রা যোগ করুন",
-          "measures": "পরিমাপ",
-          "measuresHint": "প্রদর্শনের জন্য সংখ্যাসূচক মান (যেমন, গণনা, শতাংশ)",
-          "addMeasure": "একটি পরিমাপ যোগ করুন",
-          "filters": "ফিল্টার",
-          "filtersHint": "আপনার ডেটা ফিল্টার করতে শর্ত যোগ করুন",
-          "addFilter": "ফিল্টার যোগ করুন",
-          "field": "মাঠ",
-          "value": "মান",
-          "operators": {
-            "equals": "সমান",
-            "notEquals": "সমান নয়",
-            "contains": "ধারণ করে",
-            "greaterThan": "এর চেয়ে বড়",
-            "lessThan": "থেকে কম"
-          }
+          "title": "[BN] Data Configuration",
+          "targetAudience": "[BN] Target Audience",
+          "selectAudience": "[BN] Select audience",
+          "timePeriod": "[BN] Time Period",
+          "selectTimePeriod": "[BN] Select time period",
+          "dataSource": "[BN] Data Source",
+          "selectDataSource": "[BN] Select data source"
         },
-        "displayOptions": {
-          "title": "প্রদর্শনের বিকল্প",
-          "description": "চার্ট চেহারা কাস্টমাইজ করুন",
-          "showLegend": "লিজেন্ড দেখান",
-          "showGrid": "গ্রিড দেখান",
-          "showTooltip": "টুলটিপ দেখান"
+        "preview": {
+          "title": "[BN] Preview",
+          "description": "[BN] How your chart will look"
         },
-        "chartInfo": {
-          "title": "চার্ট তথ্য",
-          "id": "আইডি",
-          "created": "তৈরি হয়েছে",
-          "lastUpdated": "সর্বশেষ আপডেট"
+        "actions": {
+          "save": "[BN] Create Chart",
+          "saving": "[BN] Creating...",
+          "cancel": "[BN] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[BN] Chart Detail",
+        "notFound": "[BN] Chart Not Found",
+        "notFoundDescription": "[BN] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[BN] Back to Charts",
+        "views": "[BN] views",
+        "shares": "[BN] shares",
+        "addToFavorites": "[BN] Add to favorites",
+        "removeFromFavorites": "[BN] Remove from favorites",
+        "tabs": {
+          "chart": "[BN] Chart",
+          "data": "[BN] Data",
+          "settings": "[BN] Settings",
+          "comments": "[BN] Comments",
+          "activity": "[BN] Activity",
+          "history": "[BN] History"
         },
-        "discardDialog": {
-          "title": "পরিবর্তনগুলি বাতিল করবেন?",
-          "description": "আপনার অসংরক্ষিত পরিবর্তন আছে. আপনি কি নিশ্চিত আপনি চলে যেতে চান? আপনার পরিবর্তন হারিয়ে যাবে.",
-          "keepEditing": "সম্পাদনা চালিয়ে যান",
-          "discardChanges": "পরিবর্তন বাতিল করুন"
+        "actions": {
+          "share": "[BN] Share",
+          "export": "[BN] Export",
+          "edit": "[BN] Edit",
+          "fullscreen": "[BN] Fullscreen",
+          "duplicate": "[BN] Duplicate",
+          "addToDashboard": "[BN] Add to Dashboard",
+          "scheduleReport": "[BN] Schedule Report",
+          "copyLink": "[BN] Copy Link",
+          "copied": "[BN] Copied!",
+          "delete": "[BN] Delete"
+        },
+        "export": {
+          "asJson": "[BN] Export as JSON",
+          "asCsv": "[BN] Export as CSV",
+          "asPng": "[BN] Export as PNG",
+          "asSvg": "[BN] Export as SVG",
+          "toPowerPoint": "[BN] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[BN] Chart Info",
+          "type": "[BN] Type",
+          "dataSource": "[BN] Data Source",
+          "audience": "[BN] Audience",
+          "timePeriod": "[BN] Time Period",
+          "created": "[BN] Created",
+          "lastUpdated": "[BN] Last Updated"
+        },
+        "share": {
+          "title": "[BN] Share Chart",
+          "description": "[BN] Share this chart with team members or external collaborators.",
+          "emailLabel": "[BN] Email address",
+          "emailPlaceholder": "[BN] email@example.com",
+          "roleLabel": "[BN] Role",
+          "viewer": "[BN] Viewer",
+          "editor": "[BN] Editor",
+          "admin": "[BN] Admin",
+          "shareLink": "[BN] Share link",
+          "embedCode": "[BN] Embed code",
+          "cancel": "[BN] Cancel",
+          "share": "[BN] Share"
+        },
+        "delete": {
+          "title": "[BN] Delete Chart",
+          "description": "[BN] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[BN] Cancel",
+          "delete": "[BN] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "ন্যূনতম সচেতনতা (%)",
           "minNPS": "ন্যূনতম NPS স্কোর"
         }
+      },
+      "pageTracker": "[BN] Brand Tracking",
+      "title": "[BN] Brand Tracking",
+      "description": "[BN] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[BN] All Brands",
+        "active": "[BN] Active",
+        "paused": "[BN] Paused",
+        "draft": "[BN] Draft"
+      },
+      "new": {
+        "title": "[BN] New Brand Tracking",
+        "description": "[BN] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[BN] Brand Information",
+          "description": "[BN] Provide details about the brand you want to track",
+          "brandNameLabel": "[BN] Brand Name *",
+          "brandNamePlaceholder": "[BN] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[BN] Description",
+          "descriptionPlaceholder": "[BN] Brief description of what you want to track...",
+          "industryLabel": "[BN] Industry",
+          "industryPlaceholder": "[BN] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[BN] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[BN] Daily",
+          "weekly": "[BN] Weekly",
+          "monthly": "[BN] Monthly",
+          "manual": "[BN] Manual Only"
+        },
+        "competitors": {
+          "label": "[BN] Competitors",
+          "placeholder": "[BN] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[BN] Metrics to Track",
+          "awareness": "[BN] Brand Awareness",
+          "consideration": "[BN] Consideration",
+          "preference": "[BN] Preference",
+          "loyalty": "[BN] Loyalty",
+          "nps": "[BN] Net Promoter Score (NPS)",
+          "sentiment": "[BN] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[BN] Cancel",
+          "create": "[BN] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[BN] Brand Tracking Detail",
+        "title": "[BN] Brand Health Dashboard",
+        "notFound": "[BN] Brand Study Not Found",
+        "notFoundDescription": "[BN] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[BN] Back to Brand Tracking",
+        "loading": "[BN] Loading...",
+        "people": "[BN] people",
+        "timePeriods": {
+          "1m": "[BN] 1 Month",
+          "3m": "[BN] 3 Months",
+          "6m": "[BN] 6 Months",
+          "1y": "[BN] 1 Year",
+          "all": "[BN] All Time"
+        },
+        "tabs": {
+          "overview": "[BN] Overview",
+          "trends": "[BN] Trends",
+          "competitors": "[BN] Competitors",
+          "insights": "[BN] Insights",
+          "comments": "[BN] Comments",
+          "activity": "[BN] Activity",
+          "history": "[BN] History"
+        },
+        "actions": {
+          "explore": "[BN] Explore",
+          "share": "[BN] Share",
+          "export": "[BN] Export",
+          "edit": "[BN] Edit",
+          "refresh": "[BN] Refresh",
+          "autoRefresh": "[BN] Auto-refresh",
+          "pauseAutoRefresh": "[BN] Pause auto-refresh",
+          "enableAutoRefresh": "[BN] Enable auto-refresh",
+          "duplicate": "[BN] Duplicate",
+          "copyLink": "[BN] Copy Link",
+          "copied": "[BN] Copied!",
+          "delete": "[BN] Delete",
+          "addToFavorites": "[BN] Add to favorites",
+          "removeFromFavorites": "[BN] Remove from favorites",
+          "scheduleReport": "[BN] Schedule Report"
+        },
+        "export": {
+          "asJson": "[BN] Export as JSON",
+          "asCsv": "[BN] Export as CSV",
+          "asPdf": "[BN] Export as PDF",
+          "toPowerPoint": "[BN] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[BN] Awareness",
+          "consideration": "[BN] Consideration",
+          "preference": "[BN] Preference",
+          "loyalty": "[BN] Loyalty",
+          "nps": "[BN] NPS",
+          "sentiment": "[BN] Sentiment",
+          "marketShare": "[BN] Market Share",
+          "vsTarget": "[BN] vs target",
+          "trend": "[BN] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[BN] Brand Health Trend",
+          "competitorComparison": "[BN] Competitor Comparison",
+          "sentimentBreakdown": "[BN] Sentiment Breakdown",
+          "metricsOverTime": "[BN] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[BN] Brand Overview",
+          "industry": "[BN] Industry",
+          "competitors": "[BN] Competitors",
+          "trackingFrequency": "[BN] Tracking Frequency",
+          "lastUpdated": "[BN] Last Updated",
+          "createdBy": "[BN] Created By",
+          "dateRange": "[BN] Date Range"
+        },
+        "insights": {
+          "title": "[BN] Key Insights",
+          "aiGenerated": "[BN] AI-Generated",
+          "noInsights": "[BN] No insights available yet",
+          "generateInsights": "[BN] Generate Insights"
+        },
+        "activity": {
+          "title": "[BN] Activity Log",
+          "description": "[BN] Recent activity on this brand study",
+          "viewed": "[BN] viewed",
+          "exported": "[BN] exported",
+          "edited": "[BN] edited",
+          "shared": "[BN] shared",
+          "created": "[BN] created"
+        },
+        "share": {
+          "title": "[BN] Share Brand Study",
+          "description": "[BN] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[BN] Email address",
+          "emailPlaceholder": "[BN] email@example.com",
+          "roleLabel": "[BN] Role",
+          "viewer": "[BN] Viewer",
+          "editor": "[BN] Editor",
+          "admin": "[BN] Admin",
+          "shareLink": "[BN] Share link",
+          "cancel": "[BN] Cancel",
+          "share": "[BN] Share"
+        },
+        "schedule": {
+          "title": "[BN] Schedule Report",
+          "description": "[BN] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[BN] Recipients",
+          "recipientsPlaceholder": "[BN] email@example.com, team@example.com",
+          "frequency": "[BN] Frequency",
+          "daily": "[BN] Daily",
+          "weekly": "[BN] Weekly",
+          "monthly": "[BN] Monthly",
+          "format": "[BN] Format",
+          "pdf": "[BN] PDF",
+          "csv": "[BN] CSV",
+          "json": "[BN] JSON",
+          "cancel": "[BN] Cancel",
+          "schedule": "[BN] Schedule"
+        },
+        "delete": {
+          "title": "[BN] Delete Brand Study",
+          "description": "[BN] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[BN] Cancel",
+          "delete": "[BN] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[BN] Select organization",
+      "searchPlaceholder": "[BN] Search organizations...",
+      "noOrganizationFound": "[BN] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[BN] Weekly Activity",
+      "monthlyTrend": "[BN] Monthly Trend",
+      "workflows": "[BN] Workflows",
+      "insights": "[BN] Insights",
+      "days": {
+        "mon": "[BN] Mon",
+        "tue": "[BN] Tue",
+        "wed": "[BN] Wed",
+        "thu": "[BN] Thu",
+        "fri": "[BN] Fri",
+        "sat": "[BN] Sat",
+        "sun": "[BN] Sun"
+      },
+      "months": {
+        "jan": "[BN] Jan",
+        "feb": "[BN] Feb",
+        "mar": "[BN] Mar",
+        "apr": "[BN] Apr",
+        "may": "[BN] May",
+        "jun": "[BN] Jun",
+        "jul": "[BN] Jul",
+        "aug": "[BN] Aug",
+        "sep": "[BN] Sep",
+        "oct": "[BN] Oct",
+        "nov": "[BN] Nov",
+        "dec": "[BN] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[BN] Active Agents",
+      "manage": "[BN] Manage",
+      "activeTasks": "[BN] {count} active tasks",
+      "idle": "[BN] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[BN] Untitled Dashboard",
+      "addWidget": "[BN] Add Widget",
+      "undoShortcut": "[BN] Undo (Ctrl+Z)",
+      "redoShortcut": "[BN] Redo (Ctrl+Y)",
+      "grid": "[BN] Grid",
+      "snap": "[BN] Snap",
+      "widgetsCount": "[BN] {count} widgets",
+      "exportFormat": "[BN] Export Format",
+      "export": {
+        "pdf": "[BN] PDF Document",
+        "png": "[BN] PNG Image",
+        "json": "[BN] JSON Config"
+      },
+      "duplicate": "[BN] Duplicate",
+      "fullscreen": "[BN] Fullscreen",
+      "lock": "[BN] Lock",
+      "unlock": "[BN] Unlock",
+      "hide": "[BN] Hide",
+      "chooseWidgetType": "[BN] Choose a widget type to add to your dashboard",
+      "editWidget": "[BN] Edit Widget",
+      "newWidget": "[BN] New {type}",
+      "enterTextContent": "[BN] Enter text content...",
+      "unknownWidgetType": "[BN] Unknown widget type",
+      "target": "[BN] Target",
+      "table": {
+        "name": "[BN] Name",
+        "value": "[BN] Value",
+        "change": "[BN] Change",
+        "item": "[BN] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[BN] Chart",
+        "metric": "[BN] Metric",
+        "table": "[BN] Table",
+        "text": "[BN] Text",
+        "image": "[BN] Image",
+        "kpi": "[BN] KPI",
+        "kpiCard": "[BN] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[BN] Visualize data with various chart types",
+        "kpi": "[BN] Display key performance indicators",
+        "metric": "[BN] Show a single metric value",
+        "table": "[BN] Display data in tabular format",
+        "text": "[BN] Add text content or notes",
+        "image": "[BN] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[BN] General",
+        "data": "[BN] Data",
+        "style": "[BN] Style",
+        "advanced": "[BN] Advanced"
+      },
+      "fields": {
+        "title": "[BN] Title",
+        "subtitle": "[BN] Subtitle",
+        "chartType": "[BN] Chart Type",
+        "content": "[BN] Content",
+        "value": "[BN] Value",
+        "changePercent": "[BN] Change (%)",
+        "target": "[BN] Target",
+        "dataSource": "[BN] Data Source",
+        "refreshInterval": "[BN] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[BN] Bar Chart",
+        "line": "[BN] Line Chart",
+        "area": "[BN] Area Chart",
+        "pie": "[BN] Pie Chart",
+        "donut": "[BN] Donut Chart",
+        "radar": "[BN] Radar Chart",
+        "scatter": "[BN] Scatter Plot",
+        "funnel": "[BN] Funnel Chart",
+        "treemap": "[BN] Treemap",
+        "heatmap": "[BN] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[BN] Sample Data",
+        "api": "[BN] API Endpoint",
+        "crosstab": "[BN] Crosstab",
+        "custom": "[BN] Custom Query"
+      },
+      "refreshIntervalHint": "[BN] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[BN] Show Legend",
+        "showGrid": "[BN] Show Grid",
+        "showTooltip": "[BN] Show Tooltip",
+        "backgroundColor": "[BN] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[BN] Lock Widget",
+        "lockWidgetHint": "[BN] Prevent moving and resizing",
+        "zIndex": "[BN] Z-Index"
+      },
+      "dashboardSettings": "[BN] Dashboard Settings",
+      "saveSettings": "[BN] Save Settings",
+      "settings": {
+        "dashboardName": "[BN] Dashboard Name",
+        "gridColumns": "[BN] Grid Columns",
+        "gridRows": "[BN] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[BN] Analytics",
+      "title": "[BN] Analytics",
+      "description": "[BN] Track your research performance and insights"
     }
   },
   "audiences": {

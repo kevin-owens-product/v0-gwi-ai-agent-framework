@@ -2,6 +2,7 @@
 
 import { useState, useCallback, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -33,6 +34,7 @@ import {
 } from "@/components/crosstabs/data/comprehensive-crosstab-data"
 
 function CrosstabAnalysisContent() {
+  const t = useTranslations('dashboard.crosstabs.analysis')
   useSearchParams() // Used for potential future API calls
 
   const [activeTab, setActiveTab] = useState<"grid" | "calculated" | "filters" | "visualize">("grid")
@@ -42,8 +44,8 @@ function CrosstabAnalysisContent() {
   const [activeFilters, setActiveFilters] = useState<FilterGroup[]>([])
 
   // Handle cell click
-  const handleCellClick = useCallback((cell: { rowId: string; columnKey: string }, value: number | null) => {
-    console.log("Cell clicked:", cell, value)
+  const handleCellClick = useCallback((_cell: { rowId: string; columnKey: string }, _value: number | null) => {
+    // Cell click handler - can be used to show drill-down details
   }, [])
 
   // Handle cell edit
@@ -53,33 +55,33 @@ function CrosstabAnalysisContent() {
         ? { ...row, values: { ...row.values, [cell.columnKey]: newValue } }
         : row
     ))
-    toast.success(`Value updated to ${newValue}%`)
-  }, [])
+    toast.success(t('toast.valueUpdated', { value: newValue }))
+  }, [t])
 
   // Handle drill down
-  const handleDrillDown = useCallback((cell: { rowId: string; columnKey: string }, row: CrosstabRow) => {
-    console.log("Drill down:", cell, row)
+  const handleDrillDown = useCallback((_cell: { rowId: string; columnKey: string }, _row: CrosstabRow) => {
+    // Drill down handler - can be used to navigate to detailed view
   }, [])
 
   // Handle calculated field add
   const handleFieldAdd = useCallback((field: CalculatedField) => {
     setCalculatedFields(prev => [...prev, field])
-    toast.success(`Calculated field "${field.name}" created`)
-  }, [])
+    toast.success(t('toast.fieldCreated', { name: field.name }))
+  }, [t])
 
   // Handle calculated field update
   const handleFieldUpdate = useCallback((id: string, updates: Partial<CalculatedField>) => {
     setCalculatedFields(prev => prev.map(f =>
       f.id === id ? { ...f, ...updates } : f
     ))
-    toast.success("Calculated field updated")
-  }, [])
+    toast.success(t('toast.fieldUpdated'))
+  }, [t])
 
   // Handle calculated field delete
   const handleFieldDelete = useCallback((id: string) => {
     setCalculatedFields(prev => prev.filter(f => f.id !== id))
-    toast.success("Calculated field deleted")
-  }, [])
+    toast.success(t('toast.fieldDeleted'))
+  }, [t])
 
   // Handle calculated field apply
   const handleFieldApply = useCallback((field: CalculatedField) => {
@@ -87,7 +89,7 @@ function CrosstabAnalysisContent() {
     const newRow: CrosstabRow = {
       id: crypto.randomUUID(),
       metric: field.name,
-      category: "Calculated",
+      category: t('categories.calculated'),
       isCalculated: true,
       formula: field.formula,
       values: {},
@@ -99,8 +101,8 @@ function CrosstabAnalysisContent() {
     }
 
     setData(prev => [...prev, newRow])
-    toast.success(`Calculated field "${field.name}" applied to grid`)
-  }, [columns])
+    toast.success(t('toast.fieldApplied', { name: field.name }))
+  }, [columns, t])
 
   // Handle filters change
   const handleFiltersChange = useCallback((filters: FilterGroup[]) => {
@@ -110,15 +112,15 @@ function CrosstabAnalysisContent() {
   // Handle filters apply
   const handleFiltersApply = useCallback((_filters: FilterGroup[]) => {
     // Apply filters to data (simplified implementation)
-    toast.success("Filters applied")
-  }, [])
+    toast.success(t('toast.filtersApplied'))
+  }, [t])
 
   // Export data
   const exportData: ExportData = {
     type: "crosstab",
-    title: "Crosstab Analysis",
+    title: t('title'),
     data: data.map(row => {
-      const rowData: Record<string, any> = { metric: row.metric, category: row.category }
+      const rowData: Record<string, string | number | null | undefined> = { metric: row.metric, category: row.category }
       for (const col of columns) {
         rowData[col.key] = row.values[col.key]
       }
@@ -143,12 +145,12 @@ function CrosstabAnalysisContent() {
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-semibold">Advanced Crosstab Analysis</h1>
-              <Badge variant="secondary">{DATA_SUMMARY.totalMetrics} metrics</Badge>
-              <Badge variant="outline">{DATA_SUMMARY.totalAudiences} audiences</Badge>
+              <h1 className="text-xl font-semibold">{t('title')}</h1>
+              <Badge variant="secondary">{t('badges.metrics', { count: DATA_SUMMARY.totalMetrics })}</Badge>
+              <Badge variant="outline">{t('badges.audiences', { count: DATA_SUMMARY.totalAudiences })}</Badge>
             </div>
             <p className="text-sm text-muted-foreground">
-              {DATA_SUMMARY.categories.length} categories: {DATA_SUMMARY.categories.slice(0, 5).join(", ")}{DATA_SUMMARY.categories.length > 5 ? ` +${DATA_SUMMARY.categories.length - 5} more` : ""}
+              {t('categoriesCount', { count: DATA_SUMMARY.categories.length })}: {DATA_SUMMARY.categories.slice(0, 5).join(", ")}{DATA_SUMMARY.categories.length > 5 ? ` +${DATA_SUMMARY.categories.length - 5} ${t('more')}` : ""}
             </p>
           </div>
         </div>
@@ -156,17 +158,17 @@ function CrosstabAnalysisContent() {
           <ExportManager data={exportData} />
           <Button variant="outline" size="sm">
             <Share2 className="h-4 w-4 mr-2" />
-            Share
+            {t('actions.share')}
           </Button>
           <Button size="sm">
             <Sparkles className="h-4 w-4 mr-2" />
-            Generate Insights
+            {t('actions.generateInsights')}
           </Button>
         </div>
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="flex-1 overflow-hidden flex flex-col">
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "grid" | "calculated" | "filters" | "visualize")} className="flex-1 overflow-hidden flex flex-col">
         <div className="border-b px-6">
           <TabsList className="h-12 bg-transparent p-0">
             <TabsTrigger
@@ -174,14 +176,14 @@ function CrosstabAnalysisContent() {
               className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <LayoutGrid className="h-4 w-4 mr-2" />
-              Data Grid
+              {t('tabs.dataGrid')}
             </TabsTrigger>
             <TabsTrigger
               value="calculated"
               className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <Calculator className="h-4 w-4 mr-2" />
-              Calculated Fields
+              {t('tabs.calculatedFields')}
               {calculatedFields.length > 0 && (
                 <Badge variant="secondary" className="ml-2 h-5 text-xs">
                   {calculatedFields.length}
@@ -193,7 +195,7 @@ function CrosstabAnalysisContent() {
               className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <Filter className="h-4 w-4 mr-2" />
-              Filters
+              {t('tabs.filters')}
               {activeFilters.length > 0 && (
                 <Badge variant="secondary" className="ml-2 h-5 text-xs">
                   {activeFilters.reduce((c, g) => c + g.conditions.filter(cond => cond.enabled).length, 0)}
@@ -205,7 +207,7 @@ function CrosstabAnalysisContent() {
               className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
             >
               <BarChart3 className="h-4 w-4 mr-2" />
-              Visualize
+              {t('tabs.visualize')}
             </TabsTrigger>
           </TabsList>
         </div>
@@ -215,8 +217,8 @@ function CrosstabAnalysisContent() {
             <AdvancedCrosstabGrid
               columns={columns}
               data={data}
-              title={`Consumer Insights Analysis (${DATA_SUMMARY.totalMetrics} metrics × ${DATA_SUMMARY.totalAudiences} segments)`}
-              description="Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+              title={t('grid.title', { metrics: DATA_SUMMARY.totalMetrics, segments: DATA_SUMMARY.totalAudiences })}
+              description={t('grid.description')}
               onCellClick={handleCellClick}
               onCellEdit={handleCellEdit}
               onDrillDown={handleDrillDown}
@@ -258,7 +260,7 @@ function CrosstabAnalysisContent() {
             <InteractiveChartEditor
               initialConfig={{
                 type: "BAR",
-                title: "Consumer Behavior Across Key Metrics",
+                title: t('visualize.chartTitle'),
               }}
               initialData={
                 // Select representative metrics from different categories
@@ -277,10 +279,10 @@ function CrosstabAnalysisContent() {
                   }))
               }
               onSave={(_config, _chartData) => {
-                toast.success("Chart saved!")
+                toast.success(t('toast.chartSaved'))
               }}
               onExport={(format) => {
-                toast.success(`Chart exported as ${format.toUpperCase()}`)
+                toast.success(t('toast.chartExported', { format: format.toUpperCase() }))
               }}
             />
           </TabsContent>

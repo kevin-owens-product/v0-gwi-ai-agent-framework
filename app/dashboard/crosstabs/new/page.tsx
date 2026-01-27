@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -11,6 +12,7 @@ import { useRouter } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 
 export default function NewCrosstabPage() {
+  const t = useTranslations('dashboard.crosstabs.new')
   const router = useRouter()
   const [name, setName] = useState("")
   const [selectedAudiences, setSelectedAudiences] = useState<string[]>([])
@@ -20,15 +22,15 @@ export default function NewCrosstabPage() {
 
   const handleCreate = async () => {
     if (!name.trim()) {
-      setError("Please enter a crosstab name")
+      setError(t('errors.nameRequired'))
       return
     }
     if (selectedAudiences.length === 0) {
-      setError("Please select at least one audience")
+      setError(t('errors.audienceRequired'))
       return
     }
     if (selectedMetrics.length === 0) {
-      setError("Please select at least one metric")
+      setError(t('errors.metricRequired'))
       return
     }
     setIsSaving(true)
@@ -42,11 +44,11 @@ export default function NewCrosstabPage() {
       if (response.ok) {
         router.push("/dashboard/crosstabs")
       } else {
-        setError("Failed to create crosstab")
+        setError(t('errors.createFailed'))
       }
     } catch (err) {
       console.error("Failed to create crosstab:", err)
-      setError("Failed to create crosstab. Please try again.")
+      setError(t('errors.createFailedRetry'))
     } finally {
       setIsSaving(false)
     }
@@ -77,8 +79,8 @@ export default function NewCrosstabPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold">Create Crosstab</h1>
-          <p className="text-muted-foreground mt-1">Compare multiple audiences side-by-side</p>
+          <h1 className="text-3xl font-bold">{t('title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('description')}</p>
         </div>
       </div>
 
@@ -86,15 +88,15 @@ export default function NewCrosstabPage() {
         <div className="lg:col-span-2 space-y-6">
           <Card className="p-6 space-y-4">
             <div>
-              <Label htmlFor="name">Crosstab Name</Label>
-              <Input id="name" placeholder="e.g., Age vs Social Media Platforms" value={name} onChange={(e) => setName(e.target.value)} />
+              <Label htmlFor="name">{t('form.crosstabName')}</Label>
+              <Input id="name" placeholder={t('form.namePlaceholder')} value={name} onChange={(e) => setName(e.target.value)} />
             </div>
           </Card>
 
           <Card className="p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <Label>Select Audiences</Label>
-              <span className="text-sm text-muted-foreground">{selectedAudiences.length} selected</span>
+              <Label>{t('form.selectAudiences')}</Label>
+              <span className="text-sm text-muted-foreground">{t('form.selected', { count: selectedAudiences.length })}</span>
             </div>
             <div className="space-y-2">
               {availableAudiences.map((audience) => (
@@ -122,8 +124,8 @@ export default function NewCrosstabPage() {
 
           <Card className="p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <Label>Select Metrics</Label>
-              <span className="text-sm text-muted-foreground">{selectedMetrics.length} selected</span>
+              <Label>{t('form.selectMetrics')}</Label>
+              <span className="text-sm text-muted-foreground">{t('form.selected', { count: selectedMetrics.length })}</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {availableMetrics.map((metric) => (
@@ -152,9 +154,9 @@ export default function NewCrosstabPage() {
 
         <div className="space-y-6">
           <Card className="p-6 space-y-4">
-            <h3 className="font-semibold">Summary</h3>
+            <h3 className="font-semibold">{t('summary.title')}</h3>
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Audiences ({selectedAudiences.length})</p>
+              <p className="text-sm text-muted-foreground mb-2">{t('summary.audiences', { count: selectedAudiences.length })}</p>
               <div className="flex flex-wrap gap-2">
                 {selectedAudiences.map((audience) => (
                   <Badge key={audience} variant="secondary">
@@ -170,7 +172,7 @@ export default function NewCrosstabPage() {
               </div>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Metrics ({selectedMetrics.length})</p>
+              <p className="text-sm text-muted-foreground mb-2">{t('summary.metrics', { count: selectedMetrics.length })}</p>
               <div className="flex flex-wrap gap-2">
                 {selectedMetrics.map((metric) => (
                   <Badge key={metric} variant="secondary">
@@ -190,10 +192,10 @@ export default function NewCrosstabPage() {
           <div className="space-y-2">
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button className="w-full" onClick={handleCreate} disabled={isSaving}>
-              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating...</> : "Generate Crosstab"}
+              {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('actions.generating')}</> : t('actions.generate')}
             </Button>
             <Button variant="outline" className="w-full bg-transparent" onClick={() => router.back()} disabled={isSaving}>
-              Cancel
+              {t('actions.cancel')}
             </Button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -21,20 +22,31 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Webhook, Plus, Loader2, Copy, Check } from 'lucide-react'
 import { toast } from 'sonner'
 
-const WEBHOOK_EVENTS = [
-  { value: 'agent.run.started', label: 'Agent Run Started' },
-  { value: 'agent.run.completed', label: 'Agent Run Completed' },
-  { value: 'agent.run.failed', label: 'Agent Run Failed' },
-  { value: 'workflow.run.started', label: 'Workflow Run Started' },
-  { value: 'workflow.run.completed', label: 'Workflow Run Completed' },
-  { value: 'workflow.run.failed', label: 'Workflow Run Failed' },
-  { value: 'report.generated', label: 'Report Generated' },
-  { value: 'member.added', label: 'Member Added' },
-  { value: 'member.removed', label: 'Member Removed' },
-]
-
 export default function WebhooksPage() {
-  const [webhooks, setWebhooks] = useState<any[]>([])
+  const t = useTranslations("settings.webhooks")
+
+  const WEBHOOK_EVENTS = [
+    { value: 'agent.run.started', label: t("eventTypes.agentRunStarted") },
+    { value: 'agent.run.completed', label: t("eventTypes.agentRunCompleted") },
+    { value: 'agent.run.failed', label: t("eventTypes.agentRunFailed") },
+    { value: 'workflow.run.started', label: t("eventTypes.workflowRunStarted") },
+    { value: 'workflow.run.completed', label: t("eventTypes.workflowRunCompleted") },
+    { value: 'workflow.run.failed', label: t("eventTypes.workflowRunFailed") },
+    { value: 'report.generated', label: t("eventTypes.reportGenerated") },
+    { value: 'member.added', label: t("eventTypes.memberAdded") },
+    { value: 'member.removed', label: t("eventTypes.memberRemoved") },
+  ]
+interface Webhook {
+    id: string
+    url: string
+    events: string[]
+    description?: string
+    enabled: boolean
+    secret: string
+    createdAt: string
+  }
+
+  const [webhooks, setWebhooks] = useState<Webhook[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -83,7 +95,7 @@ export default function WebhooksPage() {
       setDescription('')
       setSelectedEvents([])
       fetchWebhooks()
-    } catch (error) {
+    } catch {
       toast.error('Failed to create webhook')
     } finally {
       setCreating(false)
@@ -114,51 +126,51 @@ export default function WebhooksPage() {
   return (
     <div className="p-6 max-w-6xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Webhooks</h1>
-        <p className="text-muted-foreground">Receive real-time notifications for events in your organization</p>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Webhook Endpoints</CardTitle>
-              <CardDescription>Manage webhook endpoints and event subscriptions</CardDescription>
+              <CardTitle>{t("webhookEndpoints")}</CardTitle>
+              <CardDescription>{t("endpointsDescription")}</CardDescription>
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Webhook
+                  {t("addWebhook")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                  <DialogTitle>Add Webhook Endpoint</DialogTitle>
+                  <DialogTitle>{t("addWebhookEndpoint")}</DialogTitle>
                   <DialogDescription>
-                    Create a webhook to receive HTTP POST notifications for selected events
+                    {t("addWebhookDescription")}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
-                    <Label>Endpoint URL</Label>
+                    <Label>{t("endpointUrl")}</Label>
                     <Input
-                      placeholder="https://api.example.com/webhooks"
+                      placeholder={t("endpointUrlPlaceholder")}
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Description (Optional)</Label>
+                    <Label>{t("descriptionOptional")}</Label>
                     <Textarea
-                      placeholder="Describe this webhook..."
+                      placeholder={t("descriptionPlaceholder")}
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       rows={2}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Events</Label>
+                    <Label>{t("events")}</Label>
                     <div className="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto p-1">
                       {WEBHOOK_EVENTS.map(event => (
                         <div key={event.value} className="flex items-center space-x-2">
@@ -183,12 +195,12 @@ export default function WebhooksPage() {
                     {creating ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Creating...
+                        {t("creating")}
                       </>
                     ) : (
                       <>
                         <Webhook className="mr-2 h-4 w-4" />
-                        Create Webhook
+                        {t("createWebhook")}
                       </>
                     )}
                   </Button>
@@ -201,21 +213,21 @@ export default function WebhooksPage() {
           {webhooks.length === 0 ? (
             <div className="text-center py-12">
               <Webhook className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">No webhooks configured</p>
-              <p className="text-sm text-muted-foreground">Add a webhook to get started</p>
+              <p className="text-muted-foreground">{t("noWebhooks")}</p>
+              <p className="text-sm text-muted-foreground">{t("addWebhookToStart")}</p>
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Endpoint</TableHead>
-                  <TableHead>Events</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Secret</TableHead>
+                  <TableHead>{t("tableHeaders.endpoint")}</TableHead>
+                  <TableHead>{t("tableHeaders.events")}</TableHead>
+                  <TableHead>{t("tableHeaders.status")}</TableHead>
+                  <TableHead>{t("tableHeaders.secret")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {webhooks.map((webhook: any) => (
+                {webhooks.map((webhook: Webhook) => (
                   <TableRow key={webhook.id}>
                     <TableCell>
                       <div>
@@ -226,11 +238,11 @@ export default function WebhooksPage() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{webhook.events?.length || 0} events</Badge>
+                      <Badge variant="outline">{t("eventsCount", { count: webhook.events?.length || 0 })}</Badge>
                     </TableCell>
                     <TableCell>
                       <Badge className={webhook.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}>
-                        {webhook.enabled ? 'Active' : 'Disabled'}
+                        {webhook.enabled ? t("active") : t("disabled")}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -256,14 +268,14 @@ export default function WebhooksPage() {
 
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle>Webhook Security</CardTitle>
+          <CardTitle>{t("webhookSecurity")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 text-sm text-muted-foreground">
           <p>
-            Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.
+            {t("securityDescription")}
           </p>
           <p>
-            Webhook payloads include an <code className="bg-muted px-1 py-0.5 rounded">X-GWI-Signature</code> header containing an HMAC SHA-256 signature of the request body.
+            {t("signatureDescription")}
           </p>
         </CardContent>
       </Card>

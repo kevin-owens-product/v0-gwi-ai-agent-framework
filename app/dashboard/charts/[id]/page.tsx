@@ -95,6 +95,13 @@ import {
   type GWIChartTemplate,
 } from "@/components/charts"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
+
+interface ChartDataPoint {
+  name: string
+  value?: number
+  [key: string]: string | number | undefined
+}
 
 interface Chart {
   id: string
@@ -109,8 +116,8 @@ interface Chart {
   timePeriod?: string
   updatedAt?: string
   createdAt?: string
-  data?: any[]
-  config?: Record<string, any>
+  data?: ChartDataPoint[]
+  config?: Record<string, string | number | boolean | string[] | undefined>
   template?: GWIChartTemplate
   category?: string
   insights?: ChartInsight[]
@@ -275,9 +282,15 @@ const segmentOptions = [
   { value: "boomers", label: "Boomers (45-54)" },
 ]
 
+interface TreemapNode {
+  name: string
+  value?: number
+  children?: TreemapNode[]
+}
+
 // Helper function to flatten treemap data structure
-function flattenTreemapData(children: any[]): any[] {
-  const result: any[] = []
+function flattenTreemapData(children: TreemapNode[]): ChartDataPoint[] {
+  const result: ChartDataPoint[] = []
   for (const child of children) {
     if (child.children && Array.isArray(child.children)) {
       // Parent node - recursively flatten children
@@ -307,6 +320,7 @@ function formatChartType(type: AdvancedChartType): string {
 export default function ChartDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
+  const t = useTranslations("dashboard.charts.detail")
 
   // Core state
   const [chart, setChart] = useState<Chart | null>(null)
@@ -317,7 +331,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
-  const [_isExporting, setIsExporting] = useState(false)
+  const [, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showEmbedDialog, setShowEmbedDialog] = useState(false)
@@ -381,23 +395,36 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
             let extractedDataKeys: string[] = []
             let extractedColors: string[] = []
 
+            interface DatasetItem {
+              label?: string
+              color?: string
+              data?: number[] | number
+            }
+
+            interface SeedDataShape {
+              labels?: string[]
+              datasets?: DatasetItem[]
+              values?: number[]
+              children?: TreemapNode[]
+            }
+
             if (apiChart.data && !Array.isArray(apiChart.data)) {
               // Convert nested seed data structure to array format for chart rendering
-              const seedData = apiChart.data as { labels?: string[]; datasets?: any[]; values?: number[]; children?: any[] }
+              const seedData = apiChart.data as SeedDataShape
 
               if (seedData.labels && seedData.datasets) {
                 // For line/bar charts with labels and datasets
                 // Extract data keys from dataset labels (sanitized for use as object keys)
-                extractedDataKeys = seedData.datasets.map((ds: any) => {
+                extractedDataKeys = seedData.datasets.map((ds: DatasetItem) => {
                   const label = ds.label || 'value'
                   // Create a safe key name from the label
                   return label.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_+$/, '')
                 })
-                extractedColors = seedData.datasets.map((ds: any) => ds.color).filter(Boolean)
+                extractedColors = seedData.datasets.map((ds: DatasetItem) => ds.color).filter((c): c is string => Boolean(c))
 
                 chartDataArray = seedData.labels.map((label: string, idx: number) => {
-                  const row: Record<string, any> = { name: label }
-                  seedData.datasets?.forEach((ds: any, dsIdx: number) => {
+                  const row: ChartDataPoint = { name: label }
+                  seedData.datasets?.forEach((ds: DatasetItem, dsIdx: number) => {
                     const key = extractedDataKeys[dsIdx] || 'value'
                     row[key] = Array.isArray(ds.data) ? ds.data[idx] : ds.data
                   })
@@ -617,13 +644,13 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
           <Link href="/dashboard/charts">
             <Button variant="ghost" size="icon"><ArrowLeft className="h-5 w-5" /></Button>
           </Link>
-          <h1 className="text-3xl font-bold">Chart Not Found</h1>
+          <h1 className="text-3xl font-bold">{t("notFound")}</h1>
         </div>
         <Card className="p-12 text-center">
           <BarChart3 className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Chart not found</h2>
-          <p className="text-muted-foreground mb-4">The chart you're looking for doesn't exist or has been deleted.</p>
-          <Link href="/dashboard/charts"><Button>Back to Charts</Button></Link>
+          <h2 className="text-xl font-semibold mb-2">{t("notFound")}</h2>
+          <p className="text-muted-foreground mb-4">{t("notFoundDescription")}</p>
+          <Link href="/dashboard/charts"><Button>{t("backToCharts")}</Button></Link>
         </Card>
       </div>
     )
@@ -793,9 +820,9 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
                           animate: true,
                           formatter: "percentage",
                           // Pass extracted dataKeys for multi-series charts
-                          dataKeys: chart.config?.extractedDataKeys?.length ? chart.config?.extractedDataKeys : undefined,
+                          dataKeys: Array.isArray(chart.config?.extractedDataKeys) && chart.config.extractedDataKeys.length > 0 ? chart.config.extractedDataKeys as string[] : undefined,
                           // Pass extracted colors if available
-                          colors: chart.config?.extractedColors,
+                          colors: Array.isArray(chart.config?.extractedColors) ? chart.config.extractedColors as string[] : undefined,
                         }}
                         template={chart.template}
                       />

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -82,6 +83,7 @@ const resourceIcons: Record<string, typeof Database> = {
 }
 
 export default function AuditLogPage() {
+  const t = useTranslations("settings.auditLog")
   const [logs, setLogs] = useState<AuditLog[]>([])
   const [total, setTotal] = useState(0)
   const [filters, setFilters] = useState<AuditFilters>({ actions: [], resourceTypes: [] })
@@ -120,6 +122,7 @@ export default function AuditLogPage() {
 
   useEffect(() => {
     fetchLogs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, selectedAction, selectedResource])
 
   const formatDate = (dateString: string) => {
@@ -138,17 +141,17 @@ export default function AuditLogPage() {
 
     switch (log.action) {
       case 'create':
-        return `Created ${resourceType}: ${resourceName}`
+        return `${t("actions.create")} ${resourceType}: ${resourceName}`
       case 'update':
-        return `Updated ${resourceType}: ${resourceName}`
+        return `${t("actions.update")} ${resourceType}: ${resourceName}`
       case 'delete':
-        return `Deleted ${resourceType}: ${resourceName}`
+        return `${t("actions.delete")} ${resourceType}: ${resourceName}`
       case 'execute':
-        return `Executed ${resourceType}: ${resourceName}`
+        return `${t("actions.execute")} ${resourceType}: ${resourceName}`
       case 'login':
-        return 'Logged in'
+        return t("actions.login")
       case 'logout':
-        return 'Logged out'
+        return t("actions.logout")
       default:
         return `${log.action} ${resourceType}`
     }
@@ -170,16 +173,16 @@ export default function AuditLogPage() {
     <div className="p-6 max-w-5xl">
       <PageTracker pageName="Settings - Audit Log" metadata={{ total, currentPage: page, selectedAction, selectedResource }} />
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Audit Log</h1>
-        <p className="text-muted-foreground">Track all actions and changes in your organization</p>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <CardTitle>Activity History</CardTitle>
-              <CardDescription>{total} total events</CardDescription>
+              <CardTitle>{t("activityHistory")}</CardTitle>
+              <CardDescription>{t("totalEvents", { count: total })}</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -188,7 +191,7 @@ export default function AuditLogPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search logs..."
+                placeholder={t("searchLogs")}
                 className="pl-9"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -196,10 +199,10 @@ export default function AuditLogPage() {
             </div>
             <Select value={selectedAction} onValueChange={setSelectedAction}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Actions" />
+                <SelectValue placeholder={t("allActions")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Actions</SelectItem>
+                <SelectItem value="all">{t("allActions")}</SelectItem>
                 {filters.actions.map((action) => (
                   <SelectItem key={action} value={action}>
                     {action.charAt(0).toUpperCase() + action.slice(1)}
@@ -209,10 +212,10 @@ export default function AuditLogPage() {
             </Select>
             <Select value={selectedResource} onValueChange={setSelectedResource}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Resources" />
+                <SelectValue placeholder={t("allResources")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Resources</SelectItem>
+                <SelectItem value="all">{t("allResources")}</SelectItem>
                 {filters.resourceTypes.map((type) => (
                   <SelectItem key={type} value={type}>
                     {type.replace(/_/g, ' ').charAt(0).toUpperCase() + type.replace(/_/g, ' ').slice(1)}
@@ -229,8 +232,8 @@ export default function AuditLogPage() {
           ) : filteredLogs.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
               <Shield className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No audit logs found</p>
-              <p className="text-sm">Activity will appear here as actions are taken</p>
+              <p>{t("noAuditLogs")}</p>
+              <p className="text-sm">{t("activityWillAppear")}</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -286,7 +289,7 @@ export default function AuditLogPage() {
           {totalPages > 1 && (
             <div className="flex items-center justify-between mt-6 pt-6 border-t">
               <p className="text-sm text-muted-foreground">
-                Showing {page * limit + 1} to {Math.min((page + 1) * limit, total)} of {total}
+                {t("showing", { start: page * limit + 1, end: Math.min((page + 1) * limit, total), total })}
               </p>
               <div className="flex items-center gap-2">
                 <Button
@@ -296,7 +299,7 @@ export default function AuditLogPage() {
                   disabled={page === 0}
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  Previous
+                  {t("previous")}
                 </Button>
                 <Button
                   variant="outline"
@@ -304,7 +307,7 @@ export default function AuditLogPage() {
                   onClick={() => setPage(page + 1)}
                   disabled={page >= totalPages - 1}
                 >
-                  Next
+                  {t("next")}
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>

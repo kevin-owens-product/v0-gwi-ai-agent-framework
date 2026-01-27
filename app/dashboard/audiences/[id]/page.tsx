@@ -89,6 +89,7 @@ import {
 } from "@/components/ui/tooltip"
 
 // Import new advanced audience components
+import { useTranslations } from "next-intl"
 import { AudiencePersona } from "@/components/audiences/audience-persona"
 import { DayInTheLife } from "@/components/audiences/day-in-the-life"
 import { HabitsBehaviors } from "@/components/audiences/habits-behaviors"
@@ -509,6 +510,7 @@ const mockActivityData: ActivityItem[] = [
 export default function AudienceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
+  const t = useTranslations("dashboard.audiences.detail")
   const [isExporting, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -642,18 +644,18 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Audience Not Found</h1>
-            <p className="text-muted-foreground mt-1">The requested audience could not be found</p>
+            <h1 className="text-3xl font-bold">{t("notFound")}</h1>
+            <p className="text-muted-foreground mt-1">{t("notFoundDescription")}</p>
           </div>
         </div>
         <Card className="p-12 text-center">
           <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Audience not found</h2>
+          <h2 className="text-xl font-semibold mb-2">{t("notFound")}</h2>
           <p className="text-muted-foreground mb-4">
-            The audience you're looking for doesn't exist or has been deleted.
+            {t("notFoundDetailedDescription")}
           </p>
           <Link href="/dashboard/audiences">
-            <Button>Back to Audiences</Button>
+            <Button>{t("backToAudiences")}</Button>
           </Link>
         </Card>
       </div>
@@ -788,14 +790,14 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-bold">{audience.name}</h1>
-              <Badge variant="secondary">{audience.size} people</Badge>
+              <Badge variant="secondary">{audience.size} {t("people")}</Badge>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsFavorite(!isFavorite)}>
                     {isFavorite ? <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" /> : <StarOff className="h-4 w-4" />}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>{isFavorite ? "Remove from favorites" : "Add to favorites"}</TooltipContent>
+                <TooltipContent>{isFavorite ? t("removeFromFavorites") : t("addToFavorites")}</TooltipContent>
               </Tooltip>
             </div>
             <p className="text-sm text-muted-foreground max-w-2xl">{audience.description}</p>
@@ -1160,8 +1162,8 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
               resourceId={id}
               resourceName={audience.name}
               versions={[]}
-              onRestore={(versionId) => {
-                console.log("Restoring version:", versionId)
+              onRestore={(_versionId) => {
+                // Version restore functionality to be implemented
               }}
             />
           </Card>

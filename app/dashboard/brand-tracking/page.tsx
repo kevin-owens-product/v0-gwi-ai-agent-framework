@@ -3,20 +3,22 @@ import { BrandTrackingStats } from "@/components/brand-tracking/brand-tracking-s
 import { BrandTrackingGrid } from "@/components/brand-tracking/brand-tracking-grid"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BrandTrackingPageTracker } from "./page-client"
+import { getTranslations } from "@/lib/i18n/server"
 
-export default function BrandTrackingPage() {
+export default async function BrandTrackingPage() {
+  const t = await getTranslations("dashboard.brandTracking")
   return (
     <div className="space-y-6">
-      <BrandTrackingPageTracker />
+      <BrandTrackingPageTracker pageName={t("pageTracker")} />
       <BrandTrackingHeader />
       <BrandTrackingStats />
 
       <Tabs defaultValue="all" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="all">All Brands</TabsTrigger>
-          <TabsTrigger value="active">Active</TabsTrigger>
-          <TabsTrigger value="paused">Paused</TabsTrigger>
-          <TabsTrigger value="draft">Draft</TabsTrigger>
+          <TabsTrigger value="all">{t("tabs.allBrands")}</TabsTrigger>
+          <TabsTrigger value="active">{t("tabs.active")}</TabsTrigger>
+          <TabsTrigger value="paused">{t("tabs.paused")}</TabsTrigger>
+          <TabsTrigger value="draft">{t("tabs.draft")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="space-y-4">

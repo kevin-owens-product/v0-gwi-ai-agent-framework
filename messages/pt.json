@@ -203,7 +203,85 @@
     "selectLanguage": "Selecionar idioma",
     "preferences": "Preferências",
     "notifications": "Notificações",
-    "security": "Segurança",
+    "security": {
+      "title": "[PT] Security Settings",
+      "description": "[PT] Manage your account security and active sessions",
+      "changePassword": "[PT] Change Password",
+      "changePasswordDescription": "[PT] Update your password regularly to keep your account secure",
+      "currentPassword": "[PT] Current Password",
+      "newPassword": "[PT] New Password",
+      "confirmNewPassword": "[PT] Confirm New Password",
+      "updating": "[PT] Updating...",
+      "updatePassword": "[PT] Update Password",
+      "twoFactorAuth": "[PT] Two-Factor Authentication",
+      "twoFactorDescription": "[PT] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[PT] 2FA is enabled",
+      "twoFactorProtected": "[PT] Your account is protected with authenticator app",
+      "changeMethod": "[PT] Change Method",
+      "viewBackupCodes": "[PT] View Backup Codes",
+      "activeSessions": "[PT] Active Sessions",
+      "activeSessionsDescription": "[PT] Manage devices where you're currently logged in",
+      "signOutAll": "[PT] Sign Out All",
+      "current": "[PT] Current",
+      "revoke": "[PT] Revoke",
+      "dangerZone": "[PT] Danger Zone",
+      "dangerZoneDescription": "[PT] Irreversible and destructive actions",
+      "deleteAccount": "[PT] Delete Account",
+      "deleteAccountDescription": "[PT] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[PT] Data Exports",
+        "description": "[PT] Request exports of your personal data for GDPR compliance",
+        "refresh": "[PT] Refresh",
+        "yourDataRights": "[PT] Your Data Rights",
+        "yourDataRightsDescription": "[PT] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[PT] No Active Exports",
+        "noActiveExportsDescription": "[PT] Request an export to see its status here",
+        "noActiveExportsHint": "[PT] Your export status will appear here after you request a data export",
+        "exportHistory": "[PT] Export History",
+        "exportHistoryDescription": "[PT] View and download your previous data exports",
+        "total": "[PT] Total",
+        "pending": "[PT] Pending",
+        "processing": "[PT] Processing",
+        "aboutDataExports": "[PT] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[PT] What's Included",
+          "exportFormat": "[PT] Export Format",
+          "faq": "[PT] FAQ"
+        },
+        "included": {
+          "profileInfo": "[PT] Profile Information",
+          "profileInfoDesc": "[PT] Your name, email, avatar, and account settings",
+          "orgMemberships": "[PT] Organization Memberships",
+          "orgMembershipsDesc": "[PT] All organizations you belong to and your roles",
+          "createdContent": "[PT] Created Content",
+          "createdContentDesc": "[PT] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[PT] Activity History",
+          "activityHistoryDesc": "[PT] Audit logs and activity records associated with your account",
+          "preferences": "[PT] Preferences",
+          "preferencesDesc": "[PT] Your theme, language, notification, and other settings",
+          "apiKeys": "[PT] API Keys",
+          "apiKeysDesc": "[PT] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[PT] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[PT] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[PT] Human-readable when opened in a text editor",
+          "compatible": "[PT] Compatible with most data processing tools",
+          "easyImport": "[PT] Easy to import into other services",
+          "exampleStructure": "[PT] Example structure:"
+        },
+        "faq": {
+          "howLong": "[PT] How long does an export take?",
+          "howLongAnswer": "[PT] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[PT] How long is an export available?",
+          "howLongAvailableAnswer": "[PT] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[PT] How often can I request an export?",
+          "howOftenAnswer": "[PT] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[PT] Is my export secure?",
+          "isSecureAnswer": "[PT] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "Conta",
     "appearance": {
       "title": "Aparência",
@@ -239,7 +317,35 @@
       "followingSystem": "seguindo sistema",
       "savingPreferences": "Salvando preferências..."
     },
-    "general": "Geral",
+    "general": {
+      "title": "[PT] General Settings",
+      "description": "[PT] Manage your organization's settings and preferences",
+      "organizationDetails": "[PT] Organization Details",
+      "updateOrgInfo": "[PT] Update your organization's information",
+      "changeLogo": "[PT] Change Logo",
+      "organizationName": "[PT] Organization Name",
+      "organizationSlug": "[PT] Organization Slug",
+      "orgDescription": "[PT] Description",
+      "industry": "[PT] Industry",
+      "companySize": "[PT] Company Size",
+      "consumerGoods": "[PT] Consumer Goods",
+      "technology": "[PT] Technology",
+      "finance": "[PT] Finance",
+      "healthcare": "[PT] Healthcare",
+      "retail": "[PT] Retail",
+      "mediaEntertainment": "[PT] Media & Entertainment",
+      "employees1to50": "[PT] 1-50 employees",
+      "employees50to200": "[PT] 50-200 employees",
+      "employees200to1000": "[PT] 200-1000 employees",
+      "employees1000to5000": "[PT] 1000-5000 employees",
+      "employees5000plus": "[PT] 5000+ employees",
+      "regionalSettings": "[PT] Regional Settings",
+      "regionalDescription": "[PT] Set your timezone and date format preferences",
+      "timezone": "[PT] Timezone",
+      "dateFormat": "[PT] Date Format",
+      "saving": "[PT] Saving...",
+      "saveChanges": "[PT] Save Changes"
+    },
     "apiKeys": {
       "title": "Chaves de API",
       "description": "Gerencie chaves de API para acesso programático",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "Como podemos ajudar?",
-      "subtitle": "Pesquise nossa base de conhecimento ou navegue pelos tópicos abaixo",
       "searchPlaceholder": "Pesquisar ajuda...",
-      "tabs": {
-        "faq": "Perguntas Frequentes",
-        "guides": "Guias",
-        "contact": "Contato"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "Guia de Introdução",
-          "description": "Aprenda o básico do GWI Agents"
-        },
-        "videoTutorials": {
-          "title": "Tutoriais em Vídeo",
-          "description": "Assista tutoriais passo a passo"
-        },
-        "apiDocs": {
-          "title": "Documentação da API",
-          "description": "Integre com nossas APIs"
-        },
-        "contactSupport": {
-          "title": "Contatar Suporte",
-          "description": "Obtenha ajuda da nossa equipe"
-        }
+        "gettingStarted": "[PT] Getting Started Guide",
+        "videoTutorials": "[PT] Video Tutorials",
+        "apiDocs": "[PT] API Documentation",
+        "title": "[PT] Quick Links",
+        "gettingStartedDesc": "[PT] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[PT] Watch step-by-step guides",
+        "apiDocsDesc": "[PT] For developers and integrations",
+        "releaseNotes": "[PT] Release Notes",
+        "releaseNotesDesc": "[PT] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "Primeiros Passos",
-          "agentsWorkflows": "Agentes e Workflows",
-          "dataPrivacy": "Dados e Privacidade",
-          "billingPlans": "Faturamento e Planos"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "Como criar meu primeiro agente?",
-            "answer": "Navegue até a página de Agentes na barra lateral e clique em 'Criar Agente'. Siga o assistente passo a passo para configurar o nome, descrição, fontes de dados e configurações de comportamento do seu agente."
-          },
-          "dataSources": {
-            "question": "Quais fontes de dados estão disponíveis?",
-            "answer": "O GWI fornece acesso a múltiplas fontes de dados, incluindo GWI Core (nossa pesquisa principal de consumidores), GWI USA, GWI Zeitgeist (tópicos em alta) e a capacidade de carregar dados personalizados. A disponibilidade de fontes de dados depende do seu nível de assinatura."
-          },
-          "inviteTeam": {
-            "question": "Como convidar membros da equipe?",
-            "answer": "Vá para Configurações > Equipe e clique em 'Convidar Membro'. Digite o endereço de e-mail e selecione a função (Admin, Editor ou Visualizador). Eles receberão um e-mail de convite para ingressar no seu espaço de trabalho."
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "Qual é a diferença entre agentes e workflows?",
-            "answer": "Agentes são especialistas com IA que lidam com tipos específicos de tarefas de pesquisa. Workflows combinam múltiplos agentes em sequência para automatizar processos de pesquisa complexos e com várias etapas."
-          },
-          "customize": {
-            "question": "Posso personalizar agentes pré-construídos?",
-            "answer": "Sim! Você pode duplicar qualquer agente pré-construído e modificar sua configuração, incluindo o prompt do sistema, fontes de dados e formato de saída. Sua versão personalizada será salva na sua biblioteca pessoal de agentes."
-          },
-          "schedule": {
-            "question": "Como agendar um workflow?",
-            "answer": "Abra seu workflow e clique no botão 'Agendar'. Você pode configurar execuções recorrentes (diárias, semanais, mensais) ou acionar workflows com base em eventos como disponibilidade de novos dados."
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "Como meus dados são protegidos?",
-            "answer": "Todos os dados são criptografados em repouso e em trânsito usando criptografia AES-256 padrão da indústria. Somos certificados SOC 2 Tipo II e compatíveis com GDPR. Suas consultas e dados personalizados nunca são compartilhados com outros clientes."
-          },
-          "export": {
-            "question": "Posso exportar meus dados?",
-            "answer": "Sim, você pode exportar dados em múltiplos formatos, incluindo CSV, Excel, PowerPoint e JSON. Clientes Enterprise também têm acesso a conexões diretas de banco de dados e exportações via API."
-          },
-          "updateFrequency": {
-            "question": "Com que frequência os dados do GWI são atualizados?",
-            "answer": "Os dados do GWI Core são atualizados trimestralmente com novas pesquisas de consumidores. O GWI Zeitgeist fornece atualizações semanais sobre tópicos em alta. Alguns conjuntos de dados especializados podem ter frequências de atualização diferentes."
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "O que conta como uma consulta?",
-            "answer": "Uma consulta é qualquer requisição feita a um agente, incluindo perguntas de acompanhamento na mesma conversa. Workflows complexos de várias etapas contam como uma única consulta, independentemente de quantos agentes estejam envolvidos."
-          },
-          "changePlan": {
-            "question": "Posso fazer upgrade ou downgrade do meu plano?",
-            "answer": "Sim, você pode alterar seu plano a qualquer momento em Configurações > Faturamento. Upgrades entram em vigor imediatamente com cobrança proporcional. Downgrades entram em vigor no início do próximo ciclo de faturamento."
-          },
-          "annualDiscount": {
-            "question": "Vocês oferecem descontos para faturamento anual?",
-            "answer": "Sim! O faturamento anual economiza 20% em comparação ao mensal. Entre em contato com nossa equipe de vendas para configurar o faturamento anual ou mudar do mensal."
-          }
-        }
+        "title": "[PT] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "Iniciante",
-          "intermediate": "Intermediário",
-          "advanced": "Avançado"
-        },
-        "personas": {
-          "title": "Construindo Personas Eficazes",
-          "description": "Aprenda a criar personas de audiência detalhadas e acionáveis",
-          "duration": "15 min de leitura"
-        },
-        "workflows": {
-          "title": "Melhores Práticas de Automação de Workflows",
-          "description": "Projete workflows multi-agente eficientes para sua pesquisa",
-          "duration": "20 min de leitura"
-        },
-        "prompts": {
-          "title": "Engenharia de Prompts Avançada",
-          "description": "Obtenha melhores resultados com prompts de agente otimizados",
-          "duration": "25 min de leitura"
-        },
-        "apiIntegration": {
-          "title": "Guia de Integração de API",
-          "description": "Conecte agentes GWI às suas ferramentas existentes",
-          "duration": "30 min de leitura"
-        }
-      },
-      "viewAllDocs": "Ver Toda a Documentação",
       "contact": {
-        "liveChat": {
-          "title": "Chat ao Vivo",
-          "description": "Converse com nossa equipe de suporte em tempo real",
-          "availability": "Disponível de segunda a sexta, 9h - 18h (horário de Brasília). Tempo médio de resposta: 2 minutos.",
-          "button": "Iniciar Chat"
+        "title": "[PT] Need More Help?",
+        "description": "[PT] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[PT] Contact Support",
+        "responseTime": "[PT] Typical response time: 2-4 hours"
+      },
+      "description": "[PT] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[PT] Browse by Category",
+        "agents": "[PT] AI Agents",
+        "agentsDesc": "[PT] Learn about agent capabilities",
+        "workflows": "[PT] Workflows",
+        "workflowsDesc": "[PT] Build automation pipelines",
+        "data": "[PT] Data & Audiences",
+        "dataDesc": "[PT] Understanding GWI data",
+        "reports": "[PT] Reports & Exports",
+        "reportsDesc": "[PT] Generate and share insights",
+        "integrations": "[PT] Integrations",
+        "integrationsDesc": "[PT] Connect with your tools",
+        "billing": "[PT] Billing & Plans",
+        "billingDesc": "[PT] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[PT] Profile Settings",
+      "description": "[PT] Manage your personal information",
+      "personalInfo": "[PT] Personal Information",
+      "updateProfileDetails": "[PT] Update your profile details",
+      "uploadPhoto": "[PT] Upload Photo",
+      "photoHint": "[PT] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[PT] First Name",
+      "lastName": "[PT] Last Name",
+      "emailAddress": "[PT] Email Address",
+      "jobTitle": "[PT] Job Title",
+      "bio": "[PT] Bio",
+      "contactInfo": "[PT] Contact Information",
+      "contactDescription": "[PT] How colleagues can reach you",
+      "phoneNumber": "[PT] Phone Number",
+      "location": "[PT] Location",
+      "saving": "[PT] Saving...",
+      "saveChanges": "[PT] Save Changes"
+    },
+    "team": {
+      "title": "[PT] Team Management",
+      "description": "[PT] Manage team members and their permissions",
+      "teamMembers": "[PT] Team Members",
+      "membersCount": "[PT] {count} members in your organization",
+      "inviteMember": "[PT] Invite Member",
+      "inviteTeamMember": "[PT] Invite Team Member",
+      "inviteDescription": "[PT] Send an invitation to join your organization",
+      "emailAddress": "[PT] Email Address",
+      "emailPlaceholder": "[PT] colleague@company.com",
+      "role": "[PT] Role",
+      "sending": "[PT] Sending...",
+      "sendInvitation": "[PT] Send Invitation",
+      "searchMembers": "[PT] Search members...",
+      "tableHeaders": {
+        "member": "[PT] Member",
+        "role": "[PT] Role",
+        "lastActive": "[PT] Last Active",
+        "joined": "[PT] Joined"
+      },
+      "roles": {
+        "owner": "[PT] Owner",
+        "admin": "[PT] Admin",
+        "member": "[PT] Member",
+        "viewer": "[PT] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[PT] Make Admin",
+        "makeMember": "[PT] Make Member",
+        "makeViewer": "[PT] Make Viewer",
+        "removeMember": "[PT] Remove Member"
+      },
+      "pendingInvitations": "[PT] Pending Invitations",
+      "pendingCount": "[PT] {count} pending invitation",
+      "pendingCountPlural": "[PT] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[PT] Email",
+        "role": "[PT] Role",
+        "sent": "[PT] Sent",
+        "expires": "[PT] Expires"
+      },
+      "revoke": "[PT] Revoke",
+      "rolePermissions": "[PT] Role Permissions",
+      "rolePermissionsDescription": "[PT] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[PT] Full organization control",
+        "transferOwnership": "[PT] Transfer ownership",
+        "deleteOrg": "[PT] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[PT] Manage team members",
+        "billing": "[PT] Billing & subscription",
+        "allMemberPerms": "[PT] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[PT] Create and edit agents",
+        "generateReports": "[PT] Generate reports",
+        "useAgents": "[PT] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[PT] View reports",
+        "viewDashboards": "[PT] View dashboards",
+        "readOnly": "[PT] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[PT] Remove Team Member",
+        "description": "[PT] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[PT] Cancel",
+        "remove": "[PT] Remove Member"
+      },
+      "unknown": "[PT] Unknown",
+      "never": "[PT] Never",
+      "justNow": "[PT] Just now",
+      "minAgo": "[PT] {count} min ago",
+      "hoursAgo": "[PT] {count} hour ago",
+      "hoursAgoPlural": "[PT] {count} hours ago",
+      "daysAgo": "[PT] {count} day ago",
+      "daysAgoPlural": "[PT] {count} days ago"
+    },
+    "billing": {
+      "title": "[PT] Billing & Subscription",
+      "description": "[PT] Manage your subscription and payment methods",
+      "enterprisePlan": "[PT] Enterprise Plan",
+      "current": "[PT] Current",
+      "planDescription": "[PT] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[PT] per month",
+      "planFeatures": "[PT] Plan Features",
+      "features": {
+        "unlimitedQueries": "[PT] Unlimited AI agent queries",
+        "allAgents": "[PT] All pre-built domain agents",
+        "customDev": "[PT] Custom agent development",
+        "prioritySupport": "[PT] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[PT] Usage This Period",
+      "usage": {
+        "agentQueries": "[PT] Agent Queries",
+        "unlimited": "[PT] Unlimited",
+        "reportsGenerated": "[PT] Reports Generated",
+        "teamSeats": "[PT] Team Seats"
+      },
+      "nextBillingDate": "[PT] Next billing date: {date}",
+      "changePlan": "[PT] Change Plan",
+      "cancelSubscription": "[PT] Cancel Subscription",
+      "paymentMethod": "[PT] Payment Method",
+      "paymentDescription": "[PT] Manage your payment information",
+      "cardEnding": "[PT] Visa ending in {last4}",
+      "cardExpires": "[PT] Expires {date}",
+      "update": "[PT] Update",
+      "billingHistory": "[PT] Billing History",
+      "billingHistoryDescription": "[PT] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[PT] Invoice",
+        "date": "[PT] Date",
+        "amount": "[PT] Amount",
+        "status": "[PT] Status"
+      },
+      "paid": "[PT] Paid",
+      "needMoreCapacity": "[PT] Need more capacity?",
+      "contactForPricing": "[PT] Contact us for custom enterprise pricing",
+      "contactSales": "[PT] Contact Sales",
+      "upgrade": {
+        "title": "[PT] Choose Your Plan",
+        "description": "[PT] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[PT] Back to Billing",
+        "checkoutCanceled": "[PT] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[PT] Monthly",
+        "yearly": "[PT] Yearly",
+        "save17": "[PT] Save 17%",
+        "mostPopular": "[PT] Most Popular",
+        "currentPlan": "[PT] Current Plan",
+        "billedAnnually": "[PT] ${price} billed annually",
+        "upgradeTo": "[PT] Upgrade to {plan}",
+        "processing": "[PT] Processing...",
+        "customSales": "[PT] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[PT] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[PT] Starter",
+            "description": "[PT] For individuals and small teams getting started",
+            "features": {
+              "runs": "[PT] 100 agent runs / month",
+              "seats": "[PT] 3 team seats",
+              "sources": "[PT] 5 data sources",
+              "retention": "[PT] 30 day data retention",
+              "tokens": "[PT] 100K tokens / month",
+              "support": "[PT] Community support"
+            }
+          },
+          "professional": {
+            "name": "[PT] Professional",
+            "description": "[PT] For growing teams with advanced needs",
+            "features": {
+              "runs": "[PT] 1,000 agent runs / month",
+              "seats": "[PT] 10 team seats",
+              "sources": "[PT] 25 data sources",
+              "retention": "[PT] 90 day data retention",
+              "tokens": "[PT] 1M tokens / month",
+              "support": "[PT] Priority email support",
+              "analytics": "[PT] Advanced analytics",
+              "integrations": "[PT] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[PT] Enterprise",
+            "description": "[PT] For large organizations with custom requirements",
+            "features": {
+              "runs": "[PT] Unlimited agent runs",
+              "seats": "[PT] Unlimited team seats",
+              "sources": "[PT] Unlimited data sources",
+              "retention": "[PT] 365 day data retention",
+              "tokens": "[PT] Unlimited tokens",
+              "support": "[PT] 24/7 dedicated support",
+              "customDev": "[PT] Custom agent development",
+              "sso": "[PT] SSO & SCIM",
+              "sla": "[PT] SLA guarantee",
+              "accountManager": "[PT] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[PT] Audit Log",
+      "description": "[PT] Track all actions and changes in your organization",
+      "activityHistory": "[PT] Activity History",
+      "totalEvents": "[PT] {count} total events",
+      "searchLogs": "[PT] Search logs...",
+      "allActions": "[PT] All Actions",
+      "allResources": "[PT] All Resources",
+      "noAuditLogs": "[PT] No audit logs found",
+      "activityWillAppear": "[PT] Activity will appear here as actions are taken",
+      "showing": "[PT] Showing {start} to {end} of {total}",
+      "previous": "[PT] Previous",
+      "next": "[PT] Next",
+      "actions": {
+        "create": "[PT] Created",
+        "update": "[PT] Updated",
+        "delete": "[PT] Deleted",
+        "execute": "[PT] Executed",
+        "login": "[PT] Logged in",
+        "logout": "[PT] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[PT] Webhooks",
+      "description": "[PT] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[PT] Webhook Endpoints",
+      "endpointsDescription": "[PT] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[PT] Add Webhook",
+      "addWebhookEndpoint": "[PT] Add Webhook Endpoint",
+      "addWebhookDescription": "[PT] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[PT] Endpoint URL",
+      "endpointUrlPlaceholder": "[PT] https://api.example.com/webhooks",
+      "descriptionOptional": "[PT] Description (Optional)",
+      "descriptionPlaceholder": "[PT] Describe this webhook...",
+      "events": "[PT] Events",
+      "creating": "[PT] Creating...",
+      "createWebhook": "[PT] Create Webhook",
+      "noWebhooks": "[PT] No webhooks configured",
+      "addWebhookToStart": "[PT] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[PT] Endpoint",
+        "events": "[PT] Events",
+        "status": "[PT] Status",
+        "secret": "[PT] Secret"
+      },
+      "eventsCount": "[PT] {count} events",
+      "active": "[PT] Active",
+      "disabled": "[PT] Disabled",
+      "webhookSecurity": "[PT] Webhook Security",
+      "securityDescription": "[PT] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[PT] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[PT] Agent Run Started",
+        "agentRunCompleted": "[PT] Agent Run Completed",
+        "agentRunFailed": "[PT] Agent Run Failed",
+        "workflowRunStarted": "[PT] Workflow Run Started",
+        "workflowRunCompleted": "[PT] Workflow Run Completed",
+        "workflowRunFailed": "[PT] Workflow Run Failed",
+        "reportGenerated": "[PT] Report Generated",
+        "memberAdded": "[PT] Member Added",
+        "memberRemoved": "[PT] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[PT] Custom Alerts",
+      "description": "[PT] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[PT] Total Alerts",
+      "active": "[PT] Active",
+      "totalTriggers": "[PT] Total Triggers",
+      "paused": "[PT] Paused",
+      "yourAlerts": "[PT] Your Alerts",
+      "yourAlertsDescription": "[PT] Manage your custom alert configurations",
+      "createAlert": "[PT] Create Alert",
+      "searchAlerts": "[PT] Search alerts...",
+      "entityType": "[PT] Entity Type",
+      "allTypes": "[PT] All Types",
+      "allStatus": "[PT] All Status",
+      "noAlertsYet": "[PT] No alerts yet",
+      "noMatchingAlerts": "[PT] No matching alerts",
+      "createFirstAlert": "[PT] Create your first alert to get notified about important changes",
+      "adjustFilters": "[PT] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[PT] Alert",
+        "type": "[PT] Type",
+        "condition": "[PT] Condition",
+        "channels": "[PT] Channels",
+        "lastTriggered": "[PT] Last Triggered",
+        "status": "[PT] Status"
+      },
+      "total": "[PT] total",
+      "never": "[PT] Never",
+      "edit": "[PT] Edit",
+      "viewHistory": "[PT] View History",
+      "delete": "[PT] Delete",
+      "createNewAlert": "[PT] Create New Alert",
+      "createNewAlertDescription": "[PT] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[PT] Edit Alert",
+      "editAlertDescription": "[PT] Update the configuration for this alert",
+      "alertHistory": "[PT] Alert History: {name}",
+      "alertHistoryDescription": "[PT] View the history of when this alert was triggered",
+      "deleteAlert": "[PT] Delete Alert",
+      "deleteAlertDescription": "[PT] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[PT] Cancel",
+      "entityTypes": {
+        "metric": "[PT] Metric",
+        "audience": "[PT] Audience",
+        "brand": "[PT] Brand",
+        "report": "[PT] Report",
+        "agent": "[PT] Agent",
+        "workflow": "[PT] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[PT] Keyboard Shortcuts",
+      "description": "[PT] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[PT] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[PT] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[PT] Shortcut Conflicts Detected",
+      "conflictsDescription": "[PT] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[PT] Navigation",
+        "navigationDesc": "[PT] Navigate around the application",
+        "actions": "[PT] Actions",
+        "actionsDesc": "[PT] Perform common actions quickly",
+        "ui": "[PT] UI",
+        "uiDesc": "[PT] Control the user interface",
+        "editing": "[PT] Editing",
+        "editingDesc": "[PT] Edit content efficiently"
+      },
+      "resetToDefaults": "[PT] Reset to Defaults",
+      "saving": "[PT] Saving...",
+      "saveChanges": "[PT] Save Changes",
+      "resetDialog": {
+        "title": "[PT] Reset Keyboard Shortcuts",
+        "description": "[PT] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[PT] Cancel",
+        "reset": "[PT] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[PT] Edit Shortcut",
+        "customizable": "[PT] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[PT] This shortcut cannot be customized",
+        "action": "[PT] Action",
+        "currentBinding": "[PT] Current Binding",
+        "newBinding": "[PT] New Binding",
+        "pressKeys": "[PT] Press keys...",
+        "clickToRecord": "[PT] Click to record",
+        "record": "[PT] Record",
+        "recording": "[PT] Recording...",
+        "cancel": "[PT] Cancel",
+        "save": "[PT] Save"
+      }
+    },
+    "plan": {
+      "title": "[PT] Plan & Billing",
+      "description": "[PT] Manage your subscription and view usage metrics",
+      "currentPlan": "[PT] Current Plan",
+      "currentPlanDescription": "[PT] Your active subscription details",
+      "upgradePlan": "[PT] Upgrade Plan",
+      "teamMembers": "[PT] Team Members",
+      "agents": "[PT] Agents",
+      "workflows": "[PT] Workflows",
+      "reports": "[PT] Reports",
+      "usageThisMonth": "[PT] Usage This Month",
+      "usageDescription": "[PT] Monitor your resource usage against plan limits",
+      "comparePlans": "[PT] Compare Plans",
+      "yourFeatures": "[PT] Your Features",
+      "yourFeaturesDescription": "[PT] All features included in your current plan",
+      "limit": "[PT] Limit: {limit}",
+      "requesting": "[PT] Requesting...",
+      "upgradeTo": "[PT] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[PT] Starter",
+          "price": "[PT] $49/mo",
+          "features": {
+            "members": "[PT] Up to 5 team members",
+            "agents": "[PT] 10 agents",
+            "runs": "[PT] 50 workflow runs/month",
+            "analytics": "[PT] Basic analytics",
+            "support": "[PT] Email support"
+          }
         },
-        "ticket": {
-          "title": "Enviar um Ticket",
-          "description": "Obtenha ajuda por e-mail em até 24 horas",
-          "info": "Para problemas complexos ou solicitações de recursos. Inclua o máximo de detalhes possível.",
-          "button": "Enviar Ticket"
+        "professional": {
+          "name": "[PT] Professional",
+          "price": "[PT] $199/mo",
+          "features": {
+            "members": "[PT] Up to 20 team members",
+            "agents": "[PT] Unlimited agents",
+            "runs": "[PT] Unlimited workflow runs",
+            "analytics": "[PT] Advanced analytics",
+            "support": "[PT] Priority support",
+            "integrations": "[PT] Custom integrations",
+            "api": "[PT] API access"
+          }
         },
         "enterprise": {
-          "title": "Suporte Enterprise",
-          "description": "Precisa de suporte dedicado? Planos Enterprise incluem um Gerente de Sucesso do Cliente dedicado e tempos de resposta prioritários.",
-          "button": "Contatar Vendas"
+          "name": "[PT] Enterprise",
+          "price": "[PT] Custom",
+          "features": {
+            "members": "[PT] Unlimited team members",
+            "everything": "[PT] Unlimited everything",
+            "security": "[PT] Advanced security",
+            "sso": "[PT] SSO & SAML",
+            "support": "[PT] Dedicated support",
+            "sla": "[PT] Custom SLAs",
+            "onPremise": "[PT] On-premise option",
+            "whiteLabel": "[PT] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[PT] Scheduled Exports",
+      "description": "[PT] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[PT] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[PT] Manage automatic exports that run on a schedule",
+      "newExport": "[PT] New Export",
+      "all": "[PT] All",
+      "active": "[PT] Active",
+      "paused": "[PT] Paused",
+      "noScheduledExports": "[PT] No scheduled exports",
+      "createFirstExport": "[PT] Create your first scheduled export to get started",
+      "createExport": "[PT] Create Export",
+      "tableHeaders": {
+        "name": "[PT] Name",
+        "schedule": "[PT] Schedule",
+        "format": "[PT] Format",
+        "lastRun": "[PT] Last Run",
+        "nextRun": "[PT] Next Run",
+        "status": "[PT] Status"
+      },
+      "statusLabels": {
+        "pending": "[PT] Pending",
+        "processing": "[PT] Running",
+        "completed": "[PT] Success",
+        "failed": "[PT] Failed",
+        "neverRun": "[PT] Never Run"
+      },
+      "actions": {
+        "runNow": "[PT] Run Now",
+        "viewHistory": "[PT] View History",
+        "edit": "[PT] Edit",
+        "pause": "[PT] Pause",
+        "activate": "[PT] Activate",
+        "delete": "[PT] Delete"
+      },
+      "deleteDialog": {
+        "title": "[PT] Delete Scheduled Export",
+        "description": "[PT] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[PT] Cancel",
+        "delete": "[PT] Delete"
+      },
+      "historySheet": {
+        "title": "[PT] Export History",
+        "loading": "[PT] Loading..."
+      },
+      "relativeTime": {
+        "never": "[PT] Never",
+        "justNow": "[PT] Just now",
+        "lessThanMinute": "[PT] In less than a minute",
+        "minsAgo": "[PT] {count}m ago",
+        "inMins": "[PT] In {count}m",
+        "hoursAgo": "[PT] {count}h ago",
+        "inHours": "[PT] In {count}h",
+        "daysAgo": "[PT] {count}d ago",
+        "inDays": "[PT] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[PT] Inbox Agents",
+      "description": "[PT] AI agents that automatically handle incoming requests",
+      "configureChannels": "[PT] Configure Channels",
+      "createAgent": "[PT] Create Agent",
+      "activeAgents": "[PT] Active Agents",
+      "status": {
+        "processing": "[PT] Processing"
+      },
+      "stats": {
+        "processedToday": "[PT] Processed Today",
+        "fromYesterday": "[PT] {percent} from yesterday",
+        "avgResponseTime": "[PT] Avg Response Time",
+        "fasterThanLastWeek": "[PT] {percent} faster than last week",
+        "successRate": "[PT] Success Rate",
+        "basedOnRequests": "[PT] Based on {count} requests",
+        "pendingReview": "[PT] Pending Review",
+        "highPriority": "[PT] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[PT] Success rate",
+        "processed": "[PT] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[PT] Incoming Requests",
+        "description": "[PT] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[PT] Search requests...",
+        "noRequests": "[PT] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[PT] Assign to Brief Handler",
+        "assignToAudienceQuery": "[PT] Assign to Audience Query",
+        "assignToLocalization": "[PT] Assign to Localization",
+        "reprocess": "[PT] Reprocess",
+        "archive": "[PT] Archive"
+      },
+      "priority": {
+        "high": "[PT] High priority",
+        "medium": "[PT] Medium priority",
+        "low": "[PT] Low priority"
+      },
+      "request": {
+        "received": "[PT] Received {time}",
+        "generatedOutput": "[PT] Generated Output",
+        "confidence": "[PT] {percent}% confidence",
+        "citations": "[PT] {count} citations",
+        "viewFullReport": "[PT] View Full Report",
+        "assignAgent": "[PT] Assign Agent",
+        "respondManually": "[PT] Respond Manually",
+        "viewHistory": "[PT] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[PT] Agent Active",
+        "agentPaused": "[PT] Agent Paused",
+        "lastTriggered": "[PT] Last triggered {time}",
+        "processed": "[PT] Processed",
+        "successRate": "[PT] Success Rate",
+        "avgTime": "[PT] Avg Time",
+        "triggerKeywords": "[PT] Trigger Keywords",
+        "connectedChannels": "[PT] Connected Channels",
+        "processingPipeline": "[PT] Processing Pipeline",
+        "configure": "[PT] Configure",
+        "viewLogs": "[PT] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[PT] Create Inbox Agent",
+        "description": "[PT] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[PT] Agent Name",
+        "agentNamePlaceholder": "[PT] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[PT] Describe what this agent does...",
+        "triggerKeywords": "[PT] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[PT] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[PT] Agent will activate when messages contain these keywords",
+        "channels": "[PT] Channels",
+        "baseAgent": "[PT] Base Agent",
+        "selectAgent": "[PT] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[PT] Audience Explorer",
+          "personaArchitect": "[PT] Persona Architect",
+          "cultureTracker": "[PT] Culture Tracker",
+          "brandRelationshipAnalyst": "[PT] Brand Relationship Analyst"
+        },
+        "autoRespond": "[PT] Auto-respond",
+        "autoRespondHelp": "[PT] Automatically send responses to requesters",
+        "requireApproval": "[PT] Require Approval",
+        "requireApprovalHelp": "[PT] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[PT] Prompt Templates",
+      "description": "[PT] Reusable templates for common insights tasks",
+      "createTemplate": "[PT] Create Template",
+      "searchPlaceholder": "[PT] Search templates...",
+      "starredTemplates": "[PT] Starred Templates",
+      "allTemplates": "[PT] All Templates",
+      "uses": "[PT] {count} uses",
+      "categories": {
+        "all": "[PT] All",
+        "research": "[PT] Research",
+        "analysis": "[PT] Analysis",
+        "briefs": "[PT] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[PT] Use Template",
+        "duplicate": "[PT] Duplicate"
+      },
+      "createDialog": {
+        "title": "[PT] Create Template",
+        "description": "[PT] Save a prompt as a reusable template for your team",
+        "templateName": "[PT] Template Name",
+        "templateNamePlaceholder": "[PT] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[PT] What does this template do?",
+        "category": "[PT] Category",
+        "promptTemplate": "[PT] Prompt Template",
+        "promptPlaceholder": "[PT] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[PT] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[PT] Agent Store",
+      "description": "[PT] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[PT] Search agents...",
+      "sortBy": {
+        "placeholder": "[PT] Sort by",
+        "popular": "[PT] Most Popular",
+        "rating": "[PT] Highest Rated",
+        "newest": "[PT] Newest",
+        "name": "[PT] Name A-Z"
+      },
+      "featuredAgents": "[PT] Featured Agents",
+      "featured": "[PT] Featured",
+      "installed": "[PT] Installed",
+      "tryNow": "[PT] Try Now",
+      "categories": "[PT] Categories",
+      "viewDetails": "[PT] View Details",
+      "added": "[PT] Added",
+      "buildYourOwn": {
+        "title": "[PT] Build Your Own Agent",
+        "description": "[PT] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[PT] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[PT] Back to Store",
+        "notFound": {
+          "title": "[PT] Agent Not Found",
+          "description": "[PT] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[PT] {count} installs",
+        "installed": "[PT] Installed",
+        "installing": "[PT] Installing...",
+        "installAgent": "[PT] Install Agent",
+        "tryInPlayground": "[PT] Try in Playground",
+        "info": {
+          "version": "[PT] Version",
+          "category": "[PT] Category",
+          "dataSources": "[PT] Data Sources"
+        },
+        "tabs": {
+          "overview": "[PT] Overview",
+          "capabilities": "[PT] Capabilities",
+          "examples": "[PT] Examples",
+          "reviews": "[PT] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[PT] About this Agent",
+          "fastResults": "[PT] Fast Results",
+          "fastResultsDesc": "[PT] Avg. 3s response time",
+          "verifiedData": "[PT] Verified Data",
+          "verifiedDataDesc": "[PT] 100% sourced citations",
+          "alwaysUpdated": "[PT] Always Updated",
+          "alwaysUpdatedDesc": "[PT] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[PT] What this agent can do",
+          "description": "[PT] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[PT] Example Prompts",
+          "description": "[PT] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[PT] Ratings",
+          "reviewsCount": "[PT] {count} reviews"
+        },
+        "relatedAgents": "[PT] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[PT] Data Changes",
+      "description": "[PT] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[PT] Timeline",
+        "compare": "[PT] Compare",
+        "evolution": "[PT] Evolution",
+        "alerts": "[PT] Alerts"
+      },
+      "compare": {
+        "title": "[PT] Compare Versions",
+        "description": "[PT] Select an entity to compare its versions",
+        "compareVersions": "[PT] Compare versions",
+        "entities": {
+          "audiences": "[PT] Audiences",
+          "crosstabs": "[PT] Crosstabs",
+          "insights": "[PT] Insights",
+          "charts": "[PT] Charts",
+          "reports": "[PT] Reports",
+          "dashboards": "[PT] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[PT] Analysis Evolution",
+        "description": "[PT] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[PT] View evolution",
+        "types": {
+          "brandHealth": "[PT] Brand Health",
+          "audienceInsights": "[PT] Audience Insights",
+          "marketAnalysis": "[PT] Market Analysis",
+          "competitorAnalysis": "[PT] Competitor Analysis",
+          "trendAnalysis": "[PT] Trend Analysis",
+          "crosstabAnalysis": "[PT] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[PT] Change Alerts",
+        "loading": "[PT] Loading alerts...",
+        "noAlerts": "[PT] No Alerts",
+        "noAlertsDescription": "[PT] You have no unread change alerts.",
+        "markAllRead": "[PT] Mark All as Read",
+        "markRead": "[PT] Mark Read",
+        "dismiss": "[PT] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[PT] Select {entity} to Compare",
+        "entity": "[PT] Entity",
+        "enterIdDescription": "[PT] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[PT] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[PT] Select Analysis to View Evolution",
+        "enterIdDescription": "[PT] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[PT] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[PT] Crosstabs",
+      "description": "[PT] Compare audiences across multiple dimensions",
+      "newCrosstab": "[PT] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[PT] Total Crosstabs",
+        "views": "[PT] Views",
+        "exports": "[PT] Exports",
+        "usedToday": "[PT] Used Today"
+      },
+      "tabs": {
+        "all": "[PT] All Crosstabs",
+        "recent": "[PT] Recent",
+        "templates": "[PT] Templates"
+      },
+      "empty": {
+        "title": "[PT] No crosstabs yet",
+        "description": "[PT] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[PT] Featured",
+        "liveData": "[PT] Live Data",
+        "more": "[PT] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[PT] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[PT] audience segments",
+        "metrics": "[PT] metrics",
+        "audiencesCount": "[PT] {count} audiences",
+        "metricsCount": "[PT] {count} metrics",
+        "modified": "[PT] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[PT] Open Analysis"
+      },
+      "new": {
+        "title": "[PT] Create Crosstab",
+        "description": "[PT] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[PT] Crosstab Name",
+          "namePlaceholder": "[PT] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[PT] Select Audiences",
+          "selectMetrics": "[PT] Select Metrics",
+          "selected": "[PT] {count} selected"
+        },
+        "summary": {
+          "title": "[PT] Summary",
+          "audiences": "[PT] Audiences ({count})",
+          "metrics": "[PT] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[PT] Generate Crosstab",
+          "generating": "[PT] Generating...",
+          "cancel": "[PT] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[PT] Please enter a crosstab name",
+          "audienceRequired": "[PT] Please select at least one audience",
+          "metricRequired": "[PT] Please select at least one metric",
+          "createFailed": "[PT] Failed to create crosstab",
+          "createFailedRetry": "[PT] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[PT] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[PT] {count} metrics",
+          "audiences": "[PT] {count} audiences"
+        },
+        "categoriesCount": "[PT] {count} categories",
+        "more": "[PT] more",
+        "actions": {
+          "share": "[PT] Share",
+          "generateInsights": "[PT] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[PT] Data Grid",
+          "calculatedFields": "[PT] Calculated Fields",
+          "filters": "[PT] Filters",
+          "visualize": "[PT] Visualize"
+        },
+        "grid": {
+          "title": "[PT] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[PT] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[PT] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[PT] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[PT] Value updated to {value}%",
+          "fieldCreated": "[PT] Calculated field \"{name}\" created",
+          "fieldUpdated": "[PT] Calculated field updated",
+          "fieldDeleted": "[PT] Calculated field deleted",
+          "fieldApplied": "[PT] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[PT] Filters applied",
+          "chartSaved": "[PT] Chart saved!",
+          "chartExported": "[PT] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[PT] Crosstab Not Found",
+          "subtitle": "[PT] The requested crosstab could not be found",
+          "heading": "[PT] Crosstab not found",
+          "description": "[PT] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[PT] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[PT] Remove from favorites",
+          "addToFavorites": "[PT] Add to favorites",
+          "pauseAutoRefresh": "[PT] Pause auto-refresh",
+          "enableAutoRefresh": "[PT] Enable auto-refresh",
+          "exitFullscreen": "[PT] Exit fullscreen",
+          "enterFullscreen": "[PT] Enter fullscreen",
+          "visualize": "[PT] Visualize",
+          "share": "[PT] Share",
+          "edit": "[PT] Edit",
+          "duplicate": "[PT] Duplicate",
+          "addToDashboard": "[PT] Add to Dashboard",
+          "copyLink": "[PT] Copy Link",
+          "copied": "[PT] Copied!",
+          "delete": "[PT] Delete",
+          "cancel": "[PT] Cancel",
+          "selectAll": "[PT] Select All",
+          "clear": "[PT] Clear",
+          "schedule": "[PT] Schedule"
+        },
+        "filters": {
+          "title": "[PT] Data Filters",
+          "clearAll": "[PT] Clear All",
+          "description": "[PT] Filter and refine your crosstab data",
+          "quickFilters": "[PT] Quick Filters",
+          "valueRange": "[PT] Value Range: {min}% - {max}%",
+          "category": "[PT] Category",
+          "allCategories": "[PT] All Categories",
+          "activeFilters": "[PT] Active filters"
+        },
+        "tabs": {
+          "filters": "[PT] Filters",
+          "audiences": "[PT] Audiences",
+          "metrics": "[PT] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[PT] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[PT] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[PT] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[PT] Export as JSON",
+          "asCsv": "[PT] Export as CSV",
+          "asHtml": "[PT] Export as HTML",
+          "asPdf": "[PT] Export as PDF",
+          "asExcel": "[PT] Export as Excel",
+          "asPowerPoint": "[PT] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[PT] Delete Crosstab",
+          "description": "[PT] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[PT] Modified {time}",
+          "views": "[PT] {count} views",
+          "createdBy": "[PT] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[PT] Data",
+          "activity": "[PT] Activity",
+          "comments": "[PT] Comments",
+          "history": "[PT] History"
+        },
+        "insights": {
+          "title": "[PT] AI-Generated Insights",
+          "topPerformer": "[PT] Top Performer",
+          "topPerformerDesc": "[PT] leads in most metrics with an average of {average}%.",
+          "noData": "[PT] No data available",
+          "biggestGap": "[PT] Biggest Gap",
+          "biggestGapDesc": "[PT] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[PT] Trending",
+          "trendingDesc": "[PT] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[PT] no"
+        },
+        "activity": {
+          "title": "[PT] Activity Log",
+          "description": "[PT] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[PT] Share Crosstab",
+          "description": "[PT] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[PT] Email address",
+          "emailPlaceholder": "[PT] email@example.com",
+          "role": "[PT] Role",
+          "roles": {
+            "viewer": "[PT] Viewer",
+            "editor": "[PT] Editor",
+            "admin": "[PT] Admin"
+          },
+          "shareLink": "[PT] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[PT] Schedule Report",
+          "description": "[PT] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[PT] Recipients",
+          "recipientsPlaceholder": "[PT] email@example.com, team@example.com",
+          "frequency": "[PT] Frequency",
+          "frequencies": {
+            "daily": "[PT] Daily",
+            "weekly": "[PT] Weekly",
+            "monthly": "[PT] Monthly"
+          },
+          "format": "[PT] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[PT] Insights",
+      "description": "[PT] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[PT] Search insights...",
+      "filterByType": "[PT] Filter by type",
+      "loading": "[PT] Loading...",
+      "showing": "[PT] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[PT] All Types",
+        "audience": "[PT] Audience",
+        "trend": "[PT] Trend",
+        "competitive": "[PT] Competitive",
+        "analysis": "[PT] Analysis"
+      },
+      "empty": {
+        "title": "[PT] No insights yet",
+        "description": "[PT] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[PT] Go to Playground"
+      },
+      "badges": {
+        "new": "[PT] New"
+      },
+      "viaAgent": "[PT] via {name}",
+      "detail": {
+        "backToInsights": "[PT] Back to Insights",
+        "notFound": {
+          "title": "[PT] Insight not found",
+          "description": "[PT] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[PT] View All Insights",
+        "confidence": "[PT] {percent}% confidence",
+        "viaAgent": "[PT] via {name}",
+        "actions": {
+          "copy": "[PT] Copy",
+          "copied": "[PT] Copied",
+          "share": "[PT] Share",
+          "export": "[PT] Export"
+        },
+        "detailsTitle": "[PT] Insight Details",
+        "detailsDescription": "[PT] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[PT] Want to explore more?",
+          "description": "[PT] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[PT] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[PT] Data Connectors",
+        "description": "[PT] Connect external data sources to enrich your insights",
+        "addConnector": "[PT] Add Connector",
+        "searchPlaceholder": "[PT] Search connectors...",
+        "stats": {
+          "totalConnectors": "[PT] Total Connectors",
+          "active": "[PT] Active",
+          "withErrors": "[PT] With Errors",
+          "dataSources": "[PT] Data Sources"
+        },
+        "tabs": {
+          "configured": "[PT] Configured",
+          "available": "[PT] Available"
+        },
+        "filters": {
+          "allTypes": "[PT] All types"
+        },
+        "empty": {
+          "title": "[PT] No connectors configured",
+          "description": "[PT] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[PT] Previous",
+          "next": "[PT] Next",
+          "pageOf": "[PT] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[PT] Sync started",
+          "syncFailed": "[PT] Failed to start sync",
+          "connectorEnabled": "[PT] Connector enabled",
+          "connectorDisabled": "[PT] Connector disabled",
+          "updateFailed": "[PT] Failed to update connector",
+          "connectorDeleted": "[PT] Connector deleted",
+          "deleteFailed": "[PT] Failed to delete connector",
+          "testFailed": "[PT] Failed to test connection"
+        },
+        "new": {
+          "title": "[PT] Add Data Connector",
+          "description": "[PT] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[PT] Back to Connectors",
+          "notFound": "[PT] Connector not found",
+          "actions": {
+            "test": "[PT] Test",
+            "syncNow": "[PT] Sync Now",
+            "delete": "[PT] Delete",
+            "cancel": "[PT] Cancel",
+            "deleting": "[PT] Deleting..."
+          },
+          "status": {
+            "completed": "[PT] Last sync successful",
+            "running": "[PT] Syncing...",
+            "pending": "[PT] Sync pending",
+            "failed": "[PT] Last sync failed",
+            "cancelled": "[PT] Sync cancelled",
+            "never": "[PT] Never synced"
+          },
+          "cards": {
+            "status": "[PT] Status",
+            "active": "[PT] Active",
+            "paused": "[PT] Paused",
+            "totalSyncs": "[PT] Total Syncs",
+            "errorCount": "[PT] Error Count"
+          },
+          "tabs": {
+            "overview": "[PT] Overview",
+            "configuration": "[PT] Configuration",
+            "syncHistory": "[PT] Sync History"
+          },
+          "overview": {
+            "details": "[PT] Details",
+            "description": "[PT] Description",
+            "provider": "[PT] Provider",
+            "type": "[PT] Type",
+            "syncSchedule": "[PT] Sync Schedule",
+            "manualOnly": "[PT] Manual only",
+            "created": "[PT] Created",
+            "recentSyncs": "[PT] Recent Syncs",
+            "lastSyncs": "[PT] Last {count} sync operations",
+            "noSyncHistory": "[PT] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[PT] Danger Zone",
+            "deleteConnector": "[PT] Delete this connector",
+            "deleteWarning": "[PT] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[PT] Sync History",
+            "description": "[PT] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[PT] Delete Connector",
+            "description": "[PT] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[PT] Sync started",
+            "syncFailed": "[PT] Failed to start sync",
+            "testFailed": "[PT] Test failed",
+            "connectorDeleted": "[PT] Connector deleted",
+            "deleteFailed": "[PT] Failed to delete connector",
+            "connectorUpdated": "[PT] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[PT] Memory & Context",
+      "description": "[PT] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[PT] Settings",
+        "clearAll": "[PT] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "Painel",
     "welcome": "Bem-vindo de volta",
-    "overview": "Visão Geral",
+    "overview": {
+      "activeAgents": "[PT] Active Agents",
+      "workflowsRun": "[PT] Workflows Run",
+      "insightsGenerated": "[PT] Insights Generated",
+      "avgRunTime": "[PT] Avg. Run Time",
+      "thisWeekChange": "[PT] +{count} this week",
+      "fromLastMonthPercent": "[PT] +{percent}% from last month",
+      "fasterPercent": "[PT] -{percent}% faster",
+      "active": "[PT] Active",
+      "noneActive": "[PT] None active",
+      "last24Hours": "[PT] Last 24 hours",
+      "noRunsYet": "[PT] No runs yet",
+      "noInsightsYet": "[PT] No insights yet",
+      "perWorkflow": "[PT] Per workflow",
+      "notAvailable": "[PT] N/A"
+    },
     "recentActivity": "Atividade Recente",
     "quickActions": {
       "title": "Ações Rápidas",
@@ -871,7 +1990,25 @@
       "createReport": "Criar Relatório",
       "published": "publicado",
       "generating": "gerando",
-      "draft": "rascunho"
+      "draft": "rascunho",
+      "page": {
+        "tabs": {
+          "allReports": "[PT] All Reports",
+          "templates": "[PT] Templates",
+          "scheduled": "[PT] Scheduled",
+          "sharedWithMe": "[PT] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[PT] Next: {date}",
+          "recipientsCount": "[PT] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[PT] Shared by {name} on {date}",
+          "canView": "[PT] Can view",
+          "canEdit": "[PT] Can edit",
+          "canComment": "[PT] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "Projetos Ativos",
@@ -1035,7 +2172,60 @@
         "title": "Workflows",
         "description": "Crie e gerencie seus pipelines de pesquisa automatizados.",
         "newWorkflow": "Novo Workflow",
-        "searchPlaceholder": "Pesquisar workflows..."
+        "searchPlaceholder": "Pesquisar workflows...",
+        "edit": {
+          "title": "[PT] Edit Workflow",
+          "description": "[PT] Modify workflow settings and configuration",
+          "newWorkflowName": "[PT] New Workflow",
+          "basicInfo": {
+            "title": "[PT] Basic Information",
+            "description": "[PT] Update the workflow name and description",
+            "workflowName": "[PT] Workflow Name",
+            "workflowNamePlaceholder": "[PT] Enter workflow name",
+            "descriptionPlaceholder": "[PT] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[PT] Schedule",
+            "description": "[PT] Configure when this workflow runs",
+            "runFrequency": "[PT] Run Frequency",
+            "selectSchedule": "[PT] Select schedule",
+            "selectStatus": "[PT] Select status",
+            "frequencies": {
+              "hourly": "[PT] Hourly",
+              "daily": "[PT] Daily",
+              "weekly": "[PT] Weekly",
+              "monthly": "[PT] Monthly",
+              "onDemand": "[PT] On-demand"
+            },
+            "statuses": {
+              "active": "[PT] Active",
+              "paused": "[PT] Paused",
+              "scheduled": "[PT] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[PT] Error Handling",
+            "description": "[PT] Configure retry behavior for failed runs",
+            "autoRetry": "[PT] Auto-retry on failure",
+            "autoRetryDescription": "[PT] Automatically retry the workflow if it fails",
+            "retryAttempts": "[PT] Retry Attempts",
+            "selectAttempts": "[PT] Select attempts",
+            "attempts": {
+              "one": "[PT] 1 attempt",
+              "two": "[PT] 2 attempts",
+              "three": "[PT] 3 attempts",
+              "five": "[PT] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[PT] Notifications",
+            "description": "[PT] Configure how you receive updates about this workflow",
+            "email": "[PT] Email notifications",
+            "emailDescription": "[PT] Receive email updates on completion or failure",
+            "slack": "[PT] Slack notifications",
+            "slackDescription": "[PT] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "Audiências",
@@ -1083,55 +2273,235 @@
         "unarchive": "Desarquivar",
         "workflows": "workflows",
         "reports": "relatórios",
-        "agents": "agentes"
+        "agents": "agentes",
+        "detail": {
+          "defaultDescription": "[PT] Project description",
+          "projectSettings": "[PT] Project Settings",
+          "archiveProject": "[PT] Archive Project",
+          "deleteProject": "[PT] Delete Project",
+          "new": "[PT] New",
+          "stats": {
+            "teamMembers": "[PT] Team Members",
+            "workflows": "[PT] Workflows",
+            "running": "[PT] {count} running",
+            "reports": "[PT] Reports",
+            "generatedOutputs": "[PT] Generated outputs",
+            "agentsUsed": "[PT] Agents Used",
+            "totalRuns": "[PT] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[PT] Overview",
+            "workflows": "[PT] Workflows",
+            "reports": "[PT] Reports",
+            "agents": "[PT] Agents",
+            "team": "[PT] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[PT] Recent Workflows",
+            "recentReports": "[PT] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[PT] Project Workflows",
+            "newWorkflow": "[PT] New Workflow",
+            "lastRun": "[PT] Last run",
+            "run": "[PT] Run"
+          },
+          "reportsTab": {
+            "title": "[PT] Project Reports",
+            "newReport": "[PT] New Report",
+            "created": "[PT] Created"
+          },
+          "agentsTab": {
+            "title": "[PT] Agents Used",
+            "addAgent": "[PT] Add Agent",
+            "runsInProject": "[PT] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[PT] Team Members",
+            "addMember": "[PT] Add Member",
+            "remove": "[PT] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "Editar público",
-        "description": "Atualizar a configuração deste segmento de público-alvo",
-        "saving": "Salvando...",
-        "saveChanges": "Salvar alterações",
-        "notFound": "Público não encontrado",
-        "notFoundDescription": "O público que você está tentando editar não existe",
-        "notFoundDetailedDescription": "O público que você procura não existe ou foi excluído.",
-        "backToAudiences": "Voltar para o público",
+      "pageTracker": "[PT] Audiences List",
+      "title": "[PT] Audiences",
+      "description": "[PT] Build and analyze custom consumer segments",
+      "aiBuilder": "[PT] AI Builder",
+      "newAudience": "[PT] New Audience",
+      "totalAudiences": "[PT] Total Audiences",
+      "avgReach": "[PT] Avg. Reach",
+      "markets": "[PT] Markets",
+      "usedThisWeek": "[PT] Used This Week",
+      "searchPlaceholder": "[PT] Search audiences...",
+      "allAudiences": "[PT] All Audiences",
+      "recentlyUsed": "[PT] Recently Used",
+      "favorites": "[PT] Favorites",
+      "marketplace": "[PT] Marketplace",
+      "aiAudienceBuilder": "[PT] AI Audience Builder",
+      "aiBuilderDescription": "[PT] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[PT] Compare Audiences",
+      "compareDescription": "[PT] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[PT] No audiences yet",
+        "description": "[PT] Create your first audience to get started",
+        "action": "[PT] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[PT] {count} markets",
+        "used": "[PT] Used {time}"
+      },
+      "new": {
+        "title": "[PT] Build New Audience",
+        "description": "[PT] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "Informações Básicas",
-          "description": "Defina o nome e a descrição para este público",
-          "audienceName": "Nome do público",
-          "audienceNamePlaceholder": "por exemplo, Millennials Eco-Conscientes",
-          "descriptionPlaceholder": "Breve descrição deste segmento de público"
+          "audienceName": "[PT] Audience Name",
+          "audienceNamePlaceholder": "[PT] e.g., Eco-Conscious Millennials",
+          "description": "[PT] Description",
+          "descriptionPlaceholder": "[PT] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "Consulta baseada em IA",
-          "description": "Descreva seu público em linguagem natural",
-          "placeholder": "por exemplo, mostre-me a geração do milênio que se preocupa com a sustentabilidade, mora em áreas urbanas e faz compras em marcas ecológicas",
-          "generateButton": "Gerar atributos (em breve)"
+          "title": "[PT] AI-Powered Query",
+          "description": "[PT] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[PT] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[PT] Generate Attributes"
         },
         "attributes": {
-          "title": "Atributos de segmentação",
-          "description": "Defina critérios específicos para este público",
-          "addAttribute": "Adicionar atributo",
-          "noAttributes": "Nenhum atributo definido ainda",
-          "noAttributesHint": "Adicione atributos para definir seus critérios de público",
-          "valuePlaceholder": "Valor"
+          "title": "[PT] Attributes",
+          "add": "[PT] Add",
+          "age": "[PT] Age",
+          "gender": "[PT] Gender",
+          "income": "[PT] Income",
+          "interests": "[PT] Interests",
+          "is": "[PT] is",
+          "between": "[PT] between",
+          "contains": "[PT] contains"
         },
         "markets": {
-          "title": "Mercados",
-          "description": "Selecione os mercados para este público",
-          "selectAtLeastOne": "Selecione pelo menos um mercado"
+          "title": "[PT] Markets",
+          "global": "[PT] Global",
+          "us": "[PT] United States",
+          "uk": "[PT] United Kingdom",
+          "de": "[PT] Germany",
+          "jp": "[PT] Japan"
         },
         "estimatedReach": {
-          "title": "Alcance estimado",
-          "tbd": "A definir",
-          "matchCriteria": "os consumidores atendem a esses critérios"
+          "title": "[PT] Estimated Reach",
+          "matchCriteria": "[PT] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "Descartar alterações?",
-          "description": "Você tem alterações não salvas. Tem certeza de que deseja sair? Suas alterações serão perdidas.",
-          "keepEditing": "Continue editando",
-          "discardChanges": "Descartar alterações"
+        "actions": {
+          "save": "[PT] Save Audience",
+          "saving": "[PT] Saving...",
+          "cancel": "[PT] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[PT] Please enter an audience name",
+          "createFailed": "[PT] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[PT] Audience Detail",
+        "notFound": "[PT] Audience Not Found",
+        "notFoundDescription": "[PT] The requested audience could not be found",
+        "notFoundDetailedDescription": "[PT] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[PT] Back to Audiences",
+        "people": "[PT] people",
+        "addToFavorites": "[PT] Add to favorites",
+        "removeFromFavorites": "[PT] Remove from favorites",
+        "used": "[PT] Used {time}",
+        "tabs": {
+          "overview": "[PT] Overview",
+          "persona": "[PT] Persona",
+          "dayInLife": "[PT] Day in the Life",
+          "habits": "[PT] Habits & Behaviors",
+          "media": "[PT] Media Consumption",
+          "brands": "[PT] Brand Affinities",
+          "comments": "[PT] Comments",
+          "activity": "[PT] Activity",
+          "history": "[PT] History"
+        },
+        "actions": {
+          "explore": "[PT] Explore",
+          "share": "[PT] Share",
+          "export": "[PT] Export",
+          "edit": "[PT] Edit",
+          "autoRefresh": "[PT] Auto-refresh",
+          "pauseAutoRefresh": "[PT] Pause auto-refresh",
+          "enableAutoRefresh": "[PT] Enable auto-refresh",
+          "duplicate": "[PT] Duplicate",
+          "createLookalike": "[PT] Create Lookalike",
+          "addToCrosstab": "[PT] Add to Crosstab",
+          "addToDashboard": "[PT] Add to Dashboard",
+          "scheduleReport": "[PT] Schedule Report",
+          "copyLink": "[PT] Copy Link",
+          "copied": "[PT] Copied!",
+          "delete": "[PT] Delete"
+        },
+        "export": {
+          "asJson": "[PT] Export as JSON",
+          "asCsv": "[PT] Export as CSV",
+          "asPdf": "[PT] Export as PDF",
+          "toPowerPoint": "[PT] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[PT] Demographics",
+          "keyBehaviors": "[PT] Key Behaviors",
+          "interests": "[PT] Interests",
+          "audienceSummary": "[PT] Audience Summary",
+          "size": "[PT] Size",
+          "markets": "[PT] Markets",
+          "quickActions": "[PT] Quick Actions",
+          "createChart": "[PT] Create Chart",
+          "compareAudiences": "[PT] Compare Audiences",
+          "exportProfile": "[PT] Export Profile",
+          "copyLink": "[PT] Copy Link"
+        },
+        "activity": {
+          "title": "[PT] Activity Log",
+          "description": "[PT] Recent activity on this audience",
+          "viewed": "[PT] viewed",
+          "exported": "[PT] exported",
+          "edited": "[PT] edited",
+          "shared": "[PT] shared",
+          "created": "[PT] created",
+          "createdChart": "[PT] created chart",
+          "addedToCrosstab": "[PT] added to crosstab"
+        },
+        "share": {
+          "title": "[PT] Share Audience",
+          "description": "[PT] Share this audience with team members or external collaborators.",
+          "emailLabel": "[PT] Email address",
+          "emailPlaceholder": "[PT] email@example.com",
+          "roleLabel": "[PT] Role",
+          "viewer": "[PT] Viewer",
+          "editor": "[PT] Editor",
+          "admin": "[PT] Admin",
+          "shareLink": "[PT] Share link",
+          "cancel": "[PT] Cancel",
+          "share": "[PT] Share"
+        },
+        "schedule": {
+          "title": "[PT] Schedule Report",
+          "description": "[PT] Set up automatic email delivery of this audience report.",
+          "recipients": "[PT] Recipients",
+          "recipientsPlaceholder": "[PT] email@example.com, team@example.com",
+          "frequency": "[PT] Frequency",
+          "daily": "[PT] Daily",
+          "weekly": "[PT] Weekly",
+          "monthly": "[PT] Monthly",
+          "format": "[PT] Format",
+          "pdf": "[PT] PDF",
+          "csv": "[PT] CSV",
+          "json": "[PT] JSON",
+          "cancel": "[PT] Cancel",
+          "schedule": "[PT] Schedule"
+        },
+        "delete": {
+          "title": "[PT] Delete Audience",
+          "description": "[PT] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[PT] Cancel",
+          "delete": "[PT] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "Editar gráfico",
-        "description": "Modifique a configuração e as configurações do seu gráfico",
-        "saving": "Salvando...",
-        "saveChanges": "Salvar alterações",
-        "backToCharts": "Voltar aos gráficos",
-        "preview": {
-          "title": "Visualização",
-          "description": "Como ficará seu gráfico"
-        },
-        "unsavedChanges": "Alterações não salvas",
-        "authRequired": "Autenticação necessária",
-        "pleaseSignIn": "Faça login para editar este gráfico.",
-        "signIn": "Entrar",
+      "pageTracker": "[PT] Charts List",
+      "title": "[PT] Charts",
+      "description": "[PT] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[PT] Templates",
+      "compare": "[PT] Compare",
+      "newChart": "[PT] New Chart",
+      "totalCharts": "[PT] Total Charts",
+      "totalViews": "[PT] Total Views",
+      "shares": "[PT] Shares",
+      "exports": "[PT] Exports",
+      "searchPlaceholder": "[PT] Search charts...",
+      "allCategory": "[PT] All",
+      "allCharts": "[PT] All Charts",
+      "recent": "[PT] Recent",
+      "mostViewed": "[PT] Most Viewed",
+      "favorites": "[PT] Favorites",
+      "emptyState": {
+        "title": "[PT] No charts found",
+        "description": "[PT] Create your first chart or try a different search",
+        "action": "[PT] Create Chart"
+      },
+      "comparison": {
+        "title": "[PT] Brand Health Comparison",
+        "description": "[PT] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[PT] Create New Chart",
+        "description": "[PT] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "Informações Básicas",
-          "description": "Defina o nome e a descrição do seu gráfico",
-          "chartName": "Nome do gráfico",
-          "chartNamePlaceholder": "Insira o nome do gráfico",
-          "descriptionPlaceholder": "Descreva o que este gráfico mostra",
-          "selectStatus": "Selecione o status",
-          "dataSource": "Fonte de dados",
-          "selectDataSource": "Selecione a fonte de dados"
+          "title": "[PT] Basic Information",
+          "chartName": "[PT] Chart Name",
+          "chartNamePlaceholder": "[PT] e.g., Social Media Usage by Age Group",
+          "description": "[PT] Description",
+          "descriptionPlaceholder": "[PT] Describe what this chart shows"
         },
         "chartType": {
-          "title": "Tipo de gráfico",
-          "description": "Selecione o tipo de visualização para seus dados"
+          "title": "[PT] Chart Type",
+          "description": "[PT] Select the visualization type"
         },
         "dataConfig": {
-          "title": "Configuração de dados",
-          "description": "Configure os dados do seu gráfico",
-          "targetAudience": "Público-alvo",
-          "selectAudience": "Selecione o público",
-          "timePeriod": "Período de tempo",
-          "selectTimePeriod": "Selecione o período de tempo",
-          "primaryMetric": "Métrica Primária",
-          "primaryMetricPlaceholder": "por exemplo, uso de mídia social (%)",
-          "dimensions": "Dimensões",
-          "dimensionsHint": "Categorias para agrupar seus dados (por exemplo, faixa etária, região)",
-          "addDimension": "Adicionar uma dimensão",
-          "measures": "Medidas",
-          "measuresHint": "Valores numéricos a serem exibidos (por exemplo, contagem, porcentagem)",
-          "addMeasure": "Adicionar uma medida",
-          "filters": "Filtros",
-          "filtersHint": "Adicione condições para filtrar seus dados",
-          "addFilter": "Adicionar filtro",
-          "field": "Campo",
-          "value": "Valor",
-          "operators": {
-            "equals": "Igual",
-            "notEquals": "Não é igual",
-            "contains": "Contém",
-            "greaterThan": "Maior que",
-            "lessThan": "Menor que"
-          }
+          "title": "[PT] Data Configuration",
+          "targetAudience": "[PT] Target Audience",
+          "selectAudience": "[PT] Select audience",
+          "timePeriod": "[PT] Time Period",
+          "selectTimePeriod": "[PT] Select time period",
+          "dataSource": "[PT] Data Source",
+          "selectDataSource": "[PT] Select data source"
         },
-        "displayOptions": {
-          "title": "Opções de exibição",
-          "description": "Personalize a aparência do gráfico",
-          "showLegend": "Mostrar legenda",
-          "showGrid": "Mostrar grade",
-          "showTooltip": "Mostrar dica de ferramenta"
+        "preview": {
+          "title": "[PT] Preview",
+          "description": "[PT] How your chart will look"
         },
-        "chartInfo": {
-          "title": "Informações do gráfico",
-          "id": "EU IA",
-          "created": "Criada",
-          "lastUpdated": "Última atualização"
+        "actions": {
+          "save": "[PT] Create Chart",
+          "saving": "[PT] Creating...",
+          "cancel": "[PT] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[PT] Chart Detail",
+        "notFound": "[PT] Chart Not Found",
+        "notFoundDescription": "[PT] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[PT] Back to Charts",
+        "views": "[PT] views",
+        "shares": "[PT] shares",
+        "addToFavorites": "[PT] Add to favorites",
+        "removeFromFavorites": "[PT] Remove from favorites",
+        "tabs": {
+          "chart": "[PT] Chart",
+          "data": "[PT] Data",
+          "settings": "[PT] Settings",
+          "comments": "[PT] Comments",
+          "activity": "[PT] Activity",
+          "history": "[PT] History"
         },
-        "discardDialog": {
-          "title": "Descartar alterações?",
-          "description": "Você tem alterações não salvas. Tem certeza de que deseja sair? Suas alterações serão perdidas.",
-          "keepEditing": "Continue editando",
-          "discardChanges": "Descartar alterações"
+        "actions": {
+          "share": "[PT] Share",
+          "export": "[PT] Export",
+          "edit": "[PT] Edit",
+          "fullscreen": "[PT] Fullscreen",
+          "duplicate": "[PT] Duplicate",
+          "addToDashboard": "[PT] Add to Dashboard",
+          "scheduleReport": "[PT] Schedule Report",
+          "copyLink": "[PT] Copy Link",
+          "copied": "[PT] Copied!",
+          "delete": "[PT] Delete"
+        },
+        "export": {
+          "asJson": "[PT] Export as JSON",
+          "asCsv": "[PT] Export as CSV",
+          "asPng": "[PT] Export as PNG",
+          "asSvg": "[PT] Export as SVG",
+          "toPowerPoint": "[PT] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[PT] Chart Info",
+          "type": "[PT] Type",
+          "dataSource": "[PT] Data Source",
+          "audience": "[PT] Audience",
+          "timePeriod": "[PT] Time Period",
+          "created": "[PT] Created",
+          "lastUpdated": "[PT] Last Updated"
+        },
+        "share": {
+          "title": "[PT] Share Chart",
+          "description": "[PT] Share this chart with team members or external collaborators.",
+          "emailLabel": "[PT] Email address",
+          "emailPlaceholder": "[PT] email@example.com",
+          "roleLabel": "[PT] Role",
+          "viewer": "[PT] Viewer",
+          "editor": "[PT] Editor",
+          "admin": "[PT] Admin",
+          "shareLink": "[PT] Share link",
+          "embedCode": "[PT] Embed code",
+          "cancel": "[PT] Cancel",
+          "share": "[PT] Share"
+        },
+        "delete": {
+          "title": "[PT] Delete Chart",
+          "description": "[PT] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[PT] Cancel",
+          "delete": "[PT] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "Conscientização Mínima (%)",
           "minNPS": "Pontuação mínima de NPS"
         }
+      },
+      "pageTracker": "[PT] Brand Tracking",
+      "title": "[PT] Brand Tracking",
+      "description": "[PT] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[PT] All Brands",
+        "active": "[PT] Active",
+        "paused": "[PT] Paused",
+        "draft": "[PT] Draft"
+      },
+      "new": {
+        "title": "[PT] New Brand Tracking",
+        "description": "[PT] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[PT] Brand Information",
+          "description": "[PT] Provide details about the brand you want to track",
+          "brandNameLabel": "[PT] Brand Name *",
+          "brandNamePlaceholder": "[PT] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[PT] Description",
+          "descriptionPlaceholder": "[PT] Brief description of what you want to track...",
+          "industryLabel": "[PT] Industry",
+          "industryPlaceholder": "[PT] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[PT] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[PT] Daily",
+          "weekly": "[PT] Weekly",
+          "monthly": "[PT] Monthly",
+          "manual": "[PT] Manual Only"
+        },
+        "competitors": {
+          "label": "[PT] Competitors",
+          "placeholder": "[PT] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[PT] Metrics to Track",
+          "awareness": "[PT] Brand Awareness",
+          "consideration": "[PT] Consideration",
+          "preference": "[PT] Preference",
+          "loyalty": "[PT] Loyalty",
+          "nps": "[PT] Net Promoter Score (NPS)",
+          "sentiment": "[PT] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[PT] Cancel",
+          "create": "[PT] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[PT] Brand Tracking Detail",
+        "title": "[PT] Brand Health Dashboard",
+        "notFound": "[PT] Brand Study Not Found",
+        "notFoundDescription": "[PT] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[PT] Back to Brand Tracking",
+        "loading": "[PT] Loading...",
+        "people": "[PT] people",
+        "timePeriods": {
+          "1m": "[PT] 1 Month",
+          "3m": "[PT] 3 Months",
+          "6m": "[PT] 6 Months",
+          "1y": "[PT] 1 Year",
+          "all": "[PT] All Time"
+        },
+        "tabs": {
+          "overview": "[PT] Overview",
+          "trends": "[PT] Trends",
+          "competitors": "[PT] Competitors",
+          "insights": "[PT] Insights",
+          "comments": "[PT] Comments",
+          "activity": "[PT] Activity",
+          "history": "[PT] History"
+        },
+        "actions": {
+          "explore": "[PT] Explore",
+          "share": "[PT] Share",
+          "export": "[PT] Export",
+          "edit": "[PT] Edit",
+          "refresh": "[PT] Refresh",
+          "autoRefresh": "[PT] Auto-refresh",
+          "pauseAutoRefresh": "[PT] Pause auto-refresh",
+          "enableAutoRefresh": "[PT] Enable auto-refresh",
+          "duplicate": "[PT] Duplicate",
+          "copyLink": "[PT] Copy Link",
+          "copied": "[PT] Copied!",
+          "delete": "[PT] Delete",
+          "addToFavorites": "[PT] Add to favorites",
+          "removeFromFavorites": "[PT] Remove from favorites",
+          "scheduleReport": "[PT] Schedule Report"
+        },
+        "export": {
+          "asJson": "[PT] Export as JSON",
+          "asCsv": "[PT] Export as CSV",
+          "asPdf": "[PT] Export as PDF",
+          "toPowerPoint": "[PT] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[PT] Awareness",
+          "consideration": "[PT] Consideration",
+          "preference": "[PT] Preference",
+          "loyalty": "[PT] Loyalty",
+          "nps": "[PT] NPS",
+          "sentiment": "[PT] Sentiment",
+          "marketShare": "[PT] Market Share",
+          "vsTarget": "[PT] vs target",
+          "trend": "[PT] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[PT] Brand Health Trend",
+          "competitorComparison": "[PT] Competitor Comparison",
+          "sentimentBreakdown": "[PT] Sentiment Breakdown",
+          "metricsOverTime": "[PT] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[PT] Brand Overview",
+          "industry": "[PT] Industry",
+          "competitors": "[PT] Competitors",
+          "trackingFrequency": "[PT] Tracking Frequency",
+          "lastUpdated": "[PT] Last Updated",
+          "createdBy": "[PT] Created By",
+          "dateRange": "[PT] Date Range"
+        },
+        "insights": {
+          "title": "[PT] Key Insights",
+          "aiGenerated": "[PT] AI-Generated",
+          "noInsights": "[PT] No insights available yet",
+          "generateInsights": "[PT] Generate Insights"
+        },
+        "activity": {
+          "title": "[PT] Activity Log",
+          "description": "[PT] Recent activity on this brand study",
+          "viewed": "[PT] viewed",
+          "exported": "[PT] exported",
+          "edited": "[PT] edited",
+          "shared": "[PT] shared",
+          "created": "[PT] created"
+        },
+        "share": {
+          "title": "[PT] Share Brand Study",
+          "description": "[PT] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[PT] Email address",
+          "emailPlaceholder": "[PT] email@example.com",
+          "roleLabel": "[PT] Role",
+          "viewer": "[PT] Viewer",
+          "editor": "[PT] Editor",
+          "admin": "[PT] Admin",
+          "shareLink": "[PT] Share link",
+          "cancel": "[PT] Cancel",
+          "share": "[PT] Share"
+        },
+        "schedule": {
+          "title": "[PT] Schedule Report",
+          "description": "[PT] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[PT] Recipients",
+          "recipientsPlaceholder": "[PT] email@example.com, team@example.com",
+          "frequency": "[PT] Frequency",
+          "daily": "[PT] Daily",
+          "weekly": "[PT] Weekly",
+          "monthly": "[PT] Monthly",
+          "format": "[PT] Format",
+          "pdf": "[PT] PDF",
+          "csv": "[PT] CSV",
+          "json": "[PT] JSON",
+          "cancel": "[PT] Cancel",
+          "schedule": "[PT] Schedule"
+        },
+        "delete": {
+          "title": "[PT] Delete Brand Study",
+          "description": "[PT] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[PT] Cancel",
+          "delete": "[PT] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[PT] Select organization",
+      "searchPlaceholder": "[PT] Search organizations...",
+      "noOrganizationFound": "[PT] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[PT] Weekly Activity",
+      "monthlyTrend": "[PT] Monthly Trend",
+      "workflows": "[PT] Workflows",
+      "insights": "[PT] Insights",
+      "days": {
+        "mon": "[PT] Mon",
+        "tue": "[PT] Tue",
+        "wed": "[PT] Wed",
+        "thu": "[PT] Thu",
+        "fri": "[PT] Fri",
+        "sat": "[PT] Sat",
+        "sun": "[PT] Sun"
+      },
+      "months": {
+        "jan": "[PT] Jan",
+        "feb": "[PT] Feb",
+        "mar": "[PT] Mar",
+        "apr": "[PT] Apr",
+        "may": "[PT] May",
+        "jun": "[PT] Jun",
+        "jul": "[PT] Jul",
+        "aug": "[PT] Aug",
+        "sep": "[PT] Sep",
+        "oct": "[PT] Oct",
+        "nov": "[PT] Nov",
+        "dec": "[PT] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[PT] Active Agents",
+      "manage": "[PT] Manage",
+      "activeTasks": "[PT] {count} active tasks",
+      "idle": "[PT] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[PT] Untitled Dashboard",
+      "addWidget": "[PT] Add Widget",
+      "undoShortcut": "[PT] Undo (Ctrl+Z)",
+      "redoShortcut": "[PT] Redo (Ctrl+Y)",
+      "grid": "[PT] Grid",
+      "snap": "[PT] Snap",
+      "widgetsCount": "[PT] {count} widgets",
+      "exportFormat": "[PT] Export Format",
+      "export": {
+        "pdf": "[PT] PDF Document",
+        "png": "[PT] PNG Image",
+        "json": "[PT] JSON Config"
+      },
+      "duplicate": "[PT] Duplicate",
+      "fullscreen": "[PT] Fullscreen",
+      "lock": "[PT] Lock",
+      "unlock": "[PT] Unlock",
+      "hide": "[PT] Hide",
+      "chooseWidgetType": "[PT] Choose a widget type to add to your dashboard",
+      "editWidget": "[PT] Edit Widget",
+      "newWidget": "[PT] New {type}",
+      "enterTextContent": "[PT] Enter text content...",
+      "unknownWidgetType": "[PT] Unknown widget type",
+      "target": "[PT] Target",
+      "table": {
+        "name": "[PT] Name",
+        "value": "[PT] Value",
+        "change": "[PT] Change",
+        "item": "[PT] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[PT] Chart",
+        "metric": "[PT] Metric",
+        "table": "[PT] Table",
+        "text": "[PT] Text",
+        "image": "[PT] Image",
+        "kpi": "[PT] KPI",
+        "kpiCard": "[PT] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[PT] Visualize data with various chart types",
+        "kpi": "[PT] Display key performance indicators",
+        "metric": "[PT] Show a single metric value",
+        "table": "[PT] Display data in tabular format",
+        "text": "[PT] Add text content or notes",
+        "image": "[PT] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[PT] General",
+        "data": "[PT] Data",
+        "style": "[PT] Style",
+        "advanced": "[PT] Advanced"
+      },
+      "fields": {
+        "title": "[PT] Title",
+        "subtitle": "[PT] Subtitle",
+        "chartType": "[PT] Chart Type",
+        "content": "[PT] Content",
+        "value": "[PT] Value",
+        "changePercent": "[PT] Change (%)",
+        "target": "[PT] Target",
+        "dataSource": "[PT] Data Source",
+        "refreshInterval": "[PT] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[PT] Bar Chart",
+        "line": "[PT] Line Chart",
+        "area": "[PT] Area Chart",
+        "pie": "[PT] Pie Chart",
+        "donut": "[PT] Donut Chart",
+        "radar": "[PT] Radar Chart",
+        "scatter": "[PT] Scatter Plot",
+        "funnel": "[PT] Funnel Chart",
+        "treemap": "[PT] Treemap",
+        "heatmap": "[PT] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[PT] Sample Data",
+        "api": "[PT] API Endpoint",
+        "crosstab": "[PT] Crosstab",
+        "custom": "[PT] Custom Query"
+      },
+      "refreshIntervalHint": "[PT] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[PT] Show Legend",
+        "showGrid": "[PT] Show Grid",
+        "showTooltip": "[PT] Show Tooltip",
+        "backgroundColor": "[PT] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[PT] Lock Widget",
+        "lockWidgetHint": "[PT] Prevent moving and resizing",
+        "zIndex": "[PT] Z-Index"
+      },
+      "dashboardSettings": "[PT] Dashboard Settings",
+      "saveSettings": "[PT] Save Settings",
+      "settings": {
+        "dashboardName": "[PT] Dashboard Name",
+        "gridColumns": "[PT] Grid Columns",
+        "gridRows": "[PT] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[PT] Analytics",
+      "title": "[PT] Analytics",
+      "description": "[PT] Track your research performance and insights"
     }
   },
   "audiences": {

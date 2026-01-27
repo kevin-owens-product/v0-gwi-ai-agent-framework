@@ -9,6 +9,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -52,6 +53,7 @@ const DEFAULT_CUSTOM_SHORTCUTS: CustomShortcuts = {
 }
 
 export default function ShortcutsSettingsPage() {
+  const t = useTranslations("settings.shortcuts")
   const [isSaving, setIsSaving] = useState(false)
   const [showResetDialog, setShowResetDialog] = useState(false)
   const [editingShortcut, setEditingShortcut] = useState<ShortcutDefinition | null>(null)
@@ -175,10 +177,10 @@ export default function ShortcutsSettingsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-2">
           <Keyboard className="h-6 w-6 text-muted-foreground" />
-          <h1 className="text-2xl font-bold">Keyboard Shortcuts</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
         </div>
         <p className="text-muted-foreground">
-          Customize keyboard shortcuts to work the way you prefer
+          {t("description")}
         </p>
       </div>
 
@@ -188,10 +190,10 @@ export default function ShortcutsSettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="shortcuts-enabled" className="text-base font-medium">
-                Enable Keyboard Shortcuts
+                {t("enableShortcuts")}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Turn off to disable all keyboard shortcuts globally
+                {t("enableShortcutsDescription")}
               </p>
             </div>
             <Switch
@@ -211,10 +213,10 @@ export default function ShortcutsSettingsPage() {
               <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0" />
               <div>
                 <p className="font-medium text-amber-600 dark:text-amber-400">
-                  Shortcut Conflicts Detected
+                  {t("conflictsDetected")}
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  The following shortcuts have the same key binding:
+                  {t("conflictsDescription")}
                 </p>
                 <ul className="mt-2 space-y-1">
                   {conflicts.map((conflict, index) => (
@@ -246,10 +248,10 @@ export default function ShortcutsSettingsPage() {
               <CardHeader>
                 <CardTitle>{CATEGORY_LABELS[category]}</CardTitle>
                 <CardDescription>
-                  {category === "navigation" && "Navigate around the application"}
-                  {category === "actions" && "Perform common actions quickly"}
-                  {category === "ui" && "Control the user interface"}
-                  {category === "editing" && "Edit content efficiently"}
+                  {category === "navigation" && t("categories.navigationDesc")}
+                  {category === "actions" && t("categories.actionsDesc")}
+                  {category === "ui" && t("categories.uiDesc")}
+                  {category === "editing" && t("categories.editingDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -280,16 +282,16 @@ export default function ShortcutsSettingsPage() {
           disabled={isSaving}
         >
           <RotateCcw className="mr-2 h-4 w-4" />
-          Reset to Defaults
+          {t("resetToDefaults")}
         </Button>
         <Button onClick={handleSave} disabled={isSaving}>
           {isSaving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
+              {t("saving")}
             </>
           ) : (
-            "Save Changes"
+            t("saveChanges")
           )}
         </Button>
       </div>
@@ -298,16 +300,15 @@ export default function ShortcutsSettingsPage() {
       <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Reset Keyboard Shortcuts</AlertDialogTitle>
+            <AlertDialogTitle>{t("resetDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will restore all keyboard shortcuts to their default settings.
-              Any custom bindings you have set will be lost.
+              {t("resetDialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("resetDialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={resetToDefaults}>
-              Reset to Defaults
+              {t("resetDialog.reset")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -317,25 +318,25 @@ export default function ShortcutsSettingsPage() {
       <Dialog open={!!editingShortcut} onOpenChange={(open) => !open && cancelEditing()}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Shortcut</DialogTitle>
+            <DialogTitle>{t("editDialog.title")}</DialogTitle>
             <DialogDescription>
               {editingShortcut?.customizable
-                ? "Press the keys you want to use for this shortcut"
-                : "This shortcut cannot be customized"}
+                ? t("editDialog.customizable")
+                : t("editDialog.notCustomizable")}
             </DialogDescription>
           </DialogHeader>
 
           {editingShortcut && (
             <div className="py-4">
               <div className="mb-4">
-                <Label className="text-sm font-medium">Action</Label>
+                <Label className="text-sm font-medium">{t("editDialog.action")}</Label>
                 <p className="text-sm text-muted-foreground mt-1">
                   {editingShortcut.name} - {editingShortcut.description}
                 </p>
               </div>
 
               <div className="mb-4">
-                <Label className="text-sm font-medium">Current Binding</Label>
+                <Label className="text-sm font-medium">{t("editDialog.currentBinding")}</Label>
                 <div className="mt-2">
                   <ShortcutKey
                     binding={
@@ -350,7 +351,7 @@ export default function ShortcutsSettingsPage() {
 
               {editingShortcut.customizable && (
                 <div>
-                  <Label className="text-sm font-medium">New Binding</Label>
+                  <Label className="text-sm font-medium">{t("editDialog.newBinding")}</Label>
                   <div className="mt-2 flex items-center gap-3">
                     <div
                       className={cn(
@@ -362,13 +363,13 @@ export default function ShortcutsSettingsPage() {
                     >
                       {recordingKey ? (
                         <span className="text-sm text-muted-foreground animate-pulse">
-                          Press keys...
+                          {t("editDialog.pressKeys")}
                         </span>
                       ) : recordedBinding ? (
                         <ShortcutKey binding={recordedBinding} size="lg" />
                       ) : (
                         <span className="text-sm text-muted-foreground">
-                          Click to record
+                          {t("editDialog.clickToRecord")}
                         </span>
                       )}
                     </div>
@@ -377,7 +378,7 @@ export default function ShortcutsSettingsPage() {
                       onClick={() => setRecordingKey(true)}
                       disabled={recordingKey}
                     >
-                      {recordingKey ? "Recording..." : "Record"}
+                      {recordingKey ? t("editDialog.recording") : t("editDialog.record")}
                     </Button>
                   </div>
                 </div>
@@ -387,14 +388,14 @@ export default function ShortcutsSettingsPage() {
 
           <DialogFooter>
             <Button variant="outline" onClick={cancelEditing}>
-              Cancel
+              {t("editDialog.cancel")}
             </Button>
             {editingShortcut?.customizable && (
               <Button
                 onClick={saveEditedShortcut}
                 disabled={!recordedBinding || recordingKey}
               >
-                Save
+                {t("editDialog.save")}
               </Button>
             )}
           </DialogFooter>

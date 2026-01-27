@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useRef, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -140,9 +141,12 @@ export function AdvancedDashboardBuilder({
   onExport,
   className,
 }: AdvancedDashboardBuilderProps) {
+  const t = useTranslations('dashboard.builder')
+  const tCommon = useTranslations('common')
+
   const [dashboard, setDashboard] = useState<DashboardState>({
     id: initialState?.id || crypto.randomUUID(),
-    name: initialState?.name || "Untitled Dashboard",
+    name: initialState?.name || t('untitledDashboard'),
     description: initialState?.description || "",
     widgets: initialState?.widgets || [],
     gridColumns: initialState?.gridColumns || 12,
@@ -203,6 +207,14 @@ export function AdvancedDashboardBuilder({
 
   // Add widget
   const addWidget = useCallback((type: WidgetType, config?: Partial<WidgetConfig>) => {
+    const widgetTypeNames: Record<WidgetType, string> = {
+      chart: t('widgetTypes.chart'),
+      metric: t('widgetTypes.metric'),
+      table: t('widgetTypes.table'),
+      text: t('widgetTypes.text'),
+      image: t('widgetTypes.image'),
+      kpi: t('widgetTypes.kpi'),
+    }
     const newWidget: Widget = {
       id: crypto.randomUUID(),
       type,
@@ -211,7 +223,7 @@ export function AdvancedDashboardBuilder({
       width: type === "kpi" || type === "metric" ? 3 : 4,
       height: type === "kpi" || type === "metric" ? 2 : 3,
       config: {
-        title: `New ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+        title: t('newWidget', { type: widgetTypeNames[type] }),
         chartType: type === "chart" ? "BAR" : undefined,
         showLegend: true,
         showGrid: true,
@@ -229,6 +241,7 @@ export function AdvancedDashboardBuilder({
     saveToHistory(updatedWidgets)
     setSelectedWidget(newWidget.id)
     setShowWidgetPalette(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dashboard.widgets, saveToHistory])
 
   // Update widget
@@ -477,7 +490,7 @@ export function AdvancedDashboardBuilder({
             )}
             {widget.config.kpiTarget && (
               <span className="text-xs text-muted-foreground mt-1">
-                Target: {widget.config.kpiTarget}
+                {t('target')}: {widget.config.kpiTarget}
               </span>
             )}
           </div>
@@ -488,14 +501,14 @@ export function AdvancedDashboardBuilder({
           <div className="flex flex-col items-center justify-center h-full p-4">
             <Activity className="h-8 w-8 text-primary mb-2" />
             <span className="text-2xl font-bold">{widget.config.kpiValue || "0"}</span>
-            <span className="text-sm text-muted-foreground">{widget.config.subtitle || "Metric"}</span>
+            <span className="text-sm text-muted-foreground">{widget.config.subtitle || t('widgetTypes.metric')}</span>
           </div>
         )
 
       case "text":
         return (
           <div className="p-4 h-full overflow-auto prose prose-sm dark:prose-invert">
-            {widget.config.textContent || "Enter text content..."}
+            {widget.config.textContent || t('enterTextContent')}
           </div>
         )
 
@@ -518,15 +531,15 @@ export function AdvancedDashboardBuilder({
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left p-1">Name</th>
-                  <th className="text-right p-1">Value</th>
-                  <th className="text-right p-1">Change</th>
+                  <th className="text-left p-1">{t('table.name')}</th>
+                  <th className="text-right p-1">{t('table.value')}</th>
+                  <th className="text-right p-1">{t('table.change')}</th>
                 </tr>
               </thead>
               <tbody>
                 {[1, 2, 3, 4].map(i => (
                   <tr key={i} className="border-b border-muted">
-                    <td className="p-1">Item {i}</td>
+                    <td className="p-1">{t('table.item', { number: i })}</td>
                     <td className="text-right p-1">{Math.floor(Math.random() * 100)}</td>
                     <td className="text-right p-1 text-green-600">+{Math.floor(Math.random() * 20)}%</td>
                   </tr>
@@ -537,7 +550,7 @@ export function AdvancedDashboardBuilder({
         )
 
       default:
-        return <div className="flex items-center justify-center h-full text-muted-foreground">Unknown widget type</div>
+        return <div className="flex items-center justify-center h-full text-muted-foreground">{t('unknownWidgetType')}</div>
     }
   }
 
@@ -584,7 +597,7 @@ export function AdvancedDashboardBuilder({
             onClick={() => setShowWidgetPalette(true)}
           >
             <Plus className="h-4 w-4 mr-2" />
-            Add Widget
+            {t('addWidget')}
           </Button>
 
           <div className="h-6 w-px bg-border mx-2" />
@@ -594,7 +607,7 @@ export function AdvancedDashboardBuilder({
             size="icon"
             onClick={undo}
             disabled={historyIndex <= 0}
-            title="Undo (Ctrl+Z)"
+            title={t('undoShortcut')}
           >
             <Undo2 className="h-4 w-4" />
           </Button>
@@ -603,7 +616,7 @@ export function AdvancedDashboardBuilder({
             size="icon"
             onClick={redo}
             disabled={historyIndex >= history.length - 1}
-            title="Redo (Ctrl+Y)"
+            title={t('redoShortcut')}
           >
             <Redo2 className="h-4 w-4" />
           </Button>
@@ -616,7 +629,7 @@ export function AdvancedDashboardBuilder({
             onClick={() => setShowGridLines(!showGridLines)}
           >
             <LayoutGrid className="h-4 w-4 mr-2" />
-            Grid
+            {t('grid')}
           </Button>
 
           <Button
@@ -625,13 +638,13 @@ export function AdvancedDashboardBuilder({
             onClick={() => setSnapToGrid(!snapToGrid)}
           >
             <Layers className="h-4 w-4 mr-2" />
-            Snap
+            {t('snap')}
           </Button>
         </div>
 
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="text-xs">
-            {dashboard.widgets.length} widgets
+            {t('widgetsCount', { count: dashboard.widgets.length })}
           </Badge>
 
           <Select value={zoom.toString()} onValueChange={(v) => setZoom(parseInt(v))}>
@@ -657,30 +670,30 @@ export function AdvancedDashboardBuilder({
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <Download className="h-4 w-4 mr-2" />
-                Export
+                {tCommon('export')}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Export Format</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('exportFormat')}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => onExport?.("pdf", dashboard)}>
                 <FileText className="h-4 w-4 mr-2" />
-                PDF Document
+                {t('export.pdf')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onExport?.("png", dashboard)}>
                 <ImageIcon className="h-4 w-4 mr-2" />
-                PNG Image
+                {t('export.png')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onExport?.("json", dashboard)}>
                 <FileText className="h-4 w-4 mr-2" />
-                JSON Config
+                {t('export.json')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
           <Button size="sm" onClick={() => onSave?.(dashboard)}>
             <Save className="h-4 w-4 mr-2" />
-            Save
+            {tCommon('save')}
           </Button>
         </div>
       </div>
@@ -757,33 +770,33 @@ export function AdvancedDashboardBuilder({
                           setShowWidgetEditor(true)
                         }}>
                           <Edit2 className="h-4 w-4 mr-2" />
-                          Edit
+                          {tCommon('edit')}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => duplicateWidget(widget.id)}>
                           <Copy className="h-4 w-4 mr-2" />
-                          Duplicate
+                          {t('duplicate')}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => setFullscreenWidget(widget.id)}>
                           <Maximize2 className="h-4 w-4 mr-2" />
-                          Fullscreen
+                          {t('fullscreen')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => updateWidget(widget.id, { isLocked: !widget.isLocked })}>
                           {widget.isLocked ? (
                             <>
                               <Unlock className="h-4 w-4 mr-2" />
-                              Unlock
+                              {t('unlock')}
                             </>
                           ) : (
                             <>
                               <Lock className="h-4 w-4 mr-2" />
-                              Lock
+                              {t('lock')}
                             </>
                           )}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => updateWidget(widget.id, { isVisible: false })}>
                           <EyeOff className="h-4 w-4 mr-2" />
-                          Hide
+                          {t('hide')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
@@ -791,7 +804,7 @@ export function AdvancedDashboardBuilder({
                           onClick={() => deleteWidget(widget.id)}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
+                          {tCommon('delete')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -815,20 +828,20 @@ export function AdvancedDashboardBuilder({
       <Dialog open={showWidgetPalette} onOpenChange={setShowWidgetPalette}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Add Widget</DialogTitle>
+            <DialogTitle>{t('addWidget')}</DialogTitle>
             <DialogDescription>
-              Choose a widget type to add to your dashboard
+              {t('chooseWidgetType')}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid grid-cols-3 gap-4 py-4">
             {([
-              { type: "chart" as WidgetType, label: "Chart", desc: "Visualize data with various chart types" },
-              { type: "kpi" as WidgetType, label: "KPI Card", desc: "Display key performance indicators" },
-              { type: "metric" as WidgetType, label: "Metric", desc: "Show a single metric value" },
-              { type: "table" as WidgetType, label: "Table", desc: "Display data in tabular format" },
-              { type: "text" as WidgetType, label: "Text", desc: "Add text content or notes" },
-              { type: "image" as WidgetType, label: "Image", desc: "Display an image or logo" },
+              { type: "chart" as WidgetType, labelKey: "widgetTypes.chart", descKey: "widgetDescriptions.chart" },
+              { type: "kpi" as WidgetType, labelKey: "widgetTypes.kpiCard", descKey: "widgetDescriptions.kpi" },
+              { type: "metric" as WidgetType, labelKey: "widgetTypes.metric", descKey: "widgetDescriptions.metric" },
+              { type: "table" as WidgetType, labelKey: "widgetTypes.table", descKey: "widgetDescriptions.table" },
+              { type: "text" as WidgetType, labelKey: "widgetTypes.text", descKey: "widgetDescriptions.text" },
+              { type: "image" as WidgetType, labelKey: "widgetTypes.image", descKey: "widgetDescriptions.image" },
             ]).map((item) => (
               <button
                 key={item.type}
@@ -838,8 +851,8 @@ export function AdvancedDashboardBuilder({
                 <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
                   {widgetTypeIcons[item.type]}
                 </div>
-                <span className="font-medium text-sm">{item.label}</span>
-                <span className="text-xs text-muted-foreground text-center mt-1">{item.desc}</span>
+                <span className="font-medium text-sm">{t(item.labelKey)}</span>
+                <span className="text-xs text-muted-foreground text-center mt-1">{t(item.descKey)}</span>
               </button>
             ))}
           </div>
@@ -850,21 +863,21 @@ export function AdvancedDashboardBuilder({
       <Dialog open={showWidgetEditor} onOpenChange={setShowWidgetEditor}>
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Edit Widget</DialogTitle>
+            <DialogTitle>{t('editWidget')}</DialogTitle>
           </DialogHeader>
 
           {selectedWidgetData && (
             <Tabs defaultValue="general" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="general">General</TabsTrigger>
-                <TabsTrigger value="data">Data</TabsTrigger>
-                <TabsTrigger value="style">Style</TabsTrigger>
-                <TabsTrigger value="advanced">Advanced</TabsTrigger>
+                <TabsTrigger value="general">{t('tabs.general')}</TabsTrigger>
+                <TabsTrigger value="data">{t('tabs.data')}</TabsTrigger>
+                <TabsTrigger value="style">{t('tabs.style')}</TabsTrigger>
+                <TabsTrigger value="advanced">{t('tabs.advanced')}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="general" className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label>Title</Label>
+                  <Label>{t('fields.title')}</Label>
                   <Input
                     value={selectedWidgetData.config.title || ""}
                     onChange={(e) => updateWidget(selectedWidgetData.id, {
@@ -873,7 +886,7 @@ export function AdvancedDashboardBuilder({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Subtitle</Label>
+                  <Label>{t('fields.subtitle')}</Label>
                   <Input
                     value={selectedWidgetData.config.subtitle || ""}
                     onChange={(e) => updateWidget(selectedWidgetData.id, {
@@ -883,7 +896,7 @@ export function AdvancedDashboardBuilder({
                 </div>
                 {selectedWidgetData.type === "chart" && (
                   <div className="space-y-2">
-                    <Label>Chart Type</Label>
+                    <Label>{t('fields.chartType')}</Label>
                     <Select
                       value={selectedWidgetData.config.chartType}
                       onValueChange={(v) => updateWidget(selectedWidgetData.id, {
@@ -894,23 +907,23 @@ export function AdvancedDashboardBuilder({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="BAR">Bar Chart</SelectItem>
-                        <SelectItem value="LINE">Line Chart</SelectItem>
-                        <SelectItem value="AREA">Area Chart</SelectItem>
-                        <SelectItem value="PIE">Pie Chart</SelectItem>
-                        <SelectItem value="DONUT">Donut Chart</SelectItem>
-                        <SelectItem value="RADAR">Radar Chart</SelectItem>
-                        <SelectItem value="SCATTER">Scatter Plot</SelectItem>
-                        <SelectItem value="FUNNEL">Funnel Chart</SelectItem>
-                        <SelectItem value="TREEMAP">Treemap</SelectItem>
-                        <SelectItem value="HEATMAP">Heatmap</SelectItem>
+                        <SelectItem value="BAR">{t('chartTypes.bar')}</SelectItem>
+                        <SelectItem value="LINE">{t('chartTypes.line')}</SelectItem>
+                        <SelectItem value="AREA">{t('chartTypes.area')}</SelectItem>
+                        <SelectItem value="PIE">{t('chartTypes.pie')}</SelectItem>
+                        <SelectItem value="DONUT">{t('chartTypes.donut')}</SelectItem>
+                        <SelectItem value="RADAR">{t('chartTypes.radar')}</SelectItem>
+                        <SelectItem value="SCATTER">{t('chartTypes.scatter')}</SelectItem>
+                        <SelectItem value="FUNNEL">{t('chartTypes.funnel')}</SelectItem>
+                        <SelectItem value="TREEMAP">{t('chartTypes.treemap')}</SelectItem>
+                        <SelectItem value="HEATMAP">{t('chartTypes.heatmap')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 )}
                 {selectedWidgetData.type === "text" && (
                   <div className="space-y-2">
-                    <Label>Content</Label>
+                    <Label>{t('fields.content')}</Label>
                     <Textarea
                       value={selectedWidgetData.config.textContent || ""}
                       onChange={(e) => updateWidget(selectedWidgetData.id, {
@@ -923,7 +936,7 @@ export function AdvancedDashboardBuilder({
                 {(selectedWidgetData.type === "kpi" || selectedWidgetData.type === "metric") && (
                   <>
                     <div className="space-y-2">
-                      <Label>Value</Label>
+                      <Label>{t('fields.value')}</Label>
                       <Input
                         value={selectedWidgetData.config.kpiValue?.toString() || ""}
                         onChange={(e) => updateWidget(selectedWidgetData.id, {
@@ -932,7 +945,7 @@ export function AdvancedDashboardBuilder({
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Change (%)</Label>
+                      <Label>{t('fields.changePercent')}</Label>
                       <Input
                         type="number"
                         value={selectedWidgetData.config.kpiChange?.toString() || ""}
@@ -942,7 +955,7 @@ export function AdvancedDashboardBuilder({
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Target</Label>
+                      <Label>{t('fields.target')}</Label>
                       <Input
                         type="number"
                         value={selectedWidgetData.config.kpiTarget?.toString() || ""}
@@ -957,7 +970,7 @@ export function AdvancedDashboardBuilder({
 
               <TabsContent value="data" className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label>Data Source</Label>
+                  <Label>{t('fields.dataSource')}</Label>
                   <Select
                     value={selectedWidgetData.config.dataSource || "sample"}
                     onValueChange={(v) => updateWidget(selectedWidgetData.id, {
@@ -968,15 +981,15 @@ export function AdvancedDashboardBuilder({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="sample">Sample Data</SelectItem>
-                      <SelectItem value="api">API Endpoint</SelectItem>
-                      <SelectItem value="crosstab">Crosstab</SelectItem>
-                      <SelectItem value="custom">Custom Query</SelectItem>
+                      <SelectItem value="sample">{t('dataSources.sample')}</SelectItem>
+                      <SelectItem value="api">{t('dataSources.api')}</SelectItem>
+                      <SelectItem value="crosstab">{t('dataSources.crosstab')}</SelectItem>
+                      <SelectItem value="custom">{t('dataSources.custom')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Refresh Interval (seconds)</Label>
+                  <Label>{t('fields.refreshInterval')}</Label>
                   <Input
                     type="number"
                     min="0"
@@ -985,7 +998,7 @@ export function AdvancedDashboardBuilder({
                       config: { ...selectedWidgetData.config, refreshInterval: parseInt(e.target.value) || 0 }
                     })}
                   />
-                  <p className="text-xs text-muted-foreground">Set to 0 to disable auto-refresh</p>
+                  <p className="text-xs text-muted-foreground">{t('refreshIntervalHint')}</p>
                 </div>
               </TabsContent>
 
@@ -993,7 +1006,7 @@ export function AdvancedDashboardBuilder({
                 {selectedWidgetData.type === "chart" && (
                   <>
                     <div className="flex items-center justify-between">
-                      <Label>Show Legend</Label>
+                      <Label>{t('style.showLegend')}</Label>
                       <Switch
                         checked={selectedWidgetData.config.showLegend}
                         onCheckedChange={(v) => updateWidget(selectedWidgetData.id, {
@@ -1002,7 +1015,7 @@ export function AdvancedDashboardBuilder({
                       />
                     </div>
                     <div className="flex items-center justify-between">
-                      <Label>Show Grid</Label>
+                      <Label>{t('style.showGrid')}</Label>
                       <Switch
                         checked={selectedWidgetData.config.showGrid}
                         onCheckedChange={(v) => updateWidget(selectedWidgetData.id, {
@@ -1011,7 +1024,7 @@ export function AdvancedDashboardBuilder({
                       />
                     </div>
                     <div className="flex items-center justify-between">
-                      <Label>Show Tooltip</Label>
+                      <Label>{t('style.showTooltip')}</Label>
                       <Switch
                         checked={selectedWidgetData.config.showTooltip}
                         onCheckedChange={(v) => updateWidget(selectedWidgetData.id, {
@@ -1022,7 +1035,7 @@ export function AdvancedDashboardBuilder({
                   </>
                 )}
                 <div className="space-y-2">
-                  <Label>Background Color</Label>
+                  <Label>{t('style.backgroundColor')}</Label>
                   <div className="flex gap-2">
                     <Input
                       type="color"
@@ -1046,8 +1059,8 @@ export function AdvancedDashboardBuilder({
               <TabsContent value="advanced" className="space-y-4 py-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Lock Widget</Label>
-                    <p className="text-xs text-muted-foreground">Prevent moving and resizing</p>
+                    <Label>{t('advanced.lockWidget')}</Label>
+                    <p className="text-xs text-muted-foreground">{t('advanced.lockWidgetHint')}</p>
                   </div>
                   <Switch
                     checked={selectedWidgetData.isLocked}
@@ -1055,7 +1068,7 @@ export function AdvancedDashboardBuilder({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Z-Index</Label>
+                  <Label>{t('advanced.zIndex')}</Label>
                   <Input
                     type="number"
                     min="0"
@@ -1071,13 +1084,13 @@ export function AdvancedDashboardBuilder({
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowWidgetEditor(false)}>
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button onClick={() => {
               saveToHistory(dashboard.widgets)
               setShowWidgetEditor(false)
             }}>
-              Save Changes
+              {tCommon('saveChanges')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1087,19 +1100,19 @@ export function AdvancedDashboardBuilder({
       <Dialog open={showSettings} onOpenChange={setShowSettings}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Dashboard Settings</DialogTitle>
+            <DialogTitle>{t('dashboardSettings')}</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Dashboard Name</Label>
+              <Label>{t('settings.dashboardName')}</Label>
               <Input
                 value={dashboard.name}
                 onChange={(e) => setDashboard(prev => ({ ...prev, name: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
-              <Label>Description</Label>
+              <Label>{tCommon('description')}</Label>
               <Textarea
                 value={dashboard.description}
                 onChange={(e) => setDashboard(prev => ({ ...prev, description: e.target.value }))}
@@ -1108,7 +1121,7 @@ export function AdvancedDashboardBuilder({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Grid Columns</Label>
+                <Label>{t('settings.gridColumns')}</Label>
                 <Select
                   value={dashboard.gridColumns.toString()}
                   onValueChange={(v) => setDashboard(prev => ({ ...prev, gridColumns: parseInt(v) }))}
@@ -1125,7 +1138,7 @@ export function AdvancedDashboardBuilder({
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Grid Rows</Label>
+                <Label>{t('settings.gridRows')}</Label>
                 <Select
                   value={dashboard.gridRows.toString()}
                   onValueChange={(v) => setDashboard(prev => ({ ...prev, gridRows: parseInt(v) }))}
@@ -1147,10 +1160,10 @@ export function AdvancedDashboardBuilder({
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowSettings(false)}>
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button onClick={() => setShowSettings(false)}>
-              Save Settings
+              {t('saveSettings')}
             </Button>
           </DialogFooter>
         </DialogContent>

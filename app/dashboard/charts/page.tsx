@@ -38,6 +38,13 @@ import {
   type GWIChartTemplate,
 } from "@/components/charts"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { useTranslations } from "next-intl"
+
+interface ChartDataPoint {
+  name: string
+  value?: number
+  [key: string]: string | number | undefined
+}
 
 interface Chart {
   id: string
@@ -47,8 +54,8 @@ interface Chart {
   status?: string
   createdAt?: string
   updatedAt?: string
-  data?: any[]
-  config?: Record<string, any>
+  data?: ChartDataPoint[]
+  config?: Record<string, string | number | boolean>
   template?: GWIChartTemplate
   views?: number
   category?: string
@@ -190,6 +197,7 @@ const chartCategories = [
 ]
 
 export default function ChartsPage() {
+  const t = useTranslations("dashboard.charts")
   const [charts, setCharts] = useState<Chart[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState({ total: 0, views: 0, shares: 0, exports: 0 })
@@ -258,39 +266,39 @@ export default function ChartsPage() {
     return true
   })
 
-  const handleCreateFromTemplate = (template: GWIChartTemplate, _config: any) => {
+  const handleCreateFromTemplate = (template: GWIChartTemplate, _config: Record<string, unknown>) => {
     // Navigate to create page with template pre-selected
     window.location.href = `/dashboard/charts/new?template=${template}`
   }
 
   return (
     <div className="flex-1 space-y-6 p-6">
-      <PageTracker pageName="Charts List" metadata={{ activeTab, viewMode }} />
+      <PageTracker pageName={t("pageTracker")} metadata={{ activeTab, viewMode }} />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
             <BarChart3 className="h-8 w-8" />
-            Charts
+            {t("title")}
           </h1>
           <p className="text-muted-foreground mt-1">
-            Visualize consumer insights with interactive, award-winning charts
+            {t("description")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => setShowTemplates(!showTemplates)}>
             <Sparkles className="h-4 w-4 mr-2" />
-            Templates
+            {t("templates")}
           </Button>
           <Button variant="outline" onClick={() => setShowComparison(!showComparison)}>
             <TrendingUp className="h-4 w-4 mr-2" />
-            Compare
+            {t("compare")}
           </Button>
           <Link href="/dashboard/charts/new">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              New Chart
+              {t("newChart")}
             </Button>
           </Link>
         </div>
@@ -305,7 +313,7 @@ export default function ChartsPage() {
                 <BarChart3 className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Charts</p>
+                <p className="text-sm text-muted-foreground">{t("totalCharts")}</p>
                 <p className="text-2xl font-bold">{stats.total}</p>
               </div>
             </div>
@@ -318,7 +326,7 @@ export default function ChartsPage() {
                 <Eye className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Views</p>
+                <p className="text-sm text-muted-foreground">{t("totalViews")}</p>
                 <p className="text-2xl font-bold">
                   {stats.views >= 1000 ? `${(stats.views / 1000).toFixed(1)}K` : stats.views}
                 </p>
@@ -333,7 +341,7 @@ export default function ChartsPage() {
                 <Share2 className="h-5 w-5 text-emerald-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Shares</p>
+                <p className="text-sm text-muted-foreground">{t("shares")}</p>
                 <p className="text-2xl font-bold">{stats.shares}</p>
               </div>
             </div>
@@ -346,7 +354,7 @@ export default function ChartsPage() {
                 <Download className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Exports</p>
+                <p className="text-sm text-muted-foreground">{t("exports")}</p>
                 <p className="text-2xl font-bold">{stats.exports}</p>
               </div>
             </div>
@@ -367,8 +375,8 @@ export default function ChartsPage() {
       {showComparison && (
         <ChartComparison
           data={comparisonScenarios.brandHealth}
-          title="Brand Health Comparison"
-          description="Compare key brand metrics against previous period and industry benchmarks"
+          title={t("comparison.title")}
+          description={t("comparison.description")}
         />
       )}
 
@@ -378,7 +386,7 @@ export default function ChartsPage() {
           <div className="relative flex-1">
             <Filter className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search charts..."
+              placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
@@ -391,7 +399,7 @@ export default function ChartsPage() {
             <SelectContent>
               {chartCategories.map((cat) => (
                 <SelectItem key={cat} value={cat}>
-                  {cat}
+                  {cat === "All" ? t("allCategory") : cat}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -421,10 +429,10 @@ export default function ChartsPage() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
-          <TabsTrigger value="all">All Charts ({filteredCharts.length})</TabsTrigger>
-          <TabsTrigger value="recent">Recent</TabsTrigger>
-          <TabsTrigger value="popular">Most Viewed</TabsTrigger>
-          <TabsTrigger value="favorites">Favorites</TabsTrigger>
+          <TabsTrigger value="all">{t("allCharts")} ({filteredCharts.length})</TabsTrigger>
+          <TabsTrigger value="recent">{t("recent")}</TabsTrigger>
+          <TabsTrigger value="popular">{t("mostViewed")}</TabsTrigger>
+          <TabsTrigger value="favorites">{t("favorites")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="all">
@@ -487,18 +495,20 @@ function ChartsGridSkeleton({ viewMode }: { viewMode: "grid" | "list" }) {
 }
 
 function ChartsGrid({ charts, viewMode }: { charts: Chart[]; viewMode: "grid" | "list" }) {
+  const t = useTranslations("dashboard.charts")
+
   if (charts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <BarChart3 className="h-12 w-12 text-muted-foreground mb-4" />
-        <h3 className="text-lg font-semibold">No charts found</h3>
+        <h3 className="text-lg font-semibold">{t("emptyState.title")}</h3>
         <p className="text-muted-foreground mb-4">
-          Create your first chart or try a different search
+          {t("emptyState.description")}
         </p>
         <Link href="/dashboard/charts/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            Create Chart
+            {t("emptyState.action")}
           </Button>
         </Link>
       </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,6 +12,7 @@ import { Loader2, Camera } from "lucide-react"
 import { PageTracker } from "@/components/tracking/PageTracker"
 
 export default function ProfileSettingsPage() {
+  const t = useTranslations("settings.profile")
   const [isSaving, setIsSaving] = useState(false)
 
   const handleSave = async () => {
@@ -23,15 +25,15 @@ export default function ProfileSettingsPage() {
     <div className="p-6 max-w-3xl">
       <PageTracker pageName="Settings - Profile" />
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Profile Settings</h1>
-        <p className="text-muted-foreground">Manage your personal information</p>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
 
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-            <CardDescription>Update your profile details</CardDescription>
+            <CardTitle>{t("personalInfo")}</CardTitle>
+            <CardDescription>{t("updateProfileDetails")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-center gap-6">
@@ -46,35 +48,35 @@ export default function ProfileSettingsPage() {
               </div>
               <div>
                 <Button variant="outline" size="sm">
-                  Upload Photo
+                  {t("uploadPhoto")}
                 </Button>
-                <p className="mt-1 text-xs text-muted-foreground">JPG, GIF or PNG. Max size 2MB.</p>
+                <p className="mt-1 text-xs text-muted-foreground">{t("photoHint")}</p>
               </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="first-name">First Name</Label>
+                <Label htmlFor="first-name">{t("firstName")}</Label>
                 <Input id="first-name" defaultValue="Sarah" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="last-name">Last Name</Label>
+                <Label htmlFor="last-name">{t("lastName")}</Label>
                 <Input id="last-name" defaultValue="Chen" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email">{t("emailAddress")}</Label>
               <Input id="email" type="email" defaultValue="sarah.chen@acme.com" />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="job-title">Job Title</Label>
+              <Label htmlFor="job-title">{t("jobTitle")}</Label>
               <Input id="job-title" defaultValue="Senior Insights Analyst" />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio">{t("bio")}</Label>
               <Textarea
                 id="bio"
                 defaultValue="10+ years experience in consumer research and data analysis. Passionate about uncovering actionable insights."
@@ -86,17 +88,17 @@ export default function ProfileSettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Contact Information</CardTitle>
-            <CardDescription>How colleagues can reach you</CardDescription>
+            <CardTitle>{t("contactInfo")}</CardTitle>
+            <CardDescription>{t("contactDescription")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone">{t("phoneNumber")}</Label>
                 <Input id="phone" type="tel" defaultValue="+1 (555) 123-4567" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
+                <Label htmlFor="location">{t("location")}</Label>
                 <Input id="location" defaultValue="New York, NY" />
               </div>
             </div>
@@ -108,10 +110,10 @@ export default function ProfileSettingsPage() {
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
+                {t("saving")}
               </>
             ) : (
-              "Save Changes"
+              t("saveChanges")
             )}
           </Button>
         </div>

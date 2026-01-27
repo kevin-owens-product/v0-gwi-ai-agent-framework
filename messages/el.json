@@ -203,9 +203,115 @@
     "selectLanguage": "Επιλέξτε γλώσσα",
     "preferences": "Προτιμήσεις",
     "notifications": "Ειδοποιήσεις",
-    "security": "Ασφάλεια",
+    "security": {
+      "title": "[EL] Security Settings",
+      "description": "[EL] Manage your account security and active sessions",
+      "changePassword": "[EL] Change Password",
+      "changePasswordDescription": "[EL] Update your password regularly to keep your account secure",
+      "currentPassword": "[EL] Current Password",
+      "newPassword": "[EL] New Password",
+      "confirmNewPassword": "[EL] Confirm New Password",
+      "updating": "[EL] Updating...",
+      "updatePassword": "[EL] Update Password",
+      "twoFactorAuth": "[EL] Two-Factor Authentication",
+      "twoFactorDescription": "[EL] Add an extra layer of security to your account",
+      "twoFactorEnabled": "[EL] 2FA is enabled",
+      "twoFactorProtected": "[EL] Your account is protected with authenticator app",
+      "changeMethod": "[EL] Change Method",
+      "viewBackupCodes": "[EL] View Backup Codes",
+      "activeSessions": "[EL] Active Sessions",
+      "activeSessionsDescription": "[EL] Manage devices where you're currently logged in",
+      "signOutAll": "[EL] Sign Out All",
+      "current": "[EL] Current",
+      "revoke": "[EL] Revoke",
+      "dangerZone": "[EL] Danger Zone",
+      "dangerZoneDescription": "[EL] Irreversible and destructive actions",
+      "deleteAccount": "[EL] Delete Account",
+      "deleteAccountDescription": "[EL] Permanently delete your account and all data",
+      "dataExports": {
+        "title": "[EL] Data Exports",
+        "description": "[EL] Request exports of your personal data for GDPR compliance",
+        "refresh": "[EL] Refresh",
+        "yourDataRights": "[EL] Your Data Rights",
+        "yourDataRightsDescription": "[EL] Under GDPR Article 20, you have the right to receive your personal data in a structured, commonly used, and machine-readable format. Exports are processed within 30 days and remain available for download for 30 days after completion.",
+        "noActiveExports": "[EL] No Active Exports",
+        "noActiveExportsDescription": "[EL] Request an export to see its status here",
+        "noActiveExportsHint": "[EL] Your export status will appear here after you request a data export",
+        "exportHistory": "[EL] Export History",
+        "exportHistoryDescription": "[EL] View and download your previous data exports",
+        "total": "[EL] Total",
+        "pending": "[EL] Pending",
+        "processing": "[EL] Processing",
+        "aboutDataExports": "[EL] About Data Exports",
+        "tabs": {
+          "whatsIncluded": "[EL] What's Included",
+          "exportFormat": "[EL] Export Format",
+          "faq": "[EL] FAQ"
+        },
+        "included": {
+          "profileInfo": "[EL] Profile Information",
+          "profileInfoDesc": "[EL] Your name, email, avatar, and account settings",
+          "orgMemberships": "[EL] Organization Memberships",
+          "orgMembershipsDesc": "[EL] All organizations you belong to and your roles",
+          "createdContent": "[EL] Created Content",
+          "createdContentDesc": "[EL] Agents, reports, dashboards, and other content you've created",
+          "activityHistory": "[EL] Activity History",
+          "activityHistoryDesc": "[EL] Audit logs and activity records associated with your account",
+          "preferences": "[EL] Preferences",
+          "preferencesDesc": "[EL] Your theme, language, notification, and other settings",
+          "apiKeys": "[EL] API Keys",
+          "apiKeysDesc": "[EL] API key metadata (keys themselves are not exported for security)"
+        },
+        "format": {
+          "description": "[EL] Your data is exported in JSON (JavaScript Object Notation) format, which is:",
+          "machineReadable": "[EL] Machine-readable and portable as required by GDPR",
+          "humanReadable": "[EL] Human-readable when opened in a text editor",
+          "compatible": "[EL] Compatible with most data processing tools",
+          "easyImport": "[EL] Easy to import into other services",
+          "exampleStructure": "[EL] Example structure:"
+        },
+        "faq": {
+          "howLong": "[EL] How long does an export take?",
+          "howLongAnswer": "[EL] Most exports complete within a few minutes. Complex requests with large amounts of data may take longer, but GDPR allows up to 30 days for processing.",
+          "howLongAvailable": "[EL] How long is an export available?",
+          "howLongAvailableAnswer": "[EL] Completed exports are available for download for 30 days. After this period, you'll need to request a new export.",
+          "howOften": "[EL] How often can I request an export?",
+          "howOftenAnswer": "[EL] You can request one export per 24 hours. This helps ensure system resources are available for all users.",
+          "isSecure": "[EL] Is my export secure?",
+          "isSecureAnswer": "[EL] Yes. Exports are only accessible to you and require authentication to download. Sensitive data like passwords and API key secrets are never included in exports."
+        }
+      }
+    },
     "account": "Λογαριασμός",
-    "general": "Γενικός",
+    "general": {
+      "title": "[EL] General Settings",
+      "description": "[EL] Manage your organization's settings and preferences",
+      "organizationDetails": "[EL] Organization Details",
+      "updateOrgInfo": "[EL] Update your organization's information",
+      "changeLogo": "[EL] Change Logo",
+      "organizationName": "[EL] Organization Name",
+      "organizationSlug": "[EL] Organization Slug",
+      "orgDescription": "[EL] Description",
+      "industry": "[EL] Industry",
+      "companySize": "[EL] Company Size",
+      "consumerGoods": "[EL] Consumer Goods",
+      "technology": "[EL] Technology",
+      "finance": "[EL] Finance",
+      "healthcare": "[EL] Healthcare",
+      "retail": "[EL] Retail",
+      "mediaEntertainment": "[EL] Media & Entertainment",
+      "employees1to50": "[EL] 1-50 employees",
+      "employees50to200": "[EL] 50-200 employees",
+      "employees200to1000": "[EL] 200-1000 employees",
+      "employees1000to5000": "[EL] 1000-5000 employees",
+      "employees5000plus": "[EL] 5000+ employees",
+      "regionalSettings": "[EL] Regional Settings",
+      "regionalDescription": "[EL] Set your timezone and date format preferences",
+      "timezone": "[EL] Timezone",
+      "dateFormat": "[EL] Date Format",
+      "saving": "[EL] Saving...",
+      "saveChanges": "[EL] Save Changes"
+    },
     "appearance": {
       "title": "Εμφάνιση",
       "description": "Προσαρμόστε την εμφάνιση του GWI Agents στη συσκευή σας",
@@ -294,141 +400,1139 @@
     },
     "help": {
       "title": "Πώς μπορούμε να βοηθήσουμε;",
-      "subtitle": "Αναζητήστε τη βάση γνώσεων μας ή περιηγηθείτε στα θέματα παρακάτω",
       "searchPlaceholder": "Αναζητήστε βοήθεια...",
-      "tabs": {
-        "faq": "FAQ",
-        "guides": "Οδηγοί",
-        "contact": "Επαφή"
-      },
       "quickLinks": {
-        "gettingStarted": {
-          "title": "Οδηγός έναρξης",
-          "description": "Μάθετε τα βασικά των GWI Agents"
-        },
-        "videoTutorials": {
-          "title": "Εκπαιδευτικά βίντεο",
-          "description": "Παρακολουθήστε μαθήματα βήμα προς βήμα"
-        },
-        "apiDocs": {
-          "title": "Τεκμηρίωση API",
-          "description": "Ενσωματώστε τα API μας"
-        },
-        "contactSupport": {
-          "title": "Επικοινωνήστε με την Υποστήριξη",
-          "description": "Λάβετε βοήθεια από την ομάδα μας"
-        }
+        "gettingStarted": "[EL] Getting Started Guide",
+        "videoTutorials": "[EL] Video Tutorials",
+        "apiDocs": "[EL] API Documentation",
+        "title": "[EL] Quick Links",
+        "gettingStartedDesc": "[EL] New to GWI Insights? Start here",
+        "videoTutorialsDesc": "[EL] Watch step-by-step guides",
+        "apiDocsDesc": "[EL] For developers and integrations",
+        "releaseNotes": "[EL] Release Notes",
+        "releaseNotesDesc": "[EL] See what's new"
       },
       "faq": {
-        "categories": {
-          "gettingStarted": "Ξεκινώντας",
-          "agentsWorkflows": "Agents & Workflows",
-          "dataPrivacy": "Δεδομένα & Απόρρητο",
-          "billingPlans": "Χρέωση & Προγράμματα"
-        },
-        "gettingStarted": {
-          "createAgent": {
-            "question": "Πώς δημιουργώ τον πρώτο μου πράκτορα;",
-            "answer": "Μεταβείτε στη σελίδα Agents από την πλαϊνή γραμμή και κάντε κλικ στο 'Create Agent'. Ακολουθήστε τον οδηγό βήμα προς βήμα για να διαμορφώσετε το όνομα, την περιγραφή, τις πηγές δεδομένων και τις ρυθμίσεις συμπεριφοράς του πράκτορά σας."
-          },
-          "dataSources": {
-            "question": "Ποιες πηγές δεδομένων είναι διαθέσιμες;",
-            "answer": "Το GWI παρέχει πρόσβαση σε πολλές πηγές δεδομένων, συμπεριλαμβανομένου του GWI Core (η ναυαρχίδα μας έρευνα καταναλωτών), του GWI USA, του GWI Zeitgeist (θεματολογικά θέματα) και τη δυνατότητα μεταφόρτωσης προσαρμοσμένων δεδομένων. Η διαθεσιμότητα της πηγής δεδομένων εξαρτάται από το επίπεδο συνδρομής σας."
-          },
-          "inviteTeam": {
-            "question": "Πώς προσκαλώ τα μέλη της ομάδας;",
-            "answer": "Μεταβείτε στις Ρυθμίσεις > Ομάδα και κάντε κλικ στην «Πρόσκληση μέλους». Εισαγάγετε τη διεύθυνση email τους και επιλέξτε τον ρόλο τους (Διαχειριστής, Επεξεργαστής ή Προβολή). Θα λάβουν ένα email πρόσκλησης για να συμμετάσχουν στον χώρο εργασίας σας."
-          }
-        },
-        "agentsWorkflows": {
-          "difference": {
-            "question": "Ποια είναι η διαφορά μεταξύ πρακτόρων και ροών εργασίας;",
-            "answer": "Οι πράκτορες είναι ειδικοί με τεχνητή νοημοσύνη και χειρίζονται συγκεκριμένους τύπους ερευνητικών εργασιών. Οι ροές εργασίας συνδυάζουν πολλούς πράκτορες σε μια ακολουθία για να αυτοματοποιήσουν πολύπλοκες ερευνητικές διαδικασίες πολλαπλών βημάτων."
-          },
-          "customize": {
-            "question": "Μπορώ να προσαρμόσω προκατασκευασμένους πράκτορες;",
-            "answer": "Ναί! Μπορείτε να αντιγράψετε οποιονδήποτε προκατασκευασμένο παράγοντα και να τροποποιήσετε τη διαμόρφωσή του, συμπεριλαμβανομένης της προτροπής συστήματος, των πηγών δεδομένων και της μορφής εξόδου. Η προσαρμοσμένη έκδοση σας θα αποθηκευτεί στην προσωπική σας βιβλιοθήκη αντιπροσώπων."
-          },
-          "schedule": {
-            "question": "Πώς μπορώ να προγραμματίσω μια ροή εργασίας;",
-            "answer": "Ανοίξτε τη ροή εργασίας σας και κάντε κλικ στο κουμπί «Προγραμματισμός». Μπορείτε να ρυθμίσετε επαναλαμβανόμενες εκτελέσεις (ημερήσιες, εβδομαδιαίες, μηνιαίες) ή να ενεργοποιήσετε ροές εργασίας με βάση συμβάντα όπως η διαθεσιμότητα νέων δεδομένων."
-          }
-        },
-        "dataPrivacy": {
-          "protection": {
-            "question": "Πώς προστατεύονται τα δεδομένα μου;",
-            "answer": "Όλα τα δεδομένα κρυπτογραφούνται σε κατάσταση ηρεμίας και κατά τη μεταφορά χρησιμοποιώντας βιομηχανικά πρότυπα κρυπτογράφησης AES-256. Έχουμε πιστοποίηση SOC 2 Type II και συμμορφωνόμαστε με τον GDPR. Τα ερωτήματά σας και τα προσαρμοσμένα δεδομένα σας δεν κοινοποιούνται ποτέ με άλλους πελάτες."
-          },
-          "export": {
-            "question": "Μπορώ να εξάγω τα δεδομένα μου;",
-            "answer": "Ναι, μπορείτε να εξάγετε δεδομένα σε πολλές μορφές, όπως CSV, Excel, PowerPoint και JSON. Οι εταιρικοί πελάτες έχουν επίσης πρόσβαση σε απευθείας συνδέσεις βάσεων δεδομένων και εξαγωγές API."
-          },
-          "updateFrequency": {
-            "question": "Πόσο συχνά ενημερώνονται τα δεδομένα GWI;",
-            "answer": "Τα δεδομένα GWI Core ενημερώνονται ανά τρίμηνο με νέες έρευνες καταναλωτών. Το GWI Zeitgeist παρέχει εβδομαδιαίες ενημερώσεις για μοντέρνα θέματα. Ορισμένα εξειδικευμένα σύνολα δεδομένων μπορεί να έχουν διαφορετικές συχνότητες ενημέρωσης."
-          }
-        },
-        "billingPlans": {
-          "queryCount": {
-            "question": "Τι μετράει ως ερώτημα;",
-            "answer": "Ένα ερώτημα είναι κάθε αίτημα που υποβάλλεται σε έναν πράκτορα, συμπεριλαμβανομένων των επακόλουθων ερωτήσεων στην ίδια συνομιλία. Οι πολύπλοκες ροές εργασίας πολλών βημάτων υπολογίζονται ως ένα μόνο ερώτημα ανεξάρτητα από το πόσοι πράκτορες εμπλέκονται."
-          },
-          "changePlan": {
-            "question": "Μπορώ να αναβαθμίσω ή να υποβαθμίσω το σχέδιό μου;",
-            "answer": "Ναι, μπορείτε να αλλάξετε το πρόγραμμά σας ανά πάσα στιγμή από τις Ρυθμίσεις > Χρέωση. Οι αναβαθμίσεις τίθενται σε ισχύ αμέσως με την αναλογική χρέωση. Οι υποβαθμίσεις τίθενται σε ισχύ από την έναρξη του επόμενου κύκλου χρέωσής σας."
-          },
-          "annualDiscount": {
-            "question": "Προσφέρετε ετήσιες εκπτώσεις χρέωσης;",
-            "answer": "Ναί! Η ετήσια χρέωση εξοικονομεί 20% σε σύγκριση με τη μηνιαία χρέωση. Επικοινωνήστε με την ομάδα πωλήσεών μας για να ρυθμίσετε την ετήσια χρέωση ή να αλλάξετε από μηνιαία."
-          }
-        }
+        "title": "[EL] Frequently Asked Questions"
       },
-      "guides": {
-        "levels": {
-          "beginner": "Αρχάριος",
-          "intermediate": "Ενδιάμεσος",
-          "advanced": "Προχωρημένος"
-        },
-        "personas": {
-          "title": "Χτίζοντας αποτελεσματικά πρόσωπα",
-          "description": "Μάθετε πώς να δημιουργείτε λεπτομερείς, πρακτικές περσόνες κοινού",
-          "duration": "15 λεπτά ανάγνωση"
-        },
-        "workflows": {
-          "title": "Βέλτιστες πρακτικές αυτοματισμού ροής εργασιών",
-          "description": "Σχεδιάστε αποτελεσματικές ροές εργασίας πολλαπλών πρακτόρων για την έρευνά σας",
-          "duration": "20 λεπτά ανάγνωση"
-        },
-        "prompts": {
-          "title": "Advanced Prompt Engineering",
-          "description": "Λάβετε καλύτερα αποτελέσματα με βελτιστοποιημένες προτροπές αντιπροσώπων",
-          "duration": "25 λεπτά ανάγνωση"
-        },
-        "apiIntegration": {
-          "title": "Οδηγός ενσωμάτωσης API",
-          "description": "Συνδέστε τους πράκτορες GWI με τα υπάρχοντα εργαλεία σας",
-          "duration": "30 λεπτά ανάγνωση"
-        }
-      },
-      "viewAllDocs": "Προβολή όλης της τεκμηρίωσης",
       "contact": {
-        "liveChat": {
-          "title": "Ζωντανή συνομιλία",
-          "description": "Συνομιλήστε με την ομάδα υποστήριξής μας σε πραγματικό χρόνο",
-          "availability": "Διαθέσιμο Δευτέρα-Παρασκευή, 9 π.μ. - 6 μ.μ. EST. Μέσος χρόνος απόκρισης: 2 λεπτά.",
-          "button": "Ξεκινήστε τη συνομιλία"
+        "title": "[EL] Need More Help?",
+        "description": "[EL] Can't find what you're looking for? Our support team is here to help.",
+        "contactSupport": "[EL] Contact Support",
+        "responseTime": "[EL] Typical response time: 2-4 hours"
+      },
+      "description": "[EL] Find answers, learn best practices, and get assistance",
+      "categories": {
+        "title": "[EL] Browse by Category",
+        "agents": "[EL] AI Agents",
+        "agentsDesc": "[EL] Learn about agent capabilities",
+        "workflows": "[EL] Workflows",
+        "workflowsDesc": "[EL] Build automation pipelines",
+        "data": "[EL] Data & Audiences",
+        "dataDesc": "[EL] Understanding GWI data",
+        "reports": "[EL] Reports & Exports",
+        "reportsDesc": "[EL] Generate and share insights",
+        "integrations": "[EL] Integrations",
+        "integrationsDesc": "[EL] Connect with your tools",
+        "billing": "[EL] Billing & Plans",
+        "billingDesc": "[EL] Manage your subscription"
+      }
+    },
+    "profile": {
+      "title": "[EL] Profile Settings",
+      "description": "[EL] Manage your personal information",
+      "personalInfo": "[EL] Personal Information",
+      "updateProfileDetails": "[EL] Update your profile details",
+      "uploadPhoto": "[EL] Upload Photo",
+      "photoHint": "[EL] JPG, GIF or PNG. Max size 2MB.",
+      "firstName": "[EL] First Name",
+      "lastName": "[EL] Last Name",
+      "emailAddress": "[EL] Email Address",
+      "jobTitle": "[EL] Job Title",
+      "bio": "[EL] Bio",
+      "contactInfo": "[EL] Contact Information",
+      "contactDescription": "[EL] How colleagues can reach you",
+      "phoneNumber": "[EL] Phone Number",
+      "location": "[EL] Location",
+      "saving": "[EL] Saving...",
+      "saveChanges": "[EL] Save Changes"
+    },
+    "team": {
+      "title": "[EL] Team Management",
+      "description": "[EL] Manage team members and their permissions",
+      "teamMembers": "[EL] Team Members",
+      "membersCount": "[EL] {count} members in your organization",
+      "inviteMember": "[EL] Invite Member",
+      "inviteTeamMember": "[EL] Invite Team Member",
+      "inviteDescription": "[EL] Send an invitation to join your organization",
+      "emailAddress": "[EL] Email Address",
+      "emailPlaceholder": "[EL] colleague@company.com",
+      "role": "[EL] Role",
+      "sending": "[EL] Sending...",
+      "sendInvitation": "[EL] Send Invitation",
+      "searchMembers": "[EL] Search members...",
+      "tableHeaders": {
+        "member": "[EL] Member",
+        "role": "[EL] Role",
+        "lastActive": "[EL] Last Active",
+        "joined": "[EL] Joined"
+      },
+      "roles": {
+        "owner": "[EL] Owner",
+        "admin": "[EL] Admin",
+        "member": "[EL] Member",
+        "viewer": "[EL] Viewer"
+      },
+      "actions": {
+        "makeAdmin": "[EL] Make Admin",
+        "makeMember": "[EL] Make Member",
+        "makeViewer": "[EL] Make Viewer",
+        "removeMember": "[EL] Remove Member"
+      },
+      "pendingInvitations": "[EL] Pending Invitations",
+      "pendingCount": "[EL] {count} pending invitation",
+      "pendingCountPlural": "[EL] {count} pending invitations",
+      "invitationHeaders": {
+        "email": "[EL] Email",
+        "role": "[EL] Role",
+        "sent": "[EL] Sent",
+        "expires": "[EL] Expires"
+      },
+      "revoke": "[EL] Revoke",
+      "rolePermissions": "[EL] Role Permissions",
+      "rolePermissionsDescription": "[EL] Overview of what each role can do",
+      "ownerPermissions": {
+        "fullControl": "[EL] Full organization control",
+        "transferOwnership": "[EL] Transfer ownership",
+        "deleteOrg": "[EL] Delete organization"
+      },
+      "adminPermissions": {
+        "manageMembers": "[EL] Manage team members",
+        "billing": "[EL] Billing & subscription",
+        "allMemberPerms": "[EL] All member permissions"
+      },
+      "memberPermissions": {
+        "createAgents": "[EL] Create and edit agents",
+        "generateReports": "[EL] Generate reports",
+        "useAgents": "[EL] Use all agents"
+      },
+      "viewerPermissions": {
+        "viewReports": "[EL] View reports",
+        "viewDashboards": "[EL] View dashboards",
+        "readOnly": "[EL] Read-only access"
+      },
+      "removeDialog": {
+        "title": "[EL] Remove Team Member",
+        "description": "[EL] Are you sure you want to remove {name} from the organization? They will lose access immediately.",
+        "cancel": "[EL] Cancel",
+        "remove": "[EL] Remove Member"
+      },
+      "unknown": "[EL] Unknown",
+      "never": "[EL] Never",
+      "justNow": "[EL] Just now",
+      "minAgo": "[EL] {count} min ago",
+      "hoursAgo": "[EL] {count} hour ago",
+      "hoursAgoPlural": "[EL] {count} hours ago",
+      "daysAgo": "[EL] {count} day ago",
+      "daysAgoPlural": "[EL] {count} days ago"
+    },
+    "billing": {
+      "title": "[EL] Billing & Subscription",
+      "description": "[EL] Manage your subscription and payment methods",
+      "enterprisePlan": "[EL] Enterprise Plan",
+      "current": "[EL] Current",
+      "planDescription": "[EL] Unlimited agents, priority support, and advanced analytics",
+      "perMonth": "[EL] per month",
+      "planFeatures": "[EL] Plan Features",
+      "features": {
+        "unlimitedQueries": "[EL] Unlimited AI agent queries",
+        "allAgents": "[EL] All pre-built domain agents",
+        "customDev": "[EL] Custom agent development",
+        "prioritySupport": "[EL] Priority support (24/7)"
+      },
+      "usageThisPeriod": "[EL] Usage This Period",
+      "usage": {
+        "agentQueries": "[EL] Agent Queries",
+        "unlimited": "[EL] Unlimited",
+        "reportsGenerated": "[EL] Reports Generated",
+        "teamSeats": "[EL] Team Seats"
+      },
+      "nextBillingDate": "[EL] Next billing date: {date}",
+      "changePlan": "[EL] Change Plan",
+      "cancelSubscription": "[EL] Cancel Subscription",
+      "paymentMethod": "[EL] Payment Method",
+      "paymentDescription": "[EL] Manage your payment information",
+      "cardEnding": "[EL] Visa ending in {last4}",
+      "cardExpires": "[EL] Expires {date}",
+      "update": "[EL] Update",
+      "billingHistory": "[EL] Billing History",
+      "billingHistoryDescription": "[EL] Download your past invoices for your records",
+      "invoiceHeaders": {
+        "invoice": "[EL] Invoice",
+        "date": "[EL] Date",
+        "amount": "[EL] Amount",
+        "status": "[EL] Status"
+      },
+      "paid": "[EL] Paid",
+      "needMoreCapacity": "[EL] Need more capacity?",
+      "contactForPricing": "[EL] Contact us for custom enterprise pricing",
+      "contactSales": "[EL] Contact Sales",
+      "upgrade": {
+        "title": "[EL] Choose Your Plan",
+        "description": "[EL] Select the plan that best fits your needs. Upgrade or downgrade anytime.",
+        "backToBilling": "[EL] Back to Billing",
+        "checkoutCanceled": "[EL] Checkout was canceled. Feel free to try again when you're ready.",
+        "monthly": "[EL] Monthly",
+        "yearly": "[EL] Yearly",
+        "save17": "[EL] Save 17%",
+        "mostPopular": "[EL] Most Popular",
+        "currentPlan": "[EL] Current Plan",
+        "billedAnnually": "[EL] ${price} billed annually",
+        "upgradeTo": "[EL] Upgrade to {plan}",
+        "processing": "[EL] Processing...",
+        "customSales": "[EL] All plans include our core features. Need something custom?",
+        "contactSalesTeam": "[EL] Contact our sales team",
+        "plans": {
+          "starter": {
+            "name": "[EL] Starter",
+            "description": "[EL] For individuals and small teams getting started",
+            "features": {
+              "runs": "[EL] 100 agent runs / month",
+              "seats": "[EL] 3 team seats",
+              "sources": "[EL] 5 data sources",
+              "retention": "[EL] 30 day data retention",
+              "tokens": "[EL] 100K tokens / month",
+              "support": "[EL] Community support"
+            }
+          },
+          "professional": {
+            "name": "[EL] Professional",
+            "description": "[EL] For growing teams with advanced needs",
+            "features": {
+              "runs": "[EL] 1,000 agent runs / month",
+              "seats": "[EL] 10 team seats",
+              "sources": "[EL] 25 data sources",
+              "retention": "[EL] 90 day data retention",
+              "tokens": "[EL] 1M tokens / month",
+              "support": "[EL] Priority email support",
+              "analytics": "[EL] Advanced analytics",
+              "integrations": "[EL] Custom integrations"
+            }
+          },
+          "enterprise": {
+            "name": "[EL] Enterprise",
+            "description": "[EL] For large organizations with custom requirements",
+            "features": {
+              "runs": "[EL] Unlimited agent runs",
+              "seats": "[EL] Unlimited team seats",
+              "sources": "[EL] Unlimited data sources",
+              "retention": "[EL] 365 day data retention",
+              "tokens": "[EL] Unlimited tokens",
+              "support": "[EL] 24/7 dedicated support",
+              "customDev": "[EL] Custom agent development",
+              "sso": "[EL] SSO & SCIM",
+              "sla": "[EL] SLA guarantee",
+              "accountManager": "[EL] Dedicated account manager"
+            }
+          }
+        }
+      }
+    },
+    "auditLog": {
+      "title": "[EL] Audit Log",
+      "description": "[EL] Track all actions and changes in your organization",
+      "activityHistory": "[EL] Activity History",
+      "totalEvents": "[EL] {count} total events",
+      "searchLogs": "[EL] Search logs...",
+      "allActions": "[EL] All Actions",
+      "allResources": "[EL] All Resources",
+      "noAuditLogs": "[EL] No audit logs found",
+      "activityWillAppear": "[EL] Activity will appear here as actions are taken",
+      "showing": "[EL] Showing {start} to {end} of {total}",
+      "previous": "[EL] Previous",
+      "next": "[EL] Next",
+      "actions": {
+        "create": "[EL] Created",
+        "update": "[EL] Updated",
+        "delete": "[EL] Deleted",
+        "execute": "[EL] Executed",
+        "login": "[EL] Logged in",
+        "logout": "[EL] Logged out"
+      }
+    },
+    "webhooks": {
+      "title": "[EL] Webhooks",
+      "description": "[EL] Receive real-time notifications for events in your organization",
+      "webhookEndpoints": "[EL] Webhook Endpoints",
+      "endpointsDescription": "[EL] Manage webhook endpoints and event subscriptions",
+      "addWebhook": "[EL] Add Webhook",
+      "addWebhookEndpoint": "[EL] Add Webhook Endpoint",
+      "addWebhookDescription": "[EL] Create a webhook to receive HTTP POST notifications for selected events",
+      "endpointUrl": "[EL] Endpoint URL",
+      "endpointUrlPlaceholder": "[EL] https://api.example.com/webhooks",
+      "descriptionOptional": "[EL] Description (Optional)",
+      "descriptionPlaceholder": "[EL] Describe this webhook...",
+      "events": "[EL] Events",
+      "creating": "[EL] Creating...",
+      "createWebhook": "[EL] Create Webhook",
+      "noWebhooks": "[EL] No webhooks configured",
+      "addWebhookToStart": "[EL] Add a webhook to get started",
+      "tableHeaders": {
+        "endpoint": "[EL] Endpoint",
+        "events": "[EL] Events",
+        "status": "[EL] Status",
+        "secret": "[EL] Secret"
+      },
+      "eventsCount": "[EL] {count} events",
+      "active": "[EL] Active",
+      "disabled": "[EL] Disabled",
+      "webhookSecurity": "[EL] Webhook Security",
+      "securityDescription": "[EL] Each webhook endpoint has a unique secret key. Use this secret to verify that webhook requests are from GWI Insights.",
+      "signatureDescription": "[EL] Webhook payloads include an X-GWI-Signature header containing an HMAC SHA-256 signature of the request body.",
+      "eventTypes": {
+        "agentRunStarted": "[EL] Agent Run Started",
+        "agentRunCompleted": "[EL] Agent Run Completed",
+        "agentRunFailed": "[EL] Agent Run Failed",
+        "workflowRunStarted": "[EL] Workflow Run Started",
+        "workflowRunCompleted": "[EL] Workflow Run Completed",
+        "workflowRunFailed": "[EL] Workflow Run Failed",
+        "reportGenerated": "[EL] Report Generated",
+        "memberAdded": "[EL] Member Added",
+        "memberRemoved": "[EL] Member Removed"
+      }
+    },
+    "alerts": {
+      "title": "[EL] Custom Alerts",
+      "description": "[EL] Configure alerts to get notified when metrics cross important thresholds",
+      "totalAlerts": "[EL] Total Alerts",
+      "active": "[EL] Active",
+      "totalTriggers": "[EL] Total Triggers",
+      "paused": "[EL] Paused",
+      "yourAlerts": "[EL] Your Alerts",
+      "yourAlertsDescription": "[EL] Manage your custom alert configurations",
+      "createAlert": "[EL] Create Alert",
+      "searchAlerts": "[EL] Search alerts...",
+      "entityType": "[EL] Entity Type",
+      "allTypes": "[EL] All Types",
+      "allStatus": "[EL] All Status",
+      "noAlertsYet": "[EL] No alerts yet",
+      "noMatchingAlerts": "[EL] No matching alerts",
+      "createFirstAlert": "[EL] Create your first alert to get notified about important changes",
+      "adjustFilters": "[EL] Try adjusting your filters",
+      "tableHeaders": {
+        "alert": "[EL] Alert",
+        "type": "[EL] Type",
+        "condition": "[EL] Condition",
+        "channels": "[EL] Channels",
+        "lastTriggered": "[EL] Last Triggered",
+        "status": "[EL] Status"
+      },
+      "total": "[EL] total",
+      "never": "[EL] Never",
+      "edit": "[EL] Edit",
+      "viewHistory": "[EL] View History",
+      "delete": "[EL] Delete",
+      "createNewAlert": "[EL] Create New Alert",
+      "createNewAlertDescription": "[EL] Configure an alert to get notified when metrics cross important thresholds",
+      "editAlert": "[EL] Edit Alert",
+      "editAlertDescription": "[EL] Update the configuration for this alert",
+      "alertHistory": "[EL] Alert History: {name}",
+      "alertHistoryDescription": "[EL] View the history of when this alert was triggered",
+      "deleteAlert": "[EL] Delete Alert",
+      "deleteAlertDescription": "[EL] Are you sure you want to delete \"{name}\"? This action cannot be undone and all alert history will be permanently removed.",
+      "cancel": "[EL] Cancel",
+      "entityTypes": {
+        "metric": "[EL] Metric",
+        "audience": "[EL] Audience",
+        "brand": "[EL] Brand",
+        "report": "[EL] Report",
+        "agent": "[EL] Agent",
+        "workflow": "[EL] Workflow"
+      }
+    },
+    "shortcuts": {
+      "title": "[EL] Keyboard Shortcuts",
+      "description": "[EL] Customize keyboard shortcuts to work the way you prefer",
+      "enableShortcuts": "[EL] Enable Keyboard Shortcuts",
+      "enableShortcutsDescription": "[EL] Turn off to disable all keyboard shortcuts globally",
+      "conflictsDetected": "[EL] Shortcut Conflicts Detected",
+      "conflictsDescription": "[EL] The following shortcuts have the same key binding:",
+      "categories": {
+        "navigation": "[EL] Navigation",
+        "navigationDesc": "[EL] Navigate around the application",
+        "actions": "[EL] Actions",
+        "actionsDesc": "[EL] Perform common actions quickly",
+        "ui": "[EL] UI",
+        "uiDesc": "[EL] Control the user interface",
+        "editing": "[EL] Editing",
+        "editingDesc": "[EL] Edit content efficiently"
+      },
+      "resetToDefaults": "[EL] Reset to Defaults",
+      "saving": "[EL] Saving...",
+      "saveChanges": "[EL] Save Changes",
+      "resetDialog": {
+        "title": "[EL] Reset Keyboard Shortcuts",
+        "description": "[EL] This will restore all keyboard shortcuts to their default settings. Any custom bindings you have set will be lost.",
+        "cancel": "[EL] Cancel",
+        "reset": "[EL] Reset to Defaults"
+      },
+      "editDialog": {
+        "title": "[EL] Edit Shortcut",
+        "customizable": "[EL] Press the keys you want to use for this shortcut",
+        "notCustomizable": "[EL] This shortcut cannot be customized",
+        "action": "[EL] Action",
+        "currentBinding": "[EL] Current Binding",
+        "newBinding": "[EL] New Binding",
+        "pressKeys": "[EL] Press keys...",
+        "clickToRecord": "[EL] Click to record",
+        "record": "[EL] Record",
+        "recording": "[EL] Recording...",
+        "cancel": "[EL] Cancel",
+        "save": "[EL] Save"
+      }
+    },
+    "plan": {
+      "title": "[EL] Plan & Billing",
+      "description": "[EL] Manage your subscription and view usage metrics",
+      "currentPlan": "[EL] Current Plan",
+      "currentPlanDescription": "[EL] Your active subscription details",
+      "upgradePlan": "[EL] Upgrade Plan",
+      "teamMembers": "[EL] Team Members",
+      "agents": "[EL] Agents",
+      "workflows": "[EL] Workflows",
+      "reports": "[EL] Reports",
+      "usageThisMonth": "[EL] Usage This Month",
+      "usageDescription": "[EL] Monitor your resource usage against plan limits",
+      "comparePlans": "[EL] Compare Plans",
+      "yourFeatures": "[EL] Your Features",
+      "yourFeaturesDescription": "[EL] All features included in your current plan",
+      "limit": "[EL] Limit: {limit}",
+      "requesting": "[EL] Requesting...",
+      "upgradeTo": "[EL] Upgrade to {plan}",
+      "tiers": {
+        "starter": {
+          "name": "[EL] Starter",
+          "price": "[EL] $49/mo",
+          "features": {
+            "members": "[EL] Up to 5 team members",
+            "agents": "[EL] 10 agents",
+            "runs": "[EL] 50 workflow runs/month",
+            "analytics": "[EL] Basic analytics",
+            "support": "[EL] Email support"
+          }
         },
-        "ticket": {
-          "title": "Υποβολή εισιτηρίου",
-          "description": "Λάβετε βοήθεια μέσω email εντός 24 ωρών",
-          "info": "Για σύνθετα ζητήματα ή αιτήματα λειτουργιών. Συμπεριλάβετε όσο το δυνατόν περισσότερες λεπτομέρειες.",
-          "button": "Υποβολή εισιτηρίου"
+        "professional": {
+          "name": "[EL] Professional",
+          "price": "[EL] $199/mo",
+          "features": {
+            "members": "[EL] Up to 20 team members",
+            "agents": "[EL] Unlimited agents",
+            "runs": "[EL] Unlimited workflow runs",
+            "analytics": "[EL] Advanced analytics",
+            "support": "[EL] Priority support",
+            "integrations": "[EL] Custom integrations",
+            "api": "[EL] API access"
+          }
         },
         "enterprise": {
-          "title": "Υποστήριξη Επιχειρήσεων",
-          "description": "Χρειάζεστε ειδική υποστήριξη; Τα επιχειρηματικά σχέδια περιλαμβάνουν έναν αποκλειστικό Διαχειριστή επιτυχίας πελατών και χρόνους απόκρισης προτεραιότητας.",
-          "button": "Επικοινωνήστε με τις πωλήσεις"
+          "name": "[EL] Enterprise",
+          "price": "[EL] Custom",
+          "features": {
+            "members": "[EL] Unlimited team members",
+            "everything": "[EL] Unlimited everything",
+            "security": "[EL] Advanced security",
+            "sso": "[EL] SSO & SAML",
+            "support": "[EL] Dedicated support",
+            "sla": "[EL] Custom SLAs",
+            "onPremise": "[EL] On-premise option",
+            "whiteLabel": "[EL] White-label"
+          }
         }
+      }
+    },
+    "scheduledExports": {
+      "title": "[EL] Scheduled Exports",
+      "description": "[EL] Set up automatic exports of reports, dashboards, and data on a recurring schedule",
+      "yourScheduledExports": "[EL] Your Scheduled Exports",
+      "yourScheduledExportsDescription": "[EL] Manage automatic exports that run on a schedule",
+      "newExport": "[EL] New Export",
+      "all": "[EL] All",
+      "active": "[EL] Active",
+      "paused": "[EL] Paused",
+      "noScheduledExports": "[EL] No scheduled exports",
+      "createFirstExport": "[EL] Create your first scheduled export to get started",
+      "createExport": "[EL] Create Export",
+      "tableHeaders": {
+        "name": "[EL] Name",
+        "schedule": "[EL] Schedule",
+        "format": "[EL] Format",
+        "lastRun": "[EL] Last Run",
+        "nextRun": "[EL] Next Run",
+        "status": "[EL] Status"
+      },
+      "statusLabels": {
+        "pending": "[EL] Pending",
+        "processing": "[EL] Running",
+        "completed": "[EL] Success",
+        "failed": "[EL] Failed",
+        "neverRun": "[EL] Never Run"
+      },
+      "actions": {
+        "runNow": "[EL] Run Now",
+        "viewHistory": "[EL] View History",
+        "edit": "[EL] Edit",
+        "pause": "[EL] Pause",
+        "activate": "[EL] Activate",
+        "delete": "[EL] Delete"
+      },
+      "deleteDialog": {
+        "title": "[EL] Delete Scheduled Export",
+        "description": "[EL] Are you sure you want to delete \"{name}\"? This will also delete all export history. This action cannot be undone.",
+        "cancel": "[EL] Cancel",
+        "delete": "[EL] Delete"
+      },
+      "historySheet": {
+        "title": "[EL] Export History",
+        "loading": "[EL] Loading..."
+      },
+      "relativeTime": {
+        "never": "[EL] Never",
+        "justNow": "[EL] Just now",
+        "lessThanMinute": "[EL] In less than a minute",
+        "minsAgo": "[EL] {count}m ago",
+        "inMins": "[EL] In {count}m",
+        "hoursAgo": "[EL] {count}h ago",
+        "inHours": "[EL] In {count}h",
+        "daysAgo": "[EL] {count}d ago",
+        "inDays": "[EL] In {count}d"
+      }
+    },
+    "inbox": {
+      "title": "[EL] Inbox Agents",
+      "description": "[EL] AI agents that automatically handle incoming requests",
+      "configureChannels": "[EL] Configure Channels",
+      "createAgent": "[EL] Create Agent",
+      "activeAgents": "[EL] Active Agents",
+      "status": {
+        "processing": "[EL] Processing"
+      },
+      "stats": {
+        "processedToday": "[EL] Processed Today",
+        "fromYesterday": "[EL] {percent} from yesterday",
+        "avgResponseTime": "[EL] Avg Response Time",
+        "fasterThanLastWeek": "[EL] {percent} faster than last week",
+        "successRate": "[EL] Success Rate",
+        "basedOnRequests": "[EL] Based on {count} requests",
+        "pendingReview": "[EL] Pending Review",
+        "highPriority": "[EL] {count} high priority"
+      },
+      "agents": {
+        "successRate": "[EL] Success rate",
+        "processed": "[EL] {count} processed"
+      },
+      "incomingRequests": {
+        "title": "[EL] Incoming Requests",
+        "description": "[EL] Requests from Slack, Email, and other channels",
+        "searchPlaceholder": "[EL] Search requests...",
+        "noRequests": "[EL] No requests found"
+      },
+      "actions": {
+        "assignToBriefHandler": "[EL] Assign to Brief Handler",
+        "assignToAudienceQuery": "[EL] Assign to Audience Query",
+        "assignToLocalization": "[EL] Assign to Localization",
+        "reprocess": "[EL] Reprocess",
+        "archive": "[EL] Archive"
+      },
+      "priority": {
+        "high": "[EL] High priority",
+        "medium": "[EL] Medium priority",
+        "low": "[EL] Low priority"
+      },
+      "request": {
+        "received": "[EL] Received {time}",
+        "generatedOutput": "[EL] Generated Output",
+        "confidence": "[EL] {percent}% confidence",
+        "citations": "[EL] {count} citations",
+        "viewFullReport": "[EL] View Full Report",
+        "assignAgent": "[EL] Assign Agent",
+        "respondManually": "[EL] Respond Manually",
+        "viewHistory": "[EL] View Request History"
+      },
+      "agentDetail": {
+        "agentActive": "[EL] Agent Active",
+        "agentPaused": "[EL] Agent Paused",
+        "lastTriggered": "[EL] Last triggered {time}",
+        "processed": "[EL] Processed",
+        "successRate": "[EL] Success Rate",
+        "avgTime": "[EL] Avg Time",
+        "triggerKeywords": "[EL] Trigger Keywords",
+        "connectedChannels": "[EL] Connected Channels",
+        "processingPipeline": "[EL] Processing Pipeline",
+        "configure": "[EL] Configure",
+        "viewLogs": "[EL] View Logs"
+      },
+      "createAgentDialog": {
+        "title": "[EL] Create Inbox Agent",
+        "description": "[EL] Configure an AI agent to automatically handle incoming requests",
+        "agentName": "[EL] Agent Name",
+        "agentNamePlaceholder": "[EL] e.g., Competitive Analysis Handler",
+        "descriptionPlaceholder": "[EL] Describe what this agent does...",
+        "triggerKeywords": "[EL] Trigger Keywords",
+        "triggerKeywordsPlaceholder": "[EL] competitor, competitive, market share (comma separated)",
+        "triggerKeywordsHelp": "[EL] Agent will activate when messages contain these keywords",
+        "channels": "[EL] Channels",
+        "baseAgent": "[EL] Base Agent",
+        "selectAgent": "[EL] Select an agent to start from",
+        "agents": {
+          "audienceExplorer": "[EL] Audience Explorer",
+          "personaArchitect": "[EL] Persona Architect",
+          "cultureTracker": "[EL] Culture Tracker",
+          "brandRelationshipAnalyst": "[EL] Brand Relationship Analyst"
+        },
+        "autoRespond": "[EL] Auto-respond",
+        "autoRespondHelp": "[EL] Automatically send responses to requesters",
+        "requireApproval": "[EL] Require Approval",
+        "requireApprovalHelp": "[EL] Review responses before sending"
+      }
+    },
+    "templates": {
+      "title": "[EL] Prompt Templates",
+      "description": "[EL] Reusable templates for common insights tasks",
+      "createTemplate": "[EL] Create Template",
+      "searchPlaceholder": "[EL] Search templates...",
+      "starredTemplates": "[EL] Starred Templates",
+      "allTemplates": "[EL] All Templates",
+      "uses": "[EL] {count} uses",
+      "categories": {
+        "all": "[EL] All",
+        "research": "[EL] Research",
+        "analysis": "[EL] Analysis",
+        "briefs": "[EL] Briefs & Docs"
+      },
+      "actions": {
+        "useTemplate": "[EL] Use Template",
+        "duplicate": "[EL] Duplicate"
+      },
+      "createDialog": {
+        "title": "[EL] Create Template",
+        "description": "[EL] Save a prompt as a reusable template for your team",
+        "templateName": "[EL] Template Name",
+        "templateNamePlaceholder": "[EL] e.g., Audience Deep Dive",
+        "descriptionPlaceholder": "[EL] What does this template do?",
+        "category": "[EL] Category",
+        "promptTemplate": "[EL] Prompt Template",
+        "promptPlaceholder": "[EL] Use [BRACKETS] for variables that users will fill in...",
+        "promptTip": "[EL] Tip: Use [VARIABLE_NAME] syntax for parts that should be customized when using the template"
+      }
+    },
+    "store": {
+      "title": "[EL] Agent Store",
+      "description": "[EL] Discover and install pre-built agents to supercharge your research",
+      "searchPlaceholder": "[EL] Search agents...",
+      "sortBy": {
+        "placeholder": "[EL] Sort by",
+        "popular": "[EL] Most Popular",
+        "rating": "[EL] Highest Rated",
+        "newest": "[EL] Newest",
+        "name": "[EL] Name A-Z"
+      },
+      "featuredAgents": "[EL] Featured Agents",
+      "featured": "[EL] Featured",
+      "installed": "[EL] Installed",
+      "tryNow": "[EL] Try Now",
+      "categories": "[EL] Categories",
+      "viewDetails": "[EL] View Details",
+      "added": "[EL] Added",
+      "buildYourOwn": {
+        "title": "[EL] Build Your Own Agent",
+        "description": "[EL] Create custom agents tailored to your specific research needs and share them with your team.",
+        "createAgent": "[EL] Create Agent"
+      },
+      "detail": {
+        "backToStore": "[EL] Back to Store",
+        "notFound": {
+          "title": "[EL] Agent Not Found",
+          "description": "[EL] The agent you're looking for doesn't exist or has been removed."
+        },
+        "installs": "[EL] {count} installs",
+        "installed": "[EL] Installed",
+        "installing": "[EL] Installing...",
+        "installAgent": "[EL] Install Agent",
+        "tryInPlayground": "[EL] Try in Playground",
+        "info": {
+          "version": "[EL] Version",
+          "category": "[EL] Category",
+          "dataSources": "[EL] Data Sources"
+        },
+        "tabs": {
+          "overview": "[EL] Overview",
+          "capabilities": "[EL] Capabilities",
+          "examples": "[EL] Examples",
+          "reviews": "[EL] Reviews"
+        },
+        "overview": {
+          "aboutTitle": "[EL] About this Agent",
+          "fastResults": "[EL] Fast Results",
+          "fastResultsDesc": "[EL] Avg. 3s response time",
+          "verifiedData": "[EL] Verified Data",
+          "verifiedDataDesc": "[EL] 100% sourced citations",
+          "alwaysUpdated": "[EL] Always Updated",
+          "alwaysUpdatedDesc": "[EL] Latest GWI data"
+        },
+        "capabilities": {
+          "title": "[EL] What this agent can do",
+          "description": "[EL] Key capabilities and features"
+        },
+        "examples": {
+          "title": "[EL] Example Prompts",
+          "description": "[EL] Try these prompts to get started"
+        },
+        "reviews": {
+          "ratings": "[EL] Ratings",
+          "reviewsCount": "[EL] {count} reviews"
+        },
+        "relatedAgents": "[EL] Related Agents"
+      }
+    },
+    "changes": {
+      "title": "[EL] Data Changes",
+      "description": "[EL] Track what's changed, what's new, and how your analyses have evolved",
+      "tabs": {
+        "timeline": "[EL] Timeline",
+        "compare": "[EL] Compare",
+        "evolution": "[EL] Evolution",
+        "alerts": "[EL] Alerts"
+      },
+      "compare": {
+        "title": "[EL] Compare Versions",
+        "description": "[EL] Select an entity to compare its versions",
+        "compareVersions": "[EL] Compare versions",
+        "entities": {
+          "audiences": "[EL] Audiences",
+          "crosstabs": "[EL] Crosstabs",
+          "insights": "[EL] Insights",
+          "charts": "[EL] Charts",
+          "reports": "[EL] Reports",
+          "dashboards": "[EL] Dashboards"
+        }
+      },
+      "evolution": {
+        "title": "[EL] Analysis Evolution",
+        "description": "[EL] Track how your AI-generated analyses have evolved over time",
+        "viewEvolution": "[EL] View evolution",
+        "types": {
+          "brandHealth": "[EL] Brand Health",
+          "audienceInsights": "[EL] Audience Insights",
+          "marketAnalysis": "[EL] Market Analysis",
+          "competitorAnalysis": "[EL] Competitor Analysis",
+          "trendAnalysis": "[EL] Trend Analysis",
+          "crosstabAnalysis": "[EL] Crosstab Analysis"
+        }
+      },
+      "alerts": {
+        "title": "[EL] Change Alerts",
+        "loading": "[EL] Loading alerts...",
+        "noAlerts": "[EL] No Alerts",
+        "noAlertsDescription": "[EL] You have no unread change alerts.",
+        "markAllRead": "[EL] Mark All as Read",
+        "markRead": "[EL] Mark Read",
+        "dismiss": "[EL] Dismiss"
+      },
+      "compareDialog": {
+        "selectTitle": "[EL] Select {entity} to Compare",
+        "entity": "[EL] Entity",
+        "enterIdDescription": "[EL] Enter the ID of the {entityType} you want to compare versions of:",
+        "enterIdPlaceholder": "[EL] Enter {entityType} ID..."
+      },
+      "evolutionDialog": {
+        "selectTitle": "[EL] Select Analysis to View Evolution",
+        "enterIdDescription": "[EL] Enter the reference ID of the {analysisType} analysis:",
+        "enterIdPlaceholder": "[EL] Enter reference ID..."
+      }
+    },
+    "crosstabs": {
+      "title": "[EL] Crosstabs",
+      "description": "[EL] Compare audiences across multiple dimensions",
+      "newCrosstab": "[EL] New Crosstab",
+      "stats": {
+        "totalCrosstabs": "[EL] Total Crosstabs",
+        "views": "[EL] Views",
+        "exports": "[EL] Exports",
+        "usedToday": "[EL] Used Today"
+      },
+      "tabs": {
+        "all": "[EL] All Crosstabs",
+        "recent": "[EL] Recent",
+        "templates": "[EL] Templates"
+      },
+      "empty": {
+        "title": "[EL] No crosstabs yet",
+        "description": "[EL] Create your first crosstab to compare audiences"
+      },
+      "badges": {
+        "featured": "[EL] Featured",
+        "liveData": "[EL] Live Data",
+        "more": "[EL] +{count} more"
+      },
+      "featured": {
+        "exploreCategories": "[EL] Explore {count} categories of consumer behavior data"
+      },
+      "labels": {
+        "audienceSegments": "[EL] audience segments",
+        "metrics": "[EL] metrics",
+        "audiencesCount": "[EL] {count} audiences",
+        "metricsCount": "[EL] {count} metrics",
+        "modified": "[EL] Modified {time}"
+      },
+      "actions": {
+        "openAnalysis": "[EL] Open Analysis"
+      },
+      "new": {
+        "title": "[EL] Create Crosstab",
+        "description": "[EL] Compare multiple audiences side-by-side",
+        "form": {
+          "crosstabName": "[EL] Crosstab Name",
+          "namePlaceholder": "[EL] e.g., Age vs Social Media Platforms",
+          "selectAudiences": "[EL] Select Audiences",
+          "selectMetrics": "[EL] Select Metrics",
+          "selected": "[EL] {count} selected"
+        },
+        "summary": {
+          "title": "[EL] Summary",
+          "audiences": "[EL] Audiences ({count})",
+          "metrics": "[EL] Metrics ({count})"
+        },
+        "actions": {
+          "generate": "[EL] Generate Crosstab",
+          "generating": "[EL] Generating...",
+          "cancel": "[EL] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[EL] Please enter a crosstab name",
+          "audienceRequired": "[EL] Please select at least one audience",
+          "metricRequired": "[EL] Please select at least one metric",
+          "createFailed": "[EL] Failed to create crosstab",
+          "createFailedRetry": "[EL] Failed to create crosstab. Please try again."
+        }
+      },
+      "analysis": {
+        "title": "[EL] Advanced Crosstab Analysis",
+        "badges": {
+          "metrics": "[EL] {count} metrics",
+          "audiences": "[EL] {count} audiences"
+        },
+        "categoriesCount": "[EL] {count} categories",
+        "more": "[EL] more",
+        "actions": {
+          "share": "[EL] Share",
+          "generateInsights": "[EL] Generate Insights"
+        },
+        "tabs": {
+          "dataGrid": "[EL] Data Grid",
+          "calculatedFields": "[EL] Calculated Fields",
+          "filters": "[EL] Filters",
+          "visualize": "[EL] Visualize"
+        },
+        "grid": {
+          "title": "[EL] Consumer Insights Analysis ({metrics} metrics x {segments} segments)",
+          "description": "[EL] Comprehensive GWI-style analysis across demographics, behaviors, and psychographics"
+        },
+        "visualize": {
+          "chartTitle": "[EL] Consumer Behavior Across Key Metrics"
+        },
+        "categories": {
+          "calculated": "[EL] Calculated"
+        },
+        "toast": {
+          "valueUpdated": "[EL] Value updated to {value}%",
+          "fieldCreated": "[EL] Calculated field \"{name}\" created",
+          "fieldUpdated": "[EL] Calculated field updated",
+          "fieldDeleted": "[EL] Calculated field deleted",
+          "fieldApplied": "[EL] Calculated field \"{name}\" applied to grid",
+          "filtersApplied": "[EL] Filters applied",
+          "chartSaved": "[EL] Chart saved!",
+          "chartExported": "[EL] Chart exported as {format}"
+        }
+      },
+      "detail": {
+        "notFound": {
+          "title": "[EL] Crosstab Not Found",
+          "subtitle": "[EL] The requested crosstab could not be found",
+          "heading": "[EL] Crosstab not found",
+          "description": "[EL] The crosstab you're looking for doesn't exist or has been deleted.",
+          "backButton": "[EL] Back to Crosstabs"
+        },
+        "actions": {
+          "removeFromFavorites": "[EL] Remove from favorites",
+          "addToFavorites": "[EL] Add to favorites",
+          "pauseAutoRefresh": "[EL] Pause auto-refresh",
+          "enableAutoRefresh": "[EL] Enable auto-refresh",
+          "exitFullscreen": "[EL] Exit fullscreen",
+          "enterFullscreen": "[EL] Enter fullscreen",
+          "visualize": "[EL] Visualize",
+          "share": "[EL] Share",
+          "edit": "[EL] Edit",
+          "duplicate": "[EL] Duplicate",
+          "addToDashboard": "[EL] Add to Dashboard",
+          "copyLink": "[EL] Copy Link",
+          "copied": "[EL] Copied!",
+          "delete": "[EL] Delete",
+          "cancel": "[EL] Cancel",
+          "selectAll": "[EL] Select All",
+          "clear": "[EL] Clear",
+          "schedule": "[EL] Schedule"
+        },
+        "filters": {
+          "title": "[EL] Data Filters",
+          "clearAll": "[EL] Clear All",
+          "description": "[EL] Filter and refine your crosstab data",
+          "quickFilters": "[EL] Quick Filters",
+          "valueRange": "[EL] Value Range: {min}% - {max}%",
+          "category": "[EL] Category",
+          "allCategories": "[EL] All Categories",
+          "activeFilters": "[EL] Active filters"
+        },
+        "tabs": {
+          "filters": "[EL] Filters",
+          "audiences": "[EL] Audiences",
+          "metrics": "[EL] Metrics"
+        },
+        "audiences": {
+          "selectAudiences": "[EL] Select Audiences"
+        },
+        "metrics": {
+          "selectMetrics": "[EL] Select Metrics"
+        },
+        "selection": {
+          "ofSelected": "[EL] {selected} of {total} selected"
+        },
+        "export": {
+          "asJson": "[EL] Export as JSON",
+          "asCsv": "[EL] Export as CSV",
+          "asHtml": "[EL] Export as HTML",
+          "asPdf": "[EL] Export as PDF",
+          "asExcel": "[EL] Export as Excel",
+          "asPowerPoint": "[EL] Export as PowerPoint"
+        },
+        "deleteDialog": {
+          "title": "[EL] Delete Crosstab",
+          "description": "[EL] Are you sure you want to delete \"{name}\"? This action cannot be undone."
+        },
+        "meta": {
+          "modified": "[EL] Modified {time}",
+          "views": "[EL] {count} views",
+          "createdBy": "[EL] Created by {name}"
+        },
+        "mainTabs": {
+          "data": "[EL] Data",
+          "activity": "[EL] Activity",
+          "comments": "[EL] Comments",
+          "history": "[EL] History"
+        },
+        "insights": {
+          "title": "[EL] AI-Generated Insights",
+          "topPerformer": "[EL] Top Performer",
+          "topPerformerDesc": "[EL] leads in most metrics with an average of {average}%.",
+          "noData": "[EL] No data available",
+          "biggestGap": "[EL] Biggest Gap",
+          "biggestGapDesc": "[EL] The largest variance between audiences is observed in the data, indicating significant segmentation opportunities.",
+          "trending": "[EL] Trending",
+          "trendingDesc": "[EL] {metrics} metrics currently displayed after applying {filters} filters.",
+          "noFilters": "[EL] no"
+        },
+        "activity": {
+          "title": "[EL] Activity Log",
+          "description": "[EL] Recent activity on this crosstab"
+        },
+        "shareDialog": {
+          "title": "[EL] Share Crosstab",
+          "description": "[EL] Share this crosstab with team members or external collaborators.",
+          "emailLabel": "[EL] Email address",
+          "emailPlaceholder": "[EL] email@example.com",
+          "role": "[EL] Role",
+          "roles": {
+            "viewer": "[EL] Viewer",
+            "editor": "[EL] Editor",
+            "admin": "[EL] Admin"
+          },
+          "shareLink": "[EL] Share link"
+        },
+        "scheduleDialog": {
+          "title": "[EL] Schedule Report",
+          "description": "[EL] Set up automatic email delivery of this crosstab report.",
+          "recipients": "[EL] Recipients",
+          "recipientsPlaceholder": "[EL] email@example.com, team@example.com",
+          "frequency": "[EL] Frequency",
+          "frequencies": {
+            "daily": "[EL] Daily",
+            "weekly": "[EL] Weekly",
+            "monthly": "[EL] Monthly"
+          },
+          "format": "[EL] Format"
+        }
+      }
+    },
+    "insights": {
+      "title": "[EL] Insights",
+      "description": "[EL] AI-generated insights from your agent runs",
+      "searchPlaceholder": "[EL] Search insights...",
+      "filterByType": "[EL] Filter by type",
+      "loading": "[EL] Loading...",
+      "showing": "[EL] Showing {shown} of {total} insights",
+      "types": {
+        "all": "[EL] All Types",
+        "audience": "[EL] Audience",
+        "trend": "[EL] Trend",
+        "competitive": "[EL] Competitive",
+        "analysis": "[EL] Analysis"
+      },
+      "empty": {
+        "title": "[EL] No insights yet",
+        "description": "[EL] Run agents to generate insights. Insights are automatically created when agents analyze your data.",
+        "goToPlayground": "[EL] Go to Playground"
+      },
+      "badges": {
+        "new": "[EL] New"
+      },
+      "viaAgent": "[EL] via {name}",
+      "detail": {
+        "backToInsights": "[EL] Back to Insights",
+        "notFound": {
+          "title": "[EL] Insight not found",
+          "description": "[EL] This insight may have been deleted or you don't have access to it."
+        },
+        "viewAllInsights": "[EL] View All Insights",
+        "confidence": "[EL] {percent}% confidence",
+        "viaAgent": "[EL] via {name}",
+        "actions": {
+          "copy": "[EL] Copy",
+          "copied": "[EL] Copied",
+          "share": "[EL] Share",
+          "export": "[EL] Export"
+        },
+        "detailsTitle": "[EL] Insight Details",
+        "detailsDescription": "[EL] Raw data and findings from this insight",
+        "exploreMore": {
+          "title": "[EL] Want to explore more?",
+          "description": "[EL] Run more queries in the playground to generate additional insights.",
+          "openPlayground": "[EL] Open Playground"
+        }
+      }
+    },
+    "integrations": {
+      "connectors": {
+        "title": "[EL] Data Connectors",
+        "description": "[EL] Connect external data sources to enrich your insights",
+        "addConnector": "[EL] Add Connector",
+        "searchPlaceholder": "[EL] Search connectors...",
+        "stats": {
+          "totalConnectors": "[EL] Total Connectors",
+          "active": "[EL] Active",
+          "withErrors": "[EL] With Errors",
+          "dataSources": "[EL] Data Sources"
+        },
+        "tabs": {
+          "configured": "[EL] Configured",
+          "available": "[EL] Available"
+        },
+        "filters": {
+          "allTypes": "[EL] All types"
+        },
+        "empty": {
+          "title": "[EL] No connectors configured",
+          "description": "[EL] Connect your first data source to get started"
+        },
+        "pagination": {
+          "previous": "[EL] Previous",
+          "next": "[EL] Next",
+          "pageOf": "[EL] Page {page} of {total}"
+        },
+        "toast": {
+          "syncStarted": "[EL] Sync started",
+          "syncFailed": "[EL] Failed to start sync",
+          "connectorEnabled": "[EL] Connector enabled",
+          "connectorDisabled": "[EL] Connector disabled",
+          "updateFailed": "[EL] Failed to update connector",
+          "connectorDeleted": "[EL] Connector deleted",
+          "deleteFailed": "[EL] Failed to delete connector",
+          "testFailed": "[EL] Failed to test connection"
+        },
+        "new": {
+          "title": "[EL] Add Data Connector",
+          "description": "[EL] Connect a new data source to your organization"
+        },
+        "detail": {
+          "backToConnectors": "[EL] Back to Connectors",
+          "notFound": "[EL] Connector not found",
+          "actions": {
+            "test": "[EL] Test",
+            "syncNow": "[EL] Sync Now",
+            "delete": "[EL] Delete",
+            "cancel": "[EL] Cancel",
+            "deleting": "[EL] Deleting..."
+          },
+          "status": {
+            "completed": "[EL] Last sync successful",
+            "running": "[EL] Syncing...",
+            "pending": "[EL] Sync pending",
+            "failed": "[EL] Last sync failed",
+            "cancelled": "[EL] Sync cancelled",
+            "never": "[EL] Never synced"
+          },
+          "cards": {
+            "status": "[EL] Status",
+            "active": "[EL] Active",
+            "paused": "[EL] Paused",
+            "totalSyncs": "[EL] Total Syncs",
+            "errorCount": "[EL] Error Count"
+          },
+          "tabs": {
+            "overview": "[EL] Overview",
+            "configuration": "[EL] Configuration",
+            "syncHistory": "[EL] Sync History"
+          },
+          "overview": {
+            "details": "[EL] Details",
+            "description": "[EL] Description",
+            "provider": "[EL] Provider",
+            "type": "[EL] Type",
+            "syncSchedule": "[EL] Sync Schedule",
+            "manualOnly": "[EL] Manual only",
+            "created": "[EL] Created",
+            "recentSyncs": "[EL] Recent Syncs",
+            "lastSyncs": "[EL] Last {count} sync operations",
+            "noSyncHistory": "[EL] No sync history yet"
+          },
+          "dangerZone": {
+            "title": "[EL] Danger Zone",
+            "deleteConnector": "[EL] Delete this connector",
+            "deleteWarning": "[EL] This action cannot be undone. All sync history will be deleted."
+          },
+          "history": {
+            "title": "[EL] Sync History",
+            "description": "[EL] Complete history of data synchronization operations"
+          },
+          "deleteDialog": {
+            "title": "[EL] Delete Connector",
+            "description": "[EL] Are you sure you want to delete \"{name}\"? This action cannot be undone. All sync history will be permanently deleted."
+          },
+          "toast": {
+            "syncStarted": "[EL] Sync started",
+            "syncFailed": "[EL] Failed to start sync",
+            "testFailed": "[EL] Test failed",
+            "connectorDeleted": "[EL] Connector deleted",
+            "deleteFailed": "[EL] Failed to delete connector",
+            "connectorUpdated": "[EL] Connector updated"
+          }
+        }
+      }
+    },
+    "memory": {
+      "title": "[EL] Memory & Context",
+      "description": "[EL] Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "[EL] Settings",
+        "clearAll": "[EL] Clear All"
       }
     }
   },
@@ -741,7 +1845,22 @@
   "dashboard": {
     "title": "Ταμπλό",
     "welcome": "Καλώς ήρθες πίσω",
-    "overview": "Επισκόπηση",
+    "overview": {
+      "activeAgents": "[EL] Active Agents",
+      "workflowsRun": "[EL] Workflows Run",
+      "insightsGenerated": "[EL] Insights Generated",
+      "avgRunTime": "[EL] Avg. Run Time",
+      "thisWeekChange": "[EL] +{count} this week",
+      "fromLastMonthPercent": "[EL] +{percent}% from last month",
+      "fasterPercent": "[EL] -{percent}% faster",
+      "active": "[EL] Active",
+      "noneActive": "[EL] None active",
+      "last24Hours": "[EL] Last 24 hours",
+      "noRunsYet": "[EL] No runs yet",
+      "noInsightsYet": "[EL] No insights yet",
+      "perWorkflow": "[EL] Per workflow",
+      "notAvailable": "[EL] N/A"
+    },
     "recentActivity": "Πρόσφατη Δραστηριότητα",
     "quickActions": {
       "title": "Γρήγορες Ενέργειες",
@@ -871,7 +1990,25 @@
       "createReport": "Δημιουργία αναφοράς",
       "published": "δημοσιευμένο",
       "generating": "δημιουργώντας",
-      "draft": "προσχέδιο"
+      "draft": "προσχέδιο",
+      "page": {
+        "tabs": {
+          "allReports": "[EL] All Reports",
+          "templates": "[EL] Templates",
+          "scheduled": "[EL] Scheduled",
+          "sharedWithMe": "[EL] Shared with Me"
+        },
+        "scheduled": {
+          "nextRun": "[EL] Next: {date}",
+          "recipientsCount": "[EL] {count} recipient(s)"
+        },
+        "shared": {
+          "sharedBy": "[EL] Shared by {name} on {date}",
+          "canView": "[EL] Can view",
+          "canEdit": "[EL] Can edit",
+          "canComment": "[EL] Can comment"
+        }
+      }
     },
     "projects": {
       "activeProjects": "Ενεργά Έργα",
@@ -1035,7 +2172,60 @@
         "title": "Ροές εργασιών",
         "description": "Δημιουργήστε και διαχειριστείτε τους αυτοματοποιημένους αγωγούς έρευνας.",
         "newWorkflow": "Νέα ροή εργασίας",
-        "searchPlaceholder": "Ροές εργασιών αναζήτησης..."
+        "searchPlaceholder": "Ροές εργασιών αναζήτησης...",
+        "edit": {
+          "title": "[EL] Edit Workflow",
+          "description": "[EL] Modify workflow settings and configuration",
+          "newWorkflowName": "[EL] New Workflow",
+          "basicInfo": {
+            "title": "[EL] Basic Information",
+            "description": "[EL] Update the workflow name and description",
+            "workflowName": "[EL] Workflow Name",
+            "workflowNamePlaceholder": "[EL] Enter workflow name",
+            "descriptionPlaceholder": "[EL] Describe what this workflow does"
+          },
+          "schedule": {
+            "title": "[EL] Schedule",
+            "description": "[EL] Configure when this workflow runs",
+            "runFrequency": "[EL] Run Frequency",
+            "selectSchedule": "[EL] Select schedule",
+            "selectStatus": "[EL] Select status",
+            "frequencies": {
+              "hourly": "[EL] Hourly",
+              "daily": "[EL] Daily",
+              "weekly": "[EL] Weekly",
+              "monthly": "[EL] Monthly",
+              "onDemand": "[EL] On-demand"
+            },
+            "statuses": {
+              "active": "[EL] Active",
+              "paused": "[EL] Paused",
+              "scheduled": "[EL] Scheduled"
+            }
+          },
+          "errorHandling": {
+            "title": "[EL] Error Handling",
+            "description": "[EL] Configure retry behavior for failed runs",
+            "autoRetry": "[EL] Auto-retry on failure",
+            "autoRetryDescription": "[EL] Automatically retry the workflow if it fails",
+            "retryAttempts": "[EL] Retry Attempts",
+            "selectAttempts": "[EL] Select attempts",
+            "attempts": {
+              "one": "[EL] 1 attempt",
+              "two": "[EL] 2 attempts",
+              "three": "[EL] 3 attempts",
+              "five": "[EL] 5 attempts"
+            }
+          },
+          "notifications": {
+            "title": "[EL] Notifications",
+            "description": "[EL] Configure how you receive updates about this workflow",
+            "email": "[EL] Email notifications",
+            "emailDescription": "[EL] Receive email updates on completion or failure",
+            "slack": "[EL] Slack notifications",
+            "slackDescription": "[EL] Send notifications to your Slack channel"
+          }
+        }
       },
       "audiences": {
         "title": "Κοινό",
@@ -1083,55 +2273,235 @@
         "unarchive": "Κατάργηση αρχειοθέτησης",
         "workflows": "ροές εργασιών",
         "reports": "εκθέσεις",
-        "agents": "πράκτορες"
+        "agents": "πράκτορες",
+        "detail": {
+          "defaultDescription": "[EL] Project description",
+          "projectSettings": "[EL] Project Settings",
+          "archiveProject": "[EL] Archive Project",
+          "deleteProject": "[EL] Delete Project",
+          "new": "[EL] New",
+          "stats": {
+            "teamMembers": "[EL] Team Members",
+            "workflows": "[EL] Workflows",
+            "running": "[EL] {count} running",
+            "reports": "[EL] Reports",
+            "generatedOutputs": "[EL] Generated outputs",
+            "agentsUsed": "[EL] Agents Used",
+            "totalRuns": "[EL] {count} total runs"
+          },
+          "tabs": {
+            "overview": "[EL] Overview",
+            "workflows": "[EL] Workflows",
+            "reports": "[EL] Reports",
+            "agents": "[EL] Agents",
+            "team": "[EL] Team"
+          },
+          "overview": {
+            "recentWorkflows": "[EL] Recent Workflows",
+            "recentReports": "[EL] Recent Reports"
+          },
+          "workflowsTab": {
+            "title": "[EL] Project Workflows",
+            "newWorkflow": "[EL] New Workflow",
+            "lastRun": "[EL] Last run",
+            "run": "[EL] Run"
+          },
+          "reportsTab": {
+            "title": "[EL] Project Reports",
+            "newReport": "[EL] New Report",
+            "created": "[EL] Created"
+          },
+          "agentsTab": {
+            "title": "[EL] Agents Used",
+            "addAgent": "[EL] Add Agent",
+            "runsInProject": "[EL] {count} runs in this project"
+          },
+          "teamTab": {
+            "title": "[EL] Team Members",
+            "addMember": "[EL] Add Member",
+            "remove": "[EL] Remove"
+          }
+        }
       }
     },
     "audiences": {
-      "edit": {
-        "title": "Επεξεργασία κοινού",
-        "description": "Ενημερώστε τη διαμόρφωση για αυτό το τμήμα κοινού",
-        "saving": "Οικονομία...",
-        "saveChanges": "Αποθήκευση αλλαγών",
-        "notFound": "Το κοινό δεν βρέθηκε",
-        "notFoundDescription": "Το κοινό που προσπαθείτε να επεξεργαστείτε δεν υπάρχει",
-        "notFoundDetailedDescription": "Το κοινό που αναζητάτε δεν υπάρχει ή έχει διαγραφεί.",
-        "backToAudiences": "Επιστροφή στο Κοινό",
+      "pageTracker": "[EL] Audiences List",
+      "title": "[EL] Audiences",
+      "description": "[EL] Build and analyze custom consumer segments",
+      "aiBuilder": "[EL] AI Builder",
+      "newAudience": "[EL] New Audience",
+      "totalAudiences": "[EL] Total Audiences",
+      "avgReach": "[EL] Avg. Reach",
+      "markets": "[EL] Markets",
+      "usedThisWeek": "[EL] Used This Week",
+      "searchPlaceholder": "[EL] Search audiences...",
+      "allAudiences": "[EL] All Audiences",
+      "recentlyUsed": "[EL] Recently Used",
+      "favorites": "[EL] Favorites",
+      "marketplace": "[EL] Marketplace",
+      "aiAudienceBuilder": "[EL] AI Audience Builder",
+      "aiBuilderDescription": "[EL] Describe your target audience in natural language and let AI generate the criteria for you.",
+      "compareAudiences": "[EL] Compare Audiences",
+      "compareDescription": "[EL] Compare demographic and behavioral attributes between audiences.",
+      "emptyState": {
+        "title": "[EL] No audiences yet",
+        "description": "[EL] Create your first audience to get started",
+        "action": "[EL] New Audience"
+      },
+      "grid": {
+        "marketsCount": "[EL] {count} markets",
+        "used": "[EL] Used {time}"
+      },
+      "new": {
+        "title": "[EL] Build New Audience",
+        "description": "[EL] Define your target segment using natural language or attributes",
         "basicInfo": {
-          "title": "Βασικές Πληροφορίες",
-          "description": "Ορίστε το όνομα και την περιγραφή για αυτό το κοινό",
-          "audienceName": "Όνομα κοινού",
-          "audienceNamePlaceholder": "π.χ., Eco-Conscious Millennials",
-          "descriptionPlaceholder": "Σύντομη περιγραφή αυτού του τμήματος κοινού"
+          "audienceName": "[EL] Audience Name",
+          "audienceNamePlaceholder": "[EL] e.g., Eco-Conscious Millennials",
+          "description": "[EL] Description",
+          "descriptionPlaceholder": "[EL] Brief description of this audience segment"
         },
         "aiQuery": {
-          "title": "Ερώτημα AI-Powered",
-          "description": "Περιγράψτε το κοινό σας σε φυσική γλώσσα",
-          "placeholder": "π.χ., Δείξε μου millennials που νοιάζονται για τη βιωσιμότητα, ζουν σε αστικές περιοχές και ψωνίζουν σε οικολογικές επωνυμίες",
-          "generateButton": "Δημιουργία χαρακτηριστικών (προσεχώς)"
+          "title": "[EL] AI-Powered Query",
+          "description": "[EL] Describe your audience in natural language, and we'll build the query for you",
+          "placeholder": "[EL] e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands",
+          "generateButton": "[EL] Generate Attributes"
         },
         "attributes": {
-          "title": "Χαρακτηριστικά στόχευσης",
-          "description": "Καθορίστε συγκεκριμένα κριτήρια για αυτό το κοινό",
-          "addAttribute": "Προσθήκη χαρακτηριστικού",
-          "noAttributes": "Δεν έχουν καθοριστεί ακόμη χαρακτηριστικά",
-          "noAttributesHint": "Προσθέστε χαρακτηριστικά για να καθορίσετε τα κριτήρια κοινού σας",
-          "valuePlaceholder": "Αξία"
+          "title": "[EL] Attributes",
+          "add": "[EL] Add",
+          "age": "[EL] Age",
+          "gender": "[EL] Gender",
+          "income": "[EL] Income",
+          "interests": "[EL] Interests",
+          "is": "[EL] is",
+          "between": "[EL] between",
+          "contains": "[EL] contains"
         },
         "markets": {
-          "title": "Αγορές",
-          "description": "Επιλέξτε τις αγορές για αυτό το κοινό",
-          "selectAtLeastOne": "Επιλέξτε τουλάχιστον μία αγορά"
+          "title": "[EL] Markets",
+          "global": "[EL] Global",
+          "us": "[EL] United States",
+          "uk": "[EL] United Kingdom",
+          "de": "[EL] Germany",
+          "jp": "[EL] Japan"
         },
         "estimatedReach": {
-          "title": "Εκτιμώμενη προσέγγιση χρηστών",
-          "tbd": "TBD",
-          "matchCriteria": "οι καταναλωτές πληρούν αυτά τα κριτήρια"
+          "title": "[EL] Estimated Reach",
+          "matchCriteria": "[EL] consumers match these criteria"
         },
-        "discardDialog": {
-          "title": "Απόρριψη αλλαγών;",
-          "description": "Έχετε μη αποθηκευμένες αλλαγές. Είστε σίγουροι ότι θέλετε να φύγετε; Οι αλλαγές σας θα χαθούν.",
-          "keepEditing": "Συνεχίστε την επεξεργασία",
-          "discardChanges": "Απόρριψη αλλαγών"
+        "actions": {
+          "save": "[EL] Save Audience",
+          "saving": "[EL] Saving...",
+          "cancel": "[EL] Cancel"
+        },
+        "errors": {
+          "nameRequired": "[EL] Please enter an audience name",
+          "createFailed": "[EL] Failed to create audience. Please try again."
+        }
+      },
+      "detail": {
+        "pageTracker": "[EL] Audience Detail",
+        "notFound": "[EL] Audience Not Found",
+        "notFoundDescription": "[EL] The requested audience could not be found",
+        "notFoundDetailedDescription": "[EL] The audience you're looking for doesn't exist or has been deleted.",
+        "backToAudiences": "[EL] Back to Audiences",
+        "people": "[EL] people",
+        "addToFavorites": "[EL] Add to favorites",
+        "removeFromFavorites": "[EL] Remove from favorites",
+        "used": "[EL] Used {time}",
+        "tabs": {
+          "overview": "[EL] Overview",
+          "persona": "[EL] Persona",
+          "dayInLife": "[EL] Day in the Life",
+          "habits": "[EL] Habits & Behaviors",
+          "media": "[EL] Media Consumption",
+          "brands": "[EL] Brand Affinities",
+          "comments": "[EL] Comments",
+          "activity": "[EL] Activity",
+          "history": "[EL] History"
+        },
+        "actions": {
+          "explore": "[EL] Explore",
+          "share": "[EL] Share",
+          "export": "[EL] Export",
+          "edit": "[EL] Edit",
+          "autoRefresh": "[EL] Auto-refresh",
+          "pauseAutoRefresh": "[EL] Pause auto-refresh",
+          "enableAutoRefresh": "[EL] Enable auto-refresh",
+          "duplicate": "[EL] Duplicate",
+          "createLookalike": "[EL] Create Lookalike",
+          "addToCrosstab": "[EL] Add to Crosstab",
+          "addToDashboard": "[EL] Add to Dashboard",
+          "scheduleReport": "[EL] Schedule Report",
+          "copyLink": "[EL] Copy Link",
+          "copied": "[EL] Copied!",
+          "delete": "[EL] Delete"
+        },
+        "export": {
+          "asJson": "[EL] Export as JSON",
+          "asCsv": "[EL] Export as CSV",
+          "asPdf": "[EL] Export as PDF",
+          "toPowerPoint": "[EL] Export to PowerPoint"
+        },
+        "overview": {
+          "demographics": "[EL] Demographics",
+          "keyBehaviors": "[EL] Key Behaviors",
+          "interests": "[EL] Interests",
+          "audienceSummary": "[EL] Audience Summary",
+          "size": "[EL] Size",
+          "markets": "[EL] Markets",
+          "quickActions": "[EL] Quick Actions",
+          "createChart": "[EL] Create Chart",
+          "compareAudiences": "[EL] Compare Audiences",
+          "exportProfile": "[EL] Export Profile",
+          "copyLink": "[EL] Copy Link"
+        },
+        "activity": {
+          "title": "[EL] Activity Log",
+          "description": "[EL] Recent activity on this audience",
+          "viewed": "[EL] viewed",
+          "exported": "[EL] exported",
+          "edited": "[EL] edited",
+          "shared": "[EL] shared",
+          "created": "[EL] created",
+          "createdChart": "[EL] created chart",
+          "addedToCrosstab": "[EL] added to crosstab"
+        },
+        "share": {
+          "title": "[EL] Share Audience",
+          "description": "[EL] Share this audience with team members or external collaborators.",
+          "emailLabel": "[EL] Email address",
+          "emailPlaceholder": "[EL] email@example.com",
+          "roleLabel": "[EL] Role",
+          "viewer": "[EL] Viewer",
+          "editor": "[EL] Editor",
+          "admin": "[EL] Admin",
+          "shareLink": "[EL] Share link",
+          "cancel": "[EL] Cancel",
+          "share": "[EL] Share"
+        },
+        "schedule": {
+          "title": "[EL] Schedule Report",
+          "description": "[EL] Set up automatic email delivery of this audience report.",
+          "recipients": "[EL] Recipients",
+          "recipientsPlaceholder": "[EL] email@example.com, team@example.com",
+          "frequency": "[EL] Frequency",
+          "daily": "[EL] Daily",
+          "weekly": "[EL] Weekly",
+          "monthly": "[EL] Monthly",
+          "format": "[EL] Format",
+          "pdf": "[EL] PDF",
+          "csv": "[EL] CSV",
+          "json": "[EL] JSON",
+          "cancel": "[EL] Cancel",
+          "schedule": "[EL] Schedule"
+        },
+        "delete": {
+          "title": "[EL] Delete Audience",
+          "description": "[EL] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[EL] Cancel",
+          "delete": "[EL] Delete"
         }
       }
     },
@@ -1273,80 +2643,128 @@
       }
     },
     "charts": {
-      "edit": {
-        "title": "Επεξεργασία γραφήματος",
-        "description": "Τροποποιήστε τη διαμόρφωση και τις ρυθμίσεις του γραφήματος",
-        "saving": "Οικονομία...",
-        "saveChanges": "Αποθήκευση αλλαγών",
-        "backToCharts": "Επιστροφή στα γραφήματα",
-        "preview": {
-          "title": "Πρεμιέρα",
-          "description": "Πώς θα φαίνεται το γράφημά σας"
-        },
-        "unsavedChanges": "Μη αποθηκευμένες αλλαγές",
-        "authRequired": "Απαιτείται έλεγχος ταυτότητας",
-        "pleaseSignIn": "Συνδεθείτε για να επεξεργαστείτε αυτό το γράφημα.",
-        "signIn": "Είσοδος",
+      "pageTracker": "[EL] Charts List",
+      "title": "[EL] Charts",
+      "description": "[EL] Visualize consumer insights with interactive, award-winning charts",
+      "templates": "[EL] Templates",
+      "compare": "[EL] Compare",
+      "newChart": "[EL] New Chart",
+      "totalCharts": "[EL] Total Charts",
+      "totalViews": "[EL] Total Views",
+      "shares": "[EL] Shares",
+      "exports": "[EL] Exports",
+      "searchPlaceholder": "[EL] Search charts...",
+      "allCategory": "[EL] All",
+      "allCharts": "[EL] All Charts",
+      "recent": "[EL] Recent",
+      "mostViewed": "[EL] Most Viewed",
+      "favorites": "[EL] Favorites",
+      "emptyState": {
+        "title": "[EL] No charts found",
+        "description": "[EL] Create your first chart or try a different search",
+        "action": "[EL] Create Chart"
+      },
+      "comparison": {
+        "title": "[EL] Brand Health Comparison",
+        "description": "[EL] Compare key brand metrics against previous period and industry benchmarks"
+      },
+      "new": {
+        "title": "[EL] Create New Chart",
+        "description": "[EL] Choose a chart type and configure your visualization",
         "basicInfo": {
-          "title": "Βασικές Πληροφορίες",
-          "description": "Ορίστε το όνομα και την περιγραφή για το γράφημά σας",
-          "chartName": "Όνομα γραφήματος",
-          "chartNamePlaceholder": "Εισαγάγετε το όνομα του γραφήματος",
-          "descriptionPlaceholder": "Περιγράψτε τι δείχνει αυτό το διάγραμμα",
-          "selectStatus": "Επιλέξτε κατάσταση",
-          "dataSource": "Πηγή δεδομένων",
-          "selectDataSource": "Επιλέξτε πηγή δεδομένων"
+          "title": "[EL] Basic Information",
+          "chartName": "[EL] Chart Name",
+          "chartNamePlaceholder": "[EL] e.g., Social Media Usage by Age Group",
+          "description": "[EL] Description",
+          "descriptionPlaceholder": "[EL] Describe what this chart shows"
         },
         "chartType": {
-          "title": "Τύπος γραφήματος",
-          "description": "Επιλέξτε τον τύπο οπτικοποίησης για τα δεδομένα σας"
+          "title": "[EL] Chart Type",
+          "description": "[EL] Select the visualization type"
         },
         "dataConfig": {
-          "title": "Διαμόρφωση δεδομένων",
-          "description": "Διαμορφώστε τα δεδομένα για το γράφημά σας",
-          "targetAudience": "Κοινό-στόχος",
-          "selectAudience": "Επιλέξτε κοινό",
-          "timePeriod": "Χρονική περίοδος",
-          "selectTimePeriod": "Επιλέξτε χρονική περίοδο",
-          "primaryMetric": "Κύρια Μετρική",
-          "primaryMetricPlaceholder": "π.χ., χρήση μέσων κοινωνικής δικτύωσης (%)",
-          "dimensions": "Διαστάσεις",
-          "dimensionsHint": "Κατηγορίες για την ομαδοποίηση των δεδομένων σας (π.χ. Ηλικιακή Ομάδα, Περιοχή)",
-          "addDimension": "Προσθέστε μια διάσταση",
-          "measures": "Μέτρα",
-          "measuresHint": "Αριθμητικές τιμές προς εμφάνιση (π.χ. Αρίθμηση, Ποσοστό)",
-          "addMeasure": "Προσθέστε ένα μέτρο",
-          "filters": "Φίλτρα",
-          "filtersHint": "Προσθέστε συνθήκες για να φιλτράρετε τα δεδομένα σας",
-          "addFilter": "Προσθήκη φίλτρου",
-          "field": "Πεδίο",
-          "value": "Αξία",
-          "operators": {
-            "equals": "Ίσο",
-            "notEquals": "Όχι ίσοι",
-            "contains": "Περιέχει",
-            "greaterThan": "Μεγαλύτερο από",
-            "lessThan": "Λιγότερο από"
-          }
+          "title": "[EL] Data Configuration",
+          "targetAudience": "[EL] Target Audience",
+          "selectAudience": "[EL] Select audience",
+          "timePeriod": "[EL] Time Period",
+          "selectTimePeriod": "[EL] Select time period",
+          "dataSource": "[EL] Data Source",
+          "selectDataSource": "[EL] Select data source"
         },
-        "displayOptions": {
-          "title": "Επιλογές εμφάνισης",
-          "description": "Προσαρμόστε την εμφάνιση γραφήματος",
-          "showLegend": "Εμφάνιση Θρύλου",
-          "showGrid": "Εμφάνιση πλέγματος",
-          "showTooltip": "Εμφάνιση επεξήγησης εργαλείου"
+        "preview": {
+          "title": "[EL] Preview",
+          "description": "[EL] How your chart will look"
         },
-        "chartInfo": {
-          "title": "Πληροφορίες γραφήματος",
-          "id": "ταυτότητα",
-          "created": "Δημιουργήθηκε",
-          "lastUpdated": "Τελευταία Ενημέρωση"
+        "actions": {
+          "save": "[EL] Create Chart",
+          "saving": "[EL] Creating...",
+          "cancel": "[EL] Cancel"
+        }
+      },
+      "detail": {
+        "pageTracker": "[EL] Chart Detail",
+        "notFound": "[EL] Chart Not Found",
+        "notFoundDescription": "[EL] The chart you're looking for doesn't exist or has been deleted.",
+        "backToCharts": "[EL] Back to Charts",
+        "views": "[EL] views",
+        "shares": "[EL] shares",
+        "addToFavorites": "[EL] Add to favorites",
+        "removeFromFavorites": "[EL] Remove from favorites",
+        "tabs": {
+          "chart": "[EL] Chart",
+          "data": "[EL] Data",
+          "settings": "[EL] Settings",
+          "comments": "[EL] Comments",
+          "activity": "[EL] Activity",
+          "history": "[EL] History"
         },
-        "discardDialog": {
-          "title": "Απόρριψη αλλαγών;",
-          "description": "Έχετε μη αποθηκευμένες αλλαγές. Είστε σίγουροι ότι θέλετε να φύγετε; Οι αλλαγές σας θα χαθούν.",
-          "keepEditing": "Συνεχίστε την επεξεργασία",
-          "discardChanges": "Απόρριψη αλλαγών"
+        "actions": {
+          "share": "[EL] Share",
+          "export": "[EL] Export",
+          "edit": "[EL] Edit",
+          "fullscreen": "[EL] Fullscreen",
+          "duplicate": "[EL] Duplicate",
+          "addToDashboard": "[EL] Add to Dashboard",
+          "scheduleReport": "[EL] Schedule Report",
+          "copyLink": "[EL] Copy Link",
+          "copied": "[EL] Copied!",
+          "delete": "[EL] Delete"
+        },
+        "export": {
+          "asJson": "[EL] Export as JSON",
+          "asCsv": "[EL] Export as CSV",
+          "asPng": "[EL] Export as PNG",
+          "asSvg": "[EL] Export as SVG",
+          "toPowerPoint": "[EL] Export to PowerPoint"
+        },
+        "info": {
+          "chartInfo": "[EL] Chart Info",
+          "type": "[EL] Type",
+          "dataSource": "[EL] Data Source",
+          "audience": "[EL] Audience",
+          "timePeriod": "[EL] Time Period",
+          "created": "[EL] Created",
+          "lastUpdated": "[EL] Last Updated"
+        },
+        "share": {
+          "title": "[EL] Share Chart",
+          "description": "[EL] Share this chart with team members or external collaborators.",
+          "emailLabel": "[EL] Email address",
+          "emailPlaceholder": "[EL] email@example.com",
+          "roleLabel": "[EL] Role",
+          "viewer": "[EL] Viewer",
+          "editor": "[EL] Editor",
+          "admin": "[EL] Admin",
+          "shareLink": "[EL] Share link",
+          "embedCode": "[EL] Embed code",
+          "cancel": "[EL] Cancel",
+          "share": "[EL] Share"
+        },
+        "delete": {
+          "title": "[EL] Delete Chart",
+          "description": "[EL] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[EL] Cancel",
+          "delete": "[EL] Delete"
         }
       }
     },
@@ -1425,7 +2843,326 @@
           "minAwareness": "Ελάχιστη ευαισθητοποίηση (%)",
           "minNPS": "Ελάχιστη βαθμολογία NPS"
         }
+      },
+      "pageTracker": "[EL] Brand Tracking",
+      "title": "[EL] Brand Tracking",
+      "description": "[EL] Monitor and analyze brand health metrics",
+      "tabs": {
+        "allBrands": "[EL] All Brands",
+        "active": "[EL] Active",
+        "paused": "[EL] Paused",
+        "draft": "[EL] Draft"
+      },
+      "new": {
+        "title": "[EL] New Brand Tracking",
+        "description": "[EL] Set up tracking for your brand and monitor its health over time.",
+        "brandInfo": {
+          "title": "[EL] Brand Information",
+          "description": "[EL] Provide details about the brand you want to track",
+          "brandNameLabel": "[EL] Brand Name *",
+          "brandNamePlaceholder": "[EL] e.g., Nike, Apple, Coca-Cola",
+          "descriptionLabel": "[EL] Description",
+          "descriptionPlaceholder": "[EL] Brief description of what you want to track...",
+          "industryLabel": "[EL] Industry",
+          "industryPlaceholder": "[EL] e.g., Sportswear, Technology, Beverages",
+          "frequencyLabel": "[EL] Tracking Frequency"
+        },
+        "frequency": {
+          "daily": "[EL] Daily",
+          "weekly": "[EL] Weekly",
+          "monthly": "[EL] Monthly",
+          "manual": "[EL] Manual Only"
+        },
+        "competitors": {
+          "label": "[EL] Competitors",
+          "placeholder": "[EL] Add competitor name..."
+        },
+        "metrics": {
+          "title": "[EL] Metrics to Track",
+          "awareness": "[EL] Brand Awareness",
+          "consideration": "[EL] Consideration",
+          "preference": "[EL] Preference",
+          "loyalty": "[EL] Loyalty",
+          "nps": "[EL] Net Promoter Score (NPS)",
+          "sentiment": "[EL] Sentiment Analysis"
+        },
+        "actions": {
+          "cancel": "[EL] Cancel",
+          "create": "[EL] Create Brand Tracking"
+        }
+      },
+      "detail": {
+        "pageTracker": "[EL] Brand Tracking Detail",
+        "title": "[EL] Brand Health Dashboard",
+        "notFound": "[EL] Brand Study Not Found",
+        "notFoundDescription": "[EL] The brand tracking study you're looking for doesn't exist or has been deleted.",
+        "backToBrandTracking": "[EL] Back to Brand Tracking",
+        "loading": "[EL] Loading...",
+        "people": "[EL] people",
+        "timePeriods": {
+          "1m": "[EL] 1 Month",
+          "3m": "[EL] 3 Months",
+          "6m": "[EL] 6 Months",
+          "1y": "[EL] 1 Year",
+          "all": "[EL] All Time"
+        },
+        "tabs": {
+          "overview": "[EL] Overview",
+          "trends": "[EL] Trends",
+          "competitors": "[EL] Competitors",
+          "insights": "[EL] Insights",
+          "comments": "[EL] Comments",
+          "activity": "[EL] Activity",
+          "history": "[EL] History"
+        },
+        "actions": {
+          "explore": "[EL] Explore",
+          "share": "[EL] Share",
+          "export": "[EL] Export",
+          "edit": "[EL] Edit",
+          "refresh": "[EL] Refresh",
+          "autoRefresh": "[EL] Auto-refresh",
+          "pauseAutoRefresh": "[EL] Pause auto-refresh",
+          "enableAutoRefresh": "[EL] Enable auto-refresh",
+          "duplicate": "[EL] Duplicate",
+          "copyLink": "[EL] Copy Link",
+          "copied": "[EL] Copied!",
+          "delete": "[EL] Delete",
+          "addToFavorites": "[EL] Add to favorites",
+          "removeFromFavorites": "[EL] Remove from favorites",
+          "scheduleReport": "[EL] Schedule Report"
+        },
+        "export": {
+          "asJson": "[EL] Export as JSON",
+          "asCsv": "[EL] Export as CSV",
+          "asPdf": "[EL] Export as PDF",
+          "toPowerPoint": "[EL] Export to PowerPoint"
+        },
+        "metrics": {
+          "awareness": "[EL] Awareness",
+          "consideration": "[EL] Consideration",
+          "preference": "[EL] Preference",
+          "loyalty": "[EL] Loyalty",
+          "nps": "[EL] NPS",
+          "sentiment": "[EL] Sentiment",
+          "marketShare": "[EL] Market Share",
+          "vsTarget": "[EL] vs target",
+          "trend": "[EL] trend"
+        },
+        "charts": {
+          "brandHealthTrend": "[EL] Brand Health Trend",
+          "competitorComparison": "[EL] Competitor Comparison",
+          "sentimentBreakdown": "[EL] Sentiment Breakdown",
+          "metricsOverTime": "[EL] Metrics Over Time"
+        },
+        "overview": {
+          "title": "[EL] Brand Overview",
+          "industry": "[EL] Industry",
+          "competitors": "[EL] Competitors",
+          "trackingFrequency": "[EL] Tracking Frequency",
+          "lastUpdated": "[EL] Last Updated",
+          "createdBy": "[EL] Created By",
+          "dateRange": "[EL] Date Range"
+        },
+        "insights": {
+          "title": "[EL] Key Insights",
+          "aiGenerated": "[EL] AI-Generated",
+          "noInsights": "[EL] No insights available yet",
+          "generateInsights": "[EL] Generate Insights"
+        },
+        "activity": {
+          "title": "[EL] Activity Log",
+          "description": "[EL] Recent activity on this brand study",
+          "viewed": "[EL] viewed",
+          "exported": "[EL] exported",
+          "edited": "[EL] edited",
+          "shared": "[EL] shared",
+          "created": "[EL] created"
+        },
+        "share": {
+          "title": "[EL] Share Brand Study",
+          "description": "[EL] Share this brand tracking study with team members or external collaborators.",
+          "emailLabel": "[EL] Email address",
+          "emailPlaceholder": "[EL] email@example.com",
+          "roleLabel": "[EL] Role",
+          "viewer": "[EL] Viewer",
+          "editor": "[EL] Editor",
+          "admin": "[EL] Admin",
+          "shareLink": "[EL] Share link",
+          "cancel": "[EL] Cancel",
+          "share": "[EL] Share"
+        },
+        "schedule": {
+          "title": "[EL] Schedule Report",
+          "description": "[EL] Set up automatic email delivery of this brand tracking report.",
+          "recipients": "[EL] Recipients",
+          "recipientsPlaceholder": "[EL] email@example.com, team@example.com",
+          "frequency": "[EL] Frequency",
+          "daily": "[EL] Daily",
+          "weekly": "[EL] Weekly",
+          "monthly": "[EL] Monthly",
+          "format": "[EL] Format",
+          "pdf": "[EL] PDF",
+          "csv": "[EL] CSV",
+          "json": "[EL] JSON",
+          "cancel": "[EL] Cancel",
+          "schedule": "[EL] Schedule"
+        },
+        "delete": {
+          "title": "[EL] Delete Brand Study",
+          "description": "[EL] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "cancel": "[EL] Cancel",
+          "delete": "[EL] Delete"
+        }
       }
+    },
+    "organizationSwitcher": {
+      "selectOrganization": "[EL] Select organization",
+      "searchPlaceholder": "[EL] Search organizations...",
+      "noOrganizationFound": "[EL] No organization found."
+    },
+    "usageStats": {
+      "weeklyActivity": "[EL] Weekly Activity",
+      "monthlyTrend": "[EL] Monthly Trend",
+      "workflows": "[EL] Workflows",
+      "insights": "[EL] Insights",
+      "days": {
+        "mon": "[EL] Mon",
+        "tue": "[EL] Tue",
+        "wed": "[EL] Wed",
+        "thu": "[EL] Thu",
+        "fri": "[EL] Fri",
+        "sat": "[EL] Sat",
+        "sun": "[EL] Sun"
+      },
+      "months": {
+        "jan": "[EL] Jan",
+        "feb": "[EL] Feb",
+        "mar": "[EL] Mar",
+        "apr": "[EL] Apr",
+        "may": "[EL] May",
+        "jun": "[EL] Jun",
+        "jul": "[EL] Jul",
+        "aug": "[EL] Aug",
+        "sep": "[EL] Sep",
+        "oct": "[EL] Oct",
+        "nov": "[EL] Nov",
+        "dec": "[EL] Dec"
+      }
+    },
+    "activeAgents": {
+      "title": "[EL] Active Agents",
+      "manage": "[EL] Manage",
+      "activeTasks": "[EL] {count} active tasks",
+      "idle": "[EL] Idle"
+    },
+    "builder": {
+      "untitledDashboard": "[EL] Untitled Dashboard",
+      "addWidget": "[EL] Add Widget",
+      "undoShortcut": "[EL] Undo (Ctrl+Z)",
+      "redoShortcut": "[EL] Redo (Ctrl+Y)",
+      "grid": "[EL] Grid",
+      "snap": "[EL] Snap",
+      "widgetsCount": "[EL] {count} widgets",
+      "exportFormat": "[EL] Export Format",
+      "export": {
+        "pdf": "[EL] PDF Document",
+        "png": "[EL] PNG Image",
+        "json": "[EL] JSON Config"
+      },
+      "duplicate": "[EL] Duplicate",
+      "fullscreen": "[EL] Fullscreen",
+      "lock": "[EL] Lock",
+      "unlock": "[EL] Unlock",
+      "hide": "[EL] Hide",
+      "chooseWidgetType": "[EL] Choose a widget type to add to your dashboard",
+      "editWidget": "[EL] Edit Widget",
+      "newWidget": "[EL] New {type}",
+      "enterTextContent": "[EL] Enter text content...",
+      "unknownWidgetType": "[EL] Unknown widget type",
+      "target": "[EL] Target",
+      "table": {
+        "name": "[EL] Name",
+        "value": "[EL] Value",
+        "change": "[EL] Change",
+        "item": "[EL] Item {number}"
+      },
+      "widgetTypes": {
+        "chart": "[EL] Chart",
+        "metric": "[EL] Metric",
+        "table": "[EL] Table",
+        "text": "[EL] Text",
+        "image": "[EL] Image",
+        "kpi": "[EL] KPI",
+        "kpiCard": "[EL] KPI Card"
+      },
+      "widgetDescriptions": {
+        "chart": "[EL] Visualize data with various chart types",
+        "kpi": "[EL] Display key performance indicators",
+        "metric": "[EL] Show a single metric value",
+        "table": "[EL] Display data in tabular format",
+        "text": "[EL] Add text content or notes",
+        "image": "[EL] Display an image or logo"
+      },
+      "tabs": {
+        "general": "[EL] General",
+        "data": "[EL] Data",
+        "style": "[EL] Style",
+        "advanced": "[EL] Advanced"
+      },
+      "fields": {
+        "title": "[EL] Title",
+        "subtitle": "[EL] Subtitle",
+        "chartType": "[EL] Chart Type",
+        "content": "[EL] Content",
+        "value": "[EL] Value",
+        "changePercent": "[EL] Change (%)",
+        "target": "[EL] Target",
+        "dataSource": "[EL] Data Source",
+        "refreshInterval": "[EL] Refresh Interval (seconds)"
+      },
+      "chartTypes": {
+        "bar": "[EL] Bar Chart",
+        "line": "[EL] Line Chart",
+        "area": "[EL] Area Chart",
+        "pie": "[EL] Pie Chart",
+        "donut": "[EL] Donut Chart",
+        "radar": "[EL] Radar Chart",
+        "scatter": "[EL] Scatter Plot",
+        "funnel": "[EL] Funnel Chart",
+        "treemap": "[EL] Treemap",
+        "heatmap": "[EL] Heatmap"
+      },
+      "dataSources": {
+        "sample": "[EL] Sample Data",
+        "api": "[EL] API Endpoint",
+        "crosstab": "[EL] Crosstab",
+        "custom": "[EL] Custom Query"
+      },
+      "refreshIntervalHint": "[EL] Set to 0 to disable auto-refresh",
+      "style": {
+        "showLegend": "[EL] Show Legend",
+        "showGrid": "[EL] Show Grid",
+        "showTooltip": "[EL] Show Tooltip",
+        "backgroundColor": "[EL] Background Color"
+      },
+      "advanced": {
+        "lockWidget": "[EL] Lock Widget",
+        "lockWidgetHint": "[EL] Prevent moving and resizing",
+        "zIndex": "[EL] Z-Index"
+      },
+      "dashboardSettings": "[EL] Dashboard Settings",
+      "saveSettings": "[EL] Save Settings",
+      "settings": {
+        "dashboardName": "[EL] Dashboard Name",
+        "gridColumns": "[EL] Grid Columns",
+        "gridRows": "[EL] Grid Rows"
+      }
+    },
+    "analytics": {
+      "pageTracker": "[EL] Analytics",
+      "title": "[EL] Analytics",
+      "description": "[EL] Track your research performance and insights"
     }
   },
   "audiences": {

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -16,12 +17,14 @@ const invoices = [
 ]
 
 export default function BillingSettingsPage() {
+  const t = useTranslations("settings.billing")
+
   return (
     <div className="p-6 max-w-4xl">
       <PageTracker pageName="Settings - Billing" />
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Billing & Subscription</h1>
-        <p className="text-muted-foreground">Manage your subscription and payment methods</p>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
 
       <div className="space-y-6">
@@ -31,60 +34,60 @@ export default function BillingSettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  Enterprise Plan
-                  <Badge className="bg-primary">Current</Badge>
+                  {t("enterprisePlan")}
+                  <Badge className="bg-primary">{t("current")}</Badge>
                 </CardTitle>
-                <CardDescription>Unlimited agents, priority support, and advanced analytics</CardDescription>
+                <CardDescription>{t("planDescription")}</CardDescription>
               </div>
               <div className="text-right">
                 <p className="text-3xl font-bold">$2,499</p>
-                <p className="text-sm text-muted-foreground">per month</p>
+                <p className="text-sm text-muted-foreground">{t("perMonth")}</p>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-3">
-                <h4 className="text-sm font-medium">Plan Features</h4>
+                <h4 className="text-sm font-medium">{t("planFeatures")}</h4>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-emerald-500" />
-                    Unlimited AI agent queries
+                    {t("features.unlimitedQueries")}
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-emerald-500" />
-                    All pre-built domain agents
+                    {t("features.allAgents")}
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-emerald-500" />
-                    Custom agent development
+                    {t("features.customDev")}
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-emerald-500" />
-                    Priority support (24/7)
+                    {t("features.prioritySupport")}
                   </li>
                 </ul>
               </div>
               <div className="space-y-3">
-                <h4 className="text-sm font-medium">Usage This Period</h4>
+                <h4 className="text-sm font-medium">{t("usageThisPeriod")}</h4>
                 <div className="space-y-4">
                   <div>
                     <div className="flex items-center justify-between text-sm mb-1">
-                      <span>Agent Queries</span>
-                      <span>12,450 / Unlimited</span>
+                      <span>{t("usage.agentQueries")}</span>
+                      <span>12,450 / {t("usage.unlimited")}</span>
                     </div>
                     <Progress value={100} className="h-2" />
                   </div>
                   <div>
                     <div className="flex items-center justify-between text-sm mb-1">
-                      <span>Reports Generated</span>
+                      <span>{t("usage.reportsGenerated")}</span>
                       <span>89 / 100</span>
                     </div>
                     <Progress value={89} className="h-2" />
                   </div>
                   <div>
                     <div className="flex items-center justify-between text-sm mb-1">
-                      <span>Team Seats</span>
+                      <span>{t("usage.teamSeats")}</span>
                       <span>12 / 25</span>
                     </div>
                     <Progress value={48} className="h-2" />
@@ -94,11 +97,11 @@ export default function BillingSettingsPage() {
             </div>
           </CardContent>
           <CardFooter className="flex items-center justify-between border-t pt-6">
-            <p className="text-sm text-muted-foreground">Next billing date: January 1, 2025</p>
+            <p className="text-sm text-muted-foreground">{t("nextBillingDate", { date: "January 1, 2025" })}</p>
             <div className="flex items-center gap-2">
-              <Button variant="outline">Change Plan</Button>
+              <Button variant="outline">{t("changePlan")}</Button>
               <Button variant="outline" className="text-destructive bg-transparent">
-                Cancel Subscription
+                {t("cancelSubscription")}
               </Button>
             </div>
           </CardFooter>
@@ -107,8 +110,8 @@ export default function BillingSettingsPage() {
         {/* Payment Method */}
         <Card>
           <CardHeader>
-            <CardTitle>Payment Method</CardTitle>
-            <CardDescription>Manage your payment information</CardDescription>
+            <CardTitle>{t("paymentMethod")}</CardTitle>
+            <CardDescription>{t("paymentDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
@@ -117,11 +120,11 @@ export default function BillingSettingsPage() {
                   <CreditCard className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <p className="font-medium">Visa ending in 4242</p>
-                  <p className="text-sm text-muted-foreground">Expires 12/2026</p>
+                  <p className="font-medium">{t("cardEnding", { last4: "4242" })}</p>
+                  <p className="text-sm text-muted-foreground">{t("cardExpires", { date: "12/2026" })}</p>
                 </div>
               </div>
-              <Button variant="outline">Update</Button>
+              <Button variant="outline">{t("update")}</Button>
             </div>
           </CardContent>
         </Card>
@@ -129,17 +132,17 @@ export default function BillingSettingsPage() {
         {/* Billing History */}
         <Card>
           <CardHeader>
-            <CardTitle>Billing History</CardTitle>
-            <CardDescription>Download your past invoices for your records</CardDescription>
+            <CardTitle>{t("billingHistory")}</CardTitle>
+            <CardDescription>{t("billingHistoryDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Invoice</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t("invoiceHeaders.invoice")}</TableHead>
+                  <TableHead>{t("invoiceHeaders.date")}</TableHead>
+                  <TableHead>{t("invoiceHeaders.amount")}</TableHead>
+                  <TableHead>{t("invoiceHeaders.status")}</TableHead>
                   <TableHead className="w-10"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -151,7 +154,7 @@ export default function BillingSettingsPage() {
                     <TableCell>{invoice.amount}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
-                        {invoice.status}
+                        {t("paid")}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -174,12 +177,12 @@ export default function BillingSettingsPage() {
                 <Zap className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h3 className="font-semibold">Need more capacity?</h3>
-                <p className="text-sm text-muted-foreground">Contact us for custom enterprise pricing</p>
+                <h3 className="font-semibold">{t("needMoreCapacity")}</h3>
+                <p className="text-sm text-muted-foreground">{t("contactForPricing")}</p>
               </div>
             </div>
             <Button>
-              Contact Sales
+              {t("contactSales")}
               <ArrowUpRight className="ml-2 h-4 w-4" />
             </Button>
           </CardContent>
