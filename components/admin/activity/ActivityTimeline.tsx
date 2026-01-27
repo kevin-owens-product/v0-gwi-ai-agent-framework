@@ -152,7 +152,7 @@ export function ActivityTimeline({
           <div className="absolute left-4 top-0 bottom-0 w-px bg-border" />
 
           <div className="space-y-4">
-            {activities.map((activity, index) => {
+            {activities.map((activity) => {
               const ResourceIcon = resourceIcons[activity.resourceType] || FileText
               const isSuccess = activity.status === "success"
               const isFailure = activity.status === "failure"

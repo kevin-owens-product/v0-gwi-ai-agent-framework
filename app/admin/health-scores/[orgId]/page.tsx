@@ -11,7 +11,7 @@ import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+// Separator import removed - unused
 import {
   Table,
   TableBody,
@@ -27,10 +27,8 @@ import {
   Bot,
   Workflow,
   Loader2,
-  RefreshCw,
   Calculator,
   Calendar,
-  Activity,
   AlertTriangle,
   CheckCircle,
   Lightbulb,

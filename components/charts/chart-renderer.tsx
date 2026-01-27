@@ -56,15 +56,6 @@ export interface ChartRendererProps {
   className?: string
 }
 
-// Default color palette
-const _DEFAULT_COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
-]
-
 // Fallback colors if CSS variables not available
 const FALLBACK_COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#00C49F", "#FFBB28", "#FF8042"]
 

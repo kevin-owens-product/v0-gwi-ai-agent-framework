@@ -9,7 +9,6 @@ import {
   RefreshCw,
   FileText,
   Database,
-  Workflow,
   Bot,
   Brain,
   ClipboardList,

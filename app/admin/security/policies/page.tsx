@@ -282,7 +282,7 @@ export default function SecurityPoliciesPage() {
     {
       label: t("actions.editPolicy"),
       icon: <Edit className="h-4 w-4" />,
-      onClick: (policy) => {
+      onClick: () => {
         toast.info(t("messages.editComingSoon"))
       },
     },
@@ -617,20 +617,7 @@ export default function SecurityPoliciesPage() {
             columns={columns}
             getRowId={(policy) => policy.id}
             isLoading={loading}
-            emptyMessage={
-              <div className="text-center py-12">
-                <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">{t("noPolicies")}</p>
-                <Button
-                  variant="outline"
-                  className="mt-4"
-                  onClick={() => setIsCreateOpen(true)}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  {t("createFirstPolicy")}
-                </Button>
-              </div>
-            }
+            emptyMessage={t("noPolicies")}
             onDelete={async (policy) => {
               await handleDeletePolicy(policy.id)
             }}

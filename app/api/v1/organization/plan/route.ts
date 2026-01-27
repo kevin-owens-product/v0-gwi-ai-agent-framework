@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get validated organization ID (validates user membership)
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
 
     if (!orgId) {
       return NextResponse.json(
@@ -26,20 +26,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get organization with plan
+    // Get organization
     const organization = await prisma.organization.findUnique({
       where: { id: orgId },
-      include: {
-        plan: {
-          include: {
-            planFeatures: {
-              include: {
-                feature: true,
-              },
-            },
-          },
-        },
-      },
     })
 
     if (!organization) {
@@ -50,7 +39,7 @@ export async function GET(request: NextRequest) {
     const features = await getOrganizationFeatures(orgId)
 
     return NextResponse.json({
-      plan: organization.plan,
+      planTier: organization.planTier,
       features,
     })
   } catch (error) {

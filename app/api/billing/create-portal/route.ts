@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth'
 import { createPortalSession } from '@/lib/billing'
 import { prisma } from '@/lib/db'
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const session = await auth()
 

@@ -14,9 +14,8 @@ import { hasPermission, canManageHierarchy, getRecommendedChildTypes } from '@/l
 import {
   createChildOrganization,
   getDirectChildren,
-  canOrgTypeHaveChildren,
 } from '@/lib/tenant-hierarchy'
-import type { OrganizationType, PlanTier, CompanySize } from '@prisma/client'
+import type { OrganizationType, PlanTier } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
   try {

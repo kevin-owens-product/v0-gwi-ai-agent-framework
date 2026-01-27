@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { prisma } from '@/lib/db';
 import { validateSuperAdminSession } from '@/lib/super-admin';
 import { locales, Locale } from '@/lib/i18n/config';
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await validateSuperAdminSession();
+  const cookieStore = await cookies();
+  const token = cookieStore.get('adminToken')?.value;
+
+  if (!token) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const session = await validateSuperAdminSession(token);
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -35,7 +43,14 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await validateSuperAdminSession();
+  const cookieStore = await cookies();
+  const token = cookieStore.get('adminToken')?.value;
+
+  if (!token) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const session = await validateSuperAdminSession(token);
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

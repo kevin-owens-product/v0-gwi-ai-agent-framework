@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 
 // Mock dependencies
 vi.mock('@tanstack/react-query', () => ({
-  useQuery: vi.fn((options) => ({
+  useQuery: vi.fn(() => ({
     data: undefined,
     isLoading: false,
     error: null,

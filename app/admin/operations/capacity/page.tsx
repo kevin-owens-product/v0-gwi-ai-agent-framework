@@ -192,11 +192,7 @@ export default function CapacityPage() {
     return Math.min((current / max) * 100, 100)
   }
 
-  const getUsageColor = (percent: number) => {
-    if (percent >= 90) return "bg-red-500"
-    if (percent >= 80) return "bg-yellow-500"
-    return "bg-green-500"
-  }
+  // getUsageColor function removed - unused
 
   const formatValue = (value: number, unit: string) => {
     if (unit === "percent") return `${value.toFixed(1)}%`

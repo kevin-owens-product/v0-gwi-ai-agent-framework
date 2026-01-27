@@ -248,7 +248,6 @@ export function WorkflowBuilder() {
             <CardContent>
               <div className="space-y-4">
                 {steps.map((step, index) => {
-                  const _agent = availableAgents.find((a) => a.id === step.agentId)
                   return (
                     <div key={step.id} className="relative">
                       {index > 0 && <div className="absolute -top-4 left-6 w-px h-4 bg-border" />}

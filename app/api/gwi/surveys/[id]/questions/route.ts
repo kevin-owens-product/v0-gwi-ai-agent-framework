@@ -5,7 +5,7 @@ import { validateSuperAdminSession } from "@/lib/super-admin"
 import { hasGWIPermission } from "@/lib/gwi-permissions"
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

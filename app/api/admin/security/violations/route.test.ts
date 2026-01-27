@@ -308,13 +308,13 @@ describe('Admin Security Violations API - /api/admin/security/violations', () =>
   describe('POST - Report Violation', () => {
     describe('Validation', () => {
       it('should require type', () => {
-        const body = { title: 'Violation', severity: 'HIGH' }
+        const body: { title: string; severity: string; type?: string } = { title: 'Violation', severity: 'HIGH' }
         const isValid = !!body.type
         expect(isValid).toBe(false)
       })
 
       it('should require title', () => {
-        const body = { type: 'RATE_LIMIT', severity: 'HIGH' }
+        const body: { type: string; severity: string; title?: string } = { type: 'RATE_LIMIT', severity: 'HIGH' }
         const isValid = !!body.title
         expect(isValid).toBe(false)
       })
@@ -392,7 +392,7 @@ describe('Admin Security Violations API - /api/admin/security/violations', () =>
 
     describe('Resolve', () => {
       it('should resolve violation', () => {
-        const violation = { id: 'viol-123', status: 'ACKNOWLEDGED', resolvedAt: null }
+        const violation: { id: string; status: string; resolvedAt: Date | null } = { id: 'viol-123', status: 'ACKNOWLEDGED', resolvedAt: null }
         violation.status = 'RESOLVED'
         violation.resolvedAt = new Date()
         expect(violation.status).toBe('RESOLVED')

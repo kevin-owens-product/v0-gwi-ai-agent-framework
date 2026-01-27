@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db"
 import { validateSuperAdminSession, logPlatformAudit } from "@/lib/super-admin"
 
 // Simulated DNS verification - in production, this would actually check DNS records
-async function verifyDNSRecord(domain: string, verificationToken: string, method: string): Promise<{ success: boolean; message: string }> {
+async function verifyDNSRecord(_domain: string, _verificationToken: string, method: string): Promise<{ success: boolean; message: string }> {
   // This is a simulation - in production, you would:
   // 1. For DNS_TXT: Query DNS TXT records for the domain
   // 2. For DNS_CNAME: Query DNS CNAME records
@@ -29,7 +29,7 @@ async function verifyDNSRecord(domain: string, verificationToken: string, method
 }
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

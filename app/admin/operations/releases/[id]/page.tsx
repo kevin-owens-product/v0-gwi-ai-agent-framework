@@ -29,7 +29,6 @@ import {
   CheckCircle,
   AlertTriangle,
   Play,
-  Pause,
   Undo,
   XCircle,
   Edit,
@@ -869,7 +868,7 @@ export default function ReleaseDetailPage() {
             onOpenChange={setShowDeleteDialog}
             title="Delete Release"
             description="Are you sure you want to delete this release? This action cannot be undone."
-            confirmLabel="Delete"
+            confirmText="Delete"
             onConfirm={handleDelete}
             variant="destructive"
           />

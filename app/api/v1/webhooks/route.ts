@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     const webhooks = await prisma.webhookEndpoint.findMany({
-      where: { organizationId: orgId },
+      where: { orgId },
       orderBy: { createdAt: 'desc' },
     })
 
@@ -74,22 +74,22 @@ export async function POST(request: NextRequest) {
 
     const webhook = await prisma.webhookEndpoint.create({
       data: {
-        organizationId: orgId,
+        orgId,
         url,
         events,
         description,
         secret,
-        enabled: true,
+        status: 'ACTIVE',
       },
     })
 
     await prisma.auditLog.create({
       data: {
         action: 'WEBHOOK_CREATED',
-        entityType: 'WEBHOOK_ENDPOINT',
-        entityId: webhook.id,
+        resourceType: 'webhook',
+        resourceId: webhook.id,
         userId: session.user.id,
-        organizationId: orgId,
+        orgId,
         metadata: { url, events },
       },
     })

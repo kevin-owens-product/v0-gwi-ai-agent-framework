@@ -94,7 +94,7 @@ describe("GET /api/admin/revenue", () => {
       },
     ]
 
-    vi.mocked(prisma.revenueMetric.findMany).mockResolvedValueOnce(mockMetrics)
+    vi.mocked(prisma.revenueMetric.findMany).mockResolvedValueOnce(mockMetrics as never)
 
     const request = new NextRequest("http://localhost/api/admin/revenue?period=MONTHLY")
     const response = await GET(request)
@@ -184,7 +184,7 @@ describe("GET /api/admin/revenue", () => {
       },
     ]
 
-    vi.mocked(prisma.revenueMetric.findMany).mockResolvedValueOnce(mockMetrics)
+    vi.mocked(prisma.revenueMetric.findMany).mockResolvedValueOnce(mockMetrics as never)
 
     const request = new NextRequest("http://localhost/api/admin/revenue")
     const response = await GET(request)

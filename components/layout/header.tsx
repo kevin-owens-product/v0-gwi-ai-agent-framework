@@ -293,5 +293,3 @@ export function createPageTitleLookup(
   return (pathname: string) => pageTitles[pathname] || defaultTitle
 }
 
-// Export types for external use
-export type { HeaderUser, HeaderAction }

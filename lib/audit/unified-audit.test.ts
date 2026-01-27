@@ -25,8 +25,8 @@ import {
   type AuditContext,
   type AuditLogInput,
   type AuditLogEntry,
-  type PortalSession,
 } from './unified-audit'
+import type { PortalSession } from '@/lib/auth/portal-session'
 
 // Mock Prisma
 vi.mock('@/lib/db', () => ({

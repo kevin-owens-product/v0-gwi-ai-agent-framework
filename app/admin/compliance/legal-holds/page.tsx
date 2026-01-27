@@ -35,7 +35,6 @@ import {
   Users,
   Download,
   CheckCircle,
-  XCircle,
   Calendar,
   AlertTriangle,
 } from "lucide-react"
@@ -507,7 +506,7 @@ export default function LegalHoldsPage() {
         onOpenChange={(open) => !open && setHoldToRelease(null)}
         title="Release Legal Hold"
         description={`Are you sure you want to release the legal hold "${holdToRelease?.name}"? This action cannot be undone.`}
-        confirmLabel="Release"
+        confirmText="Release"
         onConfirm={handleReleaseHold}
         variant="destructive"
       />

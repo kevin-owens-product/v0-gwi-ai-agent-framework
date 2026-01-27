@@ -437,8 +437,6 @@ export function PlaygroundSidebar() {
     setSessions(sessions.filter((s) => s.id !== sessionId))
   }
 
-  const _selectedAgent = agents.find((a) => a.id === config.selectedAgent)
-
   return (
     <div
       className={cn(

@@ -6,14 +6,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -197,16 +194,22 @@ export function ShareDialog({
   }, [open, fetchSharedLinks, entityType, entityId])
 
   const handleCreateLink = useCallback(async (settings: {
-    password?: string
-    expiresAt?: string
-    maxViews?: number
+    password?: string | null
+    expiresAt?: string | null
+    maxViews?: number | null
     allowedEmails?: string[]
     permissions?: SharedLinkPermission
+    isActive?: boolean
   }) => {
+    // Filter out null values to match CreateSharedLinkInput type
     const link = await createSharedLink({
       entityType,
       entityId,
-      ...settings,
+      password: settings.password ?? undefined,
+      expiresAt: settings.expiresAt ?? undefined,
+      maxViews: settings.maxViews ?? undefined,
+      allowedEmails: settings.allowedEmails,
+      permissions: settings.permissions,
     })
 
     // Copy to clipboard

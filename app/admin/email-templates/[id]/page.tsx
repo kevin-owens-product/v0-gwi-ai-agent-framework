@@ -62,8 +62,6 @@ import {
   Code,
   Lock,
   Trash2,
-  RefreshCw,
-  Plus,
   Variable,
   CheckCircle,
 } from "lucide-react"

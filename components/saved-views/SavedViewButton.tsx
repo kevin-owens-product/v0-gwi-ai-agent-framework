@@ -113,7 +113,6 @@ export function SavedViewButton({
   const [isProcessing, setIsProcessing] = useState(false)
 
   const {
-    savedViews,
     isLoading,
     addFavorite,
     removeFavorite,

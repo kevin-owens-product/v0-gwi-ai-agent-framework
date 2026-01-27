@@ -135,7 +135,7 @@ describe('Users API - /api/v1/users', () => {
 
       const currentRole = 'member'
       // Attempting to escalate to admin role
-      const _requestedRole = 'admin'
+      void 'admin'
       const canEscalate = canRoleEscalate(currentRole)
 
       expect(canEscalate).toBe(false)

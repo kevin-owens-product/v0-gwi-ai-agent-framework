@@ -8,16 +8,13 @@ import {
   Search,
   Calendar,
   CheckCircle,
-  Clock,
-  AlertTriangle,
   RefreshCw,
-  Tag,
   Play,
   Undo,
   XCircle,
   Trash2,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -189,9 +186,9 @@ export default function ReleasesPage() {
     }
   }
 
-  const handleDelete = async (releaseId: string) => {
+  const handleDelete = async (release: Release) => {
     try {
-      const response = await fetch(`/api/admin/operations/releases/${releaseId}`, {
+      const response = await fetch(`/api/admin/operations/releases/${release.id}`, {
         method: "DELETE",
       })
 

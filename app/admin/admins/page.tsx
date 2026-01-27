@@ -31,7 +31,6 @@ import {
   Loader2,
   RefreshCw,
   Pencil,
-  Trash2,
   Key,
   Clock,
   Globe,

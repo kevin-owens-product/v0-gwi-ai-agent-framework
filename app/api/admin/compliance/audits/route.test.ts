@@ -262,19 +262,19 @@ describe('Admin Compliance Audits API - /api/admin/compliance/audits', () => {
   describe('POST - Create Compliance Audit', () => {
     describe('Validation', () => {
       it('should require name', () => {
-        const body = { frameworkId: 'fw-soc2', orgId: 'org-123' }
+        const body: { frameworkId: string; orgId: string; name?: string } = { frameworkId: 'fw-soc2', orgId: 'org-123' }
         const isValid = !!body.name
         expect(isValid).toBe(false)
       })
 
       it('should require frameworkId', () => {
-        const body = { name: 'Audit', orgId: 'org-123' }
+        const body: { name: string; orgId: string; frameworkId?: string } = { name: 'Audit', orgId: 'org-123' }
         const isValid = !!body.frameworkId
         expect(isValid).toBe(false)
       })
 
       it('should require orgId', () => {
-        const body = { name: 'Audit', frameworkId: 'fw-soc2' }
+        const body: { name: string; frameworkId: string; orgId?: string } = { name: 'Audit', frameworkId: 'fw-soc2' }
         const isValid = !!body.orgId
         expect(isValid).toBe(false)
       })
@@ -309,17 +309,17 @@ describe('Admin Compliance Audits API - /api/admin/compliance/audits', () => {
       })
 
       it('should default scope to empty array', () => {
-        const scope = []
+        const scope: unknown[] = []
         expect(scope).toEqual([])
       })
 
       it('should default findings to empty array', () => {
-        const findings = []
+        const findings: unknown[] = []
         expect(findings).toEqual([])
       })
 
       it('should default recommendations to empty array', () => {
-        const recommendations = []
+        const recommendations: unknown[] = []
         expect(recommendations).toEqual([])
       })
     })

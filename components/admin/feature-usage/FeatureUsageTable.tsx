@@ -104,7 +104,6 @@ export function FeatureUsageTable({
 }: FeatureUsageTableProps) {
   const tTable = useTranslations('ui.table')
   const tPagination = useTranslations('ui.pagination')
-  const tCommon = useTranslations('common')
 
   const [search, setSearch] = useState("")
   const [categoryFilter, setCategoryFilter] = useState("all")

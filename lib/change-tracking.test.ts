@@ -4,13 +4,10 @@ import {
   SIGNIFICANCE_THRESHOLDS,
   captureEntityVersion,
   getEntityVersionHistory,
-  compareEntityVersions,
   getChangeTimeline,
   getNewItemsSince,
   trackUserVisit,
   getUnseenChangesCount,
-  type VersionedEntityType,
-  type EntityDelta,
 } from './change-tracking'
 
 // Mock Prisma
@@ -208,7 +205,7 @@ describe('ChangeTrackingService', () => {
       }
 
       vi.mocked(prisma.entityVersion.findFirst).mockResolvedValue(null)
-      vi.mocked(prisma.entityVersion.create).mockResolvedValue(mockEntityVersion)
+      vi.mocked(prisma.entityVersion.create).mockResolvedValue(mockEntityVersion as any)
 
       const result = await changeTracking.captureVersion(
         'org-1',
@@ -278,8 +275,8 @@ describe('ChangeTrackingService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.entityVersion.findFirst).mockResolvedValue(existingVersion)
-      vi.mocked(prisma.entityVersion.create).mockImplementation(async (args) => ({
+      vi.mocked(prisma.entityVersion.findFirst).mockResolvedValue(existingVersion as any)
+      ;(vi.mocked(prisma.entityVersion.create) as any).mockImplementation(async (args: any) => ({
         id: 'version-2',
         orgId: args.data.orgId as string,
         entityType: args.data.entityType as string,
@@ -586,7 +583,7 @@ describe('ChangeTrackingService', () => {
         },
       ]
 
-      vi.mocked(prisma.entityVersion.findMany).mockResolvedValue(mockVersions)
+      vi.mocked(prisma.entityVersion.findMany).mockResolvedValue(mockVersions as any)
       vi.mocked(prisma.entityVersion.count).mockResolvedValue(2)
 
       const result = await changeTracking.getChangeTimeline('org-1', {
@@ -665,8 +662,8 @@ describe('ChangeTrackingService', () => {
         orgId: 'org-1',
         userId: 'user-1',
         lastVisit: new Date(),
-        lastSeenChanges: null,
-      })
+        lastSeenChanges: new Date(),
+      } as any)
 
       await changeTracking.trackUserVisit('org-1', 'user-1')
 
@@ -684,7 +681,7 @@ describe('ChangeTrackingService', () => {
         userId: 'user-1',
         lastVisit: new Date(),
         lastSeenChanges: new Date('2024-01-01'),
-      })
+      } as any)
       vi.mocked(prisma.entityVersion.count).mockResolvedValue(5)
 
       const result = await changeTracking.getUnseenChangesCount('org-1', 'user-1')
@@ -772,8 +769,8 @@ describe('Convenience Functions', () => {
       orgId: 'org-1',
       userId: 'user-1',
       lastVisit: new Date(),
-      lastSeenChanges: null,
-    })
+      lastSeenChanges: new Date(),
+    } as any)
 
     await trackUserVisit('org-1', 'user-1')
 

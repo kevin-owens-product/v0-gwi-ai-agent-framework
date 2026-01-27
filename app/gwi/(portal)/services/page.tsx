@@ -13,7 +13,6 @@ import {
   Truck,
   UsersRound,
   ArrowRight,
-  TrendingUp,
   AlertCircle,
   DollarSign,
   Loader2,
@@ -85,7 +84,7 @@ export default function ServicesDashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">{stats?.clients.active}</div>
             <p className="text-xs text-muted-foreground">
-              {t('ofTotalClients', { total: stats?.clients.total })}
+              {t('ofTotalClients', { total: stats?.clients.total ?? 0 })}
             </p>
           </CardContent>
         </Card>
@@ -98,7 +97,7 @@ export default function ServicesDashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">{stats?.projects.inProgress}</div>
             <p className="text-xs text-muted-foreground">
-              {t('ofTotalProjects', { total: stats?.projects.total })}
+              {t('ofTotalProjects', { total: stats?.projects.total ?? 0 })}
             </p>
           </CardContent>
         </Card>
@@ -111,7 +110,7 @@ export default function ServicesDashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">{stats?.invoices.sent}</div>
             <p className="text-xs text-muted-foreground">
-              {t('overdue', { count: stats?.invoices.overdue })}
+              {t('overdue', { count: stats?.invoices.overdue ?? 0 })}
               {stats?.invoices.overdue ? (
                 <Badge variant="destructive" className="ml-2 text-xs">
                   {t('attention')}
@@ -220,7 +219,7 @@ export default function ServicesDashboardPage() {
               <Building2 className="h-8 w-8 mb-2 text-primary" />
               <h3 className="font-medium">{t('clients')}</h3>
               <p className="text-xs text-muted-foreground">
-                {t('clientsCount', { count: stats?.clients.total })}
+                {t('clientsCount', { count: stats?.clients.total ?? 0 })}
               </p>
             </div>
           </Link>
@@ -232,7 +231,7 @@ export default function ServicesDashboardPage() {
               <FolderKanban className="h-8 w-8 mb-2 text-primary" />
               <h3 className="font-medium">{t('projects')}</h3>
               <p className="text-xs text-muted-foreground">
-                {t('projectsCount', { count: stats?.projects.total })}
+                {t('projectsCount', { count: stats?.projects.total ?? 0 })}
               </p>
             </div>
           </Link>
@@ -276,7 +275,7 @@ export default function ServicesDashboardPage() {
               <UsersRound className="h-8 w-8 mb-2 text-primary" />
               <h3 className="font-medium">{t('team')}</h3>
               <p className="text-xs text-muted-foreground">
-                {t('teamMembers', { count: stats?.team.total })}
+                {t('teamMembers', { count: stats?.team.total ?? 0 })}
               </p>
             </div>
           </Link>
@@ -290,7 +289,7 @@ export default function ServicesDashboardPage() {
             <AlertCircle className="h-5 w-5 text-destructive" />
             <div className="flex-1">
               <p className="font-medium text-destructive">
-                {t('overdueInvoices', { count: stats?.invoices.overdue })}
+                {t('overdueInvoices', { count: stats?.invoices.overdue ?? 0 })}
               </p>
               <p className="text-sm text-muted-foreground">
                 {t('reviewOverdue')}

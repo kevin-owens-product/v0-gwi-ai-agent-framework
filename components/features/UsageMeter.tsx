@@ -16,7 +16,6 @@ export function UsageMeter({
   feature,
   label,
   showPercentage = true,
-  warnAt = 80,
 }: UsageMeterProps) {
   const { usage, limit, percentage, isNearLimit, isAtLimit, isLoading } =
     useFeatureAccess(feature)

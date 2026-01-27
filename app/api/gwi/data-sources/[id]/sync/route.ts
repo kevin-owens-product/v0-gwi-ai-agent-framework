@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { prisma } from "@/lib/db"
+import { Prisma } from "@prisma/client"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { hasGWIPermission } from "@/lib/gwi-permissions"
 
@@ -147,7 +148,7 @@ export async function POST(
       where: { id },
       data: {
         syncStatus: "syncing",
-        errorLog: null, // Clear previous errors
+        errorLog: undefined, // Clear previous errors by setting to undefined (keeps existing value)
       },
     })
 
@@ -164,8 +165,8 @@ export async function POST(
           fullSync,
           options,
           previousStatus: dataSource.syncStatus,
-          previousSyncAt: dataSource.lastSyncAt,
-        },
+          previousSyncAt: dataSource.lastSyncAt?.toISOString() ?? null,
+        } as Prisma.InputJsonValue,
       },
     })
 
@@ -257,7 +258,7 @@ async function startSyncProcess(
         data: {
           syncStatus: "completed",
           lastSyncAt: new Date(),
-          errorLog: null,
+          errorLog: Prisma.JsonNull,
         },
       })
 
@@ -273,7 +274,7 @@ async function startSyncProcess(
             options,
             completedAt: new Date().toISOString(),
             duration: syncDuration,
-          },
+          } as Prisma.InputJsonValue,
         },
       })
     } else {
@@ -287,7 +288,7 @@ async function startSyncProcess(
           options,
           stage: "data_fetch",
         },
-      }
+      } as Prisma.InputJsonValue
 
       await prisma.gWIDataSourceConnection.update({
         where: { id: dataSourceId },
@@ -309,7 +310,7 @@ async function startSyncProcess(
             options,
             failedAt: new Date().toISOString(),
             error: errorMessage,
-          },
+          } as Prisma.InputJsonValue,
         },
       })
     }

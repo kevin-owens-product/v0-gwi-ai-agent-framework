@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get validated organization ID (validates user membership)
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
 
     if (!orgId) {
       return NextResponse.json(
@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
     // Verify user is owner or admin (additional permission check)
     const member = await prisma.organizationMember.findFirst({
       where: {
-        userId: session.user.id,
-        organizationId: orgId,
+        userId: session.user.id!,
+        orgId,
         role: {
           in: ['OWNER', 'ADMIN'],
         },
@@ -56,7 +56,6 @@ export async function POST(request: NextRequest) {
     // Get current organization
     const org = await prisma.organization.findUnique({
       where: { id: orgId },
-      include: { plan: true },
     })
 
     if (!org) {
@@ -72,12 +71,11 @@ export async function POST(request: NextRequest) {
     await prisma.platformAuditLog.create({
       data: {
         action: 'PLAN_UPGRADE_REQUESTED',
-        entityType: 'ORGANIZATION',
-        entityId: orgId,
-        performedById: session.user.id,
-        performedByType: 'USER',
-        metadata: {
-          currentPlan: org.plan?.tier,
+        resourceType: 'ORGANIZATION',
+        resourceId: orgId,
+        targetOrgId: orgId,
+        details: {
+          currentPlan: org.planTier,
           requestedPlan: tier,
           organizationId: orgId,
         },

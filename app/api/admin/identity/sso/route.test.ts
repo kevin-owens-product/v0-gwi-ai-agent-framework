@@ -167,13 +167,13 @@ describe('Admin Identity SSO API - /api/admin/identity/sso', () => {
   describe('POST - Create SSO Configuration', () => {
     describe('Validation', () => {
       it('should require orgId', () => {
-        const body = { provider: 'OKTA' }
+        const body: { provider: string; orgId?: string } = { provider: 'OKTA' }
         const isValid = !!(body.orgId && body.provider)
         expect(isValid).toBe(false)
       })
 
       it('should require provider', () => {
-        const body = { orgId: 'org-123' }
+        const body: { orgId: string; provider?: string } = { orgId: 'org-123' }
         const isValid = !!(body.orgId && body.provider)
         expect(isValid).toBe(false)
       })
@@ -248,7 +248,7 @@ describe('Admin Identity SSO API - /api/admin/identity/sso', () => {
       })
 
       it('should default allowedDomains to empty array', () => {
-        const allowedDomains = []
+        const allowedDomains: string[] = []
         expect(allowedDomains).toEqual([])
       })
     })

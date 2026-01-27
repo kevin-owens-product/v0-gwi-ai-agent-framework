@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
-import { randomBytes, createHmac } from "crypto"
+import { randomBytes } from "crypto"
 import { WebhookStatus } from "@prisma/client"
 
 // Generate a secure webhook secret

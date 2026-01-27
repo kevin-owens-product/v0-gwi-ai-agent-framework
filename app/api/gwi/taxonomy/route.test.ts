@@ -221,7 +221,8 @@ describe('GWI Taxonomy API - /api/gwi/taxonomy', () => {
       })
 
       it('should enforce unique code within category', () => {
-        const categoryId = 'cat-1'
+        // Check uniqueness within category 'cat-1'
+        void 'cat-1'
         const existingCodes = ['age_group', 'gender', 'income']
         const newCode = 'education'
 
@@ -400,9 +401,9 @@ describe('Taxonomy Validation API', () => {
       const data = { age_group: 'Gen Z' }
 
       const missingRequired = Object.entries(schema)
-        .filter(([_, config]) => (config as {required: boolean}).required)
-        .filter(([field, _]) => !(field in data))
-        .map(([field, _]) => field)
+        .filter(([_key, config]) => (config as {required: boolean}).required)
+        .filter(([field]) => !(field in data))
+        .map(([field]) => field)
 
       expect(missingRequired).toContain('gender')
       expect(missingRequired).not.toContain('income')

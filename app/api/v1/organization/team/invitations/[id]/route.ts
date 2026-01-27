@@ -28,7 +28,7 @@ export async function DELETE(
 
     // Verify membership and permission
     const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id!, orgId },
     })
 
     if (!member || !hasPermission(member.role, 'team:invite')) {
@@ -41,7 +41,7 @@ export async function DELETE(
     // Cancel invitation
     const invitation = await prisma.invitation.update({
       where: { id },
-      data: { status: 'CANCELLED' },
+      data: { status: 'REVOKED' },
     })
 
     return NextResponse.json(invitation)

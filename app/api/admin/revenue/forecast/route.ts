@@ -67,11 +67,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Calculate projected totals
-    const projectedEndOfYear = forecast.find(
-      f => f.period.endsWith("-12") || forecast.indexOf(f) === forecast.length - 1
-    )
-
     // Scenario analysis
     const scenarios = {
       conservative: {

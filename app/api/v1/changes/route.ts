@@ -4,16 +4,12 @@ import { getUserMembership, getValidatedOrgId } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import {
   getChangeTimeline,
-  getNewItemsSince,
   getUnseenChangesCount,
   trackUserVisit,
-  changeTracking,
   type VersionedEntityType,
   type ChangeTimelineOptions,
 } from '@/lib/change-tracking'
 import {
-  getChangeAlerts,
-  generateChangeSummary,
   getChangeSummaries,
   getUnreadAlertCount,
 } from '@/lib/change-notifications'

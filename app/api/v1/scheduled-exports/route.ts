@@ -28,7 +28,7 @@ const createScheduledExportSchema = z.object({
 })
 
 // Helper to calculate next run time from cron expression
-function calculateNextRunAt(schedule: string, timezone: string): Date {
+function calculateNextRunAt(_schedule: string, _timezone: string): Date {
   // Simple implementation - in production, use a library like cron-parser
   // For now, default to 24 hours from now
   const next = new Date()

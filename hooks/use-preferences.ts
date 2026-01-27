@@ -13,8 +13,8 @@
 
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
-import useSWR, { mutate } from "swr"
+import { useState, useCallback } from "react"
+import useSWR from "swr"
 
 /**
  * Theme enum matching Prisma schema
@@ -340,5 +340,3 @@ export function useDisplayPreferences() {
     isUpdating,
   }
 }
-
-export type { UserPreferences, PreferencesUpdate }

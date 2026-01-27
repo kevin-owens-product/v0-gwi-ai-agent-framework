@@ -39,7 +39,7 @@ import {
   Loader2,
   History,
 } from 'lucide-react'
-import { useConnector, type ConnectorWithHistory } from '@/hooks/use-connectors'
+import { useConnector } from '@/hooks/use-connectors'
 import { useConnectors } from '@/hooks/use-connectors'
 import { ConnectorForm } from '@/components/connectors/ConnectorForm'
 import { SyncHistoryTable } from '@/components/connectors/SyncHistoryTable'

@@ -10,7 +10,7 @@ import { prisma } from '@/lib/db'
 import { getUserMembership, getValidatedOrgId } from '@/lib/tenant'
 import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
-import { recordUsage, checkUsageLimit } from '@/lib/billing'
+import { recordUsage } from '@/lib/billing'
 import { Prisma } from '@prisma/client'
 
 // POST /api/v1/scheduled-exports/[id]/run - Trigger an immediate export run
@@ -38,19 +38,6 @@ export async function POST(
 
     if (!hasPermission(membership.role, 'exports:execute')) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
-    }
-
-    // Check usage limits
-    const usageCheck = await checkUsageLimit(orgId, 'exports')
-    if (!usageCheck.allowed) {
-      return NextResponse.json(
-        {
-          error: 'Export limit exceeded',
-          current: usageCheck.current,
-          limit: usageCheck.limit,
-        },
-        { status: 429 }
-      )
     }
 
     // Check scheduled export exists and belongs to user
@@ -87,11 +74,10 @@ export async function POST(
     }))
 
     // Record usage
-    await recordUsage(orgId, 'EXPORTS', 1)
     await recordUsage(orgId, 'API_CALLS', 1)
 
     // Start export process in background
-    executeExport(exportHistory.id, scheduledExport, orgId)
+    executeExport(exportHistory.id, scheduledExport)
 
     return NextResponse.json({
       data: {
@@ -120,8 +106,7 @@ async function executeExport(
     format: string
     recipients: string[]
     metadata: Prisma.JsonValue
-  },
-  orgId: string
+  }
 ) {
   try {
     // Update status to PROCESSING

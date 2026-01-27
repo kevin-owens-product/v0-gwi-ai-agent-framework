@@ -1,16 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-  BarChart3,
-  PieChart,
-  TrendingUp,
-  Users,
-  Target,
-  Lightbulb,
-  FileText,
-  CheckCircle2,
-  AlertTriangle,
-  Building2
-} from 'lucide-react'
+import { BarChart3, PieChart, TrendingUp, FileText } from 'lucide-react'
 
 // Import the utility functions we're testing
 // Since we can't directly import non-exported functions, we'll test their behavior

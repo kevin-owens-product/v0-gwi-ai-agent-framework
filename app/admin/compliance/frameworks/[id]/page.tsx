@@ -27,8 +27,6 @@ import {
   X,
   FileText,
   Calendar,
-  CheckCircle,
-  AlertTriangle,
   Building2,
   ClipboardList,
 } from "lucide-react"

@@ -84,7 +84,7 @@ const threatTypeIcons: Record<string, React.ReactNode> = {
 }
 
 export default function ThreatEventsPage() {
-  const router = useRouter()
+  useRouter()
   const t = useTranslations("admin.threats")
   const tCommon = useTranslations("common")
 
@@ -94,8 +94,8 @@ export default function ThreatEventsPage() {
   const [typeFilter, setTypeFilter] = useState("all")
   const [severityFilter, setSeverityFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState("all")
-  const [sortBy, setSortBy] = useState("createdAt")
-  const [sortOrder, setSortOrder] = useState("desc")
+  const [sortBy] = useState("createdAt")
+  const [sortOrder] = useState("desc")
   const [stats, setStats] = useState<Record<string, number>>({})
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [pagination, setPagination] = useState({

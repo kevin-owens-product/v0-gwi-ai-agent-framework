@@ -178,13 +178,13 @@ describe('Admin Identity Domains API - /api/admin/identity/domains', () => {
   describe('POST - Register Domain', () => {
     describe('Validation', () => {
       it('should require domain', () => {
-        const body = { orgId: 'org-123' }
+        const body: { orgId: string; domain?: string } = { orgId: 'org-123' }
         const isValid = !!body.domain
         expect(isValid).toBe(false)
       })
 
       it('should require orgId', () => {
-        const body = { domain: 'acme.com' }
+        const body: { domain: string; orgId?: string } = { domain: 'acme.com' }
         const isValid = !!body.orgId
         expect(isValid).toBe(false)
       })

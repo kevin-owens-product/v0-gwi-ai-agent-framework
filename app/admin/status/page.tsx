@@ -7,19 +7,16 @@ import {
   Search,
   CheckCircle,
   AlertTriangle,
-  Activity,
   MessageSquare,
-  Users,
   ExternalLink,
   Eye,
-  Clock,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// Tabs imports removed - unused
 import {
   Dialog,
   DialogContent,
@@ -62,13 +59,7 @@ interface Incident {
   updates: { id: string; status: string; message: string; createdAt: string; isPublic: boolean }[]
 }
 
-interface Subscription {
-  id: string
-  email: string
-  isVerified: boolean
-  subscribedAt: string
-  unsubscribedAt: string | null
-}
+// Subscription interface removed - unused
 
 const statusOptions = [
   { value: "INVESTIGATING", label: "Investigating" },

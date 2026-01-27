@@ -253,7 +253,7 @@ class ChangeTrackingService {
     field: string,
     oldValue: unknown,
     newValue: unknown,
-    entityType: VersionedEntityType
+    _entityType: VersionedEntityType
   ): { isSignificant: boolean; changePercent?: number } {
     // Get threshold config for this field
     const config = SIGNIFICANCE_THRESHOLDS[field] || SIGNIFICANCE_THRESHOLDS.default
@@ -284,7 +284,7 @@ class ChangeTrackingService {
   /**
    * Generate a human-readable summary of changes
    */
-  private generateChangeSummary(fields: FieldDelta[], entityType: VersionedEntityType): string {
+  private generateChangeSummary(fields: FieldDelta[], _entityType: VersionedEntityType): string {
     if (fields.length === 0) return 'No changes detected'
 
     const significantChanges = fields.filter(f => f.isSignificant)

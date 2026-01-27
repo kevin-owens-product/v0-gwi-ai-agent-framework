@@ -256,13 +256,13 @@ describe('Admin Compliance Data Exports API - /api/admin/compliance/data-exports
   describe('POST - Create Data Export Request', () => {
     describe('Validation', () => {
       it('should require exportType', () => {
-        const body = { orgId: 'org-123' }
+        const body: { orgId: string; exportType?: string } = { orgId: 'org-123' }
         const isValid = !!body.exportType
         expect(isValid).toBe(false)
       })
 
       it('should require orgId', () => {
-        const body = { exportType: 'GDPR_SAR' }
+        const body: { exportType: string; orgId?: string } = { exportType: 'GDPR_SAR' }
         const isValid = !!body.orgId
         expect(isValid).toBe(false)
       })

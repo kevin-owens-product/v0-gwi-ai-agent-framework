@@ -446,7 +446,7 @@ export default function TenantsPage() {
               <p className="font-medium">{tenant.name}</p>
               {(tenant.hierarchyLevel ?? 0) > 0 && (
                 <Badge variant="outline" className="text-xs">
-                  {t("level", { level: tenant.hierarchyLevel })}
+                  {t("level", { level: tenant.hierarchyLevel ?? 0 })}
                 </Badge>
               )}
             </div>

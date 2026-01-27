@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get validated organization ID (validates user membership)
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
 
     if (!orgId) {
       return NextResponse.json(
@@ -28,8 +28,8 @@ export async function GET(request: NextRequest) {
     // Get member info
     const member = await prisma.organizationMember.findFirst({
       where: {
-        userId: session.user.id,
-        organizationId: orgId,
+        userId: session.user.id!,
+        orgId,
       },
       include: {
         user: {
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
             id: true,
             name: true,
             email: true,
-            image: true,
+            avatarUrl: true,
           },
         },
         organization: {

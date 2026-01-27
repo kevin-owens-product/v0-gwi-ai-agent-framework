@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { getValidatedOrgId, getUserMembership } from '@/lib/tenant'
-import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
 import { createCommentSchema } from '@/lib/schemas/collaboration'
@@ -63,7 +62,7 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
-              image: true,
+              avatarUrl: true,
             },
           },
           _count: {
@@ -155,7 +154,7 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             email: true,
-            image: true,
+            avatarUrl: true,
           },
         },
       },

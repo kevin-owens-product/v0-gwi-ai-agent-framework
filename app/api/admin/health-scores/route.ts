@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const churnRisk = searchParams.get("churnRisk") as ChurnRisk | null
+    const churnRiskParam = searchParams.get("churnRisk")
     const minScore = searchParams.get("minScore")
     const maxScore = searchParams.get("maxScore")
     const planTier = searchParams.get("planTier")
@@ -35,8 +35,8 @@ export async function GET(request: NextRequest) {
     // Build filter criteria
     const where: Record<string, unknown> = {}
 
-    if (churnRisk && churnRisk !== "all") {
-      where.churnRisk = churnRisk
+    if (churnRiskParam && churnRiskParam !== "all") {
+      where.churnRisk = churnRiskParam as ChurnRisk
     }
 
     if (minScore || maxScore) {
@@ -66,11 +66,12 @@ export async function GET(request: NextRequest) {
 
     // Get organization details
     const orgIds = scores.map(s => s.orgId)
+    const orgWhere: Record<string, unknown> = { id: { in: orgIds } }
+    if (planTier && planTier !== "all") {
+      orgWhere.planTier = planTier
+    }
     const orgs = await prisma.organization.findMany({
-      where: {
-        id: { in: orgIds },
-        ...(planTier && planTier !== "all" ? { planTier } : {}),
-      },
+      where: orgWhere,
       select: { id: true, name: true, slug: true, planTier: true },
     })
 

@@ -12,7 +12,7 @@ import { extractVariables } from "@/lib/email-templates"
 
 // GET /api/admin/email-templates/[id] - Get template with versions
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -217,7 +217,7 @@ export async function PATCH(
 
 // DELETE /api/admin/email-templates/[id] - Delete template (if not system)
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

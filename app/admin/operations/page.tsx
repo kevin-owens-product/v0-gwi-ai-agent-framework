@@ -14,11 +14,8 @@ import {
   Activity,
   Cpu,
   HardDrive,
-  Wifi,
   Database,
   ArrowRight,
-  TrendingUp,
-  TrendingDown,
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

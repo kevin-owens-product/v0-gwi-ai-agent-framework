@@ -295,7 +295,7 @@ describe('Admin User Ban API - /api/admin/users/[id]/ban', () => {
 
   describe('Active Ban Detection', () => {
     it('should detect active permanent ban', () => {
-      const ban = {
+      const ban: { banType: string; expiresAt: Date | null } = {
         banType: 'PERMANENT',
         expiresAt: null
       }
@@ -306,7 +306,7 @@ describe('Admin User Ban API - /api/admin/users/[id]/ban', () => {
 
     it('should detect active temporary ban', () => {
       const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-      const ban = {
+      const ban: { banType: string; expiresAt: Date | null } = {
         banType: 'TEMPORARY',
         expiresAt: futureDate
       }
@@ -345,7 +345,7 @@ describe('Admin User Ban API - /api/admin/users/[id]/ban', () => {
     })
 
     it('should prevent duplicate active bans', () => {
-      const existingBan = {
+      const existingBan: { userId: string; orgId: string | null; expiresAt: Date | null } = {
         userId: 'user-123',
         orgId: null,
         expiresAt: null // Active permanent ban

@@ -33,7 +33,6 @@ import {
   Plus,
   Search,
   Edit,
-  Trash2,
   MoreHorizontal,
   Lock,
   UserCheck,

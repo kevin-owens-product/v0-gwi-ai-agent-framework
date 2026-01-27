@@ -46,44 +46,6 @@ export const COMPREHENSIVE_COLUMNS: CrosstabColumn[] = [
   { id: "total", key: "Total Population", label: "Total", category: "Total", isTotal: true },
 ]
 
-// Helper to generate realistic values with variance
-function generateValues(
-  base: Record<string, number>,
-  variance: number = 5
-): Record<string, number> {
-  const result: Record<string, number> = {}
-  for (const [key, value] of Object.entries(base)) {
-    const adjustment = (Math.random() - 0.5) * variance * 2
-    result[key] = Math.max(1, Math.min(99, Math.round(value + adjustment)))
-  }
-  return result
-}
-
-// Base profiles for different metric categories
-const socialMediaBase = {
-  "Gen Z (18-24)": 85,
-  "Young Mill (25-30)": 78,
-  "Older Mill (31-40)": 68,
-  "Gen X (41-56)": 52,
-  "Boomers (57-75)": 35,
-  "Male": 62,
-  "Female": 68,
-  "Non-Binary": 75,
-  "Low Income": 58,
-  "Middle Income": 64,
-  "Upper Middle": 68,
-  "High Income": 72,
-  "Urban": 72,
-  "Suburban": 64,
-  "Rural": 48,
-  "Early Adopters": 88,
-  "Brand Loyalists": 62,
-  "Price Sensitive": 58,
-  "Eco-Conscious": 72,
-  "Tech Enthusiasts": 85,
-  "Total Population": 62,
-}
-
 // =============================================================================
 // METRICS DATA (150+ rows organized by category)
 // =============================================================================

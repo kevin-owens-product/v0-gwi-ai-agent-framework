@@ -280,7 +280,7 @@ async function DataQualityContent() {
         <CardContent>
           {dataSources.length > 0 ? (
             <div className="space-y-4">
-              {dataSources.map((ds, index) => {
+              {dataSources.map((ds, _index) => {
                 // Mock quality scores per source
                 const score = 85 + Math.random() * 15
                 return (

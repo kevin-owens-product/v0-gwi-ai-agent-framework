@@ -46,7 +46,6 @@ import {
   FileJson,
   FileText,
   Table,
-  FileImage,
   Mail,
   UserPlus,
   Link2,
@@ -244,7 +243,7 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
   const [brandTracking, setBrandTracking] = useState<BrandTracking | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [isExporting, setIsExporting] = useState(false)
+  const [_isExporting, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showShareDialog, setShowShareDialog] = useState(false)

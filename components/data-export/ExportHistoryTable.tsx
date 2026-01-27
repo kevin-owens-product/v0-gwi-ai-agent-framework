@@ -106,10 +106,8 @@ function formatBytes(bytes: number): string {
 export function ExportHistoryTable({
   exports,
   loading = false,
-  onRefresh,
 }: ExportHistoryTableProps) {
   const tTable = useTranslations('ui.table')
-  const tCommon = useTranslations('common')
   const tEmpty = useTranslations('ui.empty')
 
   const [downloading, setDownloading] = useState<string | null>(null)

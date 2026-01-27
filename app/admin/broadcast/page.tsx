@@ -6,19 +6,15 @@ import {
   Plus,
   Search,
   Send,
-  Clock,
-  CheckCircle,
   Users,
   Building2,
-  Mail,
-  Bell,
   MoreHorizontal,
   Edit,
   Trash,
   Eye,
   Calendar,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -55,7 +51,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// Tabs import removed - unused
 import { toast } from "sonner"
 
 interface BroadcastMessage {
@@ -98,12 +94,7 @@ const targetOptions = [
   { value: "SPECIFIC_PLANS", label: "Specific Plan Tiers" },
 ]
 
-const channelOptions = [
-  { value: "IN_APP", label: "In-App" },
-  { value: "EMAIL", label: "Email" },
-  { value: "PUSH", label: "Push Notification" },
-  { value: "SMS", label: "SMS" },
-]
+// channelOptions removed - unused
 
 export default function BroadcastCenterPage() {
   const [messages, setMessages] = useState<BroadcastMessage[]>([])

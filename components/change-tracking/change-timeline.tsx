@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Select,
@@ -19,7 +18,6 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowUpRight,
-  ArrowDownRight,
   Plus,
   RefreshCcw,
   Trash2,
@@ -70,7 +68,6 @@ const ENTITY_TYPE_COLORS: Record<string, string> = {
 }
 
 export function ChangeTimeline({
-  entityTypes,
   significantOnly = false,
   limit = 50,
   onViewDetails,
@@ -120,22 +117,6 @@ export function ChangeTimeline({
       newExpanded.add(id)
     }
     setExpandedItems(newExpanded)
-  }
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / (1000 * 60))
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-
-    if (diffMins < 60) return `${diffMins}m ago`
-    if (diffHours < 24) return `${diffHours}h ago`
-    if (diffDays === 0) return "Today"
-    if (diffDays === 1) return "Yesterday"
-    if (diffDays < 7) return `${diffDays} days ago`
-    return date.toLocaleDateString()
   }
 
   const formatTime = (dateString: string) => {

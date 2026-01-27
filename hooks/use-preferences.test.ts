@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { renderHook, waitFor, act } from "@testing-library/react"
+import { renderHook, act } from "@testing-library/react"
 import { usePreferences, useThemePreference, defaultPreferences } from "./use-preferences"
 
 // Mock SWR

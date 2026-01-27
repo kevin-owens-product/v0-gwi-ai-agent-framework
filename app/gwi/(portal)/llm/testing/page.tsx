@@ -26,7 +26,6 @@ export default function LLMTestingPage() {
   const [maxTokens, setMaxTokens] = useState([1024])
 
   const t = useTranslations('gwi.llm.testing')
-  const tCommon = useTranslations('common')
 
   const handleTest = async () => {
     if (!prompt.trim()) return

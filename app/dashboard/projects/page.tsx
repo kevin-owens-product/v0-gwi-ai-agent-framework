@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -104,7 +103,6 @@ const initialProjects: Project[] = [
 ]
 
 export default function ProjectsPage() {
-  const _router = useRouter()
   const [projects, setProjects] = useState<Project[]>(initialProjects)
   const [searchQuery, setSearchQuery] = useState("")
   const [isCreateOpen, setIsCreateOpen] = useState(false)

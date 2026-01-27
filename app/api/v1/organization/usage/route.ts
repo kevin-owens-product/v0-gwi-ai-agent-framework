@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
     if (!orgId) {
       return NextResponse.json(
         { error: 'No organization found' },
@@ -29,27 +29,27 @@ export async function GET(request: NextRequest) {
 
     const usageRecords = await prisma.usageRecord.findMany({
       where: {
-        organizationId: orgId,
-        createdAt: {
+        orgId,
+        recordedAt: {
           gte: startOfMonth,
         },
       },
     })
 
-    // Aggregate usage by resource type
+    // Aggregate usage by metric type
     const usageByType: Record<string, number> = {}
 
     for (const record of usageRecords) {
-      if (!usageByType[record.resourceType]) {
-        usageByType[record.resourceType] = 0
+      if (!usageByType[record.metricType]) {
+        usageByType[record.metricType] = 0
       }
-      usageByType[record.resourceType] += record.quantity
+      usageByType[record.metricType] += record.quantity
     }
 
     // Get counts
     const counts = await prisma.organization.findUnique({
       where: { id: orgId },
-      select: {
+      include: {
         _count: {
           select: {
             members: true,
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
             workflows: true,
             reports: true,
             audiences: true,
-            brandTracking: true,
+            brandTrackings: true,
             crosstabs: true,
             charts: true,
             dashboards: true,

@@ -4,7 +4,6 @@ import { getValidatedOrgId, getUserMembership } from '@/lib/tenant'
 import { hasPermission, type Permission } from '@/lib/permissions'
 import {
   getEntityVersionHistory,
-  compareEntityVersions,
   type VersionedEntityType,
 } from '@/lib/change-tracking'
 

@@ -21,7 +21,6 @@ import type {
   ResourceSharingScope,
   SharedResourceType,
   Role,
-  HierarchyAction,
   PlanTier,
   CompanySize,
 } from '@prisma/client'

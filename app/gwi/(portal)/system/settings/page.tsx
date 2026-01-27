@@ -1,5 +1,4 @@
 import { Suspense } from "react"
-import Link from "next/link"
 import { prisma } from "@/lib/db"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -23,7 +22,8 @@ async function SettingsContent() {
   const settings = await getSettings()
   const t = await getTranslations('gwi.settings')
 
-  const settingsByCategory = settings.reduce((acc, setting) => {
+  // Settings grouped by category (used for dynamic settings rendering)
+  void settings.reduce((acc, setting) => {
     if (!acc[setting.category]) {
       acc[setting.category] = []
     }

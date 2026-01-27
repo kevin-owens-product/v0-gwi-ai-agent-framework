@@ -99,7 +99,7 @@ const violationTypeIcons: Record<string, React.ReactNode> = {
 }
 
 export default function SecurityViolationsPage() {
-  const router = useRouter()
+  useRouter()
   const [violations, setViolations] = useState<SecurityViolation[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")

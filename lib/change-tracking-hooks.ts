@@ -5,7 +5,7 @@
  * Use these hooks when creating, updating, or deleting tracked entities.
  */
 
-import { ChangeType } from '@prisma/client'
+// Note: ChangeType is imported for use with captureEntityVersion typing
 import {
   captureEntityVersion,
   type VersionedEntityType,

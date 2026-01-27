@@ -72,13 +72,7 @@ const scopeOptions = [
   { value: "SPECIFIC_PLANS", label: "Specific Plans" },
 ]
 
-const platformOptions = [
-  { value: "iOS", label: "iOS" },
-  { value: "Android", label: "Android" },
-  { value: "Windows", label: "Windows" },
-  { value: "macOS", label: "macOS" },
-  { value: "Linux", label: "Linux" },
-]
+// platformOptions array removed - unused
 
 export default function DevicePolicyDetailPage() {
   const params = useParams()
@@ -318,7 +312,7 @@ export default function DevicePolicyDetailPage() {
               onOpenChange={setShowDeleteDialog}
               title="Delete Policy"
               description="Are you sure you want to delete this policy? This action cannot be undone."
-              confirmLabel="Delete"
+              confirmText="Delete"
               variant="destructive"
               onConfirm={handleDelete}
             />

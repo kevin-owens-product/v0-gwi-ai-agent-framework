@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import { prisma } from "@/lib/db"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Key, Plus, Search, Copy, Trash2, Eye, EyeOff, Clock, Shield } from "lucide-react"
+import { Key, Plus, Search, Copy, Trash2, Clock, Shield } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 
 async function getApiKeys() {

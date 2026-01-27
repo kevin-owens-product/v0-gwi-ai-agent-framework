@@ -118,7 +118,6 @@ async function testConnection(
   await new Promise((resolve) => setTimeout(resolve, 500 + Math.random() * 1500))
 
   const credentials = connector.credentials as Record<string, unknown>
-  const config = connector.config as Record<string, unknown>
 
   // Check if credentials are configured
   const hasCredentials = Object.keys(credentials).length > 0

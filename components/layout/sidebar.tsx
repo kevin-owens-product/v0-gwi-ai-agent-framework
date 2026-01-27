@@ -26,7 +26,6 @@
  * ```
  */
 
-import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
@@ -325,7 +324,7 @@ export function AppSidebar({
 }: AppSidebarProps) {
   const pathname = usePathname()
   const [isCompact, setIsCompact] = useState(defaultCollapsed)
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
+  const [_openGroups, _setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
     navSections.forEach((section) => {
       initial[section.id || section.title] = section.defaultOpen ?? false
@@ -640,5 +639,3 @@ export function AppSidebar({
   )
 }
 
-// Export types for external use
-export type { NavItem, NavChild, NavSection, SidebarUser, SidebarBranding }

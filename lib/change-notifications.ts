@@ -11,7 +11,7 @@
 
 import { prisma } from '@/lib/db'
 import { Prisma, ChangeAlertType, AlertSeverity } from '@prisma/client'
-import { SIGNIFICANCE_THRESHOLDS, type VersionedEntityType } from './change-tracking'
+import { type VersionedEntityType } from './change-tracking'
 
 // Alert configuration
 export interface AlertThreshold {
@@ -232,7 +232,7 @@ class ChangeNotificationService {
    */
   private determineAlertType(
     changePercent: number,
-    threshold: AlertThreshold
+    _threshold: AlertThreshold
   ): ChangeAlertType {
     if (changePercent > 0) {
       return 'SIGNIFICANT_INCREASE'

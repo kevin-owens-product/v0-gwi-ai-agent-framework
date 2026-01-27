@@ -9,16 +9,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { useFavorites, useRecentViews, type SavedView, type SavedViewType } from '@/hooks/use-saved-views'
+import { useFavorites, useRecentViews, type SavedView } from '@/hooks/use-saved-views'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import {
   Star,
   Clock,

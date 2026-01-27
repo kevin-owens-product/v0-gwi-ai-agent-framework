@@ -4,7 +4,7 @@ import { validateSuperAdminSession } from "@/lib/super-admin"
 import { cookies } from "next/headers"
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

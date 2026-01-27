@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { hasGWIPermission } from "@/lib/gwi-permissions"
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const cookieStore = await cookies()
     const token = cookieStore.get("gwiToken")?.value

@@ -42,7 +42,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 import {
   Plus,
@@ -113,17 +113,6 @@ const STATUS_CONFIG: Record<ExportStatus | 'never', { label: string; className: 
     className: 'bg-muted text-muted-foreground border-muted',
     icon: <Clock className="h-3 w-3" />,
   },
-}
-
-function formatDate(dateString: string | null): string {
-  if (!dateString) return 'Never'
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
 }
 
 function formatRelativeDate(dateString: string | null): string {

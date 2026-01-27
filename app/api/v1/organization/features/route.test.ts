@@ -26,7 +26,15 @@ import { GET } from './route'
 import { auth } from '@/lib/auth'
 import { getValidatedOrgId } from '@/lib/tenant'
 import { prisma } from '@/lib/prisma'
+
+// Ensure prisma mock is referenced
+void prisma
 import { getOrganizationFeatures } from '@/lib/features'
+
+// Type assertion helpers for mocked functions
+const mockedAuth = auth as ReturnType<typeof vi.fn>
+const mockedGetValidatedOrgId = getValidatedOrgId as ReturnType<typeof vi.fn>
+const mockedGetOrganizationFeatures = getOrganizationFeatures as ReturnType<typeof vi.fn>
 
 describe('Organization Features API - GET /api/v1/organization/features', () => {
   beforeEach(() => {
@@ -35,7 +43,7 @@ describe('Organization Features API - GET /api/v1/organization/features', () => 
 
   describe('Authentication', () => {
     it('should return 401 for unauthenticated requests', async () => {
-      vi.mocked(auth).mockResolvedValue(null)
+      mockedAuth.mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization/features', {
         headers: { 'x-organization-id': 'org-1' },
@@ -49,11 +57,11 @@ describe('Organization Features API - GET /api/v1/organization/features', () => 
     })
 
     it('should return 403 when org validation fails', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockResolvedValue(null)
+      mockedGetValidatedOrgId.mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization/features')
 
@@ -65,11 +73,11 @@ describe('Organization Features API - GET /api/v1/organization/features', () => 
     })
 
     it('should verify user membership via getValidatedOrgId', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockResolvedValue(null)
+      mockedGetValidatedOrgId.mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization/features', {
         headers: { 'x-organization-id': 'org-1' },
@@ -118,12 +126,12 @@ describe('Organization Features API - GET /api/v1/organization/features', () => 
         },
       ]
 
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
-      vi.mocked(getOrganizationFeatures).mockResolvedValue(mockFeatures as any)
+      mockedGetValidatedOrgId.mockResolvedValue('org-1')
+      mockedGetOrganizationFeatures.mockResolvedValue(mockFeatures)
 
       const request = new Request('http://localhost:3000/api/v1/organization/features', {
         headers: { 'x-organization-id': 'org-1' },
@@ -142,12 +150,12 @@ describe('Organization Features API - GET /api/v1/organization/features', () => 
     })
 
     it('should return empty array for organization with no features', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
-      vi.mocked(getOrganizationFeatures).mockResolvedValue([])
+      mockedGetValidatedOrgId.mockResolvedValue('org-1')
+      mockedGetOrganizationFeatures.mockResolvedValue([])
 
       const request = new Request('http://localhost:3000/api/v1/organization/features', {
         headers: { 'x-organization-id': 'org-1' },
@@ -201,11 +209,11 @@ describe('Organization Features API - GET /api/v1/organization/features', () => 
 
   describe('Error Handling', () => {
     it('should return 500 for database errors', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockRejectedValue(
+      mockedGetValidatedOrgId.mockRejectedValue(
         new Error('Database error')
       )
 

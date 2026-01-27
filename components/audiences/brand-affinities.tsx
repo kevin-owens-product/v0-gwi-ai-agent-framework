@@ -18,14 +18,10 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
-  ShoppingBag,
   Smartphone,
   Car,
-  Utensils,
   Coffee,
   Shirt,
-  Home,
-  Dumbbell,
   Plane,
   CreditCard,
   Sparkles,
@@ -73,19 +69,6 @@ interface BrandAffinitiesProps {
   audienceName: string
   audienceCriteria?: Record<string, unknown>
   className?: string
-}
-
-const _categoryIcons: Record<string, React.ReactNode> = {
-  "Technology": <Smartphone className="h-5 w-5" />,
-  "Automotive": <Car className="h-5 w-5" />,
-  "Food & Beverage": <Coffee className="h-5 w-5" />,
-  "Fashion & Apparel": <Shirt className="h-5 w-5" />,
-  "Health & Fitness": <Dumbbell className="h-5 w-5" />,
-  "Travel & Hospitality": <Plane className="h-5 w-5" />,
-  "Financial Services": <CreditCard className="h-5 w-5" />,
-  "Home & Living": <Home className="h-5 w-5" />,
-  "Restaurants": <Utensils className="h-5 w-5" />,
-  "Retail": <ShoppingBag className="h-5 w-5" />,
 }
 
 const trendIcons: Record<string, React.ReactNode> = {

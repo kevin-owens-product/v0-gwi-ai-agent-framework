@@ -8,17 +8,14 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   ArrowLeft,
-  Edit,
   Play,
   Pause,
   Settings,
   FileText,
   MessageSquare,
   Send,
-  Clock,
   Users,
   CheckCircle,
-  AlertCircle,
 } from "lucide-react"
 import { SurveyEditor } from "@/components/gwi/surveys/survey-editor"
 import { QuestionList } from "@/components/gwi/surveys/question-list"

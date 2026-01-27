@@ -254,13 +254,13 @@ describe('Admin Operations Releases API - /api/admin/operations/releases', () =>
   describe('POST - Create Release', () => {
     describe('Validation', () => {
       it('should require version', () => {
-        const body = { name: 'Release', type: 'MAJOR' }
+        const body: { name: string; type: string; version?: string } = { name: 'Release', type: 'MAJOR' }
         const isValid = !!body.version
         expect(isValid).toBe(false)
       })
 
       it('should require type', () => {
-        const body = { version: '2.0.0', name: 'Release' }
+        const body: { version: string; name: string; type?: string } = { version: '2.0.0', name: 'Release' }
         const isValid = !!body.type
         expect(isValid).toBe(false)
       })
@@ -302,22 +302,22 @@ describe('Admin Operations Releases API - /api/admin/operations/releases', () =>
       })
 
       it('should default changelog to empty array', () => {
-        const changelog = []
+        const changelog: string[] = []
         expect(changelog).toEqual([])
       })
 
       it('should default features to empty array', () => {
-        const features = []
+        const features: string[] = []
         expect(features).toEqual([])
       })
 
       it('should default bugFixes to empty array', () => {
-        const bugFixes = []
+        const bugFixes: string[] = []
         expect(bugFixes).toEqual([])
       })
 
       it('should default breakingChanges to empty array', () => {
-        const breakingChanges = []
+        const breakingChanges: string[] = []
         expect(breakingChanges).toEqual([])
       })
     })

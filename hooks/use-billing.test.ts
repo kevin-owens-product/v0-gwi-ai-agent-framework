@@ -1,10 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
 import { useBilling } from './use-billing'
 
 // Mock dependencies
 vi.mock('@tanstack/react-query', () => ({
-  useQuery: vi.fn((options) => ({
+  useQuery: vi.fn(() => ({
     data: undefined,
     isLoading: false,
     error: null,

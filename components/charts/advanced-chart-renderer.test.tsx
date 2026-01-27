@@ -52,7 +52,7 @@ let shouldReturnEmptySampleData = false
 
 // Mock the GWI sample data module
 vi.mock('./data/gwi-sample-data', () => ({
-  generateAdvancedSampleData: vi.fn((type: string) => {
+  generateAdvancedSampleData: vi.fn((_type: string) => {
     // Allow tests to control whether sample data returns empty
     if (shouldReturnEmptySampleData) {
       return []
@@ -429,9 +429,9 @@ describe('AdvancedChartRenderer', () => {
 
   describe('COMPARISON_BAR Chart Type', () => {
     it('should render COMPARISON_BAR chart', () => {
-      const comparisonData = [
-        { metric: 'Awareness', current: 65, previous: 58, benchmark: 60, change: 12.1, value: 65 },
-        { metric: 'Consideration', current: 45, previous: 42, benchmark: 48, change: 7.1, value: 45 },
+      const comparisonData: AdvancedChartDataPoint[] = [
+        { name: 'Awareness', current: 65, previous: 58, benchmark: 60, change: 12.1, value: 65 },
+        { name: 'Consideration', current: 45, previous: 42, benchmark: 48, change: 7.1, value: 45 },
       ]
       render(<AdvancedChartRenderer type="COMPARISON_BAR" data={comparisonData} />)
       expect(screen.getByTestId('bar-chart')).toBeDefined()

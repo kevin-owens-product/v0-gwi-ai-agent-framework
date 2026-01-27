@@ -11,7 +11,6 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { usePinnedViews, type SavedView } from '@/hooks/use-saved-views'
 import { Button } from '@/components/ui/button'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Tooltip,
@@ -328,20 +327,10 @@ export function PinnedItemsBar({
  * Compact version of PinnedItemsBar for smaller spaces
  */
 export function CompactPinnedItemsBar({ className }: { className?: string }) {
-  const { savedViews: pinnedViews, isLoading, togglePinned } = usePinnedViews()
+  const { savedViews: pinnedViews, isLoading } = usePinnedViews()
 
   if (!isLoading && pinnedViews.length === 0) {
     return null
-  }
-
-  const handleUnpin = async (id: string, e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    try {
-      await togglePinned(id, true)
-    } catch (error) {
-      console.error('Failed to unpin:', error)
-    }
   }
 
   return (

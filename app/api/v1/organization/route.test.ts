@@ -26,6 +26,11 @@ import { auth } from '@/lib/auth'
 import { getValidatedOrgId } from '@/lib/tenant'
 import { prisma } from '@/lib/prisma'
 
+// Type assertion helpers for mocked functions
+const mockedAuth = auth as ReturnType<typeof vi.fn>
+const mockedGetValidatedOrgId = getValidatedOrgId as ReturnType<typeof vi.fn>
+const mockedPrismaOrgFindUnique = prisma.organization.findUnique as ReturnType<typeof vi.fn>
+
 describe('Organization API - GET /api/v1/organization', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -33,7 +38,7 @@ describe('Organization API - GET /api/v1/organization', () => {
 
   describe('Authentication', () => {
     it('should return 401 for unauthenticated requests', async () => {
-      vi.mocked(auth).mockResolvedValue(null)
+      mockedAuth.mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization', {
         headers: { 'x-organization-id': 'org-1' },
@@ -47,11 +52,11 @@ describe('Organization API - GET /api/v1/organization', () => {
     })
 
     it('should return 403 when org validation fails', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockResolvedValue(null)
+      mockedGetValidatedOrgId.mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization')
 
@@ -63,11 +68,11 @@ describe('Organization API - GET /api/v1/organization', () => {
     })
 
     it('should verify user membership via getValidatedOrgId', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockResolvedValue(null)
+      mockedGetValidatedOrgId.mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization', {
         headers: { 'x-organization-id': 'org-1' },
@@ -106,12 +111,12 @@ describe('Organization API - GET /api/v1/organization', () => {
         },
       }
 
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
-      vi.mocked(prisma.organization.findUnique).mockResolvedValue(mockOrganization as any)
+      mockedGetValidatedOrgId.mockResolvedValue('org-1')
+      mockedPrismaOrgFindUnique.mockResolvedValue(mockOrganization)
 
       const request = new Request('http://localhost:3000/api/v1/organization', {
         headers: { 'x-organization-id': 'org-1' },
@@ -139,12 +144,12 @@ describe('Organization API - GET /api/v1/organization', () => {
     })
 
     it('should return 404 for non-existent organization', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockResolvedValue('org-1')
-      vi.mocked(prisma.organization.findUnique).mockResolvedValue(null)
+      mockedGetValidatedOrgId.mockResolvedValue('org-1')
+      mockedPrismaOrgFindUnique.mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization', {
         headers: { 'x-organization-id': 'org-1' },
@@ -160,11 +165,11 @@ describe('Organization API - GET /api/v1/organization', () => {
 
   describe('Error Handling', () => {
     it('should return 500 for database errors', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      mockedAuth.mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
-      vi.mocked(getValidatedOrgId).mockRejectedValue(
+      mockedGetValidatedOrgId.mockRejectedValue(
         new Error('Database connection failed')
       )
 

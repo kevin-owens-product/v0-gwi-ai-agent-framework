@@ -8,8 +8,6 @@ import {
   Globe,
   Save,
   Trash2,
-  Shield,
-  Clock,
   AlertTriangle,
   Ban,
   CheckCircle,
@@ -456,7 +454,7 @@ export default function IPBlocklistDetailPage() {
             onOpenChange={setShowDeleteDialog}
             title="Remove from Blocklist"
             description={`Are you sure you want to remove ${entry?.ipAddress} from the blocklist? This IP will be allowed to access the platform again.`}
-            confirmLabel="Remove"
+            confirmText="Remove"
             onConfirm={handleDelete}
             variant="destructive"
           />

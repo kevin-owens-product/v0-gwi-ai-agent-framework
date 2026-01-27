@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -184,13 +184,10 @@ export function ExportManager({
   const [isExporting, setIsExporting] = useState(false)
   const [exportProgress, setExportProgress] = useState(0)
   const [exportHistory, setExportHistory] = useState<ExportHistoryItem[]>([])
-  const [_previewMode, setPreviewMode] = useState(false)
   const [activeTab, setActiveTab] = useState<"format" | "options" | "schedule" | "history">("format")
   const [selectedColumns, setSelectedColumns] = useState<Set<string>>(
     new Set(data.columns?.map(c => c.key) || [])
   )
-
-  const _exportRef = useRef<HTMLDivElement>(null)
 
   // Update options
   const updateOptions = useCallback((updates: Partial<ExportOptions>) => {
@@ -963,7 +960,7 @@ export function ExportManager({
                 <Copy className="h-4 w-4 mr-2" />
                 Copy
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setPreviewMode(true)}>
+              <Button variant="outline" size="sm" onClick={() => console.log('Preview mode')}>
                 <Eye className="h-4 w-4 mr-2" />
                 Preview
               </Button>

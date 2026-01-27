@@ -14,11 +14,13 @@ import { recordUsage } from './billing'
 import { Prisma } from '@prisma/client'
 
 // JobContext interface for future use when job scheduling is expanded
-interface _JobContext {
+interface JobContext {
   jobId: string
   jobType: string
   runAt: Date
 }
+// Exporting type for future use
+export type { JobContext as _JobContext }
 
 /**
  * Execute scheduled workflows

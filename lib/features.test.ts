@@ -4,7 +4,6 @@ import {
   recordFeatureUsage,
   checkMultipleFeatures,
   getOrganizationFeatures,
-  type FeatureAccess
 } from './features'
 import { prisma } from './prisma'
 

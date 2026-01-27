@@ -211,7 +211,7 @@ describe("PATCH /api/v1/preferences", () => {
     })
 
     const response = await PATCH(request)
-    const data = await response.json()
+    void await response.json()
 
     expect(response.status).toBe(200)
     expect(prisma.userPreferences.create).toHaveBeenCalled()

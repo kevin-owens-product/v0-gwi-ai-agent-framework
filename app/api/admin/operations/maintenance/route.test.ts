@@ -221,19 +221,19 @@ describe('Admin Operations Maintenance API - /api/admin/operations/maintenance',
   describe('POST - Create Maintenance Window', () => {
     describe('Validation', () => {
       it('should require title', () => {
-        const body = { scheduledStart: new Date(), scheduledEnd: new Date() }
+        const body: { scheduledStart: Date; scheduledEnd: Date; title?: string } = { scheduledStart: new Date(), scheduledEnd: new Date() }
         const isValid = !!body.title
         expect(isValid).toBe(false)
       })
 
       it('should require scheduledStart', () => {
-        const body = { title: 'Maintenance', scheduledEnd: new Date() }
+        const body: { title: string; scheduledEnd: Date; scheduledStart?: Date } = { title: 'Maintenance', scheduledEnd: new Date() }
         const isValid = !!body.scheduledStart
         expect(isValid).toBe(false)
       })
 
       it('should require scheduledEnd', () => {
-        const body = { title: 'Maintenance', scheduledStart: new Date() }
+        const body: { title: string; scheduledStart: Date; scheduledEnd?: Date } = { title: 'Maintenance', scheduledStart: new Date() }
         const isValid = !!body.scheduledEnd
         expect(isValid).toBe(false)
       })
@@ -278,12 +278,12 @@ describe('Admin Operations Maintenance API - /api/admin/operations/maintenance',
       })
 
       it('should default affectedServices to empty array', () => {
-        const services = []
+        const services: string[] = []
         expect(services).toEqual([])
       })
 
       it('should default affectedRegions to empty array', () => {
-        const regions = []
+        const regions: string[] = []
         expect(regions).toEqual([])
       })
     })

@@ -63,8 +63,9 @@ const TIER_INFO = {
 }
 
 export default function PlanPage() {
-  const { plan, tier, isLoading: planLoading } = useOrganizationPlan()
-  const { usage, counts, isLoading: usageLoading } = useOrganizationUsage()
+  const { tier, isLoading: planLoading } = useOrganizationPlan()
+  const { usage, isLoading: usageLoading } = useOrganizationUsage()
+  const counts = usage?.counts
   const { features } = useOrganizationFeatures()
   const [upgrading, setUpgrading] = useState(false)
 

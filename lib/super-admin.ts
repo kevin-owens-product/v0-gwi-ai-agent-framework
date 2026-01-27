@@ -44,6 +44,14 @@ export const SUPER_ADMIN_PERMISSIONS = {
   'support:write': 'Respond to tickets',
   'support:manage': 'Manage ticket assignments',
 
+  // Feedback
+  'feedback:read': 'View user feedback',
+  'feedback:write': 'Manage user feedback',
+
+  // NPS
+  'nps:read': 'View NPS surveys',
+  'nps:write': 'Manage NPS surveys',
+
   // System Config
   'config:read': 'View system configuration',
   'config:write': 'Modify system configuration',
@@ -79,6 +87,8 @@ export const SUPER_ADMIN_ROLE_PERMISSIONS: Record<SuperAdminRole, SuperAdminPerm
     'features:read', 'features:write',
     'rules:read', 'rules:write',
     'support:read', 'support:write', 'support:manage',
+    'feedback:read', 'feedback:write',
+    'nps:read', 'nps:write',
     'config:read',
     'audit:read',
     'notifications:read', 'notifications:write',
@@ -91,6 +101,8 @@ export const SUPER_ADMIN_ROLE_PERMISSIONS: Record<SuperAdminRole, SuperAdminPerm
     'analytics:read',
     'features:read',
     'support:read', 'support:write',
+    'feedback:read', 'feedback:write',
+    'nps:read',
     'audit:read',
     'notifications:read',
     'billing:read',

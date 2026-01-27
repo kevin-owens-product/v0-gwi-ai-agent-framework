@@ -13,16 +13,6 @@ import { FileText, HelpCircle } from "lucide-react"
 import Link from "next/link"
 import { getTranslations } from "@/lib/i18n/server"
 
-const questionTypeLabels: Record<string, string> = {
-  SINGLE_SELECT: "Single Select",
-  MULTI_SELECT: "Multi Select",
-  SCALE: "Scale",
-  OPEN_TEXT: "Open Text",
-  NUMERIC: "Numeric",
-  DATE: "Date",
-  MATRIX: "Matrix",
-}
-
 async function getQuestions() {
   const questions = await prisma.surveyQuestion.findMany({
     include: {
@@ -43,7 +33,6 @@ async function getQuestions() {
 export default async function SurveyQuestionsPage() {
   const { questions, stats } = await getQuestions()
   const t = await getTranslations('gwi.surveys.questions')
-  const tCommon = await getTranslations('common')
 
   const totalQuestions = questions.length
   const typeStats = stats.reduce(
@@ -111,7 +100,7 @@ export default async function SurveyQuestionsPage() {
                 <TableRow>
                   <TableHead>{t('code')}</TableHead>
                   <TableHead>{t('questionText')}</TableHead>
-                  <TableHead>{tCommon('type')}</TableHead>
+                  <TableHead>{t('type')}</TableHead>
                   <TableHead>{t('survey')}</TableHead>
                   <TableHead>{t('required')}</TableHead>
                 </TableRow>

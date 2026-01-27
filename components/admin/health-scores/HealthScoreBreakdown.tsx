@@ -64,13 +64,6 @@ export function HealthScoreBreakdown({
     return "text-red-500"
   }
 
-  const getProgressColor = (value: number) => {
-    if (value >= 70) return "bg-green-500"
-    if (value >= 50) return "bg-amber-500"
-    if (value >= 30) return "bg-orange-500"
-    return "bg-red-500"
-  }
-
   const details = metadata?.calculationDetails
 
   const components = [

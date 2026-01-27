@@ -138,7 +138,8 @@ function OrgTreeNode({
   onAddChild: (orgId: string, orgName: string) => void
   onViewDetails: (orgId: string) => void
   onMove: (orgId: string, orgName: string) => void
-  t: (key: string, values?: Record<string, unknown>) => string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  t: (key: string, values?: Record<string, unknown>) => any
 }) {
   const [expanded, setExpanded] = useState(level < 2)
   const hasChildren = node._count.childOrgs > 0 || (node.childOrgs && node.childOrgs.length > 0)
@@ -622,7 +623,7 @@ export default function HierarchyPage() {
                       onAddChild={openAddChildDialog}
                       onViewDetails={(id) => window.open(`/admin/tenants/${id}`, "_blank")}
                       onMove={openMoveDialog}
-                      t={t}
+                      t={t as (key: string, values?: Record<string, unknown>) => string}
                     />
                   ))}
                 </div>
@@ -753,7 +754,7 @@ export default function HierarchyPage() {
           <DialogHeader>
             <DialogTitle>{t("dialogs.addChild.title")}</DialogTitle>
             <DialogDescription>
-              {t("dialogs.addChild.description", { name: parentOrg?.name })}
+              {t("dialogs.addChild.description", { name: parentOrg?.name ?? "" })}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -962,7 +963,7 @@ export default function HierarchyPage() {
           <DialogHeader>
             <DialogTitle>{t("dialogs.move.title")}</DialogTitle>
             <DialogDescription>
-              {t("dialogs.move.description", { name: moveOrg?.name })}
+              {t("dialogs.move.description", { name: moveOrg?.name ?? "" })}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

@@ -4,9 +4,8 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { RefreshCw, ExternalLink } from "lucide-react"
+import { RefreshCw } from "lucide-react"
 import {
-  StatusBadge,
   StatusOverview,
   IncidentCard,
   StatusTimeline,

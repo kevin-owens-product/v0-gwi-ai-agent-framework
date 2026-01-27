@@ -23,7 +23,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Calendar, Filter, X } from "lucide-react"
+import { Calendar, X } from "lucide-react"
 
 interface Admin {
   id: string

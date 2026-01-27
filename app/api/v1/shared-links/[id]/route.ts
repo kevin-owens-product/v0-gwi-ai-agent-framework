@@ -41,7 +41,7 @@ export async function GET(
             id: true,
             name: true,
             email: true,
-            image: true,
+            avatarUrl: true,
           },
         },
         views: {
@@ -173,7 +173,7 @@ export async function PATCH(
             id: true,
             name: true,
             email: true,
-            image: true,
+            avatarUrl: true,
           },
         },
       },

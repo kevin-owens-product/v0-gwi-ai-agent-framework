@@ -11,7 +11,7 @@ import { calculateHealthScore, getHealthScoreHistory } from "@/lib/health-score"
 import { cookies } from "next/headers"
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ orgId: string }> }
 ) {
   try {
@@ -114,7 +114,7 @@ export async function GET(
 }
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ orgId: string }> }
 ) {
   try {

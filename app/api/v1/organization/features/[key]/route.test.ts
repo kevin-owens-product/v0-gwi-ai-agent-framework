@@ -30,7 +30,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
 
   describe('Authentication', () => {
     it('should return 401 for unauthenticated requests', async () => {
-      vi.mocked(auth).mockResolvedValue(null)
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue(null)
 
       const request = new Request('http://localhost:3000/api/v1/organization/features/ADVANCED_ANALYTICS', {
         headers: { 'x-organization-id': 'org-1' },
@@ -44,7 +44,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should require X-Organization-Id header', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -59,7 +59,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should verify user membership', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -79,7 +79,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
 
   describe('Feature Access Check', () => {
     it('should return access granted with no limits', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -113,7 +113,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should return access denied for unavailable feature', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -142,7 +142,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should return usage tracking for limited features', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -183,7 +183,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should indicate near limit status', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -217,7 +217,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should indicate at limit status', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -252,7 +252,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
 
   describe('Different Feature Keys', () => {
     it('should check ADVANCED_ANALYTICS feature', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -279,7 +279,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
     })
 
     it('should check CUSTOM_INTEGRATIONS feature', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })
@@ -306,7 +306,7 @@ describe('Feature Access API - GET /api/v1/organization/features/[key]', () => {
 
   describe('Error Handling', () => {
     it('should return 500 for database errors', async () => {
-      vi.mocked(auth).mockResolvedValue({
+      (auth as ReturnType<typeof vi.fn>).mockResolvedValue({
         user: { id: 'user-1', email: 'test@example.com' },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       })

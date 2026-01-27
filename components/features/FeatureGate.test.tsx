@@ -14,6 +14,12 @@ describe('FeatureGate Component', () => {
     it('should show skeleton loader while loading', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
+        value: undefined,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: true,
         error: null,
         refresh: vi.fn(),
@@ -31,6 +37,12 @@ describe('FeatureGate Component', () => {
     it('should show custom loading fallback when provided', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
+        value: undefined,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: true,
         error: null,
         refresh: vi.fn(),
@@ -54,6 +66,11 @@ describe('FeatureGate Component', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: true,
         value: true,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -72,6 +89,11 @@ describe('FeatureGate Component', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: true,
         value: true,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -93,6 +115,12 @@ describe('FeatureGate Component', () => {
     it('should render nothing in hard mode without fallback', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
+        value: undefined,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -111,6 +139,12 @@ describe('FeatureGate Component', () => {
     it('should render custom fallback in hard mode', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
+        value: undefined,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -135,6 +169,12 @@ describe('FeatureGate Component', () => {
     it('should show blurred content and upgrade prompt in soft mode', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
+        value: undefined,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -153,6 +193,12 @@ describe('FeatureGate Component', () => {
     it('should render custom fallback in soft mode', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
+        value: undefined,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -175,6 +221,12 @@ describe('FeatureGate Component', () => {
     it('should default to soft mode when mode not specified', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
+        value: undefined,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -197,6 +249,11 @@ describe('FeatureGate Component', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: true,
         value: true,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -214,6 +271,12 @@ describe('FeatureGate Component', () => {
     it('should check CUSTOM_INTEGRATIONS feature', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
+        value: undefined,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -233,6 +296,10 @@ describe('FeatureGate Component', () => {
         hasAccess: true,
         value: 10,
         limit: 10,
+        usage: 10,
+        percentage: 100,
+        isNearLimit: true,
+        isAtLimit: true,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -253,6 +320,11 @@ describe('FeatureGate Component', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: true,
         value: true,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -277,6 +349,11 @@ describe('FeatureGate Component', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: true,
         value: true,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -301,6 +378,11 @@ describe('FeatureGate Component', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: true,
         value: true,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -319,6 +401,11 @@ describe('FeatureGate Component', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: false,
         value: null,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
@@ -339,12 +426,17 @@ describe('FeatureGate Component', () => {
       vi.mocked(useFeatureAccess).mockReturnValue({
         hasAccess: true,
         value: true,
+        limit: undefined,
+        usage: undefined,
+        percentage: 0,
+        isNearLimit: false,
+        isAtLimit: false,
         isLoading: false,
         error: null,
         refresh: vi.fn(),
       })
 
-      const { container } = render(
+      render(
         <FeatureGate feature="ADVANCED_ANALYTICS">
           <button aria-label="Test button">Click me</button>
         </FeatureGate>

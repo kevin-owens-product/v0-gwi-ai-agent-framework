@@ -3,27 +3,15 @@ import Link from "next/link"
 import { prisma } from "@/lib/db"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import {
   Plus,
   Search,
   ChevronRight,
-  ChevronDown,
   FolderTree,
   Tag,
   Layers,
-  Edit,
-  Trash2,
-  MoreHorizontal,
 } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { TaxonomyTree } from "@/components/gwi/taxonomy/taxonomy-tree"
 import { getTranslations } from "@/lib/i18n/server"
 

@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 import { validateSuperAdminSession, liftUserBan } from "@/lib/super-admin"
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string; banId: string }> }
 ) {
   try {

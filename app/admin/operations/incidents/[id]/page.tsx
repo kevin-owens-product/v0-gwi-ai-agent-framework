@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
+// Input import removed - unused
 import { Label } from "@/components/ui/label"
 import {
   Select,

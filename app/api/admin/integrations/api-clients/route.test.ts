@@ -227,19 +227,19 @@ describe('Admin Integrations API Clients API - /api/admin/integrations/api-clien
   describe('POST - Create API Client', () => {
     describe('Validation', () => {
       it('should require name', () => {
-        const body = { orgId: 'org-123', type: 'CONFIDENTIAL' }
+        const body: { orgId: string; type: string; name?: string } = { orgId: 'org-123', type: 'CONFIDENTIAL' }
         const isValid = !!body.name
         expect(isValid).toBe(false)
       })
 
       it('should require orgId', () => {
-        const body = { name: 'My App', type: 'CONFIDENTIAL' }
+        const body: { name: string; type: string; orgId?: string } = { name: 'My App', type: 'CONFIDENTIAL' }
         const isValid = !!body.orgId
         expect(isValid).toBe(false)
       })
 
       it('should require type', () => {
-        const body = { name: 'My App', orgId: 'org-123' }
+        const body: { name: string; orgId: string; type?: string } = { name: 'My App', orgId: 'org-123' }
         const isValid = !!body.type
         expect(isValid).toBe(false)
       })
@@ -317,12 +317,12 @@ describe('Admin Integrations API Clients API - /api/admin/integrations/api-clien
       })
 
       it('should default allowedScopes to empty array', () => {
-        const scopes = []
+        const scopes: string[] = []
         expect(scopes).toEqual([])
       })
 
       it('should default redirectUris to empty array', () => {
-        const uris = []
+        const uris: string[] = []
         expect(uris).toEqual([])
       })
     })

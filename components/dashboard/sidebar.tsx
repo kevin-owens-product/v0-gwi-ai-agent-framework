@@ -30,9 +30,8 @@ import {
   Target,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { OrganizationSwitcher } from "./OrganizationSwitcher"
 import { LanguageSwitcher } from "@/components/ui/language-switcher"
 
 // Storage key for persisting sidebar state

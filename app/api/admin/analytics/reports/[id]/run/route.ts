@@ -5,7 +5,7 @@ import { cookies } from "next/headers"
 import { Prisma } from "@prisma/client"
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -311,7 +311,7 @@ async function generateSecurityReport(query: Record<string, unknown>) {
   }
 }
 
-async function generateComplianceReport(query: Record<string, unknown>) {
+async function generateComplianceReport(_query: Record<string, unknown>) {
   const [frameworks, attestations, audits, legalHolds] = await Promise.all([
     prisma.complianceFramework.count({ where: { isActive: true } }),
     prisma.complianceAttestation.groupBy({

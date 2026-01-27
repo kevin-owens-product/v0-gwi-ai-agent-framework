@@ -701,20 +701,7 @@ export default function IntegrationAppsPage() {
         columns={columns}
         getRowId={(app) => app.id}
         isLoading={loading}
-        emptyMessage={
-          <div className="text-center py-12">
-            <Puzzle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No integration apps found</p>
-            <Button
-              variant="outline"
-              className="mt-4"
-              onClick={() => setIsCreateOpen(true)}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Create First App
-            </Button>
-          </div>
-        }
+        emptyMessage="No integration apps found"
         viewHref={(app) => `/admin/integrations/apps/${app.id}`}
         onDelete={handleDeleteApp}
         deleteConfirmTitle="Delete Integration App"

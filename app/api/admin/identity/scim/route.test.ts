@@ -148,7 +148,7 @@ describe('Admin Identity SCIM API - /api/admin/identity/scim', () => {
   describe('POST - Create SCIM Configuration', () => {
     describe('Validation', () => {
       it('should require orgId', () => {
-        const body = { displayName: 'SCIM Config' }
+        const body: { displayName: string; orgId?: string } = { displayName: 'SCIM Config' }
         const isValid = !!body.orgId
         expect(isValid).toBe(false)
       })

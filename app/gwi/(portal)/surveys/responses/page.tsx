@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import Link from "next/link"
 import { prisma } from "@/lib/db"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -60,7 +60,6 @@ async function ResponsesList({
 }) {
   const { responses, surveys } = await getResponses(searchParams)
   const t = await getTranslations('gwi.surveys.responses')
-  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
@@ -125,7 +124,7 @@ async function ResponsesList({
                 <TableRow>
                   <TableHead>{t('respondentId')}</TableHead>
                   <TableHead>{t('survey')}</TableHead>
-                  <TableHead>{tCommon('status')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
                   <TableHead>{t('startedAt')}</TableHead>
                   <TableHead>{t('completedAt')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>

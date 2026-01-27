@@ -47,10 +47,7 @@ interface Role {
   _count?: { superAdmins: number }
 }
 
-const scopeColors: Record<string, string> = {
-  PLATFORM: "bg-purple-500",
-  TENANT: "bg-blue-500",
-}
+// scopeColors removed - unused
 
 export default function RolesPage() {
   const { admin: currentAdmin } = useAdmin()

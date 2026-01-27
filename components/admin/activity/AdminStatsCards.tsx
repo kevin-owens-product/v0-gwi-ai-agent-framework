@@ -185,7 +185,7 @@ export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsPro
           <div className="mt-2">
             <p className="text-xs text-muted-foreground mb-1">{t("busiestHours")}</p>
             <div className="flex gap-2">
-              {stats.busiestHours.slice(0, 3).map((hourData, index) => (
+              {stats.busiestHours.slice(0, 3).map((hourData) => (
                 <span
                   key={hourData.hour}
                   className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted"

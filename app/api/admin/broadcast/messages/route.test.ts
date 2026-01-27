@@ -229,19 +229,19 @@ describe('Admin Broadcast Messages API - /api/admin/broadcast/messages', () => {
   describe('POST - Create Broadcast Message', () => {
     describe('Validation', () => {
       it('should require title', () => {
-        const body = { content: 'Content', type: 'ANNOUNCEMENT' }
+        const body: { content: string; type: string; title?: string } = { content: 'Content', type: 'ANNOUNCEMENT' }
         const isValid = !!body.title
         expect(isValid).toBe(false)
       })
 
       it('should require content', () => {
-        const body = { title: 'Title', type: 'ANNOUNCEMENT' }
+        const body: { title: string; type: string; content?: string } = { title: 'Title', type: 'ANNOUNCEMENT' }
         const isValid = !!body.content
         expect(isValid).toBe(false)
       })
 
       it('should require type', () => {
-        const body = { title: 'Title', content: 'Content' }
+        const body: { title: string; content: string; type?: string } = { title: 'Title', content: 'Content' }
         const isValid = !!body.type
         expect(isValid).toBe(false)
       })

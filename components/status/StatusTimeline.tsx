@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, CheckCircle, AlertCircle, AlertTriangle, XCircle } from "lucide-react"
+import { Calendar, CheckCircle } from "lucide-react"
 import type { Incident } from "./IncidentCard"
 
 interface StatusTimelineProps {
@@ -12,12 +12,6 @@ interface StatusTimelineProps {
   className?: string
 }
 
-const impactColors: Record<string, string> = {
-  NONE: "bg-gray-400",
-  MINOR: "bg-yellow-500",
-  MAJOR: "bg-orange-500",
-  CRITICAL: "bg-red-500",
-}
 
 interface DayStatus {
   date: Date
@@ -56,9 +50,9 @@ export function StatusTimeline({
     let status: DayStatus["status"] = "operational"
     for (const incident of dayIncidents) {
       if (incident.impact === "CRITICAL") {
-        status = "critical"
+        status = "major" // Map CRITICAL to major since critical isn't in DayStatus type
         break
-      } else if (incident.impact === "MAJOR" && status !== "critical") {
+      } else if (incident.impact === "MAJOR" && status !== "major") {
         status = "major"
       } else if (incident.impact === "MINOR" && status === "operational") {
         status = "minor"

@@ -24,8 +24,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Copy, Check, Variable, Info } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Copy, Check, Variable } from "lucide-react"
 
 interface TemplateVariable {
   name: string

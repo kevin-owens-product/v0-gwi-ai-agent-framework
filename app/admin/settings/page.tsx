@@ -16,7 +16,6 @@ import {
   Mail,
   Loader2,
   Save,
-  RefreshCw,
 } from "lucide-react"
 
 interface SystemConfig {
@@ -30,7 +29,7 @@ interface SystemConfig {
 export default function SettingsPage() {
   const t = useTranslations("admin.settings")
   const tCommon = useTranslations("common")
-  const [configs, setConfigs] = useState<SystemConfig[]>([])
+  const [, setConfigs] = useState<SystemConfig[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [editedValues, setEditedValues] = useState<Record<string, unknown>>({})
@@ -77,9 +76,7 @@ export default function SettingsPage() {
     setEditedValues(prev => ({ ...prev, [key]: value }))
   }
 
-  const getConfigsByCategory = (category: string) => {
-    return configs.filter(c => c.category === category)
-  }
+  // getConfigsByCategory function removed - unused
 
   if (isLoading) {
     return (

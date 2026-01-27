@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get validated organization ID (validates user membership)
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
     if (!orgId) {
       return NextResponse.json(
         { error: 'Organization not found or access denied' },
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     // Check permission
     const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id!, orgId },
     })
 
     if (!member || !hasPermission(member.role, 'compliance:view')) {
@@ -35,16 +35,7 @@ export async function GET(request: NextRequest) {
 
     // Get export requests
     const exports = await prisma.dataExport.findMany({
-      where: { organizationId: orgId },
-      include: {
-        requestedBy: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
+      where: { orgId },
       orderBy: { createdAt: 'desc' },
     })
 
@@ -70,7 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get validated organization ID (validates user membership)
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
     if (!orgId) {
       return NextResponse.json(
         { error: 'Organization not found or access denied' },
@@ -80,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     // Check permission
     const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id!, orgId },
     })
 
     if (!member || !hasPermission(member.role, 'data-exports:request')) {
@@ -91,7 +82,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { exportType, format = 'JSON', description } = body
+    const { exportType, format = 'json' } = body
 
     if (!exportType || !['ORGANIZATION_DATA', 'USER_DATA', 'COMPLIANCE_DATA'].includes(exportType)) {
       return NextResponse.json(
@@ -103,11 +94,10 @@ export async function POST(request: NextRequest) {
     // Create export request
     const dataExport = await prisma.dataExport.create({
       data: {
-        organizationId: orgId,
-        requestedById: session.user.id,
-        exportType,
+        orgId,
+        requestedBy: session.user.id!,
+        type: exportType,
         format,
-        description,
         status: 'PENDING',
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       },
@@ -117,10 +107,10 @@ export async function POST(request: NextRequest) {
     await prisma.auditLog.create({
       data: {
         action: 'DATA_EXPORT_REQUESTED',
-        entityType: 'DATA_EXPORT',
-        entityId: dataExport.id,
+        resourceType: 'DATA_EXPORT',
+        resourceId: dataExport.id,
         userId: session.user.id,
-        organizationId: orgId,
+        orgId,
         metadata: {
           exportType,
           format,

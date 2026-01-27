@@ -12,8 +12,6 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
-import { Progress } from "@/components/ui/progress"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Select,
@@ -55,36 +53,28 @@ import {
   Star,
   StarOff,
   Link2,
-  Mail,
   Clock,
   Maximize2,
   Minimize2,
   MoreVertical,
   Bell,
-  BellOff,
   AlertTriangle,
   TrendingDown,
-  ArrowUpRight,
-  ArrowDownRight,
   FileJson,
   FileText,
   FileImage,
   Table,
   Tag,
-  Hash,
   Globe,
   Lock,
   UserPlus,
   Settings,
-  Zap,
   History,
-  Shield,
   ExternalLink,
   ChevronRight,
   Play,
   Pause,
   Timer,
-  Info,
   CheckCircle2,
   XCircle,
   AlertCircle,
@@ -97,10 +87,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,

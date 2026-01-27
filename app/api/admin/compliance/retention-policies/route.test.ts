@@ -275,19 +275,19 @@ describe('Admin Compliance Retention Policies API - /api/admin/compliance/retent
   describe('POST - Create Retention Policy', () => {
     describe('Validation', () => {
       it('should require name', () => {
-        const body = { dataType: 'EMAILS', retentionPeriod: 365 }
+        const body: { dataType: string; retentionPeriod: number; name?: string } = { dataType: 'EMAILS', retentionPeriod: 365 }
         const isValid = !!body.name
         expect(isValid).toBe(false)
       })
 
       it('should require dataType', () => {
-        const body = { name: 'Policy', retentionPeriod: 365 }
+        const body: { name: string; retentionPeriod: number; dataType?: string } = { name: 'Policy', retentionPeriod: 365 }
         const isValid = !!body.dataType
         expect(isValid).toBe(false)
       })
 
       it('should require retentionPeriod', () => {
-        const body = { name: 'Policy', dataType: 'EMAILS' }
+        const body: { name: string; dataType: string; retentionPeriod?: number } = { name: 'Policy', dataType: 'EMAILS' }
         const isValid = !!body.retentionPeriod
         expect(isValid).toBe(false)
       })

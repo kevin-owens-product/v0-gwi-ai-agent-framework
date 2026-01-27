@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
-              image: true,
+              avatarUrl: true,
             },
           },
           _count: {
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             email: true,
-            image: true,
+            avatarUrl: true,
           },
         },
       },

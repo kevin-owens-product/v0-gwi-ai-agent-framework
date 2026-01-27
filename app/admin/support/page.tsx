@@ -29,7 +29,6 @@ import {
   RefreshCw,
   Send,
   AlertTriangle,
-  MessageSquare,
   UserPlus,
   CheckCircle,
   XCircle,

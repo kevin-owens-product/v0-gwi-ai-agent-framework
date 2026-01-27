@@ -26,12 +26,10 @@ import {
   XCircle,
   Clock,
   TrendingUp,
-  TrendingDown,
   Workflow,
   BarChart3,
   Zap,
   RefreshCw,
-  AlertTriangle,
 } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 

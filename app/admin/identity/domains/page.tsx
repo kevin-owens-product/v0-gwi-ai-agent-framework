@@ -460,20 +460,7 @@ export default function DomainManagementPage() {
         columns={columns}
         getRowId={(domain) => domain.id}
         isLoading={loading}
-        emptyMessage={
-          <div className="text-center py-12">
-            <Globe className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">{t("noDomains")}</p>
-            <Button
-              variant="outline"
-              className="mt-4"
-              onClick={() => setIsCreateOpen(true)}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              {t("addFirstDomain")}
-            </Button>
-          </div>
-        }
+        emptyMessage={t("noDomains")}
         onDelete={handleDeleteDomain}
         deleteConfirmTitle={t("dialogs.deleteDomain")}
         deleteConfirmDescription={(domain) =>

@@ -113,7 +113,7 @@ const OPERATOR_OPTIONS = [
 export default function EditAudiencePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
-  const { data: session, status: sessionStatus } = useSession()
+  const { status: sessionStatus } = useSession()
   const t = useTranslations("dashboard.audiences.edit")
   const tCommon = useTranslations("common")
 
@@ -188,13 +188,6 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
   // Track changes
   useEffect(() => {
     if (!originalData) return
-
-    const currentData = {
-      name,
-      description,
-      markets: selectedMarkets,
-      criteria: { attributes, aiQuery },
-    }
 
     const originalCriteria = originalData.criteria || {}
     const changed =

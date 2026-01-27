@@ -17,7 +17,6 @@ import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admi
 import {
   FileText,
   Plus,
-  Loader2,
   RefreshCw,
   Play,
   Trash2,
@@ -67,7 +66,7 @@ export default function CustomReportsPage() {
   const [reports, setReports] = useState<CustomReport[]>([])
   const [pagination, setPagination] = useState<Pagination | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [runningReportId, setRunningReportId] = useState<string | null>(null)
+  const [, setRunningReportId] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   // Filter state

@@ -28,7 +28,7 @@ export function useLocalStorage<T>(
 ): [T, (value: T | ((prev: T) => T)) => void, () => void] {
   // State to store our value
   const [storedValue, setStoredValue] = useState<T>(initialValue)
-  const [isInitialized, setIsInitialized] = useState(false)
+  const [_isInitialized, setIsInitialized] = useState(false)
 
   // Initialize from localStorage on mount (client-side only)
   useEffect(() => {

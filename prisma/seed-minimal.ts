@@ -67,7 +67,7 @@ async function main() {
           passwordHash: hashSuperAdminPassword('SuperAdmin123!'),
           role: 'SUPER_ADMIN',
           isActive: true,
-          mfaEnabled: false,
+          twoFactorEnabled: false,
         }
       }),
       'SuperAdmin creation'
@@ -79,9 +79,9 @@ async function main() {
           email: 'demo@gwi.com',
           name: 'Demo Super Admin',
           passwordHash: hashSuperAdminPassword('demo123'),
-          role: 'PLATFORM_ADMIN',
+          role: 'ADMIN',
           isActive: true,
-          mfaEnabled: false,
+          twoFactorEnabled: false,
         }
       }),
       'Demo SuperAdmin creation'
@@ -96,7 +96,7 @@ async function main() {
   console.log('🎯 Creating core features...')
 
   const existingFeature = await safeCreate(
-    () => prisma.feature.findFirst({ where: { code: 'ADVANCED_ANALYTICS' } }),
+    () => prisma.feature.findFirst({ where: { key: 'ADVANCED_ANALYTICS' } }),
     'Feature lookup'
   )
 
@@ -107,7 +107,7 @@ async function main() {
       () => prisma.feature.create({
         data: {
           name: 'Advanced Analytics',
-          code: 'ADVANCED_ANALYTICS',
+          key: 'ADVANCED_ANALYTICS',
           description: 'Access to advanced analytics and reporting features',
           category: 'ANALYTICS',
           isActive: true,
@@ -120,7 +120,7 @@ async function main() {
       () => prisma.feature.create({
         data: {
           name: 'Custom Branding',
-          code: 'CUSTOM_BRANDING',
+          key: 'CUSTOM_BRANDING',
           description: 'Customize your workspace with your brand',
           category: 'CUSTOMIZATION',
           isActive: true,
@@ -133,7 +133,7 @@ async function main() {
       () => prisma.feature.create({
         data: {
           name: 'Single Sign-On',
-          code: 'SSO',
+          key: 'SSO',
           description: 'Enterprise SSO integration',
           category: 'SECURITY',
           isActive: true,
@@ -146,9 +146,9 @@ async function main() {
       () => prisma.feature.create({
         data: {
           name: 'API Access',
-          code: 'API_ACCESS',
+          key: 'API_ACCESS',
           description: 'Programmatic API access',
-          category: 'INTEGRATION',
+          category: 'INTEGRATIONS',
           isActive: true,
         }
       }),
@@ -159,7 +159,7 @@ async function main() {
       () => prisma.feature.create({
         data: {
           name: 'Audit Log',
-          code: 'AUDIT_LOG',
+          key: 'AUDIT_LOG',
           description: 'Complete audit trail of all actions',
           category: 'SECURITY',
           isActive: true,
@@ -177,7 +177,7 @@ async function main() {
   console.log('📋 Creating subscription plans...')
 
   const existingPlan = await safeCreate(
-    () => prisma.plan.findFirst({ where: { code: 'STARTER' } }),
+    () => prisma.plan.findFirst({ where: { name: 'Starter' } }),
     'Plan lookup'
   )
 
@@ -186,15 +186,13 @@ async function main() {
       () => prisma.plan.create({
         data: {
           name: 'Starter',
-          code: 'STARTER',
+          displayName: 'Starter',
           description: 'Perfect for small teams getting started',
           tier: 'STARTER',
-          monthlyPrice: 29,
-          yearlyPrice: 290,
-          maxUsers: 5,
-          maxAgents: 3,
-          maxDataSources: 5,
-          features: ['basic_analytics', 'email_support'],
+          monthlyPrice: 2900,
+          yearlyPrice: 29000,
+          limits: { maxUsers: 5, maxAgents: 3, maxDataSources: 5 },
+          metadata: { features: ['basic_analytics', 'email_support'] },
           isActive: true,
           isPublic: true,
           sortOrder: 1,
@@ -207,15 +205,13 @@ async function main() {
       () => prisma.plan.create({
         data: {
           name: 'Professional',
-          code: 'PROFESSIONAL',
+          displayName: 'Professional',
           description: 'For growing teams that need more power',
           tier: 'PROFESSIONAL',
-          monthlyPrice: 99,
-          yearlyPrice: 990,
-          maxUsers: 25,
-          maxAgents: 10,
-          maxDataSources: 25,
-          features: ['advanced_analytics', 'custom_branding', 'api_access', 'priority_support'],
+          monthlyPrice: 9900,
+          yearlyPrice: 99000,
+          limits: { maxUsers: 25, maxAgents: 10, maxDataSources: 25 },
+          metadata: { features: ['advanced_analytics', 'custom_branding', 'api_access', 'priority_support'] },
           isActive: true,
           isPublic: true,
           sortOrder: 2,
@@ -228,15 +224,13 @@ async function main() {
       () => prisma.plan.create({
         data: {
           name: 'Enterprise',
-          code: 'ENTERPRISE',
+          displayName: 'Enterprise',
           description: 'For large organizations with advanced needs',
           tier: 'ENTERPRISE',
-          monthlyPrice: 499,
-          yearlyPrice: 4990,
-          maxUsers: -1, // Unlimited
-          maxAgents: -1,
-          maxDataSources: -1,
-          features: ['all_features', 'sso', 'audit_log', 'dedicated_support', 'custom_contracts'],
+          monthlyPrice: 49900,
+          yearlyPrice: 499000,
+          limits: { maxUsers: -1, maxAgents: -1, maxDataSources: -1 },
+          metadata: { features: ['all_features', 'sso', 'audit_log', 'dedicated_support', 'custom_contracts'] },
           isActive: true,
           isPublic: true,
           sortOrder: 3,
@@ -287,7 +281,7 @@ async function main() {
     await prisma.organizationMember.create({
       data: {
         userId: demoUser.id,
-        organizationId: demoOrg.id,
+        orgId: demoOrg.id,
         role: Role.ADMIN,
       }
     })
@@ -335,8 +329,8 @@ async function main() {
     await safeCreate(
       () => prisma.featureFlag.createMany({
         data: [
-          { key: 'new_dashboard', name: 'New Dashboard', enabled: true, rolloutPercentage: 100, description: 'Enable new dashboard UI' },
-          { key: 'ai_features', name: 'AI Features', enabled: true, rolloutPercentage: 100, description: 'Enable AI-powered features' },
+          { key: 'new_dashboard', name: 'New Dashboard', isEnabled: true, rolloutPercentage: 100, description: 'Enable new dashboard UI' },
+          { key: 'ai_features', name: 'AI Features', isEnabled: true, rolloutPercentage: 100, description: 'Enable AI-powered features' },
         ],
         skipDuplicates: true,
       }),

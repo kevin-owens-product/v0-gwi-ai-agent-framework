@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import type { OrganizationRole } from '@prisma/client'
+import type { Role } from '@prisma/client'
 
 export interface OrganizationContext {
   id: string
-  role: OrganizationRole
+  role: Role
 }
 
 export interface AuthenticatedRequest extends NextApiRequest {
@@ -54,7 +54,7 @@ export function withOrganization(handler: ApiHandler) {
       const member = await prisma.organizationMember.findFirst({
         where: {
           userId: session.user.id,
-          organizationId: organizationId,
+          orgId: organizationId,
         },
       })
 
@@ -67,7 +67,13 @@ export function withOrganization(handler: ApiHandler) {
 
       // Add organization context to request
       const authenticatedReq = req as AuthenticatedRequest
-      authenticatedReq.session = session
+      authenticatedReq.session = {
+        user: {
+          id: session.user.id!,
+          email: session.user.email!,
+          name: session.user.name,
+        }
+      }
       authenticatedReq.organization = {
         id: organizationId,
         role: member.role,

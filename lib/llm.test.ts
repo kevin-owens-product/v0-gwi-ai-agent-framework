@@ -214,7 +214,8 @@ describe('LLM Utilities', () => {
   describe('Prompt Templates', () => {
     it('should support template variables', () => {
       const template = 'Analyze {{topic}} for {{audience}}'
-      const variables = { topic: 'sustainability', audience: 'Gen Z' }
+      // Template variables would be substituted at runtime
+      void { topic: 'sustainability', audience: 'Gen Z' }
 
       expect(template).toContain('{{topic}}')
       expect(template).toContain('{{audience}}')

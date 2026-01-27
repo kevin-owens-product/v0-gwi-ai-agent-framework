@@ -32,8 +32,8 @@ export async function GET(
     // Verify user is a member
     const member = await prisma.organizationMember.findFirst({
       where: {
-        userId: session.user.id,
-        organizationId: orgId,
+        userId: session.user.id!,
+        orgId,
       },
     })
 

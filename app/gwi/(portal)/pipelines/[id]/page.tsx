@@ -317,7 +317,7 @@ async function PipelineDetail({ id }: { id: string }) {
                       <div>
                         <p className="font-medium">{rule.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          {rule.description || t('noDescription')}
+                          {(rule as { description?: string }).description || t('noDescription')}
                         </p>
                       </div>
                       <Badge variant={rule.isActive ? "default" : "secondary"}>

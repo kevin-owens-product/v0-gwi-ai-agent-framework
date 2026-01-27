@@ -55,9 +55,6 @@ import {
   ChevronDown,
   ChevronUp,
   BarChart3,
-  LineChart,
-  PieChart,
-  AreaChart as AreaChartIcon,
   Table,
   FileText,
   Image as ImageIcon,
@@ -125,7 +122,6 @@ interface AdvancedDashboardBuilderProps {
   className?: string
 }
 
-const _GRID_SIZE = 20
 const MIN_WIDGET_SIZE = 2
 const DEFAULT_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4"]
 
@@ -136,13 +132,6 @@ const widgetTypeIcons: Record<WidgetType, React.ReactNode> = {
   text: <Type className="h-4 w-4" />,
   image: <ImageIcon className="h-4 w-4" />,
   kpi: <TrendingUp className="h-4 w-4" />,
-}
-
-const _chartTypeIcons: Partial<Record<ChartType, React.ReactNode>> = {
-  BAR: <BarChart3 className="h-4 w-4" />,
-  LINE: <LineChart className="h-4 w-4" />,
-  PIE: <PieChart className="h-4 w-4" />,
-  AREA: <AreaChartIcon className="h-4 w-4" />,
 }
 
 export function AdvancedDashboardBuilder({

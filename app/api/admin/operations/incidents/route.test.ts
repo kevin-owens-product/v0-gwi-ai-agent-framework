@@ -209,13 +209,13 @@ describe('Admin Operations Incidents API - /api/admin/operations/incidents', () 
   describe('POST - Create Incident', () => {
     describe('Validation', () => {
       it('should require title', () => {
-        const body = { description: 'Description' }
+        const body: { description: string; title?: string } = { description: 'Description' }
         const isValid = !!(body.title && body.description)
         expect(isValid).toBe(false)
       })
 
       it('should require description', () => {
-        const body = { title: 'Title' }
+        const body: { title: string; description?: string } = { title: 'Title' }
         const isValid = !!(body.title && body.description)
         expect(isValid).toBe(false)
       })
@@ -243,12 +243,12 @@ describe('Admin Operations Incidents API - /api/admin/operations/incidents', () 
       })
 
       it('should default affectedServices to empty array', () => {
-        const affectedServices = []
+        const affectedServices: string[] = []
         expect(affectedServices).toEqual([])
       })
 
       it('should default responders to empty array', () => {
-        const responders = []
+        const responders: string[] = []
         expect(responders).toEqual([])
       })
     })

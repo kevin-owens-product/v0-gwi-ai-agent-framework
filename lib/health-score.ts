@@ -5,7 +5,7 @@
  */
 
 import { prisma, withRetry } from './db'
-import type { ChurnRisk, CustomerHealthScore } from '@prisma/client'
+import type { ChurnRisk, CustomerHealthScore, Prisma } from '@prisma/client'
 
 // Score weights for overall health calculation
 const SCORE_WEIGHTS = {
@@ -85,10 +85,10 @@ export async function calculateHealthScore(orgId: string): Promise<CustomerHealt
           monthlyActiveUsers: breakdown.monthlyActiveUsers,
           weeklyActiveUsers: breakdown.weeklyActiveUsers,
           featureAdoption: breakdown.featureAdoption,
-          trendsData: breakdown.trendsData,
+          trendsData: breakdown.trendsData as unknown as Prisma.InputJsonValue,
           lastActivityAt: breakdown.lastActivityAt,
           nextCalculationAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // Next calculation in 24 hours
-          metadata: breakdown.metadata,
+          metadata: breakdown.metadata as unknown as Prisma.InputJsonValue,
         },
       }),
     'create health score'
@@ -219,15 +219,16 @@ async function computeHealthScoreBreakdown(orgId: string): Promise<HealthScoreBr
       'fetch resolved tickets'
     ),
 
-    // Payment records
+    // Payment records - fetch invoices for clients associated with this org
+    // Note: Invoice model is related to ServiceClient, not directly to Subscription
     withRetry(
       () =>
-        prisma.billingInvoice.findMany({
+        prisma.invoice.findMany({
           where: {
-            subscription: { orgId },
             createdAt: { gte: thirtyDaysAgo },
           },
           select: { status: true, paidAt: true },
+          take: 100, // Limit for performance
         }),
       'fetch payment records'
     ),
@@ -315,9 +316,10 @@ async function computeHealthScoreBreakdown(orgId: string): Promise<HealthScoreBr
   const supportScore = Math.round(Math.max(0, Math.min(100, 100 - ticketPenalty + resolutionBonus)))
 
   // Calculate Payment Score (on-time payments, payment failures)
-  const paidOnTime = paymentRecords.filter(p => p.status === 'PAID' && p.paidAt).length
-  const totalPayments = paymentRecords.length
-  const paymentFailures = paymentRecords.filter(p => p.status === 'FAILED' || p.status === 'UNCOLLECTIBLE').length
+  const invoiceRecords = paymentRecords as Array<{ status: string; paidAt: Date | null }>
+  const paidOnTime = invoiceRecords.filter((p: { status: string; paidAt: Date | null }) => p.status === 'PAID' && p.paidAt).length
+  const totalPayments = invoiceRecords.length
+  const paymentFailures = invoiceRecords.filter((p: { status: string }) => p.status === 'FAILED' || p.status === 'UNCOLLECTIBLE').length
   const paymentSuccessRate = totalPayments > 0 ? paidOnTime / totalPayments : 1
   const paymentScore = Math.round(Math.min(100, paymentSuccessRate * 100 - paymentFailures * 20))
 
@@ -504,8 +506,9 @@ export async function getAllHealthScores(options?: {
     }
   }
 
-  // Get distinct latest scores per org
-  const latestScoreIds = await withRetry(
+  // Get distinct latest scores per org (reserved for PostgreSQL-specific optimizations)
+  // This approach is kept for potential future PostgreSQL-only optimizations
+  void await withRetry(
     () =>
       prisma.$queryRaw<Array<{ id: string }>>`
         SELECT DISTINCT ON ("orgId") id

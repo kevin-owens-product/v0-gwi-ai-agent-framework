@@ -4,7 +4,7 @@ import { accessSharedLinkSchema } from '@/lib/schemas/collaboration'
 import bcrypt from 'bcryptjs'
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ token: string }> }
 ) {
   try {
@@ -18,7 +18,7 @@ export async function GET(
           select: {
             id: true,
             name: true,
-            image: true,
+            avatarUrl: true,
           },
         },
       },
@@ -138,7 +138,7 @@ export async function POST(
     const viewerIp = forwardedFor ? forwardedFor.split(',')[0].trim() : undefined
 
     // Record the view and update link stats in a transaction
-    const [view, updatedLink] = await prisma.$transaction([
+    const [view] = await prisma.$transaction([
       prisma.sharedLinkView.create({
         data: {
           sharedLinkId: sharedLink.id,
@@ -205,8 +205,8 @@ export async function POST(
           },
           select: {
             id: true,
-            title: true,
-            chartType: true,
+            name: true,
+            type: true,
             config: true,
             data: true,
             createdAt: true,

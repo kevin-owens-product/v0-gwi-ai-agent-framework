@@ -20,7 +20,7 @@ import { generateExport } from '@/lib/data-export'
  * GET - Get details of a specific export
  */
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -228,7 +228,7 @@ export async function PUT(
  * DELETE - Delete an export record
  */
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

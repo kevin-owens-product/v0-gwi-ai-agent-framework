@@ -224,9 +224,9 @@ export async function storeRevenueMetrics(
       arpu: metrics.arpu,
       ltv: metrics.ltv,
       cac: metrics.cac,
-      byPlan: metrics.byPlan as Prisma.InputJsonValue,
-      byRegion: metrics.byRegion as Prisma.InputJsonValue,
-      byCohort: metrics.byCohort as Prisma.InputJsonValue,
+      byPlan: metrics.byPlan as unknown as Prisma.InputJsonValue,
+      byRegion: metrics.byRegion as unknown as Prisma.InputJsonValue,
+      byCohort: metrics.byCohort as unknown as Prisma.InputJsonValue,
     },
     create: {
       date: metrics.date,
@@ -244,9 +244,9 @@ export async function storeRevenueMetrics(
       arpu: metrics.arpu,
       ltv: metrics.ltv,
       cac: metrics.cac,
-      byPlan: metrics.byPlan as Prisma.InputJsonValue,
-      byRegion: metrics.byRegion as Prisma.InputJsonValue,
-      byCohort: metrics.byCohort as Prisma.InputJsonValue,
+      byPlan: metrics.byPlan as unknown as Prisma.InputJsonValue,
+      byRegion: metrics.byRegion as unknown as Prisma.InputJsonValue,
+      byCohort: metrics.byCohort as unknown as Prisma.InputJsonValue,
     },
   })
 

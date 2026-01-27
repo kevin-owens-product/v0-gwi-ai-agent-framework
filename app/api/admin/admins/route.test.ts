@@ -179,7 +179,7 @@ describe('Admin Management API - /api/admin/admins', () => {
 
       it('should default role to ADMIN', () => {
         const defaultRole = 'ADMIN'
-        const body = {
+        const body: { email: string; name: string; password: string; role?: string } = {
           email: 'newadmin@gwi.com',
           name: 'New Admin',
           password: 'SecurePass123!'
@@ -190,7 +190,7 @@ describe('Admin Management API - /api/admin/admins', () => {
       })
 
       it('should default isActive to true', () => {
-        const body = {
+        const body: { email: string; name: string; password: string; isActive?: boolean } = {
           email: 'newadmin@gwi.com',
           name: 'New Admin',
           password: 'SecurePass123!'
@@ -342,7 +342,7 @@ describe('Admin Management API - /api/admin/admins', () => {
       it('should prevent admin from deactivating themselves', () => {
         const currentAdminId = 'admin-123'
         const targetAdminId = 'admin-123'
-        const updates = { isActive: false }
+        const updates: { name?: string; isActive?: boolean } = { isActive: false }
 
         const isSelf = currentAdminId === targetAdminId
         const isDeactivating = updates.isActive === false
@@ -354,7 +354,7 @@ describe('Admin Management API - /api/admin/admins', () => {
       it('should allow admin to update their own name', () => {
         const currentAdminId = 'admin-123'
         const targetAdminId = 'admin-123'
-        const updates = { name: 'New Name' }
+        const updates: { name?: string; isActive?: boolean } = { name: 'New Name' }
 
         const isSelf = currentAdminId === targetAdminId
         const isDeactivating = updates.isActive === false
@@ -425,7 +425,7 @@ describe('Admin Management API - /api/admin/admins', () => {
         const currentAdminId = 'admin-123'
         const targetAdminId = 'admin-456'
 
-        const isSelf = currentAdminId === targetAdminId
+        const isSelf = currentAdminId === targetAdminId as string
         expect(isSelf).toBe(false)
       })
     })

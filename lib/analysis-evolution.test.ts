@@ -6,9 +6,7 @@ import {
   compareAnalysisWithPrevious,
   getMetricTrends,
   generateEvolutionExplanation,
-  type AnalysisType,
   type EvolutionComparison,
-  type TrendAnalysis,
 } from './analysis-evolution'
 
 // Mock Prisma
@@ -560,7 +558,7 @@ describe('AnalysisEvolutionService', () => {
         { analysisVersion: 3, createdAt: new Date('2024-03-01'), confidence: 0.9 },
       ]
 
-      vi.mocked(prisma.analysisHistory.findMany).mockResolvedValue(history)
+      vi.mocked(prisma.analysisHistory.findMany).mockResolvedValue(history as any)
 
       const result = await analysisEvolution.getConfidenceHistory('crosstab', 'ref-1')
 

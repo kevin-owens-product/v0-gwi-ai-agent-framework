@@ -360,7 +360,7 @@ describe('Admin Support Tickets API - /api/admin/support', () => {
       })
 
       it('should default isInternal to false', () => {
-        const body = { message: 'Response text' }
+        const body: { message: string; isInternal?: boolean } = { message: 'Response text' }
         const isInternal = body.isInternal ?? false
         expect(isInternal).toBe(false)
       })

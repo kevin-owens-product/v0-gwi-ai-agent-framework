@@ -44,7 +44,6 @@ export function PermissionMatrix({
   disabled = false,
 }: PermissionMatrixProps) {
   const [permissions, setPermissions] = useState<Record<string, Permission[]>>({})
-  const [categories, setCategories] = useState<Record<string, string>>({})
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [expandedCategories, setExpandedCategories] = useState<string[]>([])
@@ -56,7 +55,6 @@ export function PermissionMatrix({
         const response = await fetch(`/api/admin/permissions?scope=${scope}&grouped=true`)
         const data = await response.json()
         setPermissions(data.permissions || {})
-        setCategories(data.categories || {})
         // Expand all categories by default
         setExpandedCategories(Object.keys(data.permissions || {}))
       } catch (error) {

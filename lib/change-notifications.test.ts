@@ -3,7 +3,6 @@ import {
   changeNotifications,
   DEFAULT_ALERT_THRESHOLDS,
   createChangeAlert,
-  checkThresholdsAndAlert,
   getChangeAlerts,
   getUnreadAlertCount,
   markAlertAsRead,
@@ -11,7 +10,6 @@ import {
   dismissChangeAlert,
   generateChangeSummary,
   getChangeSummaries,
-  type AlertThreshold,
 } from './change-notifications'
 
 // Mock Prisma
@@ -93,7 +91,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert)
+      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert as any)
 
       const result = await changeNotifications.createAlert(
         'org-1',
@@ -138,7 +136,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert)
+      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert as any)
 
       const result = await changeNotifications.createAlert(
         'org-1',
@@ -177,7 +175,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert)
+      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert as any)
 
       const result = await changeNotifications.checkThresholdsAndAlert(
         'org-1',
@@ -229,7 +227,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert)
+      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert as any)
 
       const result = await changeNotifications.checkThresholdsAndAlert(
         'org-1',
@@ -265,7 +263,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert)
+      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert as any)
 
       const result = await changeNotifications.checkThresholdsAndAlert(
         'org-1',
@@ -301,7 +299,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert)
+      vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert as any)
 
       await changeNotifications.checkThresholdsAndAlert(
         'org-1',
@@ -343,7 +341,7 @@ describe('ChangeNotificationService', () => {
         },
       ]
 
-      vi.mocked(prisma.changeAlert.findMany).mockResolvedValue(mockAlerts)
+      vi.mocked(prisma.changeAlert.findMany).mockResolvedValue(mockAlerts as any)
       vi.mocked(prisma.changeAlert.count).mockResolvedValue(1)
 
       const result = await changeNotifications.getAlerts('org-1')
@@ -537,7 +535,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.entityVersion.findMany).mockResolvedValue(mockVersions)
+      vi.mocked(prisma.entityVersion.findMany).mockResolvedValue(mockVersions as any)
       vi.mocked(prisma.changeAlert.count).mockResolvedValue(0)
       vi.mocked(prisma.changeSummary.upsert).mockResolvedValue(mockSummary)
 
@@ -598,7 +596,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       }
 
-      vi.mocked(prisma.entityVersion.findMany).mockResolvedValue(mockVersions)
+      vi.mocked(prisma.entityVersion.findMany).mockResolvedValue(mockVersions as any)
       vi.mocked(prisma.changeAlert.count).mockResolvedValue(0)
       vi.mocked(prisma.changeSummary.upsert).mockResolvedValue(mockSummary)
 
@@ -632,7 +630,7 @@ describe('ChangeNotificationService', () => {
         createdAt: new Date(),
       })
 
-      const result = await changeNotifications.generateChangeSummary(
+      await changeNotifications.generateChangeSummary(
         'org-1',
         'daily',
         new Date(),
@@ -744,7 +742,7 @@ describe('Convenience Functions', () => {
       createdAt: new Date(),
     }
 
-    vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert)
+    vi.mocked(prisma.changeAlert.create).mockResolvedValue(mockAlert as any)
 
     const result = await createChangeAlert(
       'org-1',

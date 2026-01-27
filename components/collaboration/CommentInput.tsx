@@ -22,13 +22,6 @@ interface CommentInputProps {
   className?: string
 }
 
-interface MentionUser {
-  id: string
-  name: string | null
-  email: string
-  avatarUrl?: string | null
-}
-
 function getInitials(name: string | null | undefined, email: string): string {
   if (name) {
     return name

@@ -11,7 +11,6 @@ import {
   Trash,
   Power,
   PowerOff,
-  Shield,
   Calendar,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
@@ -69,8 +68,8 @@ export default function IPBlocklistPage() {
   const [search, setSearch] = useState("")
   const [typeFilter, setTypeFilter] = useState("all")
   const [activeFilter, setActiveFilter] = useState("all")
-  const [sortBy, setSortBy] = useState("createdAt")
-  const [sortOrder, setSortOrder] = useState("desc")
+  const [sortBy] = useState("createdAt")
+  const [sortOrder] = useState("desc")
   const [stats, setStats] = useState<Record<string, number>>({})
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
@@ -226,14 +225,7 @@ export default function IPBlocklistPage() {
     setPagination((prev) => ({ ...prev, page }))
   }
 
-  const handleSort = (column: string) => {
-    if (sortBy === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
-    } else {
-      setSortBy(column)
-      setSortOrder("desc")
-    }
-  }
+  // handleSort function removed - unused
 
   const getTypeBadge = (type: string) => {
     switch (type) {
@@ -572,20 +564,7 @@ export default function IPBlocklistPage() {
         columns={columns}
         getRowId={(entry) => entry.id}
         isLoading={loading}
-        emptyMessage={
-          <div className="text-center py-12">
-            <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No blocked IPs found</p>
-            <Button
-              variant="outline"
-              className="mt-4"
-              onClick={() => setIsCreateOpen(true)}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Block First IP
-            </Button>
-          </div>
-        }
+        emptyMessage="No blocked IPs found"
         onDelete={handleDeleteEntry}
         deleteConfirmTitle="Remove IP from Blocklist"
         deleteConfirmDescription={(entry) =>

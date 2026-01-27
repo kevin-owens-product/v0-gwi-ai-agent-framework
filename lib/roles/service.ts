@@ -550,11 +550,11 @@ async function checkCircularDependency(roleId: string, newParentId: string): Pro
     if (visited.has(currentId)) return true
     visited.add(currentId)
 
-    const role = await prisma.adminRole.findUnique({
+    const foundRole: { parentRoleId: string | null } | null = await prisma.adminRole.findUnique({
       where: { id: currentId },
       select: { parentRoleId: true },
     })
-    currentId = role?.parentRoleId || null
+    currentId = foundRole?.parentRoleId || null
   }
 
   return false

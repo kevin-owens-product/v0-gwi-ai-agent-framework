@@ -317,7 +317,7 @@ export default function APIClientsPage() {
     {
       label: "Edit",
       icon: <Edit className="h-4 w-4" />,
-      onClick: (client) => {
+      onClick: () => {
         // TODO: Implement edit functionality
         toast.info("Edit functionality coming soon")
       },
@@ -325,7 +325,7 @@ export default function APIClientsPage() {
     {
       label: "Rotate Secret",
       icon: <RefreshCw className="h-4 w-4" />,
-      onClick: (client) => {
+      onClick: () => {
         // TODO: Implement rotate secret functionality
         toast.info("Rotate secret functionality coming soon")
       },

@@ -90,8 +90,6 @@ const openings = [
   },
 ]
 
-const _departments = ["All", "Engineering", "Product", "Data", "Customer Success", "Sales", "Marketing"]
-
 export default function CareersPage() {
   return (
     <div className="min-h-screen bg-background">

@@ -267,13 +267,13 @@ describe('Admin Security Threats API - /api/admin/security/threats', () => {
   describe('POST - Report Threat', () => {
     describe('Validation', () => {
       it('should require type', () => {
-        const body = { title: 'Threat', severity: 'HIGH' }
+        const body: { title: string; severity: string; type?: string } = { title: 'Threat', severity: 'HIGH' }
         const isValid = !!body.type
         expect(isValid).toBe(false)
       })
 
       it('should require title', () => {
-        const body = { type: 'BRUTE_FORCE', severity: 'HIGH' }
+        const body: { type: string; severity: string; title?: string } = { type: 'BRUTE_FORCE', severity: 'HIGH' }
         const isValid = !!body.title
         expect(isValid).toBe(false)
       })
@@ -308,7 +308,7 @@ describe('Admin Security Threats API - /api/admin/security/threats', () => {
       })
 
       it('should default indicators to empty array', () => {
-        const indicators = []
+        const indicators: string[] = []
         expect(indicators).toEqual([])
       })
 

@@ -75,7 +75,7 @@ interface SCIMIntegration {
 }
 
 export default function SCIMListingPage() {
-  const router = useRouter()
+  useRouter()
   const t = useTranslations("admin.scim")
   const tCommon = useTranslations("common")
 

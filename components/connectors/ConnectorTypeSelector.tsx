@@ -29,7 +29,6 @@ import {
   CONNECTOR_CATEGORIES,
   getPopularProviders,
   type ConnectorProviderConfig,
-  type ConnectorTypeValue,
 } from '@/lib/connectors'
 
 interface ConnectorTypeSelectorProps {

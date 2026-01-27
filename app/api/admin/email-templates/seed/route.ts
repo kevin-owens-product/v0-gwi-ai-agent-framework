@@ -11,7 +11,7 @@ import { cookies } from "next/headers"
 import { DEFAULT_SYSTEM_TEMPLATES } from "@/lib/email-templates"
 
 // POST /api/admin/email-templates/seed - Seed default system templates
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const cookieStore = await cookies()
     const token = cookieStore.get("adminToken")?.value

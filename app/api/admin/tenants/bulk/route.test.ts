@@ -147,13 +147,13 @@ describe('Admin Tenants Bulk API - POST /api/admin/tenants/bulk', () => {
     })
 
     it('should default to FULL suspension type', () => {
-      const data = { reason: 'Default suspension' }
+      const data: { reason: string; suspensionType?: string } = { reason: 'Default suspension' }
       const suspensionType = data.suspensionType || 'FULL'
       expect(suspensionType).toBe('FULL')
     })
 
     it('should default suspension reason', () => {
-      const data = {}
+      const data: { reason?: string } = {}
       const reason = data.reason || 'Bulk suspension by admin'
       expect(reason).toBe('Bulk suspension by admin')
     })
@@ -196,7 +196,7 @@ describe('Admin Tenants Bulk API - POST /api/admin/tenants/bulk', () => {
 
   describe('Update Plan Action', () => {
     it('should require planTier parameter', () => {
-      const data = {}
+      const data: { planTier?: string } = {}
       expect(data.planTier).toBeUndefined()
     })
 
@@ -248,7 +248,7 @@ describe('Admin Tenants Bulk API - POST /api/admin/tenants/bulk', () => {
 
   describe('Delete Action', () => {
     it('should check for child organizations', () => {
-      const childCount = 3
+      const childCount = 3 as number
       const canDelete = childCount === 0
       expect(canDelete).toBe(false)
     })
@@ -379,7 +379,8 @@ describe('Admin Tenants Bulk API - POST /api/admin/tenants/bulk', () => {
     })
 
     it('should catch individual operation errors', () => {
-      const tenantIds = ['org-1', 'org-2', 'org-3']
+      // Processing 3 tenants
+      void ['org-1', 'org-2', 'org-3']
       const errors: string[] = []
 
       // Simulate error for org-2
@@ -390,7 +391,8 @@ describe('Admin Tenants Bulk API - POST /api/admin/tenants/bulk', () => {
     })
 
     it('should continue processing after individual failures', () => {
-      const tenantIds = ['org-1', 'org-2', 'org-3', 'org-4']
+      // Processing 4 tenants
+      void ['org-1', 'org-2', 'org-3', 'org-4']
       const errors = ['org-2: Error']
       const success = 3 // org-1, org-3, org-4 succeeded
 
@@ -506,7 +508,7 @@ describe('Admin Tenants Bulk API - POST /api/admin/tenants/bulk', () => {
 
     it('should require authentication for all actions', () => {
       const actions = ['suspend', 'unsuspend', 'updatePlan', 'delete', 'enableHierarchy']
-      actions.forEach(action => {
+      actions.forEach(() => {
         const requiresAuth = true
         expect(requiresAuth).toBe(true)
       })

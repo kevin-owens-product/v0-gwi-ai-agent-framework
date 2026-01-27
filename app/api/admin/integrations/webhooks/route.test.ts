@@ -215,13 +215,13 @@ describe('Admin Integrations Webhooks API - /api/admin/integrations/webhooks', (
   describe('POST - Create Webhook', () => {
     describe('Validation', () => {
       it('should require url', () => {
-        const body = { orgId: 'org-123' }
+        const body: { orgId: string; url?: string } = { orgId: 'org-123' }
         const isValid = !!(body.url)
         expect(isValid).toBe(false)
       })
 
       it('should require orgId', () => {
-        const body = { url: 'https://example.com' }
+        const body: { url: string; orgId?: string } = { url: 'https://example.com' }
         const isValid = !!(body.orgId)
         expect(isValid).toBe(false)
       })
@@ -278,7 +278,7 @@ describe('Admin Integrations Webhooks API - /api/admin/integrations/webhooks', (
       })
 
       it('should default events to empty array', () => {
-        const events = []
+        const events: string[] = []
         expect(events).toEqual([])
       })
 

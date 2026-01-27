@@ -197,13 +197,13 @@ describe('Admin Plans API - /api/admin/plans', () => {
   describe('POST - Create Plan', () => {
     describe('Validation', () => {
       it('should require name', () => {
-        const body = { tier: 'STARTER', price: 0 }
+        const body: { tier: string; price: number; name?: string } = { tier: 'STARTER', price: 0 }
         const isValid = !!body.name
         expect(isValid).toBe(false)
       })
 
       it('should require tier', () => {
-        const body = { name: 'Plan', price: 0 }
+        const body: { name: string; price: number; tier?: string } = { name: 'Plan', price: 0 }
         const isValid = !!body.tier
         expect(isValid).toBe(false)
       })
@@ -248,7 +248,7 @@ describe('Admin Plans API - /api/admin/plans', () => {
       })
 
       it('should default features to empty array', () => {
-        const features = []
+        const features: string[] = []
         expect(features).toEqual([])
       })
 

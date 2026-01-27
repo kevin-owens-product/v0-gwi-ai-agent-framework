@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next'
-import type { OrganizationRole } from '@prisma/client'
+import type { Role } from '@prisma/client'
 import type { AuthenticatedRequest } from './withOrganization'
 
 type ApiHandler = (
@@ -11,7 +11,7 @@ type ApiHandler = (
  * Middleware to check if user has required role(s) in the organization
  * Must be used after withOrganization middleware
  */
-export function withRole(allowedRoles: OrganizationRole[], handler: ApiHandler) {
+export function withRole(allowedRoles: Role[], handler: ApiHandler) {
   return async (req: AuthenticatedRequest, res: NextApiResponse) => {
     if (!req.organization) {
       return res.status(500).json({

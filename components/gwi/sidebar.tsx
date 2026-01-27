@@ -276,6 +276,7 @@ function NavSectionComponent({ section }: { section: NavSection }) {
       })
       return () => sidebarContext.unregisterSection(section.titleKey)
     }
+    return undefined
   }, [sidebarContext, section.titleKey])
 
   return (
@@ -436,7 +437,7 @@ function SidebarContent({ onLogout }: { onLogout: () => void }) {
 }
 
 export function GWISidebar() {
-  const { admin } = useGWIAdmin()
+  useGWIAdmin()
   const { isMobileOpen, setMobileOpen } = useSidebar()
 
   // Track all section setters for expand/collapse all

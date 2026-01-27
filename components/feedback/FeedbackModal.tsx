@@ -112,7 +112,8 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
     }
   }
 
-  const selectedType = feedbackTypes.find((t) => t.value === type)
+  // Find the selected feedback type for icon display
+  feedbackTypes.find((t) => t.value === type)
 
   if (isSuccess) {
     return (

@@ -26,7 +26,6 @@ import {
   CheckCircle,
   AlertTriangle,
   Play,
-  Pause,
   XCircle,
   Edit,
   Save,
@@ -68,13 +67,7 @@ interface MaintenanceWindow {
   }>
 }
 
-const typeOptions = [
-  { value: "SCHEDULED", label: "Scheduled" },
-  { value: "EMERGENCY", label: "Emergency" },
-  { value: "UPGRADE", label: "Upgrade" },
-  { value: "MIGRATION", label: "Migration" },
-  { value: "SECURITY_PATCH", label: "Security Patch" },
-]
+// typeOptions array removed - unused
 
 const statusOptions = [
   { value: "SCHEDULED", label: "Scheduled" },
@@ -249,7 +242,7 @@ export default function MaintenanceDetailPage() {
     )
   }
 
-  const isUpcoming = new Date(window.scheduledStart) > new Date()
+  // isUpcoming removed - unused
   const isActive = window.status === "IN_PROGRESS"
 
   return (
@@ -561,7 +554,7 @@ export default function MaintenanceDetailPage() {
                     onOpenChange={setShowDeleteDialog}
                     title="Delete Maintenance Window"
                     description="Are you sure you want to delete this maintenance window? This action cannot be undone."
-                    confirmLabel="Delete"
+                    confirmText="Delete"
                     variant="destructive"
                     onConfirm={handleDelete}
                   />

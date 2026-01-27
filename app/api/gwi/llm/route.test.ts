@@ -273,7 +273,8 @@ describe('GWI LLM Configuration API - /api/gwi/llm', () => {
 
       it('should preserve version for metadata-only updates', () => {
         const existing = { version: 2, description: 'Old desc' }
-        const update = { description: 'New desc' }
+        // Metadata-only update: { description: 'New desc' }
+        void { description: 'New desc' }
 
         // Description updates don't increment version
         expect(existing.version).toBe(2)
@@ -370,7 +371,7 @@ describe('GWI LLM Configuration API - /api/gwi/llm', () => {
 
       it('should support template rendering', () => {
         const template = 'Analyze: {{data}}'
-        const variables = { data: 'Sample data here' }
+        const variables: Record<string, string> = { data: 'Sample data here' }
 
         const rendered = template.replace(/\{\{(\w+)\}\}/g, (_, key) => variables[key] || '')
         expect(rendered).toBe('Analyze: Sample data here')

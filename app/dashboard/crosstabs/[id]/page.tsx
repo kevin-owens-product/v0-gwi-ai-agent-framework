@@ -33,14 +33,9 @@ import {
   Minimize2,
   Star,
   StarOff,
-  FileJson,
-  FileText,
-  Table,
-  FileImage,
   History,
   Mail,
   UserPlus,
-  Link2,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"

@@ -175,7 +175,6 @@ export function WorkflowStatusManager({
   }
 
   const approvedCount = reviewers.filter(r => r.status === "approved").length
-  const _pendingCount = reviewers.filter(r => r.status === "pending").length
 
   const isDueSoon = dueDate && new Date(dueDate).getTime() - Date.now() < 24 * 60 * 60 * 1000
   const isOverdue = dueDate && new Date(dueDate) < new Date()

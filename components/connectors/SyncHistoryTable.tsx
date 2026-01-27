@@ -99,7 +99,6 @@ const STATUS_CONFIG: Record<DataSyncStatus, {
 }
 
 export function SyncHistoryTable({
-  connectorId,
   syncLogs: initialLogs,
   fetchSyncHistory,
   isLoading: initialLoading,

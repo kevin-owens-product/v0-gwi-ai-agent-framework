@@ -22,7 +22,7 @@ describe('ChangeTimeline Component', () => {
 
   beforeEach(() => {
     mockFetch = vi.fn()
-    global.fetch = mockFetch
+    global.fetch = mockFetch as typeof fetch
   })
 
   afterEach(() => {
@@ -316,7 +316,7 @@ describe('ChangeTimeline Component', () => {
         brand_tracking: 'Brand Tracking',
       }
 
-      Object.entries(labelMap).forEach(([type, label]) => {
+      Object.entries(labelMap).forEach(([_type, label]) => {
         expect(label).toBeTruthy()
         expect(typeof label).toBe('string')
       })

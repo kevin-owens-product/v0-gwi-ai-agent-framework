@@ -12,7 +12,7 @@ import { hasPermission } from '@/lib/permissions'
 import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
 import { z } from 'zod'
-import { Prisma, DataConnectorType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { CONNECTOR_PROVIDERS, type ConnectorProviderType } from '@/lib/connectors'
 
 // Validation schema for updating a connector

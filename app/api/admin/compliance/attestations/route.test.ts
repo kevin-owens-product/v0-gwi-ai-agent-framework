@@ -162,13 +162,13 @@ describe('Admin Compliance Attestations API - /api/admin/compliance/attestations
   describe('POST - Create Attestation', () => {
     describe('Validation', () => {
       it('should require frameworkId', () => {
-        const body = { orgId: 'org-123' }
+        const body: { orgId: string; frameworkId?: string } = { orgId: 'org-123' }
         const isValid = !!(body.frameworkId && body.orgId)
         expect(isValid).toBe(false)
       })
 
       it('should require orgId', () => {
-        const body = { frameworkId: 'fw-123' }
+        const body: { frameworkId: string; orgId?: string } = { frameworkId: 'fw-123' }
         const isValid = !!(body.frameworkId && body.orgId)
         expect(isValid).toBe(false)
       })
@@ -204,12 +204,12 @@ describe('Admin Compliance Attestations API - /api/admin/compliance/attestations
       })
 
       it('should default findings to empty array', () => {
-        const findings = []
+        const findings: unknown[] = []
         expect(findings).toEqual([])
       })
 
       it('should default evidence to empty array', () => {
-        const evidence = []
+        const evidence: unknown[] = []
         expect(evidence).toEqual([])
       })
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { validateSuperAdminSession, banUser, liftUserBan } from "@/lib/super-admin"
+import { validateSuperAdminSession, banUser } from "@/lib/super-admin"
 import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/admin-activity"
 import { prisma } from "@/lib/db"
 

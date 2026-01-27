@@ -152,7 +152,7 @@ const weightingOptions = [
 export default function EditCrosstabPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const t = useTranslations("dashboard.crosstabs.edit")
   const tCommon = useTranslations("common")
 

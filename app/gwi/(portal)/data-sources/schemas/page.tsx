@@ -24,7 +24,6 @@ import {
   Table,
   FileJson,
   RefreshCw,
-  Eye,
   Copy,
   ChevronRight,
 } from "lucide-react"

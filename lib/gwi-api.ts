@@ -2,8 +2,8 @@
 // Provides methods to interact with GWI Platform API, Spark API, and Spark MCP
 
 export class GWIClient {
-  private baseUrl: string
-  private apiToken: string
+  public readonly baseUrl: string
+  public readonly apiToken: string
 
   constructor(apiToken?: string) {
     this.baseUrl = process.env.GWI_API_BASE_URL || "https://api.globalwebindex.com"

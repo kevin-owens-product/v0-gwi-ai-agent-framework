@@ -64,6 +64,27 @@ export const PERMISSIONS = {
   'team:write': 'Create and edit team members',
   'team:invite': 'Invite team members',
   'team:manage': 'Manage team roles',
+  'team:change-role': 'Change team member roles',
+  'team:remove': 'Remove team members',
+
+  // Domains
+  'domains:read': 'View domains',
+  'domains:manage': 'Manage domain verification',
+
+  // Security
+  'security:read': 'View security settings',
+  'security:view': 'View security policies',
+  'security:manage-policies': 'Manage security policies',
+
+  // Exports
+  'exports:read': 'View exports',
+  'exports:write': 'Create exports',
+  'exports:delete': 'Delete exports',
+  'exports:execute': 'Execute exports',
+
+  // Webhooks
+  'webhooks:view': 'View webhooks',
+  'webhooks:manage': 'Manage webhooks',
 
   // API Keys
   'apiKeys:read': 'View API keys',
@@ -158,7 +179,11 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     'insights:read', 'insights:export',
     'data_sources:read', 'data_sources:write', 'data_sources:delete',
     'dataSources:read', 'dataSources:write', 'dataSources:delete',
-    'team:read', 'team:write', 'team:invite', 'team:manage',
+    'team:read', 'team:write', 'team:invite', 'team:manage', 'team:change-role', 'team:remove',
+    'domains:read', 'domains:manage',
+    'security:read', 'security:view', 'security:manage-policies',
+    'exports:read', 'exports:write', 'exports:delete', 'exports:execute',
+    'webhooks:view', 'webhooks:manage',
     'apiKeys:read', 'apiKeys:write', 'apiKeys:delete',
     'analytics:read', 'analytics:write',
     'integrations:read', 'integrations:write', 'integrations:delete',

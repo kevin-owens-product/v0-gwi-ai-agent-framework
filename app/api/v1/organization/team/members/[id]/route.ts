@@ -28,7 +28,7 @@ export async function PUT(
 
     // Verify membership and permission
     const currentMember = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id!, orgId },
     })
 
     if (!currentMember || !hasPermission(currentMember.role, 'team:change-role')) {
@@ -53,7 +53,7 @@ export async function PUT(
       where: { id },
     })
 
-    if (!targetMember || targetMember.organizationId !== orgId) {
+    if (!targetMember || targetMember.orgId !== orgId) {
       return NextResponse.json(
         { error: 'Member not found' },
         { status: 404 }
@@ -87,10 +87,10 @@ export async function PUT(
     await prisma.auditLog.create({
       data: {
         action: 'MEMBER_ROLE_CHANGED',
-        entityType: 'ORGANIZATION_MEMBER',
-        entityId: id,
+        resourceType: 'ORGANIZATION_MEMBER',
+        resourceId: id,
         userId: session.user.id,
-        organizationId: orgId,
+        orgId,
         metadata: {
           targetUserId: targetMember.userId,
           oldRole: targetMember.role,
@@ -134,7 +134,7 @@ export async function DELETE(
 
     // Verify membership and permission
     const currentMember = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id!, orgId },
     })
 
     if (!currentMember || !hasPermission(currentMember.role, 'team:remove')) {
@@ -149,7 +149,7 @@ export async function DELETE(
       where: { id },
     })
 
-    if (!targetMember || targetMember.organizationId !== orgId) {
+    if (!targetMember || targetMember.orgId !== orgId) {
       return NextResponse.json(
         { error: 'Member not found' },
         { status: 404 }
@@ -181,10 +181,10 @@ export async function DELETE(
     await prisma.auditLog.create({
       data: {
         action: 'MEMBER_REMOVED',
-        entityType: 'ORGANIZATION_MEMBER',
-        entityId: id,
+        resourceType: 'ORGANIZATION_MEMBER',
+        resourceId: id,
         userId: session.user.id,
-        organizationId: orgId,
+        orgId,
         metadata: {
           targetUserId: targetMember.userId,
           role: targetMember.role,

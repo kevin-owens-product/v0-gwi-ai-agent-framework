@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-// Store original env
-const originalEnv = process.env
+// Original env is stored implicitly by vitest mock system
 
 // Create mock send function that persists across module reloads
 const mockSend = vi.fn()

@@ -90,7 +90,7 @@ export default function NewIncidentPage() {
         throw new Error(data.error || "Failed to create incident")
       }
 
-      const data = await response.json()
+      await response.json()
       toast.success("Incident reported and team notified")
       router.push(`/admin/operations/incidents`)
     } catch (error) {

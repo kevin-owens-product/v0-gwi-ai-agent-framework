@@ -133,7 +133,7 @@ interface FilterRule {
 export default function EditChartPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
-  const { data: session, status: sessionStatus } = useSession()
+  const { status: sessionStatus } = useSession()
   const t = useTranslations("dashboard.charts.edit")
   const tCommon = useTranslations("common")
 

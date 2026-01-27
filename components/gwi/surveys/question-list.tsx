@@ -369,21 +369,21 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                           <dt className="text-muted-foreground">Type</dt>
                           <dd className="font-medium">{question.type}</dd>
                         </div>
-                        {question.options && (
+                        {question.options != null && (
                           <div className="col-span-2">
                             <dt className="text-muted-foreground mb-1">Options</dt>
-                            <dd className="font-mono text-xs bg-slate-100 p-2 rounded">
-                              {JSON.stringify(question.options, null, 2)}
+                            <dd className="font-mono text-xs bg-slate-100 p-2 rounded whitespace-pre-wrap">
+                              {JSON.stringify(question.options as object, null, 2)}
                             </dd>
                           </div>
                         )}
-                        {question.validationRules && (
+                        {question.validationRules != null && (
                           <div className="col-span-2">
                             <dt className="text-muted-foreground mb-1">
                               Validation Rules
                             </dt>
-                            <dd className="font-mono text-xs bg-slate-100 p-2 rounded">
-                              {JSON.stringify(question.validationRules, null, 2)}
+                            <dd className="font-mono text-xs bg-slate-100 p-2 rounded whitespace-pre-wrap">
+                              {JSON.stringify(question.validationRules as object, null, 2)}
                             </dd>
                           </div>
                         )}

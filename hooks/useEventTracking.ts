@@ -602,7 +602,7 @@ export function useTimeOnPage(pageId: string, metadata?: EventMetadata) {
  */
 export function useFormTracking(
   formId: string,
-  submitHandler?: any,
+  _submitHandler?: any,
   metadata?: EventMetadata
 ) {
   const pathname = usePathname();
@@ -610,7 +610,7 @@ export function useFormTracking(
 
   // Track form start on first field interaction
   const onFieldChange = useCallback(
-    (fieldName: string) => (event: any) => {
+    (fieldName: string) => (_event: any) => {
       if (!hasStarted.current) {
         hasStarted.current = true;
         trackForm('form_start', formId, {

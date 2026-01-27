@@ -79,17 +79,6 @@ export async function GET(request: NextRequest) {
       }),
     ])
 
-    // Aggregate current status across all metrics
-    const statusCounts = await prisma.capacityMetric.groupBy({
-      by: ["status"],
-      _count: true,
-      where: {
-        recordedAt: {
-          gte: new Date(Date.now() - 60 * 60 * 1000), // Last hour
-        },
-      },
-    })
-
     // Calculate overall health score
     const recentMetrics = await prisma.capacityMetric.findMany({
       where: {

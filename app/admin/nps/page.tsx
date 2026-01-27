@@ -300,7 +300,7 @@ export default function NPSPage() {
             onOpenChange={(open) => !open && setSurveyToDelete(null)}
             title="Delete Survey"
             description={`Are you sure you want to delete "${surveyToDelete?.name}"? All responses will be permanently lost.`}
-            confirmLabel="Delete"
+            confirmText="Delete"
             onConfirm={handleDeleteSurvey}
             variant="destructive"
           />

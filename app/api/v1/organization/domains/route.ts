@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get validated organization ID (validates user membership)
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
     if (!orgId) {
       return NextResponse.json(
         { error: 'Organization not found or access denied' },
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     // Check permission
     const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id!, orgId },
     })
 
     if (!member || !hasPermission(member.role, 'domains:manage')) {
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 
     // Get domains
     const domains = await prisma.domainVerification.findMany({
-      where: { organizationId: orgId },
+      where: { orgId },
       orderBy: { createdAt: 'desc' },
     })
 
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get validated organization ID (validates user membership)
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
     if (!orgId) {
       return NextResponse.json(
         { error: 'Organization not found or access denied' },
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     // Check permission
     const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id!, orgId },
     })
 
     if (!member || !hasPermission(member.role, 'domains:manage')) {
@@ -110,11 +110,11 @@ export async function POST(request: NextRequest) {
     // Create domain verification record
     const domainVerification = await prisma.domainVerification.create({
       data: {
-        organizationId: orgId,
+        orgId,
         domain,
         verificationToken,
         verificationMethod: 'DNS_TXT',
-        verified: false,
+        status: 'PENDING',
       },
     })
 
@@ -122,10 +122,10 @@ export async function POST(request: NextRequest) {
     await prisma.auditLog.create({
       data: {
         action: 'DOMAIN_ADDED',
-        entityType: 'DOMAIN_VERIFICATION',
-        entityId: domainVerification.id,
+        resourceType: 'DOMAIN_VERIFICATION',
+        resourceId: domainVerification.id,
         userId: session.user.id,
-        organizationId: orgId,
+        orgId,
         metadata: { domain },
       },
     })

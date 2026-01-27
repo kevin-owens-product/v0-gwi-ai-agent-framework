@@ -3,7 +3,6 @@ import Link from "next/link"
 import { prisma } from "@/lib/db"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import {
   Select,
   SelectContent,
@@ -24,7 +23,6 @@ import {
   Activity,
   Clock,
   TrendingUp,
-  TrendingDown,
   BarChart3,
   Zap,
   AlertTriangle,

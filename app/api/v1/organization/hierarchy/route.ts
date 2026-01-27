@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get validated organization ID (validates user membership)
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
     if (!orgId) {
       return NextResponse.json(
         { error: 'Organization not found or access denied' },
@@ -27,20 +27,15 @@ export async function GET(request: NextRequest) {
     const organization = await prisma.organization.findUnique({
       where: { id: orgId },
       include: {
-        plan: true,
-        parent: true,
-        children: {
-          include: {
-            plan: true,
-          },
-        },
+        parentOrg: true,
+        childOrgs: true,
       },
     })
 
     return NextResponse.json({
       current: organization,
-      parent: organization?.parent,
-      children: organization?.children || [],
+      parent: organization?.parentOrg,
+      children: organization?.childOrgs || [],
     })
   } catch (error) {
     console.error('Error fetching hierarchy:', error)

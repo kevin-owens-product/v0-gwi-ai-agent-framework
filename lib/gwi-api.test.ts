@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 
 describe('GWI API Integration', () => {
   describe('API Configuration', () => {
@@ -81,7 +81,6 @@ describe('GWI API Integration', () => {
 
     it('should call brands endpoint', () => {
       const endpoint = '/brands/affinity'
-      const method = 'POST'
 
       expect(endpoint).toContain('/brands')
     })

@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AdvancedCrosstabGrid, CrosstabRow, CrosstabColumn } from "@/components/crosstabs/advanced-crosstab-grid"
-import { CalculatedFieldsManager, CalculatedField, FieldVariable } from "@/components/crosstabs/calculated-fields"
-import { AdvancedFilters, FilterGroup, FilterField } from "@/components/crosstabs/advanced-filters"
+import { CalculatedFieldsManager, CalculatedField } from "@/components/crosstabs/calculated-fields"
+import { AdvancedFilters, FilterGroup } from "@/components/crosstabs/advanced-filters"
 import { InteractiveChartEditor } from "@/components/charts/interactive-chart-editor"
 import { ExportManager, ExportData } from "@/components/export/export-manager"
 import {
@@ -33,9 +33,7 @@ import {
 } from "@/components/crosstabs/data/comprehensive-crosstab-data"
 
 function CrosstabAnalysisContent() {
-  const searchParams = useSearchParams()
-  // crosstabId can be used for API calls when backend is ready
-  const _crosstabId = searchParams.get("id")
+  useSearchParams() // Used for potential future API calls
 
   const [activeTab, setActiveTab] = useState<"grid" | "calculated" | "filters" | "visualize">("grid")
   const [data, setData] = useState<CrosstabRow[]>(COMPREHENSIVE_DATA)

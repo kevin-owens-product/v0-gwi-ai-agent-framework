@@ -34,7 +34,6 @@ import {
   Clock,
   XCircle,
   ExternalLink,
-  FileText,
   Trash2,
   RotateCcw,
 } from "lucide-react"

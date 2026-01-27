@@ -65,8 +65,8 @@ describe('Changes API - GET /api/v1/changes', () => {
     })
 
     it('should parse significantOnly flag', () => {
-      const trueValue = 'true' === 'true'
-      const falseValue = 'false' === 'true'
+      const trueValue = 'true' as string === 'true'
+      const falseValue = 'false' as string === 'true'
 
       expect(trueValue).toBe(true)
       expect(falseValue).toBe(false)
@@ -195,21 +195,24 @@ describe('Changes API - GET /api/v1/changes', () => {
     })
 
     it('should return 404 when no organization found', () => {
-      const errorResponse = { error: 'No organization found' }
+      // Error response for missing organization
+      void { error: 'No organization found' }
       const status = 404
 
       expect(status).toBe(404)
     })
 
     it('should return 403 when not a member', () => {
-      const errorResponse = { error: 'Not a member of this organization' }
+      // Error response for non-member
+      void { error: 'Not a member of this organization' }
       const status = 403
 
       expect(status).toBe(403)
     })
 
     it('should return 403 when permission denied', () => {
-      const errorResponse = { error: 'Permission denied' }
+      // Error response for permission denied
+      void { error: 'Permission denied' }
       const status = 403
 
       expect(status).toBe(403)

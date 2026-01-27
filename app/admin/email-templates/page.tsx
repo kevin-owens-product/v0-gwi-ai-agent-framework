@@ -106,7 +106,7 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
 }
 
 export default function EmailTemplatesPage() {
-  const [templates, setTemplates] = useState<EmailTemplate[]>([])
+  const [, setTemplates] = useState<EmailTemplate[]>([])
   const [grouped, setGrouped] = useState<GroupedTemplates[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)

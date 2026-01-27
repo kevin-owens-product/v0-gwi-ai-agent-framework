@@ -219,13 +219,13 @@ describe('Admin Compliance Frameworks API - /api/admin/compliance/frameworks', (
   describe('POST - Create Compliance Framework', () => {
     describe('Validation', () => {
       it('should require code', () => {
-        const body = { name: 'Framework' }
+        const body: { name: string; code?: string } = { name: 'Framework' }
         const isValid = !!body.code
         expect(isValid).toBe(false)
       })
 
       it('should require name', () => {
-        const body = { code: 'FW1' }
+        const body: { code: string; name?: string } = { code: 'FW1' }
         const isValid = !!body.name
         expect(isValid).toBe(false)
       })
@@ -265,7 +265,7 @@ describe('Admin Compliance Frameworks API - /api/admin/compliance/frameworks', (
       })
 
       it('should default requirements to empty array', () => {
-        const requirements = []
+        const requirements: unknown[] = []
         expect(requirements).toEqual([])
       })
     })

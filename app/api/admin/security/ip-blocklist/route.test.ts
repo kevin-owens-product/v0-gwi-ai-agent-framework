@@ -243,13 +243,13 @@ describe('Admin Security IP Blocklist API - /api/admin/security/ip-blocklist', (
   describe('POST - Create IP Blocklist Entry', () => {
     describe('Validation', () => {
       it('should require value', () => {
-        const body = { blockType: 'IP' }
+        const body: { blockType: string; value?: string } = { blockType: 'IP' }
         const isValid = !!body.value
         expect(isValid).toBe(false)
       })
 
       it('should require blockType', () => {
-        const body = { value: '192.168.1.100' }
+        const body: { value: string; blockType?: string } = { value: '192.168.1.100' }
         const isValid = !!body.blockType
         expect(isValid).toBe(false)
       })

@@ -31,7 +31,6 @@ import {
   CheckCircle,
   AlertTriangle,
   Clock,
-  ClipboardList,
   FileCheck,
 } from "lucide-react"
 import Link from "next/link"

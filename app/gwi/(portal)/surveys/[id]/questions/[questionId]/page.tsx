@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -87,14 +86,22 @@ const questionTypeIcons = {
   MATRIX: Grid3X3,
 }
 
+const questionTypeLabels: Record<string, string> = {
+  SINGLE_SELECT: "Single Select",
+  MULTI_SELECT: "Multi Select",
+  SCALE: "Scale",
+  OPEN_TEXT: "Open Text",
+  NUMERIC: "Numeric",
+  DATE: "Date",
+  MATRIX: "Matrix",
+}
+
 export default function QuestionDetailPage({
   params,
 }: {
   params: Promise<{ id: string; questionId: string }>
 }) {
   const { id: surveyId, questionId } = use(params)
-  const t = useTranslations("gwi.surveys.questions")
-  const tCommon = useTranslations("common")
   const router = useRouter()
   const [question, setQuestion] = useState<Question | null>(null)
   const [loading, setLoading] = useState(true)

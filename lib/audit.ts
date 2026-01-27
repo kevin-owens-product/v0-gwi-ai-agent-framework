@@ -41,6 +41,9 @@ export type AuditResourceType =
   | 'comment'
   | 'shared_link'
   | 'alert'
+  | 'saved_view'
+  | 'scheduled_export'
+  | 'webhook'
 
 export interface AuditEvent {
   orgId: string

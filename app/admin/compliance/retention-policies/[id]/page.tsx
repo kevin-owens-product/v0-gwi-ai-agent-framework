@@ -14,7 +14,6 @@ import {
   XCircle,
   Building,
   Trash2,
-  Play,
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -517,7 +516,7 @@ export default function RetentionPolicyDetailPage() {
             onOpenChange={setShowDeleteDialog}
             title="Delete Retention Policy"
             description="Are you sure you want to delete this retention policy? This action cannot be undone."
-            confirmLabel="Delete"
+            confirmText="Delete"
             onConfirm={handleDelete}
             variant="destructive"
           />

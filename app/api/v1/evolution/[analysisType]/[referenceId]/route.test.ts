@@ -157,7 +157,8 @@ describe('Evolution API - GET /api/v1/evolution/[analysisType]/[referenceId]', (
 
   describe('Error Handling', () => {
     it('should return 401 for unauthenticated requests', () => {
-      const errorResponse = { error: 'Unauthorized' }
+      // Error response for unauthorized
+      void { error: 'Unauthorized' }
       const status = 401
 
       expect(status).toBe(401)
@@ -174,14 +175,16 @@ describe('Evolution API - GET /api/v1/evolution/[analysisType]/[referenceId]', (
     })
 
     it('should return 404 when no organization found', () => {
-      const errorResponse = { error: 'No organization found' }
+      // Error response for missing organization
+      void { error: 'No organization found' }
       const status = 404
 
       expect(status).toBe(404)
     })
 
     it('should return 403 when permission denied', () => {
-      const errorResponse = { error: 'Permission denied' }
+      // Error response for permission denied
+      void { error: 'Permission denied' }
       const status = 403
 
       expect(status).toBe(403)

@@ -1,5 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { NextRequest } from 'next/server'
+import { describe, it, expect, vi } from 'vitest'
 
 vi.mock('@/lib/super-admin')
 vi.mock('next/headers')
@@ -140,31 +139,27 @@ describe('Admin Auth API - POST /api/admin/auth/login', () => {
     })
 
     it('should use secure flag in production', () => {
-      const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'production'
+      const nodeEnv = 'production'
 
       const cookieOptions = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: nodeEnv === 'production',
         sameSite: 'lax' as const
       }
 
       expect(cookieOptions.secure).toBe(true)
-      process.env.NODE_ENV = originalEnv
     })
 
     it('should not use secure flag in development', () => {
-      const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+      const nodeEnv = 'development' as string
 
       const cookieOptions = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: nodeEnv === 'production',
         sameSite: 'lax' as const
       }
 
       expect(cookieOptions.secure).toBe(false)
-      process.env.NODE_ENV = originalEnv
     })
 
     it('should set sameSite to lax', () => {
@@ -270,7 +265,8 @@ describe('Admin Auth API - POST /api/admin/auth/login', () => {
     })
 
     it('should log errors without exposing sensitive data', () => {
-      const error = new Error('Database connection failed')
+      // Simulate error scenario
+      void new Error('Database connection failed')
       const logMessage = 'Admin login error:'
 
       expect(logMessage).not.toContain('password')

@@ -156,7 +156,7 @@ describe('UpgradePrompt Component', () => {
 
   describe('Button Interaction', () => {
     it('should have full width button', () => {
-      const { container } = render(<UpgradePrompt />)
+      render(<UpgradePrompt />)
 
       const button = screen.getByText('Upgrade Plan').closest('button')
       expect(button?.classList.contains('w-full')).toBe(true)
@@ -219,7 +219,7 @@ describe('UpgradePrompt Component', () => {
 
   describe('Multiple Instances', () => {
     it('should render multiple upgrade prompts independently', () => {
-      const { container } = render(
+      render(
         <div>
           <UpgradePrompt
             feature="FEATURE_1"

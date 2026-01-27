@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
     if (!orgId) {
       return NextResponse.json(
         { error: 'No organization found' },
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     // Verify membership and permission
     const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id!, orgId },
     })
 
     if (!member) {
@@ -60,12 +60,12 @@ export async function POST(request: NextRequest) {
           where: { email },
           include: {
             memberships: {
-              where: { organizationId: orgId },
+              where: { orgId },
             },
           },
         })
 
-        if (existingUser?.memberships.length > 0) {
+        if (existingUser?.memberships && existingUser.memberships.length > 0) {
           return {
             email,
             status: 'already_member',
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
         const existingInvitation = await prisma.invitation.findFirst({
           where: {
             email,
-            organizationId: orgId,
+            orgId,
             status: 'PENDING',
           },
         })
@@ -90,13 +90,17 @@ export async function POST(request: NextRequest) {
           }
         }
 
+        // Generate a unique token for the invitation
+        const crypto = await import('crypto')
+        const token = crypto.randomUUID()
+
         // Create invitation
         const invitation = await prisma.invitation.create({
           data: {
             email,
             role,
-            organizationId: orgId,
-            invitedById: session.user.id,
+            orgId,
+            token,
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
           },
         })

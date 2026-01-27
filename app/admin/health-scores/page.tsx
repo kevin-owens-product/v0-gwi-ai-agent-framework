@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
+// Input import removed - unused
 import {
   HeartPulse,
   Building2,
@@ -37,7 +37,6 @@ import {
   Loader2,
   RefreshCw,
   Calculator,
-  Search,
   Filter,
   ChevronLeft,
   ChevronRight,

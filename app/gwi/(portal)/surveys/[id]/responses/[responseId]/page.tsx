@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -30,7 +29,6 @@ import {
   CheckCircle,
   Clock,
   User,
-  Calendar,
   FileText,
   Loader2,
 } from "lucide-react"
@@ -64,8 +62,6 @@ interface SurveyResponse {
 export default function ResponseDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const t = useTranslations("gwi.surveys.responses")
-  const tCommon = useTranslations("common")
   const surveyId = params.id as string
   const responseId = params.responseId as string
 

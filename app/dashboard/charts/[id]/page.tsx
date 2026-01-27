@@ -12,7 +12,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
 import {
   Select,
   SelectContent,
@@ -34,7 +33,6 @@ import {
   Copy,
   Check,
   Trash2,
-  Target,
   Activity,
   Sparkles,
   Maximize2,
@@ -44,10 +42,6 @@ import {
   History,
   Code,
   Mail,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  RefreshCw,
   ChevronDown,
   ChevronUp,
   Search,
@@ -57,12 +51,7 @@ import {
   Star,
   StarOff,
   Bookmark,
-  ExternalLink,
-  Zap,
-  AlertCircle,
   Info,
-  ArrowUpRight,
-  ArrowDownRight,
   Play,
   Pause,
 } from "lucide-react"
@@ -74,9 +63,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
@@ -95,7 +81,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import {
   Tooltip,
@@ -103,11 +88,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import {
   AdvancedChartRenderer,
   generateAdvancedSampleData,
@@ -337,7 +317,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
-  const [isExporting, setIsExporting] = useState(false)
+  const [_isExporting, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showEmbedDialog, setShowEmbedDialog] = useState(false)
@@ -352,7 +332,6 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
 
   // Comparison state
   const [comparisonMode, setComparisonMode] = useState(false)
-  const [comparisonPeriod, setComparisonPeriod] = useState("previous")
 
   // Data view state
   const [dataViewMode, setDataViewMode] = useState<"chart" | "table">("chart")
@@ -364,9 +343,6 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
   const [newAnnotation, setNewAnnotation] = useState("")
   const [showAnnotations, setShowAnnotations] = useState(true)
 
-  // AI Summary state
-  const [aiSummary, setAiSummary] = useState<string | null>(null)
-  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false)
 
   // Get chart data
   const chartData = useMemo(() => {
@@ -599,16 +575,6 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
     setNewAnnotation("")
   }
 
-  const handleGenerateAISummary = async () => {
-    setIsGeneratingSummary(true)
-    // Simulate AI generation
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setAiSummary(
-      `**Executive Summary**\n\nThis analysis reveals significant shifts in social media platform usage across generational cohorts. Key findings include:\n\n1. **TikTok's Rapid Ascent**: With 67% penetration among Gen Z and 54% among Millennials, TikTok has emerged as the second most-used platform, showing 24% YoY growth.\n\n2. **YouTube Dominance**: YouTube maintains its position as the most-used platform across all generations (89% average), demonstrating its universal appeal.\n\n3. **Facebook's Generational Divide**: While still strong among Gen X (68%) and Boomers (62%), Facebook usage among Gen Z has declined to 34%, representing a 9% drop from last quarter.\n\n4. **LinkedIn's Professional Niche**: Shows consistent 28% usage, primarily concentrated in the 25-44 age bracket.\n\n**Recommendations**: Consider reallocating social budget toward TikTok and YouTube for Gen Z targeting, while maintaining Facebook presence for older demographics.`
-    )
-    setIsGeneratingSummary(false)
-  }
-
   const handleSort = (column: string) => {
     if (sortColumn === column) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc")
@@ -827,7 +793,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
                           animate: true,
                           formatter: "percentage",
                           // Pass extracted dataKeys for multi-series charts
-                          dataKeys: chart.config?.extractedDataKeys?.length > 0 ? chart.config.extractedDataKeys : undefined,
+                          dataKeys: chart.config?.extractedDataKeys?.length ? chart.config?.extractedDataKeys : undefined,
                           // Pass extracted colors if available
                           colors: chart.config?.extractedColors,
                         }}

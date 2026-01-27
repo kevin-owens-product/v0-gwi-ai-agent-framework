@@ -101,7 +101,7 @@ const channelIcons: Record<string, typeof Bell> = {
 }
 
 export default function BroadcastMessagesPage() {
-  const router = useRouter()
+  useRouter()
   const searchParams = useSearchParams()
 
   const [messages, setMessages] = useState<BroadcastMessage[]>([])
@@ -624,18 +624,7 @@ export default function BroadcastMessagesPage() {
         columns={columns}
         getRowId={(message) => message.id}
         isLoading={loading}
-        emptyMessage={
-          <div className="text-center py-8">
-            <Megaphone className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No broadcast messages found</p>
-            <Button variant="outline" className="mt-4" asChild>
-              <Link href="/admin/broadcast/messages/new">
-                <Plus className="h-4 w-4 mr-2" />
-                Create First Broadcast
-              </Link>
-            </Button>
-          </div>
-        }
+        emptyMessage="No broadcast messages found"
         viewHref={(message) => `/admin/broadcast/messages/${message.id}`}
         rowActions={rowActions}
         bulkActions={bulkActions}

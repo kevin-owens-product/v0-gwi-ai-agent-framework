@@ -131,7 +131,7 @@ export function IncidentCard({
           <div className="space-y-4">
             <h4 className="text-sm font-semibold text-muted-foreground">Updates</h4>
             <div className="space-y-4 border-l-2 border-muted pl-4">
-              {publicUpdates.map((update, index) => {
+              {publicUpdates.map((update) => {
                 const updateStatusInfo = statusConfig[update.status] || statusConfig.INVESTIGATING
                 return (
                   <div key={update.id} className="relative">

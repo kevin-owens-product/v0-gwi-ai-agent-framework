@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import { LoadingText } from "@/components/ui/loading-text"
 import {
   Brain,
@@ -14,8 +13,6 @@ import {
   Plus,
   DollarSign,
   Zap,
-  Clock,
-  TrendingUp,
 } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 

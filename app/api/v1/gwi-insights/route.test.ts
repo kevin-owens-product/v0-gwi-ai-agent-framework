@@ -44,6 +44,9 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { getValidatedOrgId } from '@/lib/tenant'
 
+// Type assertion helper for mocked auth function
+const mockedAuth = auth as ReturnType<typeof vi.fn>
+
 describe('GWI Insights API Integration Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -51,19 +54,19 @@ describe('GWI Insights API Integration Tests', () => {
 
   // Helper to create mock authenticated session
   const mockAuthenticatedSession = () => {
-    vi.mocked(auth).mockResolvedValue({
+    mockedAuth.mockResolvedValue({
       user: {
         id: 'user-123',
         email: 'user@example.com',
         name: 'Test User',
       },
       expires: new Date(Date.now() + 3600000).toISOString(),
-    } as never)
+    })
   }
 
   // Helper to create mock unauthenticated session
   const mockUnauthenticatedSession = () => {
-    vi.mocked(auth).mockResolvedValue(null)
+    mockedAuth.mockResolvedValue(null)
   }
 
   // Helper to mock organization validation
@@ -87,7 +90,7 @@ describe('GWI Insights API Integration Tests', () => {
 
       it('should return 401 when user is not authenticated', () => {
         // Simulating the auth check logic from route handlers
-        const session = null
+        const session = null as { user?: { id?: string } } | null
         const isAuthenticated = session?.user?.id
         expect(isAuthenticated).toBeFalsy()
       })
@@ -192,26 +195,26 @@ describe('GWI Insights API Integration Tests', () => {
     describe('Search Functionality', () => {
       it('should search by survey name', () => {
         const search = 'consumer'
+        const nameClause = { name: { contains: search, mode: 'insensitive' } }
+        const descClause = { description: { contains: search, mode: 'insensitive' } }
         const searchClause = {
-          OR: [
-            { name: { contains: search, mode: 'insensitive' } },
-            { description: { contains: search, mode: 'insensitive' } },
-          ],
+          OR: [nameClause, descClause],
         }
 
-        expect(searchClause.OR[0].name.contains).toBe('consumer')
+        expect(searchClause.OR[0]).toBe(nameClause)
+        expect(nameClause.name.contains).toBe('consumer')
       })
 
       it('should search by survey description', () => {
         const search = 'trends'
+        const nameClause = { name: { contains: search, mode: 'insensitive' } }
+        const descClause = { description: { contains: search, mode: 'insensitive' } }
         const searchClause = {
-          OR: [
-            { name: { contains: search, mode: 'insensitive' } },
-            { description: { contains: search, mode: 'insensitive' } },
-          ],
+          OR: [nameClause, descClause],
         }
 
-        expect(searchClause.OR[1].description.contains).toBe('trends')
+        expect(searchClause.OR[1]).toBe(descClause)
+        expect(descClause.description.contains).toBe('trends')
       })
     })
 
@@ -563,16 +566,15 @@ describe('GWI Insights API Integration Tests', () => {
     describe('Search Functionality', () => {
       it('should search by name', () => {
         const search = 'demo'
+        const nameClause = { name: { contains: search, mode: 'insensitive' } }
+        const codeClause = { code: { contains: search, mode: 'insensitive' } }
+        const descClause = { description: { contains: search, mode: 'insensitive' } }
         const searchClause = {
-          OR: [
-            { name: { contains: search, mode: 'insensitive' } },
-            { code: { contains: search, mode: 'insensitive' } },
-            { description: { contains: search, mode: 'insensitive' } },
-          ],
+          OR: [nameClause, codeClause, descClause],
         }
 
         expect(searchClause.OR).toHaveLength(3)
-        expect(searchClause.OR[0].name.contains).toBe('demo')
+        expect(nameClause.name.contains).toBe('demo')
       })
 
       it('should search by code', () => {
@@ -646,7 +648,7 @@ describe('GWI Insights API Integration Tests', () => {
   describe('Error Handling', () => {
     describe('Authentication Errors', () => {
       it('should return 401 for missing session', () => {
-        const session = null
+        const session = null as { user?: { id?: string } } | null
         const response = !session?.user?.id
           ? { error: 'Unauthorized', status: 401 }
           : { status: 200 }
@@ -679,7 +681,7 @@ describe('GWI Insights API Integration Tests', () => {
     describe('Server Errors', () => {
       it('should return 500 for database errors', () => {
         // Simulate error handling in route
-        const handleError = (error: Error) => ({
+        const handleError = (_error: Error) => ({
           error: 'Internal server error',
           status: 500,
         })
@@ -727,7 +729,7 @@ describe('GWI Insights API Integration Tests', () => {
       const session = await auth()
 
       // All endpoints call getValidatedOrgId with the same pattern
-      const orgId = await getValidatedOrgId({} as never, session?.user?.id as string)
+      await getValidatedOrgId({} as never, session?.user?.id as string)
 
       expect(getValidatedOrgId).toHaveBeenCalled()
     })

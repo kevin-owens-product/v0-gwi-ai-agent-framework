@@ -136,7 +136,7 @@ describe('Admin System Notifications API - /api/admin/notifications', () => {
       })
 
       it('should default targetType to ALL', () => {
-        const body = {
+        const body: { title: string; message: string; type: string; targetType?: string } = {
           title: 'Title',
           message: 'Message',
           type: 'INFO'
@@ -147,7 +147,7 @@ describe('Admin System Notifications API - /api/admin/notifications', () => {
       })
 
       it('should default isActive to true', () => {
-        const body = { title: 'Title', message: 'Message', type: 'INFO' }
+        const body: { title: string; message: string; type: string; isActive?: boolean } = { title: 'Title', message: 'Message', type: 'INFO' }
         const isActive = body.isActive ?? true
         expect(isActive).toBe(true)
       })

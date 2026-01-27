@@ -5,7 +5,7 @@ import { logAdminActivity, AdminActivityAction, AdminResourceType } from "@/lib/
 import { cookies } from "next/headers"
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

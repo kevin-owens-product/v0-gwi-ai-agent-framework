@@ -177,14 +177,14 @@ describe('Admin Health API - GET /api/admin/health', () => {
 
   describe('Churn Probability Thresholds', () => {
     it('should assign low churn for HEALTHY', () => {
-      const riskLevel = 'HEALTHY'
+      // HEALTHY risk level should have low churn probability
       const churnProbability = 0.1
 
       expect(churnProbability).toBeLessThan(0.3)
     })
 
     it('should assign medium churn for AT_RISK', () => {
-      const riskLevel = 'AT_RISK'
+      // AT_RISK risk level should have medium churn probability
       const churnProbability = 0.4
 
       expect(churnProbability).toBeGreaterThanOrEqual(0.3)
@@ -192,7 +192,7 @@ describe('Admin Health API - GET /api/admin/health', () => {
     })
 
     it('should assign high churn for CRITICAL', () => {
-      const riskLevel = 'CRITICAL'
+      // CRITICAL risk level should have high churn probability
       const churnProbability = 0.7
 
       expect(churnProbability).toBeGreaterThanOrEqual(0.6)

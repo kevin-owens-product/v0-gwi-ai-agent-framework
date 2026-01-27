@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { prisma } from "@/lib/db"
+import { Prisma } from "@prisma/client"
 import { validateSuperAdminSession } from "@/lib/super-admin"
 import { hasGWIPermission } from "@/lib/gwi-permissions"
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string; responseId: string }> }
 ) {
   try {
@@ -118,7 +119,7 @@ export async function PATCH(
           metadata: existingResponse.metadata,
           completedAt: existingResponse.completedAt,
         },
-        newState: updateData,
+        newState: updateData as Prisma.InputJsonValue,
       },
     })
 
@@ -133,7 +134,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string; responseId: string }> }
 ) {
   try {

@@ -113,7 +113,6 @@ export function ExportHistoryTable({
 }: ExportHistoryTableProps) {
   const tTable = useTranslations('ui.table')
   const tEmpty = useTranslations('ui.empty')
-  const tLoading = useTranslations('ui.loading')
 
   if (isLoading) {
     return (

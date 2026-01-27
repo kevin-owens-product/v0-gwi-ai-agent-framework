@@ -287,7 +287,7 @@ describe('Admin Analytics Snapshots API - /api/admin/analytics/snapshots', () =>
       })
 
       it('should use current date if not provided', () => {
-        const body = { type: 'DAILY' }
+        const body: { type: string; date?: Date } = { type: 'DAILY' }
         const date = body.date || new Date()
         expect(date).toBeInstanceOf(Date)
       })
@@ -430,7 +430,7 @@ describe('Admin Analytics Snapshots API - /api/admin/analytics/snapshots', () =>
     })
 
     it('should handle missing metrics gracefully', () => {
-      const snapshot = {
+      const snapshot: { id: string; metrics: { totalOrgs?: number } | null } = {
         id: 'snapshot-123',
         metrics: null
       }

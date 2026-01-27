@@ -13,6 +13,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/db"
+import { Prisma } from "@prisma/client"
 import { z } from "zod"
 
 /**
@@ -44,7 +45,7 @@ const PreferencesUpdateSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 })
 
-type PreferencesUpdate = z.infer<typeof PreferencesUpdateSchema>
+// Note: Type is inferred but not directly used - validation happens through safeParse
 
 /**
  * GET /api/v1/preferences
@@ -180,12 +181,31 @@ export async function PATCH(request: NextRequest) {
 
     if (existingPreferences) {
       // Update existing preferences
+      const updateData: Prisma.UserPreferencesUpdateInput = {
+        updatedAt: new Date(),
+      }
+      if (updates.theme !== undefined) updateData.theme = updates.theme
+      if (updates.language !== undefined) updateData.language = updates.language
+      if (updates.timezone !== undefined) updateData.timezone = updates.timezone
+      if (updates.dateFormat !== undefined) updateData.dateFormat = updates.dateFormat
+      if (updates.timeFormat !== undefined) updateData.timeFormat = updates.timeFormat
+      if (updates.keyboardShortcuts !== undefined) updateData.keyboardShortcuts = updates.keyboardShortcuts
+      if (updates.customShortcuts !== undefined) updateData.customShortcuts = updates.customShortcuts as Prisma.InputJsonValue
+      if (updates.emailNotifications !== undefined) updateData.emailNotifications = updates.emailNotifications
+      if (updates.pushNotifications !== undefined) updateData.pushNotifications = updates.pushNotifications
+      if (updates.inAppNotifications !== undefined) updateData.inAppNotifications = updates.inAppNotifications
+      if (updates.weeklyDigest !== undefined) updateData.weeklyDigest = updates.weeklyDigest
+      if (updates.compactMode !== undefined) updateData.compactMode = updates.compactMode
+      if (updates.sidebarCollapsed !== undefined) updateData.sidebarCollapsed = updates.sidebarCollapsed
+      if (updates.defaultDashboard !== undefined) updateData.defaultDashboard = updates.defaultDashboard
+      if (updates.recentItems !== undefined) updateData.recentItems = updates.recentItems
+      if (updates.pinnedItems !== undefined) updateData.pinnedItems = updates.pinnedItems
+      if (updates.tourCompleted !== undefined) updateData.tourCompleted = updates.tourCompleted
+      if (updates.metadata !== undefined) updateData.metadata = updates.metadata as Prisma.InputJsonValue
+
       preferences = await prisma.userPreferences.update({
         where: { userId: session.user.id },
-        data: {
-          ...updates,
-          updatedAt: new Date(),
-        },
+        data: updateData,
       })
     } else {
       // Create new preferences with updates
@@ -198,7 +218,7 @@ export async function PATCH(request: NextRequest) {
           dateFormat: updates.dateFormat || "MMM dd, yyyy",
           timeFormat: updates.timeFormat || "HH:mm",
           keyboardShortcuts: updates.keyboardShortcuts ?? true,
-          customShortcuts: updates.customShortcuts || {},
+          customShortcuts: (updates.customShortcuts || {}) as Prisma.InputJsonValue,
           emailNotifications: updates.emailNotifications ?? true,
           pushNotifications: updates.pushNotifications ?? true,
           inAppNotifications: updates.inAppNotifications ?? true,
@@ -209,7 +229,7 @@ export async function PATCH(request: NextRequest) {
           recentItems: updates.recentItems || [],
           pinnedItems: updates.pinnedItems || [],
           tourCompleted: updates.tourCompleted ?? false,
-          metadata: updates.metadata || {},
+          metadata: (updates.metadata || {}) as Prisma.InputJsonValue,
         },
       })
     }
@@ -258,13 +278,33 @@ export async function PUT(request: NextRequest) {
 
     const updates = validationResult.data
 
+    // Build update data
+    const updateData: Prisma.UserPreferencesUpdateInput = {
+      updatedAt: new Date(),
+    }
+    if (updates.theme !== undefined) updateData.theme = updates.theme
+    if (updates.language !== undefined) updateData.language = updates.language
+    if (updates.timezone !== undefined) updateData.timezone = updates.timezone
+    if (updates.dateFormat !== undefined) updateData.dateFormat = updates.dateFormat
+    if (updates.timeFormat !== undefined) updateData.timeFormat = updates.timeFormat
+    if (updates.keyboardShortcuts !== undefined) updateData.keyboardShortcuts = updates.keyboardShortcuts
+    if (updates.customShortcuts !== undefined) updateData.customShortcuts = updates.customShortcuts as Prisma.InputJsonValue
+    if (updates.emailNotifications !== undefined) updateData.emailNotifications = updates.emailNotifications
+    if (updates.pushNotifications !== undefined) updateData.pushNotifications = updates.pushNotifications
+    if (updates.inAppNotifications !== undefined) updateData.inAppNotifications = updates.inAppNotifications
+    if (updates.weeklyDigest !== undefined) updateData.weeklyDigest = updates.weeklyDigest
+    if (updates.compactMode !== undefined) updateData.compactMode = updates.compactMode
+    if (updates.sidebarCollapsed !== undefined) updateData.sidebarCollapsed = updates.sidebarCollapsed
+    if (updates.defaultDashboard !== undefined) updateData.defaultDashboard = updates.defaultDashboard
+    if (updates.recentItems !== undefined) updateData.recentItems = updates.recentItems
+    if (updates.pinnedItems !== undefined) updateData.pinnedItems = updates.pinnedItems
+    if (updates.tourCompleted !== undefined) updateData.tourCompleted = updates.tourCompleted
+    if (updates.metadata !== undefined) updateData.metadata = updates.metadata as Prisma.InputJsonValue
+
     // Upsert preferences
     const preferences = await prisma.userPreferences.upsert({
       where: { userId: session.user.id },
-      update: {
-        ...updates,
-        updatedAt: new Date(),
-      },
+      update: updateData,
       create: {
         userId: session.user.id,
         theme: updates.theme || "SYSTEM",
@@ -273,7 +313,7 @@ export async function PUT(request: NextRequest) {
         dateFormat: updates.dateFormat || "MMM dd, yyyy",
         timeFormat: updates.timeFormat || "HH:mm",
         keyboardShortcuts: updates.keyboardShortcuts ?? true,
-        customShortcuts: updates.customShortcuts || {},
+        customShortcuts: (updates.customShortcuts || {}) as Prisma.InputJsonValue,
         emailNotifications: updates.emailNotifications ?? true,
         pushNotifications: updates.pushNotifications ?? true,
         inAppNotifications: updates.inAppNotifications ?? true,
@@ -284,7 +324,7 @@ export async function PUT(request: NextRequest) {
         recentItems: updates.recentItems || [],
         pinnedItems: updates.pinnedItems || [],
         tourCompleted: updates.tourCompleted ?? false,
-        metadata: updates.metadata || {},
+        metadata: (updates.metadata || {}) as Prisma.InputJsonValue,
       },
     })
 

@@ -78,7 +78,6 @@ export function StatusBadge({
 }: StatusBadgeProps) {
   const config = statusConfig[status]
   const sizes = sizeConfig[size]
-  const Icon = config.icon
 
   return (
     <div

@@ -46,7 +46,6 @@ import {
   Trash,
   Star,
   Download,
-  Globe,
   Shield,
   ExternalLink,
   CheckCircle,

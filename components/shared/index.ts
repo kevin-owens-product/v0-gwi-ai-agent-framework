@@ -17,4 +17,4 @@ export { FolderOrganization } from "./folder-organization"
 export { VersionHistory } from "./version-history"
 
 // Workflow
-export { WorkflowStatus } from "./workflow-status"
+export { WorkflowStatusBadge, WorkflowStatusManager } from "./workflow-status"

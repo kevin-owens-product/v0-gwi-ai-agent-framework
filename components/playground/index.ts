@@ -9,18 +9,18 @@
 // Layout
 export { PlaygroundHeader } from "./header"
 export { PlaygroundSidebar } from "./sidebar"
-export { Toolbar } from "./toolbar"
+export { PlaygroundToolbar } from "./toolbar"
 
 // Canvas & Workspace
-export { Canvas } from "./canvas"
+export { PlaygroundCanvas } from "./canvas"
 export { WorkspaceManager } from "./workspace-manager"
 
 // Chat
-export { Chat } from "./chat"
+export { PlaygroundChat } from "./chat"
 export { ChatMessage } from "./chat-message"
 
 // Panels
-export { ContextPanel } from "./context-panel"
+export { PlaygroundContextPanel } from "./context-panel"
 export { SourcePreview } from "./source-preview"
 
 // Commands & Onboarding

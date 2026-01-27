@@ -14,7 +14,6 @@ import { prisma } from '@/lib/db'
 import { Prisma } from '@prisma/client'
 import type {
   GWITool,
-  ToolExecutionContext,
   ToolResult,
   AudienceCriteria,
   ChartConfiguration,
@@ -408,7 +407,7 @@ export const querySparkTool: GWITool = {
     type: 'object',
     description: 'Spark response with insights, citations, and confidence score',
   },
-  execute: async (params, context): Promise<ToolResult> => {
+  execute: async (params, _context): Promise<ToolResult> => {
     const { result, executionTimeMs } = await withTiming(async () => {
       const { query, audienceContext, market } = params as {
         query: string
@@ -900,6 +899,8 @@ export const analyzeInsightsTool: GWITool = {
       }
 
       // Generate insights based on focus areas
+      // sourceData contains the fetched data for potential future use in advanced analysis
+      void sourceData
       const insights: GeneratedInsight[] = []
       const areas = focusAreas || ['trends', 'anomalies', 'recommendations']
 

@@ -47,7 +47,7 @@ describe('Admin Tenant Suspension API - /api/admin/tenants/[id]/suspend', () => 
       })
 
       it('should default suspensionType to FULL', () => {
-        const body = { reason: 'ToS violation' }
+        const body: { reason: string; suspensionType?: string } = { reason: 'ToS violation' }
         const suspensionType = body.suspensionType || 'FULL'
 
         expect(suspensionType).toBe('FULL')
@@ -277,7 +277,7 @@ describe('Admin Tenant Suspension API - /api/admin/tenants/[id]/suspend', () => 
 
   describe('Active Suspension Detection', () => {
     it('should detect active indefinite suspension', () => {
-      const suspension = {
+      const suspension: { isActive: boolean; expiresAt: Date | null } = {
         isActive: true,
         expiresAt: null
       }

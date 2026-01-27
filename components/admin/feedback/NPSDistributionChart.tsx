@@ -41,12 +41,6 @@ export function NPSDistributionChart({
     return "bg-green-500"
   }
 
-  const getCategoryLabel = (score: number) => {
-    if (score <= 6) return "Detractor"
-    if (score <= 8) return "Passive"
-    return "Promoter"
-  }
-
   return (
     <Card className={className}>
       <CardHeader>

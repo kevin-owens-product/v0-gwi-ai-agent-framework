@@ -5,7 +5,7 @@ import { cookies } from "next/headers"
 import { APIClientType, APIClientStatus } from "@prisma/client"
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -36,9 +36,6 @@ export async function GET(
       where: { id: client.orgId },
       select: { id: true, name: true, slug: true },
     })
-
-    // Get usage statistics (last 30 days)
-    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
 
     // Calculate daily request counts (simulated - would come from actual API logs)
     const usageStats = {
@@ -164,7 +161,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

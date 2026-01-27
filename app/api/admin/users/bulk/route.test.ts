@@ -161,13 +161,13 @@ describe('Admin Users Bulk API - POST /api/admin/users/bulk', () => {
     })
 
     it('should default to TEMPORARY ban type', () => {
-      const data = { reason: 'Default ban' }
+      const data: { reason: string; banType?: string } = { reason: 'Default ban' }
       const banType = data.banType || 'TEMPORARY'
       expect(banType).toBe('TEMPORARY')
     })
 
     it('should default ban reason', () => {
-      const data = {}
+      const data: { reason?: string } = {}
       const reason = data.reason || 'Bulk ban by admin'
       expect(reason).toBe('Bulk ban by admin')
     })
@@ -439,7 +439,7 @@ describe('Admin Users Bulk API - POST /api/admin/users/bulk', () => {
     })
 
     it('should skip import without email', () => {
-      const userData = { name: 'John' }
+      const userData: { name: string; email?: string } = { name: 'John' }
       const canImport = !!userData.email
       expect(canImport).toBe(false)
     })
@@ -554,7 +554,8 @@ describe('Admin Users Bulk API - POST /api/admin/users/bulk', () => {
     })
 
     it('should catch individual operation errors', () => {
-      const userIds = ['user-1', 'user-2', 'user-3']
+      // Processing 3 users
+      void ['user-1', 'user-2', 'user-3']
       const errors: string[] = []
 
       // Simulate error for user-2
@@ -565,7 +566,8 @@ describe('Admin Users Bulk API - POST /api/admin/users/bulk', () => {
     })
 
     it('should continue processing after individual failures', () => {
-      const userIds = ['user-1', 'user-2', 'user-3']
+      // Processing 3 users
+      void ['user-1', 'user-2', 'user-3']
       const errors = ['user-2: Error']
       const success = 2
 

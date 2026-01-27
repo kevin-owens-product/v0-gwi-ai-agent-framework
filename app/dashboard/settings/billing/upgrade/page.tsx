@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -73,7 +73,6 @@ const plans = [
 ]
 
 export default function UpgradePage() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [isYearly, setIsYearly] = useState(false)
   const [loadingTier, setLoadingTier] = useState<string | null>(null)

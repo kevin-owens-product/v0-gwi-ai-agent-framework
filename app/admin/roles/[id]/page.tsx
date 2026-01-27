@@ -76,10 +76,10 @@ const colorOptions = [
 
 export default function RoleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  const router = useRouter()
+  useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [role, setRole] = useState<Role | null>(null)
-  const [effectivePermissions, setEffectivePermissions] = useState<string[]>([])
+  const [, setEffectivePermissions] = useState<string[]>([])
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)

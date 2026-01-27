@@ -15,7 +15,7 @@ function hashSecret(secret: string): string {
 }
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

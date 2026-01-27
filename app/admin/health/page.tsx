@@ -23,7 +23,6 @@ import {
 import {
   HeartPulse,
   Building2,
-  TrendingUp,
   TrendingDown,
   AlertTriangle,
   CheckCircle,
@@ -110,11 +109,7 @@ export default function HealthScoresPage() {
     return "text-red-500"
   }
 
-  const getProgressColor = (score: number) => {
-    if (score >= 70) return "bg-green-500"
-    if (score >= 40) return "bg-amber-500"
-    return "bg-red-500"
-  }
+  // getProgressColor function removed - unused
 
   // Summary stats
   const criticalCount = scores.filter(s => s.riskLevel === "CRITICAL").length

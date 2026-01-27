@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useLocalStorage } from './use-local-storage'
 
@@ -38,7 +38,7 @@ describe('useLocalStorage', () => {
   it('returns stored value from localStorage', () => {
     mockLocalStorage.store['test-key'] = JSON.stringify('stored')
 
-    const { result } = renderHook(() => useLocalStorage('test-key', 'initial'))
+    renderHook(() => useLocalStorage('test-key', 'initial'))
 
     // Wait for useEffect to run
     expect(mockLocalStorage.getItem).toHaveBeenCalledWith('test-key')

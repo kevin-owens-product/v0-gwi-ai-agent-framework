@@ -245,7 +245,7 @@ describe('Admin System Rules API - /api/admin/rules', () => {
       })
 
       it('should default isActive to true', () => {
-        const body = {
+        const body: { name: string; type: string; isActive?: boolean } = {
           name: 'New Rule',
           type: 'RATE_LIMIT'
         }
@@ -255,7 +255,7 @@ describe('Admin System Rules API - /api/admin/rules', () => {
       })
 
       it('should default priority to 0', () => {
-        const body = {
+        const body: { name: string; type: string; priority?: number } = {
           name: 'New Rule',
           type: 'RATE_LIMIT'
         }

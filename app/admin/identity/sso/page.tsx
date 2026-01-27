@@ -67,7 +67,7 @@ const SSO_PROVIDER_KEYS = ["SAML", "OIDC", "AZURE_AD", "OKTA", "GOOGLE_WORKSPACE
 const STATUS_KEYS = ["CONFIGURING", "TESTING", "ACTIVE", "DISABLED", "ERROR"] as const
 
 export default function SSOListingPage() {
-  const router = useRouter()
+  useRouter()
   const t = useTranslations("admin.sso")
   const tCommon = useTranslations("common")
 
@@ -178,8 +178,8 @@ export default function SSOListingPage() {
     }
   }
 
-  const handleDeleteClick = (configId: string) => {
-    setConfigToDelete(configId)
+  const handleDeleteClick = (config: SSOConfig) => {
+    setConfigToDelete(config.id)
     setShowDeleteConfirm(true)
   }
 
@@ -248,7 +248,7 @@ export default function SSOListingPage() {
     }
   }
 
-  const getProviderIcon = (provider: string) => {
+  const getProviderIcon = (_provider: string) => {
     return <Key className="h-4 w-4" />
   }
 

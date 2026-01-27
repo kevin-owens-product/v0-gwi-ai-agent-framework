@@ -17,10 +17,10 @@ export async function GET(request: NextRequest) {
     }
 
     const member = await prisma.organizationMember.findFirst({
-      where: { userId: session.user.id, organizationId: orgId },
+      where: { userId: session.user.id, orgId },
     })
 
-    if (!member || !hasPermission(member.role, 'analytics:view')) {
+    if (!member || !hasPermission(member.role, 'analytics:read')) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -28,10 +28,10 @@ export async function GET(request: NextRequest) {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
 
     const [agentCount, workflowCount, reportCount, memberCount] = await Promise.all([
-      prisma.agent.count({ where: { organizationId: orgId } }),
-      prisma.workflow.count({ where: { organizationId: orgId } }),
-      prisma.report.count({ where: { organizationId: orgId } }),
-      prisma.organizationMember.count({ where: { organizationId: orgId } }),
+      prisma.agent.count({ where: { orgId } }),
+      prisma.workflow.count({ where: { orgId } }),
+      prisma.report.count({ where: { orgId } }),
+      prisma.organizationMember.count({ where: { orgId } }),
     ])
 
     return NextResponse.json({

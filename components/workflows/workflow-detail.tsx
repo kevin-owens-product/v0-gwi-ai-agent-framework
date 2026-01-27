@@ -22,8 +22,6 @@ import {
   Edit,
   Copy,
   Trash2,
-  Clock,
-  CheckCircle2,
   AlertCircle,
   ChevronRight,
   Loader2,
@@ -43,16 +41,6 @@ interface WorkflowData {
   updatedAt: string
   lastRunAt?: string
   runsCount?: number
-}
-
-const _runStatusConfig = {
-  completed: { icon: CheckCircle2, color: "text-chart-5", bg: "bg-chart-5/10" },
-  COMPLETED: { icon: CheckCircle2, color: "text-chart-5", bg: "bg-chart-5/10" },
-  failed: { icon: AlertCircle, color: "text-destructive", bg: "bg-destructive/10" },
-  FAILED: { icon: AlertCircle, color: "text-destructive", bg: "bg-destructive/10" },
-  running: { icon: Clock, color: "text-accent", bg: "bg-accent/10" },
-  RUNNING: { icon: Clock, color: "text-accent", bg: "bg-accent/10" },
-  PENDING: { icon: Clock, color: "text-muted-foreground", bg: "bg-muted/10" },
 }
 
 const statusDisplayMap: Record<string, string> = {

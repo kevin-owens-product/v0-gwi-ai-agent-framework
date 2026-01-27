@@ -369,7 +369,7 @@ export default function ApiKeysSettingsPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>{t("deleteKey")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteKeyConfirmation", { name: deleteKey?.name })}
+              {t("deleteKeyConfirmation", { name: deleteKey?.name ?? "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

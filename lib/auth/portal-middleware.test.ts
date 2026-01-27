@@ -17,8 +17,8 @@ import {
   unauthorizedResponse,
   forbiddenResponse,
   loginRedirect,
-  type PortalSession,
 } from './portal-middleware'
+import type { PortalSession } from './portal-session'
 
 // Mock portal-session module
 vi.mock('./portal-session', () => ({
@@ -44,7 +44,7 @@ vi.mock('./portal-session', () => ({
 
 // Mock unified-audit module
 vi.mock('@/lib/audit/unified-audit', () => ({
-  createAuditContext: vi.fn((session, request) => ({
+  createAuditContext: vi.fn((session, _request) => ({
     portal: session.type.toUpperCase(),
     userId: session.type === 'user' ? session.userId : undefined,
     adminId: session.type !== 'user' ? session.userId : undefined,

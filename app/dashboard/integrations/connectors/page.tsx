@@ -28,15 +28,12 @@ import {
   Search,
   Plug,
   RefreshCw,
-  BarChart3,
-  Users,
-  Megaphone,
   Database,
   AlertTriangle,
 } from 'lucide-react'
 import { ConnectorCard } from '@/components/connectors/ConnectorCard'
 import { ConnectorTypeSelector } from '@/components/connectors/ConnectorTypeSelector'
-import { useConnectors, type Connector } from '@/hooks/use-connectors'
+import { useConnectors } from '@/hooks/use-connectors'
 import { CONNECTOR_CATEGORIES, type ConnectorProviderConfig } from '@/lib/connectors'
 import { PageTracker } from '@/components/tracking/PageTracker'
 
@@ -114,7 +111,6 @@ export default function ConnectorsPage() {
 
   // Group connectors by status
   const activeConnectors = connectors.filter((c) => c.isActive)
-  const pausedConnectors = connectors.filter((c) => !c.isActive)
   const errorConnectors = connectors.filter((c) => c.lastSyncStatus === 'FAILED')
 
   return (

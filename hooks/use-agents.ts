@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { useCurrentOrg } from './use-organization'
-import type { Agent, AgentWithDetails, CreateAgentInput, UpdateAgentInput, RunAgentInput, PaginatedResponse } from '@/types'
+import type { AgentWithDetails, CreateAgentInput, UpdateAgentInput, RunAgentInput, PaginatedResponse } from '@/types'
 
 interface UseAgentsOptions {
   page?: number

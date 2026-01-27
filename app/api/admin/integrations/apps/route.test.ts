@@ -277,13 +277,13 @@ describe('Admin Integrations Apps API - /api/admin/integrations/apps', () => {
   describe('POST - Create App', () => {
     describe('Validation', () => {
       it('should require name', () => {
-        const body = { category: 'PRODUCTIVITY' }
+        const body: { category: string; name?: string } = { category: 'PRODUCTIVITY' }
         const isValid = !!body.name
         expect(isValid).toBe(false)
       })
 
       it('should require category', () => {
-        const body = { name: 'My App' }
+        const body: { name: string; category?: string } = { name: 'My App' }
         const isValid = !!body.category
         expect(isValid).toBe(false)
       })
@@ -345,7 +345,7 @@ describe('Admin Integrations Apps API - /api/admin/integrations/apps', () => {
       })
 
       it('should default permissions to empty array', () => {
-        const permissions = []
+        const permissions: string[] = []
         expect(permissions).toEqual([])
       })
 

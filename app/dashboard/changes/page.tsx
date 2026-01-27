@@ -13,7 +13,6 @@ import {
 import {
   History,
   ArrowLeftRight,
-  Sparkles,
   Activity,
   Bell,
   RefreshCw,

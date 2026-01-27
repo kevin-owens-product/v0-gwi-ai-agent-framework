@@ -91,10 +91,7 @@ test.describe('Responsive Design', () => {
     await page.setViewportSize({ width: 375, height: 667 })
     await page.goto('/')
 
-    // Check for mobile menu button or hamburger icon
-    const mobileMenuButton = page.locator('[aria-label*="menu" i], button:has([class*="menu"]), [class*="hamburger"]')
-
-    // Page should still be functional
+    // Page should still be functional (mobile menu button would be found via locator if needed)
     await expect(page.locator('body')).toBeVisible()
   })
 

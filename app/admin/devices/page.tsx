@@ -21,7 +21,7 @@ import {
   Settings,
   Plus,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -88,13 +88,7 @@ const trustStatuses = [
   { value: "REVOKED", label: "Revoked" },
 ]
 
-const platforms = [
-  { value: "iOS", label: "iOS" },
-  { value: "Android", label: "Android" },
-  { value: "Windows", label: "Windows" },
-  { value: "macOS", label: "macOS" },
-  { value: "Linux", label: "Linux" },
-]
+// platforms array removed - unused
 
 export default function DevicesPage() {
   const router = useRouter()

@@ -14,11 +14,10 @@
  * - Tool/Function calling support
  */
 
-import { toolRegistry, getToolSchemas, resolveParameterTemplates } from '@/lib/tool-registry'
+import { toolRegistry, getToolSchemas } from '@/lib/tool-registry'
 import type {
   ToolExecutionContext,
   ToolCallRecord,
-  LLMToolSchema,
   ResourceReference,
   AgentExecutionWithToolsResult,
 } from '@/types/tools'
@@ -444,7 +443,6 @@ export async function executeAgentWithTools(
 ): Promise<AgentExecutionWithToolsResult> {
   const {
     agentType,
-    agentName,
     userInput,
     systemPrompt,
     memoryContext,

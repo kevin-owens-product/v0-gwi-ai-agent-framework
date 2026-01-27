@@ -37,7 +37,7 @@ describe('Admin Security Policies API - GET /api/admin/security/policies', () =>
     })
 
     it('should filter by type when specified', () => {
-      const type = 'MFA_REQUIRED'
+      const type = 'MFA_REQUIRED' as string
       const where: Record<string, unknown> = {}
       if (type && type !== 'all') {
         where.type = type
@@ -71,7 +71,7 @@ describe('Admin Security Policies API - GET /api/admin/security/policies', () =>
     })
 
     it('should filter by scope when specified', () => {
-      const scope = 'PLATFORM'
+      const scope = 'PLATFORM' as string
       const where: Record<string, unknown> = {}
       if (scope && scope !== 'all') {
         where.scope = scope
@@ -122,7 +122,7 @@ describe('Admin Security Policies API - GET /api/admin/security/policies', () =>
 
     it('should search in description field', () => {
       const search = 'require'
-      const where: Record<string, unknown> = {
+      const where: { OR: unknown[] } = {
         OR: [
           { name: { contains: search, mode: 'insensitive' } },
           { description: { contains: search, mode: 'insensitive' } }
@@ -132,7 +132,7 @@ describe('Admin Security Policies API - GET /api/admin/security/policies', () =>
     })
 
     it('should be case insensitive', () => {
-      const search = 'PASSWORD'
+      void 'PASSWORD' // Search term
       const searchMode = 'insensitive'
       expect(searchMode).toBe('insensitive')
     })
@@ -149,8 +149,8 @@ describe('Admin Security Policies API - GET /api/admin/security/policies', () =>
 
   describe('Combined Filters', () => {
     it('should support type and scope together', () => {
-      const type = 'MFA_REQUIRED'
-      const scope = 'PLATFORM'
+      const type = 'MFA_REQUIRED' as string
+      const scope = 'PLATFORM' as string
       const where: Record<string, unknown> = {}
       if (type && type !== 'all') where.type = type
       if (scope && scope !== 'all') where.scope = scope
@@ -160,8 +160,8 @@ describe('Admin Security Policies API - GET /api/admin/security/policies', () =>
     })
 
     it('should support all three filters together', () => {
-      const type = 'IP_BLOCKING'
-      const scope = 'ORGANIZATION'
+      const type = 'IP_BLOCKING' as string
+      const scope = 'ORGANIZATION' as string
       const search = 'block'
       const where: Record<string, unknown> = {}
 
@@ -384,7 +384,7 @@ describe('Admin Security Policies API - POST /api/admin/security/policies', () =
     })
 
     it('should default to ENFORCE', () => {
-      const body = { name: 'Test', type: 'MFA_REQUIRED' }
+      const body: { name: string; type: string; enforcementMode?: string } = { name: 'Test', type: 'MFA_REQUIRED' }
       const enforcementMode = body.enforcementMode || 'ENFORCE'
       expect(enforcementMode).toBe('ENFORCE')
     })
@@ -392,37 +392,37 @@ describe('Admin Security Policies API - POST /api/admin/security/policies', () =
 
   describe('Default Values', () => {
     it('should default scope to PLATFORM', () => {
-      const body = { name: 'Test', type: 'MFA_REQUIRED' }
+      const body: { name: string; type: string; scope?: string } = { name: 'Test', type: 'MFA_REQUIRED' }
       const scope = body.scope || 'PLATFORM'
       expect(scope).toBe('PLATFORM')
     })
 
     it('should default priority to 0', () => {
-      const body = { name: 'Test', type: 'MFA_REQUIRED' }
+      const body: { name: string; type: string; priority?: number } = { name: 'Test', type: 'MFA_REQUIRED' }
       const priority = body.priority || 0
       expect(priority).toBe(0)
     })
 
     it('should default isActive to true', () => {
-      const body = { name: 'Test', type: 'MFA_REQUIRED' }
+      const body: { name: string; type: string; isActive?: boolean } = { name: 'Test', type: 'MFA_REQUIRED' }
       const isActive = body.isActive ?? true
       expect(isActive).toBe(true)
     })
 
     it('should default targetOrgs to empty array', () => {
-      const body = { name: 'Test', type: 'MFA_REQUIRED' }
+      const body: { name: string; type: string; targetOrgs?: string[] } = { name: 'Test', type: 'MFA_REQUIRED' }
       const targetOrgs = body.targetOrgs || []
       expect(targetOrgs).toEqual([])
     })
 
     it('should default targetPlans to empty array', () => {
-      const body = { name: 'Test', type: 'MFA_REQUIRED' }
+      const body: { name: string; type: string; targetPlans?: string[] } = { name: 'Test', type: 'MFA_REQUIRED' }
       const targetPlans = body.targetPlans || []
       expect(targetPlans).toEqual([])
     })
 
     it('should default settings to empty object', () => {
-      const body = { name: 'Test', type: 'MFA_REQUIRED' }
+      const body: { name: string; type: string; settings?: Record<string, unknown> } = { name: 'Test', type: 'MFA_REQUIRED' }
       const settings = body.settings || {}
       expect(settings).toEqual({})
     })

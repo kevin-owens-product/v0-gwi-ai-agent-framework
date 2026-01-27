@@ -3,7 +3,6 @@ import { prisma } from "@/lib/db"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { LoadingText } from "@/components/ui/loading-text"
 import {
@@ -15,7 +14,6 @@ import {
 } from "@/components/ui/select"
 import {
   CheckCircle,
-  XCircle,
   Play,
   TestTube,
   AlertTriangle,

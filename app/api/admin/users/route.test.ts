@@ -244,7 +244,7 @@ describe('Admin Users API - GET /api/admin/users', () => {
 
   describe('Ban Status Detection', () => {
     it('should detect active permanent bans', () => {
-      const ban = {
+      const ban: { id: string; userId: string; banType: string; expiresAt: Date | null } = {
         id: 'ban-1',
         userId: 'user-1',
         banType: 'PERMANENT',

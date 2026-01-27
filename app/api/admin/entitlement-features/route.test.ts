@@ -238,13 +238,13 @@ describe('Admin Entitlement Features API - /api/admin/entitlement-features', () 
   describe('POST - Create Entitlement Feature', () => {
     describe('Validation', () => {
       it('should require key', () => {
-        const body = { name: 'Feature' }
+        const body: { name: string; key?: string } = { name: 'Feature' }
         const isValid = !!body.key
         expect(isValid).toBe(false)
       })
 
       it('should require name', () => {
-        const body = { key: 'feature-key' }
+        const body: { key: string; name?: string } = { key: 'feature-key' }
         const isValid = !!body.name
         expect(isValid).toBe(false)
       })

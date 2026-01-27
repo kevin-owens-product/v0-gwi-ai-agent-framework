@@ -241,13 +241,13 @@ describe('Admin Compliance Legal Holds API - /api/admin/compliance/legal-holds',
   describe('POST - Create Legal Hold', () => {
     describe('Validation', () => {
       it('should require name', () => {
-        const body = { orgId: 'org-123', holdType: 'LITIGATION' }
+        const body: { orgId: string; holdType: string; name?: string } = { orgId: 'org-123', holdType: 'LITIGATION' }
         const isValid = !!body.name
         expect(isValid).toBe(false)
       })
 
       it('should require orgId', () => {
-        const body = { name: 'Hold', holdType: 'LITIGATION' }
+        const body: { name: string; holdType: string; orgId?: string } = { name: 'Hold', holdType: 'LITIGATION' }
         const isValid = !!body.orgId
         expect(isValid).toBe(false)
       })
@@ -282,7 +282,7 @@ describe('Admin Compliance Legal Holds API - /api/admin/compliance/legal-holds',
       })
 
       it('should default custodians to empty array', () => {
-        const custodians = []
+        const custodians: unknown[] = []
         expect(custodians).toEqual([])
       })
 

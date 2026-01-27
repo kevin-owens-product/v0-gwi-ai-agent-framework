@@ -7,7 +7,8 @@ import bcrypt from "bcryptjs"
 import { prisma } from "./db"
 
 // Use RENDER_EXTERNAL_URL as fallback for NEXTAUTH_URL on Render
-const getAuthUrl = () => {
+// Exported for potential future use
+export const getAuthUrl = () => {
   if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL
   if (process.env.RENDER_EXTERNAL_URL) return process.env.RENDER_EXTERNAL_URL
   return 'http://localhost:3000'
@@ -63,7 +64,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     ] : []),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id
       }

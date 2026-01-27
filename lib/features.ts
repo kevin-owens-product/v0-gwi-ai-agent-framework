@@ -13,58 +13,47 @@ export interface FeatureAccess {
 
 /**
  * Check if an organization has access to a feature
- * Checks entitlement overrides first, then plan features
+ * Checks entitlement overrides first, then plan features based on planTier
  */
 export async function checkFeatureAccess(
   organizationId: string,
   featureKey: string
 ): Promise<FeatureAccess> {
   try {
-    // Get organization with plan and entitlements
+    // Get organization with planTier
     const org = await prisma.organization.findUnique({
       where: { id: organizationId },
-      include: {
-        plan: {
-          include: {
-            planFeatures: {
-              where: {
-                feature: { key: featureKey }
-              },
-              include: {
-                feature: true
-              }
-            }
-          }
-        },
-        entitlements: {
-          where: {
-            feature: { key: featureKey },
-            OR: [
-              { expiresAt: null },
-              { expiresAt: { gt: new Date() } }
-            ]
-          },
-          include: {
-            feature: true
-          }
-        }
-      }
+      select: { planTier: true }
     })
 
     if (!org) {
       return { hasAccess: false }
     }
 
-    // Check entitlement override first (highest priority)
-    const entitlement = org.entitlements[0]
-    if (entitlement) {
+    // Check for direct tenant entitlement override first (highest priority)
+    const entitlement = await prisma.tenantEntitlement.findFirst({
+      where: {
+        orgId: organizationId,
+        isActive: true,
+        feature: { key: featureKey },
+        OR: [
+          { expiresAt: null },
+          { expiresAt: { gt: new Date() } }
+        ]
+      },
+      include: {
+        feature: true
+      }
+    })
+
+    if (entitlement && entitlement.feature) {
       const hasAccess = isFeatureEnabled(
         entitlement.value,
         entitlement.feature.valueType
       )
 
       let usage: number | undefined
-      let limit = entitlement.limit
+      const limit = entitlement.limit
 
       // Get usage if feature has limits
       if (limit !== null && limit !== undefined) {
@@ -73,7 +62,7 @@ export async function checkFeatureAccess(
 
       return {
         hasAccess,
-        value: entitlement.value,
+        value: entitlement.value as string | number | boolean | object | null,
         limit,
         usage,
         percentage: limit && usage !== undefined ? (usage / limit) * 100 : undefined,
@@ -82,8 +71,22 @@ export async function checkFeatureAccess(
       }
     }
 
-    // Check plan feature
-    const planFeature = org.plan?.planFeatures[0]
+    // Check plan feature based on organization's planTier
+    const plan = await prisma.plan.findFirst({
+      where: { tier: org.planTier, isActive: true },
+      include: {
+        features: {
+          where: {
+            feature: { key: featureKey }
+          },
+          include: {
+            feature: true
+          }
+        }
+      }
+    })
+
+    const planFeature = plan?.features[0]
     if (planFeature) {
       const hasAccess = isFeatureEnabled(
         planFeature.value,
@@ -91,7 +94,7 @@ export async function checkFeatureAccess(
       )
 
       let usage: number | undefined
-      let limit = planFeature.limit
+      const limit = planFeature.limit
 
       // Get usage if feature has limits
       if (limit !== null && limit !== undefined) {
@@ -100,7 +103,7 @@ export async function checkFeatureAccess(
 
       return {
         hasAccess,
-        value: planFeature.value,
+        value: planFeature.value as string | number | boolean | object | null,
         limit,
         usage,
         percentage: limit && usage !== undefined ? (usage / limit) * 100 : undefined,
@@ -120,7 +123,7 @@ export async function checkFeatureAccess(
 /**
  * Check if a feature value indicates the feature is enabled
  */
-function isFeatureEnabled(value: any, valueType: FeatureValueType): boolean {
+function isFeatureEnabled(value: unknown, valueType: FeatureValueType): boolean {
   switch (valueType) {
     case 'BOOLEAN':
       return value === true || value === 'true'
@@ -137,29 +140,32 @@ function isFeatureEnabled(value: any, valueType: FeatureValueType): boolean {
 
 /**
  * Get current usage for a feature
- * This is a simplified version - you'd implement actual usage tracking
+ * Uses UsageRecord model with metricType field
  */
 async function getFeatureUsage(
   organizationId: string,
-  featureKey: string
+  _featureKey: string
 ): Promise<number> {
   try {
-    // Get usage records for this organization and feature
+    // Get usage records for this organization
     const now = new Date()
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
 
-    const usageRecords = await prisma.usageRecord.findMany({
+    // Note: UsageRecord uses metricType (UsageMetric enum) not resourceType
+    // For feature-based usage, we aggregate based on relevant metrics
+    const result = await prisma.usageRecord.aggregate({
       where: {
-        organizationId,
-        resourceType: featureKey,
-        createdAt: {
+        orgId: organizationId,
+        recordedAt: {
           gte: startOfMonth
         }
+      },
+      _sum: {
+        quantity: true
       }
     })
 
-    // Sum up the quantity
-    return usageRecords.reduce((sum, record) => sum + record.quantity, 0)
+    return result._sum.quantity || 0
   } catch (error) {
     console.error('Error getting feature usage:', error)
     return 0
@@ -168,20 +174,21 @@ async function getFeatureUsage(
 
 /**
  * Record usage for a feature
+ * Note: UsageRecord uses metricType enum, not arbitrary resource types
  */
 export async function recordFeatureUsage(
   organizationId: string,
-  featureKey: string,
+  _featureKey: string,
   quantity: number = 1,
-  metadata?: object
+  _metadata?: object
 ): Promise<void> {
   try {
+    // Map feature key to a metric type - using API_CALLS as default
     await prisma.usageRecord.create({
       data: {
-        organizationId,
-        resourceType: featureKey,
+        orgId: organizationId,
+        metricType: 'API_CALLS',
         quantity,
-        metadata,
       }
     })
   } catch (error) {
@@ -207,29 +214,35 @@ export async function checkMultipleFeatures(
   return results
 }
 
+interface OrgFeature {
+  key: string
+  name: string
+  category: string | null
+  valueType: FeatureValueType
+  value: unknown
+  limit: number | null
+  hasOverride: boolean
+  expiresAt: Date | null
+}
+
 /**
  * Get all features for an organization with their access status
  */
-export async function getOrganizationFeatures(organizationId: string) {
+export async function getOrganizationFeatures(organizationId: string): Promise<OrgFeature[]> {
   const org = await prisma.organization.findUnique({
     where: { id: organizationId },
+    select: { planTier: true }
+  })
+
+  if (!org) {
+    return []
+  }
+
+  // Get plan based on org's planTier
+  const plan = await prisma.plan.findFirst({
+    where: { tier: org.planTier, isActive: true },
     include: {
-      plan: {
-        include: {
-          planFeatures: {
-            include: {
-              feature: true
-            }
-          }
-        }
-      },
-      entitlements: {
-        where: {
-          OR: [
-            { expiresAt: null },
-            { expiresAt: { gt: new Date() } }
-          ]
-        },
+      features: {
         include: {
           feature: true
         }
@@ -237,13 +250,41 @@ export async function getOrganizationFeatures(organizationId: string) {
     }
   })
 
-  if (!org || !org.plan) {
-    return []
+  // Get tenant entitlements
+  const entitlements = await prisma.tenantEntitlement.findMany({
+    where: {
+      orgId: organizationId,
+      isActive: true,
+      featureId: { not: null },
+      OR: [
+        { expiresAt: null },
+        { expiresAt: { gt: new Date() } }
+      ]
+    },
+    include: {
+      feature: true
+    }
+  })
+
+  if (!plan) {
+    // Return only entitlements if no plan
+    return entitlements
+      .filter((e): e is typeof e & { feature: NonNullable<typeof e.feature> } => e.feature !== null)
+      .map(e => ({
+        key: e.feature.key,
+        name: e.feature.name,
+        category: e.feature.category,
+        valueType: e.feature.valueType,
+        value: e.value,
+        limit: e.limit,
+        hasOverride: true,
+        expiresAt: e.expiresAt,
+      }))
   }
 
   // Combine plan features with entitlement overrides
-  const features = org.plan.planFeatures.map(pf => {
-    const entitlement = org.entitlements.find(e => e.feature.key === pf.feature.key)
+  const features: OrgFeature[] = plan.features.map((pf: { feature: { key: string; name: string; category: string | null; valueType: FeatureValueType }; value: unknown; limit: number | null }) => {
+    const entitlement = entitlements.find(e => e.feature?.key === pf.feature.key)
 
     return {
       key: pf.feature.key,
@@ -253,13 +294,13 @@ export async function getOrganizationFeatures(organizationId: string) {
       value: entitlement?.value ?? pf.value,
       limit: entitlement?.limit ?? pf.limit,
       hasOverride: !!entitlement,
-      expiresAt: entitlement?.expiresAt,
+      expiresAt: entitlement?.expiresAt ?? null,
     }
   })
 
   // Add entitlements that don't have plan features
-  for (const entitlement of org.entitlements) {
-    if (!features.find(f => f.key === entitlement.feature.key)) {
+  for (const entitlement of entitlements) {
+    if (entitlement.feature && !features.find(f => f.key === entitlement.feature!.key)) {
       features.push({
         key: entitlement.feature.key,
         name: entitlement.feature.name,

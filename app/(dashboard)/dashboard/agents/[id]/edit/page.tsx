@@ -55,7 +55,7 @@ interface Agent {
 export default function EditAgentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
-  const { data: session, status: sessionStatus } = useSession()
+  const { status: sessionStatus } = useSession()
   const t = useTranslations("dashboard.agents.edit")
   const tCommon = useTranslations("common")
 

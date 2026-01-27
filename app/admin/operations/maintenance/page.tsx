@@ -14,7 +14,7 @@ import {
   Play,
   XCircle,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -182,9 +182,9 @@ export default function MaintenancePage() {
     }
   }
 
-  const handleDelete = async (windowId: string) => {
+  const handleDelete = async (window: MaintenanceWindow) => {
     try {
-      const response = await fetch(`/api/admin/operations/maintenance/${windowId}`, {
+      const response = await fetch(`/api/admin/operations/maintenance/${window.id}`, {
         method: "DELETE",
       })
 

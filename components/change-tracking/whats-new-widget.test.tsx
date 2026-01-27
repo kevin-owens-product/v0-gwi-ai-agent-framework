@@ -22,7 +22,7 @@ describe('WhatsNewWidget Component', () => {
 
   beforeEach(() => {
     mockFetch = vi.fn()
-    global.fetch = mockFetch
+    global.fetch = mockFetch as typeof fetch
   })
 
   afterEach(() => {

@@ -40,7 +40,6 @@ import {
   Database,
   Server,
   CheckCircle,
-  Clock,
   BellRing,
 } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"

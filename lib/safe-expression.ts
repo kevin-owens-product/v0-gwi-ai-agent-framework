@@ -135,9 +135,10 @@ class ExpressionParser {
     return token
   }
 
-  private peek(): Token {
+  // Reserved for future use in expression parsing
+  /* private peek(): Token {
     return this.tokens[this.pos + 1]
-  }
+  } */
 
   parse(): number {
     const result = this.parseExpression()

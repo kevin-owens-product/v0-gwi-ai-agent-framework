@@ -336,7 +336,7 @@ export default function ReportDetailPage() {
             onOpenChange={setShowDeleteDialog}
             title="Delete Report"
             description="Are you sure you want to delete this report? This action cannot be undone."
-            confirmLabel="Delete"
+            confirmText="Delete"
             variant="destructive"
             onConfirm={handleDelete}
           />

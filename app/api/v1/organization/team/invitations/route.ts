@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orgId = await getValidatedOrgId(request, session.user.id)
+    const orgId = await getValidatedOrgId(request, session.user.id!)
     if (!orgId) {
       return NextResponse.json(
         { error: 'No organization found' },
@@ -25,17 +25,8 @@ export async function GET(request: NextRequest) {
     // Get invitations
     const invitations = await prisma.invitation.findMany({
       where: {
-        organizationId: orgId,
+        orgId,
         status: 'PENDING',
-      },
-      include: {
-        invitedBy: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
       },
       orderBy: { createdAt: 'desc' },
     })

@@ -97,7 +97,7 @@ describe('Admin System Settings API - /api/admin/settings', () => {
       })
 
       it('should default category to general', () => {
-        const config = { key: 'misc.setting' }
+        const config: { key: string; category?: string } = { key: 'misc.setting' }
         const category = config.category || 'general'
 
         expect(category).toBe('general')
@@ -196,10 +196,8 @@ describe('Admin System Settings API - /api/admin/settings', () => {
     describe('Upsert Behavior', () => {
       it('should create new config if not exists', () => {
         const existingConfig = null
-        const body = {
-          key: 'new.setting',
-          value: 'new value'
-        }
+        // body represents the request payload
+        void { key: 'new.setting', value: 'new value' }
 
         const action = existingConfig ? 'update' : 'create'
         expect(action).toBe('create')
@@ -210,10 +208,8 @@ describe('Admin System Settings API - /api/admin/settings', () => {
           key: 'existing.setting',
           value: 'old value'
         }
-        const body = {
-          key: 'existing.setting',
-          value: 'new value'
-        }
+        // body represents the request payload
+        void { key: 'existing.setting', value: 'new value' }
 
         const action = existingConfig ? 'update' : 'create'
         expect(action).toBe('update')

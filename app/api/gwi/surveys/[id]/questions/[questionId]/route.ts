@@ -62,7 +62,7 @@ export async function GET(
     const completedResponses = answeredResponses.filter((r) => r.completedAt)
 
     // Build response distribution for select-type questions
-    let responseDistribution: Record<string, number> = {}
+    const responseDistribution: Record<string, number> = {}
     if (
       question.type === "SINGLE_SELECT" ||
       question.type === "MULTI_SELECT"
