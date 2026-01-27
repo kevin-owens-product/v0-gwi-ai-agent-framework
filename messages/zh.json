@@ -2098,7 +2098,14 @@
           "requireCitations": "需要引用",
           "requireCitationsDescription": "始终包含数据源"
         }
-      }
+      },
+      "agentOrchestrator": "[ZH] Agent Orchestrator",
+      "manage": "[ZH] Manage",
+      "noAgentsYet": "[ZH] No agents yet",
+      "createAgent": "[ZH] Create Agent",
+      "activate": "[ZH] Activate",
+      "runsCount": "[ZH] {count} run",
+      "runsCountPlural": "[ZH] {count} runs"
     },
     "platform": {
       "platformModules": "平台模块",

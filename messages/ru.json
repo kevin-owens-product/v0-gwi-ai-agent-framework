@@ -2098,7 +2098,14 @@
           "requireCitations": "Требовать цитирования",
           "requireCitationsDescription": "Всегда включайте источники данных"
         }
-      }
+      },
+      "agentOrchestrator": "[RU] Agent Orchestrator",
+      "manage": "[RU] Manage",
+      "noAgentsYet": "[RU] No agents yet",
+      "createAgent": "[RU] Create Agent",
+      "activate": "[RU] Activate",
+      "runsCount": "[RU] {count} run",
+      "runsCountPlural": "[RU] {count} runs"
     },
     "platform": {
       "platformModules": "Модули платформы",

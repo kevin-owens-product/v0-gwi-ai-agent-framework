@@ -2098,7 +2098,14 @@
           "requireCitations": "Exiger des citations",
           "requireCitationsDescription": "Incluez toujours les sources de données"
         }
-      }
+      },
+      "agentOrchestrator": "[FR] Agent Orchestrator",
+      "manage": "[FR] Manage",
+      "noAgentsYet": "[FR] No agents yet",
+      "createAgent": "[FR] Create Agent",
+      "activate": "[FR] Activate",
+      "runsCount": "[FR] {count} run",
+      "runsCountPlural": "[FR] {count} runs"
     },
     "platform": {
       "platformModules": "Modules de la plateforme",

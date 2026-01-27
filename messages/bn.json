@@ -2098,7 +2098,14 @@
           "requireCitations": "উদ্ধৃতি প্রয়োজন",
           "requireCitationsDescription": "সর্বদা তথ্য উত্স অন্তর্ভুক্ত"
         }
-      }
+      },
+      "agentOrchestrator": "[BN] Agent Orchestrator",
+      "manage": "[BN] Manage",
+      "noAgentsYet": "[BN] No agents yet",
+      "createAgent": "[BN] Create Agent",
+      "activate": "[BN] Activate",
+      "runsCount": "[BN] {count} run",
+      "runsCountPlural": "[BN] {count} runs"
     },
     "platform": {
       "platformModules": "প্ল্যাটফর্ম মডিউল",

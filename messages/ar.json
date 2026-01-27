@@ -2098,7 +2098,14 @@
           "requireCitations": "تتطلب الاقتباسات",
           "requireCitationsDescription": "قم دائمًا بتضمين مصادر البيانات"
         }
-      }
+      },
+      "agentOrchestrator": "[AR] Agent Orchestrator",
+      "manage": "[AR] Manage",
+      "noAgentsYet": "[AR] No agents yet",
+      "createAgent": "[AR] Create Agent",
+      "activate": "[AR] Activate",
+      "runsCount": "[AR] {count} run",
+      "runsCountPlural": "[AR] {count} runs"
     },
     "platform": {
       "platformModules": "وحدات المنصة",

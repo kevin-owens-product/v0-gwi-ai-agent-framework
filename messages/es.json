@@ -2098,7 +2098,14 @@
           "requireCitations": "Requerir citas",
           "requireCitationsDescription": "Incluya siempre fuentes de datos"
         }
-      }
+      },
+      "agentOrchestrator": "[ES] Agent Orchestrator",
+      "manage": "[ES] Manage",
+      "noAgentsYet": "[ES] No agents yet",
+      "createAgent": "[ES] Create Agent",
+      "activate": "[ES] Activate",
+      "runsCount": "[ES] {count} run",
+      "runsCountPlural": "[ES] {count} runs"
     },
     "platform": {
       "platformModules": "Módulos de plataforma",

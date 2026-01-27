@@ -2098,7 +2098,14 @@
           "requireCitations": "引用が必要",
           "requireCitationsDescription": "常にデータソースを含める"
         }
-      }
+      },
+      "agentOrchestrator": "[JA] Agent Orchestrator",
+      "manage": "[JA] Manage",
+      "noAgentsYet": "[JA] No agents yet",
+      "createAgent": "[JA] Create Agent",
+      "activate": "[JA] Activate",
+      "runsCount": "[JA] {count} run",
+      "runsCountPlural": "[JA] {count} runs"
     },
     "platform": {
       "platformModules": "プラットフォームモジュール",

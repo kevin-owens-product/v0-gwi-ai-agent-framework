@@ -2405,15 +2405,6 @@
       "onHold": "On Hold",
       "updated": "Updated {time}"
     },
-    "agents": {
-      "agentOrchestrator": "Agent Orchestrator",
-      "manage": "Manage",
-      "noAgentsYet": "No agents yet",
-      "createAgent": "Create Agent",
-      "activate": "Activate",
-      "runsCount": "{count} run",
-      "runsCountPlural": "{count} runs"
-    },
     "overview": {
       "activeAgents": "Active Agents",
       "workflowsRun": "Workflows Run",
@@ -2910,6 +2901,13 @@
       }
     },
     "agents": {
+      "agentOrchestrator": "Agent Orchestrator",
+      "manage": "Manage",
+      "noAgentsYet": "No agents yet",
+      "createAgent": "Create Agent",
+      "activate": "Activate",
+      "runsCount": "{count} run",
+      "runsCountPlural": "{count} runs",
       "edit": {
         "title": "Edit Agent",
         "description": "Modify agent configuration and settings",

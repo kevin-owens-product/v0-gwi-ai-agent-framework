@@ -2098,7 +2098,14 @@
           "requireCitations": "उद्धरण की आवश्यकता है",
           "requireCitationsDescription": "हमेशा डेटा स्रोत शामिल करें"
         }
-      }
+      },
+      "agentOrchestrator": "[HI] Agent Orchestrator",
+      "manage": "[HI] Manage",
+      "noAgentsYet": "[HI] No agents yet",
+      "createAgent": "[HI] Create Agent",
+      "activate": "[HI] Activate",
+      "runsCount": "[HI] {count} run",
+      "runsCountPlural": "[HI] {count} runs"
     },
     "platform": {
       "platformModules": "प्लेटफ़ॉर्म मॉड्यूल",

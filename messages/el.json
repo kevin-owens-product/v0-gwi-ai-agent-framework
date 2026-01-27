@@ -2098,7 +2098,14 @@
           "requireCitations": "Απαιτούνται Αναφορές",
           "requireCitationsDescription": "Να συμπεριλαμβάνετε πάντα πηγές δεδομένων"
         }
-      }
+      },
+      "agentOrchestrator": "[EL] Agent Orchestrator",
+      "manage": "[EL] Manage",
+      "noAgentsYet": "[EL] No agents yet",
+      "createAgent": "[EL] Create Agent",
+      "activate": "[EL] Activate",
+      "runsCount": "[EL] {count} run",
+      "runsCountPlural": "[EL] {count} runs"
     },
     "platform": {
       "platformModules": "Ενότητες πλατφόρμας",
