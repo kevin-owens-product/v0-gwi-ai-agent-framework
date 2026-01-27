@@ -2,6 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react"
 import type { SuperAdminRole } from "@prisma/client"
+import { SidebarProvider } from "./sidebar-provider"
 
 interface AdminContextValue {
   admin: {
@@ -24,7 +25,9 @@ export function AdminProvider({
 }) {
   return (
     <AdminContext.Provider value={{ admin }}>
-      {children}
+      <SidebarProvider>
+        {children}
+      </SidebarProvider>
     </AdminContext.Provider>
   )
 }

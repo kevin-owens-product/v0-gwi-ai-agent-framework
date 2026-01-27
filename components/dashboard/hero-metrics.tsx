@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card"
 import { Bot, Zap, TrendingUp, Clock, ArrowUpRight, ArrowDownRight } from "lucide-react"
 import { Area, AreaChart, ResponsiveContainer } from "recharts"
+import { useTranslations } from "next-intl"
 
 interface MetricsData {
   totalAgents: number
@@ -69,43 +70,45 @@ const defaultMetrics: MetricsData = {
 }
 
 export function HeroMetrics({ metrics = defaultMetrics }: HeroMetricsProps) {
+  const t = useTranslations('dashboard.metrics')
+
   const metricsConfig = [
     {
-      label: "Active Agents",
+      label: t('activeAgents'),
       value: metrics.activeAgents.toString(),
-      change: `${metrics.totalAgents} total`,
+      change: t('totalCount', { count: metrics.totalAgents }),
       trend: "up" as const,
-      description: "Running now",
+      description: t('runningNow'),
       icon: Bot,
       color: "emerald",
       sparkData: generateSparkData(metrics.activeAgents),
     },
     {
-      label: "Insights Generated",
+      label: t('insightsGenerated'),
       value: metrics.weeklyInsights.toLocaleString(),
-      change: `${metrics.monthlyRuns} runs`,
+      change: t('runsCount', { count: metrics.monthlyRuns }),
       trend: "up" as const,
-      description: "This week",
+      description: t('thisWeek'),
       icon: Zap,
       color: "blue",
       sparkData: generateSparkData(metrics.weeklyInsights),
     },
     {
-      label: "Success Rate",
+      label: t('successRate'),
       value: `${metrics.successRate}%`,
-      change: metrics.successRate >= 90 ? "Excellent" : metrics.successRate >= 70 ? "Good" : metrics.successRate > 0 ? "Needs attention" : "No data",
+      change: metrics.successRate >= 90 ? t('excellent') : metrics.successRate >= 70 ? t('good') : metrics.successRate > 0 ? t('needsAttention') : t('noData'),
       trend: metrics.successRate >= 70 ? "up" as const : "down" as const,
-      description: "Completed runs",
+      description: t('completedRuns'),
       icon: TrendingUp,
       color: "violet",
       sparkData: generateSparkData(metrics.successRate),
     },
     {
-      label: "Avg. Response",
-      value: metrics.avgResponseTime > 0 ? `${metrics.avgResponseTime}s` : "N/A",
-      change: metrics.avgResponseTime === 0 ? "No data" : metrics.avgResponseTime < 2 ? "Fast" : metrics.avgResponseTime < 5 ? "Normal" : "Slow",
+      label: t('avgResponse'),
+      value: metrics.avgResponseTime > 0 ? `${metrics.avgResponseTime}s` : t('notAvailable'),
+      change: metrics.avgResponseTime === 0 ? t('noData') : metrics.avgResponseTime < 2 ? t('fast') : metrics.avgResponseTime < 5 ? t('normal') : t('slow'),
       trend: metrics.avgResponseTime < 3 || metrics.avgResponseTime === 0 ? "up" as const : "down" as const,
-      description: "Per run",
+      description: t('perRun'),
       icon: Clock,
       color: "amber",
       sparkData: generateSparkData(metrics.avgResponseTime || 1),

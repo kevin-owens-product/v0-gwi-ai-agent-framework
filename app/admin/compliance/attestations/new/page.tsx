@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -82,7 +83,7 @@ export default function NewAttestationPage() {
 
   const handleCreate = async () => {
     if (!formData.frameworkId || !formData.orgId) {
-      alert("Framework and organization are required")
+      toast.error("Framework and organization are required")
       return
     }
 
@@ -114,7 +115,7 @@ export default function NewAttestationPage() {
       router.push(`/admin/compliance/attestations/${data.attestation?.id || ""}`)
     } catch (error) {
       console.error("Failed to create attestation:", error)
-      alert(error instanceof Error ? error.message : "Failed to create attestation")
+      toast.error(error instanceof Error ? error.message : "Failed to create attestation")
     } finally {
       setIsSaving(false)
     }

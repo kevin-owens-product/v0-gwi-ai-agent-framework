@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -164,7 +165,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Failed to ban user:", error)
-      alert(error instanceof Error ? error.message : "Failed to ban user")
+      toast.error(error instanceof Error ? error.message : "Failed to ban user")
     } finally {
       setIsSubmitting(false)
     }
@@ -187,7 +188,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Failed to lift ban:", error)
-      alert(error instanceof Error ? error.message : "Failed to lift ban")
+      toast.error(error instanceof Error ? error.message : "Failed to lift ban")
     }
   }
 
@@ -208,7 +209,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Failed to delete user:", error)
-      alert(error instanceof Error ? error.message : "Failed to delete user")
+      toast.error(error instanceof Error ? error.message : "Failed to delete user")
     }
   }
 
@@ -231,7 +232,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Bulk ban failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk ban failed")
+      toast.error(error instanceof Error ? error.message : "Bulk ban failed")
     }
   }
 
@@ -253,7 +254,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Bulk unban failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk unban failed")
+      toast.error(error instanceof Error ? error.message : "Bulk unban failed")
     }
   }
 
@@ -275,7 +276,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Bulk delete failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk delete failed")
+      toast.error(error instanceof Error ? error.message : "Bulk delete failed")
     }
   }
 
@@ -297,7 +298,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Bulk verify failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk verify failed")
+      toast.error(error instanceof Error ? error.message : "Bulk verify failed")
     }
   }
 
@@ -320,7 +321,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Bulk reset password failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk reset password failed")
+      toast.error(error instanceof Error ? error.message : "Bulk reset password failed")
     }
   }
 
@@ -342,7 +343,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Bulk revoke sessions failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk revoke sessions failed")
+      toast.error(error instanceof Error ? error.message : "Bulk revoke sessions failed")
     }
   }
 
@@ -412,7 +413,7 @@ export default function UsersPage() {
       fetchUsers()
     } catch (error) {
       console.error("Failed to create user:", error)
-      alert(error instanceof Error ? error.message : "Failed to create user")
+      toast.error(error instanceof Error ? error.message : "Failed to create user")
     } finally {
       setIsSubmitting(false)
     }

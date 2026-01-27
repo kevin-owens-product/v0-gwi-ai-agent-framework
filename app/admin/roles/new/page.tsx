@@ -24,6 +24,7 @@ import {
   Building2,
 } from "lucide-react"
 import Link from "next/link"
+import { toast } from "sonner"
 import { useAdmin } from "@/components/providers/admin-provider"
 import { PermissionMatrix } from "@/components/admin/roles/permission-matrix"
 
@@ -117,7 +118,7 @@ export default function NewRolePage() {
 
   const handleCreate = async () => {
     if (!formData.name || !formData.displayName) {
-      alert("Name and display name are required")
+      toast.error("Name and display name are required")
       return
     }
 
@@ -143,11 +144,11 @@ export default function NewRolePage() {
         router.push(`/admin/roles/${data.role.id}`)
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to create role")
+        toast.error(data.error || "Failed to create role")
       }
     } catch (error) {
       console.error("Failed to create role:", error)
-      alert("Failed to create role")
+      toast.error("Failed to create role")
     } finally {
       setIsSaving(false)
     }

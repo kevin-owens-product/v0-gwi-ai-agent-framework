@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -142,7 +143,7 @@ export default function SystemRuleDetailPage() {
         conditions = JSON.parse(editForm.conditions)
         actions = JSON.parse(editForm.actions)
       } catch {
-        alert("Invalid JSON in conditions or actions")
+        toast.error("Invalid JSON in conditions or actions")
         setIsSaving(false)
         return
       }

@@ -6,6 +6,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import * as Sentry from '@sentry/nextjs'
 
+// Fallback text for when translations are not available
+const FALLBACK_TEXT = {
+  somethingWentWrong: 'Something went wrong',
+  unexpectedErrorDescription: 'An unexpected error occurred. Please try again or contact support if the problem persists.',
+  tryAgain: 'Try again',
+  reloadPage: 'Reload page',
+}
+
 interface ErrorBoundaryProps {
   children: ReactNode
   fallback?: ReactNode
@@ -90,17 +98,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         return this.props.fallback
       }
 
-      // Default error UI
+      // Default error UI with fallback text (translations may not be available in error boundary)
       return (
         <div className="flex min-h-[400px] items-center justify-center p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-destructive" />
-                <CardTitle>Something went wrong</CardTitle>
+                <CardTitle>{FALLBACK_TEXT.somethingWentWrong}</CardTitle>
               </div>
               <CardDescription>
-                An unexpected error occurred. Please try again or contact support if the problem persists.
+                {FALLBACK_TEXT.unexpectedErrorDescription}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -114,13 +122,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               <div className="flex gap-2">
                 <Button onClick={this.handleReset} variant="default">
                   <RefreshCw className="mr-2 h-4 w-4" />
-                  Try Again
+                  {FALLBACK_TEXT.tryAgain}
                 </Button>
                 <Button
                   onClick={() => window.location.reload()}
                   variant="outline"
                 >
-                  Reload Page
+                  {FALLBACK_TEXT.reloadPage}
                 </Button>
               </div>
             </CardContent>
@@ -154,7 +162,8 @@ export function withErrorBoundary<P extends object>(
 }
 
 /**
- * Simple error fallback component
+ * Simple error fallback component with translations support
+ * Use this when you want translations - it should be wrapped in a provider
  */
 export function ErrorFallback({
   error,
@@ -167,7 +176,7 @@ export function ErrorFallback({
     <div className="flex flex-col items-center justify-center gap-4 p-8 text-center">
       <AlertTriangle className="h-12 w-12 text-destructive" />
       <div>
-        <h2 className="text-lg font-semibold">Something went wrong</h2>
+        <h2 className="text-lg font-semibold">{FALLBACK_TEXT.somethingWentWrong}</h2>
         {error && process.env.NODE_ENV === 'development' && (
           <p className="mt-1 text-sm text-muted-foreground">{error.message}</p>
         )}
@@ -175,7 +184,39 @@ export function ErrorFallback({
       {resetError && (
         <Button onClick={resetError} size="sm">
           <RefreshCw className="mr-2 h-4 w-4" />
-          Try Again
+          {FALLBACK_TEXT.tryAgain}
+        </Button>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Error fallback component that uses translations
+ * Must be used within a translation provider context
+ */
+export function TranslatedErrorFallback({
+  error,
+  resetError,
+  t,
+}: {
+  error?: Error
+  resetError?: () => void
+  t: (key: string) => string
+}): ReactNode {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 p-8 text-center">
+      <AlertTriangle className="h-12 w-12 text-destructive" />
+      <div>
+        <h2 className="text-lg font-semibold">{t('somethingWentWrong')}</h2>
+        {error && process.env.NODE_ENV === 'development' && (
+          <p className="mt-1 text-sm text-muted-foreground">{error.message}</p>
+        )}
+      </div>
+      {resetError && (
+        <Button onClick={resetError} size="sm">
+          <RefreshCw className="mr-2 h-4 w-4" />
+          {t('tryAgain')}
         </Button>
       )}
     </div>

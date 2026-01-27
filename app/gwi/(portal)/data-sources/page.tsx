@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
+import { LoadingText } from "@/components/ui/loading-text"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   Table,
   TableBody,
@@ -195,19 +197,18 @@ async function DataSourcesContent() {
               </TableBody>
             </Table>
           ) : (
-            <div className="flex flex-col items-center justify-center py-12">
-              <Database className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No data sources configured</h3>
-              <p className="text-muted-foreground mb-4">
-                Connect external data sources to your platform
-              </p>
+            <EmptyState
+              icon={Database}
+              title="No data sources configured"
+              description="Connect external data sources to your platform"
+            >
               <Button asChild>
                 <Link href="/gwi/data-sources/new">
                   <Plus className="mr-2 h-4 w-4" />
                   Add First Data Source
                 </Link>
               </Button>
-            </div>
+            </EmptyState>
           )}
         </CardContent>
       </Card>
@@ -222,7 +223,7 @@ export default function DataSourcesPage() {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Data Sources</h1>
-            <p className="text-muted-foreground">Loading...</p>
+            <LoadingText />
           </div>
         </div>
       }

@@ -83,7 +83,7 @@ export default async function DashboardLayout({
       <DashboardShell>
         <div className="min-h-screen bg-background">
           <DashboardSidebar />
-          <div className="lg:pl-60">
+          <div className="lg:pl-64">
             <DashboardHeader />
             <main className="p-6">{children}</main>
           </div>

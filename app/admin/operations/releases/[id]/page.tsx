@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -123,6 +124,7 @@ export default function ReleaseDetailPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [editForm, setEditForm] = useState<Partial<Release>>({})
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const fetchRelease = useCallback(async () => {
     setIsLoading(true)
@@ -206,10 +208,6 @@ export default function ReleaseDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this release?")) {
-      return
-    }
-
     try {
       const response = await fetch(`/api/admin/operations/releases/${releaseId}`, {
         method: "DELETE",
@@ -222,6 +220,8 @@ export default function ReleaseDetailPage() {
       router.push("/admin/operations/releases")
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to delete release")
+    } finally {
+      setShowDeleteDialog(false)
     }
   }
 
@@ -855,13 +855,24 @@ export default function ReleaseDetailPage() {
                 <Button
                   className="w-full"
                   variant="destructive"
-                  onClick={handleDelete}
+                  onClick={() => setShowDeleteDialog(true)}
                 >
                   Delete Release
                 </Button>
               )}
             </CardContent>
           </Card>
+
+          {/* Delete Confirmation Dialog */}
+          <ConfirmationDialog
+            open={showDeleteDialog}
+            onOpenChange={setShowDeleteDialog}
+            title="Delete Release"
+            description="Are you sure you want to delete this release? This action cannot be undone."
+            confirmLabel="Delete"
+            onConfirm={handleDelete}
+            variant="destructive"
+          />
 
           {/* Status */}
           <Card>

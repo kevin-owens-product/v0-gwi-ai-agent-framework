@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -176,7 +177,7 @@ export default function DataExportsPage() {
       fetchExports()
     } catch (error) {
       console.error("Failed to create data export:", error)
-      alert(error instanceof Error ? error.message : "Failed to create data export")
+      toast.error(error instanceof Error ? error.message : "Failed to create data export")
     } finally {
       setIsSubmitting(false)
     }
@@ -343,7 +344,7 @@ export default function DataExportsPage() {
       fetchExports()
     } catch (error) {
       console.error("Failed to retry export:", error)
-      alert(error instanceof Error ? error.message : "Failed to retry export")
+      toast.error(error instanceof Error ? error.message : "Failed to retry export")
     }
   }
 
@@ -389,7 +390,7 @@ export default function DataExportsPage() {
       onClick: async (ids) => {
         const failedExports = exports.filter((e) => ids.includes(e.id) && e.status === "FAILED")
         if (failedExports.length === 0) {
-          alert("No failed exports selected")
+          toast.info("No failed exports selected")
           return
         }
         try {

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -83,6 +84,8 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null)
   const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set())
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [questionToDelete, setQuestionToDelete] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     code: "",
     text: "",
@@ -153,12 +156,17 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
     }
   }
 
-  const handleDelete = async (questionId: string) => {
-    if (!confirm("Are you sure you want to delete this question?")) return
+  const handleDeleteClick = (questionId: string) => {
+    setQuestionToDelete(questionId)
+    setShowDeleteConfirm(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!questionToDelete) return
 
     try {
       const response = await fetch(
-        `/api/gwi/surveys/${surveyId}/questions/${questionId}`,
+        `/api/gwi/surveys/${surveyId}/questions/${questionToDelete}`,
         { method: "DELETE" }
       )
 
@@ -167,6 +175,9 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
       }
     } catch (error) {
       console.error("Failed to delete question:", error)
+    } finally {
+      setShowDeleteConfirm(false)
+      setQuestionToDelete(null)
     }
   }
 
@@ -341,7 +352,7 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                         variant="ghost"
                         size="icon"
                         className="text-red-600 hover:text-red-700"
-                        onClick={() => handleDelete(question.id)}
+                        onClick={() => handleDeleteClick(question.id)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -397,6 +408,16 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
           </div>
         )}
       </CardContent>
+
+      <ConfirmationDialog
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        title="Delete Question"
+        description="Are you sure you want to delete this question? This action cannot be undone."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={handleConfirmDelete}
+      />
     </Card>
   )
 }

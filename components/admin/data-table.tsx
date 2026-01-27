@@ -2,6 +2,7 @@
 
 import { useState, useCallback, ReactNode } from "react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -113,11 +114,11 @@ export function AdminDataTable<T>({
   columns,
   getRowId,
   isLoading = false,
-  emptyMessage = "No items found",
+  emptyMessage,
   viewHref,
   editHref,
   onDelete,
-  deleteConfirmTitle = "Delete Item",
+  deleteConfirmTitle,
   deleteConfirmDescription,
   rowActions = [],
   bulkActions = [],
@@ -129,6 +130,12 @@ export function AdminDataTable<T>({
   selectedIds: controlledSelectedIds,
   onSelectionChange,
 }: AdminDataTableProps<T>) {
+  const tTable = useTranslations('ui.table')
+  const tPagination = useTranslations('ui.pagination')
+  const tCommon = useTranslations('common')
+  const tDialog = useTranslations('ui.dialog')
+  const tAlert = useTranslations('ui.alert')
+
   // Internal selection state (if not controlled)
   const [internalSelectedIds, setInternalSelectedIds] = useState<Set<string>>(new Set())
   const selectedIds = controlledSelectedIds ?? internalSelectedIds
@@ -219,7 +226,7 @@ export function AdminDataTable<T>({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm">
-                    Bulk Actions
+                    {tCommon('actions')}
                     <ChevronDown className="h-4 w-4 ml-2" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -243,7 +250,7 @@ export function AdminDataTable<T>({
                 size="sm"
                 onClick={() => setSelectedIds(new Set())}
               >
-                Clear Selection
+                {tTable('deselectAll')}
               </Button>
             </div>
           </div>
@@ -269,7 +276,7 @@ export function AdminDataTable<T>({
                   </TableHead>
                 ))}
                 {hasActions && (
-                  <TableHead className="w-[120px] text-right">Actions</TableHead>
+                  <TableHead className="w-[120px] text-right">{tCommon('actions')}</TableHead>
                 )}
               </TableRow>
             </TableHeader>
@@ -289,7 +296,7 @@ export function AdminDataTable<T>({
                     colSpan={columns.length + (enableSelection ? 1 : 0) + (hasActions ? 1 : 0)}
                     className="text-center py-8 text-muted-foreground"
                   >
-                    {emptyMessage}
+                    {emptyMessage || tTable('noResults')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -334,7 +341,7 @@ export function AdminDataTable<T>({
                                     </Link>
                                   </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>View details</TooltipContent>
+                                <TooltipContent>{tCommon('viewDetails')}</TooltipContent>
                               </Tooltip>
                             )}
 
@@ -352,7 +359,7 @@ export function AdminDataTable<T>({
                                     </Link>
                                   </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>Edit</TooltipContent>
+                                <TooltipContent>{tCommon('edit')}</TooltipContent>
                               </Tooltip>
                             )}
 
@@ -372,7 +379,7 @@ export function AdminDataTable<T>({
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>Delete</TooltipContent>
+                                <TooltipContent>{tCommon('delete')}</TooltipContent>
                               </Tooltip>
                             )}
 
@@ -444,7 +451,7 @@ export function AdminDataTable<T>({
         {totalPages > 1 && onPageChange && (
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              Page {page} of {totalPages}
+              {tPagination('page', { current: page, total: totalPages })}
               {total !== undefined && ` (${total} total)`}
             </p>
             <div className="flex gap-2">
@@ -454,7 +461,7 @@ export function AdminDataTable<T>({
                 onClick={() => onPageChange(Math.max(1, page - 1))}
                 disabled={page === 1}
               >
-                Previous
+                {tPagination('previous')}
               </Button>
               <Button
                 variant="outline"
@@ -462,7 +469,7 @@ export function AdminDataTable<T>({
                 onClick={() => onPageChange(Math.min(totalPages, page + 1))}
                 disabled={page === totalPages}
               >
-                Next
+                {tPagination('next')}
               </Button>
             </div>
           </div>
@@ -472,15 +479,15 @@ export function AdminDataTable<T>({
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>{deleteConfirmTitle}</AlertDialogTitle>
+              <AlertDialogTitle>{deleteConfirmTitle || tCommon('delete')}</AlertDialogTitle>
               <AlertDialogDescription>
                 {itemToDelete && deleteConfirmDescription
                   ? deleteConfirmDescription(itemToDelete)
-                  : "Are you sure you want to delete this item? This action cannot be undone."}
+                  : tAlert('deleteConfirm')}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isDeleting}>{tDialog('cancel')}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleDelete}
                 disabled={isDeleting}
@@ -489,10 +496,10 @@ export function AdminDataTable<T>({
                 {isDeleting ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Deleting...
+                    {tCommon('loading')}
                   </>
                 ) : (
-                  "Delete"
+                  tCommon('delete')
                 )}
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -504,15 +511,15 @@ export function AdminDataTable<T>({
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                {pendingBulkAction?.confirmTitle || "Confirm Action"}
+                {pendingBulkAction?.confirmTitle || tDialog('confirm')}
               </AlertDialogTitle>
               <AlertDialogDescription>
                 {pendingBulkAction?.confirmDescription ||
-                  `This action will affect ${selectedIds.size} item${selectedIds.size !== 1 ? "s" : ""}. Are you sure you want to continue?`}
+                  tAlert('areYouSure')}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isBulkProcessing}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isBulkProcessing}>{tDialog('cancel')}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleBulkAction}
                 disabled={isBulkProcessing}
@@ -524,10 +531,10 @@ export function AdminDataTable<T>({
                 {isBulkProcessing ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Processing...
+                    {tCommon('loading')}
                   </>
                 ) : (
-                  "Confirm"
+                  tDialog('confirm')
                 )}
               </AlertDialogAction>
             </AlertDialogFooter>

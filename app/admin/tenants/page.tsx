@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -213,7 +214,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Failed to suspend tenant:", error)
-      alert(error instanceof Error ? error.message : "Failed to suspend tenant")
+      toast.error(error instanceof Error ? error.message : "Failed to suspend tenant")
     } finally {
       setIsSubmitting(false)
     }
@@ -236,7 +237,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Failed to lift suspension:", error)
-      alert(error instanceof Error ? error.message : "Failed to lift suspension")
+      toast.error(error instanceof Error ? error.message : "Failed to lift suspension")
     }
   }
 
@@ -257,7 +258,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Failed to delete tenant:", error)
-      alert(error instanceof Error ? error.message : "Failed to delete tenant")
+      toast.error(error instanceof Error ? error.message : "Failed to delete tenant")
     }
   }
 
@@ -280,7 +281,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Bulk operation failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk operation failed")
+      toast.error(error instanceof Error ? error.message : "Bulk operation failed")
     }
   }
 
@@ -302,7 +303,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Bulk operation failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk operation failed")
+      toast.error(error instanceof Error ? error.message : "Bulk operation failed")
     }
   }
 
@@ -324,7 +325,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Bulk operation failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk operation failed")
+      toast.error(error instanceof Error ? error.message : "Bulk operation failed")
     }
   }
 
@@ -347,7 +348,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Bulk plan change failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk plan change failed")
+      toast.error(error instanceof Error ? error.message : "Bulk plan change failed")
     }
   }
 
@@ -369,7 +370,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Bulk enable hierarchy failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk enable hierarchy failed")
+      toast.error(error instanceof Error ? error.message : "Bulk enable hierarchy failed")
     }
   }
 
@@ -391,7 +392,7 @@ export default function TenantsPage() {
       fetchTenants()
     } catch (error) {
       console.error("Bulk disable hierarchy failed:", error)
-      alert(error instanceof Error ? error.message : "Bulk disable hierarchy failed")
+      toast.error(error instanceof Error ? error.message : "Bulk disable hierarchy failed")
     }
   }
 
@@ -438,7 +439,7 @@ export default function TenantsPage() {
       fetchParentOrgs()
     } catch (error) {
       console.error("Failed to create tenant:", error)
-      alert(error instanceof Error ? error.message : "Failed to create tenant")
+      toast.error(error instanceof Error ? error.message : "Failed to create tenant")
     } finally {
       setIsSubmitting(false)
     }

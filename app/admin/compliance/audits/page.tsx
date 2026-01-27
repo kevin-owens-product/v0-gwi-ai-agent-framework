@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -188,7 +189,7 @@ export default function AuditsPage() {
       fetchAudits()
     } catch (error) {
       console.error("Failed to schedule audit:", error)
-      alert(error instanceof Error ? error.message : "Failed to schedule audit")
+      toast.error(error instanceof Error ? error.message : "Failed to schedule audit")
     } finally {
       setIsSubmitting(false)
     }
@@ -339,7 +340,7 @@ export default function AuditsPage() {
       fetchAudits()
     } catch (error) {
       console.error("Failed to start audit:", error)
-      alert(error instanceof Error ? error.message : "Failed to start audit")
+      toast.error(error instanceof Error ? error.message : "Failed to start audit")
     }
   }
 
@@ -359,7 +360,7 @@ export default function AuditsPage() {
       fetchAudits()
     } catch (error) {
       console.error("Failed to cancel audit:", error)
-      alert(error instanceof Error ? error.message : "Failed to cancel audit")
+      toast.error(error instanceof Error ? error.message : "Failed to cancel audit")
     }
   }
 
@@ -399,7 +400,7 @@ export default function AuditsPage() {
       onClick: async (ids) => {
         const scheduledAudits = audits.filter((a) => ids.includes(a.id) && a.status === "SCHEDULED")
         if (scheduledAudits.length === 0) {
-          alert("No scheduled audits selected")
+          toast.info("No scheduled audits selected")
           return
         }
         try {
@@ -430,7 +431,7 @@ export default function AuditsPage() {
           (a) => ids.includes(a.id) && (a.status === "SCHEDULED" || a.status === "IN_PROGRESS")
         )
         if (cancelableAudits.length === 0) {
-          alert("No cancelable audits selected")
+          toast.info("No cancelable audits selected")
           return
         }
         try {

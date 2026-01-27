@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { LoadingText } from "@/components/ui/loading-text"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Save, Settings, Bell, Shield, Database, Zap } from "lucide-react"
 
@@ -289,7 +290,7 @@ export default function SettingsPage() {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-            <p className="text-muted-foreground">Loading...</p>
+            <LoadingText />
           </div>
         </div>
       }

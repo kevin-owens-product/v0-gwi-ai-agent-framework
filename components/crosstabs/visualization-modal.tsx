@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Download, BarChart3, LineChart, PieChart, Activity, Grid3X3, Save } from "lucide-react"
 import { ChartRenderer, ChartType } from "@/components/charts/chart-renderer"
+import { toast } from "sonner"
 
 interface CrosstabData {
   metric: string
@@ -108,7 +109,7 @@ export function VisualizationModal({
       ? `${crosstabName} - All Metrics`
       : `${crosstabName} - ${selectedMetric}`
 
-    alert(`Exporting ${chartTitle} as ${format.toUpperCase()}`)
+    toast.info(`Exporting ${chartTitle} as ${format.toUpperCase()}`)
   }
 
   const handleSaveChart = () => {

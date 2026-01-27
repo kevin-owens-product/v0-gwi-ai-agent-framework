@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -141,7 +142,7 @@ export default function RulesPage() {
         conditions = JSON.parse(formData.conditions)
         actions = JSON.parse(formData.actions)
       } catch {
-        alert("Invalid JSON in conditions or actions")
+        toast.error("Invalid JSON in conditions or actions")
         setIsSubmitting(false)
         return
       }

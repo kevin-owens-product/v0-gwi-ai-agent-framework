@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -172,7 +173,7 @@ export default function RetentionPoliciesPage() {
       fetchPolicies()
     } catch (error) {
       console.error("Failed to create retention policy:", error)
-      alert(error instanceof Error ? error.message : "Failed to create retention policy")
+      toast.error(error instanceof Error ? error.message : "Failed to create retention policy")
     } finally {
       setIsSubmitting(false)
     }
@@ -195,7 +196,7 @@ export default function RetentionPoliciesPage() {
       fetchPolicies()
     } catch (error) {
       console.error("Failed to update policy:", error)
-      alert(error instanceof Error ? error.message : "Failed to update policy")
+      toast.error(error instanceof Error ? error.message : "Failed to update policy")
     }
   }
 
@@ -214,7 +215,7 @@ export default function RetentionPoliciesPage() {
       fetchPolicies()
     } catch (error) {
       console.error("Failed to delete policy:", error)
-      alert(error instanceof Error ? error.message : "Failed to delete policy")
+      toast.error(error instanceof Error ? error.message : "Failed to delete policy")
     }
   }
 

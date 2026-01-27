@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from 'next-intl'
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,8 +20,8 @@ interface ConfirmationDialogProps {
   onOpenChange?: (open: boolean) => void
   onConfirm: () => void
   onCancel?: () => void
-  title: string
-  description: string
+  title?: string
+  description?: string
   confirmText?: string
   cancelText?: string
   variant?: "default" | "destructive"
@@ -33,11 +35,15 @@ export function ConfirmationDialog({
   onCancel,
   title,
   description,
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  confirmText,
+  cancelText,
   variant = "default",
   isLoading = false,
 }: ConfirmationDialogProps) {
+  const tDialog = useTranslations('ui.dialog')
+  const tAlert = useTranslations('ui.alert')
+  const tCommon = useTranslations('common')
+
   const handleCancel = () => {
     onCancel?.()
     onOpenChange?.(false)
@@ -54,12 +60,12 @@ export function ConfirmationDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          <AlertDialogTitle>{title ?? tAlert('areYouSure')}</AlertDialogTitle>
+          <AlertDialogDescription>{description ?? tAlert('cannotUndo')}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={handleCancel} disabled={isLoading}>
-            {cancelText}
+            {cancelText ?? tDialog('cancel')}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
@@ -69,7 +75,7 @@ export function ConfirmationDialog({
                 buttonVariants({ variant: "destructive" })
             )}
           >
-            {isLoading ? "Processing..." : confirmText}
+            {isLoading ? tCommon('loading') : (confirmText ?? tDialog('confirm'))}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -81,14 +87,14 @@ export function ConfirmationDialog({
 import { useState, useCallback } from "react"
 
 interface UseConfirmationOptions {
-  title: string
-  description: string
+  title?: string
+  description?: string
   confirmText?: string
   cancelText?: string
   variant?: "default" | "destructive"
 }
 
-export function useConfirmation(options: UseConfirmationOptions) {
+export function useConfirmation(options: UseConfirmationOptions = {}) {
   const [isOpen, setIsOpen] = useState(false)
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null)
 

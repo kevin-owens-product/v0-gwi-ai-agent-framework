@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -86,6 +88,7 @@ export default function LegalHoldsPage() {
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [holdToRelease, setHoldToRelease] = useState<LegalHold | null>(null)
   const [newHold, setNewHold] = useState({
     name: "",
     description: "",
@@ -159,17 +162,17 @@ export default function LegalHoldsPage() {
       fetchLegalHolds()
     } catch (error) {
       console.error("Failed to create legal hold:", error)
-      alert(error instanceof Error ? error.message : "Failed to create legal hold")
+      toast.error(error instanceof Error ? error.message : "Failed to create legal hold")
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleReleaseHold = async (hold: LegalHold) => {
-    if (!confirm(`Are you sure you want to release the legal hold "${hold.name}"?`)) return
+  const handleReleaseHold = async () => {
+    if (!holdToRelease) return
 
     try {
-      const response = await fetch(`/api/admin/compliance/legal-holds/${hold.id}`, {
+      const response = await fetch(`/api/admin/compliance/legal-holds/${holdToRelease.id}`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -184,7 +187,9 @@ export default function LegalHoldsPage() {
       fetchLegalHolds()
     } catch (error) {
       console.error("Failed to release legal hold:", error)
-      alert(error instanceof Error ? error.message : "Failed to release legal hold")
+      toast.error(error instanceof Error ? error.message : "Failed to release legal hold")
+    } finally {
+      setHoldToRelease(null)
     }
   }
 
@@ -203,13 +208,13 @@ export default function LegalHoldsPage() {
 
       const failed = results.filter(r => r.status === "rejected").length
       if (failed > 0) {
-        alert(`Failed to release ${failed} of ${ids.length} legal holds`)
+        toast.error(`Failed to release ${failed} of ${ids.length} legal holds`)
       }
 
       fetchLegalHolds()
     } catch (error) {
       console.error("Failed to release legal holds:", error)
-      alert(error instanceof Error ? error.message : "Failed to release legal holds")
+      toast.error(error instanceof Error ? error.message : "Failed to release legal holds")
     }
   }
 
@@ -326,7 +331,7 @@ export default function LegalHoldsPage() {
     {
       label: "Release Hold",
       icon: <CheckCircle className="h-4 w-4" />,
-      onClick: (hold) => handleReleaseHold(hold),
+      onClick: (hold) => setHoldToRelease(hold),
       variant: "destructive",
       hidden: (hold) => hold.status !== "ACTIVE",
       separator: true,
@@ -495,6 +500,17 @@ export default function LegalHoldsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Release Confirmation Dialog */}
+      <ConfirmationDialog
+        open={!!holdToRelease}
+        onOpenChange={(open) => !open && setHoldToRelease(null)}
+        title="Release Legal Hold"
+        description={`Are you sure you want to release the legal hold "${holdToRelease?.name}"? This action cannot be undone.`}
+        confirmLabel="Release"
+        onConfirm={handleReleaseHold}
+        variant="destructive"
+      />
     </div>
   )
 }

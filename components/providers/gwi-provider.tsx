@@ -3,6 +3,7 @@
 import { createContext, useContext, type ReactNode } from "react"
 import type { SuperAdminRole } from "@prisma/client"
 import { hasGWIPermission, type GWIPermission } from "@/lib/gwi-permissions"
+import { SidebarProvider } from "./sidebar-provider"
 
 interface GWIAdminContextValue {
   admin: {
@@ -25,7 +26,9 @@ export function GWIProvider({
 }) {
   return (
     <GWIAdminContext.Provider value={{ admin }}>
-      {children}
+      <SidebarProvider>
+        {children}
+      </SidebarProvider>
     </GWIAdminContext.Provider>
   )
 }

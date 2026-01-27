@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import {
   Table,
   TableBody,
@@ -50,6 +51,8 @@ export function EnhancedDataTable({
   showSignificance = true,
   className,
 }: EnhancedDataTableProps) {
+  const tTable = useTranslations('ui.table')
+
   const [sortConfig, setSortConfig] = useState<SortConfig>(null)
   const [viewMode, setViewMode] = useState<ViewMode>("percentage")
   const [hoveredRow, setHoveredRow] = useState<string | null>(null)

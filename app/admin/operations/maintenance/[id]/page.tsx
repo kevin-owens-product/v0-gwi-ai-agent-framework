@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   Wrench,
   ArrowLeft,
@@ -104,6 +105,7 @@ export default function MaintenanceDetailPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [editForm, setEditForm] = useState<Partial<MaintenanceWindow>>({})
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const fetchWindow = useCallback(async () => {
     setIsLoading(true)
@@ -169,10 +171,6 @@ export default function MaintenanceDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this maintenance window?")) {
-      return
-    }
-
     try {
       const response = await fetch(`/api/admin/operations/maintenance/${windowId}`, {
         method: "DELETE",
@@ -185,6 +183,8 @@ export default function MaintenanceDetailPage() {
       router.push("/admin/operations/maintenance")
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to delete maintenance window")
+    } finally {
+      setShowDeleteDialog(false)
     }
   }
 
@@ -548,13 +548,24 @@ export default function MaintenanceDetailPage() {
                 </>
               )}
               {["COMPLETED", "CANCELLED"].includes(window.status) && (
-                <Button
-                  className="w-full"
-                  variant="destructive"
-                  onClick={handleDelete}
-                >
-                  Delete Window
-                </Button>
+                <>
+                  <Button
+                    className="w-full"
+                    variant="destructive"
+                    onClick={() => setShowDeleteDialog(true)}
+                  >
+                    Delete Window
+                  </Button>
+                  <ConfirmationDialog
+                    open={showDeleteDialog}
+                    onOpenChange={setShowDeleteDialog}
+                    title="Delete Maintenance Window"
+                    description="Are you sure you want to delete this maintenance window? This action cannot be undone."
+                    confirmLabel="Delete"
+                    variant="destructive"
+                    onConfirm={handleDelete}
+                  />
+                </>
               )}
             </CardContent>
           </Card>

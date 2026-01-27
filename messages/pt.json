@@ -1,0 +1,448 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "refresh": "Atualizar",
+    "back": "Voltar",
+    "next": "Avançar",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "yes": "Sim",
+    "no": "Não",
+    "or": "ou",
+    "and": "e",
+    "all": "Todos",
+    "none": "Nenhum",
+    "viewDetails": "Ver detalhes",
+    "viewAll": "Ver Tudo",
+    "noResults": "Nenhum resultado encontrado",
+    "required": "Obrigatório",
+    "optional": "Opcional",
+    "actions": "Ações",
+    "status": "Status",
+    "name": "Nome",
+    "description": "Descrição",
+    "type": "Tipo",
+    "date": "Data",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "enabled": "Habilitado",
+    "disabled": "Desabilitado",
+    "success": "Sucesso",
+    "failed": "Falhou",
+    "pending": "Pendente",
+    "completed": "Concluído",
+    "running": "Em execução",
+    "cancelled": "Cancelado"
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signOut": "Sair",
+    "signUp": "Cadastrar-se",
+    "getStarted": "Começar",
+    "email": "E-mail",
+    "emailPlaceholder": "Digite seu e-mail",
+    "password": "Senha",
+    "passwordPlaceholder": "Digite sua senha",
+    "forgotPassword": "Esqueceu a senha?",
+    "resetPassword": "Redefinir senha",
+    "confirmPassword": "Confirmar senha",
+    "rememberMe": "Lembrar de mim",
+    "noAccount": "Não tem uma conta?",
+    "hasAccount": "Já tem uma conta?",
+    "createAccount": "Criar conta",
+    "signInWith": "Entrar com {provider}",
+    "orContinueWith": "Ou continue com",
+    "termsAgreement": "Ao entrar, você concorda com nossos Termos de Serviço e Política de Privacidade",
+    "welcomeBack": "Bem-vindo de volta",
+    "signInToContinue": "Entre para continuar na sua conta",
+    "createYourAccount": "Crie sua conta",
+    "getStartedFree": "Comece gratuitamente",
+    "errors": {
+      "invalidCredentials": "E-mail ou senha inválidos",
+      "emailRequired": "E-mail é obrigatório",
+      "passwordRequired": "Senha é obrigatória",
+      "invalidEmail": "Por favor, digite um e-mail válido",
+      "passwordTooShort": "A senha deve ter pelo menos 8 caracteres",
+      "accountNotFound": "Conta não encontrada",
+      "accountLocked": "Conta bloqueada. Entre em contato com o suporte.",
+      "tooManyAttempts": "Muitas tentativas de login. Tente novamente mais tarde.",
+      "networkError": "Erro de rede. Verifique sua conexão."
+    },
+    "admin": {
+      "title": "Login do Administrador",
+      "description": "Entre para acessar o portal de administração"
+    },
+    "gwi": {
+      "title": "Login da Equipe GWI",
+      "description": "Entre para acessar o portal da equipe GWI"
+    }
+  },
+  "navigation": {
+    "home": "Início",
+    "dashboard": "Painel",
+    "settings": "Configurações",
+    "profile": "Perfil",
+    "help": "Ajuda",
+    "docs": "Documentação",
+    "features": "Recursos",
+    "pricing": "Preços",
+    "solutions": "Soluções",
+    "agents": "Agentes",
+    "theme": "Tema"
+  },
+  "settings": {
+    "title": "Configurações",
+    "language": "Idioma",
+    "selectLanguage": "Selecionar idioma",
+    "preferences": "Preferências",
+    "notifications": "Notificações",
+    "security": "Segurança",
+    "account": "Conta",
+    "appearance": "Aparência",
+    "general": "Geral"
+  },
+  "landing": {
+    "header": {
+      "brandName": "GWI Insights",
+      "solutions": "Soluções",
+      "salesTeams": "Equipes de Vendas",
+      "insightsTeams": "Equipes de Insights",
+      "adSales": "Vendas de Publicidade",
+      "marketing": "Marketing",
+      "productDevelopment": "Desenvolvimento de Produto",
+      "marketResearch": "Pesquisa de Mercado",
+      "innovation": "Inovação",
+      "features": "Recursos",
+      "agents": "Agentes",
+      "pricing": "Preços",
+      "docs": "Documentação",
+      "signIn": "Entrar",
+      "getStarted": "Começar",
+      "theme": "Tema"
+    },
+    "hero": {
+      "title": "Insights do Consumidor com Inteligência Artificial",
+      "subtitle": "Descubra insights profundos sobre o consumidor com análise baseada em IA de dados de pesquisas globais",
+      "cta": "Iniciar Teste Gratuito",
+      "secondaryCta": "Assistir Demonstração"
+    },
+    "features": {
+      "title": "Recursos Poderosos",
+      "subtitle": "Tudo o que você precisa para entender seu público"
+    },
+    "pricing": {
+      "title": "Preços Simples e Transparentes",
+      "subtitle": "Escolha o plano ideal para suas necessidades",
+      "monthly": "Mensal",
+      "annual": "Anual",
+      "perMonth": "/mês",
+      "perYear": "/ano",
+      "mostPopular": "Mais Popular",
+      "getStarted": "Começar",
+      "contactSales": "Falar com Vendas",
+      "features": "Recursos"
+    },
+    "cta": {
+      "title": "Pronto para começar?",
+      "subtitle": "Junte-se a milhares de empresas que usam o GWI Insights",
+      "button": "Iniciar Teste Gratuito"
+    },
+    "footer": {
+      "company": "Empresa",
+      "about": "Sobre",
+      "careers": "Carreiras",
+      "press": "Imprensa",
+      "contact": "Contato",
+      "product": "Produto",
+      "features": "Recursos",
+      "pricing": "Preços",
+      "security": "Segurança",
+      "roadmap": "Roadmap",
+      "resources": "Recursos",
+      "docs": "Documentação",
+      "blog": "Blog",
+      "support": "Suporte",
+      "changelog": "Histórico de Alterações",
+      "legal": "Jurídico",
+      "privacy": "Privacidade",
+      "terms": "Termos",
+      "copyright": "© {year} GWI. Todos os direitos reservados."
+    }
+  },
+  "dashboard": {
+    "title": "Painel",
+    "welcome": "Bem-vindo de volta",
+    "overview": "Visão Geral",
+    "recentActivity": "Atividade Recente",
+    "quickActions": "Ações Rápidas",
+    "header": {
+      "missionControl": "Centro de Controle",
+      "allSystemsOperational": "Todos os sistemas operacionais",
+      "realTimeOverview": "Visão geral em tempo real do seu ecossistema de agentes de IA",
+      "last24Hours": "Últimas 24 horas",
+      "last7Days": "Últimos 7 dias",
+      "last30Days": "Últimos 30 dias",
+      "last90Days": "Últimos 90 dias",
+      "playground": "Playground",
+      "newWorkflow": "Novo Workflow"
+    },
+    "metrics": {
+      "activeAgents": "Agentes Ativos",
+      "totalCount": "{count} total",
+      "runningNow": "Em execução agora",
+      "insightsGenerated": "Insights Gerados",
+      "runsCount": "{count} execuções",
+      "thisWeek": "Esta semana",
+      "successRate": "Taxa de Sucesso",
+      "excellent": "Excelente",
+      "good": "Bom",
+      "needsAttention": "Precisa de atenção",
+      "noData": "Sem dados",
+      "completedRuns": "Execuções concluídas",
+      "avgResponse": "Resposta Média",
+      "notAvailable": "N/D",
+      "fast": "Rápido",
+      "normal": "Normal",
+      "slow": "Lento",
+      "perRun": "Por execução"
+    }
+  },
+  "audiences": {
+    "title": "Audiências",
+    "createAudience": "Criar Audiência",
+    "audienceBuilder": "Construtor de Audiência",
+    "savedAudiences": "Audiências Salvas",
+    "comparison": "Comparação",
+    "overlap": "Sobreposição",
+    "persona": "Persona",
+    "mediaConsumption": "Consumo de Mídia",
+    "brandAffinities": "Afinidades de Marca"
+  },
+  "playground": {
+    "title": "Playground",
+    "newSession": "Nova Sessão",
+    "chat": "Chat",
+    "context": "Contexto",
+    "sources": "Fontes",
+    "workspace": "Área de Trabalho"
+  },
+  "collaboration": {
+    "share": "Compartilhar",
+    "comments": "Comentários",
+    "addComment": "Adicionar comentário",
+    "reply": "Responder",
+    "shareLink": "Compartilhar Link",
+    "copyLink": "Copiar Link",
+    "linkCopied": "Link copiado!"
+  },
+  "savedViews": {
+    "title": "Visualizações Salvas",
+    "saveView": "Salvar Visualização",
+    "pinnedItems": "Itens Fixados",
+    "recentItems": "Itens Recentes"
+  },
+  "exports": {
+    "title": "Exportações",
+    "exportData": "Exportar Dados",
+    "format": "Formato",
+    "schedule": "Agendamento",
+    "history": "Histórico"
+  },
+  "profile": {
+    "title": "Perfil",
+    "editProfile": "Editar Perfil",
+    "avatar": "Avatar",
+    "displayName": "Nome de Exibição",
+    "emailAddress": "Endereço de E-mail"
+  },
+  "gwi": {
+    "dashboard": {
+      "title": "Portal da Equipe GWI",
+      "description": "Gerencie pesquisas, taxonomia, pipelines de dados e configurações de IA",
+      "loading": "Carregando painel...",
+      "unresolvedErrors": "{count, plural, one {# erro não resolvido} other {# erros não resolvidos}} nas últimas 24 horas",
+      "reviewErrors": "Revise e resolva problemas para manter a saúde do sistema",
+      "viewErrors": "Ver Erros"
+    },
+    "stats": {
+      "surveys": "Pesquisas",
+      "active": "{count} ativas",
+      "taxonomyCategories": "Categorias de Taxonomia",
+      "dataPipelines": "Pipelines de Dados",
+      "llmConfigurations": "Configurações de LLM",
+      "agentTemplates": "Modelos de Agentes",
+      "dataSources": "Fontes de Dados"
+    },
+    "pipelineRuns": {
+      "title": "Execuções Recentes de Pipeline",
+      "description": "Status das últimas execuções de pipeline",
+      "viewAll": "Ver Todos",
+      "noPipelines": "Nenhuma execução de pipeline ainda",
+      "createFirst": "Crie seu primeiro pipeline",
+      "records": "{count} registros",
+      "started": "Iniciado em {date}"
+    },
+    "quickActions": {
+      "createSurvey": "Criar Pesquisa",
+      "createSurveyDesc": "Projete uma nova pesquisa",
+      "newPipeline": "Novo Pipeline",
+      "newPipelineDesc": "Configure processamento de dados",
+      "testPrompts": "Testar Prompts",
+      "testPromptsDesc": "Experimente modelos de prompt"
+    },
+    "navigation": {
+      "surveys": "Pesquisas",
+      "taxonomy": "Taxonomia",
+      "pipelines": "Pipelines",
+      "llm": "LLM",
+      "agents": "Agentes",
+      "dataSources": "Fontes de Dados",
+      "monitoring": "Monitoramento",
+      "system": "Sistema",
+      "services": "Serviços"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Portal de Administração",
+      "description": "Administração da plataforma e gerenciamento de inquilinos"
+    },
+    "navigation": {
+      "dashboard": "Painel",
+      "organizations": "Organizações",
+      "users": "Usuários",
+      "plans": "Planos",
+      "features": "Recursos",
+      "security": "Segurança",
+      "identity": "Identidade",
+      "sso": "SSO",
+      "domains": "Domínios",
+      "devices": "Dispositivos",
+      "scim": "SCIM",
+      "hierarchy": "Hierarquia",
+      "settings": "Configurações",
+      "entitlements": "Direitos"
+    },
+    "plans": {
+      "title": "Planos",
+      "description": "Gerenciar planos de assinatura",
+      "createPlan": "Criar Plano",
+      "editPlan": "Editar Plano",
+      "planName": "Nome do Plano",
+      "pricing": "Preços",
+      "features": "Recursos",
+      "limits": "Limites"
+    },
+    "security": {
+      "title": "Segurança",
+      "policies": "Políticas",
+      "sessions": "Sessões",
+      "ipBlocklist": "Lista de Bloqueio de IP",
+      "threats": "Ameaças",
+      "violations": "Violações"
+    },
+    "identity": {
+      "title": "Gerenciamento de Identidade",
+      "ssoTitle": "Single Sign-On",
+      "ssoDescription": "Configurar provedores de SSO",
+      "domainsTitle": "Domínios",
+      "domainsDescription": "Gerenciar domínios verificados",
+      "scimTitle": "SCIM",
+      "scimDescription": "Configurações de provisionamento de usuários"
+    },
+    "organizations": {
+      "title": "Organizações",
+      "description": "Gerenciar organizações de inquilinos",
+      "createOrg": "Criar Organização",
+      "orgName": "Nome da Organização",
+      "status": "Status",
+      "plan": "Plano",
+      "members": "Membros",
+      "defaultLanguage": "Idioma Padrão"
+    }
+  },
+  "ui": {
+    "dialog": {
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "close": "Fechar",
+      "ok": "OK",
+      "yes": "Sim",
+      "no": "Não",
+      "continue": "Continuar",
+      "goBack": "Voltar"
+    },
+    "alert": {
+      "areYouSure": "Tem certeza?",
+      "cannotUndo": "Esta ação não pode ser desfeita.",
+      "deleteConfirm": "Tem certeza de que deseja excluir isto?",
+      "unsavedChanges": "Você tem alterações não salvas",
+      "discardChanges": "Descartar alterações?"
+    },
+    "theme": {
+      "light": "Claro",
+      "dark": "Escuro",
+      "system": "Sistema",
+      "toggleTheme": "Alternar tema"
+    },
+    "commandPalette": {
+      "placeholder": "Digite um comando ou pesquise...",
+      "noResults": "Nenhum resultado encontrado",
+      "recentSearches": "Pesquisas recentes",
+      "suggestions": "Sugestões"
+    },
+    "shortcuts": {
+      "title": "Atalhos de Teclado",
+      "general": "Geral",
+      "navigation": "Navegação",
+      "actions": "Ações"
+    },
+    "errors": {
+      "somethingWentWrong": "Algo deu errado",
+      "tryAgain": "Tentar novamente",
+      "pageNotFound": "Página não encontrada",
+      "pageNotFoundDescription": "Desculpe, não conseguimos encontrar a página que você está procurando. Ela pode ter sido movida ou excluída.",
+      "backToDashboard": "Voltar ao painel",
+      "goHome": "Ir para o início",
+      "unexpectedError": "Ocorreu um erro inesperado",
+      "unexpectedErrorDescription": "Encontramos um erro inesperado. Nossa equipe foi notificada e está trabalhando em uma correção.",
+      "reloadPage": "Recarregar página",
+      "errorId": "ID do erro: {id}",
+      "contactSupport": "Entrar em contato com o suporte"
+    },
+    "loading": {
+      "loading": "Carregando...",
+      "pleaseWait": "Por favor, aguarde..."
+    },
+    "empty": {
+      "noData": "Nenhum dado disponível",
+      "noItems": "Nenhum item encontrado",
+      "getStarted": "Comece criando seu primeiro item"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Próximo",
+      "page": "Página {current} de {total}",
+      "showingItems": "Exibindo {start} a {end} de {total} itens"
+    },
+    "table": {
+      "noResults": "Sem resultados",
+      "sortAscending": "Ordenar crescente",
+      "sortDescending": "Ordenar decrescente",
+      "selectAll": "Selecionar todos",
+      "deselectAll": "Desmarcar todos"
+    }
+  }
+}

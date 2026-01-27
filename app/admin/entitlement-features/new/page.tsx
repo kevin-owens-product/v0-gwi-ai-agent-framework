@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -89,13 +90,13 @@ export default function NewEntitlementFeaturePage() {
 
   const handleCreate = async () => {
     if (!formData.key || !formData.name) {
-      alert("Key and name are required")
+      toast.error("Key and name are required")
       return
     }
 
     // Validate key format
     if (!/^[a-z][a-z0-9_]*$/.test(formData.key)) {
-      alert("Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)")
+      toast.error("Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)")
       return
     }
 
@@ -122,11 +123,11 @@ export default function NewEntitlementFeaturePage() {
         router.push(`/admin/entitlement-features/${data.feature.id}`)
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to create feature")
+        toast.error(data.error || "Failed to create feature")
       }
     } catch (error) {
       console.error("Failed to create feature:", error)
-      alert("Failed to create feature")
+      toast.error("Failed to create feature")
     } finally {
       setIsSaving(false)
     }

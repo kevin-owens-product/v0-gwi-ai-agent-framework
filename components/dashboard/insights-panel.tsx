@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, TrendingUp, Users, Target, Lightbulb, Sparkles, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface Insight {
   id: string
@@ -33,6 +34,8 @@ const typeIcons: Record<string, typeof Users> = {
 export function InsightsPanel({ orgId }: InsightsPanelProps) {
   const [insights, setInsights] = useState<Insight[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const t = useTranslations('dashboard.insights')
+  const tCommon = useTranslations('common')
 
   useEffect(() => {
     async function fetchInsights() {
@@ -70,16 +73,16 @@ export function InsightsPanel({ orgId }: InsightsPanelProps) {
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <div className="flex items-center gap-2">
-          <CardTitle className="text-base font-medium">Top Insights</CardTitle>
+          <CardTitle className="text-base font-medium">{t('topInsights')}</CardTitle>
           {newCount > 0 && (
             <Badge variant="secondary" className="text-xs">
-              {newCount} new
+              {t('newCount', { count: newCount })}
             </Badge>
           )}
         </div>
         <Link href="/dashboard/insights">
           <Button variant="ghost" size="sm" className="text-xs gap-1">
-            View all
+            {tCommon('viewAll')}
             <ArrowRight className="h-3 w-3" />
           </Button>
         </Link>
@@ -92,8 +95,8 @@ export function InsightsPanel({ orgId }: InsightsPanelProps) {
         ) : insights.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <Sparkles className="h-8 w-8 mb-2 opacity-50" />
-            <p className="text-sm">No insights yet</p>
-            <p className="text-xs">Run agents to generate insights</p>
+            <p className="text-sm">{t('noInsightsYet')}</p>
+            <p className="text-xs">{t('runAgentsToGenerate')}</p>
           </div>
         ) : (
           insights.map((insight) => {
@@ -123,7 +126,7 @@ export function InsightsPanel({ orgId }: InsightsPanelProps) {
                       {confidence && (
                         <>
                           <span>·</span>
-                          <span className="text-emerald-400">{confidence}% confidence</span>
+                          <span className="text-emerald-400">{t('confidence', { percent: confidence })}</span>
                         </>
                       )}
                     </div>

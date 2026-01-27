@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -81,6 +82,7 @@ export default function RetentionPolicyDetailPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -156,7 +158,7 @@ export default function RetentionPolicyDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!policy || !confirm("Are you sure you want to delete this retention policy?")) return
+    if (!policy) return
 
     try {
       setDeleting(true)
@@ -175,6 +177,7 @@ export default function RetentionPolicyDetailPage() {
       toast.error("Failed to delete retention policy")
     } finally {
       setDeleting(false)
+      setShowDeleteDialog(false)
     }
   }
 
@@ -499,7 +502,7 @@ export default function RetentionPolicyDetailPage() {
               <Button
                 variant="outline"
                 className="w-full justify-start text-destructive"
-                onClick={handleDelete}
+                onClick={() => setShowDeleteDialog(true)}
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -507,6 +510,17 @@ export default function RetentionPolicyDetailPage() {
               </Button>
             </CardContent>
           </Card>
+
+          {/* Delete Confirmation Dialog */}
+          <ConfirmationDialog
+            open={showDeleteDialog}
+            onOpenChange={setShowDeleteDialog}
+            title="Delete Retention Policy"
+            description="Are you sure you want to delete this retention policy? This action cannot be undone."
+            confirmLabel="Delete"
+            onConfirm={handleDelete}
+            variant="destructive"
+          />
 
           <Card>
             <CardHeader>

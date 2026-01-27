@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -34,6 +35,9 @@ interface CohortAnalysisTableProps {
 }
 
 export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProps) {
+  const tTable = useTranslations('ui.table')
+  const tLoading = useTranslations('ui.loading')
+
   const formatCurrency = (value: number) => {
     if (value >= 1000000) return `$${(value / 1000000).toFixed(2)}M`
     if (value >= 1000) return `$${(value / 1000).toFixed(1)}K`
@@ -78,7 +82,7 @@ export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProp
       <Card>
         <CardHeader>
           <CardTitle>Cohort Analysis</CardTitle>
-          <CardDescription>Loading cohort data...</CardDescription>
+          <CardDescription>{tLoading('loading')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -100,7 +104,7 @@ export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProp
         </CardHeader>
         <CardContent>
           <div className="h-48 flex items-center justify-center text-muted-foreground">
-            No cohort data available
+            {tTable('noResults')}
           </div>
         </CardContent>
       </Card>

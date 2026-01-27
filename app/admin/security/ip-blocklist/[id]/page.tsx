@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -68,6 +69,7 @@ export default function IPBlocklistDetailPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const [formData, setFormData] = useState({
     ipAddress: "",
@@ -140,7 +142,7 @@ export default function IPBlocklistDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!entry || !confirm("Are you sure you want to remove this IP from the blocklist?")) return
+    if (!entry) return
 
     try {
       setDeleting(true)
@@ -158,6 +160,7 @@ export default function IPBlocklistDetailPage() {
       toast.error("Failed to remove IP from blocklist")
     } finally {
       setDeleting(false)
+      setShowDeleteDialog(false)
     }
   }
 
@@ -438,7 +441,7 @@ export default function IPBlocklistDetailPage() {
               <Button
                 variant="outline"
                 className="w-full justify-start text-destructive"
-                onClick={handleDelete}
+                onClick={() => setShowDeleteDialog(true)}
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -446,6 +449,17 @@ export default function IPBlocklistDetailPage() {
               </Button>
             </CardContent>
           </Card>
+
+          {/* Delete Confirmation Dialog */}
+          <ConfirmationDialog
+            open={showDeleteDialog}
+            onOpenChange={setShowDeleteDialog}
+            title="Remove from Blocklist"
+            description={`Are you sure you want to remove ${entry?.ipAddress} from the blocklist? This IP will be allowed to access the platform again.`}
+            confirmLabel="Remove"
+            onConfirm={handleDelete}
+            variant="destructive"
+          />
 
           <Card>
             <CardHeader>

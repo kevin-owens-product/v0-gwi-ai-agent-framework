@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -84,7 +85,7 @@ export default function NewAuditPage() {
 
   const handleCreate = async () => {
     if (!formData.frameworkId || !formData.scheduledDate) {
-      alert("Framework and scheduled date are required")
+      toast.error("Framework and scheduled date are required")
       return
     }
 
@@ -117,7 +118,7 @@ export default function NewAuditPage() {
       router.push(`/admin/compliance/audits/${data.audit?.id || ""}`)
     } catch (error) {
       console.error("Failed to schedule audit:", error)
-      alert(error instanceof Error ? error.message : "Failed to schedule audit")
+      toast.error(error instanceof Error ? error.message : "Failed to schedule audit")
     } finally {
       setIsSaving(false)
     }

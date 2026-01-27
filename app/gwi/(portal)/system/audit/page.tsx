@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { LoadingText } from "@/components/ui/loading-text"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   Table,
   TableBody,
@@ -159,13 +161,11 @@ async function AuditLogsContent() {
               </TableBody>
             </Table>
           ) : (
-            <div className="flex flex-col items-center justify-center py-12">
-              <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No audit logs yet</h3>
-              <p className="text-muted-foreground">
-                Activity logs will appear here as users interact with the portal
-              </p>
-            </div>
+            <EmptyState
+              icon={FileText}
+              title="No audit logs yet"
+              description="Activity logs will appear here as users interact with the portal"
+            />
           )}
         </CardContent>
       </Card>
@@ -180,7 +180,7 @@ export default function AuditPage() {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Audit Logs</h1>
-            <p className="text-muted-foreground">Loading...</p>
+            <LoadingText />
           </div>
         </div>
       }

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
+import { LoadingText } from "@/components/ui/loading-text"
 import {
   Table,
   TableBody,
@@ -149,7 +150,7 @@ export default function ToolsPage() {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">System Tools</h1>
-            <p className="text-muted-foreground">Loading...</p>
+            <LoadingText />
           </div>
         </div>
       }

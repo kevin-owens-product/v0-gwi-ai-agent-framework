@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect, useRef, useCallback, createContext, useContext } from "react"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
@@ -61,16 +62,17 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { useSidebar } from "@/components/providers/sidebar-provider"
+import { LanguageSwitcher } from "@/components/ui/language-switcher"
 
 interface NavItem {
-  name: string
+  nameKey: string
   href: string
   icon: React.ComponentType<{ className?: string }>
   badge?: string | number
 }
 
 interface NavSection {
-  title: string
+  titleKey: string
   items: NavItem[]
   defaultOpen?: boolean
 }
@@ -115,105 +117,105 @@ function savePersistedState(state: Record<string, boolean>) {
 
 const navSections: NavSection[] = [
   {
-    title: "Overview",
+    titleKey: "sections.overview",
     defaultOpen: true,
     items: [
-      { name: "Dashboard", href: "/gwi", icon: LayoutDashboard },
-      { name: "Activity Feed", href: "/gwi/activity", icon: Activity },
-      { name: "Quick Actions", href: "/gwi/quick-actions", icon: Sparkles },
+      { nameKey: "items.dashboard", href: "/gwi", icon: LayoutDashboard },
+      { nameKey: "items.activityFeed", href: "/gwi/activity", icon: Activity },
+      { nameKey: "items.quickActions", href: "/gwi/quick-actions", icon: Sparkles },
     ],
   },
   {
-    title: "Survey Management",
+    titleKey: "sections.surveyManagement",
     defaultOpen: true,
     items: [
-      { name: "Surveys", href: "/gwi/surveys", icon: ClipboardList },
-      { name: "Questions", href: "/gwi/surveys/questions", icon: FileQuestion },
-      { name: "Responses", href: "/gwi/surveys/responses", icon: MessageSquare },
-      { name: "Distribution", href: "/gwi/surveys/distribution", icon: Send },
+      { nameKey: "items.surveys", href: "/gwi/surveys", icon: ClipboardList },
+      { nameKey: "items.questions", href: "/gwi/surveys/questions", icon: FileQuestion },
+      { nameKey: "items.responses", href: "/gwi/surveys/responses", icon: MessageSquare },
+      { nameKey: "items.distribution", href: "/gwi/surveys/distribution", icon: Send },
     ],
   },
   {
-    title: "Taxonomy",
+    titleKey: "sections.taxonomy",
     defaultOpen: false,
     items: [
-      { name: "Categories", href: "/gwi/taxonomy", icon: Tags },
-      { name: "Attributes", href: "/gwi/taxonomy/attributes", icon: Layers },
-      { name: "Mapping Rules", href: "/gwi/taxonomy/mappings", icon: GitBranch },
-      { name: "Validation", href: "/gwi/taxonomy/validation", icon: CheckCircle },
+      { nameKey: "items.categories", href: "/gwi/taxonomy", icon: Tags },
+      { nameKey: "items.attributes", href: "/gwi/taxonomy/attributes", icon: Layers },
+      { nameKey: "items.mappingRules", href: "/gwi/taxonomy/mappings", icon: GitBranch },
+      { nameKey: "items.validation", href: "/gwi/taxonomy/validation", icon: CheckCircle },
     ],
   },
   {
-    title: "Data Pipelines",
+    titleKey: "sections.dataPipelines",
     defaultOpen: false,
     items: [
-      { name: "Pipelines", href: "/gwi/pipelines", icon: Workflow },
-      { name: "Pipeline Runs", href: "/gwi/pipelines/runs", icon: Play },
-      { name: "Schedules", href: "/gwi/pipelines/schedules", icon: Calendar },
-      { name: "Validation Rules", href: "/gwi/pipelines/validation", icon: ShieldCheck },
+      { nameKey: "items.pipelines", href: "/gwi/pipelines", icon: Workflow },
+      { nameKey: "items.pipelineRuns", href: "/gwi/pipelines/runs", icon: Play },
+      { nameKey: "items.schedules", href: "/gwi/pipelines/schedules", icon: Calendar },
+      { nameKey: "items.validationRules", href: "/gwi/pipelines/validation", icon: ShieldCheck },
     ],
   },
   {
-    title: "LLM Configuration",
+    titleKey: "sections.llmConfiguration",
     defaultOpen: false,
     items: [
-      { name: "Models", href: "/gwi/llm", icon: Brain },
-      { name: "Prompts", href: "/gwi/llm/prompts", icon: FileCode },
-      { name: "Usage & Costs", href: "/gwi/llm/usage", icon: BarChart3 },
-      { name: "Testing", href: "/gwi/llm/testing", icon: TestTube },
+      { nameKey: "items.models", href: "/gwi/llm", icon: Brain },
+      { nameKey: "items.prompts", href: "/gwi/llm/prompts", icon: FileCode },
+      { nameKey: "items.usageCosts", href: "/gwi/llm/usage", icon: BarChart3 },
+      { nameKey: "items.testing", href: "/gwi/llm/testing", icon: TestTube },
     ],
   },
   {
-    title: "Agent Configuration",
+    titleKey: "sections.agentConfiguration",
     defaultOpen: false,
     items: [
-      { name: "System Agents", href: "/gwi/agents", icon: Bot },
-      { name: "Agent Templates", href: "/gwi/agents/templates", icon: FileCode },
-      { name: "Tools", href: "/gwi/agents/tools", icon: Wrench },
-      { name: "Capabilities", href: "/gwi/agents/capabilities", icon: Puzzle },
+      { nameKey: "items.systemAgents", href: "/gwi/agents", icon: Bot },
+      { nameKey: "items.agentTemplates", href: "/gwi/agents/templates", icon: FileCode },
+      { nameKey: "items.tools", href: "/gwi/agents/tools", icon: Wrench },
+      { nameKey: "items.capabilities", href: "/gwi/agents/capabilities", icon: Puzzle },
     ],
   },
   {
-    title: "Data Sources",
+    titleKey: "sections.dataSources",
     defaultOpen: false,
     items: [
-      { name: "Connections", href: "/gwi/data-sources", icon: Database },
-      { name: "Schemas", href: "/gwi/data-sources/schemas", icon: FileText },
-      { name: "Sync Status", href: "/gwi/data-sources/sync", icon: RefreshCw },
-      { name: "Data Quality", href: "/gwi/data-sources/quality", icon: LineChart },
+      { nameKey: "items.connections", href: "/gwi/data-sources", icon: Database },
+      { nameKey: "items.schemas", href: "/gwi/data-sources/schemas", icon: FileText },
+      { nameKey: "items.syncStatus", href: "/gwi/data-sources/sync", icon: RefreshCw },
+      { nameKey: "items.dataQuality", href: "/gwi/data-sources/quality", icon: LineChart },
     ],
   },
   {
-    title: "Monitoring",
+    titleKey: "sections.monitoring",
     defaultOpen: false,
     items: [
-      { name: "Pipeline Health", href: "/gwi/monitoring/pipelines", icon: Activity },
-      { name: "LLM Performance", href: "/gwi/monitoring/llm", icon: BarChart3 },
-      { name: "Error Logs", href: "/gwi/monitoring/errors", icon: AlertTriangle },
-      { name: "Alerts", href: "/gwi/monitoring/alerts", icon: Bell },
+      { nameKey: "items.pipelineHealth", href: "/gwi/monitoring/pipelines", icon: Activity },
+      { nameKey: "items.llmPerformance", href: "/gwi/monitoring/llm", icon: BarChart3 },
+      { nameKey: "items.errorLogs", href: "/gwi/monitoring/errors", icon: AlertTriangle },
+      { nameKey: "items.alerts", href: "/gwi/monitoring/alerts", icon: Bell },
     ],
   },
   {
-    title: "System",
+    titleKey: "sections.system",
     defaultOpen: false,
     items: [
-      { name: "Settings", href: "/gwi/system/settings", icon: Settings },
-      { name: "Access Control", href: "/gwi/system/access", icon: Users },
-      { name: "Audit Logs", href: "/gwi/system/audit", icon: FileText },
-      { name: "API Keys", href: "/gwi/system/api-keys", icon: Key },
+      { nameKey: "items.settings", href: "/gwi/system/settings", icon: Settings },
+      { nameKey: "items.accessControl", href: "/gwi/system/access", icon: Users },
+      { nameKey: "items.auditLogs", href: "/gwi/system/audit", icon: FileText },
+      { nameKey: "items.apiKeys", href: "/gwi/system/api-keys", icon: Key },
     ],
   },
   {
-    title: "Services Management",
+    titleKey: "sections.servicesManagement",
     defaultOpen: false,
     items: [
-      { name: "Dashboard", href: "/gwi/services", icon: Briefcase },
-      { name: "Clients", href: "/gwi/services/clients", icon: Building2 },
-      { name: "Projects", href: "/gwi/services/projects", icon: FolderKanban },
-      { name: "Time Tracking", href: "/gwi/services/time", icon: Clock },
-      { name: "Invoicing", href: "/gwi/services/invoicing", icon: Receipt },
-      { name: "Vendors", href: "/gwi/services/vendors", icon: Truck },
-      { name: "Team", href: "/gwi/services/team", icon: UsersRound },
+      { nameKey: "items.dashboard", href: "/gwi/services", icon: Briefcase },
+      { nameKey: "items.clients", href: "/gwi/services/clients", icon: Building2 },
+      { nameKey: "items.projects", href: "/gwi/services/projects", icon: FolderKanban },
+      { nameKey: "items.timeTracking", href: "/gwi/services/time", icon: Clock },
+      { nameKey: "items.invoicing", href: "/gwi/services/invoicing", icon: Receipt },
+      { nameKey: "items.vendors", href: "/gwi/services/vendors", icon: Truck },
+      { nameKey: "items.team", href: "/gwi/services/team", icon: UsersRound },
     ],
   },
 ]
@@ -221,6 +223,7 @@ const navSections: NavSection[] = [
 function NavSectionComponent({ section }: { section: NavSection }) {
   const pathname = usePathname()
   const sidebarContext = useSidebarContext()
+  const t = useTranslations("gwi.navigation")
 
   // Track if user has manually interacted with this section
   const userInteracted = useRef(false)
@@ -229,8 +232,8 @@ function NavSectionComponent({ section }: { section: NavSection }) {
   // Initialize state from persisted storage or defaults
   const [isOpen, setIsOpen] = useState(() => {
     const persisted = loadPersistedState()
-    if (section.title in persisted) {
-      return persisted[section.title]
+    if (section.titleKey in persisted) {
+      return persisted[section.titleKey]
     }
     return section.defaultOpen ?? false
   })
@@ -249,9 +252,9 @@ function NavSectionComponent({ section }: { section: NavSection }) {
 
     // Persist to localStorage
     const currentState = loadPersistedState()
-    currentState[section.title] = open
+    currentState[section.titleKey] = open
     savePersistedState(currentState)
-  }, [section.title])
+  }, [section.titleKey])
 
   // Auto-expand on initial render if has active item and user hasn't interacted
   useEffect(() => {
@@ -264,16 +267,16 @@ function NavSectionComponent({ section }: { section: NavSection }) {
   // Register with sidebar context for expand/collapse all
   useEffect(() => {
     if (sidebarContext) {
-      sidebarContext.registerSection(section.title, (open) => {
+      sidebarContext.registerSection(section.titleKey, (open) => {
         userInteracted.current = true
         setIsOpen(open)
         const currentState = loadPersistedState()
-        currentState[section.title] = open
+        currentState[section.titleKey] = open
         savePersistedState(currentState)
       })
-      return () => sidebarContext.unregisterSection(section.title)
+      return () => sidebarContext.unregisterSection(section.titleKey)
     }
-  }, [sidebarContext, section.title])
+  }, [sidebarContext, section.titleKey])
 
   return (
     <Collapsible open={isOpen} onOpenChange={handleOpenChange} className="mb-1">
@@ -288,7 +291,7 @@ function NavSectionComponent({ section }: { section: NavSection }) {
           aria-expanded={isOpen}
         >
           <span className="flex items-center gap-2">
-            {section.title}
+            {t(section.titleKey)}
             {hasActiveItem && !isOpen && (
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" title="Contains active page" />
             )}
@@ -305,7 +308,7 @@ function NavSectionComponent({ section }: { section: NavSection }) {
         <div className="space-y-0.5 pl-1">
           {section.items.map((item) => (
             <Link
-              key={item.name}
+              key={item.nameKey}
               href={item.href}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150",
@@ -315,7 +318,7 @@ function NavSectionComponent({ section }: { section: NavSection }) {
               )}
             >
               <item.icon className="h-4 w-4 flex-shrink-0" />
-              <span className="truncate">{item.name}</span>
+              <span className="truncate">{t(item.nameKey)}</span>
               {item.badge && (
                 <span className="ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full bg-emerald-500 px-1.5 text-xs font-medium text-white">
                   {item.badge}
@@ -331,6 +334,7 @@ function NavSectionComponent({ section }: { section: NavSection }) {
 
 function SidebarContent({ onLogout }: { onLogout: () => void }) {
   const { admin } = useGWIAdmin()
+  const t = useTranslations("gwi.navigation")
 
   // Track all section setters for expand/collapse all
   const sectionSettersRef = useRef<Map<string, (open: boolean) => void>>(new Map())
@@ -367,37 +371,40 @@ function SidebarContent({ onLogout }: { onLogout: () => void }) {
             <Database className="h-5 w-5 text-white" />
           </div>
           <div>
-            <span className="text-base font-semibold text-white">GWI Portal</span>
-            <p className="text-xs text-slate-400">Team Tools</p>
+            <span className="text-base font-semibold text-white">{t("portal.title")}</span>
+            <p className="text-xs text-slate-400">{t("portal.subtitle")}</p>
           </div>
         </Link>
       </div>
 
       {/* Navigation Controls */}
-      <div className="px-3 pt-3 pb-1 flex justify-end">
-        <button
-          onClick={expandAll}
-          className="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition-colors"
-          title="Expand all sections"
-          aria-label="Expand all sections"
-        >
-          Expand all
-        </button>
-        <span className="text-slate-600 mx-1">|</span>
-        <button
-          onClick={collapseAll}
-          className="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition-colors"
-          title="Collapse all sections"
-          aria-label="Collapse all sections"
-        >
-          Collapse all
-        </button>
+      <div className="px-3 pt-3 pb-1 flex justify-between items-center">
+        <LanguageSwitcher variant="ghost" size="sm" />
+        <div className="flex items-center">
+          <button
+            onClick={expandAll}
+            className="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition-colors"
+            title={t("controls.expandAll")}
+            aria-label={t("controls.expandAll")}
+          >
+            {t("controls.expandAll")}
+          </button>
+          <span className="text-slate-600 mx-1">|</span>
+          <button
+            onClick={collapseAll}
+            className="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition-colors"
+            title={t("controls.collapseAll")}
+            aria-label={t("controls.collapseAll")}
+          >
+            {t("controls.collapseAll")}
+          </button>
+        </div>
       </div>
 
       {/* Navigation */}
       <ScrollArea className="flex-1 py-2 px-3">
         {navSections.map((section) => (
-          <NavSectionComponent key={section.title} section={section} />
+          <NavSectionComponent key={section.titleKey} section={section} />
         ))}
       </ScrollArea>
 
@@ -421,7 +428,7 @@ function SidebarContent({ onLogout }: { onLogout: () => void }) {
           onClick={onLogout}
         >
           <LogOut className="h-4 w-4 mr-2" />
-          Sign out
+          {t("user.signOut")}
         </Button>
       </div>
     </SidebarContext.Provider>

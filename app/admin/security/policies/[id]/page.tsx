@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -40,6 +40,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { toast } from "sonner"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface SecurityViolation {
   id: string
@@ -123,6 +124,7 @@ export default function SecurityPolicyDetailPage() {
     priority: 0,
     isActive: true,
   })
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   useEffect(() => {
     if (params.id) {
@@ -180,8 +182,12 @@ export default function SecurityPolicyDetailPage() {
     }
   }
 
-  const handleDelete = async () => {
-    if (!policy || !confirm("Are you sure you want to delete this security policy?")) return
+  const handleDeleteClick = () => {
+    setShowDeleteDialog(true)
+  }
+
+  const handleDeleteConfirm = useCallback(async () => {
+    if (!policy) return
 
     try {
       setDeleting(true)
@@ -199,8 +205,9 @@ export default function SecurityPolicyDetailPage() {
       toast.error("Failed to delete security policy")
     } finally {
       setDeleting(false)
+      setShowDeleteDialog(false)
     }
-  }
+  }, [policy, router])
 
   const handleToggleActive = async () => {
     if (!policy) return
@@ -523,7 +530,7 @@ export default function SecurityPolicyDetailPage() {
               <Button
                 variant="outline"
                 className="w-full justify-start text-destructive"
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -531,6 +538,16 @@ export default function SecurityPolicyDetailPage() {
               </Button>
             </CardContent>
           </Card>
+
+          <ConfirmationDialog
+            open={showDeleteDialog}
+            onOpenChange={setShowDeleteDialog}
+            title="Delete Security Policy"
+            description="Are you sure you want to delete this security policy? This action cannot be undone."
+            confirmText={deleting ? "Deleting..." : "Delete"}
+            onConfirm={handleDeleteConfirm}
+            variant="destructive"
+          />
 
           <Card>
             <CardHeader>

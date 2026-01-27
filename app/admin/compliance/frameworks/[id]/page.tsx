@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -135,7 +136,7 @@ export default function FrameworkDetailPage() {
         fetchFramework()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to update framework")
+        toast.error(data.error || "Failed to update framework")
       }
     } catch (error) {
       console.error("Failed to update framework:", error)

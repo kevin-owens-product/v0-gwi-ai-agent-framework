@@ -11,6 +11,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import {
   Table,
   TableBody,
@@ -107,6 +108,10 @@ export function ExportHistoryTable({
   loading = false,
   onRefresh,
 }: ExportHistoryTableProps) {
+  const tTable = useTranslations('ui.table')
+  const tCommon = useTranslations('common')
+  const tEmpty = useTranslations('ui.empty')
+
   const [downloading, setDownloading] = useState<string | null>(null)
 
   const handleDownload = async (exportId: string) => {
@@ -140,9 +145,9 @@ export function ExportHistoryTable({
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <FileJson className="h-12 w-12 text-muted-foreground mb-4" />
-        <h3 className="text-lg font-medium">No export history</h3>
+        <h3 className="text-lg font-medium">{tTable('noResults')}</h3>
         <p className="text-sm text-muted-foreground mt-1">
-          You haven&apos;t requested any data exports yet
+          {tEmpty('getStarted')}
         </p>
       </div>
     )

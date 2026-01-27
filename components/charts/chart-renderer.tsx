@@ -29,6 +29,7 @@ import {
   Treemap,
 } from "recharts"
 import { Loader2, Activity } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export type ChartType = "BAR" | "LINE" | "PIE" | "DONUT" | "AREA" | "SCATTER" | "HEATMAP" | "TREEMAP" | "FUNNEL" | "RADAR" | "METRIC"
 
@@ -74,6 +75,7 @@ export function ChartRenderer({
   isLoading = false,
   className = "",
 }: ChartRendererProps) {
+  const t = useTranslations('ui.empty')
   const {
     colors = FALLBACK_COLORS,
     xAxisKey = "name",
@@ -98,7 +100,7 @@ export function ChartRenderer({
   if (chartData.length === 0) {
     return (
       <div className={`flex items-center justify-center text-muted-foreground ${className}`} style={{ height }}>
-        No data available
+        {t('noData')}
       </div>
     )
   }

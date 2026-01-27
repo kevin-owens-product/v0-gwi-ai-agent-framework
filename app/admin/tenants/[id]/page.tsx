@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -331,7 +332,7 @@ export default function TenantDetailPage() {
         fetchTenant()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to assign plan")
+        toast.error(data.error || "Failed to assign plan")
       }
     } catch (error) {
       console.error("Failed to assign plan:", error)
@@ -362,7 +363,7 @@ export default function TenantDetailPage() {
         fetchEntitlements()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to grant feature")
+        toast.error(data.error || "Failed to grant feature")
       }
     } catch (error) {
       console.error("Failed to grant feature:", error)
@@ -380,7 +381,7 @@ export default function TenantDetailPage() {
         fetchEntitlements()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to revoke entitlement")
+        toast.error(data.error || "Failed to revoke entitlement")
       }
     } catch (error) {
       console.error("Failed to revoke entitlement:", error)

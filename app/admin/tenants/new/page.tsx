@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -131,7 +132,7 @@ export default function NewTenantPage() {
 
   const handleCreate = async () => {
     if (!formData.name) {
-      alert("Organization name is required")
+      toast.error("Organization name is required")
       return
     }
 
@@ -165,11 +166,11 @@ export default function NewTenantPage() {
         router.push(`/admin/tenants/${data.organization.id}`)
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to create organization")
+        toast.error(data.error || "Failed to create organization")
       }
     } catch (error) {
       console.error("Failed to create organization:", error)
-      alert("Failed to create organization")
+      toast.error("Failed to create organization")
     } finally {
       setIsSaving(false)
     }

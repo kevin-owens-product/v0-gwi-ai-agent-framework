@@ -28,6 +28,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { LoadingText } from "@/components/ui/loading-text"
 import { AlertTriangle, Search, Eye, CheckCircle, Clock, RefreshCw } from "lucide-react"
 
 async function getErrorLogs() {
@@ -270,7 +271,7 @@ export default function ErrorLogsPage() {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Error Logs</h1>
-            <p className="text-muted-foreground">Loading...</p>
+            <LoadingText />
           </div>
         </div>
       }

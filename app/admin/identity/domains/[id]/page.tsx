@@ -35,6 +35,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface Organization {
   id: string
@@ -89,6 +90,7 @@ export default function DomainDetailPage() {
     ssoEnforced: false,
     verificationMethod: "DNS_TXT",
   })
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const fetchDomain = useCallback(async () => {
     setIsLoading(true)
@@ -161,9 +163,11 @@ export default function DomainDetailPage() {
     }
   }
 
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this domain verification?")) return
+  const handleDeleteClick = () => {
+    setShowDeleteDialog(true)
+  }
 
+  const handleDeleteConfirm = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/identity/domains/${domainId}`, {
         method: "DELETE",
@@ -177,8 +181,10 @@ export default function DomainDetailPage() {
     } catch (error) {
       console.error("Failed to delete domain:", error)
       toast.error("Failed to delete domain")
+    } finally {
+      setShowDeleteDialog(false)
     }
-  }
+  }, [domainId, router])
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -355,11 +361,21 @@ export default function DomainDetailPage() {
               Verify Now
             </Button>
           )}
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button variant="destructive" onClick={handleDeleteClick}>
             Delete
           </Button>
         </div>
       </div>
+
+      <ConfirmationDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        title="Delete Domain Verification"
+        description="Are you sure you want to delete this domain verification? This action cannot be undone."
+        confirmText="Delete"
+        onConfirm={handleDeleteConfirm}
+        variant="destructive"
+      />
 
       <Tabs defaultValue="overview">
         <TabsList>

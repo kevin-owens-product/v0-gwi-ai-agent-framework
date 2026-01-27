@@ -44,7 +44,7 @@ export default async function GWILayout({
         permissions: session.admin.permissions,
       }}
     >
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background gwi-portal">
         <GWISidebar />
         <div className="lg:pl-64">
           <GWIHeader />

@@ -35,6 +35,7 @@ import {
   Check,
   X,
 } from "lucide-react"
+import { toast } from "sonner"
 
 const CATEGORIES = [
   { value: "CORE", label: "Core" },
@@ -159,7 +160,7 @@ export default function FeaturesPage() {
         fetchFeatures()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to create feature")
+        toast.error(data.error || "Failed to create feature")
       }
     } catch (error) {
       console.error("Failed to create feature:", error)
@@ -184,7 +185,7 @@ export default function FeaturesPage() {
         fetchFeatures()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to update feature")
+        toast.error(data.error || "Failed to update feature")
       }
     } catch (error) {
       console.error("Failed to update feature:", error)
@@ -233,7 +234,7 @@ export default function FeaturesPage() {
         fetchFeatures()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to delete feature")
+        toast.error(data.error || "Failed to delete feature")
       }
     } catch (error) {
       console.error("Failed to delete feature:", error)
@@ -427,7 +428,7 @@ export default function FeaturesPage() {
             onDelete={(feature) => {
               // Check if feature is used in plans before deleting
               if (feature._count.plans > 0) {
-                alert(`Cannot delete this feature as it is used by ${feature._count.plans} plan(s)`)
+                toast.error(`Cannot delete this feature as it is used by ${feature._count.plans} plan(s)`)
                 return Promise.reject(new Error("Feature is in use"))
               }
               return handleDeleteFeature(feature)

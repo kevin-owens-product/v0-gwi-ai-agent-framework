@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -76,7 +77,7 @@ export default function NewUserPage() {
 
   const handleCreate = async () => {
     if (!formData.email) {
-      alert("Email is required")
+      toast.error("Email is required")
       return
     }
 
@@ -101,11 +102,11 @@ export default function NewUserPage() {
         router.push(`/admin/users/${data.user.id}`)
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to create user")
+        toast.error(data.error || "Failed to create user")
       }
     } catch (error) {
       console.error("Failed to create user:", error)
-      alert("Failed to create user")
+      toast.error("Failed to create user")
     } finally {
       setIsSaving(false)
     }

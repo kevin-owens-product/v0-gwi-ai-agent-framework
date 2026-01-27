@@ -50,6 +50,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface Organization {
   id: string
@@ -150,6 +151,7 @@ export default function SSODetailPage() {
     autoDeactivate: false,
     allowedDomains: "",
   })
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const fetchSSOConfig = useCallback(async () => {
     setIsLoading(true)
@@ -283,9 +285,11 @@ export default function SSODetailPage() {
     }
   }
 
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this SSO configuration?")) return
+  const handleDeleteClick = () => {
+    setShowDeleteDialog(true)
+  }
 
+  const handleDeleteConfirm = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/identity/sso/${ssoId}`, {
         method: "DELETE",
@@ -300,8 +304,10 @@ export default function SSODetailPage() {
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to delete SSO configuration")
+    } finally {
+      setShowDeleteDialog(false)
     }
-  }
+  }, [ssoId, router])
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -423,11 +429,21 @@ export default function SSODetailPage() {
               </>
             )}
           </Button>
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button variant="destructive" onClick={handleDeleteClick}>
             Delete
           </Button>
         </div>
       </div>
+
+      <ConfirmationDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        title="Delete SSO Configuration"
+        description="Are you sure you want to delete this SSO configuration? This action cannot be undone."
+        confirmText="Delete"
+        onConfirm={handleDeleteConfirm}
+        variant="destructive"
+      />
 
       <Tabs defaultValue="overview">
         <TabsList>

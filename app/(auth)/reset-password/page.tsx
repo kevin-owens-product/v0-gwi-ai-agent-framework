@@ -4,21 +4,23 @@ import type React from "react"
 import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { useTranslations } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Brain, Loader2, Eye, EyeOff, Check, AlertCircle, CheckCircle } from "lucide-react"
 
-const passwordRequirements = [
-  { label: "At least 8 characters", check: (p: string) => p.length >= 8 },
-  { label: "One uppercase letter", check: (p: string) => /[A-Z]/.test(p) },
-  { label: "One lowercase letter", check: (p: string) => /[a-z]/.test(p) },
-  { label: "One number", check: (p: string) => /\d/.test(p) },
-]
-
 function ResetPasswordForm() {
   const searchParams = useSearchParams()
   const token = searchParams.get("token")
+  const t = useTranslations('auth')
+
+  const passwordRequirements = [
+    { label: t('validation.atLeast8Characters'), check: (p: string) => p.length >= 8 },
+    { label: t('validation.oneUppercase'), check: (p: string) => /[A-Z]/.test(p) },
+    { label: t('validation.oneLowercase'), check: (p: string) => /[a-z]/.test(p) },
+    { label: t('validation.oneNumber'), check: (p: string) => /\d/.test(p) },
+  ]
 
   const [isValidating, setIsValidating] = useState(true)
   const [isValid, setIsValid] = useState(false)
@@ -40,7 +42,7 @@ function ResetPasswordForm() {
     async function validateToken() {
       if (!token) {
         setIsValidating(false)
-        setValidationError("No reset token provided")
+        setValidationError(t('errors.noResetToken'))
         return
       }
 
@@ -51,28 +53,28 @@ function ResetPasswordForm() {
         if (data.valid) {
           setIsValid(true)
         } else {
-          setValidationError(data.error || "Invalid or expired reset link")
+          setValidationError(data.error || t('errors.invalidOrExpiredLink'))
         }
       } catch {
-        setValidationError("Failed to validate reset link")
+        setValidationError(t('errors.failedToValidateLink'))
       } finally {
         setIsValidating(false)
       }
     }
 
     validateToken()
-  }, [token])
+  }, [token, t])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!passwordsMatch) {
-      setFormError("Passwords do not match")
+      setFormError(t('validation.passwordsDoNotMatch'))
       return
     }
 
     if (!isPasswordValid) {
-      setFormError("Please meet all password requirements")
+      setFormError(t('validation.meetPasswordRequirements'))
       return
     }
 
@@ -92,13 +94,13 @@ function ResetPasswordForm() {
       const data = await response.json()
 
       if (!response.ok) {
-        setFormError(data.error || "Failed to reset password")
+        setFormError(data.error || t('errors.failedToResetPassword'))
         return
       }
 
       setIsSuccess(true)
     } catch {
-      setFormError("An error occurred. Please try again.")
+      setFormError(t('errors.genericError'))
     } finally {
       setIsLoading(false)
     }
@@ -118,7 +120,7 @@ function ResetPasswordForm() {
         </div>
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Validating reset link...</p>
+          <p className="text-muted-foreground">{t('validatingLink')}</p>
         </div>
       </div>
     )
@@ -140,14 +142,14 @@ function ResetPasswordForm() {
           <AlertCircle className="h-8 w-8 text-destructive" />
         </div>
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Invalid Link</h1>
+          <h1 className="text-3xl font-bold">{t('invalidLink')}</h1>
           <p className="text-muted-foreground">{validationError}</p>
         </div>
         <Button asChild className="w-full">
-          <Link href="/forgot-password">Request New Reset Link</Link>
+          <Link href="/forgot-password">{t('requestNewResetLink')}</Link>
         </Button>
         <Button variant="ghost" asChild className="w-full">
-          <Link href="/login">Back to Sign In</Link>
+          <Link href="/login">{t('backToSignIn')}</Link>
         </Button>
       </div>
     )
@@ -169,13 +171,13 @@ function ResetPasswordForm() {
           <CheckCircle className="h-8 w-8 text-emerald-500" />
         </div>
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Password Reset!</h1>
+          <h1 className="text-3xl font-bold">{t('passwordReset')}</h1>
           <p className="text-muted-foreground">
-            Your password has been successfully reset. You can now sign in with your new password.
+            {t('passwordResetSuccess')}
           </p>
         </div>
         <Button asChild className="w-full">
-          <Link href="/login">Sign In</Link>
+          <Link href="/login">{t('signIn')}</Link>
         </Button>
       </div>
     )
@@ -194,8 +196,8 @@ function ResetPasswordForm() {
       </div>
 
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Create new password</h1>
-        <p className="text-muted-foreground">Enter your new password below</p>
+        <h1 className="text-3xl font-bold">{t('createNewPassword')}</h1>
+        <p className="text-muted-foreground">{t('enterNewPasswordBelow')}</p>
       </div>
 
       {formError && (
@@ -207,12 +209,12 @@ function ResetPasswordForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="password">New Password</Label>
+          <Label htmlFor="password">{t('newPassword')}</Label>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              placeholder="Create a strong password"
+              placeholder={t('newPasswordPlaceholder')}
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
@@ -244,12 +246,12 @@ function ResetPasswordForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword">{t('confirmPassword')}</Label>
           <div className="relative">
             <Input
               id="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm your password"
+              placeholder={t('confirmPasswordPlaceholder')}
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
               required
@@ -266,7 +268,7 @@ function ResetPasswordForm() {
           {formData.confirmPassword && (
             <div className={`flex items-center gap-1.5 text-xs ${passwordsMatch ? "text-emerald-500" : "text-destructive"}`}>
               {passwordsMatch ? <Check className="h-3 w-3" /> : <AlertCircle className="h-3 w-3" />}
-              {passwordsMatch ? "Passwords match" : "Passwords do not match"}
+              {passwordsMatch ? t('validation.passwordsMatch') : t('validation.passwordsDoNotMatch')}
             </div>
           )}
         </div>
@@ -279,27 +281,29 @@ function ResetPasswordForm() {
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Resetting password...
+              {t('resettingPassword')}
             </>
           ) : (
-            "Reset Password"
+            t('resetPassword')
           )}
         </Button>
       </form>
 
       <Button variant="ghost" asChild className="w-full">
-        <Link href="/login">Back to Sign In</Link>
+        <Link href="/login">{t('backToSignIn')}</Link>
       </Button>
     </div>
   )
 }
 
 function ResetPasswordSkeleton() {
+  const t = useTranslations('auth')
+
   return (
     <div className="space-y-8 text-center">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">{t('loading')}</p>
       </div>
     </div>
   )

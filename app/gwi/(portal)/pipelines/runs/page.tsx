@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { LoadingText } from "@/components/ui/loading-text"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   Table,
   TableBody,
@@ -195,13 +197,11 @@ async function PipelineRunsContent() {
               </TableBody>
             </Table>
           ) : (
-            <div className="flex flex-col items-center justify-center py-12">
-              <Activity className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No pipeline runs yet</h3>
-              <p className="text-muted-foreground">
-                Pipeline runs will appear here after execution
-              </p>
-            </div>
+            <EmptyState
+              icon={Activity}
+              title="No pipeline runs yet"
+              description="Pipeline runs will appear here after execution"
+            />
           )}
         </CardContent>
       </Card>
@@ -216,7 +216,7 @@ export default function PipelineRunsPage() {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Pipeline Runs</h1>
-            <p className="text-muted-foreground">Loading...</p>
+            <LoadingText />
           </div>
         </div>
       }

@@ -1,0 +1,448 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "create": "作成",
+    "search": "検索",
+    "filter": "フィルター",
+    "export": "エクスポート",
+    "import": "インポート",
+    "refresh": "更新",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ",
+    "submit": "送信",
+    "confirm": "確認",
+    "close": "閉じる",
+    "yes": "はい",
+    "no": "いいえ",
+    "or": "または",
+    "and": "および",
+    "all": "すべて",
+    "none": "なし",
+    "viewDetails": "詳細を表示",
+    "viewAll": "すべて表示",
+    "noResults": "結果が見つかりません",
+    "required": "必須",
+    "optional": "任意",
+    "actions": "操作",
+    "status": "ステータス",
+    "name": "名前",
+    "description": "説明",
+    "type": "種類",
+    "date": "日付",
+    "active": "有効",
+    "inactive": "無効",
+    "enabled": "有効",
+    "disabled": "無効",
+    "success": "成功",
+    "failed": "失敗",
+    "pending": "保留中",
+    "completed": "完了",
+    "running": "実行中",
+    "cancelled": "キャンセル済み"
+  },
+  "auth": {
+    "signIn": "ログイン",
+    "signOut": "ログアウト",
+    "signUp": "新規登録",
+    "getStarted": "始める",
+    "email": "メールアドレス",
+    "emailPlaceholder": "メールアドレスを入力",
+    "password": "パスワード",
+    "passwordPlaceholder": "パスワードを入力",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "resetPassword": "パスワードをリセット",
+    "confirmPassword": "パスワードを確認",
+    "rememberMe": "ログイン状態を保持",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "createAccount": "アカウントを作成",
+    "signInWith": "{provider}でログイン",
+    "orContinueWith": "または以下で続行",
+    "termsAgreement": "ログインすると、利用規約とプライバシーポリシーに同意したことになります",
+    "welcomeBack": "おかえりなさい",
+    "signInToContinue": "アカウントにログインして続行",
+    "createYourAccount": "アカウントを作成",
+    "getStartedFree": "無料で始める",
+    "errors": {
+      "invalidCredentials": "メールアドレスまたはパスワードが正しくありません",
+      "emailRequired": "メールアドレスは必須です",
+      "passwordRequired": "パスワードは必須です",
+      "invalidEmail": "有効なメールアドレスを入力してください",
+      "passwordTooShort": "パスワードは8文字以上である必要があります",
+      "accountNotFound": "アカウントが見つかりません",
+      "accountLocked": "アカウントがロックされています。サポートにお問い合わせください。",
+      "tooManyAttempts": "ログイン試行回数が多すぎます。しばらくしてからもう一度お試しください。",
+      "networkError": "ネットワークエラーです。接続を確認してください。"
+    },
+    "admin": {
+      "title": "管理者ログイン",
+      "description": "管理者ポータルにアクセスするにはログインしてください"
+    },
+    "gwi": {
+      "title": "GWIチームログイン",
+      "description": "GWIチームポータルにアクセスするにはログインしてください"
+    }
+  },
+  "navigation": {
+    "home": "ホーム",
+    "dashboard": "ダッシュボード",
+    "settings": "設定",
+    "profile": "プロフィール",
+    "help": "ヘルプ",
+    "docs": "ドキュメント",
+    "features": "機能",
+    "pricing": "料金",
+    "solutions": "ソリューション",
+    "agents": "エージェント",
+    "theme": "テーマ"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "selectLanguage": "言語を選択",
+    "preferences": "環境設定",
+    "notifications": "通知",
+    "security": "セキュリティ",
+    "account": "アカウント",
+    "appearance": "外観",
+    "general": "一般"
+  },
+  "landing": {
+    "header": {
+      "brandName": "GWI Insights",
+      "solutions": "ソリューション",
+      "salesTeams": "営業チーム",
+      "insightsTeams": "インサイトチーム",
+      "adSales": "広告営業",
+      "marketing": "マーケティング",
+      "productDevelopment": "製品開発",
+      "marketResearch": "市場調査",
+      "innovation": "イノベーション",
+      "features": "機能",
+      "agents": "エージェント",
+      "pricing": "料金",
+      "docs": "ドキュメント",
+      "signIn": "ログイン",
+      "getStarted": "始める",
+      "theme": "テーマ"
+    },
+    "hero": {
+      "title": "AIで実現する消費者インサイト",
+      "subtitle": "AIを活用したグローバル調査データの分析で、消費者への深い理解を実現",
+      "cta": "無料トライアルを開始",
+      "secondaryCta": "デモを見る"
+    },
+    "features": {
+      "title": "強力な機能",
+      "subtitle": "オーディエンスを理解するために必要なすべてが揃っています"
+    },
+    "pricing": {
+      "title": "シンプルで透明な料金体系",
+      "subtitle": "ニーズに合ったプランをお選びください",
+      "monthly": "月額",
+      "annual": "年額",
+      "perMonth": "/月",
+      "perYear": "/年",
+      "mostPopular": "人気No.1",
+      "getStarted": "始める",
+      "contactSales": "営業に問い合わせ",
+      "features": "機能"
+    },
+    "cta": {
+      "title": "始める準備はできましたか？",
+      "subtitle": "GWI Insightsを利用する数千の企業に参加しましょう",
+      "button": "無料トライアルを開始"
+    },
+    "footer": {
+      "company": "会社情報",
+      "about": "会社概要",
+      "careers": "採用情報",
+      "press": "プレスリリース",
+      "contact": "お問い合わせ",
+      "product": "製品",
+      "features": "機能",
+      "pricing": "料金",
+      "security": "セキュリティ",
+      "roadmap": "ロードマップ",
+      "resources": "リソース",
+      "docs": "ドキュメント",
+      "blog": "ブログ",
+      "support": "サポート",
+      "changelog": "更新履歴",
+      "legal": "法的情報",
+      "privacy": "プライバシー",
+      "terms": "利用規約",
+      "copyright": "© {year} GWI. All rights reserved."
+    }
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "welcome": "おかえりなさい",
+    "overview": "概要",
+    "recentActivity": "最近のアクティビティ",
+    "quickActions": "クイックアクション",
+    "header": {
+      "missionControl": "ミッションコントロール",
+      "allSystemsOperational": "全システム稼働中",
+      "realTimeOverview": "AIエージェントエコシステムのリアルタイム概要",
+      "last24Hours": "過去24時間",
+      "last7Days": "過去7日間",
+      "last30Days": "過去30日間",
+      "last90Days": "過去90日間",
+      "playground": "プレイグラウンド",
+      "newWorkflow": "新規ワークフロー"
+    },
+    "metrics": {
+      "activeAgents": "アクティブエージェント",
+      "totalCount": "合計{count}件",
+      "runningNow": "実行中",
+      "insightsGenerated": "生成されたインサイト",
+      "runsCount": "{count}回の実行",
+      "thisWeek": "今週",
+      "successRate": "成功率",
+      "excellent": "優秀",
+      "good": "良好",
+      "needsAttention": "要注意",
+      "noData": "データなし",
+      "completedRuns": "完了した実行",
+      "avgResponse": "平均応答時間",
+      "notAvailable": "N/A",
+      "fast": "高速",
+      "normal": "通常",
+      "slow": "低速",
+      "perRun": "実行あたり"
+    }
+  },
+  "audiences": {
+    "title": "オーディエンス",
+    "createAudience": "オーディエンスを作成",
+    "audienceBuilder": "オーディエンスビルダー",
+    "savedAudiences": "保存済みオーディエンス",
+    "comparison": "比較",
+    "overlap": "オーバーラップ",
+    "persona": "ペルソナ",
+    "mediaConsumption": "メディア消費",
+    "brandAffinities": "ブランド親和性"
+  },
+  "playground": {
+    "title": "プレイグラウンド",
+    "newSession": "新規セッション",
+    "chat": "チャット",
+    "context": "コンテキスト",
+    "sources": "ソース",
+    "workspace": "ワークスペース"
+  },
+  "collaboration": {
+    "share": "共有",
+    "comments": "コメント",
+    "addComment": "コメントを追加",
+    "reply": "返信",
+    "shareLink": "リンクを共有",
+    "copyLink": "リンクをコピー",
+    "linkCopied": "リンクをコピーしました！"
+  },
+  "savedViews": {
+    "title": "保存済みビュー",
+    "saveView": "ビューを保存",
+    "pinnedItems": "ピン留めされたアイテム",
+    "recentItems": "最近のアイテム"
+  },
+  "exports": {
+    "title": "エクスポート",
+    "exportData": "データをエクスポート",
+    "format": "形式",
+    "schedule": "スケジュール",
+    "history": "履歴"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "editProfile": "プロフィールを編集",
+    "avatar": "アバター",
+    "displayName": "表示名",
+    "emailAddress": "メールアドレス"
+  },
+  "gwi": {
+    "dashboard": {
+      "title": "GWIチームポータル",
+      "description": "調査、タクソノミー、データパイプライン、AI設定を管理",
+      "loading": "ダッシュボードを読み込み中...",
+      "unresolvedErrors": "{count, plural, one {# 件の未解決エラー} other {# 件の未解決エラー}}（過去24時間）",
+      "reviewErrors": "システムの健全性を維持するために問題を確認して解決してください",
+      "viewErrors": "エラーを表示"
+    },
+    "stats": {
+      "surveys": "調査",
+      "active": "{count}件が有効",
+      "taxonomyCategories": "タクソノミーカテゴリ",
+      "dataPipelines": "データパイプライン",
+      "llmConfigurations": "LLM設定",
+      "agentTemplates": "エージェントテンプレート",
+      "dataSources": "データソース"
+    },
+    "pipelineRuns": {
+      "title": "最近のパイプライン実行",
+      "description": "最新のパイプライン実行ステータス",
+      "viewAll": "すべて表示",
+      "noPipelines": "パイプライン実行履歴がありません",
+      "createFirst": "最初のパイプラインを作成",
+      "records": "{count}件のレコード",
+      "started": "{date}に開始"
+    },
+    "quickActions": {
+      "createSurvey": "調査を作成",
+      "createSurveyDesc": "新しい調査を設計",
+      "newPipeline": "新規パイプライン",
+      "newPipelineDesc": "データ処理を設定",
+      "testPrompts": "プロンプトをテスト",
+      "testPromptsDesc": "プロンプトテンプレートを試す"
+    },
+    "navigation": {
+      "surveys": "調査",
+      "taxonomy": "タクソノミー",
+      "pipelines": "パイプライン",
+      "llm": "LLM",
+      "agents": "エージェント",
+      "dataSources": "データソース",
+      "monitoring": "モニタリング",
+      "system": "システム",
+      "services": "サービス"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "管理者ポータル",
+      "description": "プラットフォーム管理とテナント管理"
+    },
+    "navigation": {
+      "dashboard": "ダッシュボード",
+      "organizations": "組織",
+      "users": "ユーザー",
+      "plans": "プラン",
+      "features": "機能",
+      "security": "セキュリティ",
+      "identity": "アイデンティティ",
+      "sso": "SSO",
+      "domains": "ドメイン",
+      "devices": "デバイス",
+      "scim": "SCIM",
+      "hierarchy": "階層",
+      "settings": "設定",
+      "entitlements": "権限"
+    },
+    "plans": {
+      "title": "プラン",
+      "description": "サブスクリプションプランを管理",
+      "createPlan": "プランを作成",
+      "editPlan": "プランを編集",
+      "planName": "プラン名",
+      "pricing": "料金",
+      "features": "機能",
+      "limits": "制限"
+    },
+    "security": {
+      "title": "セキュリティ",
+      "policies": "ポリシー",
+      "sessions": "セッション",
+      "ipBlocklist": "IPブロックリスト",
+      "threats": "脅威",
+      "violations": "違反"
+    },
+    "identity": {
+      "title": "アイデンティティ管理",
+      "ssoTitle": "シングルサインオン",
+      "ssoDescription": "SSOプロバイダーを設定",
+      "domainsTitle": "ドメイン",
+      "domainsDescription": "認証済みドメインを管理",
+      "scimTitle": "SCIM",
+      "scimDescription": "ユーザープロビジョニング設定"
+    },
+    "organizations": {
+      "title": "組織",
+      "description": "テナント組織を管理",
+      "createOrg": "組織を作成",
+      "orgName": "組織名",
+      "status": "ステータス",
+      "plan": "プラン",
+      "members": "メンバー",
+      "defaultLanguage": "デフォルト言語"
+    }
+  },
+  "ui": {
+    "dialog": {
+      "confirm": "確認",
+      "cancel": "キャンセル",
+      "close": "閉じる",
+      "ok": "OK",
+      "yes": "はい",
+      "no": "いいえ",
+      "continue": "続行",
+      "goBack": "戻る"
+    },
+    "alert": {
+      "areYouSure": "よろしいですか？",
+      "cannotUndo": "この操作は取り消せません。",
+      "deleteConfirm": "本当に削除しますか？",
+      "unsavedChanges": "保存されていない変更があります",
+      "discardChanges": "変更を破棄しますか？"
+    },
+    "theme": {
+      "light": "ライト",
+      "dark": "ダーク",
+      "system": "システム",
+      "toggleTheme": "テーマを切り替え"
+    },
+    "commandPalette": {
+      "placeholder": "コマンドを入力または検索...",
+      "noResults": "結果が見つかりません",
+      "recentSearches": "最近の検索",
+      "suggestions": "候補"
+    },
+    "shortcuts": {
+      "title": "キーボードショートカット",
+      "general": "一般",
+      "navigation": "ナビゲーション",
+      "actions": "操作"
+    },
+    "errors": {
+      "somethingWentWrong": "問題が発生しました",
+      "tryAgain": "再試行",
+      "pageNotFound": "ページが見つかりません",
+      "pageNotFoundDescription": "申し訳ございません。お探しのページが見つかりませんでした。移動または削除された可能性があります。",
+      "backToDashboard": "ダッシュボードに戻る",
+      "goHome": "ホームへ戻る",
+      "unexpectedError": "予期しないエラーが発生しました",
+      "unexpectedErrorDescription": "予期しないエラーが発生しました。チームに通知され、修正に取り組んでいます。",
+      "reloadPage": "ページを再読み込み",
+      "errorId": "エラーID: {id}",
+      "contactSupport": "サポートに問い合わせ"
+    },
+    "loading": {
+      "loading": "読み込み中...",
+      "pleaseWait": "お待ちください..."
+    },
+    "empty": {
+      "noData": "データがありません",
+      "noItems": "アイテムが見つかりません",
+      "getStarted": "最初のアイテムを作成して始めましょう"
+    },
+    "pagination": {
+      "previous": "前へ",
+      "next": "次へ",
+      "page": "{total}ページ中{current}ページ",
+      "showingItems": "{total}件中{start}〜{end}件を表示"
+    },
+    "table": {
+      "noResults": "結果なし",
+      "sortAscending": "昇順で並べ替え",
+      "sortDescending": "降順で並べ替え",
+      "selectAll": "すべて選択",
+      "deselectAll": "すべて選択解除"
+    }
+  }
+}

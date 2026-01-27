@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   Key,
   Plus,
@@ -90,6 +91,8 @@ export default function SSOListingPage() {
   const [providerFilter, setProviderFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [configToDelete, setConfigToDelete] = useState<string | null>(null)
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 20,
@@ -188,11 +191,16 @@ export default function SSOListingPage() {
     }
   }
 
-  const handleDelete = async (configId: string) => {
-    if (!confirm("Are you sure you want to delete this SSO configuration?")) return
+  const handleDeleteClick = (configId: string) => {
+    setConfigToDelete(configId)
+    setShowDeleteConfirm(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!configToDelete) return
 
     try {
-      const response = await fetch(`/api/admin/identity/sso/${configId}`, {
+      const response = await fetch(`/api/admin/identity/sso/${configToDelete}`, {
         method: "DELETE",
       })
 
@@ -205,6 +213,9 @@ export default function SSOListingPage() {
       fetchSSOConfigs()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to delete SSO configuration")
+    } finally {
+      setShowDeleteConfirm(false)
+      setConfigToDelete(null)
     }
   }
 
@@ -616,7 +627,7 @@ export default function SSOListingPage() {
         isLoading={loading}
         emptyMessage="No SSO configurations found"
         viewHref={(config) => `/admin/identity/sso/${config.id}`}
-        onDelete={handleDelete}
+        onDelete={handleDeleteClick}
         deleteConfirmTitle="Delete SSO Configuration"
         deleteConfirmDescription={(config) =>
           `Are you sure you want to delete the SSO configuration for ${
@@ -632,6 +643,16 @@ export default function SSOListingPage() {
         enableSelection={true}
         selectedIds={selectedIds}
         onSelectionChange={setSelectedIds}
+      />
+
+      <ConfirmationDialog
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        title="Delete SSO Configuration"
+        description="Are you sure you want to delete this SSO configuration? Users will no longer be able to sign in using this provider."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={handleConfirmDelete}
       />
     </div>
   )

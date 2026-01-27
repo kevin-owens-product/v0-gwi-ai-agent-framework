@@ -1,0 +1,448 @@
+{
+  "common": {
+    "loading": "লোড হচ্ছে...",
+    "error": "ত্রুটি",
+    "save": "সংরক্ষণ করুন",
+    "cancel": "বাতিল করুন",
+    "delete": "মুছে ফেলুন",
+    "edit": "সম্পাদনা করুন",
+    "create": "তৈরি করুন",
+    "search": "অনুসন্ধান করুন",
+    "filter": "ফিল্টার",
+    "export": "এক্সপোর্ট",
+    "import": "ইম্পোর্ট",
+    "refresh": "রিফ্রেশ করুন",
+    "back": "পেছনে",
+    "next": "পরবর্তী",
+    "previous": "পূর্ববর্তী",
+    "submit": "জমা দিন",
+    "confirm": "নিশ্চিত করুন",
+    "close": "বন্ধ করুন",
+    "yes": "হ্যাঁ",
+    "no": "না",
+    "or": "অথবা",
+    "and": "এবং",
+    "all": "সব",
+    "none": "কোনোটিই নয়",
+    "viewDetails": "বিস্তারিত দেখুন",
+    "viewAll": "সব দেখুন",
+    "noResults": "কোনো ফলাফল পাওয়া যায়নি",
+    "required": "আবশ্যক",
+    "optional": "ঐচ্ছিক",
+    "actions": "কার্যক্রম",
+    "status": "অবস্থা",
+    "name": "নাম",
+    "description": "বিবরণ",
+    "type": "ধরন",
+    "date": "তারিখ",
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়",
+    "enabled": "সক্ষম",
+    "disabled": "অক্ষম",
+    "success": "সফল",
+    "failed": "ব্যর্থ",
+    "pending": "মুলতুবি",
+    "completed": "সম্পন্ন",
+    "running": "চলমান",
+    "cancelled": "বাতিল করা হয়েছে"
+  },
+  "auth": {
+    "signIn": "সাইন ইন করুন",
+    "signOut": "সাইন আউট করুন",
+    "signUp": "সাইন আপ করুন",
+    "getStarted": "শুরু করুন",
+    "email": "ইমেইল",
+    "emailPlaceholder": "আপনার ইমেইল লিখুন",
+    "password": "পাসওয়ার্ড",
+    "passwordPlaceholder": "আপনার পাসওয়ার্ড লিখুন",
+    "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+    "resetPassword": "পাসওয়ার্ড রিসেট করুন",
+    "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
+    "rememberMe": "আমাকে মনে রাখুন",
+    "noAccount": "অ্যাকাউন্ট নেই?",
+    "hasAccount": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+    "createAccount": "অ্যাকাউন্ট তৈরি করুন",
+    "signInWith": "{provider} দিয়ে সাইন ইন করুন",
+    "orContinueWith": "অথবা এর সাথে চালিয়ে যান",
+    "termsAgreement": "সাইন ইন করে, আপনি আমাদের পরিষেবার শর্তাবলী এবং গোপনীয়তা নীতিতে সম্মত হচ্ছেন",
+    "welcomeBack": "স্বাগতম",
+    "signInToContinue": "আপনার অ্যাকাউন্টে প্রবেশ করতে সাইন ইন করুন",
+    "createYourAccount": "আপনার অ্যাকাউন্ট তৈরি করুন",
+    "getStartedFree": "বিনামূল্যে শুরু করুন",
+    "errors": {
+      "invalidCredentials": "অবৈধ ইমেইল বা পাসওয়ার্ড",
+      "emailRequired": "ইমেইল আবশ্যক",
+      "passwordRequired": "পাসওয়ার্ড আবশ্যক",
+      "invalidEmail": "অনুগ্রহ করে একটি বৈধ ইমেইল লিখুন",
+      "passwordTooShort": "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে",
+      "accountNotFound": "অ্যাকাউন্ট পাওয়া যায়নি",
+      "accountLocked": "অ্যাকাউন্ট লক করা হয়েছে। অনুগ্রহ করে সহায়তার সাথে যোগাযোগ করুন।",
+      "tooManyAttempts": "অনেক বেশি লগইন প্রচেষ্টা। অনুগ্রহ করে পরে আবার চেষ্টা করুন।",
+      "networkError": "নেটওয়ার্ক ত্রুটি। অনুগ্রহ করে আপনার সংযোগ পরীক্ষা করুন।"
+    },
+    "admin": {
+      "title": "অ্যাডমিন লগইন",
+      "description": "অ্যাডমিন পোর্টালে প্রবেশ করতে সাইন ইন করুন"
+    },
+    "gwi": {
+      "title": "GWI টিম লগইন",
+      "description": "GWI টিম পোর্টালে প্রবেশ করতে সাইন ইন করুন"
+    }
+  },
+  "navigation": {
+    "home": "হোম",
+    "dashboard": "ড্যাশবোর্ড",
+    "settings": "সেটিংস",
+    "profile": "প্রোফাইল",
+    "help": "সাহায্য",
+    "docs": "ডকুমেন্টেশন",
+    "features": "বৈশিষ্ট্য",
+    "pricing": "মূল্য",
+    "solutions": "সমাধান",
+    "agents": "এজেন্ট",
+    "theme": "থিম"
+  },
+  "settings": {
+    "title": "সেটিংস",
+    "language": "ভাষা",
+    "selectLanguage": "ভাষা নির্বাচন করুন",
+    "preferences": "পছন্দসমূহ",
+    "notifications": "বিজ্ঞপ্তি",
+    "security": "নিরাপত্তা",
+    "account": "অ্যাকাউন্ট",
+    "appearance": "চেহারা",
+    "general": "সাধারণ"
+  },
+  "landing": {
+    "header": {
+      "brandName": "GWI Insights",
+      "solutions": "সমাধান",
+      "salesTeams": "সেলস টিম",
+      "insightsTeams": "ইনসাইটস টিম",
+      "adSales": "বিজ্ঞাপন বিক্রয়",
+      "marketing": "মার্কেটিং",
+      "productDevelopment": "পণ্য উন্নয়ন",
+      "marketResearch": "বাজার গবেষণা",
+      "innovation": "উদ্ভাবন",
+      "features": "বৈশিষ্ট্য",
+      "agents": "এজেন্ট",
+      "pricing": "মূল্য",
+      "docs": "ডকুমেন্টেশন",
+      "signIn": "সাইন ইন করুন",
+      "getStarted": "শুরু করুন",
+      "theme": "থিম"
+    },
+    "hero": {
+      "title": "AI দ্বারা চালিত ভোক্তা অন্তর্দৃষ্টি",
+      "subtitle": "বৈশ্বিক সার্ভে ডেটার AI-চালিত বিশ্লেষণের মাধ্যমে গভীর ভোক্তা বোঝাপড়া আনলক করুন",
+      "cta": "বিনামূল্যে ট্রায়াল শুরু করুন",
+      "secondaryCta": "ডেমো দেখুন"
+    },
+    "features": {
+      "title": "শক্তিশালী বৈশিষ্ট্যসমূহ",
+      "subtitle": "আপনার দর্শকদের বুঝতে প্রয়োজনীয় সবকিছু"
+    },
+    "pricing": {
+      "title": "সহজ, স্বচ্ছ মূল্য",
+      "subtitle": "আপনার প্রয়োজন অনুযায়ী প্ল্যান বেছে নিন",
+      "monthly": "মাসিক",
+      "annual": "বার্ষিক",
+      "perMonth": "/মাস",
+      "perYear": "/বছর",
+      "mostPopular": "সবচেয়ে জনপ্রিয়",
+      "getStarted": "শুরু করুন",
+      "contactSales": "সেলসের সাথে যোগাযোগ করুন",
+      "features": "বৈশিষ্ট্যসমূহ"
+    },
+    "cta": {
+      "title": "শুরু করতে প্রস্তুত?",
+      "subtitle": "হাজার হাজার কোম্পানি GWI Insights ব্যবহার করছে, আপনিও যোগ দিন",
+      "button": "বিনামূল্যে ট্রায়াল শুরু করুন"
+    },
+    "footer": {
+      "company": "কোম্পানি",
+      "about": "আমাদের সম্পর্কে",
+      "careers": "ক্যারিয়ার",
+      "press": "প্রেস",
+      "contact": "যোগাযোগ",
+      "product": "পণ্য",
+      "features": "বৈশিষ্ট্য",
+      "pricing": "মূল্য",
+      "security": "নিরাপত্তা",
+      "roadmap": "রোডম্যাপ",
+      "resources": "রিসোর্স",
+      "docs": "ডকুমেন্টেশন",
+      "blog": "ব্লগ",
+      "support": "সহায়তা",
+      "changelog": "পরিবর্তন লগ",
+      "legal": "আইনি",
+      "privacy": "গোপনীয়তা",
+      "terms": "শর্তাবলী",
+      "copyright": "© {year} GWI. সর্বস্বত্ব সংরক্ষিত।"
+    }
+  },
+  "dashboard": {
+    "title": "ড্যাশবোর্ড",
+    "welcome": "স্বাগতম",
+    "overview": "সংক্ষিপ্ত বিবরণ",
+    "recentActivity": "সাম্প্রতিক কার্যক্রম",
+    "quickActions": "দ্রুত কার্যক্রম",
+    "header": {
+      "missionControl": "মিশন কন্ট্রোল",
+      "allSystemsOperational": "সব সিস্টেম চালু আছে",
+      "realTimeOverview": "আপনার AI এজেন্ট ইকোসিস্টেমের রিয়েল-টাইম ওভারভিউ",
+      "last24Hours": "গত ২৪ ঘণ্টা",
+      "last7Days": "গত ৭ দিন",
+      "last30Days": "গত ৩০ দিন",
+      "last90Days": "গত ৯০ দিন",
+      "playground": "প্লেগ্রাউন্ড",
+      "newWorkflow": "নতুন ওয়ার্কফ্লো"
+    },
+    "metrics": {
+      "activeAgents": "সক্রিয় এজেন্ট",
+      "totalCount": "মোট {count}",
+      "runningNow": "এখন চলছে",
+      "insightsGenerated": "তৈরি হওয়া ইনসাইট",
+      "runsCount": "{count} টি রান",
+      "thisWeek": "এই সপ্তাহে",
+      "successRate": "সফলতার হার",
+      "excellent": "চমৎকার",
+      "good": "ভালো",
+      "needsAttention": "মনোযোগ প্রয়োজন",
+      "noData": "কোনো ডেটা নেই",
+      "completedRuns": "সম্পন্ন রান",
+      "avgResponse": "গড় প্রতিক্রিয়া",
+      "notAvailable": "প্রযোজ্য নয়",
+      "fast": "দ্রুত",
+      "normal": "স্বাভাবিক",
+      "slow": "ধীর",
+      "perRun": "প্রতি রান"
+    }
+  },
+  "audiences": {
+    "title": "দর্শক",
+    "createAudience": "দর্শক তৈরি করুন",
+    "audienceBuilder": "দর্শক বিল্ডার",
+    "savedAudiences": "সংরক্ষিত দর্শক",
+    "comparison": "তুলনা",
+    "overlap": "ওভারল্যাপ",
+    "persona": "পার্সোনা",
+    "mediaConsumption": "মিডিয়া ব্যবহার",
+    "brandAffinities": "ব্র্যান্ড সংযোগ"
+  },
+  "playground": {
+    "title": "প্লেগ্রাউন্ড",
+    "newSession": "নতুন সেশন",
+    "chat": "চ্যাট",
+    "context": "প্রসঙ্গ",
+    "sources": "উৎস",
+    "workspace": "ওয়ার্কস্পেস"
+  },
+  "collaboration": {
+    "share": "শেয়ার করুন",
+    "comments": "মন্তব্য",
+    "addComment": "মন্তব্য যোগ করুন",
+    "reply": "উত্তর দিন",
+    "shareLink": "লিঙ্ক শেয়ার করুন",
+    "copyLink": "লিঙ্ক কপি করুন",
+    "linkCopied": "লিঙ্ক কপি হয়েছে!"
+  },
+  "savedViews": {
+    "title": "সংরক্ষিত ভিউ",
+    "saveView": "ভিউ সংরক্ষণ করুন",
+    "pinnedItems": "পিন করা আইটেম",
+    "recentItems": "সাম্প্রতিক আইটেম"
+  },
+  "exports": {
+    "title": "এক্সপোর্ট",
+    "exportData": "ডেটা এক্সপোর্ট করুন",
+    "format": "ফরম্যাট",
+    "schedule": "সময়সূচী",
+    "history": "ইতিহাস"
+  },
+  "profile": {
+    "title": "প্রোফাইল",
+    "editProfile": "প্রোফাইল সম্পাদনা করুন",
+    "avatar": "অবতার",
+    "displayName": "প্রদর্শিত নাম",
+    "emailAddress": "ইমেইল ঠিকানা"
+  },
+  "gwi": {
+    "dashboard": {
+      "title": "GWI টিম পোর্টাল",
+      "description": "সার্ভে, ট্যাক্সোনমি, ডেটা পাইপলাইন এবং AI কনফিগারেশন পরিচালনা করুন",
+      "loading": "ড্যাশবোর্ড লোড হচ্ছে...",
+      "unresolvedErrors": "{count, plural, one {# টি অমীমাংসিত ত্রুটি} other {# টি অমীমাংসিত ত্রুটি}} গত ২৪ ঘণ্টায়",
+      "reviewErrors": "সিস্টেমের স্বাস্থ্য বজায় রাখতে সমস্যাগুলি পর্যালোচনা এবং সমাধান করুন",
+      "viewErrors": "ত্রুটি দেখুন"
+    },
+    "stats": {
+      "surveys": "সার্ভে",
+      "active": "{count} টি সক্রিয়",
+      "taxonomyCategories": "ট্যাক্সোনমি বিভাগ",
+      "dataPipelines": "ডেটা পাইপলাইন",
+      "llmConfigurations": "LLM কনফিগারেশন",
+      "agentTemplates": "এজেন্ট টেমপ্লেট",
+      "dataSources": "ডেটা উৎস"
+    },
+    "pipelineRuns": {
+      "title": "সাম্প্রতিক পাইপলাইন রান",
+      "description": "সর্বশেষ পাইপলাইন এক্সিকিউশন অবস্থা",
+      "viewAll": "সব দেখুন",
+      "noPipelines": "এখনো কোনো পাইপলাইন রান নেই",
+      "createFirst": "আপনার প্রথম পাইপলাইন তৈরি করুন",
+      "records": "{count} টি রেকর্ড",
+      "started": "{date} এ শুরু হয়েছে"
+    },
+    "quickActions": {
+      "createSurvey": "সার্ভে তৈরি করুন",
+      "createSurveyDesc": "একটি নতুন সার্ভে ডিজাইন করুন",
+      "newPipeline": "নতুন পাইপলাইন",
+      "newPipelineDesc": "ডেটা প্রসেসিং সেটআপ করুন",
+      "testPrompts": "প্রম্পট পরীক্ষা করুন",
+      "testPromptsDesc": "প্রম্পট টেমপ্লেট চেষ্টা করুন"
+    },
+    "navigation": {
+      "surveys": "সার্ভে",
+      "taxonomy": "ট্যাক্সোনমি",
+      "pipelines": "পাইপলাইন",
+      "llm": "LLM",
+      "agents": "এজেন্ট",
+      "dataSources": "ডেটা উৎস",
+      "monitoring": "মনিটরিং",
+      "system": "সিস্টেম",
+      "services": "সার্ভিস"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "অ্যাডমিন পোর্টাল",
+      "description": "প্ল্যাটফর্ম প্রশাসন এবং টেন্যান্ট ব্যবস্থাপনা"
+    },
+    "navigation": {
+      "dashboard": "ড্যাশবোর্ড",
+      "organizations": "সংস্থাসমূহ",
+      "users": "ব্যবহারকারী",
+      "plans": "প্ল্যান",
+      "features": "বৈশিষ্ট্য",
+      "security": "নিরাপত্তা",
+      "identity": "পরিচয়",
+      "sso": "SSO",
+      "domains": "ডোমেইন",
+      "devices": "ডিভাইস",
+      "scim": "SCIM",
+      "hierarchy": "শ্রেণিবিন্যাস",
+      "settings": "সেটিংস",
+      "entitlements": "এনটাইটেলমেন্ট"
+    },
+    "plans": {
+      "title": "প্ল্যান",
+      "description": "সাবস্ক্রিপশন প্ল্যান পরিচালনা করুন",
+      "createPlan": "প্ল্যান তৈরি করুন",
+      "editPlan": "প্ল্যান সম্পাদনা করুন",
+      "planName": "প্ল্যানের নাম",
+      "pricing": "মূল্য",
+      "features": "বৈশিষ্ট্যসমূহ",
+      "limits": "সীমাবদ্ধতা"
+    },
+    "security": {
+      "title": "নিরাপত্তা",
+      "policies": "নীতিমালা",
+      "sessions": "সেশন",
+      "ipBlocklist": "IP ব্লকলিস্ট",
+      "threats": "হুমকি",
+      "violations": "লঙ্ঘন"
+    },
+    "identity": {
+      "title": "পরিচয় ব্যবস্থাপনা",
+      "ssoTitle": "Single Sign-On",
+      "ssoDescription": "SSO প্রদানকারী কনফিগার করুন",
+      "domainsTitle": "ডোমেইন",
+      "domainsDescription": "যাচাইকৃত ডোমেইন পরিচালনা করুন",
+      "scimTitle": "SCIM",
+      "scimDescription": "ব্যবহারকারী প্রভিশনিং সেটিংস"
+    },
+    "organizations": {
+      "title": "সংস্থাসমূহ",
+      "description": "টেন্যান্ট সংস্থা পরিচালনা করুন",
+      "createOrg": "সংস্থা তৈরি করুন",
+      "orgName": "সংস্থার নাম",
+      "status": "অবস্থা",
+      "plan": "প্ল্যান",
+      "members": "সদস্য",
+      "defaultLanguage": "ডিফল্ট ভাষা"
+    }
+  },
+  "ui": {
+    "dialog": {
+      "confirm": "নিশ্চিত করুন",
+      "cancel": "বাতিল করুন",
+      "close": "বন্ধ করুন",
+      "ok": "ঠিক আছে",
+      "yes": "হ্যাঁ",
+      "no": "না",
+      "continue": "চালিয়ে যান",
+      "goBack": "ফিরে যান"
+    },
+    "alert": {
+      "areYouSure": "আপনি কি নিশ্চিত?",
+      "cannotUndo": "এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+      "deleteConfirm": "আপনি কি এটি মুছে ফেলতে চান?",
+      "unsavedChanges": "আপনার অসংরক্ষিত পরিবর্তন আছে",
+      "discardChanges": "পরিবর্তনগুলি বাতিল করবেন?"
+    },
+    "theme": {
+      "light": "লাইট",
+      "dark": "ডার্ক",
+      "system": "সিস্টেম",
+      "toggleTheme": "থিম পরিবর্তন করুন"
+    },
+    "commandPalette": {
+      "placeholder": "একটি কমান্ড লিখুন বা অনুসন্ধান করুন...",
+      "noResults": "কোনো ফলাফল পাওয়া যায়নি",
+      "recentSearches": "সাম্প্রতিক অনুসন্ধান",
+      "suggestions": "পরামর্শ"
+    },
+    "shortcuts": {
+      "title": "কীবোর্ড শর্টকাট",
+      "general": "সাধারণ",
+      "navigation": "নেভিগেশন",
+      "actions": "কার্যক্রম"
+    },
+    "errors": {
+      "somethingWentWrong": "কিছু ভুল হয়েছে",
+      "tryAgain": "আবার চেষ্টা করুন",
+      "pageNotFound": "পৃষ্ঠা পাওয়া যায়নি",
+      "pageNotFoundDescription": "দুঃখিত, আপনি যে পৃষ্ঠাটি খুঁজছেন তা আমরা খুঁজে পাইনি। এটি সরানো বা মুছে ফেলা হয়ে থাকতে পারে।",
+      "backToDashboard": "ড্যাশবোর্ডে ফিরে যান",
+      "goHome": "হোমে যান",
+      "unexpectedError": "একটি অপ্রত্যাশিত ত্রুটি ঘটেছে",
+      "unexpectedErrorDescription": "আমরা একটি অপ্রত্যাশিত ত্রুটির সম্মুখীন হয়েছি। আমাদের টিমকে জানানো হয়েছে এবং তারা সমাধানে কাজ করছে।",
+      "reloadPage": "পৃষ্ঠা পুনরায় লোড করুন",
+      "errorId": "ত্রুটি ID: {id}",
+      "contactSupport": "সহায়তার সাথে যোগাযোগ করুন"
+    },
+    "loading": {
+      "loading": "লোড হচ্ছে...",
+      "pleaseWait": "অনুগ্রহ করে অপেক্ষা করুন..."
+    },
+    "empty": {
+      "noData": "কোনো ডেটা নেই",
+      "noItems": "কোনো আইটেম পাওয়া যায়নি",
+      "getStarted": "আপনার প্রথম আইটেম তৈরি করে শুরু করুন"
+    },
+    "pagination": {
+      "previous": "পূর্ববর্তী",
+      "next": "পরবর্তী",
+      "page": "পৃষ্ঠা {current} এর মধ্যে {total}",
+      "showingItems": "{total} টি আইটেমের মধ্যে {start} থেকে {end} দেখানো হচ্ছে"
+    },
+    "table": {
+      "noResults": "কোনো ফলাফল নেই",
+      "sortAscending": "ঊর্ধ্বক্রমে সাজান",
+      "sortDescending": "অধঃক্রমে সাজান",
+      "selectAll": "সব নির্বাচন করুন",
+      "deselectAll": "সব অনির্বাচিত করুন"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -26,18 +27,20 @@ import { PageTracker } from "@/components/tracking/PageTracker"
 type Notification = {
   id: string
   type: "workflow" | "agent" | "team" | "system" | "report"
-  title: string
+  titleKey: string
   description: string
   time: string
   read: boolean
   actionUrl?: string
 }
 
+// Note: In a real app, these would come from an API with already-translated titles
+// or use translation keys that are resolved at render time
 const initialNotifications: Notification[] = [
   {
     id: "1",
     type: "workflow",
-    title: "Workflow completed",
+    titleKey: "workflowCompleted",
     description: "Your 'Weekly Competitive Analysis' workflow has finished running",
     time: "5 minutes ago",
     read: false,
@@ -46,7 +49,7 @@ const initialNotifications: Notification[] = [
   {
     id: "2",
     type: "agent",
-    title: "New agent available",
+    titleKey: "newAgentAvailable",
     description: "The 'Trend Forecaster Pro' agent is now available in the Agent Store",
     time: "1 hour ago",
     read: false,
@@ -55,7 +58,7 @@ const initialNotifications: Notification[] = [
   {
     id: "3",
     type: "team",
-    title: "Team member joined",
+    titleKey: "teamMemberJoined",
     description: "Sarah Chen has joined your workspace",
     time: "2 hours ago",
     read: false,
@@ -63,7 +66,7 @@ const initialNotifications: Notification[] = [
   {
     id: "4",
     type: "system",
-    title: "Usage limit approaching",
+    titleKey: "usageLimitApproaching",
     description: "You've used 80% of your monthly query limit",
     time: "3 hours ago",
     read: true,
@@ -72,7 +75,7 @@ const initialNotifications: Notification[] = [
   {
     id: "5",
     type: "report",
-    title: "Report ready for download",
+    titleKey: "reportReady",
     description: "Your 'Q4 Consumer Insights' report is ready",
     time: "5 hours ago",
     read: true,
@@ -81,7 +84,7 @@ const initialNotifications: Notification[] = [
   {
     id: "6",
     type: "workflow",
-    title: "Workflow failed",
+    titleKey: "workflowFailed",
     description: "The 'Daily Brand Tracking' workflow encountered an error",
     time: "1 day ago",
     read: true,
@@ -90,7 +93,7 @@ const initialNotifications: Notification[] = [
   {
     id: "7",
     type: "agent",
-    title: "Agent update available",
+    titleKey: "agentUpdateAvailable",
     description: "Audience Strategist Pro has been updated to v2.5.0",
     time: "2 days ago",
     read: true,
@@ -98,7 +101,7 @@ const initialNotifications: Notification[] = [
   {
     id: "8",
     type: "system",
-    title: "Scheduled maintenance",
+    titleKey: "scheduledMaintenance",
     description: "Platform maintenance scheduled for this Sunday, 2-4 AM UTC",
     time: "3 days ago",
     read: true,
@@ -123,6 +126,9 @@ const getIcon = (type: Notification["type"]) => {
 }
 
 export default function NotificationsPage() {
+  const t = useTranslations("notifications")
+  const tCommon = useTranslations("common")
+
   const [notifications, setNotifications] = useState(initialNotifications)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -164,28 +170,39 @@ export default function NotificationsPage() {
     return notifications.filter((n) => n.type === type)
   }
 
+  // Get translated notification title
+  const getNotificationTitle = (titleKey: string) => {
+    try {
+      return t(`titles.${titleKey}`)
+    } catch {
+      return titleKey
+    }
+  }
+
   return (
     <div className="space-y-6">
       <PageTracker pageName="Notifications" metadata={{ unreadCount }} />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Notifications</h1>
+          <h1 className="text-3xl font-bold">{t("page.title")}</h1>
           <p className="text-muted-foreground">
-            {unreadCount > 0 ? `You have ${unreadCount} unread notifications` : "You're all caught up!"}
+            {unreadCount > 0
+              ? t("page.description", { count: unreadCount })
+              : t("page.allCaughtUp")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
             <Link href="/dashboard/settings/notifications">
               <Settings className="mr-2 h-4 w-4" />
-              Settings
+              {t("page.settings")}
             </Link>
           </Button>
           {!allRead && (
             <Button variant="outline" size="sm" onClick={markAllAsRead}>
               <CheckCheck className="mr-2 h-4 w-4" />
-              Mark all read
+              {t("page.markAllRead")}
             </Button>
           )}
         </div>
@@ -195,14 +212,16 @@ export default function NotificationsPage() {
       {selectedIds.length > 0 && (
         <Card>
           <CardContent className="py-3 flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">{selectedIds.length} selected</span>
+            <span className="text-sm text-muted-foreground">
+              {t("page.selected", { count: selectedIds.length })}
+            </span>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" onClick={() => setSelectedIds([])}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button variant="destructive" size="sm" onClick={deleteSelected}>
                 <Trash2 className="mr-2 h-4 w-4" />
-                Delete
+                {tCommon("delete")}
               </Button>
             </div>
           </CardContent>
@@ -213,17 +232,17 @@ export default function NotificationsPage() {
       <Tabs defaultValue="all">
         <TabsList>
           <TabsTrigger value="all">
-            All
+            {t("types.all")}
             {unreadCount > 0 && (
               <Badge variant="secondary" className="ml-2">
                 {unreadCount}
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="workflow">Workflows</TabsTrigger>
-          <TabsTrigger value="agent">Agents</TabsTrigger>
-          <TabsTrigger value="team">Team</TabsTrigger>
-          <TabsTrigger value="system">System</TabsTrigger>
+          <TabsTrigger value="workflow">{t("types.workflow")}</TabsTrigger>
+          <TabsTrigger value="agent">{t("types.agent")}</TabsTrigger>
+          <TabsTrigger value="team">{t("types.team")}</TabsTrigger>
+          <TabsTrigger value="system">{t("types.system")}</TabsTrigger>
         </TabsList>
 
         {["all", "workflow", "agent", "team", "system", "report"].map((type) => (
@@ -235,14 +254,14 @@ export default function NotificationsPage() {
                     checked={selectedIds.length === notifications.length && notifications.length > 0}
                     onCheckedChange={selectAll}
                   />
-                  <span className="text-sm text-muted-foreground">Select all</span>
+                  <span className="text-sm text-muted-foreground">{t("page.selectAll")}</span>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
                 {filterByType(type).length === 0 ? (
                   <div className="py-12 text-center text-muted-foreground">
                     <Bell className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                    <p>No notifications</p>
+                    <p>{t("page.noNotifications")}</p>
                   </div>
                 ) : (
                   <div className="divide-y">
@@ -276,7 +295,7 @@ export default function NotificationsPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <span className={cn("font-medium", !notification.read && "text-foreground")}>
-                                {notification.title}
+                                {getNotificationTitle(notification.titleKey)}
                               </span>
                               {!notification.read && <span className="w-2 h-2 rounded-full bg-primary" />}
                             </div>
@@ -288,7 +307,7 @@ export default function NotificationsPage() {
                               </span>
                               {notification.actionUrl && (
                                 <Link href={notification.actionUrl} className="text-xs text-primary hover:underline">
-                                  View details
+                                  {t("page.viewDetails")}
                                 </Link>
                               )}
                             </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -154,7 +155,7 @@ export default function AdminsPage() {
 
   const handleDelete = async (admin: Admin) => {
     if (admin.id === currentAdmin.id) {
-      alert("You cannot delete your own account")
+      toast.error("You cannot delete your own account")
       return
     }
     try {

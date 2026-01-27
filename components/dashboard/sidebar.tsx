@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
@@ -29,26 +30,52 @@ import {
   Target,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { OrganizationSwitcher } from "./OrganizationSwitcher"
+import { LanguageSwitcher } from "@/components/ui/language-switcher"
 
-const navGroups = [
+// Storage key for persisting sidebar state
+const SIDEBAR_COMPACT_KEY = "dashboard-sidebar-compact"
+
+// Helper to load persisted state
+function loadCompactState(): boolean {
+  if (typeof window === "undefined") return false
+  try {
+    const stored = localStorage.getItem(SIDEBAR_COMPACT_KEY)
+    return stored === "true"
+  } catch {
+    return false
+  }
+}
+
+// Helper to save state
+function saveCompactState(isCompact: boolean) {
+  if (typeof window === "undefined") return
+  try {
+    localStorage.setItem(SIDEBAR_COMPACT_KEY, String(isCompact))
+  } catch {
+    // Ignore storage errors
+  }
+}
+
+// Navigation configuration using translation keys
+const getNavGroups = (t: ReturnType<typeof useTranslations<'dashboard.sidebar'>>) => [
   {
     id: "work",
-    label: "Work",
+    label: t('sections.work'),
     defaultOpen: true,
     items: [
-      { name: "Home", href: "/dashboard", icon: LayoutDashboard, description: "Overview & activity" },
-      { name: "Playground", href: "/dashboard/playground", icon: Sparkles, description: "Interactive AI workspace" },
-      { name: "Inbox", href: "/dashboard/inbox", icon: Inbox, badge: 3, description: "Automated request handling" },
+      { name: t('items.home'), href: "/dashboard", icon: LayoutDashboard, description: t('items.homeDesc') },
+      { name: t('items.playground'), href: "/dashboard/playground", icon: Sparkles, description: t('items.playgroundDesc') },
+      { name: t('items.inbox'), href: "/dashboard/inbox", icon: Inbox, badge: 3, description: t('items.inboxDesc') },
     ],
   },
   {
     id: "projects",
-    label: "Projects",
+    label: t('sections.projects'),
     defaultOpen: true,
-    items: [{ name: "All Projects", href: "/dashboard/projects", icon: Folder, description: "Manage all projects" }],
+    items: [{ name: t('items.allProjects'), href: "/dashboard/projects", icon: Folder, description: t('items.allProjectsDesc') }],
     children: [
       { name: "Gen Z Sustainability", href: "/dashboard/projects/gen-z-sustainability", color: "bg-emerald-500" },
       { name: "Q4 Campaign", href: "/dashboard/projects/q4-campaign", color: "bg-blue-500" },
@@ -57,54 +84,59 @@ const navGroups = [
   },
   {
     id: "gwi-tools",
-    label: "GWI Tools",
+    label: t('sections.gwiTools'),
     defaultOpen: true,
     items: [
-      { name: "Audiences", href: "/dashboard/audiences", icon: Users, description: "Build audience segments" },
-      { name: "Brand Tracking", href: "/dashboard/brand-tracking", icon: Target, description: "Monitor brand health" },
-      { name: "Charts", href: "/dashboard/charts", icon: BarChart3, description: "Data visualizations" },
-      { name: "Crosstabs", href: "/dashboard/crosstabs", icon: Table2, description: "Compare audiences" },
-      { name: "Dashboards", href: "/dashboard/dashboards", icon: PieChart, description: "Combined insights" },
+      { name: t('items.audiences'), href: "/dashboard/audiences", icon: Users, description: t('items.audiencesDesc') },
+      { name: t('items.brandTracking'), href: "/dashboard/brand-tracking", icon: Target, description: t('items.brandTrackingDesc') },
+      { name: t('items.charts'), href: "/dashboard/charts", icon: BarChart3, description: t('items.chartsDesc') },
+      { name: t('items.crosstabs'), href: "/dashboard/crosstabs", icon: Table2, description: t('items.crosstabsDesc') },
+      { name: t('items.dashboards'), href: "/dashboard/dashboards", icon: PieChart, description: t('items.dashboardsDesc') },
     ],
   },
   {
     id: "build",
-    label: "Build",
+    label: t('sections.build'),
     defaultOpen: false,
     items: [
-      { name: "Workflows", href: "/dashboard/workflows", icon: Workflow, description: "Automation pipelines" },
-      { name: "Agents", href: "/dashboard/agents", icon: Bot, description: "Custom AI agents" },
-      { name: "Templates", href: "/dashboard/templates", icon: LayoutTemplate, description: "Reusable prompts" },
+      { name: t('items.workflows'), href: "/dashboard/workflows", icon: Workflow, description: t('items.workflowsDesc') },
+      { name: t('items.agents'), href: "/dashboard/agents", icon: Bot, description: t('items.agentsDesc') },
+      { name: t('items.templates'), href: "/dashboard/templates", icon: LayoutTemplate, description: t('items.templatesDesc') },
     ],
   },
   {
     id: "discover",
-    label: "Discover",
+    label: t('sections.discover'),
     defaultOpen: false,
     items: [
-      { name: "Agent Store", href: "/dashboard/store", icon: Store, description: "Pre-built agents" },
-      { name: "Reports", href: "/dashboard/reports", icon: FileText, description: "Generated outputs" },
-      { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3, description: "Usage & performance" },
+      { name: t('items.agentStore'), href: "/dashboard/store", icon: Store, description: t('items.agentStoreDesc') },
+      { name: t('items.reports'), href: "/dashboard/reports", icon: FileText, description: t('items.reportsDesc') },
+      { name: t('items.analytics'), href: "/dashboard/analytics", icon: BarChart3, description: t('items.analyticsDesc') },
     ],
   },
   {
     id: "system",
-    label: "System",
+    label: t('sections.system'),
     defaultOpen: false,
     items: [
-      { name: "Integrations", href: "/dashboard/integrations", icon: Plug, description: "Connected services" },
-      { name: "Memory", href: "/dashboard/memory", icon: Brain, description: "Context & history" },
+      { name: t('items.integrations'), href: "/dashboard/integrations", icon: Plug, description: t('items.integrationsDesc') },
+      { name: t('items.memory'), href: "/dashboard/memory", icon: Brain, description: t('items.memoryDesc') },
     ],
   },
 ]
 
-const bottomNavItems = [
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
-  { name: "Help", href: "/dashboard/help", icon: HelpCircle },
+const getBottomNavItems = (t: ReturnType<typeof useTranslations<'dashboard.sidebar'>>) => [
+  { name: t('items.settings'), href: "/dashboard/settings", icon: Settings },
+  { name: t('items.help'), href: "/dashboard/help", icon: HelpCircle },
 ]
 
 export function DashboardSidebar() {
   const pathname = usePathname()
+  const t = useTranslations('dashboard.sidebar')
+
+  const navGroups = getNavGroups(t)
+  const bottomNavItems = getBottomNavItems(t)
+
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
     navGroups.forEach((group) => {
@@ -112,7 +144,13 @@ export function DashboardSidebar() {
     })
     return initial
   })
-  const [isCompact, setIsCompact] = useState(false)
+  const [isCompact, setIsCompact] = useState(() => loadCompactState())
+
+  // Persist compact state changes
+  const handleCompactChange = (compact: boolean) => {
+    setIsCompact(compact)
+    saveCompactState(compact)
+  }
 
   const toggleGroup = (groupId: string) => {
     setOpenGroups((prev) => ({ ...prev, [groupId]: !prev[groupId] }))
@@ -125,7 +163,7 @@ export function DashboardSidebar() {
       <aside
         className={cn(
           "fixed left-0 top-0 z-40 h-screen border-r border-border bg-sidebar hidden lg:flex flex-col transition-all duration-200",
-          isCompact ? "w-16" : "w-60",
+          isCompact ? "w-16" : "w-64",
         )}
       >
         {/* Logo */}
@@ -139,7 +177,7 @@ export function DashboardSidebar() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent shrink-0">
               <span className="text-sm font-bold text-accent-foreground">G</span>
             </div>
-            {!isCompact && <span className="text-base font-semibold text-sidebar-foreground">GWI Insights</span>}
+            {!isCompact && <span className="text-base font-semibold text-sidebar-foreground">{t('brandName')}</span>}
           </Link>
         </div>
 
@@ -154,14 +192,14 @@ export function DashboardSidebar() {
                   </Button>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right">New Session</TooltipContent>
+              <TooltipContent side="right">{t('newSession')}</TooltipContent>
             </Tooltip>
           ) : (
             <div className="flex gap-2">
               <Link href="/dashboard/playground" className="flex-1">
                 <Button className="w-full gap-2 h-9" size="sm">
                   <Plus className="h-4 w-4" />
-                  New Session
+                  {t('newSession')}
                 </Button>
               </Link>
               <Tooltip>
@@ -170,7 +208,7 @@ export function DashboardSidebar() {
                     <Search className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side="right">Search (⌘K)</TooltipContent>
+                <TooltipContent side="right">{t('searchShortcut')} (⌘K)</TooltipContent>
               </Tooltip>
             </div>
           )}
@@ -265,7 +303,7 @@ export function DashboardSidebar() {
                         className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/40 hover:text-sidebar-foreground/60"
                       >
                         <Plus className="h-3 w-3" />
-                        <span>New Project</span>
+                        <span>{t('items.newProject')}</span>
                       </Link>
                     </div>
                   )}
@@ -302,14 +340,22 @@ export function DashboardSidebar() {
             ),
           )}
 
+          {/* Language Switcher */}
+          {!isCompact && (
+            <div className="px-3 py-2">
+              <LanguageSwitcher showLabel variant="ghost" size="sm" />
+            </div>
+          )}
+
           {/* Collapse Toggle */}
           {!isCompact && (
             <button
-              onClick={() => setIsCompact(true)}
+              onClick={() => handleCompactChange(true)}
               className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-sidebar-foreground/40 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+              aria-label="Collapse sidebar"
             >
               <Layers className="h-4 w-4" />
-              Collapse
+              {t('collapse')}
             </button>
           )}
         </div>
@@ -341,7 +387,13 @@ export function DashboardSidebar() {
                 <p className="text-sm font-medium text-sidebar-foreground truncate">John Doe</p>
                 <p className="text-xs text-sidebar-foreground/50 truncate">john@company.com</p>
               </div>
-              <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" onClick={() => setIsCompact(true)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 shrink-0"
+                onClick={() => handleCompactChange(true)}
+                aria-label="Collapse sidebar"
+              >
                 <ChevronDown className="h-4 w-4 rotate-90" />
               </Button>
             </div>
@@ -350,8 +402,9 @@ export function DashboardSidebar() {
           {/* Expand button when compact */}
           {isCompact && (
             <button
-              onClick={() => setIsCompact(false)}
+              onClick={() => handleCompactChange(false)}
               className="flex h-9 w-full items-center justify-center rounded-md text-sidebar-foreground/40 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground mt-1"
+              aria-label="Expand sidebar"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

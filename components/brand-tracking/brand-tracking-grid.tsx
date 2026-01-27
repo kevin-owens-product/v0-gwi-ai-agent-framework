@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -140,6 +141,7 @@ const statusColors = {
 
 export function BrandTrackingGrid() {
   const router = useRouter()
+  const t = useTranslations('ui.empty')
   const [brandTrackings, setBrandTrackings] = useState<BrandTracking[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [_hoveredId, setHoveredId] = useState<string | null>(null)
@@ -364,7 +366,7 @@ export function BrandTrackingGrid() {
                   </div>
                 ) : (
                   <div className="text-center p-3 bg-muted/50 rounded-lg mb-4">
-                    <p className="text-sm text-muted-foreground">No data yet - take a snapshot to see metrics</p>
+                    <p className="text-sm text-muted-foreground">{t('noData')}</p>
                   </div>
                 )}
 

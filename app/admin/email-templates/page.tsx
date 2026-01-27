@@ -53,6 +53,7 @@ import {
   Settings,
 } from "lucide-react"
 import Link from "next/link"
+import { toast } from "sonner"
 
 interface EmailTemplate {
   id: string
@@ -192,11 +193,11 @@ export default function EmailTemplatesPage() {
         fetchTemplates()
       } else {
         const error = await response.json()
-        alert(error.error || "Failed to create template")
+        toast.error(error.error || "Failed to create template")
       }
     } catch (error) {
       console.error("Failed to create template:", error)
-      alert("Failed to create template")
+      toast.error("Failed to create template")
     } finally {
       setIsSubmitting(false)
     }

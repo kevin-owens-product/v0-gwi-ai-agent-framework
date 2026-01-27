@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -145,7 +146,7 @@ export default function DataExportDetailPage() {
         fetchDataExport()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to update data export")
+        toast.error(data.error || "Failed to update data export")
       }
     } catch (error) {
       console.error("Failed to update data export:", error)

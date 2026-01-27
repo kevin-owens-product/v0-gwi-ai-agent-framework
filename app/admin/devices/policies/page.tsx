@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   Shield,
   Plus,
@@ -108,6 +109,8 @@ export default function DevicePoliciesPage() {
   const [activeFilter, setActiveFilter] = useState("all")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [stats, setStats] = useState<Stats>({ total: 0, active: 0, enforcing: 0 })
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [policyToDelete, setPolicyToDelete] = useState<string | null>(null)
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 20,
@@ -227,11 +230,16 @@ export default function DevicePoliciesPage() {
     }
   }
 
-  const handleDeletePolicy = async (policyId: string) => {
-    if (!confirm("Are you sure you want to delete this policy?")) return
+  const handleDeleteClick = (policyId: string) => {
+    setPolicyToDelete(policyId)
+    setShowDeleteConfirm(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!policyToDelete) return
 
     try {
-      const response = await fetch(`/api/admin/devices/policies/${policyId}`, {
+      const response = await fetch(`/api/admin/devices/policies/${policyToDelete}`, {
         method: "DELETE",
       })
 
@@ -243,6 +251,9 @@ export default function DevicePoliciesPage() {
       fetchPolicies()
     } catch (error) {
       toast.error("Failed to delete policy")
+    } finally {
+      setShowDeleteConfirm(false)
+      setPolicyToDelete(null)
     }
   }
 
@@ -656,7 +667,7 @@ export default function DevicePoliciesPage() {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             className="text-destructive"
-                            onClick={() => handleDeletePolicy(policy.id)}
+                            onClick={() => handleDeleteClick(policy.id)}
                           >
                             <Trash className="h-4 w-4 mr-2" />
                             Delete
@@ -700,6 +711,16 @@ export default function DevicePoliciesPage() {
           </div>
         </div>
       )}
+
+      <ConfirmationDialog
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        title="Delete Policy"
+        description="Are you sure you want to delete this policy? Devices currently using this policy will no longer be affected by its rules."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   )
 }

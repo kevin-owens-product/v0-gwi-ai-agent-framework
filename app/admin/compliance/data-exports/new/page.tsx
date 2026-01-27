@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -96,21 +97,21 @@ export default function NewDataExportPage() {
 
   const handleCreate = async () => {
     if (!formData.type) {
-      alert("Export type is required")
+      toast.error("Export type is required")
       return
     }
 
     // Validate subject based on type
     if (formData.type === "USER_DATA" && !formData.userId) {
-      alert("Please select a user for user data export")
+      toast.error("Please select a user for user data export")
       return
     }
     if (formData.type === "ORG_DATA" && !formData.orgId) {
-      alert("Please select an organization for org data export")
+      toast.error("Please select an organization for org data export")
       return
     }
     if (formData.type === "LEGAL_HOLD" && !formData.legalHoldId) {
-      alert("Please select a legal hold")
+      toast.error("Please select a legal hold")
       return
     }
 
@@ -142,7 +143,7 @@ export default function NewDataExportPage() {
       router.push(`/admin/compliance/data-exports/${data.export?.id || ""}`)
     } catch (error) {
       console.error("Failed to create data export:", error)
-      alert(error instanceof Error ? error.message : "Failed to create data export")
+      toast.error(error instanceof Error ? error.message : "Failed to create data export")
     } finally {
       setIsSaving(false)
     }

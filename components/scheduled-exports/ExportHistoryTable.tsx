@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -110,6 +111,10 @@ export function ExportHistoryTable({
   isLoading,
   className,
 }: ExportHistoryTableProps) {
+  const tTable = useTranslations('ui.table')
+  const tEmpty = useTranslations('ui.empty')
+  const tLoading = useTranslations('ui.loading')
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -122,8 +127,8 @@ export function ExportHistoryTable({
     return (
       <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
         <Clock className="h-12 w-12 mb-4 opacity-50" />
-        <p className="font-medium">No export history</p>
-        <p className="text-sm">Run an export to see history here</p>
+        <p className="font-medium">{tTable('noResults')}</p>
+        <p className="text-sm">{tEmpty('getStarted')}</p>
       </div>
     )
   }
@@ -224,11 +229,12 @@ export function ExportHistoryCompact({
   history: ExportHistory[]
   limit?: number
 }) {
+  const tTable = useTranslations('ui.table')
   const recentHistory = history.slice(0, limit)
 
   if (recentHistory.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">No recent exports</p>
+      <p className="text-sm text-muted-foreground">{tTable('noResults')}</p>
     )
   }
 

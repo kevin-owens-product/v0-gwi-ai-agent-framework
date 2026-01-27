@@ -1,0 +1,448 @@
+{
+  "common": {
+    "loading": "جارٍ التحميل...",
+    "error": "خطأ",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "search": "بحث",
+    "filter": "تصفية",
+    "export": "تصدير",
+    "import": "استيراد",
+    "refresh": "تحديث",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "yes": "نعم",
+    "no": "لا",
+    "or": "أو",
+    "and": "و",
+    "all": "الكل",
+    "none": "لا شيء",
+    "viewDetails": "عرض التفاصيل",
+    "viewAll": "عرض الكل",
+    "noResults": "لم يتم العثور على نتائج",
+    "required": "مطلوب",
+    "optional": "اختياري",
+    "actions": "الإجراءات",
+    "status": "الحالة",
+    "name": "الاسم",
+    "description": "الوصف",
+    "type": "النوع",
+    "date": "التاريخ",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "enabled": "مفعّل",
+    "disabled": "معطّل",
+    "success": "نجاح",
+    "failed": "فشل",
+    "pending": "قيد الانتظار",
+    "completed": "مكتمل",
+    "running": "قيد التشغيل",
+    "cancelled": "ملغى"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signOut": "تسجيل الخروج",
+    "signUp": "إنشاء حساب",
+    "getStarted": "ابدأ الآن",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "rememberMe": "تذكرني",
+    "noAccount": "ليس لديك حساب؟",
+    "hasAccount": "لديك حساب بالفعل؟",
+    "createAccount": "إنشاء حساب",
+    "signInWith": "تسجيل الدخول باستخدام {provider}",
+    "orContinueWith": "أو المتابعة باستخدام",
+    "termsAgreement": "بتسجيل الدخول، فإنك توافق على شروط الخدمة وسياسة الخصوصية",
+    "welcomeBack": "مرحباً بعودتك",
+    "signInToContinue": "سجّل الدخول للمتابعة إلى حسابك",
+    "createYourAccount": "أنشئ حسابك",
+    "getStartedFree": "ابدأ مجاناً",
+    "errors": {
+      "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "invalidEmail": "يرجى إدخال بريد إلكتروني صالح",
+      "passwordTooShort": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+      "accountNotFound": "لم يتم العثور على الحساب",
+      "accountLocked": "الحساب مقفل. يرجى التواصل مع الدعم.",
+      "tooManyAttempts": "محاولات تسجيل دخول كثيرة جداً. يرجى المحاولة لاحقاً.",
+      "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك."
+    },
+    "admin": {
+      "title": "تسجيل دخول المسؤول",
+      "description": "سجّل الدخول للوصول إلى بوابة المسؤول"
+    },
+    "gwi": {
+      "title": "تسجيل دخول فريق GWI",
+      "description": "سجّل الدخول للوصول إلى بوابة فريق GWI"
+    }
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "dashboard": "لوحة التحكم",
+    "settings": "الإعدادات",
+    "profile": "الملف الشخصي",
+    "help": "المساعدة",
+    "docs": "الوثائق",
+    "features": "الميزات",
+    "pricing": "الأسعار",
+    "solutions": "الحلول",
+    "agents": "الوكلاء",
+    "theme": "المظهر"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "selectLanguage": "اختر اللغة",
+    "preferences": "التفضيلات",
+    "notifications": "الإشعارات",
+    "security": "الأمان",
+    "account": "الحساب",
+    "appearance": "المظهر",
+    "general": "عام"
+  },
+  "landing": {
+    "header": {
+      "brandName": "GWI Insights",
+      "solutions": "الحلول",
+      "salesTeams": "فرق المبيعات",
+      "insightsTeams": "فرق التحليلات",
+      "adSales": "مبيعات الإعلانات",
+      "marketing": "التسويق",
+      "productDevelopment": "تطوير المنتجات",
+      "marketResearch": "أبحاث السوق",
+      "innovation": "الابتكار",
+      "features": "الميزات",
+      "agents": "الوكلاء",
+      "pricing": "الأسعار",
+      "docs": "الوثائق",
+      "signIn": "تسجيل الدخول",
+      "getStarted": "ابدأ الآن",
+      "theme": "المظهر"
+    },
+    "hero": {
+      "title": "رؤى المستهلك بقوة الذكاء الاصطناعي",
+      "subtitle": "اكتشف فهماً عميقاً للمستهلكين من خلال التحليل المدعوم بالذكاء الاصطناعي لبيانات الاستطلاعات العالمية",
+      "cta": "ابدأ التجربة المجانية",
+      "secondaryCta": "شاهد العرض التوضيحي"
+    },
+    "features": {
+      "title": "ميزات قوية",
+      "subtitle": "كل ما تحتاجه لفهم جمهورك"
+    },
+    "pricing": {
+      "title": "أسعار بسيطة وشفافة",
+      "subtitle": "اختر الخطة التي تناسب احتياجاتك",
+      "monthly": "شهري",
+      "annual": "سنوي",
+      "perMonth": "/شهر",
+      "perYear": "/سنة",
+      "mostPopular": "الأكثر شعبية",
+      "getStarted": "ابدأ الآن",
+      "contactSales": "تواصل مع المبيعات",
+      "features": "الميزات"
+    },
+    "cta": {
+      "title": "هل أنت مستعد للبدء؟",
+      "subtitle": "انضم إلى آلاف الشركات التي تستخدم GWI Insights",
+      "button": "ابدأ التجربة المجانية"
+    },
+    "footer": {
+      "company": "الشركة",
+      "about": "عن الشركة",
+      "careers": "الوظائف",
+      "press": "الصحافة",
+      "contact": "اتصل بنا",
+      "product": "المنتج",
+      "features": "الميزات",
+      "pricing": "الأسعار",
+      "security": "الأمان",
+      "roadmap": "خارطة الطريق",
+      "resources": "الموارد",
+      "docs": "الوثائق",
+      "blog": "المدونة",
+      "support": "الدعم",
+      "changelog": "سجل التغييرات",
+      "legal": "قانوني",
+      "privacy": "الخصوصية",
+      "terms": "الشروط",
+      "copyright": "© {year} GWI. جميع الحقوق محفوظة."
+    }
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحباً بعودتك",
+    "overview": "نظرة عامة",
+    "recentActivity": "النشاط الأخير",
+    "quickActions": "إجراءات سريعة",
+    "header": {
+      "missionControl": "مركز التحكم",
+      "allSystemsOperational": "جميع الأنظمة تعمل",
+      "realTimeOverview": "نظرة عامة فورية على منظومة وكلاء الذكاء الاصطناعي",
+      "last24Hours": "آخر 24 ساعة",
+      "last7Days": "آخر 7 أيام",
+      "last30Days": "آخر 30 يوماً",
+      "last90Days": "آخر 90 يوماً",
+      "playground": "ساحة التجربة",
+      "newWorkflow": "سير عمل جديد"
+    },
+    "metrics": {
+      "activeAgents": "الوكلاء النشطون",
+      "totalCount": "{count} إجمالي",
+      "runningNow": "قيد التشغيل الآن",
+      "insightsGenerated": "الرؤى المُنشأة",
+      "runsCount": "{count} عملية تشغيل",
+      "thisWeek": "هذا الأسبوع",
+      "successRate": "معدل النجاح",
+      "excellent": "ممتاز",
+      "good": "جيد",
+      "needsAttention": "يحتاج انتباه",
+      "noData": "لا توجد بيانات",
+      "completedRuns": "العمليات المكتملة",
+      "avgResponse": "متوسط الاستجابة",
+      "notAvailable": "غير متوفر",
+      "fast": "سريع",
+      "normal": "عادي",
+      "slow": "بطيء",
+      "perRun": "لكل عملية"
+    }
+  },
+  "audiences": {
+    "title": "الجماهير",
+    "createAudience": "إنشاء جمهور",
+    "audienceBuilder": "منشئ الجمهور",
+    "savedAudiences": "الجماهير المحفوظة",
+    "comparison": "المقارنة",
+    "overlap": "التداخل",
+    "persona": "الشخصية",
+    "mediaConsumption": "استهلاك الوسائط",
+    "brandAffinities": "تفضيلات العلامات التجارية"
+  },
+  "playground": {
+    "title": "ساحة التجربة",
+    "newSession": "جلسة جديدة",
+    "chat": "محادثة",
+    "context": "السياق",
+    "sources": "المصادر",
+    "workspace": "مساحة العمل"
+  },
+  "collaboration": {
+    "share": "مشاركة",
+    "comments": "التعليقات",
+    "addComment": "إضافة تعليق",
+    "reply": "رد",
+    "shareLink": "مشاركة الرابط",
+    "copyLink": "نسخ الرابط",
+    "linkCopied": "تم نسخ الرابط!"
+  },
+  "savedViews": {
+    "title": "العروض المحفوظة",
+    "saveView": "حفظ العرض",
+    "pinnedItems": "العناصر المثبتة",
+    "recentItems": "العناصر الأخيرة"
+  },
+  "exports": {
+    "title": "التصديرات",
+    "exportData": "تصدير البيانات",
+    "format": "التنسيق",
+    "schedule": "الجدولة",
+    "history": "السجل"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "editProfile": "تعديل الملف الشخصي",
+    "avatar": "الصورة الرمزية",
+    "displayName": "الاسم المعروض",
+    "emailAddress": "عنوان البريد الإلكتروني"
+  },
+  "gwi": {
+    "dashboard": {
+      "title": "بوابة فريق GWI",
+      "description": "إدارة الاستطلاعات والتصنيف وخطوط البيانات وتكوينات الذكاء الاصطناعي",
+      "loading": "جارٍ تحميل لوحة التحكم...",
+      "unresolvedErrors": "{count, plural, zero {لا توجد أخطاء غير محلولة} one {خطأ واحد غير محلول} two {خطآن غير محلولان} few {# أخطاء غير محلولة} many {# خطأً غير محلول} other {# خطأ غير محلول}} في آخر 24 ساعة",
+      "reviewErrors": "راجع المشكلات وحلها للحفاظ على صحة النظام",
+      "viewErrors": "عرض الأخطاء"
+    },
+    "stats": {
+      "surveys": "الاستطلاعات",
+      "active": "{count, plural, zero {لا يوجد نشط} one {واحد نشط} two {اثنان نشطان} few {# نشطة} many {# نشطاً} other {# نشط}}",
+      "taxonomyCategories": "فئات التصنيف",
+      "dataPipelines": "خطوط البيانات",
+      "llmConfigurations": "تكوينات LLM",
+      "agentTemplates": "قوالب الوكلاء",
+      "dataSources": "مصادر البيانات"
+    },
+    "pipelineRuns": {
+      "title": "عمليات خطوط البيانات الأخيرة",
+      "description": "حالة تنفيذ خطوط البيانات الأخيرة",
+      "viewAll": "عرض الكل",
+      "noPipelines": "لا توجد عمليات خطوط بيانات بعد",
+      "createFirst": "أنشئ خط البيانات الأول",
+      "records": "{count, plural, zero {لا توجد سجلات} one {سجل واحد} two {سجلان} few {# سجلات} many {# سجلاً} other {# سجل}}",
+      "started": "بدأ في {date}"
+    },
+    "quickActions": {
+      "createSurvey": "إنشاء استطلاع",
+      "createSurveyDesc": "تصميم استطلاع جديد",
+      "newPipeline": "خط بيانات جديد",
+      "newPipelineDesc": "إعداد معالجة البيانات",
+      "testPrompts": "اختبار الأوامر",
+      "testPromptsDesc": "تجربة قوالب الأوامر"
+    },
+    "navigation": {
+      "surveys": "الاستطلاعات",
+      "taxonomy": "التصنيف",
+      "pipelines": "خطوط البيانات",
+      "llm": "LLM",
+      "agents": "الوكلاء",
+      "dataSources": "مصادر البيانات",
+      "monitoring": "المراقبة",
+      "system": "النظام",
+      "services": "الخدمات"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "بوابة المسؤول",
+      "description": "إدارة المنصة والمستأجرين"
+    },
+    "navigation": {
+      "dashboard": "لوحة التحكم",
+      "organizations": "المؤسسات",
+      "users": "المستخدمون",
+      "plans": "الخطط",
+      "features": "الميزات",
+      "security": "الأمان",
+      "identity": "الهوية",
+      "sso": "SSO",
+      "domains": "النطاقات",
+      "devices": "الأجهزة",
+      "scim": "SCIM",
+      "hierarchy": "التسلسل الهرمي",
+      "settings": "الإعدادات",
+      "entitlements": "الصلاحيات"
+    },
+    "plans": {
+      "title": "الخطط",
+      "description": "إدارة خطط الاشتراك",
+      "createPlan": "إنشاء خطة",
+      "editPlan": "تعديل الخطة",
+      "planName": "اسم الخطة",
+      "pricing": "التسعير",
+      "features": "الميزات",
+      "limits": "الحدود"
+    },
+    "security": {
+      "title": "الأمان",
+      "policies": "السياسات",
+      "sessions": "الجلسات",
+      "ipBlocklist": "قائمة حظر IP",
+      "threats": "التهديدات",
+      "violations": "المخالفات"
+    },
+    "identity": {
+      "title": "إدارة الهوية",
+      "ssoTitle": "تسجيل الدخول الموحد",
+      "ssoDescription": "تكوين موفري SSO",
+      "domainsTitle": "النطاقات",
+      "domainsDescription": "إدارة النطاقات المُتحقق منها",
+      "scimTitle": "SCIM",
+      "scimDescription": "إعدادات توفير المستخدمين"
+    },
+    "organizations": {
+      "title": "المؤسسات",
+      "description": "إدارة مؤسسات المستأجرين",
+      "createOrg": "إنشاء مؤسسة",
+      "orgName": "اسم المؤسسة",
+      "status": "الحالة",
+      "plan": "الخطة",
+      "members": "الأعضاء",
+      "defaultLanguage": "اللغة الافتراضية"
+    }
+  },
+  "ui": {
+    "dialog": {
+      "confirm": "تأكيد",
+      "cancel": "إلغاء",
+      "close": "إغلاق",
+      "ok": "موافق",
+      "yes": "نعم",
+      "no": "لا",
+      "continue": "متابعة",
+      "goBack": "رجوع"
+    },
+    "alert": {
+      "areYouSure": "هل أنت متأكد؟",
+      "cannotUndo": "لا يمكن التراجع عن هذا الإجراء.",
+      "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذا؟",
+      "unsavedChanges": "لديك تغييرات غير محفوظة",
+      "discardChanges": "تجاهل التغييرات؟"
+    },
+    "theme": {
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "النظام",
+      "toggleTheme": "تبديل المظهر"
+    },
+    "commandPalette": {
+      "placeholder": "اكتب أمراً أو ابحث...",
+      "noResults": "لم يتم العثور على نتائج",
+      "recentSearches": "عمليات البحث الأخيرة",
+      "suggestions": "الاقتراحات"
+    },
+    "shortcuts": {
+      "title": "اختصارات لوحة المفاتيح",
+      "general": "عام",
+      "navigation": "التنقل",
+      "actions": "الإجراءات"
+    },
+    "errors": {
+      "somethingWentWrong": "حدث خطأ ما",
+      "tryAgain": "حاول مرة أخرى",
+      "pageNotFound": "الصفحة غير موجودة",
+      "pageNotFoundDescription": "عذراً، لم نتمكن من العثور على الصفحة التي تبحث عنها. ربما تم نقلها أو حذفها.",
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "goHome": "العودة للرئيسية",
+      "unexpectedError": "حدث خطأ غير متوقع",
+      "unexpectedErrorDescription": "واجهنا خطأً غير متوقع. تم إبلاغ فريقنا ويعمل على إصلاحه.",
+      "reloadPage": "إعادة تحميل الصفحة",
+      "errorId": "معرّف الخطأ: {id}",
+      "contactSupport": "تواصل مع الدعم"
+    },
+    "loading": {
+      "loading": "جارٍ التحميل...",
+      "pleaseWait": "يرجى الانتظار..."
+    },
+    "empty": {
+      "noData": "لا توجد بيانات متاحة",
+      "noItems": "لم يتم العثور على عناصر",
+      "getStarted": "ابدأ بإنشاء العنصر الأول"
+    },
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي",
+      "page": "صفحة {current} من {total}",
+      "showingItems": "عرض {start} إلى {end} من {total} عنصر"
+    },
+    "table": {
+      "noResults": "لا توجد نتائج",
+      "sortAscending": "ترتيب تصاعدي",
+      "sortDescending": "ترتيب تنازلي",
+      "selectAll": "تحديد الكل",
+      "deselectAll": "إلغاء تحديد الكل"
+    }
+  }
+}

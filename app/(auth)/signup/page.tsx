@@ -5,6 +5,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
+import { useTranslations } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,15 +13,17 @@ import { Separator } from "@/components/ui/separator"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Brain, Loader2, Eye, EyeOff, Check, AlertCircle } from "lucide-react"
 
-const passwordRequirements = [
-  { label: "At least 8 characters", check: (p: string) => p.length >= 8 },
-  { label: "One uppercase letter", check: (p: string) => /[A-Z]/.test(p) },
-  { label: "One lowercase letter", check: (p: string) => /[a-z]/.test(p) },
-  { label: "One number", check: (p: string) => /\d/.test(p) },
-]
-
 export default function SignupPage() {
   const router = useRouter()
+  const t = useTranslations('auth')
+
+  const passwordRequirements = [
+    { label: t('validation.atLeast8Characters'), check: (p: string) => p.length >= 8 },
+    { label: t('validation.oneUppercase'), check: (p: string) => /[A-Z]/.test(p) },
+    { label: t('validation.oneLowercase'), check: (p: string) => /[a-z]/.test(p) },
+    { label: t('validation.oneNumber'), check: (p: string) => /\d/.test(p) },
+  ]
+
   const [isLoading, setIsLoading] = useState(false)
   const [isOAuthLoading, setIsOAuthLoading] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
@@ -38,7 +41,7 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!agreedToTerms) {
-      setFormError("You must agree to the terms and conditions")
+      setFormError(t('validation.pleaseAgreeToTerms'))
       return
     }
 
@@ -61,7 +64,7 @@ export default function SignupPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setFormError(data.error || "Failed to create account")
+        setFormError(data.error || t('errors.failedToCreateAccount'))
         return
       }
 
@@ -80,7 +83,7 @@ export default function SignupPage() {
         router.refresh()
       }
     } catch (err) {
-      setFormError("An error occurred. Please try again.")
+      setFormError(t('errors.genericError'))
     } finally {
       setIsLoading(false)
     }
@@ -104,8 +107,8 @@ export default function SignupPage() {
       </div>
 
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Create your account</h1>
-        <p className="text-muted-foreground">Start your 14-day free trial. No credit card required.</p>
+        <h1 className="text-3xl font-bold">{t('createYourAccount')}</h1>
+        <p className="text-muted-foreground">{t('getStartedFree')}</p>
       </div>
 
       {/* Error message */}
@@ -119,10 +122,10 @@ export default function SignupPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="name">Full name</Label>
+            <Label htmlFor="name">{t('form.fullName')}</Label>
             <Input
               id="name"
-              placeholder="John Smith"
+              placeholder={t('form.fullNamePlaceholder')}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
@@ -130,10 +133,10 @@ export default function SignupPage() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="company">Organization</Label>
+            <Label htmlFor="company">{t('form.organization')}</Label>
             <Input
               id="company"
-              placeholder="Acme Inc."
+              placeholder={t('form.organizationPlaceholder')}
               value={formData.company}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
               required
@@ -143,11 +146,11 @@ export default function SignupPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Work email</Label>
+          <Label htmlFor="email">{t('form.workEmail')}</Label>
           <Input
             id="email"
             type="email"
-            placeholder="you@company.com"
+            placeholder={t('emailPlaceholder')}
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
@@ -156,12 +159,12 @@ export default function SignupPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t('password')}</Label>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              placeholder="Create a strong password"
+              placeholder={t('newPasswordPlaceholder')}
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
@@ -200,13 +203,13 @@ export default function SignupPage() {
             disabled={isLoading}
           />
           <Label htmlFor="terms" className="text-sm leading-relaxed font-normal">
-            I agree to the{" "}
+            {t('termsAgreement')}{" "}
             <Link href="/terms" className="text-primary hover:underline">
-              Terms of Service
+              {t('termsOfService')}
             </Link>{" "}
             and{" "}
             <Link href="/privacy" className="text-primary hover:underline">
-              Privacy Policy
+              {t('privacyPolicy')}
             </Link>
           </Label>
         </div>
@@ -219,10 +222,10 @@ export default function SignupPage() {
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Creating account...
+              {t('creatingAccount')}
             </>
           ) : (
-            "Create account"
+            t('createAccount')
           )}
         </Button>
       </form>
@@ -230,7 +233,7 @@ export default function SignupPage() {
       <div className="relative">
         <Separator />
         <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
-          OR
+          {t('orContinueWith')}
         </span>
       </div>
 
@@ -263,7 +266,7 @@ export default function SignupPage() {
               />
             </svg>
           )}
-          Sign up with Google
+          {t('oauth.signUpWithGoogle')}
         </Button>
         <Button
           variant="outline"
@@ -278,14 +281,14 @@ export default function SignupPage() {
               <path fill="currentColor" d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z" />
             </svg>
           )}
-          Sign up with Microsoft
+          {t('oauth.signUpWithMicrosoft')}
         </Button>
       </div>
 
       <p className="text-center text-sm text-muted-foreground">
-        Already have an account?{" "}
+        {t('hasAccount')}{" "}
         <Link href="/login" className="text-primary hover:underline">
-          Sign in
+          {t('signIn')}
         </Link>
       </p>
     </div>

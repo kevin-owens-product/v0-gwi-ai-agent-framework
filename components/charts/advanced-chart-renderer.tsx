@@ -34,6 +34,7 @@ import {
   ZAxis,
 } from "recharts"
 import { Loader2, Activity, TrendingUp, TrendingDown, Minus, ZoomIn, ZoomOut, Download } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { generateAdvancedSampleData, gwiColorPalettes, formatters, type GWIChartTemplate } from "./data/gwi-sample-data"
@@ -205,6 +206,8 @@ export function AdvancedChartRenderer({
   onDataPointClick,
   onExport,
 }: AdvancedChartRendererProps) {
+  const t = useTranslations('ui.empty')
+  const tLoading = useTranslations('ui.loading')
   const chartRef = useRef<HTMLDivElement>(null)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
@@ -296,7 +299,7 @@ export function AdvancedChartRenderer({
       <div className={cn("flex items-center justify-center", className)} style={{ height }}>
         <div className="flex flex-col items-center gap-2">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <span className="text-sm text-muted-foreground">Loading chart data...</span>
+          <span className="text-sm text-muted-foreground">{tLoading('pleaseWait')}</span>
         </div>
       </div>
     )
@@ -309,8 +312,8 @@ export function AdvancedChartRenderer({
         style={{ height }}
       >
         <Activity className="h-12 w-12 mb-2 opacity-50" />
-        <span className="text-sm">No data available</span>
-        <span className="text-xs mt-1">Try selecting a different time period or audience</span>
+        <span className="text-sm">{t('noData')}</span>
+        <span className="text-xs mt-1">{t('getStarted')}</span>
       </div>
     )
   }

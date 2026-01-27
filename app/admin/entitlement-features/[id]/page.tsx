@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -37,6 +37,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { toast } from "sonner"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface TenantEntitlement {
   id: string
@@ -107,6 +108,7 @@ export default function FeatureDetailPage() {
     defaultValue: "",
     isActive: true,
   })
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   useEffect(() => {
     if (params.id) {
@@ -185,8 +187,12 @@ export default function FeatureDetailPage() {
     }
   }
 
-  const handleDelete = async () => {
-    if (!feature || !confirm("Are you sure you want to delete this feature? This will also remove all associated entitlements.")) return
+  const handleDeleteClick = () => {
+    setShowDeleteDialog(true)
+  }
+
+  const handleDeleteConfirm = useCallback(async () => {
+    if (!feature) return
 
     try {
       setDeleting(true)
@@ -204,8 +210,9 @@ export default function FeatureDetailPage() {
       toast.error("Failed to delete feature")
     } finally {
       setDeleting(false)
+      setShowDeleteDialog(false)
     }
-  }
+  }, [feature, router])
 
   const handleToggleActive = async () => {
     if (!feature) return
@@ -542,7 +549,7 @@ export default function FeatureDetailPage() {
               <Button
                 variant="outline"
                 className="w-full justify-start text-destructive"
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -550,6 +557,16 @@ export default function FeatureDetailPage() {
               </Button>
             </CardContent>
           </Card>
+
+          <ConfirmationDialog
+            open={showDeleteDialog}
+            onOpenChange={setShowDeleteDialog}
+            title="Delete Feature"
+            description="Are you sure you want to delete this feature? This will also remove all associated entitlements. This action cannot be undone."
+            confirmText={deleting ? "Deleting..." : "Delete"}
+            onConfirm={handleDeleteConfirm}
+            variant="destructive"
+          />
 
           <Card>
             <CardHeader>

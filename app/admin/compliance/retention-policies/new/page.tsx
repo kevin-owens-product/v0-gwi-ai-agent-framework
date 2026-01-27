@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -59,7 +60,7 @@ export default function NewRetentionPolicyPage() {
 
   const handleCreate = async () => {
     if (!formData.name || !formData.dataType) {
-      alert("Name and data type are required")
+      toast.error("Name and data type are required")
       return
     }
 
@@ -93,7 +94,7 @@ export default function NewRetentionPolicyPage() {
       router.push(`/admin/compliance/retention-policies/${data.policy?.id || ""}`)
     } catch (error) {
       console.error("Failed to create retention policy:", error)
-      alert(error instanceof Error ? error.message : "Failed to create retention policy")
+      toast.error(error instanceof Error ? error.message : "Failed to create retention policy")
     } finally {
       setIsSaving(false)
     }

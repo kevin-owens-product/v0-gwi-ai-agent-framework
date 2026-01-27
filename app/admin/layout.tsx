@@ -38,7 +38,7 @@ export default async function AdminLayout({
         permissions: session.admin.permissions,
       }}
     >
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background admin-portal">
         <AdminSidebar />
         <div className="lg:pl-64">
           <AdminHeader />

@@ -190,10 +190,6 @@ export default function ReleasesPage() {
   }
 
   const handleDelete = async (releaseId: string) => {
-    if (!confirm("Are you sure you want to delete this release?")) {
-      return
-    }
-
     try {
       const response = await fetch(`/api/admin/operations/releases/${releaseId}`, {
         method: "DELETE",

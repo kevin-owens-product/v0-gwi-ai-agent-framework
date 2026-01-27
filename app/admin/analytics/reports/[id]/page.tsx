@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   ArrowLeft,
   FileText,
@@ -113,6 +114,7 @@ export default function ReportDetailPage() {
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const [editForm, setEditForm] = useState({
     name: "",
@@ -203,8 +205,6 @@ export default function ReportDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this report?")) return
-
     try {
       const response = await fetch(`/api/admin/analytics/reports/${reportId}`, {
         method: "DELETE",
@@ -215,6 +215,8 @@ export default function ReportDetailPage() {
       }
     } catch (err) {
       console.error("Failed to delete report:", err)
+    } finally {
+      setShowDeleteDialog(false)
     }
   }
 
@@ -325,10 +327,19 @@ export default function ReportDetailPage() {
           <Button
             variant="destructive"
             size="icon"
-            onClick={handleDelete}
+            onClick={() => setShowDeleteDialog(true)}
           >
             <Trash2 className="h-4 w-4" />
           </Button>
+          <ConfirmationDialog
+            open={showDeleteDialog}
+            onOpenChange={setShowDeleteDialog}
+            title="Delete Report"
+            description="Are you sure you want to delete this report? This action cannot be undone."
+            confirmLabel="Delete"
+            variant="destructive"
+            onConfirm={handleDelete}
+          />
         </div>
       </div>
 

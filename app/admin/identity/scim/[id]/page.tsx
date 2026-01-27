@@ -45,6 +45,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface Organization {
   id: string
@@ -102,6 +103,8 @@ export default function SCIMDetailPage() {
     autoDeactivate: true,
     defaultRole: "MEMBER",
   })
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showRegenerateTokenDialog, setShowRegenerateTokenDialog] = useState(false)
 
   const fetchSCIMIntegration = useCallback(async () => {
     setIsLoading(true)
@@ -172,11 +175,11 @@ export default function SCIMDetailPage() {
     }
   }
 
-  const handleRegenerateToken = async () => {
-    if (!confirm("Are you sure you want to regenerate the token? The current token will be invalidated.")) {
-      return
-    }
+  const handleRegenerateTokenClick = () => {
+    setShowRegenerateTokenDialog(true)
+  }
 
+  const handleRegenerateTokenConfirm = useCallback(async () => {
     setIsRegeneratingToken(true)
     try {
       const response = await fetch(`/api/admin/identity/scim/${scimId}/token`, {
@@ -195,12 +198,15 @@ export default function SCIMDetailPage() {
       toast.error("Failed to regenerate token")
     } finally {
       setIsRegeneratingToken(false)
+      setShowRegenerateTokenDialog(false)
     }
+  }, [scimId, fetchSCIMIntegration])
+
+  const handleDeleteClick = () => {
+    setShowDeleteDialog(true)
   }
 
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this SCIM integration?")) return
-
+  const handleDeleteConfirm = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/identity/scim/${scimId}`, {
         method: "DELETE",
@@ -215,8 +221,10 @@ export default function SCIMDetailPage() {
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to delete SCIM integration")
+    } finally {
+      setShowDeleteDialog(false)
     }
-  }
+  }, [scimId, router])
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -322,11 +330,31 @@ export default function SCIMDetailPage() {
               </>
             )}
           </Button>
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button variant="destructive" onClick={handleDeleteClick}>
             Delete
           </Button>
         </div>
       </div>
+
+      <ConfirmationDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        title="Delete SCIM Integration"
+        description="Are you sure you want to delete this SCIM integration? This action cannot be undone."
+        confirmText="Delete"
+        onConfirm={handleDeleteConfirm}
+        variant="destructive"
+      />
+
+      <ConfirmationDialog
+        open={showRegenerateTokenDialog}
+        onOpenChange={setShowRegenerateTokenDialog}
+        title="Regenerate Token"
+        description="Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+        confirmText={isRegeneratingToken ? "Regenerating..." : "Regenerate"}
+        onConfirm={handleRegenerateTokenConfirm}
+        variant="destructive"
+      />
 
       {/* New Token Alert */}
       {newToken && (
@@ -552,7 +580,7 @@ export default function SCIMDetailPage() {
               <div className="pt-4 border-t">
                 <Button
                   variant="destructive"
-                  onClick={handleRegenerateToken}
+                  onClick={handleRegenerateTokenClick}
                   disabled={isRegeneratingToken}
                 >
                   {isRegeneratingToken ? (

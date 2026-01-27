@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   Smartphone,
   Laptop,
@@ -111,6 +112,8 @@ export default function DevicesPage() {
     totalPages: 0,
   })
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [showRevokeConfirm, setShowRevokeConfirm] = useState(false)
+  const [deviceToRevoke, setDeviceToRevoke] = useState<string | null>(null)
 
   const fetchDevices = useCallback(async () => {
     setLoading(true)
@@ -169,11 +172,16 @@ export default function DevicesPage() {
     }
   }
 
-  const handleRevokeDevice = async (deviceId: string) => {
-    if (!confirm("Are you sure you want to revoke trust for this device?")) return
+  const handleRevokeClick = (deviceId: string) => {
+    setDeviceToRevoke(deviceId)
+    setShowRevokeConfirm(true)
+  }
+
+  const handleConfirmRevoke = async () => {
+    if (!deviceToRevoke) return
 
     try {
-      const response = await fetch(`/api/admin/devices/${deviceId}/revoke`, {
+      const response = await fetch(`/api/admin/devices/${deviceToRevoke}/revoke`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reason: "Revoked by admin" }),
@@ -186,6 +194,9 @@ export default function DevicesPage() {
       fetchDevices()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to revoke device")
+    } finally {
+      setShowRevokeConfirm(false)
+      setDeviceToRevoke(null)
     }
   }
 
@@ -384,7 +395,7 @@ export default function DevicesPage() {
     {
       label: "Revoke Trust",
       icon: <ShieldX className="h-4 w-4" />,
-      onClick: (device) => handleRevokeDevice(device.id),
+      onClick: (device) => handleRevokeClick(device.id),
       hidden: (device) => device.trustStatus !== "TRUSTED",
     },
   ]
@@ -554,6 +565,16 @@ export default function DevicesPage() {
           />
         </CardContent>
       </Card>
+
+      <ConfirmationDialog
+        open={showRevokeConfirm}
+        onOpenChange={setShowRevokeConfirm}
+        title="Revoke Device Trust"
+        description="Are you sure you want to revoke trust for this device? The device will need to be re-approved to regain access."
+        confirmText="Revoke Trust"
+        variant="destructive"
+        onConfirm={handleConfirmRevoke}
+      />
     </div>
   )
 }

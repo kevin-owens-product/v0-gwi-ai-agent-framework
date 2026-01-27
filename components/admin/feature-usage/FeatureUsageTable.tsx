@@ -10,6 +10,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -98,9 +99,13 @@ function getCategoryBadgeColor(category: string): string {
 export function FeatureUsageTable({
   data,
   categories = [],
-  title = "Feature Usage Details",
-  description = "Detailed metrics for all tracked features",
+  title,
+  description,
 }: FeatureUsageTableProps) {
+  const tTable = useTranslations('ui.table')
+  const tPagination = useTranslations('ui.pagination')
+  const tCommon = useTranslations('common')
+
   const [search, setSearch] = useState("")
   const [categoryFilter, setCategoryFilter] = useState("all")
   const [sortField, setSortField] = useState<SortField>("adoptionRate")
@@ -147,8 +152,8 @@ export function FeatureUsageTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle>{title || "Feature Usage Details"}</CardTitle>
+        <CardDescription>{description || "Detailed metrics for all tracked features"}</CardDescription>
       </CardHeader>
       <CardContent>
         {/* Filters */}
@@ -241,7 +246,7 @@ export function FeatureUsageTable({
               {filteredData.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                    No features match your filters
+                    {tTable('noResults')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -304,7 +309,7 @@ export function FeatureUsageTable({
 
         {/* Summary */}
         <div className="mt-4 text-sm text-muted-foreground">
-          Showing {filteredData.length} of {data.length} features
+          {tPagination('showingItems', { start: 1, end: filteredData.length, total: data.length })}
         </div>
       </CardContent>
     </Card>

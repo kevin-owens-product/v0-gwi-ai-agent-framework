@@ -4,12 +4,14 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
+import { useTranslations } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Brain, Loader2, ArrowLeft, Mail } from "lucide-react"
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations('auth')
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [email, setEmail] = useState("")
@@ -52,23 +54,23 @@ export default function ForgotPasswordPage() {
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Check your email</h1>
+          <h1 className="text-3xl font-bold">{t('checkYourEmail')}</h1>
           <p className="text-muted-foreground">
-            We sent a password reset link to <span className="font-medium text-foreground">{email}</span>
+            {t('emailSentTo')} <span className="font-medium text-foreground">{email}</span>
           </p>
         </div>
 
         <Button variant="outline" asChild className="w-full bg-transparent">
           <Link href="/login">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to sign in
+            {t('backToSignIn')}
           </Link>
         </Button>
 
         <p className="text-sm text-muted-foreground">
-          Didn&apos;t receive the email?{" "}
+          {t('didntReceiveEmail')}{" "}
           <button onClick={() => setIsSubmitted(false)} className="text-primary hover:underline">
-            Click to resend
+            {t('clickToResend')}
           </button>
         </p>
       </div>
@@ -87,17 +89,17 @@ export default function ForgotPasswordPage() {
       </div>
 
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Reset your password</h1>
-        <p className="text-muted-foreground">Enter your email and we&apos;ll send you a reset link</p>
+        <h1 className="text-3xl font-bold">{t('resetYourPassword')}</h1>
+        <p className="text-muted-foreground">{t('enterEmailForReset')}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t('email')}</Label>
           <Input
             id="email"
             type="email"
-            placeholder="you@company.com"
+            placeholder={t('emailPlaceholder')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -108,10 +110,10 @@ export default function ForgotPasswordPage() {
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Sending link...
+              {t('sendingLink')}
             </>
           ) : (
-            "Send reset link"
+            t('sendResetLink')
           )}
         </Button>
       </form>
@@ -119,7 +121,7 @@ export default function ForgotPasswordPage() {
       <Button variant="ghost" asChild className="w-full">
         <Link href="/login">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to sign in
+          {t('backToSignIn')}
         </Link>
       </Button>
     </div>

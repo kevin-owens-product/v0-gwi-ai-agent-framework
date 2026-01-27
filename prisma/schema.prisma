@@ -43,6 +43,9 @@ model Organization {
   country           String?
   timezone          String              @default("UTC")
 
+  // Internationalization
+  defaultLanguage   String              @default("en")
+
   // Hierarchy relationships
   parentOrg         Organization?       @relation("OrgHierarchy", fields: [parentOrgId], references: [id])
   childOrgs         Organization[]      @relation("OrgHierarchy")

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -251,7 +252,7 @@ export default function AttestationsPage() {
       fetchAttestations()
     } catch (error) {
       console.error("Failed to update attestation:", error)
-      alert(error instanceof Error ? error.message : "Failed to update attestation")
+      toast.error(error instanceof Error ? error.message : "Failed to update attestation")
     }
   }
 
@@ -290,7 +291,7 @@ export default function AttestationsPage() {
       onClick: async (ids) => {
         const notStarted = attestations.filter((a) => ids.includes(a.id) && a.status === "NOT_STARTED")
         if (notStarted.length === 0) {
-          alert("No 'Not Started' attestations selected")
+          toast.info("No 'Not Started' attestations selected")
           return
         }
         try {

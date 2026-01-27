@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -143,7 +144,7 @@ export default function FrameworksPage() {
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to create framework:", error)
-      alert(error instanceof Error ? error.message : "Failed to create framework")
+      toast.error(error instanceof Error ? error.message : "Failed to create framework")
     } finally {
       setIsSubmitting(false)
     }
@@ -166,7 +167,7 @@ export default function FrameworksPage() {
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to update framework:", error)
-      alert(error instanceof Error ? error.message : "Failed to update framework")
+      toast.error(error instanceof Error ? error.message : "Failed to update framework")
     }
   }
 
@@ -185,7 +186,7 @@ export default function FrameworksPage() {
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to delete framework:", error)
-      alert(error instanceof Error ? error.message : "Failed to delete framework")
+      toast.error(error instanceof Error ? error.message : "Failed to delete framework")
     }
   }
 
@@ -210,7 +211,7 @@ export default function FrameworksPage() {
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to update frameworks:", error)
-      alert(error instanceof Error ? error.message : "Failed to update frameworks")
+      toast.error(error instanceof Error ? error.message : "Failed to update frameworks")
     }
   }
 
@@ -233,7 +234,7 @@ export default function FrameworksPage() {
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to delete frameworks:", error)
-      alert(error instanceof Error ? error.message : "Failed to delete frameworks")
+      toast.error(error instanceof Error ? error.message : "Failed to delete frameworks")
     }
   }
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -51,17 +52,17 @@ export default function NewAdminPage() {
 
   const handleCreate = async () => {
     if (!formData.email || !formData.name || !formData.password) {
-      alert("Email, name, and password are required")
+      toast.error("Email, name, and password are required")
       return
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match")
+      toast.error("Passwords do not match")
       return
     }
 
     if (formData.password.length < 8) {
-      alert("Password must be at least 8 characters")
+      toast.error("Password must be at least 8 characters")
       return
     }
 
@@ -85,11 +86,11 @@ export default function NewAdminPage() {
         router.push(`/admin/admins/${data.admin.id}`)
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to create admin")
+        toast.error(data.error || "Failed to create admin")
       }
     } catch (error) {
       console.error("Failed to create admin:", error)
-      alert("Failed to create admin")
+      toast.error("Failed to create admin")
     } finally {
       setIsSaving(false)
     }

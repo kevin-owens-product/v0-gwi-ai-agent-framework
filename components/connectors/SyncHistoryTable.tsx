@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import {
   Table,
   TableBody,
@@ -104,6 +105,10 @@ export function SyncHistoryTable({
   isLoading: initialLoading,
   onRefresh,
 }: SyncHistoryTableProps) {
+  const tTable = useTranslations('ui.table')
+  const tPagination = useTranslations('ui.pagination')
+  const tCommon = useTranslations('common')
+
   const [logs, setLogs] = useState<SyncLog[]>(initialLogs || [])
   const [isLoading, setIsLoading] = useState(initialLoading || false)
   const [page, setPage] = useState(1)
@@ -192,7 +197,7 @@ export function SyncHistoryTable({
 
         <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
           <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-          Refresh
+          {tCommon('refresh')}
         </Button>
       </div>
 
@@ -231,7 +236,7 @@ export function SyncHistoryTable({
             ) : logs.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                  No sync history found
+                  {tTable('noResults')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -313,7 +318,7 @@ export function SyncHistoryTable({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
+            {tPagination('page', { current: page, total: totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -323,7 +328,7 @@ export function SyncHistoryTable({
               disabled={page === 1 || isLoading}
             >
               <ChevronLeft className="h-4 w-4" />
-              Previous
+              {tPagination('previous')}
             </Button>
             <Button
               variant="outline"
@@ -331,7 +336,7 @@ export function SyncHistoryTable({
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages || isLoading}
             >
-              Next
+              {tPagination('next')}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

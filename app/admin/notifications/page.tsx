@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -39,6 +40,7 @@ import {
 } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
+import { showSuccessToast, showErrorToast } from "@/lib/toast-utils"
 
 interface Notification {
   id: string
@@ -54,16 +56,29 @@ interface Notification {
   createdAt: string
 }
 
-const notificationTypes = [
-  { value: "INFO", label: "Info", icon: Info, color: "bg-blue-500" },
-  { value: "WARNING", label: "Warning", icon: AlertTriangle, color: "bg-amber-500" },
-  { value: "ALERT", label: "Alert", icon: AlertTriangle, color: "bg-red-500" },
-  { value: "MAINTENANCE", label: "Maintenance", icon: Wrench, color: "bg-slate-500" },
-  { value: "FEATURE", label: "Feature", icon: Sparkles, color: "bg-purple-500" },
-  { value: "PROMOTION", label: "Promotion", icon: Gift, color: "bg-green-500" },
-]
+const notificationTypeIcons = {
+  INFO: Info,
+  WARNING: AlertTriangle,
+  ALERT: AlertTriangle,
+  MAINTENANCE: Wrench,
+  FEATURE: Sparkles,
+  PROMOTION: Gift,
+}
+
+const notificationTypeColors = {
+  INFO: "bg-blue-500",
+  WARNING: "bg-amber-500",
+  ALERT: "bg-red-500",
+  MAINTENANCE: "bg-slate-500",
+  FEATURE: "bg-purple-500",
+  PROMOTION: "bg-green-500",
+}
 
 export default function NotificationsPage() {
+  const t = useTranslations("notifications.admin")
+  const tCommon = useTranslations("common")
+  const tToast = useTranslations("toast")
+
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -90,6 +105,7 @@ export default function NotificationsPage() {
       setNotifications(data.notifications)
     } catch (error) {
       console.error("Failed to fetch notifications:", error)
+      showErrorToast(tToast("error.loadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -140,7 +156,7 @@ export default function NotificationsPage() {
         : "/api/admin/notifications"
       const method = editingNotification ? "PATCH" : "POST"
 
-      await fetch(url, {
+      const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -150,11 +166,17 @@ export default function NotificationsPage() {
         }),
       })
 
-      setDialogOpen(false)
-      resetForm()
-      fetchNotifications()
+      if (response.ok) {
+        showSuccessToast(editingNotification ? tToast("success.updated") : tToast("success.created"))
+        setDialogOpen(false)
+        resetForm()
+        fetchNotifications()
+      } else {
+        showErrorToast(editingNotification ? tToast("error.updateFailed") : tToast("error.createFailed"))
+      }
     } catch (error) {
       console.error("Failed to save notification:", error)
+      showErrorToast(tToast("error.saveFailed"))
     } finally {
       setIsSubmitting(false)
     }
@@ -170,20 +192,25 @@ export default function NotificationsPage() {
       fetchNotifications()
     } catch (error) {
       console.error("Failed to toggle notification:", error)
+      showErrorToast(tToast("error.updateFailed"))
     }
   }
 
   const handleDelete = async (notificationId: string) => {
     try {
       await fetch(`/api/admin/notifications/${notificationId}`, { method: "DELETE" })
+      showSuccessToast(tToast("success.deleted"))
       fetchNotifications()
     } catch (error) {
       console.error("Failed to delete notification:", error)
+      showErrorToast(tToast("error.deleteFailed"))
     }
   }
 
   const getTypeInfo = (type: string) => {
-    return notificationTypes.find(t => t.value === type) || notificationTypes[0]
+    const TypeIcon = notificationTypeIcons[type as keyof typeof notificationTypeIcons] || Info
+    const color = notificationTypeColors[type as keyof typeof notificationTypeColors] || "bg-blue-500"
+    return { icon: TypeIcon, color, label: t(`types.${type.toLowerCase()}`) }
   }
 
   const togglePlan = (plan: string) => {
@@ -206,9 +233,11 @@ export default function NotificationsPage() {
           })
         )
       )
+      showSuccessToast(tToast("success.updated"))
       fetchNotifications()
     } catch (error) {
       console.error("Failed to mark notifications as read:", error)
+      showErrorToast(tToast("error.updateFailed"))
     }
   }
 
@@ -217,9 +246,11 @@ export default function NotificationsPage() {
       await Promise.all(
         ids.map(id => fetch(`/api/admin/notifications/${id}`, { method: "DELETE" }))
       )
+      showSuccessToast(tToast("success.deleted"))
       fetchNotifications()
     } catch (error) {
       console.error("Failed to delete notifications:", error)
+      showErrorToast(tToast("error.deleteFailed"))
     }
   }
 
@@ -227,7 +258,7 @@ export default function NotificationsPage() {
   const columns: Column<Notification>[] = [
     {
       id: "notification",
-      header: "Notification",
+      header: t("table.notification"),
       cell: (notification) => {
         const typeInfo = getTypeInfo(notification.type)
         const TypeIcon = typeInfo.icon
@@ -248,7 +279,7 @@ export default function NotificationsPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("table.type"),
       cell: (notification) => {
         const typeInfo = getTypeInfo(notification.type)
         return (
@@ -260,18 +291,18 @@ export default function NotificationsPage() {
     },
     {
       id: "target",
-      header: "Target",
+      header: t("table.target"),
       cell: (notification) => (
         <Badge variant="outline">
-          {notification.targetType === "ALL" ? "All Users" :
+          {notification.targetType === "ALL" ? t("form.allUsers") :
            notification.targetType === "SPECIFIC_PLANS" ? notification.targetPlans.join(", ") :
-           "Custom"}
+           t("table.custom")}
         </Badge>
       ),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("table.status"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (notification) => (
@@ -283,18 +314,18 @@ export default function NotificationsPage() {
     },
     {
       id: "schedule",
-      header: "Schedule",
+      header: t("table.schedule"),
       cell: (notification) => (
         <span className="text-muted-foreground">
           {notification.scheduledFor
             ? new Date(notification.scheduledFor).toLocaleDateString()
-            : "Immediate"}
+            : t("table.immediate")}
         </span>
       ),
     },
     {
       id: "created",
-      header: "Created",
+      header: t("table.created"),
       cell: (notification) => (
         <span className="text-muted-foreground">
           {new Date(notification.createdAt).toLocaleDateString()}
@@ -306,7 +337,7 @@ export default function NotificationsPage() {
   // Define row actions
   const rowActions: RowAction<Notification>[] = [
     {
-      label: "Edit",
+      label: t("actions.edit"),
       icon: <Pencil className="h-4 w-4" />,
       onClick: (notification) => handleOpenDialog(notification),
     },
@@ -315,20 +346,20 @@ export default function NotificationsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Mark as Inactive",
+      label: t("actions.markInactive"),
       icon: <CheckCheck className="h-4 w-4" />,
       onClick: handleBulkMarkAsRead,
-      confirmTitle: "Mark Notifications as Inactive",
-      confirmDescription: "Are you sure you want to mark the selected notifications as inactive?",
+      confirmTitle: t("actions.markInactive"),
+      confirmDescription: t("actions.markInactive"),
     },
     {
-      label: "Delete Selected",
+      label: t("actions.deleteSelected"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Notifications",
-      confirmDescription: "Are you sure you want to delete the selected notifications? This action cannot be undone.",
+      confirmTitle: t("confirmDelete"),
+      confirmDescription: t("confirmDelete"),
     },
   ]
 
@@ -338,36 +369,36 @@ export default function NotificationsPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>System Notifications</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Send announcements, alerts, and updates to platform users
+                {t("description")}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchNotifications} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {t("refresh")}
               </Button>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm" onClick={() => handleOpenDialog()}>
                     <Plus className="h-4 w-4 mr-2" />
-                    New Notification
+                    {t("newNotification")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-lg">
                   <DialogHeader>
                     <DialogTitle>
-                      {editingNotification ? "Edit Notification" : "Create Notification"}
+                      {editingNotification ? t("editNotification") : t("createNotification")}
                     </DialogTitle>
                     <DialogDescription>
-                      Send a notification to platform users
+                      {t("sendNotification")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Type</Label>
+                        <Label>{t("form.type")}</Label>
                         <Select
                           value={formData.type}
                           onValueChange={(v) => setFormData(prev => ({ ...prev, type: v }))}
@@ -376,19 +407,22 @@ export default function NotificationsPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {notificationTypes.map((type) => (
-                              <SelectItem key={type.value} value={type.value}>
-                                <div className="flex items-center gap-2">
-                                  <type.icon className="h-4 w-4" />
-                                  {type.label}
-                                </div>
-                              </SelectItem>
-                            ))}
+                            {Object.keys(notificationTypeIcons).map((type) => {
+                              const TypeIcon = notificationTypeIcons[type as keyof typeof notificationTypeIcons]
+                              return (
+                                <SelectItem key={type} value={type}>
+                                  <div className="flex items-center gap-2">
+                                    <TypeIcon className="h-4 w-4" />
+                                    {t(`types.${type.toLowerCase()}`)}
+                                  </div>
+                                </SelectItem>
+                              )
+                            })}
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label>Target Audience</Label>
+                        <Label>{t("form.targetAudience")}</Label>
                         <Select
                           value={formData.targetType}
                           onValueChange={(v) => setFormData(prev => ({ ...prev, targetType: v }))}
@@ -397,25 +431,25 @@ export default function NotificationsPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="ALL">All Users</SelectItem>
-                            <SelectItem value="SPECIFIC_PLANS">Specific Plans</SelectItem>
-                            <SelectItem value="SPECIFIC_ORGS">Specific Orgs</SelectItem>
+                            <SelectItem value="ALL">{t("form.allUsers")}</SelectItem>
+                            <SelectItem value="SPECIFIC_PLANS">{t("form.specificPlans")}</SelectItem>
+                            <SelectItem value="SPECIFIC_ORGS">{t("form.specificOrgs")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Title</Label>
+                      <Label>{t("form.title")}</Label>
                       <Input
-                        placeholder="Notification title"
+                        placeholder={t("form.titlePlaceholder")}
                         value={formData.title}
                         onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Message</Label>
+                      <Label>{t("form.message")}</Label>
                       <Textarea
-                        placeholder="Notification message..."
+                        placeholder={t("form.messagePlaceholder")}
                         value={formData.message}
                         onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                         rows={3}
@@ -423,7 +457,7 @@ export default function NotificationsPage() {
                     </div>
                     {formData.targetType === "SPECIFIC_PLANS" && (
                       <div className="space-y-2">
-                        <Label>Target Plans</Label>
+                        <Label>{t("form.targetPlans")}</Label>
                         <div className="flex gap-4">
                           {["STARTER", "PROFESSIONAL", "ENTERPRISE"].map((plan) => (
                             <div key={plan} className="flex items-center gap-2">
@@ -440,7 +474,7 @@ export default function NotificationsPage() {
                     )}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Schedule For (optional)</Label>
+                        <Label>{t("form.scheduleFor")}</Label>
                         <Input
                           type="datetime-local"
                           value={formData.scheduledFor}
@@ -448,7 +482,7 @@ export default function NotificationsPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Expires At (optional)</Label>
+                        <Label>{t("form.expiresAt")}</Label>
                         <Input
                           type="datetime-local"
                           value={formData.expiresAt}
@@ -458,8 +492,8 @@ export default function NotificationsPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Active</Label>
-                        <p className="text-xs text-muted-foreground">Show this notification immediately</p>
+                        <Label>{t("form.active")}</Label>
+                        <p className="text-xs text-muted-foreground">{t("form.activeDescription")}</p>
                       </div>
                       <Switch
                         checked={formData.isActive}
@@ -469,18 +503,18 @@ export default function NotificationsPage() {
                   </div>
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                      Cancel
+                      {tCommon("cancel")}
                     </Button>
                     <Button onClick={handleSubmit} disabled={!formData.title || !formData.message || isSubmitting}>
                       {isSubmitting ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Saving...
+                          {tToast("loading.saving")}
                         </>
                       ) : editingNotification ? (
-                        "Update"
+                        tCommon("save")
                       ) : (
-                        "Create"
+                        tCommon("create")
                       )}
                     </Button>
                   </DialogFooter>
@@ -495,12 +529,12 @@ export default function NotificationsPage() {
             columns={columns}
             getRowId={(notification) => notification.id}
             isLoading={isLoading}
-            emptyMessage="No notifications created"
+            emptyMessage={t("empty")}
             viewHref={(notification) => `/admin/notifications/${notification.id}`}
             onDelete={(notification) => handleDelete(notification.id)}
-            deleteConfirmTitle="Delete Notification"
+            deleteConfirmTitle={t("confirmDelete")}
             deleteConfirmDescription={(notification) =>
-              `Are you sure you want to delete "${notification.title}"? This action cannot be undone.`
+              t("confirmDeleteDescription", { title: notification.title })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}

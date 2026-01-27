@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -158,7 +159,7 @@ export default function AttestationDetailPage() {
         fetchAttestation()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to update attestation")
+        toast.error(data.error || "Failed to update attestation")
       }
     } catch (error) {
       console.error("Failed to update attestation:", error)

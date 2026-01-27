@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -172,7 +173,7 @@ export default function AuditDetailPage() {
         fetchAudit()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to update audit")
+        toast.error(data.error || "Failed to update audit")
       }
     } catch (error) {
       console.error("Failed to update audit:", error)

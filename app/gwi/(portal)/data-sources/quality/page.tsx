@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { LoadingText } from "@/components/ui/loading-text"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   Select,
   SelectContent,
@@ -307,10 +309,10 @@ async function DataQualityContent() {
               })}
             </div>
           ) : (
-            <div className="text-center py-8">
-              <Database className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No data sources connected</p>
-            </div>
+            <EmptyState
+              icon={Database}
+              title="No data sources connected"
+            />
           )}
         </CardContent>
       </Card>
@@ -325,7 +327,7 @@ export default function DataQualityPage() {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Data Quality</h1>
-            <p className="text-muted-foreground">Loading quality metrics...</p>
+            <LoadingText />
           </div>
         </div>
       }

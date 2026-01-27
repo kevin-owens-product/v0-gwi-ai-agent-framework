@@ -5,6 +5,7 @@ import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
+import { useTranslations } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,6 +20,7 @@ function LoginForm() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
   const error = searchParams.get("error")
+  const t = useTranslations('auth')
 
   const [loginType, setLoginType] = useState<LoginType>("platform")
 
@@ -55,7 +57,7 @@ function LoginForm() {
         const data = await response.json()
 
         if (!response.ok) {
-          setFormError(data.error || "Invalid credentials. Please try again.")
+          setFormError(data.error || t('errors.invalidCredentials'))
           return
         }
 
@@ -72,7 +74,7 @@ function LoginForm() {
         const data = await response.json()
 
         if (!response.ok) {
-          setFormError(data.error || "Invalid credentials. Please try again.")
+          setFormError(data.error || t('errors.invalidCredentials'))
           return
         }
 
@@ -87,14 +89,14 @@ function LoginForm() {
         })
 
         if (result?.error) {
-          setFormError("Invalid email or password. Please try again.")
+          setFormError(t('errors.invalidCredentials'))
         } else {
           router.push(callbackUrl)
           router.refresh()
         }
       }
     } catch {
-      setFormError("An error occurred. Please try again.")
+      setFormError(t('errors.genericError'))
     } finally {
       setIsLoading(false)
     }
@@ -124,8 +126,8 @@ function LoginForm() {
       </div>
 
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Welcome back</h1>
-        <p className="text-muted-foreground">Sign in to your account to continue</p>
+        <h1 className="text-3xl font-bold">{t('welcomeBack')}</h1>
+        <p className="text-muted-foreground">{t('signInToContinue')}</p>
       </div>
 
       {/* Login Type Tabs */}
@@ -133,16 +135,16 @@ function LoginForm() {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="platform" className="flex items-center gap-1.5 text-xs sm:text-sm">
             <Users className="h-4 w-4" />
-            <span className="hidden sm:inline">Platform</span>
-            <span className="sm:hidden">User</span>
+            <span className="hidden sm:inline">{t('tabs.platform')}</span>
+            <span className="sm:hidden">{t('tabs.user')}</span>
           </TabsTrigger>
           <TabsTrigger value="admin" className="flex items-center gap-1.5 text-xs sm:text-sm">
             <Shield className="h-4 w-4" />
-            Admin
+            {t('tabs.admin')}
           </TabsTrigger>
           <TabsTrigger value="gwi" className="flex items-center gap-1.5 text-xs sm:text-sm">
             <Database className="h-4 w-4" />
-            GWI
+            {t('tabs.gwi')}
           </TabsTrigger>
         </TabsList>
 
@@ -153,19 +155,19 @@ function LoginForm() {
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>
                 {error === "OAuthAccountNotLinked"
-                  ? "This email is already associated with another account."
-                  : formError || "An error occurred during sign in."}
+                  ? t('errors.oauthAccountNotLinked')
+                  : formError || t('errors.signInError')}
               </span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="platform-email">Email</Label>
+              <Label htmlFor="platform-email">{t('email')}</Label>
               <Input
                 id="platform-email"
                 type="email"
-                placeholder="you@company.com"
+                placeholder={t('emailPlaceholder')}
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
@@ -175,16 +177,16 @@ function LoginForm() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="platform-password">Password</Label>
+                <Label htmlFor="platform-password">{t('password')}</Label>
                 <Link href="/forgot-password" className="text-sm text-primary hover:underline">
-                  Forgot password?
+                  {t('forgotPassword')}
                 </Link>
               </div>
               <div className="relative">
                 <Input
                   id="platform-password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder={t('passwordPlaceholder')}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
@@ -204,10 +206,10 @@ function LoginForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  {t('signingIn')}
                 </>
               ) : (
-                "Sign in to Platform"
+                t('portal.signInToPlatform')
               )}
             </Button>
           </form>
@@ -215,7 +217,7 @@ function LoginForm() {
           <div className="relative">
             <Separator />
             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
-              OR
+              {t('orContinueWith')}
             </span>
           </div>
 
@@ -248,7 +250,7 @@ function LoginForm() {
                   />
                 </svg>
               )}
-              Continue with Google
+              {t('oauth.continueWithGoogle')}
             </Button>
             <Button
               variant="outline"
@@ -263,14 +265,14 @@ function LoginForm() {
                   <path fill="currentColor" d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z" />
                 </svg>
               )}
-              Continue with Microsoft
+              {t('oauth.continueWithMicrosoft')}
             </Button>
           </div>
 
           <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            {t('noAccount')}{" "}
             <Link href="/signup" className="text-primary hover:underline">
-              Sign up for free
+              {t('signUpForFree')}
             </Link>
           </p>
         </TabsContent>
@@ -280,9 +282,9 @@ function LoginForm() {
             <div className="flex items-start gap-3">
               <Shield className="h-5 w-5 text-amber-500 mt-0.5" />
               <div className="space-y-1">
-                <p className="text-sm font-medium text-amber-500">Admin Portal Access</p>
+                <p className="text-sm font-medium text-amber-500">{t('admin.title')}</p>
                 <p className="text-xs text-muted-foreground">
-                  This login is for platform administrators only. If you are a regular user, please use the Platform tab.
+                  {t('admin.description')}
                 </p>
               </div>
             </div>
@@ -298,11 +300,11 @@ function LoginForm() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="admin-email">Admin Email</Label>
+              <Label htmlFor="admin-email">{t('form.adminEmail')}</Label>
               <Input
                 id="admin-email"
                 type="email"
-                placeholder="admin@gwi.com"
+                placeholder={t('form.adminEmailPlaceholder')}
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
@@ -311,12 +313,12 @@ function LoginForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="admin-password">Password</Label>
+              <Label htmlFor="admin-password">{t('password')}</Label>
               <div className="relative">
                 <Input
                   id="admin-password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your admin password"
+                  placeholder={t('form.adminPasswordPlaceholder')}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
@@ -336,19 +338,19 @@ function LoginForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  {t('signingIn')}
                 </>
               ) : (
                 <>
                   <Shield className="mr-2 h-4 w-4" />
-                  Sign in to Admin Portal
+                  {t('portal.signInToAdmin')}
                 </>
               )}
             </Button>
           </form>
 
           <p className="text-center text-xs text-muted-foreground">
-            Admin access is logged and monitored for security purposes.
+            {t('admin.accessLogged')}
           </p>
         </TabsContent>
 
@@ -357,9 +359,9 @@ function LoginForm() {
             <div className="flex items-start gap-3">
               <Database className="h-5 w-5 text-emerald-500 mt-0.5" />
               <div className="space-y-1">
-                <p className="text-sm font-medium text-emerald-500">GWI Team Portal</p>
+                <p className="text-sm font-medium text-emerald-500">{t('gwi.title')}</p>
                 <p className="text-xs text-muted-foreground">
-                  Access for GWI team members: Data Engineers, Taxonomy Managers, ML Engineers, and GWI Admins.
+                  {t('gwi.description')}
                 </p>
               </div>
             </div>
@@ -375,11 +377,11 @@ function LoginForm() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="gwi-email">GWI Email</Label>
+              <Label htmlFor="gwi-email">{t('form.gwiEmail')}</Label>
               <Input
                 id="gwi-email"
                 type="email"
-                placeholder="you@gwi.com"
+                placeholder={t('form.gwiEmailPlaceholder')}
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
@@ -388,12 +390,12 @@ function LoginForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="gwi-password">Password</Label>
+              <Label htmlFor="gwi-password">{t('password')}</Label>
               <div className="relative">
                 <Input
                   id="gwi-password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder={t('passwordPlaceholder')}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
@@ -413,19 +415,19 @@ function LoginForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  {t('signingIn')}
                 </>
               ) : (
                 <>
                   <Database className="mr-2 h-4 w-4" />
-                  Sign in to GWI Portal
+                  {t('portal.signInToGwi')}
                 </>
               )}
             </Button>
           </form>
 
           <p className="text-center text-xs text-muted-foreground">
-            Manage surveys, taxonomy, pipelines, LLMs, and data tools.
+            {t('gwi.manageTools')}
           </p>
         </TabsContent>
       </Tabs>
@@ -434,11 +436,13 @@ function LoginForm() {
 }
 
 function LoginFormSkeleton() {
+  const t = useTranslations('auth')
+
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Welcome back</h1>
-        <p className="text-muted-foreground">Sign in to your account to continue</p>
+        <h1 className="text-3xl font-bold">{t('welcomeBack')}</h1>
+        <p className="text-muted-foreground">{t('signInToContinue')}</p>
       </div>
       <div className="space-y-4">
         <div className="h-10 bg-muted rounded animate-pulse" />

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -109,7 +110,7 @@ export default function RolesPage() {
         fetchRoles()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to clone role")
+        toast.error(data.error || "Failed to clone role")
       }
     } catch (error) {
       console.error("Failed to clone role:", error)
@@ -136,7 +137,7 @@ export default function RolesPage() {
         fetchRoles()
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to delete role")
+        toast.error(data.error || "Failed to delete role")
       }
     } catch (error) {
       console.error("Failed to delete role:", error)

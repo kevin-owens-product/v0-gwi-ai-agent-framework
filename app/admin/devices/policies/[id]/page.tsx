@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   ArrowLeft,
   Shield,
@@ -89,6 +90,7 @@ export default function DevicePolicyDetailPage() {
   const [isLoading, setIsLoading] = useState(!isNew)
   const [isEditing, setIsEditing] = useState(isNew)
   const [isSaving, setIsSaving] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const [editForm, setEditForm] = useState({
     name: "",
@@ -217,8 +219,6 @@ export default function DevicePolicyDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this policy?")) return
-
     try {
       const response = await fetch(`/api/admin/devices/policies/${policyId}`, {
         method: "DELETE",
@@ -232,6 +232,8 @@ export default function DevicePolicyDetailPage() {
       }
     } catch (error) {
       toast.error("Failed to delete policy")
+    } finally {
+      setShowDeleteDialog(false)
     }
   }
 
@@ -307,10 +309,19 @@ export default function DevicePolicyDetailPage() {
                 </>
               )}
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button variant="destructive" onClick={() => setShowDeleteDialog(true)}>
               <Trash className="h-4 w-4 mr-2" />
               Delete
             </Button>
+            <ConfirmationDialog
+              open={showDeleteDialog}
+              onOpenChange={setShowDeleteDialog}
+              title="Delete Policy"
+              description="Are you sure you want to delete this policy? This action cannot be undone."
+              confirmLabel="Delete"
+              variant="destructive"
+              onConfirm={handleDelete}
+            />
           </div>
         )}
       </div>

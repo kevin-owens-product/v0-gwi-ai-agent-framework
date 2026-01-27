@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { useTranslations } from 'next-intl'
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, RefreshCw, Home } from "lucide-react"
 import Link from "next/link"
@@ -12,6 +13,8 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const t = useTranslations('ui.errors')
+
   useEffect(() => {
     console.error(error)
   }, [error])
@@ -22,23 +25,23 @@ export default function Error({
         <div className="w-20 h-20 rounded-full bg-destructive/10 flex items-center justify-center mx-auto mb-6">
           <AlertTriangle className="h-10 w-10 text-destructive" />
         </div>
-        <h1 className="text-2xl font-bold mb-2">Something went wrong</h1>
+        <h1 className="text-2xl font-bold mb-2">{t('somethingWentWrong')}</h1>
         <p className="text-muted-foreground mb-8">
-          We encountered an unexpected error. Our team has been notified and is working on a fix.
+          {t('unexpectedErrorDescription')}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={() => reset()}>
             <RefreshCw className="mr-2 h-4 w-4" />
-            Try Again
+            {t('tryAgain')}
           </Button>
           <Button variant="outline" asChild>
             <Link href="/">
               <Home className="mr-2 h-4 w-4" />
-              Go Home
+              {t('goHome')}
             </Link>
           </Button>
         </div>
-        {error.digest && <p className="text-xs text-muted-foreground mt-6">Error ID: {error.digest}</p>}
+        {error.digest && <p className="text-xs text-muted-foreground mt-6">{t('errorId', { id: error.digest })}</p>}
       </div>
     </div>
   )

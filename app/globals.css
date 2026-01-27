@@ -134,3 +134,61 @@ html.dark, .dark {
     @apply bg-background text-foreground;
   }
 }
+
+/* Portal-specific theme variables */
+:root {
+  /* Admin Portal - Slate/Blue accent */
+  --admin-accent: oklch(0.55 0.15 250);
+  --admin-accent-foreground: oklch(0.98 0 0);
+  --admin-bg: oklch(0.15 0.01 260);
+  --admin-bg-subtle: oklch(0.18 0.01 260);
+  --admin-border: oklch(0.25 0.01 260);
+  --admin-text: oklch(0.98 0 0);
+  --admin-text-muted: oklch(0.65 0.01 260);
+
+  /* GWI Portal - Emerald accent */
+  --gwi-accent: oklch(0.6 0.17 160);
+  --gwi-accent-foreground: oklch(0.98 0 0);
+  --gwi-bg: oklch(0.15 0.01 260);
+  --gwi-bg-subtle: oklch(0.18 0.01 260);
+  --gwi-border: oklch(0.25 0.01 260);
+  --gwi-text: oklch(0.98 0 0);
+  --gwi-text-muted: oklch(0.65 0.01 260);
+}
+
+html.dark, .dark {
+  /* Admin Portal - Dark mode */
+  --admin-accent: oklch(0.65 0.15 250);
+  --admin-accent-foreground: oklch(0.98 0 0);
+  --admin-bg: oklch(0.12 0.01 260);
+  --admin-bg-subtle: oklch(0.15 0.01 260);
+  --admin-border: oklch(0.22 0.01 260);
+
+  /* GWI Portal - Dark mode */
+  --gwi-accent: oklch(0.65 0.17 160);
+  --gwi-accent-foreground: oklch(0.98 0 0);
+  --gwi-bg: oklch(0.12 0.01 260);
+  --gwi-bg-subtle: oklch(0.15 0.01 260);
+  --gwi-border: oklch(0.22 0.01 260);
+}
+
+/* Portal-specific utility classes */
+.admin-portal {
+  --portal-accent: var(--admin-accent);
+  --portal-accent-fg: var(--admin-accent-foreground);
+  --portal-bg: var(--admin-bg);
+  --portal-bg-subtle: var(--admin-bg-subtle);
+  --portal-border: var(--admin-border);
+  --portal-text: var(--admin-text);
+  --portal-text-muted: var(--admin-text-muted);
+}
+
+.gwi-portal {
+  --portal-accent: var(--gwi-accent);
+  --portal-accent-fg: var(--gwi-accent-foreground);
+  --portal-bg: var(--gwi-bg);
+  --portal-bg-subtle: var(--gwi-bg-subtle);
+  --portal-border: var(--gwi-border);
+  --portal-text: var(--gwi-text);
+  --portal-text-muted: var(--gwi-text-muted);
+}

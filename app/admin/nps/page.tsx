@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -84,6 +85,7 @@ export default function NPSPage() {
   // Create survey dialog
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
+  const [surveyToDelete, setSurveyToDelete] = useState<NPSSurvey | null>(null)
   const [newSurvey, setNewSurvey] = useState({
     name: "",
     description: "",
@@ -152,18 +154,18 @@ export default function NPSPage() {
     }
   }
 
-  const handleDeleteSurvey = async (surveyId: string) => {
-    if (!confirm("Are you sure you want to delete this survey? All responses will be lost.")) {
-      return
-    }
+  const handleDeleteSurvey = async () => {
+    if (!surveyToDelete) return
 
     try {
-      await fetch(`/api/admin/nps/surveys/${surveyId}`, {
+      await fetch(`/api/admin/nps/surveys/${surveyToDelete.id}`, {
         method: "DELETE",
       })
       fetchSurveys()
     } catch (error) {
       console.error("Failed to delete survey:", error)
+    } finally {
+      setSurveyToDelete(null)
     }
   }
 
@@ -291,6 +293,17 @@ export default function NPSPage() {
               </div>
             </DialogContent>
           </Dialog>
+
+          {/* Delete Confirmation Dialog */}
+          <ConfirmationDialog
+            open={!!surveyToDelete}
+            onOpenChange={(open) => !open && setSurveyToDelete(null)}
+            title="Delete Survey"
+            description={`Are you sure you want to delete "${surveyToDelete?.name}"? All responses will be permanently lost.`}
+            confirmLabel="Delete"
+            onConfirm={handleDeleteSurvey}
+            variant="destructive"
+          />
         </div>
       </div>
 
@@ -431,7 +444,7 @@ export default function NPSPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => handleDeleteSurvey(survey.id)}
+                        onClick={() => setSurveyToDelete(survey)}
                         className="text-muted-foreground hover:text-destructive"
                       >
                         <Trash2 className="h-4 w-4" />

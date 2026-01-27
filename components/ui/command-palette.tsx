@@ -32,6 +32,7 @@ import {
   User,
   HelpCircle,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { ShortcutKey } from "@/components/ui/shortcut-key"
 
@@ -253,6 +254,7 @@ export function CommandPalette({
   customItems = [],
 }: CommandPaletteProps) {
   const router = useRouter()
+  const t = useTranslations('common')
   const [search, setSearch] = useState("")
 
   const allItems = React.useMemo(() => {
@@ -332,7 +334,7 @@ export function CommandPalette({
           {/* Results List */}
           <CommandPrimitive.List className="max-h-[400px] overflow-y-auto overflow-x-hidden p-2">
             <CommandPrimitive.Empty className="py-6 text-center text-sm text-muted-foreground">
-              No results found.
+              {t('noResults')}
             </CommandPrimitive.Empty>
 
             {/* Recent Items */}

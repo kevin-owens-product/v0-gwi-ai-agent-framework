@@ -47,6 +47,7 @@ import {
   Move,
 } from "lucide-react"
 import Link from "next/link"
+import { toast } from "sonner"
 
 interface HierarchyNode {
   id: string
@@ -404,7 +405,7 @@ export default function HierarchyPage() {
       fetchAllOrgs()
     } catch (error) {
       console.error("Failed to create child:", error)
-      alert(error instanceof Error ? error.message : "Failed to create child organization")
+      toast.error(error instanceof Error ? error.message : "Failed to create child organization")
     } finally {
       setIsSubmitting(false)
     }
@@ -440,7 +441,7 @@ export default function HierarchyPage() {
       fetchRelationships()
     } catch (error) {
       console.error("Failed to create relationship:", error)
-      alert(error instanceof Error ? error.message : "Failed to create relationship")
+      toast.error(error instanceof Error ? error.message : "Failed to create relationship")
     } finally {
       setIsSubmitting(false)
     }
@@ -474,7 +475,7 @@ export default function HierarchyPage() {
       fetchHierarchy()
     } catch (error) {
       console.error("Failed to move org:", error)
-      alert(error instanceof Error ? error.message : "Failed to move organization")
+      toast.error(error instanceof Error ? error.message : "Failed to move organization")
     } finally {
       setIsSubmitting(false)
     }
@@ -499,7 +500,7 @@ export default function HierarchyPage() {
       fetchRelationships()
     } catch (error) {
       console.error("Failed to update relationship:", error)
-      alert(error instanceof Error ? error.message : "Failed to update relationship")
+      toast.error(error instanceof Error ? error.message : "Failed to update relationship")
     }
   }
 

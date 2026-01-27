@@ -1,0 +1,448 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Creer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "import": "Importer",
+    "refresh": "Actualiser",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Precedent",
+    "submit": "Soumettre",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "yes": "Oui",
+    "no": "Non",
+    "or": "ou",
+    "and": "et",
+    "all": "Tout",
+    "none": "Aucun",
+    "viewDetails": "Voir les details",
+    "viewAll": "Voir tout",
+    "noResults": "Aucun resultat trouve",
+    "required": "Obligatoire",
+    "optional": "Facultatif",
+    "actions": "Actions",
+    "status": "Statut",
+    "name": "Nom",
+    "description": "Description",
+    "type": "Type",
+    "date": "Date",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "enabled": "Active",
+    "disabled": "Desactive",
+    "success": "Succes",
+    "failed": "Echoue",
+    "pending": "En attente",
+    "completed": "Termine",
+    "running": "En cours",
+    "cancelled": "Annule"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signOut": "Se deconnecter",
+    "signUp": "S'inscrire",
+    "getStarted": "Commencer",
+    "email": "E-mail",
+    "emailPlaceholder": "Entrez votre e-mail",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "forgotPassword": "Mot de passe oublie ?",
+    "resetPassword": "Reinitialiser le mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "rememberMe": "Se souvenir de moi",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "hasAccount": "Vous avez deja un compte ?",
+    "createAccount": "Creer un compte",
+    "signInWith": "Se connecter avec {provider}",
+    "orContinueWith": "Ou continuer avec",
+    "termsAgreement": "En vous connectant, vous acceptez nos Conditions d'utilisation et notre Politique de confidentialite",
+    "welcomeBack": "Bon retour",
+    "signInToContinue": "Connectez-vous pour acceder a votre compte",
+    "createYourAccount": "Creez votre compte",
+    "getStartedFree": "Commencez gratuitement",
+    "errors": {
+      "invalidCredentials": "E-mail ou mot de passe invalide",
+      "emailRequired": "L'e-mail est obligatoire",
+      "passwordRequired": "Le mot de passe est obligatoire",
+      "invalidEmail": "Veuillez entrer un e-mail valide",
+      "passwordTooShort": "Le mot de passe doit contenir au moins 8 caracteres",
+      "accountNotFound": "Compte introuvable",
+      "accountLocked": "Le compte est verrouille. Veuillez contacter le support.",
+      "tooManyAttempts": "Trop de tentatives de connexion. Veuillez reessayer plus tard.",
+      "networkError": "Erreur reseau. Veuillez verifier votre connexion."
+    },
+    "admin": {
+      "title": "Connexion administrateur",
+      "description": "Connectez-vous pour acceder au portail administrateur"
+    },
+    "gwi": {
+      "title": "Connexion equipe GWI",
+      "description": "Connectez-vous pour acceder au portail de l'equipe GWI"
+    }
+  },
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "settings": "Parametres",
+    "profile": "Profil",
+    "help": "Aide",
+    "docs": "Documentation",
+    "features": "Fonctionnalites",
+    "pricing": "Tarifs",
+    "solutions": "Solutions",
+    "agents": "Agents",
+    "theme": "Theme"
+  },
+  "settings": {
+    "title": "Parametres",
+    "language": "Langue",
+    "selectLanguage": "Selectionner la langue",
+    "preferences": "Preferences",
+    "notifications": "Notifications",
+    "security": "Securite",
+    "account": "Compte",
+    "appearance": "Apparence",
+    "general": "General"
+  },
+  "landing": {
+    "header": {
+      "brandName": "GWI Insights",
+      "solutions": "Solutions",
+      "salesTeams": "Equipes commerciales",
+      "insightsTeams": "Equipes insights",
+      "adSales": "Ventes publicitaires",
+      "marketing": "Marketing",
+      "productDevelopment": "Developpement produit",
+      "marketResearch": "Etudes de marche",
+      "innovation": "Innovation",
+      "features": "Fonctionnalites",
+      "agents": "Agents",
+      "pricing": "Tarifs",
+      "docs": "Documentation",
+      "signIn": "Se connecter",
+      "getStarted": "Commencer",
+      "theme": "Theme"
+    },
+    "hero": {
+      "title": "Insights consommateurs propulses par l'IA",
+      "subtitle": "Debloquez une comprehension approfondie des consommateurs grace a l'analyse par IA des donnees d'enquete mondiales",
+      "cta": "Demarrer l'essai gratuit",
+      "secondaryCta": "Voir la demo"
+    },
+    "features": {
+      "title": "Fonctionnalites puissantes",
+      "subtitle": "Tout ce dont vous avez besoin pour comprendre votre audience"
+    },
+    "pricing": {
+      "title": "Tarification simple et transparente",
+      "subtitle": "Choisissez le forfait qui correspond a vos besoins",
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "perMonth": "/mois",
+      "perYear": "/an",
+      "mostPopular": "Le plus populaire",
+      "getStarted": "Commencer",
+      "contactSales": "Contacter les ventes",
+      "features": "Fonctionnalites"
+    },
+    "cta": {
+      "title": "Pret a commencer ?",
+      "subtitle": "Rejoignez des milliers d'entreprises utilisant GWI Insights",
+      "button": "Demarrer l'essai gratuit"
+    },
+    "footer": {
+      "company": "Entreprise",
+      "about": "A propos",
+      "careers": "Carrieres",
+      "press": "Presse",
+      "contact": "Contact",
+      "product": "Produit",
+      "features": "Fonctionnalites",
+      "pricing": "Tarifs",
+      "security": "Securite",
+      "roadmap": "Feuille de route",
+      "resources": "Ressources",
+      "docs": "Documentation",
+      "blog": "Blog",
+      "support": "Support",
+      "changelog": "Journal des modifications",
+      "legal": "Mentions legales",
+      "privacy": "Confidentialite",
+      "terms": "Conditions",
+      "copyright": "© {year} GWI. Tous droits reserves."
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bon retour",
+    "overview": "Vue d'ensemble",
+    "recentActivity": "Activite recente",
+    "quickActions": "Actions rapides",
+    "header": {
+      "missionControl": "Centre de controle",
+      "allSystemsOperational": "Tous les systemes operationnels",
+      "realTimeOverview": "Vue en temps reel de votre ecosysteme d'agents IA",
+      "last24Hours": "Dernieres 24 heures",
+      "last7Days": "7 derniers jours",
+      "last30Days": "30 derniers jours",
+      "last90Days": "90 derniers jours",
+      "playground": "Espace d'experimentation",
+      "newWorkflow": "Nouveau flux de travail"
+    },
+    "metrics": {
+      "activeAgents": "Agents actifs",
+      "totalCount": "{count} au total",
+      "runningNow": "En cours d'execution",
+      "insightsGenerated": "Insights generes",
+      "runsCount": "{count} executions",
+      "thisWeek": "Cette semaine",
+      "successRate": "Taux de reussite",
+      "excellent": "Excellent",
+      "good": "Bon",
+      "needsAttention": "Attention requise",
+      "noData": "Aucune donnee",
+      "completedRuns": "Executions terminees",
+      "avgResponse": "Reponse moyenne",
+      "notAvailable": "N/D",
+      "fast": "Rapide",
+      "normal": "Normal",
+      "slow": "Lent",
+      "perRun": "Par execution"
+    }
+  },
+  "audiences": {
+    "title": "Audiences",
+    "createAudience": "Creer une audience",
+    "audienceBuilder": "Constructeur d'audience",
+    "savedAudiences": "Audiences enregistrees",
+    "comparison": "Comparaison",
+    "overlap": "Chevauchement",
+    "persona": "Persona",
+    "mediaConsumption": "Consommation media",
+    "brandAffinities": "Affinites de marque"
+  },
+  "playground": {
+    "title": "Espace d'experimentation",
+    "newSession": "Nouvelle session",
+    "chat": "Discussion",
+    "context": "Contexte",
+    "sources": "Sources",
+    "workspace": "Espace de travail"
+  },
+  "collaboration": {
+    "share": "Partager",
+    "comments": "Commentaires",
+    "addComment": "Ajouter un commentaire",
+    "reply": "Repondre",
+    "shareLink": "Partager le lien",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copie !"
+  },
+  "savedViews": {
+    "title": "Vues enregistrees",
+    "saveView": "Enregistrer la vue",
+    "pinnedItems": "Elements epingles",
+    "recentItems": "Elements recents"
+  },
+  "exports": {
+    "title": "Exportations",
+    "exportData": "Exporter les donnees",
+    "format": "Format",
+    "schedule": "Planification",
+    "history": "Historique"
+  },
+  "profile": {
+    "title": "Profil",
+    "editProfile": "Modifier le profil",
+    "avatar": "Avatar",
+    "displayName": "Nom d'affichage",
+    "emailAddress": "Adresse e-mail"
+  },
+  "gwi": {
+    "dashboard": {
+      "title": "Portail de l'equipe GWI",
+      "description": "Gerez les enquetes, la taxonomie, les pipelines de donnees et les configurations IA",
+      "loading": "Chargement du tableau de bord...",
+      "unresolvedErrors": "{count, plural, one {# erreur non resolue} other {# erreurs non resolues}} au cours des dernieres 24 heures",
+      "reviewErrors": "Examinez et resolvez les problemes pour maintenir la sante du systeme",
+      "viewErrors": "Voir les erreurs"
+    },
+    "stats": {
+      "surveys": "Enquetes",
+      "active": "{count} actif(s)",
+      "taxonomyCategories": "Categories de taxonomie",
+      "dataPipelines": "Pipelines de donnees",
+      "llmConfigurations": "Configurations LLM",
+      "agentTemplates": "Modeles d'agents",
+      "dataSources": "Sources de donnees"
+    },
+    "pipelineRuns": {
+      "title": "Executions recentes des pipelines",
+      "description": "Statut des dernieres executions de pipeline",
+      "viewAll": "Voir tout",
+      "noPipelines": "Aucune execution de pipeline pour l'instant",
+      "createFirst": "Creez votre premier pipeline",
+      "records": "{count} enregistrements",
+      "started": "Demarre le {date}"
+    },
+    "quickActions": {
+      "createSurvey": "Creer une enquete",
+      "createSurveyDesc": "Concevoir une nouvelle enquete",
+      "newPipeline": "Nouveau pipeline",
+      "newPipelineDesc": "Configurer le traitement des donnees",
+      "testPrompts": "Tester les prompts",
+      "testPromptsDesc": "Essayer les modeles de prompts"
+    },
+    "navigation": {
+      "surveys": "Enquetes",
+      "taxonomy": "Taxonomie",
+      "pipelines": "Pipelines",
+      "llm": "LLM",
+      "agents": "Agents",
+      "dataSources": "Sources de donnees",
+      "monitoring": "Surveillance",
+      "system": "Systeme",
+      "services": "Services"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Portail administrateur",
+      "description": "Administration de la plateforme et gestion des locataires"
+    },
+    "navigation": {
+      "dashboard": "Tableau de bord",
+      "organizations": "Organisations",
+      "users": "Utilisateurs",
+      "plans": "Forfaits",
+      "features": "Fonctionnalites",
+      "security": "Securite",
+      "identity": "Identite",
+      "sso": "SSO",
+      "domains": "Domaines",
+      "devices": "Appareils",
+      "scim": "SCIM",
+      "hierarchy": "Hierarchie",
+      "settings": "Parametres",
+      "entitlements": "Droits"
+    },
+    "plans": {
+      "title": "Forfaits",
+      "description": "Gerer les forfaits d'abonnement",
+      "createPlan": "Creer un forfait",
+      "editPlan": "Modifier le forfait",
+      "planName": "Nom du forfait",
+      "pricing": "Tarification",
+      "features": "Fonctionnalites",
+      "limits": "Limites"
+    },
+    "security": {
+      "title": "Securite",
+      "policies": "Politiques",
+      "sessions": "Sessions",
+      "ipBlocklist": "Liste de blocage IP",
+      "threats": "Menaces",
+      "violations": "Violations"
+    },
+    "identity": {
+      "title": "Gestion des identites",
+      "ssoTitle": "Authentification unique",
+      "ssoDescription": "Configurer les fournisseurs SSO",
+      "domainsTitle": "Domaines",
+      "domainsDescription": "Gerer les domaines verifies",
+      "scimTitle": "SCIM",
+      "scimDescription": "Parametres de provisionnement des utilisateurs"
+    },
+    "organizations": {
+      "title": "Organisations",
+      "description": "Gerer les organisations locataires",
+      "createOrg": "Creer une organisation",
+      "orgName": "Nom de l'organisation",
+      "status": "Statut",
+      "plan": "Forfait",
+      "members": "Membres",
+      "defaultLanguage": "Langue par defaut"
+    }
+  },
+  "ui": {
+    "dialog": {
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "ok": "OK",
+      "yes": "Oui",
+      "no": "Non",
+      "continue": "Continuer",
+      "goBack": "Retour"
+    },
+    "alert": {
+      "areYouSure": "Etes-vous sur ?",
+      "cannotUndo": "Cette action est irreversible.",
+      "deleteConfirm": "Etes-vous sur de vouloir supprimer ceci ?",
+      "unsavedChanges": "Vous avez des modifications non enregistrees",
+      "discardChanges": "Abandonner les modifications ?"
+    },
+    "theme": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Systeme",
+      "toggleTheme": "Changer de theme"
+    },
+    "commandPalette": {
+      "placeholder": "Tapez une commande ou recherchez...",
+      "noResults": "Aucun resultat trouve",
+      "recentSearches": "Recherches recentes",
+      "suggestions": "Suggestions"
+    },
+    "shortcuts": {
+      "title": "Raccourcis clavier",
+      "general": "General",
+      "navigation": "Navigation",
+      "actions": "Actions"
+    },
+    "errors": {
+      "somethingWentWrong": "Une erreur s'est produite",
+      "tryAgain": "Reessayer",
+      "pageNotFound": "Page introuvable",
+      "pageNotFoundDescription": "Desole, nous n'avons pas pu trouver la page que vous recherchez. Elle a peut-etre ete deplacee ou supprimee.",
+      "backToDashboard": "Retour au tableau de bord",
+      "goHome": "Retour a l'accueil",
+      "unexpectedError": "Une erreur inattendue s'est produite",
+      "unexpectedErrorDescription": "Nous avons rencontre une erreur inattendue. Notre equipe a ete informee et travaille sur une solution.",
+      "reloadPage": "Recharger la page",
+      "errorId": "ID de l'erreur : {id}",
+      "contactSupport": "Contacter le support"
+    },
+    "loading": {
+      "loading": "Chargement...",
+      "pleaseWait": "Veuillez patienter..."
+    },
+    "empty": {
+      "noData": "Aucune donnee disponible",
+      "noItems": "Aucun element trouve",
+      "getStarted": "Commencez par creer votre premier element"
+    },
+    "pagination": {
+      "previous": "Precedent",
+      "next": "Suivant",
+      "page": "Page {current} sur {total}",
+      "showingItems": "Affichage de {start} a {end} sur {total} elements"
+    },
+    "table": {
+      "noResults": "Aucun resultat",
+      "sortAscending": "Trier par ordre croissant",
+      "sortDescending": "Trier par ordre decroissant",
+      "selectAll": "Tout selectionner",
+      "deselectAll": "Tout deselectionner"
+    }
+  }
+}

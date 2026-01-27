@@ -1,3 +1,7 @@
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./lib/i18n/request.ts');
+
 // Check if we're in a memory-constrained build environment
 const isMemoryConstrained = process.env.RENDER === 'true' || process.env.MEMORY_CONSTRAINED === 'true';
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -134,4 +138,5 @@ if (!isMemoryConstrained) {
   console.log('Memory-constrained build: Skipping Sentry webpack plugin to save ~200-300MB');
 }
 
-export default finalConfig;
+// Wrap with next-intl plugin for internationalization
+export default withNextIntl(finalConfig);

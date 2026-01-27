@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, Play, AlertTriangle, Clock, ArrowRight, Bot, Sparkles, Inbox } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface Activity {
   id: string
@@ -52,11 +53,14 @@ const typeIcons = {
 }
 
 export function LiveActivityFeed({ activities = [] }: LiveActivityFeedProps) {
+  const t = useTranslations('dashboard.activity')
+  const tCommon = useTranslations('common')
+
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <div className="flex items-center gap-2">
-          <CardTitle className="text-base font-medium">Live Activity</CardTitle>
+          <CardTitle className="text-base font-medium">{t('liveActivity')}</CardTitle>
           {activities.length > 0 && (
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -66,7 +70,7 @@ export function LiveActivityFeed({ activities = [] }: LiveActivityFeedProps) {
         </div>
         <Link href="/dashboard/agents">
           <Button variant="ghost" size="sm" className="text-xs gap-1">
-            View all
+            {tCommon('viewAll')}
             <ArrowRight className="h-3 w-3" />
           </Button>
         </Link>
@@ -75,8 +79,8 @@ export function LiveActivityFeed({ activities = [] }: LiveActivityFeedProps) {
         {activities.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <Inbox className="h-8 w-8 mb-2 opacity-50" />
-            <p className="text-sm">No recent activity</p>
-            <p className="text-xs">Run an agent to see activity here</p>
+            <p className="text-sm">{t('noRecentActivity')}</p>
+            <p className="text-xs">{t('runAgentToSeeActivity')}</p>
           </div>
         ) : (
           activities.map((activity) => {

@@ -183,10 +183,6 @@ export default function MaintenancePage() {
   }
 
   const handleDelete = async (windowId: string) => {
-    if (!confirm("Are you sure you want to delete this maintenance window?")) {
-      return
-    }
-
     try {
       const response = await fetch(`/api/admin/operations/maintenance/${windowId}`, {
         method: "DELETE",

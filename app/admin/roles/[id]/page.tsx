@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, use } from "react"
+import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -176,11 +177,11 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
         }
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to save role")
+        toast.error(data.error || "Failed to save role")
       }
     } catch (error) {
       console.error("Failed to save role:", error)
-      alert("Failed to save role")
+      toast.error("Failed to save role")
     } finally {
       setIsSaving(false)
     }

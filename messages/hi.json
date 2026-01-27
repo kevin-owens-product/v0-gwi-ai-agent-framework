@@ -1,0 +1,448 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "create": "बनाएं",
+    "search": "खोजें",
+    "filter": "फ़िल्टर",
+    "export": "निर्यात करें",
+    "import": "आयात करें",
+    "refresh": "ताज़ा करें",
+    "back": "वापस",
+    "next": "अगला",
+    "previous": "पिछला",
+    "submit": "जमा करें",
+    "confirm": "पुष्टि करें",
+    "close": "बंद करें",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "or": "या",
+    "and": "और",
+    "all": "सभी",
+    "none": "कोई नहीं",
+    "viewDetails": "विवरण देखें",
+    "viewAll": "सभी देखें",
+    "noResults": "कोई परिणाम नहीं मिला",
+    "required": "आवश्यक",
+    "optional": "वैकल्पिक",
+    "actions": "कार्य",
+    "status": "स्थिति",
+    "name": "नाम",
+    "description": "विवरण",
+    "type": "प्रकार",
+    "date": "दिनांक",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "enabled": "सक्षम",
+    "disabled": "अक्षम",
+    "success": "सफलता",
+    "failed": "विफल",
+    "pending": "लंबित",
+    "completed": "पूर्ण",
+    "running": "चल रहा है",
+    "cancelled": "रद्द किया गया"
+  },
+  "auth": {
+    "signIn": "साइन इन करें",
+    "signOut": "साइन आउट करें",
+    "signUp": "साइन अप करें",
+    "getStarted": "शुरू करें",
+    "email": "ईमेल",
+    "emailPlaceholder": "अपना ईमेल दर्ज करें",
+    "password": "पासवर्ड",
+    "passwordPlaceholder": "अपना पासवर्ड दर्ज करें",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "resetPassword": "पासवर्ड रीसेट करें",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "rememberMe": "मुझे याद रखें",
+    "noAccount": "खाता नहीं है?",
+    "hasAccount": "पहले से खाता है?",
+    "createAccount": "खाता बनाएं",
+    "signInWith": "{provider} से साइन इन करें",
+    "orContinueWith": "या इसके साथ जारी रखें",
+    "termsAgreement": "साइन इन करके, आप हमारी सेवा की शर्तों और गोपनीयता नीति से सहमत होते हैं",
+    "welcomeBack": "वापस स्वागत है",
+    "signInToContinue": "अपने खाते में जारी रखने के लिए साइन इन करें",
+    "createYourAccount": "अपना खाता बनाएं",
+    "getStartedFree": "मुफ़्त में शुरू करें",
+    "errors": {
+      "invalidCredentials": "अमान्य ईमेल या पासवर्ड",
+      "emailRequired": "ईमेल आवश्यक है",
+      "passwordRequired": "पासवर्ड आवश्यक है",
+      "invalidEmail": "कृपया एक मान्य ईमेल दर्ज करें",
+      "passwordTooShort": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए",
+      "accountNotFound": "खाता नहीं मिला",
+      "accountLocked": "खाता लॉक है। कृपया सहायता से संपर्क करें।",
+      "tooManyAttempts": "बहुत अधिक लॉगिन प्रयास। कृपया बाद में पुनः प्रयास करें।",
+      "networkError": "नेटवर्क त्रुटि। कृपया अपना कनेक्शन जाँचें।"
+    },
+    "admin": {
+      "title": "व्यवस्थापक लॉगिन",
+      "description": "व्यवस्थापक पोर्टल तक पहुँचने के लिए साइन इन करें"
+    },
+    "gwi": {
+      "title": "GWI टीम लॉगिन",
+      "description": "GWI टीम पोर्टल तक पहुँचने के लिए साइन इन करें"
+    }
+  },
+  "navigation": {
+    "home": "होम",
+    "dashboard": "डैशबोर्ड",
+    "settings": "सेटिंग्स",
+    "profile": "प्रोफ़ाइल",
+    "help": "सहायता",
+    "docs": "दस्तावेज़",
+    "features": "सुविधाएं",
+    "pricing": "मूल्य निर्धारण",
+    "solutions": "समाधान",
+    "agents": "एजेंट्स",
+    "theme": "थीम"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "selectLanguage": "भाषा चुनें",
+    "preferences": "प्राथमिकताएं",
+    "notifications": "सूचनाएं",
+    "security": "सुरक्षा",
+    "account": "खाता",
+    "appearance": "दिखावट",
+    "general": "सामान्य"
+  },
+  "landing": {
+    "header": {
+      "brandName": "GWI Insights",
+      "solutions": "समाधान",
+      "salesTeams": "बिक्री टीमें",
+      "insightsTeams": "इनसाइट्स टीमें",
+      "adSales": "विज्ञापन बिक्री",
+      "marketing": "मार्केटिंग",
+      "productDevelopment": "उत्पाद विकास",
+      "marketResearch": "बाज़ार अनुसंधान",
+      "innovation": "नवाचार",
+      "features": "सुविधाएं",
+      "agents": "एजेंट्स",
+      "pricing": "मूल्य निर्धारण",
+      "docs": "दस्तावेज़",
+      "signIn": "साइन इन करें",
+      "getStarted": "शुरू करें",
+      "theme": "थीम"
+    },
+    "hero": {
+      "title": "AI द्वारा संचालित उपभोक्ता इनसाइट्स",
+      "subtitle": "वैश्विक सर्वेक्षण डेटा के AI-संचालित विश्लेषण के साथ गहरी उपभोक्ता समझ प्राप्त करें",
+      "cta": "मुफ़्त ट्रायल शुरू करें",
+      "secondaryCta": "डेमो देखें"
+    },
+    "features": {
+      "title": "शक्तिशाली सुविधाएं",
+      "subtitle": "अपने दर्शकों को समझने के लिए आपको जो कुछ भी चाहिए"
+    },
+    "pricing": {
+      "title": "सरल, पारदर्शी मूल्य निर्धारण",
+      "subtitle": "अपनी आवश्यकताओं के अनुसार योजना चुनें",
+      "monthly": "मासिक",
+      "annual": "वार्षिक",
+      "perMonth": "/माह",
+      "perYear": "/वर्ष",
+      "mostPopular": "सबसे लोकप्रिय",
+      "getStarted": "शुरू करें",
+      "contactSales": "बिक्री से संपर्क करें",
+      "features": "सुविधाएं"
+    },
+    "cta": {
+      "title": "शुरू करने के लिए तैयार हैं?",
+      "subtitle": "GWI Insights का उपयोग करने वाली हज़ारों कंपनियों से जुड़ें",
+      "button": "मुफ़्त ट्रायल शुरू करें"
+    },
+    "footer": {
+      "company": "कंपनी",
+      "about": "हमारे बारे में",
+      "careers": "करियर",
+      "press": "प्रेस",
+      "contact": "संपर्क",
+      "product": "उत्पाद",
+      "features": "सुविधाएं",
+      "pricing": "मूल्य निर्धारण",
+      "security": "सुरक्षा",
+      "roadmap": "रोडमैप",
+      "resources": "संसाधन",
+      "docs": "दस्तावेज़ीकरण",
+      "blog": "ब्लॉग",
+      "support": "सहायता",
+      "changelog": "परिवर्तन लॉग",
+      "legal": "कानूनी",
+      "privacy": "गोपनीयता",
+      "terms": "शर्तें",
+      "copyright": "© {year} GWI. सर्वाधिकार सुरक्षित।"
+    }
+  },
+  "dashboard": {
+    "title": "डैशबोर्ड",
+    "welcome": "वापस स्वागत है",
+    "overview": "अवलोकन",
+    "recentActivity": "हाल की गतिविधि",
+    "quickActions": "त्वरित कार्य",
+    "header": {
+      "missionControl": "मिशन कंट्रोल",
+      "allSystemsOperational": "सभी सिस्टम सुचारू रूप से चल रहे हैं",
+      "realTimeOverview": "आपके AI एजेंट इकोसिस्टम का रियल-टाइम अवलोकन",
+      "last24Hours": "पिछले 24 घंटे",
+      "last7Days": "पिछले 7 दिन",
+      "last30Days": "पिछले 30 दिन",
+      "last90Days": "पिछले 90 दिन",
+      "playground": "प्लेग्राउंड",
+      "newWorkflow": "नया वर्कफ़्लो"
+    },
+    "metrics": {
+      "activeAgents": "सक्रिय एजेंट्स",
+      "totalCount": "कुल {count}",
+      "runningNow": "अभी चल रहा है",
+      "insightsGenerated": "जनरेट की गई इनसाइट्स",
+      "runsCount": "{count} रन",
+      "thisWeek": "इस सप्ताह",
+      "successRate": "सफलता दर",
+      "excellent": "उत्कृष्ट",
+      "good": "अच्छा",
+      "needsAttention": "ध्यान देने की आवश्यकता",
+      "noData": "कोई डेटा नहीं",
+      "completedRuns": "पूर्ण रन",
+      "avgResponse": "औसत प्रतिक्रिया",
+      "notAvailable": "उपलब्ध नहीं",
+      "fast": "तेज़",
+      "normal": "सामान्य",
+      "slow": "धीमा",
+      "perRun": "प्रति रन"
+    }
+  },
+  "audiences": {
+    "title": "दर्शक",
+    "createAudience": "दर्शक बनाएं",
+    "audienceBuilder": "दर्शक बिल्डर",
+    "savedAudiences": "सहेजे गए दर्शक",
+    "comparison": "तुलना",
+    "overlap": "ओवरलैप",
+    "persona": "पर्सोना",
+    "mediaConsumption": "मीडिया उपभोग",
+    "brandAffinities": "ब्रांड आत्मीयता"
+  },
+  "playground": {
+    "title": "प्लेग्राउंड",
+    "newSession": "नया सत्र",
+    "chat": "चैट",
+    "context": "संदर्भ",
+    "sources": "स्रोत",
+    "workspace": "कार्यक्षेत्र"
+  },
+  "collaboration": {
+    "share": "साझा करें",
+    "comments": "टिप्पणियां",
+    "addComment": "टिप्पणी जोड़ें",
+    "reply": "जवाब दें",
+    "shareLink": "लिंक साझा करें",
+    "copyLink": "लिंक कॉपी करें",
+    "linkCopied": "लिंक कॉपी हो गया!"
+  },
+  "savedViews": {
+    "title": "सहेजे गए दृश्य",
+    "saveView": "दृश्य सहेजें",
+    "pinnedItems": "पिन किए गए आइटम",
+    "recentItems": "हाल के आइटम"
+  },
+  "exports": {
+    "title": "निर्यात",
+    "exportData": "डेटा निर्यात करें",
+    "format": "प्रारूप",
+    "schedule": "शेड्यूल",
+    "history": "इतिहास"
+  },
+  "profile": {
+    "title": "प्रोफ़ाइल",
+    "editProfile": "प्रोफ़ाइल संपादित करें",
+    "avatar": "अवतार",
+    "displayName": "प्रदर्शन नाम",
+    "emailAddress": "ईमेल पता"
+  },
+  "gwi": {
+    "dashboard": {
+      "title": "GWI टीम पोर्टल",
+      "description": "सर्वेक्षण, वर्गीकरण, डेटा पाइपलाइन और AI कॉन्फ़िगरेशन प्रबंधित करें",
+      "loading": "डैशबोर्ड लोड हो रहा है...",
+      "unresolvedErrors": "{count, plural, one {# अनसुलझी त्रुटि} other {# अनसुलझी त्रुटियां}} पिछले 24 घंटों में",
+      "reviewErrors": "सिस्टम स्वास्थ्य बनाए रखने के लिए समस्याओं की समीक्षा करें और हल करें",
+      "viewErrors": "त्रुटियां देखें"
+    },
+    "stats": {
+      "surveys": "सर्वेक्षण",
+      "active": "{count} सक्रिय",
+      "taxonomyCategories": "वर्गीकरण श्रेणियां",
+      "dataPipelines": "डेटा पाइपलाइन",
+      "llmConfigurations": "LLM कॉन्फ़िगरेशन",
+      "agentTemplates": "एजेंट टेम्पलेट्स",
+      "dataSources": "डेटा स्रोत"
+    },
+    "pipelineRuns": {
+      "title": "हाल की पाइपलाइन रन",
+      "description": "नवीनतम पाइपलाइन निष्पादन स्थिति",
+      "viewAll": "सभी देखें",
+      "noPipelines": "अभी तक कोई पाइपलाइन रन नहीं",
+      "createFirst": "अपनी पहली पाइपलाइन बनाएं",
+      "records": "{count} रिकॉर्ड",
+      "started": "{date} को शुरू हुआ"
+    },
+    "quickActions": {
+      "createSurvey": "सर्वेक्षण बनाएं",
+      "createSurveyDesc": "एक नया सर्वेक्षण डिज़ाइन करें",
+      "newPipeline": "नई पाइपलाइन",
+      "newPipelineDesc": "डेटा प्रोसेसिंग सेट करें",
+      "testPrompts": "प्रॉम्प्ट्स परीक्षण करें",
+      "testPromptsDesc": "प्रॉम्प्ट टेम्पलेट्स आज़माएं"
+    },
+    "navigation": {
+      "surveys": "सर्वेक्षण",
+      "taxonomy": "वर्गीकरण",
+      "pipelines": "पाइपलाइन",
+      "llm": "LLM",
+      "agents": "एजेंट्स",
+      "dataSources": "डेटा स्रोत",
+      "monitoring": "निगरानी",
+      "system": "सिस्टम",
+      "services": "सेवाएं"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "व्यवस्थापक पोर्टल",
+      "description": "प्लेटफ़ॉर्म प्रशासन और किरायेदार प्रबंधन"
+    },
+    "navigation": {
+      "dashboard": "डैशबोर्ड",
+      "organizations": "संगठन",
+      "users": "उपयोगकर्ता",
+      "plans": "योजनाएं",
+      "features": "सुविधाएं",
+      "security": "सुरक्षा",
+      "identity": "पहचान",
+      "sso": "SSO",
+      "domains": "डोमेन",
+      "devices": "डिवाइस",
+      "scim": "SCIM",
+      "hierarchy": "पदानुक्रम",
+      "settings": "सेटिंग्स",
+      "entitlements": "अधिकार"
+    },
+    "plans": {
+      "title": "योजनाएं",
+      "description": "सदस्यता योजनाएं प्रबंधित करें",
+      "createPlan": "योजना बनाएं",
+      "editPlan": "योजना संपादित करें",
+      "planName": "योजना का नाम",
+      "pricing": "मूल्य निर्धारण",
+      "features": "सुविधाएं",
+      "limits": "सीमाएं"
+    },
+    "security": {
+      "title": "सुरक्षा",
+      "policies": "नीतियां",
+      "sessions": "सत्र",
+      "ipBlocklist": "IP ब्लॉकलिस्ट",
+      "threats": "खतरे",
+      "violations": "उल्लंघन"
+    },
+    "identity": {
+      "title": "पहचान प्रबंधन",
+      "ssoTitle": "सिंगल साइन-ऑन",
+      "ssoDescription": "SSO प्रदाताओं को कॉन्फ़िगर करें",
+      "domainsTitle": "डोमेन",
+      "domainsDescription": "सत्यापित डोमेन प्रबंधित करें",
+      "scimTitle": "SCIM",
+      "scimDescription": "उपयोगकर्ता प्रोविज़निंग सेटिंग्स"
+    },
+    "organizations": {
+      "title": "संगठन",
+      "description": "किरायेदार संगठनों का प्रबंधन करें",
+      "createOrg": "संगठन बनाएं",
+      "orgName": "संगठन का नाम",
+      "status": "स्थिति",
+      "plan": "योजना",
+      "members": "सदस्य",
+      "defaultLanguage": "डिफ़ॉल्ट भाषा"
+    }
+  },
+  "ui": {
+    "dialog": {
+      "confirm": "पुष्टि करें",
+      "cancel": "रद्द करें",
+      "close": "बंद करें",
+      "ok": "ठीक है",
+      "yes": "हाँ",
+      "no": "नहीं",
+      "continue": "जारी रखें",
+      "goBack": "वापस जाएं"
+    },
+    "alert": {
+      "areYouSure": "क्या आप सुनिश्चित हैं?",
+      "cannotUndo": "यह कार्य पूर्ववत नहीं किया जा सकता।",
+      "deleteConfirm": "क्या आप वाकई इसे हटाना चाहते हैं?",
+      "unsavedChanges": "आपके पास सहेजे नहीं गए परिवर्तन हैं",
+      "discardChanges": "परिवर्तन छोड़ें?"
+    },
+    "theme": {
+      "light": "लाइट",
+      "dark": "डार्क",
+      "system": "सिस्टम",
+      "toggleTheme": "थीम बदलें"
+    },
+    "commandPalette": {
+      "placeholder": "कमांड टाइप करें या खोजें...",
+      "noResults": "कोई परिणाम नहीं मिला",
+      "recentSearches": "हाल की खोजें",
+      "suggestions": "सुझाव"
+    },
+    "shortcuts": {
+      "title": "कीबोर्ड शॉर्टकट्स",
+      "general": "सामान्य",
+      "navigation": "नेविगेशन",
+      "actions": "कार्य"
+    },
+    "errors": {
+      "somethingWentWrong": "कुछ गलत हो गया",
+      "tryAgain": "पुनः प्रयास करें",
+      "pageNotFound": "पृष्ठ नहीं मिला",
+      "pageNotFoundDescription": "क्षमा करें, हम वह पृष्ठ नहीं ढूंढ पाए जिसे आप खोज रहे हैं। इसे स्थानांतरित या हटाया जा सकता है।",
+      "backToDashboard": "डैशबोर्ड पर वापस जाएं",
+      "goHome": "होम पर जाएं",
+      "unexpectedError": "एक अप्रत्याशित त्रुटि हुई",
+      "unexpectedErrorDescription": "हमें एक अप्रत्याशित त्रुटि का सामना करना पड़ा। हमारी टीम को सूचित कर दिया गया है और समाधान पर काम कर रही है।",
+      "reloadPage": "पृष्ठ पुनः लोड करें",
+      "errorId": "त्रुटि ID: {id}",
+      "contactSupport": "सहायता से संपर्क करें"
+    },
+    "loading": {
+      "loading": "लोड हो रहा है...",
+      "pleaseWait": "कृपया प्रतीक्षा करें..."
+    },
+    "empty": {
+      "noData": "कोई डेटा उपलब्ध नहीं",
+      "noItems": "कोई आइटम नहीं मिला",
+      "getStarted": "अपना पहला आइटम बनाकर शुरू करें"
+    },
+    "pagination": {
+      "previous": "पिछला",
+      "next": "अगला",
+      "page": "पृष्ठ {current} में से {total}",
+      "showingItems": "{total} में से {start} से {end} आइटम दिखा रहे हैं"
+    },
+    "table": {
+      "noResults": "कोई परिणाम नहीं",
+      "sortAscending": "आरोही क्रम में सॉर्ट करें",
+      "sortDescending": "अवरोही क्रम में सॉर्ट करें",
+      "selectAll": "सभी चुनें",
+      "deselectAll": "सभी अचयनित करें"
+    }
+  }
+}

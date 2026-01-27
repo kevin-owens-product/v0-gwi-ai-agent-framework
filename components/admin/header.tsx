@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { useAdmin } from "@/components/providers/admin-provider"
+import { useSidebar } from "@/components/providers/sidebar-provider"
 
 const pageTitles: Record<string, string> = {
   "/admin": "Dashboard",
@@ -24,12 +25,19 @@ const pageTitles: Record<string, string> = {
 export function AdminHeader() {
   const pathname = usePathname()
   const { admin } = useAdmin()
+  const { toggleMobile } = useSidebar()
 
   const title = pageTitles[pathname] || "Admin Portal"
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/95 backdrop-blur px-6">
-      <Button variant="ghost" size="icon" className="lg:hidden">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="lg:hidden"
+        onClick={toggleMobile}
+        aria-label="Toggle navigation menu"
+      >
         <Menu className="h-5 w-5" />
       </Button>
 
@@ -48,7 +56,7 @@ export function AdminHeader() {
 
         <ThemeToggle />
 
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative" aria-label="Notifications (3 unread)">
           <Bell className="h-5 w-5" />
           <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center">
             3

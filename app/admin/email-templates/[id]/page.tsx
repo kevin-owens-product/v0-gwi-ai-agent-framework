@@ -72,6 +72,7 @@ import { TemplateEditor } from "@/components/admin/email-templates/TemplateEdito
 import { TemplatePreview } from "@/components/admin/email-templates/TemplatePreview"
 import { VariableInserter } from "@/components/admin/email-templates/VariableInserter"
 import { VersionHistory } from "@/components/admin/email-templates/VersionHistory"
+import { toast } from "sonner"
 
 interface TemplateVariable {
   name: string
@@ -222,11 +223,11 @@ export default function EmailTemplateDetailPage() {
         setEditForm((prev) => ({ ...prev, changeNote: "" }))
       } else {
         const error = await response.json()
-        alert(error.error || "Failed to save template")
+        toast.error(error.error || "Failed to save template")
       }
     } catch (error) {
       console.error("Failed to save template:", error)
-      alert("Failed to save template")
+      toast.error("Failed to save template")
     } finally {
       setIsSaving(false)
     }
@@ -242,17 +243,17 @@ export default function EmailTemplateDetailPage() {
         router.push("/admin/email-templates")
       } else {
         const error = await response.json()
-        alert(error.error || "Failed to delete template")
+        toast.error(error.error || "Failed to delete template")
       }
     } catch (error) {
       console.error("Failed to delete template:", error)
-      alert("Failed to delete template")
+      toast.error("Failed to delete template")
     }
   }
 
   const handleSendTest = async () => {
     if (!testEmail) {
-      alert("Please enter an email address")
+      toast.error("Please enter an email address")
       return
     }
 

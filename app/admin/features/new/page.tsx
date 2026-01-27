@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -81,13 +82,13 @@ export default function NewFeatureFlagPage() {
 
   const handleCreate = async () => {
     if (!formData.key || !formData.name) {
-      alert("Key and name are required")
+      toast.error("Key and name are required")
       return
     }
 
     // Validate key format
     if (!/^[a-z][a-z0-9_]*$/.test(formData.key)) {
-      alert("Key must be lowercase letters, numbers, and underscores only, starting with a letter")
+      toast.error("Key must be lowercase letters, numbers, and underscores only, starting with a letter")
       return
     }
 
@@ -113,11 +114,11 @@ export default function NewFeatureFlagPage() {
         router.push(`/admin/features/${data.flag.id}`)
       } else {
         const data = await response.json()
-        alert(data.error || "Failed to create feature flag")
+        toast.error(data.error || "Failed to create feature flag")
       }
     } catch (error) {
       console.error("Failed to create feature flag:", error)
-      alert("Failed to create feature flag")
+      toast.error("Failed to create feature flag")
     } finally {
       setIsSaving(false)
     }

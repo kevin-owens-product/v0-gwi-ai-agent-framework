@@ -37,6 +37,7 @@ export function DashboardHeader() {
         <button
           className="lg:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground"
           onClick={() => setMobileMenuOpen(true)}
+          aria-label="Open navigation menu"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -47,6 +48,7 @@ export function DashboardHeader() {
             <Input
               placeholder="Search agents, workflows, or insights..."
               className="pl-10 bg-secondary border-border"
+              aria-label="Search"
             />
           </div>
         </div>
@@ -56,9 +58,9 @@ export function DashboardHeader() {
             <StatusBadge status={systemStatus} size="sm" showLabel={systemStatus !== "operational"} />
           </Link>
           <ThemeToggle />
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
             <Bell className="h-4 w-4" />
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-accent" />
+            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
           </Button>
           <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center lg:hidden">
             <span className="text-xs font-medium text-accent">JD</span>

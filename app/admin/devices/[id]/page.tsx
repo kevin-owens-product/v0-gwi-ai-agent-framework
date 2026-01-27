@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -109,6 +110,8 @@ export default function DeviceDetailPage() {
     name: "",
     isManaged: false,
   })
+  const [showRevokeConfirm, setShowRevokeConfirm] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const fetchDevice = useCallback(async () => {
     setIsLoading(true)
@@ -177,9 +180,11 @@ export default function DeviceDetailPage() {
     }
   }
 
-  const handleRevoke = async () => {
-    if (!confirm("Are you sure you want to revoke trust for this device?")) return
+  const handleRevokeClick = () => {
+    setShowRevokeConfirm(true)
+  }
 
+  const handleConfirmRevoke = async () => {
     try {
       const response = await fetch(`/api/admin/devices/${deviceId}/revoke`, {
         method: "POST",
@@ -194,12 +199,16 @@ export default function DeviceDetailPage() {
       fetchDevice()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to revoke device")
+    } finally {
+      setShowRevokeConfirm(false)
     }
   }
 
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this device? This action cannot be undone.")) return
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true)
+  }
 
+  const handleConfirmDelete = async () => {
     try {
       const response = await fetch(`/api/admin/devices/${deviceId}`, {
         method: "DELETE",
@@ -212,6 +221,8 @@ export default function DeviceDetailPage() {
       }
     } catch (error) {
       toast.error("Failed to delete device")
+    } finally {
+      setShowDeleteConfirm(false)
     }
   }
 
@@ -327,12 +338,12 @@ export default function DeviceDetailPage() {
             </Button>
           )}
           {device.trustStatus === "TRUSTED" && (
-            <Button variant="secondary" onClick={handleRevoke}>
+            <Button variant="secondary" onClick={handleRevokeClick}>
               <ShieldX className="h-4 w-4 mr-2" />
               Revoke Trust
             </Button>
           )}
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button variant="destructive" onClick={handleDeleteClick}>
             <Trash className="h-4 w-4 mr-2" />
             Delete
           </Button>
@@ -736,6 +747,26 @@ export default function DeviceDetailPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <ConfirmationDialog
+        open={showRevokeConfirm}
+        onOpenChange={setShowRevokeConfirm}
+        title="Revoke Device Trust"
+        description="Are you sure you want to revoke trust for this device? The device will need to be re-approved to regain access."
+        confirmText="Revoke Trust"
+        variant="destructive"
+        onConfirm={handleConfirmRevoke}
+      />
+
+      <ConfirmationDialog
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        title="Delete Device"
+        description="Are you sure you want to delete this device? This action cannot be undone."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   )
 }

@@ -1,0 +1,448 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "search": "搜索",
+    "filter": "筛选",
+    "export": "导出",
+    "import": "导入",
+    "refresh": "刷新",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "submit": "提交",
+    "confirm": "确认",
+    "close": "关闭",
+    "yes": "是",
+    "no": "否",
+    "or": "或",
+    "and": "和",
+    "all": "全部",
+    "none": "无",
+    "viewDetails": "查看详情",
+    "viewAll": "查看全部",
+    "noResults": "未找到结果",
+    "required": "必填",
+    "optional": "可选",
+    "actions": "操作",
+    "status": "状态",
+    "name": "名称",
+    "description": "描述",
+    "type": "类型",
+    "date": "日期",
+    "active": "活跃",
+    "inactive": "不活跃",
+    "enabled": "已启用",
+    "disabled": "已禁用",
+    "success": "成功",
+    "failed": "失败",
+    "pending": "待处理",
+    "completed": "已完成",
+    "running": "运行中",
+    "cancelled": "已取消"
+  },
+  "auth": {
+    "signIn": "登录",
+    "signOut": "退出登录",
+    "signUp": "注册",
+    "getStarted": "立即开始",
+    "email": "邮箱",
+    "emailPlaceholder": "请输入邮箱",
+    "password": "密码",
+    "passwordPlaceholder": "请输入密码",
+    "forgotPassword": "忘记密码？",
+    "resetPassword": "重置密码",
+    "confirmPassword": "确认密码",
+    "rememberMe": "记住我",
+    "noAccount": "还没有账户？",
+    "hasAccount": "已有账户？",
+    "createAccount": "创建账户",
+    "signInWith": "使用 {provider} 登录",
+    "orContinueWith": "或通过以下方式继续",
+    "termsAgreement": "登录即表示您同意我们的服务条款和隐私政策",
+    "welcomeBack": "欢迎回来",
+    "signInToContinue": "登录以继续访问您的账户",
+    "createYourAccount": "创建您的账户",
+    "getStartedFree": "免费开始使用",
+    "errors": {
+      "invalidCredentials": "邮箱或密码无效",
+      "emailRequired": "请输入邮箱",
+      "passwordRequired": "请输入密码",
+      "invalidEmail": "请输入有效的邮箱地址",
+      "passwordTooShort": "密码长度至少为8个字符",
+      "accountNotFound": "账户不存在",
+      "accountLocked": "账户已被锁定，请联系客服",
+      "tooManyAttempts": "登录尝试次数过多，请稍后重试",
+      "networkError": "网络错误，请检查您的网络连接"
+    },
+    "admin": {
+      "title": "管理员登录",
+      "description": "登录以访问管理员门户"
+    },
+    "gwi": {
+      "title": "GWI 团队登录",
+      "description": "登录以访问 GWI 团队门户"
+    }
+  },
+  "navigation": {
+    "home": "首页",
+    "dashboard": "仪表板",
+    "settings": "设置",
+    "profile": "个人资料",
+    "help": "帮助",
+    "docs": "文档",
+    "features": "功能",
+    "pricing": "定价",
+    "solutions": "解决方案",
+    "agents": "智能体",
+    "theme": "主题"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "selectLanguage": "选择语言",
+    "preferences": "偏好设置",
+    "notifications": "通知",
+    "security": "安全",
+    "account": "账户",
+    "appearance": "外观",
+    "general": "常规"
+  },
+  "landing": {
+    "header": {
+      "brandName": "GWI Insights",
+      "solutions": "解决方案",
+      "salesTeams": "销售团队",
+      "insightsTeams": "洞察团队",
+      "adSales": "广告销售",
+      "marketing": "市场营销",
+      "productDevelopment": "产品开发",
+      "marketResearch": "市场研究",
+      "innovation": "创新",
+      "features": "功能",
+      "agents": "智能体",
+      "pricing": "定价",
+      "docs": "文档",
+      "signIn": "登录",
+      "getStarted": "立即开始",
+      "theme": "主题"
+    },
+    "hero": {
+      "title": "AI 驱动的消费者洞察",
+      "subtitle": "通过 AI 驱动的全球调研数据分析，解锁深度消费者洞察",
+      "cta": "开始免费试用",
+      "secondaryCta": "观看演示"
+    },
+    "features": {
+      "title": "强大功能",
+      "subtitle": "了解受众所需的一切"
+    },
+    "pricing": {
+      "title": "简单透明的定价",
+      "subtitle": "选择适合您需求的方案",
+      "monthly": "按月付费",
+      "annual": "按年付费",
+      "perMonth": "/月",
+      "perYear": "/年",
+      "mostPopular": "最受欢迎",
+      "getStarted": "立即开始",
+      "contactSales": "联系销售",
+      "features": "功能"
+    },
+    "cta": {
+      "title": "准备好开始了吗？",
+      "subtitle": "加入数千家使用 GWI Insights 的公司",
+      "button": "开始免费试用"
+    },
+    "footer": {
+      "company": "公司",
+      "about": "关于我们",
+      "careers": "招聘",
+      "press": "媒体",
+      "contact": "联系我们",
+      "product": "产品",
+      "features": "功能",
+      "pricing": "定价",
+      "security": "安全",
+      "roadmap": "路线图",
+      "resources": "资源",
+      "docs": "文档",
+      "blog": "博客",
+      "support": "支持",
+      "changelog": "更新日志",
+      "legal": "法律",
+      "privacy": "隐私政策",
+      "terms": "服务条款",
+      "copyright": "© {year} GWI。保留所有权利。"
+    }
+  },
+  "dashboard": {
+    "title": "仪表板",
+    "welcome": "欢迎回来",
+    "overview": "概览",
+    "recentActivity": "最近活动",
+    "quickActions": "快捷操作",
+    "header": {
+      "missionControl": "任务控制中心",
+      "allSystemsOperational": "所有系统运行正常",
+      "realTimeOverview": "AI 智能体生态系统实时概览",
+      "last24Hours": "过去 24 小时",
+      "last7Days": "过去 7 天",
+      "last30Days": "过去 30 天",
+      "last90Days": "过去 90 天",
+      "playground": "实验场",
+      "newWorkflow": "新建工作流"
+    },
+    "metrics": {
+      "activeAgents": "活跃智能体",
+      "totalCount": "共 {count} 个",
+      "runningNow": "正在运行",
+      "insightsGenerated": "已生成洞察",
+      "runsCount": "{count} 次运行",
+      "thisWeek": "本周",
+      "successRate": "成功率",
+      "excellent": "优秀",
+      "good": "良好",
+      "needsAttention": "需要关注",
+      "noData": "暂无数据",
+      "completedRuns": "已完成的运行",
+      "avgResponse": "平均响应时间",
+      "notAvailable": "不可用",
+      "fast": "快速",
+      "normal": "正常",
+      "slow": "缓慢",
+      "perRun": "每次运行"
+    }
+  },
+  "audiences": {
+    "title": "受众",
+    "createAudience": "创建受众",
+    "audienceBuilder": "受众构建器",
+    "savedAudiences": "已保存的受众",
+    "comparison": "对比",
+    "overlap": "重叠",
+    "persona": "人物画像",
+    "mediaConsumption": "媒体消费",
+    "brandAffinities": "品牌亲和力"
+  },
+  "playground": {
+    "title": "实验场",
+    "newSession": "新建会话",
+    "chat": "对话",
+    "context": "上下文",
+    "sources": "数据源",
+    "workspace": "工作区"
+  },
+  "collaboration": {
+    "share": "分享",
+    "comments": "评论",
+    "addComment": "添加评论",
+    "reply": "回复",
+    "shareLink": "分享链接",
+    "copyLink": "复制链接",
+    "linkCopied": "链接已复制！"
+  },
+  "savedViews": {
+    "title": "已保存的视图",
+    "saveView": "保存视图",
+    "pinnedItems": "已置顶项目",
+    "recentItems": "最近项目"
+  },
+  "exports": {
+    "title": "导出",
+    "exportData": "导出数据",
+    "format": "格式",
+    "schedule": "计划",
+    "history": "历史记录"
+  },
+  "profile": {
+    "title": "个人资料",
+    "editProfile": "编辑资料",
+    "avatar": "头像",
+    "displayName": "显示名称",
+    "emailAddress": "邮箱地址"
+  },
+  "gwi": {
+    "dashboard": {
+      "title": "GWI 团队门户",
+      "description": "管理调研、分类法、数据管道和 AI 配置",
+      "loading": "正在加载仪表板...",
+      "unresolvedErrors": "{count, plural, one {# 个未解决的错误} other {# 个未解决的错误}}（过去24小时内）",
+      "reviewErrors": "查看并解决问题以保持系统健康",
+      "viewErrors": "查看错误"
+    },
+    "stats": {
+      "surveys": "调研",
+      "active": "{count} 个活跃",
+      "taxonomyCategories": "分类类别",
+      "dataPipelines": "数据管道",
+      "llmConfigurations": "LLM 配置",
+      "agentTemplates": "智能体模板",
+      "dataSources": "数据源"
+    },
+    "pipelineRuns": {
+      "title": "最近的管道运行",
+      "description": "最新管道执行状态",
+      "viewAll": "查看全部",
+      "noPipelines": "暂无管道运行记录",
+      "createFirst": "创建您的第一个管道",
+      "records": "{count} 条记录",
+      "started": "开始于 {date}"
+    },
+    "quickActions": {
+      "createSurvey": "创建调研",
+      "createSurveyDesc": "设计新的调研",
+      "newPipeline": "新建管道",
+      "newPipelineDesc": "设置数据处理",
+      "testPrompts": "测试提示词",
+      "testPromptsDesc": "尝试提示词模板"
+    },
+    "navigation": {
+      "surveys": "调研",
+      "taxonomy": "分类法",
+      "pipelines": "管道",
+      "llm": "LLM",
+      "agents": "智能体",
+      "dataSources": "数据源",
+      "monitoring": "监控",
+      "system": "系统",
+      "services": "服务"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "管理员门户",
+      "description": "平台管理和租户管理"
+    },
+    "navigation": {
+      "dashboard": "仪表板",
+      "organizations": "组织",
+      "users": "用户",
+      "plans": "套餐",
+      "features": "功能",
+      "security": "安全",
+      "identity": "身份",
+      "sso": "SSO",
+      "domains": "域名",
+      "devices": "设备",
+      "scim": "SCIM",
+      "hierarchy": "层级",
+      "settings": "设置",
+      "entitlements": "权限"
+    },
+    "plans": {
+      "title": "套餐",
+      "description": "管理订阅套餐",
+      "createPlan": "创建套餐",
+      "editPlan": "编辑套餐",
+      "planName": "套餐名称",
+      "pricing": "定价",
+      "features": "功能",
+      "limits": "限制"
+    },
+    "security": {
+      "title": "安全",
+      "policies": "策略",
+      "sessions": "会话",
+      "ipBlocklist": "IP 黑名单",
+      "threats": "威胁",
+      "violations": "违规"
+    },
+    "identity": {
+      "title": "身份管理",
+      "ssoTitle": "单点登录",
+      "ssoDescription": "配置 SSO 提供商",
+      "domainsTitle": "域名",
+      "domainsDescription": "管理已验证的域名",
+      "scimTitle": "SCIM",
+      "scimDescription": "用户配置设置"
+    },
+    "organizations": {
+      "title": "组织",
+      "description": "管理租户组织",
+      "createOrg": "创建组织",
+      "orgName": "组织名称",
+      "status": "状态",
+      "plan": "套餐",
+      "members": "成员",
+      "defaultLanguage": "默认语言"
+    }
+  },
+  "ui": {
+    "dialog": {
+      "confirm": "确认",
+      "cancel": "取消",
+      "close": "关闭",
+      "ok": "确定",
+      "yes": "是",
+      "no": "否",
+      "continue": "继续",
+      "goBack": "返回"
+    },
+    "alert": {
+      "areYouSure": "您确定吗？",
+      "cannotUndo": "此操作无法撤销。",
+      "deleteConfirm": "您确定要删除吗？",
+      "unsavedChanges": "您有未保存的更改",
+      "discardChanges": "放弃更改？"
+    },
+    "theme": {
+      "light": "浅色",
+      "dark": "深色",
+      "system": "跟随系统",
+      "toggleTheme": "切换主题"
+    },
+    "commandPalette": {
+      "placeholder": "输入命令或搜索...",
+      "noResults": "未找到结果",
+      "recentSearches": "最近搜索",
+      "suggestions": "建议"
+    },
+    "shortcuts": {
+      "title": "键盘快捷键",
+      "general": "常规",
+      "navigation": "导航",
+      "actions": "操作"
+    },
+    "errors": {
+      "somethingWentWrong": "出了点问题",
+      "tryAgain": "重试",
+      "pageNotFound": "页面未找到",
+      "pageNotFoundDescription": "抱歉，我们找不到您要访问的页面。该页面可能已被移动或删除。",
+      "backToDashboard": "返回仪表板",
+      "goHome": "返回首页",
+      "unexpectedError": "发生了意外错误",
+      "unexpectedErrorDescription": "我们遇到了一个意外错误。我们的团队已收到通知，正在努力修复。",
+      "reloadPage": "重新加载页面",
+      "errorId": "错误 ID：{id}",
+      "contactSupport": "联系客服"
+    },
+    "loading": {
+      "loading": "加载中...",
+      "pleaseWait": "请稍候..."
+    },
+    "empty": {
+      "noData": "暂无数据",
+      "noItems": "未找到项目",
+      "getStarted": "创建您的第一个项目开始使用"
+    },
+    "pagination": {
+      "previous": "上一页",
+      "next": "下一页",
+      "page": "第 {current} 页，共 {total} 页",
+      "showingItems": "显示第 {start} 至 {end} 项，共 {total} 项"
+    },
+    "table": {
+      "noResults": "无结果",
+      "sortAscending": "升序排列",
+      "sortDescending": "降序排列",
+      "selectAll": "全选",
+      "deselectAll": "取消全选"
+    }
+  }
+}

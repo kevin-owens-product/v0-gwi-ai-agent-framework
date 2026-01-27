@@ -33,6 +33,7 @@ import {
   FileText,
   Loader2,
 } from "lucide-react"
+import { toast } from "sonner"
 
 interface SurveyQuestion {
   id: string
@@ -120,7 +121,7 @@ export default function ResponseDetailPage() {
       setResponse({ ...response, answers: updated.answers })
       setIsEditing(false)
     } catch (err) {
-      alert("Failed to save changes")
+      toast.error("Failed to save changes")
     } finally {
       setSaving(false)
     }
@@ -139,7 +140,7 @@ export default function ResponseDetailPage() {
 
       router.push(`/gwi/surveys/${surveyId}`)
     } catch (err) {
-      alert("Failed to delete response")
+      toast.error("Failed to delete response")
       setDeleting(false)
     }
   }
@@ -162,7 +163,7 @@ export default function ResponseDetailPage() {
       const updated = await res.json()
       setResponse({ ...response, completedAt: updated.completedAt })
     } catch (err) {
-      alert("Failed to mark as complete")
+      toast.error("Failed to mark as complete")
     } finally {
       setSaving(false)
     }

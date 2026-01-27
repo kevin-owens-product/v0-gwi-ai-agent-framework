@@ -1,0 +1,448 @@
+{
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "create": "Создать",
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "export": "Экспорт",
+    "import": "Импорт",
+    "refresh": "Обновить",
+    "back": "Назад",
+    "next": "Далее",
+    "previous": "Предыдущий",
+    "submit": "Отправить",
+    "confirm": "Подтвердить",
+    "close": "Закрыть",
+    "yes": "Да",
+    "no": "Нет",
+    "or": "или",
+    "and": "и",
+    "all": "Все",
+    "none": "Ничего",
+    "viewDetails": "Подробнее",
+    "viewAll": "Показать все",
+    "noResults": "Результаты не найдены",
+    "required": "Обязательно",
+    "optional": "Необязательно",
+    "actions": "Действия",
+    "status": "Статус",
+    "name": "Название",
+    "description": "Описание",
+    "type": "Тип",
+    "date": "Дата",
+    "active": "Активен",
+    "inactive": "Неактивен",
+    "enabled": "Включено",
+    "disabled": "Отключено",
+    "success": "Успешно",
+    "failed": "Ошибка",
+    "pending": "В ожидании",
+    "completed": "Завершено",
+    "running": "Выполняется",
+    "cancelled": "Отменено"
+  },
+  "auth": {
+    "signIn": "Войти",
+    "signOut": "Выйти",
+    "signUp": "Зарегистрироваться",
+    "getStarted": "Начать",
+    "email": "Электронная почта",
+    "emailPlaceholder": "Введите вашу электронную почту",
+    "password": "Пароль",
+    "passwordPlaceholder": "Введите ваш пароль",
+    "forgotPassword": "Забыли пароль?",
+    "resetPassword": "Сбросить пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "rememberMe": "Запомнить меня",
+    "noAccount": "Нет учётной записи?",
+    "hasAccount": "Уже есть учётная запись?",
+    "createAccount": "Создать учётную запись",
+    "signInWith": "Войти через {provider}",
+    "orContinueWith": "Или продолжить с",
+    "termsAgreement": "Входя в систему, вы соглашаетесь с нашими Условиями использования и Политикой конфиденциальности",
+    "welcomeBack": "С возвращением",
+    "signInToContinue": "Войдите, чтобы продолжить работу с вашей учётной записью",
+    "createYourAccount": "Создайте вашу учётную запись",
+    "getStartedFree": "Начните бесплатно",
+    "errors": {
+      "invalidCredentials": "Неверная электронная почта или пароль",
+      "emailRequired": "Электронная почта обязательна",
+      "passwordRequired": "Пароль обязателен",
+      "invalidEmail": "Введите корректный адрес электронной почты",
+      "passwordTooShort": "Пароль должен содержать не менее 8 символов",
+      "accountNotFound": "Учётная запись не найдена",
+      "accountLocked": "Учётная запись заблокирована. Обратитесь в службу поддержки.",
+      "tooManyAttempts": "Слишком много попыток входа. Повторите попытку позже.",
+      "networkError": "Ошибка сети. Проверьте подключение."
+    },
+    "admin": {
+      "title": "Вход для администратора",
+      "description": "Войдите для доступа к порталу администратора"
+    },
+    "gwi": {
+      "title": "Вход для команды GWI",
+      "description": "Войдите для доступа к порталу команды GWI"
+    }
+  },
+  "navigation": {
+    "home": "Главная",
+    "dashboard": "Панель управления",
+    "settings": "Настройки",
+    "profile": "Профиль",
+    "help": "Помощь",
+    "docs": "Документация",
+    "features": "Возможности",
+    "pricing": "Цены",
+    "solutions": "Решения",
+    "agents": "Агенты",
+    "theme": "Тема"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "selectLanguage": "Выберите язык",
+    "preferences": "Предпочтения",
+    "notifications": "Уведомления",
+    "security": "Безопасность",
+    "account": "Учётная запись",
+    "appearance": "Внешний вид",
+    "general": "Общие"
+  },
+  "landing": {
+    "header": {
+      "brandName": "GWI Insights",
+      "solutions": "Решения",
+      "salesTeams": "Отделы продаж",
+      "insightsTeams": "Аналитические команды",
+      "adSales": "Продажа рекламы",
+      "marketing": "Маркетинг",
+      "productDevelopment": "Разработка продукта",
+      "marketResearch": "Исследование рынка",
+      "innovation": "Инновации",
+      "features": "Возможности",
+      "agents": "Агенты",
+      "pricing": "Цены",
+      "docs": "Документация",
+      "signIn": "Войти",
+      "getStarted": "Начать",
+      "theme": "Тема"
+    },
+    "hero": {
+      "title": "Потребительские инсайты на базе ИИ",
+      "subtitle": "Получите глубокое понимание потребителей с помощью ИИ-анализа глобальных данных опросов",
+      "cta": "Начать бесплатный пробный период",
+      "secondaryCta": "Посмотреть демо"
+    },
+    "features": {
+      "title": "Мощные возможности",
+      "subtitle": "Всё, что вам нужно для понимания вашей аудитории"
+    },
+    "pricing": {
+      "title": "Простые и прозрачные цены",
+      "subtitle": "Выберите план, который подходит вам",
+      "monthly": "Ежемесячно",
+      "annual": "Ежегодно",
+      "perMonth": "/месяц",
+      "perYear": "/год",
+      "mostPopular": "Самый популярный",
+      "getStarted": "Начать",
+      "contactSales": "Связаться с отделом продаж",
+      "features": "Возможности"
+    },
+    "cta": {
+      "title": "Готовы начать?",
+      "subtitle": "Присоединяйтесь к тысячам компаний, использующих GWI Insights",
+      "button": "Начать бесплатный пробный период"
+    },
+    "footer": {
+      "company": "Компания",
+      "about": "О нас",
+      "careers": "Карьера",
+      "press": "Пресса",
+      "contact": "Контакты",
+      "product": "Продукт",
+      "features": "Возможности",
+      "pricing": "Цены",
+      "security": "Безопасность",
+      "roadmap": "Дорожная карта",
+      "resources": "Ресурсы",
+      "docs": "Документация",
+      "blog": "Блог",
+      "support": "Поддержка",
+      "changelog": "История изменений",
+      "legal": "Правовая информация",
+      "privacy": "Конфиденциальность",
+      "terms": "Условия",
+      "copyright": "© {year} GWI. Все права защищены."
+    }
+  },
+  "dashboard": {
+    "title": "Панель управления",
+    "welcome": "С возвращением",
+    "overview": "Обзор",
+    "recentActivity": "Недавняя активность",
+    "quickActions": "Быстрые действия",
+    "header": {
+      "missionControl": "Центр управления",
+      "allSystemsOperational": "Все системы работают",
+      "realTimeOverview": "Обзор вашей экосистемы ИИ-агентов в реальном времени",
+      "last24Hours": "Последние 24 часа",
+      "last7Days": "Последние 7 дней",
+      "last30Days": "Последние 30 дней",
+      "last90Days": "Последние 90 дней",
+      "playground": "Песочница",
+      "newWorkflow": "Новый рабочий процесс"
+    },
+    "metrics": {
+      "activeAgents": "Активные агенты",
+      "totalCount": "{count} всего",
+      "runningNow": "Запущено сейчас",
+      "insightsGenerated": "Сгенерировано инсайтов",
+      "runsCount": "{count} запусков",
+      "thisWeek": "На этой неделе",
+      "successRate": "Показатель успеха",
+      "excellent": "Отлично",
+      "good": "Хорошо",
+      "needsAttention": "Требует внимания",
+      "noData": "Нет данных",
+      "completedRuns": "Завершённые запуски",
+      "avgResponse": "Среднее время ответа",
+      "notAvailable": "Н/Д",
+      "fast": "Быстро",
+      "normal": "Нормально",
+      "slow": "Медленно",
+      "perRun": "За запуск"
+    }
+  },
+  "audiences": {
+    "title": "Аудитории",
+    "createAudience": "Создать аудиторию",
+    "audienceBuilder": "Конструктор аудиторий",
+    "savedAudiences": "Сохранённые аудитории",
+    "comparison": "Сравнение",
+    "overlap": "Пересечение",
+    "persona": "Персона",
+    "mediaConsumption": "Медиапотребление",
+    "brandAffinities": "Предпочтения брендов"
+  },
+  "playground": {
+    "title": "Песочница",
+    "newSession": "Новая сессия",
+    "chat": "Чат",
+    "context": "Контекст",
+    "sources": "Источники",
+    "workspace": "Рабочее пространство"
+  },
+  "collaboration": {
+    "share": "Поделиться",
+    "comments": "Комментарии",
+    "addComment": "Добавить комментарий",
+    "reply": "Ответить",
+    "shareLink": "Поделиться ссылкой",
+    "copyLink": "Копировать ссылку",
+    "linkCopied": "Ссылка скопирована!"
+  },
+  "savedViews": {
+    "title": "Сохранённые представления",
+    "saveView": "Сохранить представление",
+    "pinnedItems": "Закреплённые элементы",
+    "recentItems": "Недавние элементы"
+  },
+  "exports": {
+    "title": "Экспорт",
+    "exportData": "Экспортировать данные",
+    "format": "Формат",
+    "schedule": "Расписание",
+    "history": "История"
+  },
+  "profile": {
+    "title": "Профиль",
+    "editProfile": "Редактировать профиль",
+    "avatar": "Аватар",
+    "displayName": "Отображаемое имя",
+    "emailAddress": "Адрес электронной почты"
+  },
+  "gwi": {
+    "dashboard": {
+      "title": "Портал команды GWI",
+      "description": "Управление опросами, таксономией, конвейерами данных и конфигурациями ИИ",
+      "loading": "Загрузка панели управления...",
+      "unresolvedErrors": "{count, plural, one {# нерешённая ошибка} few {# нерешённые ошибки} many {# нерешённых ошибок} other {# нерешённых ошибок}} за последние 24 часа",
+      "reviewErrors": "Просмотрите и устраните проблемы для поддержания работоспособности системы",
+      "viewErrors": "Просмотреть ошибки"
+    },
+    "stats": {
+      "surveys": "Опросы",
+      "active": "{count, plural, one {# активный} few {# активных} many {# активных} other {# активных}}",
+      "taxonomyCategories": "Категории таксономии",
+      "dataPipelines": "Конвейеры данных",
+      "llmConfigurations": "Конфигурации LLM",
+      "agentTemplates": "Шаблоны агентов",
+      "dataSources": "Источники данных"
+    },
+    "pipelineRuns": {
+      "title": "Недавние запуски конвейеров",
+      "description": "Последний статус выполнения конвейеров",
+      "viewAll": "Показать все",
+      "noPipelines": "Запусков конвейеров пока нет",
+      "createFirst": "Создайте ваш первый конвейер",
+      "records": "{count, plural, one {# запись} few {# записи} many {# записей} other {# записей}}",
+      "started": "Начат {date}"
+    },
+    "quickActions": {
+      "createSurvey": "Создать опрос",
+      "createSurveyDesc": "Разработать новый опрос",
+      "newPipeline": "Новый конвейер",
+      "newPipelineDesc": "Настроить обработку данных",
+      "testPrompts": "Тестировать промпты",
+      "testPromptsDesc": "Попробовать шаблоны промптов"
+    },
+    "navigation": {
+      "surveys": "Опросы",
+      "taxonomy": "Таксономия",
+      "pipelines": "Конвейеры",
+      "llm": "LLM",
+      "agents": "Агенты",
+      "dataSources": "Источники данных",
+      "monitoring": "Мониторинг",
+      "system": "Система",
+      "services": "Сервисы"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Портал администратора",
+      "description": "Администрирование платформы и управление арендаторами"
+    },
+    "navigation": {
+      "dashboard": "Панель управления",
+      "organizations": "Организации",
+      "users": "Пользователи",
+      "plans": "Планы",
+      "features": "Возможности",
+      "security": "Безопасность",
+      "identity": "Идентификация",
+      "sso": "SSO",
+      "domains": "Домены",
+      "devices": "Устройства",
+      "scim": "SCIM",
+      "hierarchy": "Иерархия",
+      "settings": "Настройки",
+      "entitlements": "Права доступа"
+    },
+    "plans": {
+      "title": "Планы",
+      "description": "Управление тарифными планами",
+      "createPlan": "Создать план",
+      "editPlan": "Редактировать план",
+      "planName": "Название плана",
+      "pricing": "Цены",
+      "features": "Возможности",
+      "limits": "Лимиты"
+    },
+    "security": {
+      "title": "Безопасность",
+      "policies": "Политики",
+      "sessions": "Сессии",
+      "ipBlocklist": "Чёрный список IP",
+      "threats": "Угрозы",
+      "violations": "Нарушения"
+    },
+    "identity": {
+      "title": "Управление идентификацией",
+      "ssoTitle": "Единый вход",
+      "ssoDescription": "Настройка провайдеров SSO",
+      "domainsTitle": "Домены",
+      "domainsDescription": "Управление подтверждёнными доменами",
+      "scimTitle": "SCIM",
+      "scimDescription": "Настройки автоматического создания пользователей"
+    },
+    "organizations": {
+      "title": "Организации",
+      "description": "Управление организациями-арендаторами",
+      "createOrg": "Создать организацию",
+      "orgName": "Название организации",
+      "status": "Статус",
+      "plan": "План",
+      "members": "Участники",
+      "defaultLanguage": "Язык по умолчанию"
+    }
+  },
+  "ui": {
+    "dialog": {
+      "confirm": "Подтвердить",
+      "cancel": "Отмена",
+      "close": "Закрыть",
+      "ok": "ОК",
+      "yes": "Да",
+      "no": "Нет",
+      "continue": "Продолжить",
+      "goBack": "Вернуться"
+    },
+    "alert": {
+      "areYouSure": "Вы уверены?",
+      "cannotUndo": "Это действие нельзя отменить.",
+      "deleteConfirm": "Вы уверены, что хотите удалить это?",
+      "unsavedChanges": "У вас есть несохранённые изменения",
+      "discardChanges": "Отменить изменения?"
+    },
+    "theme": {
+      "light": "Светлая",
+      "dark": "Тёмная",
+      "system": "Системная",
+      "toggleTheme": "Переключить тему"
+    },
+    "commandPalette": {
+      "placeholder": "Введите команду или поисковый запрос...",
+      "noResults": "Результаты не найдены",
+      "recentSearches": "Недавние поиски",
+      "suggestions": "Предложения"
+    },
+    "shortcuts": {
+      "title": "Сочетания клавиш",
+      "general": "Общие",
+      "navigation": "Навигация",
+      "actions": "Действия"
+    },
+    "errors": {
+      "somethingWentWrong": "Что-то пошло не так",
+      "tryAgain": "Попробовать снова",
+      "pageNotFound": "Страница не найдена",
+      "pageNotFoundDescription": "К сожалению, мы не смогли найти страницу, которую вы ищете. Возможно, она была перемещена или удалена.",
+      "backToDashboard": "Вернуться на панель управления",
+      "goHome": "На главную",
+      "unexpectedError": "Произошла непредвиденная ошибка",
+      "unexpectedErrorDescription": "Мы столкнулись с непредвиденной ошибкой. Наша команда уведомлена и работает над исправлением.",
+      "reloadPage": "Перезагрузить страницу",
+      "errorId": "Идентификатор ошибки: {id}",
+      "contactSupport": "Связаться с поддержкой"
+    },
+    "loading": {
+      "loading": "Загрузка...",
+      "pleaseWait": "Пожалуйста, подождите..."
+    },
+    "empty": {
+      "noData": "Данные отсутствуют",
+      "noItems": "Элементы не найдены",
+      "getStarted": "Начните с создания вашего первого элемента"
+    },
+    "pagination": {
+      "previous": "Предыдущая",
+      "next": "Следующая",
+      "page": "Страница {current} из {total}",
+      "showingItems": "Показано с {start} по {end} из {total} элементов"
+    },
+    "table": {
+      "noResults": "Нет результатов",
+      "sortAscending": "Сортировать по возрастанию",
+      "sortDescending": "Сортировать по убыванию",
+      "selectAll": "Выбрать все",
+      "deselectAll": "Снять выделение со всех"
+    }
+  }
+}

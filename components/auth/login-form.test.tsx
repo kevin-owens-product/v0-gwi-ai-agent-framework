@@ -1,14 +1,31 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 
+// Mock useTranslations
+vi.mock('@/lib/i18n', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      'email': 'Email',
+      'password': 'Password',
+      'signIn': 'Sign In',
+      'signingIn': 'Signing in...',
+      'welcomeBack': 'Welcome back',
+      'signInToContinue': 'Sign in to your account to continue',
+      'errors.invalidCredentials': 'Invalid email or password',
+      'errors.genericError': 'An error occurred',
+    }
+    return translations[key] || key
+  }
+}))
+
 // Mock login form structure
-const LoginForm = ({ onSubmit }: any) => {
+const LoginForm = ({ onSubmit }: { onSubmit: (data: { email: string; password: string }) => void }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const formData = new FormData(e.target as HTMLFormElement)
     onSubmit({
-      email: formData.get('email'),
-      password: formData.get('password')
+      email: formData.get('email') as string,
+      password: formData.get('password') as string
     })
   }
 

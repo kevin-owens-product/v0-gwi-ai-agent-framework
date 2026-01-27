@@ -14,45 +14,61 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useGWIAdmin } from "@/components/providers/gwi-provider"
+import { useSidebar } from "@/components/providers/sidebar-provider"
 
 // Route to breadcrumb mapping
 const routeLabels: Record<string, string> = {
   gwi: "GWI Portal",
+  // Survey Management
   surveys: "Surveys",
   questions: "Questions",
   responses: "Responses",
   distribution: "Distribution",
+  // Taxonomy
   taxonomy: "Taxonomy",
   categories: "Categories",
   attributes: "Attributes",
   mappings: "Mapping Rules",
   validation: "Validation",
+  // Pipelines
   pipelines: "Pipelines",
   runs: "Pipeline Runs",
   schedules: "Schedules",
+  // LLM
   llm: "LLM Configuration",
   models: "Models",
   prompts: "Prompts",
   usage: "Usage & Costs",
   testing: "Testing",
+  // Agents
   agents: "Agents",
   templates: "Templates",
   tools: "Tools",
   capabilities: "Capabilities",
+  // Data Sources
   "data-sources": "Data Sources",
   schemas: "Schemas",
   sync: "Sync Status",
   quality: "Data Quality",
+  connections: "Connections",
+  // Monitoring
   monitoring: "Monitoring",
   errors: "Error Logs",
   alerts: "Alerts",
+  health: "Health",
+  // System
   system: "System",
   settings: "Settings",
   access: "Access Control",
   audit: "Audit Logs",
   "api-keys": "API Keys",
+  // Overview
   activity: "Activity Feed",
   "quick-actions": "Quick Actions",
+  // Dynamic route segments (IDs will be handled separately)
+  new: "New",
+  edit: "Edit",
+  details: "Details",
 }
 
 function generateBreadcrumbs(pathname: string) {
@@ -72,12 +88,19 @@ function generateBreadcrumbs(pathname: string) {
 export function GWIHeader() {
   const pathname = usePathname()
   const { admin } = useGWIAdmin()
+  const { toggleMobile } = useSidebar()
   const breadcrumbs = generateBreadcrumbs(pathname)
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-6 dark:border-slate-700 dark:bg-slate-900">
       {/* Mobile Menu Button */}
-      <Button variant="ghost" size="icon" className="lg:hidden">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="lg:hidden"
+        onClick={toggleMobile}
+        aria-label="Toggle navigation menu"
+      >
         <Menu className="h-5 w-5" />
       </Button>
 
@@ -119,7 +142,7 @@ export function GWIHeader() {
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative" aria-label="Notifications (3 unread)">
               <Bell className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 text-[10px] font-medium text-white flex items-center justify-center">
                 3
