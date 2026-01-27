@@ -5368,7 +5368,34 @@
     },
     "dashboard": {
       "title": "[ZH] Admin Portal",
-      "description": "[ZH] Platform administration and tenant management"
+      "description": "[ZH] Platform administration and tenant management",
+      "ticketsRequiringAttention": "[ZH] Tickets Requiring Attention",
+      "viewAll": "[ZH] View All",
+      "recentActivity": "[ZH] Recent Activity",
+      "systemHealth": "[ZH] System Health",
+      "activeUsers": "[ZH] Active Users",
+      "pendingApprovals": "[ZH] Pending Approvals",
+      "totalTenants": "[ZH] Total Tenants",
+      "totalUsers": "[ZH] Total Users",
+      "agentRuns": "[ZH] Agent Runs",
+      "tokensUsed": "[ZH] Tokens Used",
+      "totalPlatformConsumption": "[ZH] Total platform consumption",
+      "urgentTickets": "[ZH] Urgent Tickets",
+      "totalOpen": "[ZH] {count} total open",
+      "atRiskTenants": "[ZH] At-Risk Tenants",
+      "requireAttention": "[ZH] Require attention",
+      "suspended": "[ZH] Suspended",
+      "organizations": "[ZH] Organizations",
+      "enterprise": "[ZH] Enterprise",
+      "pro": "[ZH] {count} Pro",
+      "starter": "[ZH] {count} Starter",
+      "vsLastMonth": "[ZH] vs last month",
+      "recentSignups": "[ZH] Recent Signups",
+      "newOrgsLastDays": "[ZH] New organizations in the last 30 days",
+      "members": "[ZH] {count, plural, one {# member} other {# members}}",
+      "noRecentSignups": "[ZH] No recent signups",
+      "openSupportTickets": "[ZH] Open Support Tickets",
+      "noOpenTickets": "[ZH] No open tickets"
     },
     "navigation": {
       "dashboard": "[ZH] Dashboard",
@@ -6084,6 +6111,12 @@
         "bulkDeleted": "[ZH] Deleted {count} policies",
         "editComingSoon": "[ZH] Edit functionality coming soon"
       }
+    },
+    "header": {
+      "search": "[ZH] Search",
+      "searchPlaceholder": "[ZH] Search...",
+      "notifications": "[ZH] Notifications",
+      "loggedInAs": "[ZH] Logged in as"
     }
   },
   "ui": {

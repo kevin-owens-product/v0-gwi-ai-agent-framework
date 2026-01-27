@@ -4396,9 +4396,42 @@
     }
   },
   "admin": {
+    "header": {
+      "search": "Search",
+      "searchPlaceholder": "Search...",
+      "notifications": "Notifications",
+      "loggedInAs": "Logged in as"
+    },
     "dashboard": {
       "title": "Admin Portal",
-      "description": "Platform administration and tenant management"
+      "description": "Platform administration and tenant management",
+      "totalTenants": "Total Tenants",
+      "totalUsers": "Total Users",
+      "agentRuns": "Agent Runs",
+      "tokensUsed": "Tokens Used",
+      "totalPlatformConsumption": "Total platform consumption",
+      "urgentTickets": "Urgent Tickets",
+      "totalOpen": "{count} total open",
+      "atRiskTenants": "At-Risk Tenants",
+      "requireAttention": "Require attention",
+      "suspended": "Suspended",
+      "organizations": "Organizations",
+      "enterprise": "Enterprise",
+      "pro": "{count} Pro",
+      "starter": "{count} Starter",
+      "vsLastMonth": "vs last month",
+      "recentSignups": "Recent Signups",
+      "newOrgsLastDays": "New organizations in the last 30 days",
+      "viewAll": "View All",
+      "members": "{count, plural, one {# member} other {# members}}",
+      "noRecentSignups": "No recent signups",
+      "openSupportTickets": "Open Support Tickets",
+      "ticketsRequiringAttention": "Tickets requiring attention",
+      "noOpenTickets": "No open tickets",
+      "recentActivity": "Recent Activity",
+      "systemHealth": "System Health",
+      "activeUsers": "Active Users",
+      "pendingApprovals": "Pending Approvals"
     },
     "navigation": {
       "dashboard": "Dashboard",

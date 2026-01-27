@@ -5248,7 +5248,34 @@
     },
     "dashboard": {
       "title": "[RU] Admin Portal",
-      "description": "[RU] Platform administration and tenant management"
+      "description": "[RU] Platform administration and tenant management",
+      "ticketsRequiringAttention": "[RU] Tickets Requiring Attention",
+      "viewAll": "[RU] View All",
+      "recentActivity": "[RU] Recent Activity",
+      "systemHealth": "[RU] System Health",
+      "activeUsers": "[RU] Active Users",
+      "pendingApprovals": "[RU] Pending Approvals",
+      "totalTenants": "[RU] Total Tenants",
+      "totalUsers": "[RU] Total Users",
+      "agentRuns": "[RU] Agent Runs",
+      "tokensUsed": "[RU] Tokens Used",
+      "totalPlatformConsumption": "[RU] Total platform consumption",
+      "urgentTickets": "[RU] Urgent Tickets",
+      "totalOpen": "[RU] {count} total open",
+      "atRiskTenants": "[RU] At-Risk Tenants",
+      "requireAttention": "[RU] Require attention",
+      "suspended": "[RU] Suspended",
+      "organizations": "[RU] Organizations",
+      "enterprise": "[RU] Enterprise",
+      "pro": "[RU] {count} Pro",
+      "starter": "[RU] {count} Starter",
+      "vsLastMonth": "[RU] vs last month",
+      "recentSignups": "[RU] Recent Signups",
+      "newOrgsLastDays": "[RU] New organizations in the last 30 days",
+      "members": "[RU] {count, plural, one {# member} other {# members}}",
+      "noRecentSignups": "[RU] No recent signups",
+      "openSupportTickets": "[RU] Open Support Tickets",
+      "noOpenTickets": "[RU] No open tickets"
     },
     "navigation": {
       "dashboard": "[RU] Dashboard",
@@ -5964,6 +5991,12 @@
         "bulkDeleted": "[RU] Deleted {count} policies",
         "editComingSoon": "[RU] Edit functionality coming soon"
       }
+    },
+    "header": {
+      "search": "[RU] Search",
+      "searchPlaceholder": "[RU] Search...",
+      "notifications": "[RU] Notifications",
+      "loggedInAs": "[RU] Logged in as"
     }
   },
   "ui": {
