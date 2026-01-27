@@ -51,7 +51,8 @@
     "cancelled": "Cancelled",
     "settings": "Settings",
     "createdAt": "Created At",
-    "lastUpdated": "Last Updated"
+    "lastUpdated": "Last Updated",
+    "searchPlaceholder": "Search..."
   },
   "auth": {
     "signIn": "Sign in",
@@ -1454,7 +1455,147 @@
     "chat": "Chat",
     "context": "Context",
     "sources": "Sources",
-    "workspace": "Workspace"
+    "workspace": "Workspace",
+    "wizard": {
+      "getStarted": "Get Started",
+      "skipTutorial": "Skip tutorial",
+      "steps": {
+        "welcome": {
+          "title": "Welcome to the Playground",
+          "description": "Your AI-powered insights sandbox for exploring consumer data, creating personas, and uncovering behavioral patterns.",
+          "whatYouCanDo": "What you can do:",
+          "capability1": "Ask questions about consumer segments in natural language",
+          "capability2": "Generate charts, tables, and personas from GWI data",
+          "capability3": "Switch between 6 specialized AI agents for different analyses",
+          "capability4": "Save your work and share insights with your team"
+        },
+        "agents": {
+          "title": "Choose Your AI Agent",
+          "description": "Select from specialized agents designed for different types of consumer insights.",
+          "audienceExplorer": {
+            "name": "Audience Explorer",
+            "purpose": "Segment analysis & profiling"
+          },
+          "personaArchitect": {
+            "name": "Persona Architect",
+            "purpose": "Rich persona creation"
+          },
+          "motivationDecoder": {
+            "name": "Motivation Decoder",
+            "purpose": "Behavioral 'why' analysis"
+          },
+          "cultureTracker": {
+            "name": "Culture Tracker",
+            "purpose": "Trends & cultural shifts"
+          },
+          "brandAnalyst": {
+            "name": "Brand Analyst",
+            "purpose": "Brand relationships"
+          },
+          "globalPerspective": {
+            "name": "Global Perspective",
+            "purpose": "Cross-market insights"
+          }
+        },
+        "examples": {
+          "title": "Explore Examples",
+          "description": "Get started quickly with these common use cases.",
+          "clickToStart": "Click any example to start exploring:",
+          "items": {
+            "genZSustainability": {
+              "title": "Gen Z Sustainability Analysis",
+              "prompt": "Analyze Gen Z's attitudes toward sustainability and eco-friendly purchasing behavior",
+              "category": "Audience Research"
+            },
+            "socialMediaComparison": {
+              "title": "Social Media Usage Comparison",
+              "prompt": "Compare social media platform usage between Millennials and Gen X",
+              "category": "Trend Analysis"
+            },
+            "techEarlyAdopter": {
+              "title": "Tech Early Adopter Persona",
+              "prompt": "Create a detailed persona for tech early adopters aged 25-35 in urban markets",
+              "category": "Persona Development"
+            },
+            "purchaseDecisionDrivers": {
+              "title": "Purchase Decision Drivers",
+              "prompt": "What motivates consumers to choose sustainable brands over traditional alternatives?",
+              "category": "Behavioral Insights"
+            },
+            "brandLoyalty": {
+              "title": "Brand Loyalty by Generation",
+              "prompt": "Analyze brand loyalty differences across generational cohorts",
+              "category": "Brand Strategy"
+            },
+            "usUkComparison": {
+              "title": "US vs UK Market Comparison",
+              "prompt": "Compare consumer behaviors and preferences between US and UK markets",
+              "category": "Market Analysis"
+            }
+          }
+        },
+        "viewModes": {
+          "title": "View Modes",
+          "description": "Switch between different layouts based on your workflow.",
+          "chat": {
+            "name": "Chat Mode",
+            "description": "Conversational interface for exploratory questions",
+            "bestFor": "Best for: Quick questions, iterative analysis"
+          },
+          "canvas": {
+            "name": "Canvas Mode",
+            "description": "Visual workspace with all output blocks in a grid",
+            "bestFor": "Best for: Presentations, comparing multiple insights"
+          },
+          "split": {
+            "name": "Split View",
+            "description": "Chat on left, canvas on right for simultaneous work",
+            "bestFor": "Best for: Building reports while refining queries"
+          }
+        }
+      }
+    },
+    "toolbar": {
+      "addOutput": "Add Output",
+      "autoGenerate": "Auto-Generate",
+      "reasoning": "Reasoning",
+      "on": "ON",
+      "modes": {
+        "chat": "Chat",
+        "canvas": "Canvas",
+        "split": "Split"
+      },
+      "outputs": {
+        "chart": {
+          "label": "Chart",
+          "description": "Create data visualization"
+        },
+        "table": {
+          "label": "Table",
+          "description": "Generate data table"
+        },
+        "persona": {
+          "label": "Persona",
+          "description": "Build consumer persona"
+        },
+        "slides": {
+          "label": "Slides",
+          "description": "Create presentation"
+        },
+        "compare": {
+          "label": "Compare",
+          "description": "Side-by-side analysis"
+        },
+        "image": {
+          "label": "Image",
+          "description": "Generate visual"
+        },
+        "export": {
+          "label": "Export",
+          "description": "Export as code/data"
+        }
+      }
+    }
   },
   "collaboration": {
     "share": "Share",
@@ -1477,6 +1618,41 @@
     "format": "Format",
     "schedule": "Schedule",
     "history": "History"
+  },
+  "feedback": {
+    "nps": {
+      "defaultQuestion": "How likely are you to recommend us to a friend or colleague?",
+      "thankYou": "Thank you!",
+      "responseRecorded": "Your response has been recorded. We appreciate your feedback!",
+      "scaleDescription": "0 = Not likely at all, 10 = Extremely likely",
+      "notLikely": "Not likely",
+      "likely": "Likely",
+      "veryLikely": "Very likely",
+      "neutral": "Neutral",
+      "maybeLater": "Maybe later",
+      "detractorPrompt": "We're sorry to hear that. What could we do better?",
+      "passivePrompt": "Thanks for your feedback! What would make your experience even better?",
+      "promoterPrompt": "We're glad you're enjoying the product! What do you like most?",
+      "feedbackPlaceholder": "Your feedback (optional)",
+      "responsePlaceholder": "Your response (optional)",
+      "submitting": "Submitting...",
+      "submit": "Submit"
+    }
+  },
+  "status": {
+    "timeline": {
+      "pastDays": "Past {days} Days",
+      "uptime": "{percentage}% uptime",
+      "noIncidents": "No incidents",
+      "incidentCount": "{count, plural, one {# incident} other {# incidents}}",
+      "today": "Today",
+      "severity": {
+        "operational": "Operational",
+        "minor": "Minor",
+        "major": "Major",
+        "critical": "Critical"
+      }
+    }
   },
   "profile": {
     "title": "Profile",
@@ -1618,6 +1794,38 @@
         "paused": "Paused",
         "completed": "Completed",
         "archived": "Archived"
+      },
+      "questions": {
+        "title": "Questions",
+        "description": "Define the questions for this survey",
+        "addQuestion": "Add Question",
+        "editQuestion": "Edit Question",
+        "addNewQuestion": "Add New Question",
+        "configureSettings": "Configure the question settings and options",
+        "questionCode": "Question Code",
+        "questionType": "Question Type",
+        "questionText": "Question Text",
+        "questionTextPlaceholder": "Enter the question text",
+        "optionsJson": "Options (JSON)",
+        "optionsPlaceholder": "[\"Option 1\", \"Option 2\", \"Option 3\"]",
+        "requiredQuestion": "Required question",
+        "order": "Order",
+        "options": "Options",
+        "validationRules": "Validation Rules",
+        "noQuestionsYet": "No questions yet",
+        "startBuilding": "Start building your survey by adding questions",
+        "addFirstQuestion": "Add First Question",
+        "deleteQuestion": "Delete Question",
+        "deleteConfirmation": "Are you sure you want to delete this question? This action cannot be undone.",
+        "types": {
+          "singleSelect": "Single Select",
+          "multiSelect": "Multi Select",
+          "scale": "Scale",
+          "openText": "Open Text",
+          "numeric": "Numeric",
+          "date": "Date",
+          "matrix": "Matrix"
+        }
       },
       "detail": {
         "title": "Survey Details",
@@ -4327,6 +4535,7 @@
       "monitoring": "Monitoring",
       "system": "System",
       "services": "Services",
+      "mobileMenu": "Navigation Menu",
       "sections": {
         "overview": "Overview",
         "surveyManagement": "Survey Management",
@@ -4521,22 +4730,40 @@
       }
     },
     "plans": {
-      "title": "Plans",
-      "description": "Manage subscription plans",
+      "title": "Plans & Pricing",
+      "description": "Manage {total} subscription plans and pricing tiers",
       "createPlan": "Create Plan",
       "editPlan": "Edit Plan",
       "planName": "Plan Name",
       "pricing": "Pricing",
       "features": "Features",
-      "limits": "Limits"
-    },
-    "security": {
-      "title": "Security",
-      "policies": "Policies",
-      "sessions": "Sessions",
-      "ipBlocklist": "IP Blocklist",
-      "threats": "Threats",
-      "violations": "Violations"
+      "limits": "Limits",
+      "plan": "Plan",
+      "tier": "Tier",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "tenantsCount": "Tenants",
+      "statusLabel": "Status",
+      "activeStatus": "Active",
+      "inactive": "Inactive",
+      "public": "Public",
+      "activatePlans": "Activate Plans",
+      "confirmActivate": "Are you sure you want to activate the selected plans?",
+      "deactivatePlans": "Deactivate Plans",
+      "confirmDeactivate": "Are you sure you want to deactivate the selected plans?",
+      "refresh": "Refresh",
+      "newPlan": "New Plan",
+      "searchPlaceholder": "Search plans...",
+      "allTiers": "All Tiers",
+      "starter": "Starter",
+      "professional": "Professional",
+      "enterprise": "Enterprise",
+      "allStatus": "All Status",
+      "noPlans": "No plans found",
+      "deletePlan": "Delete Plan",
+      "confirmDelete": "Are you sure you want to delete {name}?",
+      "warningActiveTenants": " Warning: This plan has active tenants.",
+      "free": "Free"
     },
     "identity": {
       "title": "Identity Management",
@@ -4556,6 +4783,107 @@
       "plan": "Plan",
       "members": "Members",
       "defaultLanguage": "Default Language"
+    },
+    "tenants": {
+      "title": "Organizations",
+      "description": "Manage {total} tenant organizations",
+      "organization": "Organization",
+      "level": "Level {level}",
+      "type": "Type",
+      "plan": "Plan",
+      "status": "Status",
+      "members": "Members",
+      "children": "Children",
+      "created": "Created",
+      "active": "Active",
+      "suspended": "Suspended",
+      "trial": "Trial",
+      "impersonate": "Impersonate",
+      "viewHierarchy": "View Hierarchy",
+      "liftSuspension": "Lift Suspension",
+      "suspend": "Suspend",
+      "suspendAll": "Suspend All",
+      "unsuspendAll": "Unsuspend All",
+      "confirmSuspend": "Are you sure you want to suspend the selected organizations?",
+      "confirmUnsuspend": "Are you sure you want to unsuspend the selected organizations?",
+      "upgradeToStarter": "Upgrade to Starter",
+      "upgradeToProfessional": "Upgrade to Professional",
+      "upgradeToEnterprise": "Upgrade to Enterprise",
+      "confirmChangePlan": "Are you sure you want to change the plan to {plan} for the selected organizations?",
+      "enableHierarchy": "Enable Hierarchy",
+      "disableHierarchy": "Disable Hierarchy",
+      "confirmEnableHierarchy": "Are you sure you want to enable hierarchy for the selected organizations?",
+      "confirmDisableHierarchy": "Are you sure you want to disable hierarchy for the selected organizations?",
+      "deleteAll": "Delete All",
+      "deleteOrganization": "Delete Organization",
+      "confirmDeleteAll": "Are you sure you want to delete the selected organizations? This action cannot be undone.",
+      "confirmDelete": "Are you sure you want to delete {name}? This action cannot be undone.",
+      "refresh": "Refresh",
+      "hierarchy": "Hierarchy",
+      "addTenant": "Add Organization",
+      "searchPlaceholder": "Search organizations...",
+      "allPlans": "All Plans",
+      "allStatus": "All Status",
+      "noTenants": "No organizations found",
+      "suspendOrganization": "Suspend Organization",
+      "suspendDescription": "Suspending {name} will restrict access for all users in this organization.",
+      "suspensionType": "Suspension Type",
+      "fullSuspension": "Full Suspension",
+      "partialSuspension": "Partial Suspension",
+      "billingHold": "Billing Hold",
+      "underInvestigation": "Under Investigation",
+      "reason": "Reason",
+      "reasonPlaceholder": "Enter the reason for suspension...",
+      "suspending": "Suspending...",
+      "createNewOrganization": "Create New Organization",
+      "addNewTenant": "Add a new tenant organization to the platform.",
+      "organizationName": "Organization Name",
+      "organizationNamePlaceholder": "e.g., Acme Corporation",
+      "slug": "Slug",
+      "slugPlaceholder": "e.g., acme-corp",
+      "planTier": "Plan Tier",
+      "organizationType": "Organization Type",
+      "parentOrganization": "Parent Organization",
+      "noneRootOrganization": "None (Root Organization)",
+      "parentOrgHint": "Select a parent organization to create a child org in the hierarchy.",
+      "industry": "Industry",
+      "industryPlaceholder": "e.g., Technology, Finance",
+      "companySize": "Company Size",
+      "selectSize": "Select size",
+      "soloSize": "Solo (1)",
+      "smallSize": "Small (2-50)",
+      "mediumSize": "Medium (51-200)",
+      "largeSize": "Large (201-1000)",
+      "enterpriseSize": "Enterprise (1001-5000)",
+      "globalSize": "Global (5000+)",
+      "country": "Country",
+      "countryPlaceholder": "e.g., United States",
+      "timezone": "Timezone",
+      "timezonePlaceholder": "e.g., America/New_York",
+      "ownerInformation": "Owner Information",
+      "ownerEmail": "Owner Email",
+      "ownerEmailPlaceholder": "owner@company.com",
+      "ownerName": "Owner Name",
+      "ownerNamePlaceholder": "John Doe",
+      "allowChildOrgs": "Allow child organizations (enable hierarchy)",
+      "creating": "Creating...",
+      "createOrganization": "Create Organization",
+      "orgTypes": {
+        "STANDARD": "Standard",
+        "AGENCY": "Agency",
+        "HOLDING_COMPANY": "Holding Company",
+        "SUBSIDIARY": "Subsidiary",
+        "BRAND": "Brand",
+        "SUB_BRAND": "Sub-Brand",
+        "DIVISION": "Division",
+        "DEPARTMENT": "Department",
+        "FRANCHISE": "Franchise",
+        "FRANCHISEE": "Franchisee",
+        "RESELLER": "Reseller",
+        "CLIENT": "Client",
+        "REGIONAL": "Regional",
+        "PORTFOLIO_COMPANY": "Portfolio Company"
+      }
     },
     "admins": {
       "title": "Admin Management",
@@ -4597,6 +4925,71 @@
         "support": "Support",
         "analyst": "Analyst"
       }
+    },
+    "users": {
+      "title": "User Management",
+      "description": "Manage {total} platform users across all organizations",
+      "user": "User",
+      "noName": "No Name",
+      "organizations": "Organizations",
+      "moreOrgs": "+{count} more",
+      "noOrganizations": "No organizations",
+      "status": "Status",
+      "banned": "Banned",
+      "verified": "Verified",
+      "unverified": "Unverified",
+      "sessions": "Sessions",
+      "joined": "Joined",
+      "impersonate": "Impersonate",
+      "liftBan": "Lift Ban",
+      "banUser": "Ban User",
+      "banSelected": "Ban Selected",
+      "banUserTitle": "Ban User",
+      "confirmBan": "Are you sure you want to ban the selected users?",
+      "unbanSelected": "Unban Selected",
+      "confirmUnban": "Are you sure you want to unban the selected users?",
+      "verifyEmails": "Verify Emails",
+      "confirmVerify": "Are you sure you want to mark the selected users' emails as verified?",
+      "resetPasswords": "Reset Passwords",
+      "confirmResetPassword": "Are you sure you want to send password reset emails to the selected users?",
+      "revokeSessions": "Revoke Sessions",
+      "confirmRevokeSessions": "Are you sure you want to revoke all sessions for the selected users?",
+      "deleteSelected": "Delete Selected",
+      "deleteUser": "Delete User",
+      "confirmDeleteAll": "Are you sure you want to delete the selected users? This action cannot be undone.",
+      "confirmDelete": "Are you sure you want to delete {name}? This action cannot be undone.",
+      "refresh": "Refresh",
+      "addUser": "Add User",
+      "searchPlaceholder": "Search users by name or email...",
+      "allUsers": "All Users",
+      "active": "Active",
+      "noUsers": "No users found",
+      "banDescription": "Banning {name} will prevent them from accessing the platform.",
+      "banType": "Ban Type",
+      "temporary": "Temporary",
+      "permanent": "Permanent",
+      "shadowBan": "Shadow Ban",
+      "reasonLabel": "Reason",
+      "reasonPlaceholder": "Enter the reason for banning...",
+      "banning": "Banning...",
+      "createNewUser": "Create New User",
+      "addNewUserDescription": "Add a new user to the platform.",
+      "email": "Email",
+      "emailPlaceholder": "user@example.com",
+      "name": "Name",
+      "namePlaceholder": "Full name",
+      "password": "Password",
+      "passwordPlaceholder": "Leave empty to send invite email",
+      "organizationAssignment": "Organization Assignment",
+      "selectOrganization": "Select an organization",
+      "noOrganization": "No Organization",
+      "role": "Role",
+      "owner": "Owner",
+      "admin": "Admin",
+      "member": "Member",
+      "viewer": "Viewer",
+      "creating": "Creating...",
+      "createUser": "Create User"
     },
     "audit": {
       "title": "Platform Audit Log",
@@ -5400,8 +5793,47 @@
       }
     },
     "security": {
-      "title": "Security Center",
+      "title": "Security Overview",
       "description": "Monitor and manage platform security",
+      "policies": "Policies",
+      "sessions": "Sessions",
+      "ipBlocklist": "IP Blocklist",
+      "violations": "Violations",
+      "loading": "Loading...",
+      "platformSecurityScore": "Platform Security Score",
+      "authenticationOverview": "Authentication Overview",
+      "loginActivityMetrics": "Login Activity Metrics",
+      "loginAttempts24h": "Login Attempts (24h)",
+      "failedLogins24h": "Failed Logins (24h)",
+      "mfaAdoptionRate": "MFA Adoption Rate",
+      "ssoAdoptionRate": "SSO Adoption Rate",
+      "securityPolicies": "Security Policies",
+      "activePolicies": "Active Policies",
+      "managePolicies": "Manage Policies",
+      "configureRules": "Configure security rules and policies",
+      "viewPolicies": "View Policies",
+      "threatDetection": "Threat Detection",
+      "activeThreats": "Active Threats",
+      "monitorThreats": "Monitor Threats",
+      "requireImmediateAttention": "Require immediate attention",
+      "viewThreats": "View Threats",
+      "securityViolations": "Security Violations",
+      "openViolations": "Open Violations",
+      "reviewViolations": "Review Violations",
+      "reviewPolicyViolations": "Review policy violations",
+      "blockedIPs": "Blocked IPs",
+      "manageIPs": "Manage IPs",
+      "manageBlockedAddresses": "Manage blocked IP addresses",
+      "platformWideRestrictions": "Platform-wide restrictions",
+      "latestSecurityActivities": "Latest Security Activities",
+      "recentSecurityEvents": "Recent Security Events",
+      "noRecentEvents": "No recent security events",
+      "viewAllEvents": "View All Events",
+      "thisWeek": "This Week",
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
       "threats": {
         "title": "Threat Detection",
         "description": "Monitor and respond to security threats",

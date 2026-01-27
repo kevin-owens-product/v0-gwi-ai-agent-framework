@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import {
   Dialog,
   DialogContent,
@@ -31,12 +32,14 @@ interface NPSPopupProps {
 
 export function NPSPopup({
   surveyId,
-  question = "How likely are you to recommend us to a friend or colleague?",
+  question,
   followUpQuestion,
   open,
   onOpenChange,
   onComplete,
 }: NPSPopupProps) {
+  const t = useTranslations("feedback.nps")
+  const defaultQuestion = question || t("defaultQuestion")
   const [score, setScore] = useState<number | null>(null)
   const [feedback, setFeedback] = useState("")
   const [followUpResponse, setFollowUpResponse] = useState("")
@@ -94,9 +97,9 @@ export function NPSPopup({
   }
 
   const getScoreLabel = (s: number) => {
-    if (s <= 6) return "Not likely"
-    if (s <= 8) return "Likely"
-    return "Very likely"
+    if (s <= 6) return t("notLikely")
+    if (s <= 8) return t("likely")
+    return t("veryLikely")
   }
 
   const getScoreColor = (s: number) => {
@@ -107,9 +110,9 @@ export function NPSPopup({
 
   const getFollowUpPrompt = () => {
     if (score === null) return ""
-    if (score <= 6) return "We're sorry to hear that. What could we do better?"
-    if (score <= 8) return "Thanks for your feedback! What would make your experience even better?"
-    return "We're glad you're enjoying the product! What do you like most?"
+    if (score <= 6) return t("detractorPrompt")
+    if (score <= 8) return t("passivePrompt")
+    return t("promoterPrompt")
   }
 
   if (isSuccess) {
@@ -120,9 +123,9 @@ export function NPSPopup({
             <div className="h-16 w-16 rounded-full bg-green-500/10 flex items-center justify-center mb-4">
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>
-            <DialogTitle className="text-xl mb-2">Thank you!</DialogTitle>
+            <DialogTitle className="text-xl mb-2">{t("thankYou")}</DialogTitle>
             <DialogDescription>
-              Your response has been recorded. We appreciate your feedback!
+              {t("responseRecorded")}
             </DialogDescription>
           </div>
         </DialogContent>
@@ -142,9 +145,9 @@ export function NPSPopup({
         </button>
 
         <DialogHeader>
-          <DialogTitle className="text-center">{question}</DialogTitle>
+          <DialogTitle className="text-center">{defaultQuestion}</DialogTitle>
           <DialogDescription className="text-center">
-            0 = Not likely at all, 10 = Extremely likely
+            {t("scaleDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -177,9 +180,9 @@ export function NPSPopup({
               })}
             </div>
             <div className="flex justify-between text-xs text-muted-foreground px-1">
-              <span>Not likely</span>
-              <span>Neutral</span>
-              <span>Very likely</span>
+              <span>{t("notLikely")}</span>
+              <span>{t("neutral")}</span>
+              <span>{t("veryLikely")}</span>
             </div>
           </div>
 
@@ -200,7 +203,7 @@ export function NPSPopup({
                 <Textarea
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
-                  placeholder="Your feedback (optional)"
+                  placeholder={t("feedbackPlaceholder")}
                   rows={3}
                 />
               </div>
@@ -211,7 +214,7 @@ export function NPSPopup({
                   <Textarea
                     value={followUpResponse}
                     onChange={(e) => setFollowUpResponse(e.target.value)}
-                    placeholder="Your response (optional)"
+                    placeholder={t("responsePlaceholder")}
                     rows={2}
                   />
                 </div>
@@ -222,7 +225,7 @@ export function NPSPopup({
                   variant="ghost"
                   onClick={() => onOpenChange(false)}
                 >
-                  Maybe later
+                  {t("maybeLater")}
                 </Button>
                 <Button
                   onClick={handleSubmit}
@@ -231,10 +234,10 @@ export function NPSPopup({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Submitting...
+                      {t("submitting")}
                     </>
                   ) : (
-                    "Submit"
+                    t("submit")
                   )}
                 </Button>
               </div>

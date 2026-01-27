@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -81,6 +82,8 @@ const questionTypeLabels = {
 }
 
 export function QuestionList({ surveyId, questions }: QuestionListProps) {
+  const t = useTranslations("gwi.surveys.questions")
+  const tCommon = useTranslations("common")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null)
   const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set())
@@ -185,31 +188,31 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Questions</CardTitle>
+          <CardTitle>{t("title")}</CardTitle>
           <CardDescription>
-            Define the questions for this survey
+            {t("description")}
           </CardDescription>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={openNewDialog}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Question
+              {t("addQuestion")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle>
-                {editingQuestion ? "Edit Question" : "Add New Question"}
+                {editingQuestion ? t("editQuestion") : t("addNewQuestion")}
               </DialogTitle>
               <DialogDescription>
-                Configure the question settings and options
+                {t("configureSettings")}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="code">Question Code</Label>
+                  <Label htmlFor="code">{t("questionCode")}</Label>
                   <Input
                     id="code"
                     value={formData.code}
@@ -220,7 +223,7 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="type">Question Type</Label>
+                  <Label htmlFor="type">{t("questionType")}</Label>
                   <Select
                     value={formData.type}
                     onValueChange={(value) =>
@@ -231,27 +234,27 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="SINGLE_SELECT">Single Select</SelectItem>
-                      <SelectItem value="MULTI_SELECT">Multi Select</SelectItem>
-                      <SelectItem value="SCALE">Scale</SelectItem>
-                      <SelectItem value="OPEN_TEXT">Open Text</SelectItem>
-                      <SelectItem value="NUMERIC">Numeric</SelectItem>
-                      <SelectItem value="DATE">Date</SelectItem>
-                      <SelectItem value="MATRIX">Matrix</SelectItem>
+                      <SelectItem value="SINGLE_SELECT">{t("types.singleSelect")}</SelectItem>
+                      <SelectItem value="MULTI_SELECT">{t("types.multiSelect")}</SelectItem>
+                      <SelectItem value="SCALE">{t("types.scale")}</SelectItem>
+                      <SelectItem value="OPEN_TEXT">{t("types.openText")}</SelectItem>
+                      <SelectItem value="NUMERIC">{t("types.numeric")}</SelectItem>
+                      <SelectItem value="DATE">{t("types.date")}</SelectItem>
+                      <SelectItem value="MATRIX">{t("types.matrix")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="text">Question Text</Label>
+                <Label htmlFor="text">{t("questionText")}</Label>
                 <Textarea
                   id="text"
                   value={formData.text}
                   onChange={(e) =>
                     setFormData({ ...formData, text: e.target.value })
                   }
-                  placeholder="Enter the question text"
+                  placeholder={t("questionTextPlaceholder")}
                   rows={3}
                 />
               </div>
@@ -259,14 +262,14 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
               {(formData.type === "SINGLE_SELECT" ||
                 formData.type === "MULTI_SELECT") && (
                 <div className="space-y-2">
-                  <Label htmlFor="options">Options (JSON)</Label>
+                  <Label htmlFor="options">{t("optionsJson")}</Label>
                   <Textarea
                     id="options"
                     value={formData.options}
                     onChange={(e) =>
                       setFormData({ ...formData, options: e.target.value })
                     }
-                    placeholder='["Option 1", "Option 2", "Option 3"]'
+                    placeholder={t("optionsPlaceholder")}
                     rows={4}
                     className="font-mono text-sm"
                   />
@@ -281,15 +284,15 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                     setFormData({ ...formData, required: checked })
                   }
                 />
-                <Label htmlFor="required">Required question</Label>
+                <Label htmlFor="required">{t("requiredQuestion")}</Label>
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button onClick={handleSubmit}>
-                {editingQuestion ? "Save Changes" : "Add Question"}
+                {editingQuestion ? tCommon("saveChanges") : t("addQuestion")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -322,7 +325,7 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                       {questionTypeLabels[question.type as keyof typeof questionTypeLabels]}
                     </Badge>
                     {question.required && (
-                      <Badge variant="secondary">Required</Badge>
+                      <Badge variant="secondary">{tCommon("required")}</Badge>
                     )}
                     <div className="flex items-center gap-1">
                       <Button
@@ -362,16 +365,16 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                     <div className="p-4 border-t bg-white">
                       <dl className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <dt className="text-muted-foreground">Order</dt>
+                          <dt className="text-muted-foreground">{t("order")}</dt>
                           <dd className="font-medium">{question.order}</dd>
                         </div>
                         <div>
-                          <dt className="text-muted-foreground">Type</dt>
+                          <dt className="text-muted-foreground">{tCommon("type")}</dt>
                           <dd className="font-medium">{question.type}</dd>
                         </div>
                         {question.options != null && (
                           <div className="col-span-2">
-                            <dt className="text-muted-foreground mb-1">Options</dt>
+                            <dt className="text-muted-foreground mb-1">{t("options")}</dt>
                             <dd className="font-mono text-xs bg-slate-100 p-2 rounded whitespace-pre-wrap">
                               {JSON.stringify(question.options as object, null, 2)}
                             </dd>
@@ -380,7 +383,7 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
                         {question.validationRules != null && (
                           <div className="col-span-2">
                             <dt className="text-muted-foreground mb-1">
-                              Validation Rules
+                              {t("validationRules")}
                             </dt>
                             <dd className="font-mono text-xs bg-slate-100 p-2 rounded whitespace-pre-wrap">
                               {JSON.stringify(question.validationRules as object, null, 2)}
@@ -397,13 +400,13 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
         ) : (
           <div className="text-center py-12">
             <List className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-            <h3 className="text-lg font-medium">No questions yet</h3>
+            <h3 className="text-lg font-medium">{t("noQuestionsYet")}</h3>
             <p className="text-muted-foreground mb-4">
-              Start building your survey by adding questions
+              {t("startBuilding")}
             </p>
             <Button onClick={openNewDialog}>
               <Plus className="mr-2 h-4 w-4" />
-              Add First Question
+              {t("addFirstQuestion")}
             </Button>
           </div>
         )}
@@ -412,9 +415,9 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
       <ConfirmationDialog
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
-        title="Delete Question"
-        description="Are you sure you want to delete this question? This action cannot be undone."
-        confirmText="Delete"
+        title={t("deleteQuestion")}
+        description={t("deleteConfirmation")}
+        confirmText={tCommon("delete")}
         variant="destructive"
         onConfirm={handleConfirmDelete}
       />

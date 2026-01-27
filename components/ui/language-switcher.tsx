@@ -19,6 +19,7 @@ interface LanguageSwitcherProps {
   size?: 'default' | 'sm' | 'lg' | 'icon';
   showLabel?: boolean;
   align?: 'start' | 'center' | 'end';
+  className?: string;
 }
 
 export function LanguageSwitcher({
@@ -27,6 +28,7 @@ export function LanguageSwitcher({
   size = 'sm',
   showLabel = false,
   align = 'end',
+  className,
 }: LanguageSwitcherProps) {
   const router = useRouter();
   const t = useTranslations('ui.languageSwitcher');
@@ -76,7 +78,7 @@ export function LanguageSwitcher({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={variant} size={size} disabled={isPending}>
+        <Button variant={variant} size={size} disabled={isPending} className={className}>
           <Globe className="h-4 w-4" />
           {showLabel && (
             <span className="ml-2">

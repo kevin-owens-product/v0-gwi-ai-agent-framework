@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { prisma } from "@/lib/db"
-import bcrypt from "bcryptjs"
 import { randomBytes } from "crypto"
 import { canAccessGWIPortal } from "@/lib/gwi-permissions"
+import { verifyPassword } from "@/lib/super-admin"
 import { checkAuthRateLimit, getRateLimitHeaders } from "@/lib/rate-limit"
 import { Prisma } from "@prisma/client"
 
@@ -83,8 +83,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Verify password
-    const isValidPassword = await bcrypt.compare(password, admin.passwordHash)
+    // Verify password (supports both bcrypt and legacy SHA256)
+    const isValidPassword = await verifyPassword(password, admin.passwordHash)
     if (!isValidPassword) {
       return NextResponse.json(
         { error: "Invalid credentials" },

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -24,6 +25,7 @@ export function StatusTimeline({
   days = 30,
   className,
 }: StatusTimelineProps) {
+  const t = useTranslations("status.timeline")
   // Generate array of last N days
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -79,10 +81,10 @@ export function StatusTimeline({
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            Past {days} Days
+            {t("pastDays", { days })}
           </CardTitle>
           <Badge variant="outline" className="text-sm">
-            {uptimePercentage}% uptime
+            {t("uptime", { percentage: uptimePercentage })}
           </Badge>
         </div>
       </CardHeader>
@@ -94,8 +96,8 @@ export function StatusTimeline({
               className="group relative flex-1"
               title={`${day.date.toLocaleDateString()}: ${
                 day.status === "operational"
-                  ? "No incidents"
-                  : `${day.incidents.length} incident(s)`
+                  ? t("noIncidents")
+                  : t("incidentCount", { count: day.incidents.length })
               }`}
             >
               <div
@@ -110,7 +112,7 @@ export function StatusTimeline({
                   <p className="font-medium">{day.date.toLocaleDateString()}</p>
                   {day.status === "operational" ? (
                     <p className="text-green-500 flex items-center gap-1 mt-1">
-                      <CheckCircle className="h-3 w-3" /> No incidents
+                      <CheckCircle className="h-3 w-3" /> {t("noIncidents")}
                     </p>
                   ) : (
                     <div className="mt-1 space-y-1">
@@ -139,22 +141,22 @@ export function StatusTimeline({
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               <span className="h-3 w-3 rounded-sm bg-green-500" />
-              Operational
+              {t("severity.operational")}
             </span>
             <span className="flex items-center gap-1">
               <span className="h-3 w-3 rounded-sm bg-yellow-500" />
-              Minor
+              {t("severity.minor")}
             </span>
             <span className="flex items-center gap-1">
               <span className="h-3 w-3 rounded-sm bg-orange-500" />
-              Major
+              {t("severity.major")}
             </span>
             <span className="flex items-center gap-1">
               <span className="h-3 w-3 rounded-sm bg-red-500" />
-              Critical
+              {t("severity.critical")}
             </span>
           </div>
-          <span>Today</span>
+          <span>{t("today")}</span>
         </div>
       </CardContent>
     </Card>

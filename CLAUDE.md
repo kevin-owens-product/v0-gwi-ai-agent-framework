@@ -214,10 +214,24 @@ npx tsc --noEmit      # Same as above
 
 ## Internationalization (i18n)
 
-This application supports **10 languages** with 5,118+ translation keys using `next-intl`.
+This application supports **11 languages** with 5,476+ translation keys using `next-intl`.
 
 ### Supported Languages
-`en`, `es`, `zh`, `hi`, `fr`, `ar`, `pt`, `ru`, `ja`, `bn`
+`en`, `es`, `zh`, `hi`, `fr`, `ar`, `pt`, `ru`, `ja`, `bn`, `el`
+
+| Code | Language | Native Name | Flag |
+|------|----------|-------------|------|
+| `en` | English | English | 🇺🇸 |
+| `es` | Spanish | Español | 🇪🇸 |
+| `zh` | Chinese | 中文 | 🇨🇳 |
+| `hi` | Hindi | हिन्दी | 🇮🇳 |
+| `fr` | French | Français | 🇫🇷 |
+| `ar` | Arabic | العربية | 🇸🇦 |
+| `pt` | Portuguese | Português | 🇧🇷 |
+| `ru` | Russian | Русский | 🇷🇺 |
+| `ja` | Japanese | 日本語 | 🇯🇵 |
+| `bn` | Bengali | বাংলা | 🇧🇩 |
+| `el` | Greek | Ελληνικά | 🇬🇷 |
 
 ### Translation Files
 - Location: `/messages/*.json`
@@ -267,6 +281,18 @@ npm run i18n:sync          # Fix + clean combined
 2. Run `npm run i18n:fix` to sync to all languages
 3. Search for `[XX]` placeholders to find keys needing translation
 
+### Adding a New Language
+1. Add locale code to `lib/i18n/config.ts`:
+   - Add to `locales` array
+   - Add to `localeNames` with native name
+   - Add to `localeFlags` with country flag emoji
+2. Add language code mapping to `scripts/translate-messages.ts` in `LANG_MAP`
+3. Create translation file: `cp messages/en.json messages/{code}.json`
+4. Add placeholders: Run script to prefix all strings with `[{CODE}] `
+5. Translate: `npx tsx scripts/translate-messages.ts --lang={code}`
+6. Validate: `npm run i18n:validate`
+7. Update test files to include new locale count and assertions
+
 ## Large-Scale Codebase Changes
 
 When fixing errors or making changes across many files, use parallel agents by directory:
@@ -294,15 +320,126 @@ This approach fixed 1,018 TypeScript errors across 373 files efficiently.
 
 ## Test Accounts
 
-### GWI Portal
-- `gwiadmin@gwi.com` / `gwi123` (GWI_ADMIN)
-- `dataengineer@gwi.com` / `dataengineer123` (DATA_ENGINEER)
-- `taxonomy@gwi.com` / `gwi123` (TAXONOMY_MANAGER)
-- `mlengineer@gwi.com` / `gwi123` (ML_ENGINEER)
+> **Note:** These accounts are created by `prisma/seed.ts`. If login fails, re-seed the database.
 
-### Admin Portal
-- `superadmin@gwi.com` / `superadmin123` (SUPER_ADMIN)
-- `admin@gwi.com` / `admin123` (ADMIN)
+### GWI Portal (`/login?type=gwi`)
+| Email | Password | Role |
+|-------|----------|------|
+| `gwiadmin@gwi.com` | `gwi123` | GWI_ADMIN |
+| `dataengineer@gwi.com` | `dataengineer123` | DATA_ENGINEER |
+| `taxonomy@gwi.com` | `gwi123` | TAXONOMY_MANAGER |
+| `mlengineer@gwi.com` | `gwi123` | ML_ENGINEER |
+
+### Admin Portal (`/login?type=admin`)
+| Email | Password | Role |
+|-------|----------|------|
+| `demo-admin@gwi.com` | `demo123` | SUPER_ADMIN |
+| `superadmin@gwi.com` | `SuperAdmin123!` | SUPER_ADMIN |
+| `admin@gwi.com` | `Admin123!` | ADMIN |
+| `support@gwi.com` | `Support123!` | SUPPORT |
+
+### User Dashboard (`/login`)
+| Email | Password | Notes |
+|-------|----------|-------|
+| `demo@example.com` | `demo123` | Demo user |
+| `admin@acme.com` | `Password123!` | Acme Corp owner |
+
+## Known Pitfalls & Lessons Learned
+
+### 1. Middleware Route Handling
+The middleware (`middleware.ts`) must have explicit handlers for each portal type. Missing handlers cause auth failures:
+
+```typescript
+// REQUIRED: Each portal needs its own route handler
+if (isAdminRoute(pathname)) { /* check adminToken */ }
+if (isGwiRoute(pathname)) { /* check gwiToken */ }  // Don't forget this!
+// THEN fall through to NextAuth for dashboard routes
+```
+
+**Symptom:** Infinite redirect loop when accessing a portal
+**Cause:** Route falls through to wrong auth check (e.g., GWI route hitting NextAuth)
+**Fix:** Add explicit route handler in middleware before the NextAuth check
+
+### 2. Password Hashing Consistency
+All auth endpoints MUST use `verifyPassword()` from `lib/super-admin.ts`:
+
+```typescript
+// CORRECT - supports both bcrypt and legacy SHA256
+import { verifyPassword } from "@/lib/super-admin"
+const isValid = await verifyPassword(password, user.passwordHash)
+
+// WRONG - only supports bcrypt, breaks with seeded SHA256 passwords
+import bcrypt from "bcryptjs"
+const isValid = await bcrypt.compare(password, user.passwordHash)
+```
+
+### 3. i18n Namespace Matching
+Translation namespaces in components MUST exist in `messages/en.json`:
+
+```typescript
+// Component uses:
+const t = useTranslations("admin.tenants")
+
+// messages/en.json MUST have:
+{
+  "admin": {
+    "tenants": { ... }  // This namespace must exist!
+  }
+}
+```
+
+**Symptom:** Labels show as `admin.tenants.title` instead of actual text
+**Cause:** Namespace doesn't exist or has wrong structure
+**Fix:** Add missing namespace to `messages/en.json`
+
+### 4. Duplicate JSON Keys
+JSON files silently use the LAST occurrence of duplicate keys:
+
+```json
+{
+  "admin": {
+    "security": { "title": "First" },
+    "other": { ... },
+    "security": { "title": "Second" }  // This one wins!
+  }
+}
+```
+
+**Prevention:** Use a JSON linter or search for duplicate keys before committing
+
+### 5. Seed Data vs Documentation
+Test accounts in documentation MUST match actual seed data:
+
+| Documented | Seed File | Status |
+|------------|-----------|--------|
+| `gwiadmin@gwi.com` | Must exist in `prisma/seed.ts` | Verify! |
+
+**After adding test accounts to docs, always verify they exist in seed.**
+
+---
+
+## Validation Checklists
+
+### Adding a New Portal Route
+- [ ] Add route handler in `middleware.ts` (before NextAuth check)
+- [ ] Add login redirect path to `publicPaths` array
+- [ ] Use correct auth cookie (`adminToken`, `gwiToken`, etc.)
+- [ ] Test: login → redirect → refresh (should stay logged in)
+
+### Adding New i18n Keys
+- [ ] Add namespace to `messages/en.json`
+- [ ] Verify no duplicate keys in the JSON file
+- [ ] Run `npm run i18n:validate` to check structure
+- [ ] Test: page shows actual labels, not translation keys
+
+### Adding Test Accounts
+- [ ] Add to `prisma/seed.ts`
+- [ ] Document in `CLAUDE.md` Test Accounts section
+- [ ] Use `hashSuperAdminPassword()` for password (SHA256 compatible)
+- [ ] Run `npx prisma db seed` to apply
+- [ ] Test: can actually log in with documented credentials
+
+---
 
 ## Troubleshooting
 
@@ -333,3 +470,46 @@ You're using Next.js 14 syntax in Next.js 15. Change:
 { params }: { params: Promise<{ id: string }> }
 const { id } = await params
 ```
+
+### Login Redirects to Wrong Page / Infinite Loop
+**Symptom:** After login, redirects to `/login` instead of dashboard, or loops forever
+**Cause:** Middleware doesn't have handler for this portal type
+**Fix:** Add route handler in `middleware.ts`:
+```typescript
+if (isGwiRoute(pathname)) {
+  const gwiToken = request.cookies.get('gwiToken')?.value
+  if (!gwiToken) {
+    return NextResponse.redirect(new URL('/login?type=gwi', request.url))
+  }
+  return addSecurityHeaders(NextResponse.next())
+}
+```
+
+### Login Returns 401 "Invalid Credentials" (But Credentials Are Correct)
+**Symptom:** Correct password returns 401
+**Cause:** Password hash mismatch - endpoint uses bcrypt but seed uses SHA256
+**Fix:** Use `verifyPassword()` which supports both:
+```typescript
+import { verifyPassword } from "@/lib/super-admin"
+const isValid = await verifyPassword(password, admin.passwordHash)
+```
+
+### Translation Keys Show Instead of Labels
+**Symptom:** UI shows `admin.tenants.title` instead of "Tenants"
+**Causes:**
+1. Namespace doesn't exist in `messages/en.json`
+2. Duplicate namespace keys (later one overwrites)
+3. Cache issue
+
+**Fixes:**
+1. Add missing namespace to `messages/en.json`
+2. Search for duplicate keys: `grep -n '"tenants":' messages/en.json`
+3. Clear cache: `rm -rf .next && npm run dev`
+
+### Test Account Login Fails
+**Symptom:** Documented test account doesn't work
+**Cause:** Account doesn't exist in seed data
+**Fix:**
+1. Check `prisma/seed.ts` for the account
+2. Add if missing
+3. Re-seed: `npx prisma db push --force-reset && npx prisma db seed`

@@ -9,6 +9,7 @@ const publicPaths = [
   '/signup',
   '/forgot-password',
   '/login?type=admin',
+  '/login?type=gwi',
   '/api/auth',
   '/api/admin/auth',
   '/api/webhooks',
@@ -44,6 +45,11 @@ function isApiRoute(pathname: string): boolean {
 // Check if path is an admin route (admin portal has its own auth via adminToken cookie)
 function isAdminRoute(pathname: string): boolean {
   return pathname.startsWith('/admin') && pathname !== '/login?type=admin'
+}
+
+// Check if path is a GWI route (GWI portal has its own auth via gwiToken cookie)
+function isGwiRoute(pathname: string): boolean {
+  return pathname.startsWith('/gwi') && pathname !== '/login?type=gwi'
 }
 
 // Check if path matches any public path
@@ -119,6 +125,16 @@ export async function middleware(request: NextRequest) {
     if (!adminToken) {
       const adminLoginUrl = new URL('/login?type=admin', request.url)
       return NextResponse.redirect(adminLoginUrl)
+    }
+    return addSecurityHeaders(NextResponse.next())
+  }
+
+  // GWI routes use their own authentication (gwiToken cookie)
+  if (isGwiRoute(pathname)) {
+    const gwiToken = request.cookies.get('gwiToken')?.value
+    if (!gwiToken) {
+      const gwiLoginUrl = new URL('/login?type=gwi', request.url)
+      return NextResponse.redirect(gwiLoginUrl)
     }
     return addSecurityHeaders(NextResponse.next())
   }

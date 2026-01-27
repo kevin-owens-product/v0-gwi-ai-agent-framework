@@ -9,6 +9,7 @@
  * @module components/dashboard/search-button
  */
 
+import { useTranslations } from "next-intl"
 import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -35,6 +36,7 @@ interface SearchButtonProps {
  * ```
  */
 export function SearchButton({ variant = "icon", className }: SearchButtonProps) {
+  const t = useTranslations("common")
   const { open } = useCommandPalette()
 
   if (variant === "icon") {
@@ -51,7 +53,7 @@ export function SearchButton({ variant = "icon", className }: SearchButtonProps)
           </Button>
         </TooltipTrigger>
         <TooltipContent side="right" className="flex items-center gap-2">
-          <span>Search</span>
+          <span>{t("search")}</span>
           <ShortcutKey binding="mod+k" size="sm" variant="ghost" />
         </TooltipContent>
       </Tooltip>
@@ -65,7 +67,7 @@ export function SearchButton({ variant = "icon", className }: SearchButtonProps)
       onClick={open}
     >
       <Search className="mr-2 h-4 w-4" />
-      <span className="flex-1 text-left">Search...</span>
+      <span className="flex-1 text-left">{t("searchPlaceholder")}</span>
       <ShortcutKey binding="mod+k" size="sm" variant="ghost" />
     </Button>
   )

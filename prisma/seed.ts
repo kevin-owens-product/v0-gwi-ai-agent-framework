@@ -4263,6 +4263,59 @@ async function main() {
     }
   })
 
+  // ==================== GWI PORTAL ACCOUNTS ====================
+  console.log('🔧 Creating GWI Portal accounts...')
+
+  // GWI Admin - Full GWI portal access
+  await prisma.superAdmin.create({
+    data: {
+      email: 'gwiadmin@gwi.com',
+      name: 'GWI Administrator',
+      passwordHash: hashSuperAdminPassword('gwi123'),
+      role: 'GWI_ADMIN',
+      permissions: ['gwi:*'],
+      isActive: true,
+    }
+  })
+
+  // Data Engineer - Pipeline and data source management
+  await prisma.superAdmin.create({
+    data: {
+      email: 'dataengineer@gwi.com',
+      name: 'Data Engineer',
+      passwordHash: hashSuperAdminPassword('dataengineer123'),
+      role: 'DATA_ENGINEER',
+      permissions: ['gwi:pipelines:*', 'gwi:data-sources:*', 'gwi:monitoring:*'],
+      isActive: true,
+    }
+  })
+
+  // Taxonomy Manager - Taxonomy and survey management
+  await prisma.superAdmin.create({
+    data: {
+      email: 'taxonomy@gwi.com',
+      name: 'Taxonomy Manager',
+      passwordHash: hashSuperAdminPassword('gwi123'),
+      role: 'TAXONOMY_MANAGER',
+      permissions: ['gwi:taxonomy:*', 'gwi:surveys:*'],
+      isActive: true,
+    }
+  })
+
+  // ML Engineer - LLM and agent configuration
+  await prisma.superAdmin.create({
+    data: {
+      email: 'mlengineer@gwi.com',
+      name: 'ML Engineer',
+      passwordHash: hashSuperAdminPassword('gwi123'),
+      role: 'ML_ENGINEER',
+      permissions: ['gwi:llm:*', 'gwi:agents:*', 'gwi:prompts:*'],
+      isActive: true,
+    }
+  })
+
+  console.log('   Created 4 GWI Portal accounts')
+
   // ==================== DYNAMIC ROLES & PERMISSIONS ====================
   await safeSeedSection('Admin Roles & Permissions', async () => {
     console.log('🔐 Creating dynamic roles and permissions...')

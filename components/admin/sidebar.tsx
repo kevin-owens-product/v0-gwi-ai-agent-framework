@@ -383,7 +383,7 @@ function SidebarContent({ onLogout }: { onLogout: () => void }) {
 
       {/* Navigation Controls */}
       <div className="px-3 pt-3 pb-1 flex justify-between items-center">
-        <LanguageSwitcher variant="ghost" size="sm" />
+        <LanguageSwitcher variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white" />
         <div className="flex">
           <button
             onClick={expandAll}
