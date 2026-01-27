@@ -436,13 +436,11 @@ function LoginForm() {
 }
 
 function LoginFormSkeleton() {
-  const t = useTranslations('auth')
-
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">{t('welcomeBack')}</h1>
-        <p className="text-muted-foreground">{t('signInToContinue')}</p>
+        <div className="h-9 w-48 bg-muted rounded animate-pulse mx-auto" />
+        <div className="h-5 w-64 bg-muted rounded animate-pulse mx-auto" />
       </div>
       <div className="space-y-4">
         <div className="h-10 bg-muted rounded animate-pulse" />
