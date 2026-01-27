@@ -82,9 +82,9 @@ export default function PlanPage() {
 
       if (!response.ok) throw new Error('Failed to request upgrade')
 
-      toast.success('Upgrade request submitted! Our team will contact you shortly.')
+      toast.success(t('toast.upgradeRequestSubmitted'))
     } catch {
-      toast.error('Failed to submit upgrade request')
+      toast.error(t('toast.upgradeRequestFailed'))
     } finally {
       setUpgrading(false)
     }

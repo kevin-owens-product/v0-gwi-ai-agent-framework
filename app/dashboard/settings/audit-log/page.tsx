@@ -114,7 +114,7 @@ export default function AuditLogPage() {
       }
     } catch (error) {
       console.error('Failed to fetch audit logs:', error)
-      toast.error('Failed to load audit logs')
+      toast.error(t('toast.loadFailed'))
     } finally {
       setIsLoading(false)
     }

@@ -165,13 +165,14 @@ export default function ScheduledExportsPage() {
     setIsSubmitting(true)
     try {
       await createExport(data as CreateScheduledExportInput)
-      toast.success('Scheduled export created')
+      toast.success(t('toast.exportCreated'))
       setFormOpen(false)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to create export')
+      toast.error(error instanceof Error ? error.message : t('toast.createFailed'))
     } finally {
       setIsSubmitting(false)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createExport])
 
   const handleUpdate = useCallback(async (data: CreateScheduledExportInput | UpdateScheduledExportInput) => {
@@ -179,43 +180,47 @@ export default function ScheduledExportsPage() {
     setIsSubmitting(true)
     try {
       await updateExport(editingExport.id, data as UpdateScheduledExportInput)
-      toast.success('Scheduled export updated')
+      toast.success(t('toast.exportUpdated'))
       setEditingExport(null)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to update export')
+      toast.error(error instanceof Error ? error.message : t('toast.updateFailed'))
     } finally {
       setIsSubmitting(false)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingExport, updateExport])
 
   const handleDelete = useCallback(async () => {
     if (!deleteExport) return
     try {
       await removeExport(deleteExport.id)
-      toast.success('Scheduled export deleted')
+      toast.success(t('toast.exportDeleted'))
       setDeleteExport(null)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete export')
+      toast.error(error instanceof Error ? error.message : t('toast.deleteFailed'))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteExport, removeExport])
 
   const handleToggleActive = useCallback(async (exportItem: ScheduledExport) => {
     try {
       await updateExport(exportItem.id, { isActive: !exportItem.isActive })
-      toast.success(exportItem.isActive ? 'Export paused' : 'Export activated')
+      toast.success(exportItem.isActive ? t('toast.exportPaused') : t('toast.exportActivated'))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to update export')
+      toast.error(error instanceof Error ? error.message : t('toast.updateFailed'))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateExport])
 
   const handleRunNow = useCallback(async (exportItem: ScheduledExport) => {
     try {
       await runExport(exportItem.id)
-      toast.success('Export started')
+      toast.success(t('toast.exportStarted'))
       refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to start export')
+      toast.error(error instanceof Error ? error.message : t('toast.startFailed'))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [runExport, refresh])
 
   if (isLoading) {

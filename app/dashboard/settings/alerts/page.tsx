@@ -136,10 +136,10 @@ export default function AlertsSettingsPage() {
     setIsSubmitting(true)
     try {
       await createAlert(data as CreateAlertInput)
-      toast.success('Alert created successfully')
+      toast.success(t('toast.alertCreated'))
       setIsCreateDialogOpen(false)
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to create alert')
+      toast.error(err instanceof Error ? err.message : t('toast.createFailed'))
     } finally {
       setIsSubmitting(false)
     }
@@ -151,10 +151,10 @@ export default function AlertsSettingsPage() {
     setIsSubmitting(true)
     try {
       await updateAlert(editingAlert.id, data as UpdateAlertInput)
-      toast.success('Alert updated successfully')
+      toast.success(t('toast.alertUpdated'))
       setEditingAlert(null)
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update alert')
+      toast.error(err instanceof Error ? err.message : t('toast.updateFailed'))
     } finally {
       setIsSubmitting(false)
     }
@@ -165,19 +165,19 @@ export default function AlertsSettingsPage() {
 
     try {
       await deleteAlert(deletingAlert.id)
-      toast.success('Alert deleted successfully')
+      toast.success(t('toast.alertDeleted'))
       setDeletingAlert(null)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete alert')
+      toast.error(error instanceof Error ? error.message : t('toast.deleteFailed'))
     }
   }
 
   const handleToggleAlert = async (alert: CustomAlert) => {
     try {
       await toggleAlert(alert.id, !alert.isActive)
-      toast.success(`Alert ${alert.isActive ? 'disabled' : 'enabled'} successfully`)
+      toast.success(alert.isActive ? t('toast.alertDisabled') : t('toast.alertEnabled'))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to toggle alert')
+      toast.error(error instanceof Error ? error.message : t('toast.toggleFailed'))
     }
   }
 
@@ -559,6 +559,7 @@ export default function AlertsSettingsPage() {
 
 // Separate component for alert history to handle its own data fetching
 function AlertHistoryView({ alertId }: { alertId: string }) {
+  const t = useTranslations("settings.alerts")
   const { history, isLoading, fetchHistory, acknowledgeAlert } = useAlertHistory(alertId)
 
   useEffect(() => {
@@ -572,9 +573,9 @@ function AlertHistoryView({ alertId }: { alertId: string }) {
   ) => {
     try {
       await acknowledgeAlert({ historyId, status, notes })
-      toast.success('Alert acknowledged')
+      toast.success(t('toast.alertAcknowledged'))
     } catch {
-      toast.error('Failed to acknowledge alert')
+      toast.error(t('toast.acknowledgeFailed'))
     }
   }
 

@@ -23,53 +23,57 @@ interface Crosstab {
 }
 
 // Demo crosstabs for fallback - organized by category with realistic audience/metric counts
-const demoCrosstabs: Crosstab[] = [
-  // Featured comprehensive analysis
-  { id: "analysis", name: "Comprehensive Consumer Insights Analysis", audiences: DATA_SUMMARY.totalAudiences, metrics: DATA_SUMMARY.totalMetrics, lastModified: "Just now", category: "Featured", isFeatured: true },
+function getDemoCrosstabs(tRelTime: (key: string, values?: Record<string, number>) => string): Crosstab[] {
+  return [
+    // Featured comprehensive analysis
+    { id: "analysis", name: "Comprehensive Consumer Insights Analysis", audiences: DATA_SUMMARY.totalAudiences, metrics: DATA_SUMMARY.totalMetrics, lastModified: tRelTime('justNow'), category: "Featured", isFeatured: true },
 
-  // Social & Platform Analysis
-  { id: "social-1", name: "Generational Social Media Platform Analysis", audiences: 21, metrics: 20, lastModified: "1 hour ago", category: "Social" },
-  { id: "social-2", name: "TikTok vs Instagram Engagement by Age", audiences: 5, metrics: 12, lastModified: "3 hours ago", category: "Social" },
-  { id: "social-3", name: "Content Format Preferences by Generation", audiences: 8, metrics: 15, lastModified: "1 day ago", category: "Social" },
+    // Social & Platform Analysis
+    { id: "social-1", name: "Generational Social Media Platform Analysis", audiences: 21, metrics: 20, lastModified: tRelTime('hoursAgo', { count: 1 }), category: "Social" },
+    { id: "social-2", name: "TikTok vs Instagram Engagement by Age", audiences: 5, metrics: 12, lastModified: tRelTime('hoursAgo', { count: 3 }), category: "Social" },
+    { id: "social-3", name: "Content Format Preferences by Generation", audiences: 8, metrics: 15, lastModified: tRelTime('daysAgo', { count: 1 }), category: "Social" },
 
-  // Commerce & Purchase Behavior
-  { id: "commerce-1", name: "Income Segment Purchase Channel Preferences", audiences: 12, metrics: 15, lastModified: "4 hours ago", category: "Commerce" },
-  { id: "commerce-2", name: "E-commerce vs In-Store by Product Category", audiences: 8, metrics: 18, lastModified: "2 hours ago", category: "Commerce" },
-  { id: "commerce-3", name: "Subscription Service Adoption by Segment", audiences: 10, metrics: 12, lastModified: "6 hours ago", category: "Commerce" },
+    // Commerce & Purchase Behavior
+    { id: "commerce-1", name: "Income Segment Purchase Channel Preferences", audiences: 12, metrics: 15, lastModified: tRelTime('hoursAgo', { count: 4 }), category: "Commerce" },
+    { id: "commerce-2", name: "E-commerce vs In-Store by Product Category", audiences: 8, metrics: 18, lastModified: tRelTime('hoursAgo', { count: 2 }), category: "Commerce" },
+    { id: "commerce-3", name: "Subscription Service Adoption by Segment", audiences: 10, metrics: 12, lastModified: tRelTime('hoursAgo', { count: 6 }), category: "Commerce" },
 
-  // Brand & Competitive Intelligence
-  { id: "brand-1", name: "Brand Awareness Competitive Landscape", audiences: 15, metrics: 8, lastModified: "3 hours ago", category: "Brand" },
-  { id: "brand-2", name: "Brand Health Funnel by Market", audiences: 6, metrics: 6, lastModified: "5 hours ago", category: "Brand" },
-  { id: "brand-3", name: "Competitive NPS Benchmarking", audiences: 8, metrics: 5, lastModified: "8 hours ago", category: "Brand" },
+    // Brand & Competitive Intelligence
+    { id: "brand-1", name: "Brand Awareness Competitive Landscape", audiences: 15, metrics: 8, lastModified: tRelTime('hoursAgo', { count: 3 }), category: "Brand" },
+    { id: "brand-2", name: "Brand Health Funnel by Market", audiences: 6, metrics: 6, lastModified: tRelTime('hoursAgo', { count: 5 }), category: "Brand" },
+    { id: "brand-3", name: "Competitive NPS Benchmarking", audiences: 8, metrics: 5, lastModified: tRelTime('hoursAgo', { count: 8 }), category: "Brand" },
 
-  // Media & Content Consumption
-  { id: "media-1", name: "Media Consumption by Daypart", audiences: 12, metrics: 15, lastModified: "8 hours ago", category: "Media" },
-  { id: "media-2", name: "Streaming Service Preferences by Age", audiences: 8, metrics: 12, lastModified: "12 hours ago", category: "Media" },
-  { id: "media-3", name: "News Source Trust by Demographics", audiences: 10, metrics: 8, lastModified: "1 day ago", category: "Media" },
+    // Media & Content Consumption
+    { id: "media-1", name: "Media Consumption by Daypart", audiences: 12, metrics: 15, lastModified: tRelTime('hoursAgo', { count: 8 }), category: "Media" },
+    { id: "media-2", name: "Streaming Service Preferences by Age", audiences: 8, metrics: 12, lastModified: tRelTime('hoursAgo', { count: 12 }), category: "Media" },
+    { id: "media-3", name: "News Source Trust by Demographics", audiences: 10, metrics: 8, lastModified: tRelTime('daysAgo', { count: 1 }), category: "Media" },
 
-  // Demographics & Segmentation
-  { id: "demo-1", name: "Sustainability Attitudes by Consumer Segment", audiences: 15, metrics: 10, lastModified: "6 hours ago", category: "Values" },
-  { id: "demo-2", name: "Tech Adoption by Income Level", audiences: 8, metrics: 11, lastModified: "2 days ago", category: "Technology" },
+    // Demographics & Segmentation
+    { id: "demo-1", name: "Sustainability Attitudes by Consumer Segment", audiences: 15, metrics: 10, lastModified: tRelTime('hoursAgo', { count: 6 }), category: "Values" },
+    { id: "demo-2", name: "Tech Adoption by Income Level", audiences: 8, metrics: 11, lastModified: tRelTime('daysAgo', { count: 2 }), category: "Technology" },
 
-  // Health & Lifestyle
-  { id: "health-1", name: "Health & Fitness Behavior Analysis", audiences: 12, metrics: 8, lastModified: "4 hours ago", category: "Health" },
-  { id: "food-1", name: "Food & Dining Preferences by Segment", audiences: 10, metrics: 5, lastModified: "1 day ago", category: "Food" },
+    // Health & Lifestyle
+    { id: "health-1", name: "Health & Fitness Behavior Analysis", audiences: 12, metrics: 8, lastModified: tRelTime('hoursAgo', { count: 4 }), category: "Health" },
+    { id: "food-1", name: "Food & Dining Preferences by Segment", audiences: 10, metrics: 5, lastModified: tRelTime('daysAgo', { count: 1 }), category: "Food" },
 
-  // Market & Geographic Analysis
-  { id: "market-1", name: "Global Market Digital Behavior Comparison", audiences: 18, metrics: 25, lastModified: "2 days ago", category: "Global" },
-  { id: "market-2", name: "US vs UK vs Germany Consumer Attitudes", audiences: 6, metrics: 30, lastModified: "1 day ago", category: "Global" },
-]
+    // Market & Geographic Analysis
+    { id: "market-1", name: "Global Market Digital Behavior Comparison", audiences: 18, metrics: 25, lastModified: tRelTime('daysAgo', { count: 2 }), category: "Global" },
+    { id: "market-2", name: "US vs UK vs Germany Consumer Attitudes", audiences: 6, metrics: 30, lastModified: tRelTime('daysAgo', { count: 1 }), category: "Global" },
+  ]
+}
 
-function formatTimeAgo(dateString: string): string {
+function formatTimeAgo(dateString: string, t: (key: string, values?: Record<string, number>) => string): string {
   const date = new Date(dateString)
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / (1000 * 60))
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
   const diffDays = Math.floor(diffHours / 24)
 
-  if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
-  if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
-  return 'Just now'
+  if (diffDays > 0) return t('daysAgo', { count: diffDays })
+  if (diffHours > 0) return t('hoursAgo', { count: diffHours })
+  if (diffMins > 0) return t('minutesAgo', { count: diffMins })
+  return t('justNow')
 }
 
 interface ApiCrosstab {
@@ -82,23 +86,26 @@ interface ApiCrosstab {
   }
 }
 
-function mapApiCrosstab(apiCrosstab: ApiCrosstab): Crosstab {
+function mapApiCrosstab(apiCrosstab: ApiCrosstab, tRelTime: (key: string, values?: Record<string, number>) => string): Crosstab {
   const config = apiCrosstab.configuration || {}
   return {
     id: apiCrosstab.id,
     name: apiCrosstab.name,
     audiences: config.audiences?.length || 0,
     metrics: config.metrics?.length || 8,
-    lastModified: formatTimeAgo(apiCrosstab.updatedAt),
+    lastModified: formatTimeAgo(apiCrosstab.updatedAt, tRelTime),
   }
 }
 
 export default function CrosstabsPage() {
   const t = useTranslations('dashboard.crosstabs')
+  const tRelTime = useTranslations('common.relativeTime')
   const [crosstabs, setCrosstabs] = useState<Crosstab[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState({ total: 0, views: 0, exports: 0, usedToday: 0 })
   const [activeTab, setActiveTab] = useState("all")
+
+  const demoCrosstabs = getDemoCrosstabs(tRelTime)
 
   useEffect(() => {
     async function fetchCrosstabs() {
@@ -110,7 +117,7 @@ export default function CrosstabsPage() {
 
           // Map API crosstabs but only include ones with valid configuration
           const validApiCrosstabs = apiCrosstabs
-            .map(mapApiCrosstab)
+            .map((ct: ApiCrosstab) => mapApiCrosstab(ct, tRelTime))
             .filter((ct: Crosstab) => ct.audiences > 0 || ct.metrics > 0)
 
           // Always include demoCrosstabs, then add any valid API crosstabs that aren't duplicates
@@ -138,7 +145,7 @@ export default function CrosstabsPage() {
       }
     }
     fetchCrosstabs()
-  }, [])
+  }, [demoCrosstabs, tRelTime])
 
   const formatNumber = (num: number) => {
     if (num >= 1000) return `${(num / 1000).toFixed(1)}K`

@@ -11,6 +11,7 @@ import { RecentWorkflows } from "@/components/dashboard/recent-workflows"
 import { RecentReports } from "@/components/dashboard/recent-reports"
 import { ProjectsOverview } from "@/components/dashboard/projects-overview"
 import { PlatformOverview } from "@/components/dashboard/platform-overview"
+import { getTranslations } from "next-intl/server"
 
 async function getDashboardData(orgId: string) {
   const now = new Date()
@@ -128,58 +129,67 @@ const demoMetrics = {
   avgResponseTime: 3.2,
 }
 
-const demoActivities = [
-  {
-    id: "demo-1",
-    type: "completed" as const,
-    title: "Audience Explorer Run",
-    agent: "Audience Explorer",
-    time: "2 hours ago",
-    insights: 8,
-    href: "/dashboard/agents/audience-explorer",
-  },
-  {
-    id: "demo-2",
-    type: "completed" as const,
-    title: "Culture Tracker Run",
-    agent: "Culture Tracker",
-    time: "4 hours ago",
-    insights: 5,
-    href: "/dashboard/agents/culture-tracker",
-  },
-  {
-    id: "demo-3",
-    type: "running" as const,
-    title: "Brand Analyst Run",
-    agent: "Brand Analyst",
-    time: "Just now",
-    insights: 0,
-    href: "/dashboard/agents/brand-analyst",
-    progress: 65,
-  },
-  {
-    id: "demo-4",
-    type: "completed" as const,
-    title: "Trend Forecaster Run",
-    agent: "Trend Forecaster",
-    time: "1 day ago",
-    insights: 12,
-    href: "/dashboard/agents/trend-forecaster",
-  },
-  {
-    id: "demo-5",
-    type: "warning" as const,
-    title: "Competitive Intelligence Run",
-    agent: "Competitive Intelligence",
-    time: "2 days ago",
-    insights: 0,
-    href: "/dashboard/agents/competitive-intel",
-    message: "Rate limit exceeded",
-  },
-]
+function getDemoActivities(
+  tCommon: (key: string, values?: Record<string, number>) => string,
+  tDemo: (key: string) => string
+) {
+  return [
+    {
+      id: "demo-1",
+      type: "completed" as const,
+      title: tDemo('audienceExplorerRun'),
+      agent: "Audience Explorer",
+      time: tCommon('relativeTime.hoursAgo', { count: 2 }),
+      insights: 8,
+      href: "/dashboard/agents/audience-explorer",
+    },
+    {
+      id: "demo-2",
+      type: "completed" as const,
+      title: tDemo('cultureTrackerRun'),
+      agent: "Culture Tracker",
+      time: tCommon('relativeTime.hoursAgo', { count: 4 }),
+      insights: 5,
+      href: "/dashboard/agents/culture-tracker",
+    },
+    {
+      id: "demo-3",
+      type: "running" as const,
+      title: tDemo('brandAnalystRun'),
+      agent: "Brand Analyst",
+      time: tCommon('relativeTime.justNow'),
+      insights: 0,
+      href: "/dashboard/agents/brand-analyst",
+      progress: 65,
+    },
+    {
+      id: "demo-4",
+      type: "completed" as const,
+      title: tDemo('trendForecasterRun'),
+      agent: "Trend Forecaster",
+      time: tCommon('relativeTime.daysAgo', { count: 1 }),
+      insights: 12,
+      href: "/dashboard/agents/trend-forecaster",
+    },
+    {
+      id: "demo-5",
+      type: "warning" as const,
+      title: tDemo('competitiveIntelligenceRun'),
+      agent: "Competitive Intelligence",
+      time: tCommon('relativeTime.daysAgo', { count: 2 }),
+      insights: 0,
+      href: "/dashboard/agents/competitive-intel",
+      message: tDemo('rateLimitExceeded'),
+    },
+  ]
+}
 
 export default async function DashboardPage() {
+  const tCommon = await getTranslations('common')
+  const tDemo = await getTranslations('dashboard.demoActivities')
   const session = await auth()
+  const demoActivities = getDemoActivities(tCommon, tDemo)
+
   if (!session?.user?.id) {
     // Return demo dashboard for unauthenticated users
     return (
@@ -258,7 +268,7 @@ export default async function DashboardPage() {
           run.status === "FAILED" ? "warning" as const : "scheduled" as const,
     title: `${run.agent.name} Run`,
     agent: run.agent.name,
-    time: formatRelativeTime(run.startedAt),
+    time: formatRelativeTime(run.startedAt, tCommon),
     insights: run.insights.length,
     href: `/dashboard/agents/${run.agent.id}`,
     progress: run.status === "RUNNING" ? 50 : undefined,
@@ -297,15 +307,15 @@ export default async function DashboardPage() {
   )
 }
 
-function formatRelativeTime(date: Date): string {
+function formatRelativeTime(date: Date, t: (key: string, values?: Record<string, number>) => string): string {
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
   const diffMins = Math.floor(diffMs / 60000)
   const diffHours = Math.floor(diffMs / 3600000)
   const diffDays = Math.floor(diffMs / 86400000)
 
-  if (diffMins < 1) return "Just now"
-  if (diffMins < 60) return `${diffMins} min ago`
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`
-  return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`
+  if (diffMins < 1) return t('relativeTime.justNow')
+  if (diffMins < 60) return t('relativeTime.minutesAgo', { count: diffMins })
+  if (diffHours < 24) return t('relativeTime.hoursAgo', { count: diffHours })
+  return t('relativeTime.daysAgo', { count: diffDays })
 }

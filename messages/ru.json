@@ -52,7 +52,14 @@
     "settings": "Настройки",
     "createdAt": "Создано в",
     "lastUpdated": "Последнее обновление",
-    "searchPlaceholder": "Поиск..."
+    "searchPlaceholder": "Поиск...",
+    "relativeTime": {
+      "justNow": "[RU] Just now",
+      "minutesAgo": "[RU] {count} min ago",
+      "hoursAgo": "[RU] {count, plural, one {# hour} other {# hours}} ago",
+      "daysAgo": "[RU] {count, plural, one {# day} other {# days}} ago",
+      "recently": "[RU] Recently"
+    }
   },
   "auth": {
     "signIn": "Войти",
@@ -344,7 +351,25 @@
       "timezone": "[RU] Timezone",
       "dateFormat": "[RU] Date Format",
       "saving": "[RU] Saving...",
-      "saveChanges": "[RU] Save Changes"
+      "saveChanges": "[RU] Save Changes",
+      "loading": "[RU] Loading...",
+      "timezones": {
+        "americaNewYork": "[RU] America/New York (EST)",
+        "americaLosAngeles": "[RU] America/Los Angeles (PST)",
+        "europeLondon": "[RU] Europe/London (GMT)",
+        "europeParis": "[RU] Europe/Paris (CET)",
+        "asiaTokyo": "[RU] Asia/Tokyo (JST)"
+      },
+      "dateFormats": {
+        "mdy": "[RU] MM/DD/YYYY",
+        "dmy": "[RU] DD/MM/YYYY",
+        "ymd": "[RU] YYYY-MM-DD"
+      },
+      "placeholders": {
+        "organizationName": "[RU] Enter organization name",
+        "organizationSlug": "[RU] organization-slug",
+        "orgDescription": "[RU] Describe your organization..."
+      }
     },
     "apiKeys": {
       "title": "API-ключи",
@@ -455,7 +480,17 @@
       "phoneNumber": "[RU] Phone Number",
       "location": "[RU] Location",
       "saving": "[RU] Saving...",
-      "saveChanges": "[RU] Save Changes"
+      "saveChanges": "[RU] Save Changes",
+      "loading": "[RU] Loading...",
+      "placeholders": {
+        "firstName": "[RU] Enter first name",
+        "lastName": "[RU] Enter last name",
+        "email": "[RU] you@company.com",
+        "jobTitle": "[RU] Enter your job title",
+        "bio": "[RU] Tell us about yourself...",
+        "phone": "[RU] +1 (555) 000-0000",
+        "location": "[RU] City, State"
+      }
     },
     "team": {
       "title": "[RU] Team Management",
@@ -534,7 +569,18 @@
       "hoursAgo": "[RU] {count} hour ago",
       "hoursAgoPlural": "[RU] {count} hours ago",
       "daysAgo": "[RU] {count} day ago",
-      "daysAgoPlural": "[RU] {count} days ago"
+      "daysAgoPlural": "[RU] {count} days ago",
+      "toast": {
+        "loadFailed": "[RU] Failed to load team data",
+        "invitationSent": "[RU] Invitation sent successfully",
+        "invitationFailed": "[RU] Failed to send invitation",
+        "roleUpdated": "[RU] Role updated successfully",
+        "roleUpdateFailed": "[RU] Failed to update role",
+        "memberRemoved": "[RU] Member removed successfully",
+        "memberRemoveFailed": "[RU] Failed to remove member",
+        "invitationRevoked": "[RU] Invitation revoked",
+        "revokeFailed": "[RU] Failed to revoke invitation"
+      }
     },
     "billing": {
       "title": "[RU] Billing & Subscription",
@@ -635,6 +681,9 @@
               "accountManager": "[RU] Dedicated account manager"
             }
           }
+        },
+        "toast": {
+          "checkoutFailed": "[RU] Failed to start checkout"
         }
       }
     },
@@ -658,6 +707,9 @@
         "execute": "[RU] Executed",
         "login": "[RU] Logged in",
         "logout": "[RU] Logged out"
+      },
+      "toast": {
+        "loadFailed": "[RU] Failed to load audit logs"
       }
     },
     "webhooks": {
@@ -699,6 +751,12 @@
         "reportGenerated": "[RU] Report Generated",
         "memberAdded": "[RU] Member Added",
         "memberRemoved": "[RU] Member Removed"
+      },
+      "toast": {
+        "urlAndEventRequired": "[RU] URL and at least one event are required",
+        "webhookCreated": "[RU] Webhook created successfully",
+        "createFailed": "[RU] Failed to create webhook",
+        "secretCopied": "[RU] Secret copied to clipboard"
       }
     },
     "alerts": {
@@ -748,6 +806,19 @@
         "report": "[RU] Report",
         "agent": "[RU] Agent",
         "workflow": "[RU] Workflow"
+      },
+      "toast": {
+        "alertCreated": "[RU] Alert created successfully",
+        "createFailed": "[RU] Failed to create alert",
+        "alertUpdated": "[RU] Alert updated successfully",
+        "updateFailed": "[RU] Failed to update alert",
+        "alertDeleted": "[RU] Alert deleted successfully",
+        "deleteFailed": "[RU] Failed to delete alert",
+        "alertEnabled": "[RU] Alert enabled successfully",
+        "alertDisabled": "[RU] Alert disabled successfully",
+        "toggleFailed": "[RU] Failed to toggle alert",
+        "alertAcknowledged": "[RU] Alert acknowledged",
+        "acknowledgeFailed": "[RU] Failed to acknowledge alert"
       }
     },
     "shortcuts": {
@@ -848,6 +919,10 @@
             "whiteLabel": "[RU] White-label"
           }
         }
+      },
+      "toast": {
+        "upgradeRequestSubmitted": "[RU] Upgrade request submitted! Our team will contact you shortly.",
+        "upgradeRequestFailed": "[RU] Failed to submit upgrade request"
       }
     },
     "scheduledExports": {
@@ -905,6 +980,18 @@
         "inHours": "[RU] In {count}h",
         "daysAgo": "[RU] {count}d ago",
         "inDays": "[RU] In {count}d"
+      },
+      "toast": {
+        "exportCreated": "[RU] Scheduled export created",
+        "createFailed": "[RU] Failed to create export",
+        "exportUpdated": "[RU] Scheduled export updated",
+        "updateFailed": "[RU] Failed to update export",
+        "exportDeleted": "[RU] Scheduled export deleted",
+        "deleteFailed": "[RU] Failed to delete export",
+        "exportPaused": "[RU] Export paused",
+        "exportActivated": "[RU] Export activated",
+        "exportStarted": "[RU] Export started",
+        "startFailed": "[RU] Failed to start export"
       }
     },
     "inbox": {
@@ -1965,6 +2052,15 @@
         "memoryDesc": "Контекст и история",
         "settings": "Настройки",
         "help": "Помощь"
+      },
+      "demo": {
+        "logoLetter": "[RU] G",
+        "projectName1": "[RU] Gen Z Sustainability",
+        "projectName2": "[RU] Q4 Campaign",
+        "projectName3": "[RU] Market Expansion",
+        "userName": "[RU] John Doe",
+        "userEmail": "[RU] john@company.com",
+        "userInitials": "[RU] JD"
       }
     },
     "performance": {
@@ -2696,7 +2792,8 @@
           "timePeriod": "[RU] Time Period",
           "selectTimePeriod": "[RU] Select time period",
           "dataSource": "[RU] Data Source",
-          "selectDataSource": "[RU] Select data source"
+          "selectDataSource": "[RU] Select data source",
+          "timePeriodPlaceholder": "[RU] Last 12 months"
         },
         "preview": {
           "title": "[RU] Preview",
@@ -2723,7 +2820,10 @@
           "settings": "[RU] Settings",
           "comments": "[RU] Comments",
           "activity": "[RU] Activity",
-          "history": "[RU] History"
+          "history": "[RU] History",
+          "overview": "[RU] Overview",
+          "filters": "[RU] Filters",
+          "notes": "[RU] Notes"
         },
         "actions": {
           "share": "[RU] Share",
@@ -2772,6 +2872,12 @@
           "description": "[RU] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
           "cancel": "[RU] Cancel",
           "delete": "[RU] Delete"
+        },
+        "data": {
+          "searchPlaceholder": "[RU] Search data..."
+        },
+        "annotations": {
+          "addPlaceholder": "[RU] Add a note, observation, or question about this chart..."
         }
       }
     },
@@ -3170,6 +3276,14 @@
       "pageTracker": "[RU] Analytics",
       "title": "[RU] Analytics",
       "description": "[RU] Track your research performance and insights"
+    },
+    "demoActivities": {
+      "audienceExplorerRun": "[RU] Audience Explorer Run",
+      "cultureTrackerRun": "[RU] Culture Tracker Run",
+      "brandAnalystRun": "[RU] Brand Analyst Run",
+      "trendForecasterRun": "[RU] Trend Forecaster Run",
+      "competitiveIntelligenceRun": "[RU] Competitive Intelligence Run",
+      "rateLimitExceeded": "[RU] Rate limit exceeded"
     }
   },
   "audiences": {

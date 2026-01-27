@@ -52,7 +52,14 @@
     "settings": "Configurações",
     "createdAt": "Criado em",
     "lastUpdated": "Última atualização",
-    "searchPlaceholder": "Procurar..."
+    "searchPlaceholder": "Procurar...",
+    "relativeTime": {
+      "justNow": "[PT] Just now",
+      "minutesAgo": "[PT] {count} min ago",
+      "hoursAgo": "[PT] {count, plural, one {# hour} other {# hours}} ago",
+      "daysAgo": "[PT] {count, plural, one {# day} other {# days}} ago",
+      "recently": "[PT] Recently"
+    }
   },
   "auth": {
     "signIn": "Entrar",
@@ -344,7 +351,25 @@
       "timezone": "[PT] Timezone",
       "dateFormat": "[PT] Date Format",
       "saving": "[PT] Saving...",
-      "saveChanges": "[PT] Save Changes"
+      "saveChanges": "[PT] Save Changes",
+      "loading": "[PT] Loading...",
+      "timezones": {
+        "americaNewYork": "[PT] America/New York (EST)",
+        "americaLosAngeles": "[PT] America/Los Angeles (PST)",
+        "europeLondon": "[PT] Europe/London (GMT)",
+        "europeParis": "[PT] Europe/Paris (CET)",
+        "asiaTokyo": "[PT] Asia/Tokyo (JST)"
+      },
+      "dateFormats": {
+        "mdy": "[PT] MM/DD/YYYY",
+        "dmy": "[PT] DD/MM/YYYY",
+        "ymd": "[PT] YYYY-MM-DD"
+      },
+      "placeholders": {
+        "organizationName": "[PT] Enter organization name",
+        "organizationSlug": "[PT] organization-slug",
+        "orgDescription": "[PT] Describe your organization..."
+      }
     },
     "apiKeys": {
       "title": "Chaves de API",
@@ -455,7 +480,17 @@
       "phoneNumber": "[PT] Phone Number",
       "location": "[PT] Location",
       "saving": "[PT] Saving...",
-      "saveChanges": "[PT] Save Changes"
+      "saveChanges": "[PT] Save Changes",
+      "loading": "[PT] Loading...",
+      "placeholders": {
+        "firstName": "[PT] Enter first name",
+        "lastName": "[PT] Enter last name",
+        "email": "[PT] you@company.com",
+        "jobTitle": "[PT] Enter your job title",
+        "bio": "[PT] Tell us about yourself...",
+        "phone": "[PT] +1 (555) 000-0000",
+        "location": "[PT] City, State"
+      }
     },
     "team": {
       "title": "[PT] Team Management",
@@ -534,7 +569,18 @@
       "hoursAgo": "[PT] {count} hour ago",
       "hoursAgoPlural": "[PT] {count} hours ago",
       "daysAgo": "[PT] {count} day ago",
-      "daysAgoPlural": "[PT] {count} days ago"
+      "daysAgoPlural": "[PT] {count} days ago",
+      "toast": {
+        "loadFailed": "[PT] Failed to load team data",
+        "invitationSent": "[PT] Invitation sent successfully",
+        "invitationFailed": "[PT] Failed to send invitation",
+        "roleUpdated": "[PT] Role updated successfully",
+        "roleUpdateFailed": "[PT] Failed to update role",
+        "memberRemoved": "[PT] Member removed successfully",
+        "memberRemoveFailed": "[PT] Failed to remove member",
+        "invitationRevoked": "[PT] Invitation revoked",
+        "revokeFailed": "[PT] Failed to revoke invitation"
+      }
     },
     "billing": {
       "title": "[PT] Billing & Subscription",
@@ -635,6 +681,9 @@
               "accountManager": "[PT] Dedicated account manager"
             }
           }
+        },
+        "toast": {
+          "checkoutFailed": "[PT] Failed to start checkout"
         }
       }
     },
@@ -658,6 +707,9 @@
         "execute": "[PT] Executed",
         "login": "[PT] Logged in",
         "logout": "[PT] Logged out"
+      },
+      "toast": {
+        "loadFailed": "[PT] Failed to load audit logs"
       }
     },
     "webhooks": {
@@ -699,6 +751,12 @@
         "reportGenerated": "[PT] Report Generated",
         "memberAdded": "[PT] Member Added",
         "memberRemoved": "[PT] Member Removed"
+      },
+      "toast": {
+        "urlAndEventRequired": "[PT] URL and at least one event are required",
+        "webhookCreated": "[PT] Webhook created successfully",
+        "createFailed": "[PT] Failed to create webhook",
+        "secretCopied": "[PT] Secret copied to clipboard"
       }
     },
     "alerts": {
@@ -748,6 +806,19 @@
         "report": "[PT] Report",
         "agent": "[PT] Agent",
         "workflow": "[PT] Workflow"
+      },
+      "toast": {
+        "alertCreated": "[PT] Alert created successfully",
+        "createFailed": "[PT] Failed to create alert",
+        "alertUpdated": "[PT] Alert updated successfully",
+        "updateFailed": "[PT] Failed to update alert",
+        "alertDeleted": "[PT] Alert deleted successfully",
+        "deleteFailed": "[PT] Failed to delete alert",
+        "alertEnabled": "[PT] Alert enabled successfully",
+        "alertDisabled": "[PT] Alert disabled successfully",
+        "toggleFailed": "[PT] Failed to toggle alert",
+        "alertAcknowledged": "[PT] Alert acknowledged",
+        "acknowledgeFailed": "[PT] Failed to acknowledge alert"
       }
     },
     "shortcuts": {
@@ -848,6 +919,10 @@
             "whiteLabel": "[PT] White-label"
           }
         }
+      },
+      "toast": {
+        "upgradeRequestSubmitted": "[PT] Upgrade request submitted! Our team will contact you shortly.",
+        "upgradeRequestFailed": "[PT] Failed to submit upgrade request"
       }
     },
     "scheduledExports": {
@@ -905,6 +980,18 @@
         "inHours": "[PT] In {count}h",
         "daysAgo": "[PT] {count}d ago",
         "inDays": "[PT] In {count}d"
+      },
+      "toast": {
+        "exportCreated": "[PT] Scheduled export created",
+        "createFailed": "[PT] Failed to create export",
+        "exportUpdated": "[PT] Scheduled export updated",
+        "updateFailed": "[PT] Failed to update export",
+        "exportDeleted": "[PT] Scheduled export deleted",
+        "deleteFailed": "[PT] Failed to delete export",
+        "exportPaused": "[PT] Export paused",
+        "exportActivated": "[PT] Export activated",
+        "exportStarted": "[PT] Export started",
+        "startFailed": "[PT] Failed to start export"
       }
     },
     "inbox": {
@@ -1965,6 +2052,15 @@
         "memoryDesc": "Contexto e histórico",
         "settings": "Configurações",
         "help": "Ajuda"
+      },
+      "demo": {
+        "logoLetter": "[PT] G",
+        "projectName1": "[PT] Gen Z Sustainability",
+        "projectName2": "[PT] Q4 Campaign",
+        "projectName3": "[PT] Market Expansion",
+        "userName": "[PT] John Doe",
+        "userEmail": "[PT] john@company.com",
+        "userInitials": "[PT] JD"
       }
     },
     "performance": {
@@ -2696,7 +2792,8 @@
           "timePeriod": "[PT] Time Period",
           "selectTimePeriod": "[PT] Select time period",
           "dataSource": "[PT] Data Source",
-          "selectDataSource": "[PT] Select data source"
+          "selectDataSource": "[PT] Select data source",
+          "timePeriodPlaceholder": "[PT] Last 12 months"
         },
         "preview": {
           "title": "[PT] Preview",
@@ -2723,7 +2820,10 @@
           "settings": "[PT] Settings",
           "comments": "[PT] Comments",
           "activity": "[PT] Activity",
-          "history": "[PT] History"
+          "history": "[PT] History",
+          "overview": "[PT] Overview",
+          "filters": "[PT] Filters",
+          "notes": "[PT] Notes"
         },
         "actions": {
           "share": "[PT] Share",
@@ -2772,6 +2872,12 @@
           "description": "[PT] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
           "cancel": "[PT] Cancel",
           "delete": "[PT] Delete"
+        },
+        "data": {
+          "searchPlaceholder": "[PT] Search data..."
+        },
+        "annotations": {
+          "addPlaceholder": "[PT] Add a note, observation, or question about this chart..."
         }
       }
     },
@@ -3170,6 +3276,14 @@
       "pageTracker": "[PT] Analytics",
       "title": "[PT] Analytics",
       "description": "[PT] Track your research performance and insights"
+    },
+    "demoActivities": {
+      "audienceExplorerRun": "[PT] Audience Explorer Run",
+      "cultureTrackerRun": "[PT] Culture Tracker Run",
+      "brandAnalystRun": "[PT] Brand Analyst Run",
+      "trendForecasterRun": "[PT] Trend Forecaster Run",
+      "competitiveIntelligenceRun": "[PT] Competitive Intelligence Run",
+      "rateLimitExceeded": "[PT] Rate limit exceeded"
     }
   },
   "audiences": {

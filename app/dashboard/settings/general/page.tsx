@@ -10,9 +10,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2 } from "lucide-react"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { useOrganization } from "@/hooks/useOrganization"
+
+// Helper function to get organization initials
+function getOrgInitials(name: string | undefined | null): string {
+  if (!name) return ""
+  return name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
+}
 
 export default function GeneralSettingsPage() {
   const t = useTranslations("settings.general")
+  const { organization, isLoading } = useOrganization()
   const [isSaving, setIsSaving] = useState(false)
 
   const handleSave = async () => {
@@ -20,6 +33,20 @@ export default function GeneralSettingsPage() {
     await new Promise((resolve) => setTimeout(resolve, 1000))
     setIsSaving(false)
   }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
+
+  // Extract organization settings for industry and company size
+  const orgSettings = organization?.settings as Record<string, unknown> | undefined
+  const orgIndustry = (orgSettings?.industry as string) || organization?.industry || ""
+  const orgCompanySize = (orgSettings?.companySize as string) || ""
+  const orgDescription = (orgSettings?.description as string) || ""
 
   return (
     <div className="p-6 max-w-3xl">
@@ -38,7 +65,7 @@ export default function GeneralSettingsPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4">
               <div className="h-20 w-20 rounded-lg bg-muted flex items-center justify-center text-2xl font-bold">
-                AC
+                {getOrgInitials(organization?.name)}
               </div>
               <Button variant="outline">{t("changeLogo")}</Button>
             </div>
@@ -46,11 +73,19 @@ export default function GeneralSettingsPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="org-name">{t("organizationName")}</Label>
-                <Input id="org-name" defaultValue="Acme Corporation" />
+                <Input
+                  id="org-name"
+                  defaultValue={organization?.name || ""}
+                  placeholder={t("placeholders.organizationName")}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="org-slug">{t("organizationSlug")}</Label>
-                <Input id="org-slug" defaultValue="acme-corp" />
+                <Input
+                  id="org-slug"
+                  defaultValue={organization?.slug || ""}
+                  placeholder={t("placeholders.organizationSlug")}
+                />
               </div>
             </div>
 
@@ -58,7 +93,8 @@ export default function GeneralSettingsPage() {
               <Label htmlFor="org-description">{t("orgDescription")}</Label>
               <Textarea
                 id="org-description"
-                defaultValue="Leading consumer goods company focused on sustainable products."
+                defaultValue={orgDescription}
+                placeholder={t("placeholders.orgDescription")}
                 rows={3}
               />
             </div>
@@ -66,7 +102,7 @@ export default function GeneralSettingsPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="industry">{t("industry")}</Label>
-                <Select defaultValue="consumer-goods">
+                <Select defaultValue={orgIndustry || undefined}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -82,7 +118,7 @@ export default function GeneralSettingsPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="size">{t("companySize")}</Label>
-                <Select defaultValue="1000-5000">
+                <Select defaultValue={orgCompanySize || undefined}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -108,29 +144,29 @@ export default function GeneralSettingsPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="timezone">{t("timezone")}</Label>
-                <Select defaultValue="america-new-york">
+                <Select defaultValue={organization?.timezone || "america-new-york"}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="america-new-york">America/New York (EST)</SelectItem>
-                    <SelectItem value="america-los-angeles">America/Los Angeles (PST)</SelectItem>
-                    <SelectItem value="europe-london">Europe/London (GMT)</SelectItem>
-                    <SelectItem value="europe-paris">Europe/Paris (CET)</SelectItem>
-                    <SelectItem value="asia-tokyo">Asia/Tokyo (JST)</SelectItem>
+                    <SelectItem value="america-new-york">{t("timezones.americaNewYork")}</SelectItem>
+                    <SelectItem value="america-los-angeles">{t("timezones.americaLosAngeles")}</SelectItem>
+                    <SelectItem value="europe-london">{t("timezones.europeLondon")}</SelectItem>
+                    <SelectItem value="europe-paris">{t("timezones.europeParis")}</SelectItem>
+                    <SelectItem value="asia-tokyo">{t("timezones.asiaTokyo")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="date-format">{t("dateFormat")}</Label>
-                <Select defaultValue="mdy">
+                <Select defaultValue={(orgSettings?.dateFormat as string) || "mdy"}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mdy">MM/DD/YYYY</SelectItem>
-                    <SelectItem value="dmy">DD/MM/YYYY</SelectItem>
-                    <SelectItem value="ymd">YYYY-MM-DD</SelectItem>
+                    <SelectItem value="mdy">{t("dateFormats.mdy")}</SelectItem>
+                    <SelectItem value="dmy">{t("dateFormats.dmy")}</SelectItem>
+                    <SelectItem value="ymd">{t("dateFormats.ymd")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

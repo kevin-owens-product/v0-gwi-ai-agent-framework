@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,8 +12,31 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Loader2, Camera } from "lucide-react"
 import { PageTracker } from "@/components/tracking/PageTracker"
 
+// Helper function to get user initials
+function getUserInitials(name: string | undefined | null): string {
+  if (!name) return ""
+  return name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
+}
+
+// Helper to split name into first and last
+function splitName(fullName: string | undefined | null): { firstName: string; lastName: string } {
+  if (!fullName) return { firstName: "", lastName: "" }
+  const parts = fullName.trim().split(" ")
+  if (parts.length === 1) return { firstName: parts[0], lastName: "" }
+  return {
+    firstName: parts[0],
+    lastName: parts.slice(1).join(" "),
+  }
+}
+
 export default function ProfileSettingsPage() {
   const t = useTranslations("settings.profile")
+  const { data: session, status } = useSession()
   const [isSaving, setIsSaving] = useState(false)
 
   const handleSave = async () => {
@@ -20,6 +44,17 @@ export default function ProfileSettingsPage() {
     await new Promise((resolve) => setTimeout(resolve, 1000))
     setIsSaving(false)
   }
+
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
+
+  const { firstName, lastName } = splitName(session?.user?.name)
+  const userInitials = getUserInitials(session?.user?.name)
 
   return (
     <div className="p-6 max-w-3xl">
@@ -39,8 +74,8 @@ export default function ProfileSettingsPage() {
             <div className="flex items-center gap-6">
               <div className="relative">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src="/placeholder.svg?key=poh3o" />
-                  <AvatarFallback>SC</AvatarFallback>
+                  <AvatarImage src={session?.user?.image || undefined} />
+                  <AvatarFallback>{userInitials}</AvatarFallback>
                 </Avatar>
                 <button className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg">
                   <Camera className="h-4 w-4" />
@@ -57,29 +92,47 @@ export default function ProfileSettingsPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="first-name">{t("firstName")}</Label>
-                <Input id="first-name" defaultValue="Sarah" />
+                <Input
+                  id="first-name"
+                  defaultValue={firstName}
+                  placeholder={t("placeholders.firstName")}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="last-name">{t("lastName")}</Label>
-                <Input id="last-name" defaultValue="Chen" />
+                <Input
+                  id="last-name"
+                  defaultValue={lastName}
+                  placeholder={t("placeholders.lastName")}
+                />
               </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="email">{t("emailAddress")}</Label>
-              <Input id="email" type="email" defaultValue="sarah.chen@acme.com" />
+              <Input
+                id="email"
+                type="email"
+                defaultValue={session?.user?.email || ""}
+                placeholder={t("placeholders.email")}
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="job-title">{t("jobTitle")}</Label>
-              <Input id="job-title" defaultValue="Senior Insights Analyst" />
+              <Input
+                id="job-title"
+                defaultValue=""
+                placeholder={t("placeholders.jobTitle")}
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="bio">{t("bio")}</Label>
               <Textarea
                 id="bio"
-                defaultValue="10+ years experience in consumer research and data analysis. Passionate about uncovering actionable insights."
+                defaultValue=""
+                placeholder={t("placeholders.bio")}
                 rows={3}
               />
             </div>
@@ -95,11 +148,20 @@ export default function ProfileSettingsPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="phone">{t("phoneNumber")}</Label>
-                <Input id="phone" type="tel" defaultValue="+1 (555) 123-4567" />
+                <Input
+                  id="phone"
+                  type="tel"
+                  defaultValue=""
+                  placeholder={t("placeholders.phone")}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="location">{t("location")}</Label>
-                <Input id="location" defaultValue="New York, NY" />
+                <Input
+                  id="location"
+                  defaultValue=""
+                  placeholder={t("placeholders.location")}
+                />
               </div>
             </div>
           </CardContent>

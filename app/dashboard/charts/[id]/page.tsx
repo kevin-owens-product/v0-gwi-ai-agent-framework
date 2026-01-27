@@ -742,7 +742,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
             </DropdownMenu>
 
             <Link href={`/dashboard/charts/new?edit=${chart.id}`}>
-              <Button size="sm"><Edit className="h-4 w-4 mr-2" /> Edit</Button>
+              <Button size="sm"><Edit className="h-4 w-4 mr-2" /> {t("actions.edit")}</Button>
             </Link>
 
             <DropdownMenu>
@@ -757,8 +757,8 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
                   <Mail className="h-4 w-4 mr-2" /> Schedule Report
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem><Copy className="h-4 w-4 mr-2" /> Duplicate</DropdownMenuItem>
-                <DropdownMenuItem><Bookmark className="h-4 w-4 mr-2" /> Add to Dashboard</DropdownMenuItem>
+                <DropdownMenuItem><Copy className="h-4 w-4 mr-2" /> {t("actions.duplicate")}</DropdownMenuItem>
+                <DropdownMenuItem><Bookmark className="h-4 w-4 mr-2" /> {t("actions.addToDashboard")}</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
                   <Trash2 className="h-4 w-4 mr-2" /> Delete
@@ -772,11 +772,11 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <div className="flex items-center justify-between">
             <TabsList>
-              <TabsTrigger value="overview" className="gap-2"><BarChart3 className="h-4 w-4" /> Overview</TabsTrigger>
-              <TabsTrigger value="data" className="gap-2"><Table className="h-4 w-4" /> Data</TabsTrigger>
-              <TabsTrigger value="filters" className="gap-2"><Filter className="h-4 w-4" /> Filters</TabsTrigger>
-              <TabsTrigger value="annotations" className="gap-2"><MessageSquare className="h-4 w-4" /> Notes ({annotations.length})</TabsTrigger>
-              <TabsTrigger value="activity" className="gap-2"><History className="h-4 w-4" /> Activity</TabsTrigger>
+              <TabsTrigger value="overview" className="gap-2"><BarChart3 className="h-4 w-4" /> {t("tabs.overview")}</TabsTrigger>
+              <TabsTrigger value="data" className="gap-2"><Table className="h-4 w-4" /> {t("tabs.data")}</TabsTrigger>
+              <TabsTrigger value="filters" className="gap-2"><Filter className="h-4 w-4" /> {t("tabs.filters")}</TabsTrigger>
+              <TabsTrigger value="annotations" className="gap-2"><MessageSquare className="h-4 w-4" /> {t("tabs.notes")} ({annotations.length})</TabsTrigger>
+              <TabsTrigger value="activity" className="gap-2"><History className="h-4 w-4" /> {t("tabs.activity")}</TabsTrigger>
             </TabsList>
 
             {activeTab === "overview" && (
@@ -938,7 +938,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input placeholder="Search data..." className="pl-8 w-[200px]" />
+                      <Input placeholder={t("data.searchPlaceholder")} className="pl-8 w-[200px]" />
                     </div>
                     <Button variant="outline" size="sm" onClick={() => handleExport("csv")}>
                       <Download className="h-4 w-4 mr-2" /> Export CSV
@@ -1082,7 +1082,7 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
               <CardContent>
                 <div className="flex gap-2">
                   <Textarea
-                    placeholder="Add a note, observation, or question about this chart..."
+                    placeholder={t("annotations.addPlaceholder")}
                     value={newAnnotation}
                     onChange={e => setNewAnnotation(e.target.value)}
                     className="min-h-[80px]"

@@ -52,7 +52,14 @@
     "settings": "إعدادات",
     "createdAt": "تم الإنشاء في",
     "lastUpdated": "آخر تحديث",
-    "searchPlaceholder": "يبحث..."
+    "searchPlaceholder": "يبحث...",
+    "relativeTime": {
+      "justNow": "[AR] Just now",
+      "minutesAgo": "[AR] {count} min ago",
+      "hoursAgo": "[AR] {count, plural, one {# hour} other {# hours}} ago",
+      "daysAgo": "[AR] {count, plural, one {# day} other {# days}} ago",
+      "recently": "[AR] Recently"
+    }
   },
   "auth": {
     "signIn": "تسجيل الدخول",
@@ -344,7 +351,25 @@
       "timezone": "[AR] Timezone",
       "dateFormat": "[AR] Date Format",
       "saving": "[AR] Saving...",
-      "saveChanges": "[AR] Save Changes"
+      "saveChanges": "[AR] Save Changes",
+      "loading": "[AR] Loading...",
+      "timezones": {
+        "americaNewYork": "[AR] America/New York (EST)",
+        "americaLosAngeles": "[AR] America/Los Angeles (PST)",
+        "europeLondon": "[AR] Europe/London (GMT)",
+        "europeParis": "[AR] Europe/Paris (CET)",
+        "asiaTokyo": "[AR] Asia/Tokyo (JST)"
+      },
+      "dateFormats": {
+        "mdy": "[AR] MM/DD/YYYY",
+        "dmy": "[AR] DD/MM/YYYY",
+        "ymd": "[AR] YYYY-MM-DD"
+      },
+      "placeholders": {
+        "organizationName": "[AR] Enter organization name",
+        "organizationSlug": "[AR] organization-slug",
+        "orgDescription": "[AR] Describe your organization..."
+      }
     },
     "apiKeys": {
       "title": "مفاتيح API",
@@ -455,7 +480,17 @@
       "phoneNumber": "[AR] Phone Number",
       "location": "[AR] Location",
       "saving": "[AR] Saving...",
-      "saveChanges": "[AR] Save Changes"
+      "saveChanges": "[AR] Save Changes",
+      "loading": "[AR] Loading...",
+      "placeholders": {
+        "firstName": "[AR] Enter first name",
+        "lastName": "[AR] Enter last name",
+        "email": "[AR] you@company.com",
+        "jobTitle": "[AR] Enter your job title",
+        "bio": "[AR] Tell us about yourself...",
+        "phone": "[AR] +1 (555) 000-0000",
+        "location": "[AR] City, State"
+      }
     },
     "team": {
       "title": "[AR] Team Management",
@@ -534,7 +569,18 @@
       "hoursAgo": "[AR] {count} hour ago",
       "hoursAgoPlural": "[AR] {count} hours ago",
       "daysAgo": "[AR] {count} day ago",
-      "daysAgoPlural": "[AR] {count} days ago"
+      "daysAgoPlural": "[AR] {count} days ago",
+      "toast": {
+        "loadFailed": "[AR] Failed to load team data",
+        "invitationSent": "[AR] Invitation sent successfully",
+        "invitationFailed": "[AR] Failed to send invitation",
+        "roleUpdated": "[AR] Role updated successfully",
+        "roleUpdateFailed": "[AR] Failed to update role",
+        "memberRemoved": "[AR] Member removed successfully",
+        "memberRemoveFailed": "[AR] Failed to remove member",
+        "invitationRevoked": "[AR] Invitation revoked",
+        "revokeFailed": "[AR] Failed to revoke invitation"
+      }
     },
     "billing": {
       "title": "[AR] Billing & Subscription",
@@ -635,6 +681,9 @@
               "accountManager": "[AR] Dedicated account manager"
             }
           }
+        },
+        "toast": {
+          "checkoutFailed": "[AR] Failed to start checkout"
         }
       }
     },
@@ -658,6 +707,9 @@
         "execute": "[AR] Executed",
         "login": "[AR] Logged in",
         "logout": "[AR] Logged out"
+      },
+      "toast": {
+        "loadFailed": "[AR] Failed to load audit logs"
       }
     },
     "webhooks": {
@@ -699,6 +751,12 @@
         "reportGenerated": "[AR] Report Generated",
         "memberAdded": "[AR] Member Added",
         "memberRemoved": "[AR] Member Removed"
+      },
+      "toast": {
+        "urlAndEventRequired": "[AR] URL and at least one event are required",
+        "webhookCreated": "[AR] Webhook created successfully",
+        "createFailed": "[AR] Failed to create webhook",
+        "secretCopied": "[AR] Secret copied to clipboard"
       }
     },
     "alerts": {
@@ -748,6 +806,19 @@
         "report": "[AR] Report",
         "agent": "[AR] Agent",
         "workflow": "[AR] Workflow"
+      },
+      "toast": {
+        "alertCreated": "[AR] Alert created successfully",
+        "createFailed": "[AR] Failed to create alert",
+        "alertUpdated": "[AR] Alert updated successfully",
+        "updateFailed": "[AR] Failed to update alert",
+        "alertDeleted": "[AR] Alert deleted successfully",
+        "deleteFailed": "[AR] Failed to delete alert",
+        "alertEnabled": "[AR] Alert enabled successfully",
+        "alertDisabled": "[AR] Alert disabled successfully",
+        "toggleFailed": "[AR] Failed to toggle alert",
+        "alertAcknowledged": "[AR] Alert acknowledged",
+        "acknowledgeFailed": "[AR] Failed to acknowledge alert"
       }
     },
     "shortcuts": {
@@ -848,6 +919,10 @@
             "whiteLabel": "[AR] White-label"
           }
         }
+      },
+      "toast": {
+        "upgradeRequestSubmitted": "[AR] Upgrade request submitted! Our team will contact you shortly.",
+        "upgradeRequestFailed": "[AR] Failed to submit upgrade request"
       }
     },
     "scheduledExports": {
@@ -905,6 +980,18 @@
         "inHours": "[AR] In {count}h",
         "daysAgo": "[AR] {count}d ago",
         "inDays": "[AR] In {count}d"
+      },
+      "toast": {
+        "exportCreated": "[AR] Scheduled export created",
+        "createFailed": "[AR] Failed to create export",
+        "exportUpdated": "[AR] Scheduled export updated",
+        "updateFailed": "[AR] Failed to update export",
+        "exportDeleted": "[AR] Scheduled export deleted",
+        "deleteFailed": "[AR] Failed to delete export",
+        "exportPaused": "[AR] Export paused",
+        "exportActivated": "[AR] Export activated",
+        "exportStarted": "[AR] Export started",
+        "startFailed": "[AR] Failed to start export"
       }
     },
     "inbox": {
@@ -1965,6 +2052,15 @@
         "memoryDesc": "السياق والسجل",
         "settings": "الإعدادات",
         "help": "المساعدة"
+      },
+      "demo": {
+        "logoLetter": "[AR] G",
+        "projectName1": "[AR] Gen Z Sustainability",
+        "projectName2": "[AR] Q4 Campaign",
+        "projectName3": "[AR] Market Expansion",
+        "userName": "[AR] John Doe",
+        "userEmail": "[AR] john@company.com",
+        "userInitials": "[AR] JD"
       }
     },
     "performance": {
@@ -2696,7 +2792,8 @@
           "timePeriod": "[AR] Time Period",
           "selectTimePeriod": "[AR] Select time period",
           "dataSource": "[AR] Data Source",
-          "selectDataSource": "[AR] Select data source"
+          "selectDataSource": "[AR] Select data source",
+          "timePeriodPlaceholder": "[AR] Last 12 months"
         },
         "preview": {
           "title": "[AR] Preview",
@@ -2723,7 +2820,10 @@
           "settings": "[AR] Settings",
           "comments": "[AR] Comments",
           "activity": "[AR] Activity",
-          "history": "[AR] History"
+          "history": "[AR] History",
+          "overview": "[AR] Overview",
+          "filters": "[AR] Filters",
+          "notes": "[AR] Notes"
         },
         "actions": {
           "share": "[AR] Share",
@@ -2772,6 +2872,12 @@
           "description": "[AR] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
           "cancel": "[AR] Cancel",
           "delete": "[AR] Delete"
+        },
+        "data": {
+          "searchPlaceholder": "[AR] Search data..."
+        },
+        "annotations": {
+          "addPlaceholder": "[AR] Add a note, observation, or question about this chart..."
         }
       }
     },
@@ -3170,6 +3276,14 @@
       "pageTracker": "[AR] Analytics",
       "title": "[AR] Analytics",
       "description": "[AR] Track your research performance and insights"
+    },
+    "demoActivities": {
+      "audienceExplorerRun": "[AR] Audience Explorer Run",
+      "cultureTrackerRun": "[AR] Culture Tracker Run",
+      "brandAnalystRun": "[AR] Brand Analyst Run",
+      "trendForecasterRun": "[AR] Trend Forecaster Run",
+      "competitiveIntelligenceRun": "[AR] Competitive Intelligence Run",
+      "rateLimitExceeded": "[AR] Rate limit exceeded"
     }
   },
   "audiences": {

@@ -52,7 +52,14 @@
     "settings": "設定",
     "createdAt": "作成日",
     "lastUpdated": "最終更新日",
-    "searchPlaceholder": "検索..."
+    "searchPlaceholder": "検索...",
+    "relativeTime": {
+      "justNow": "[JA] Just now",
+      "minutesAgo": "[JA] {count} min ago",
+      "hoursAgo": "[JA] {count, plural, one {# hour} other {# hours}} ago",
+      "daysAgo": "[JA] {count, plural, one {# day} other {# days}} ago",
+      "recently": "[JA] Recently"
+    }
   },
   "auth": {
     "signIn": "ログイン",
@@ -344,7 +351,25 @@
       "timezone": "[JA] Timezone",
       "dateFormat": "[JA] Date Format",
       "saving": "[JA] Saving...",
-      "saveChanges": "[JA] Save Changes"
+      "saveChanges": "[JA] Save Changes",
+      "loading": "[JA] Loading...",
+      "timezones": {
+        "americaNewYork": "[JA] America/New York (EST)",
+        "americaLosAngeles": "[JA] America/Los Angeles (PST)",
+        "europeLondon": "[JA] Europe/London (GMT)",
+        "europeParis": "[JA] Europe/Paris (CET)",
+        "asiaTokyo": "[JA] Asia/Tokyo (JST)"
+      },
+      "dateFormats": {
+        "mdy": "[JA] MM/DD/YYYY",
+        "dmy": "[JA] DD/MM/YYYY",
+        "ymd": "[JA] YYYY-MM-DD"
+      },
+      "placeholders": {
+        "organizationName": "[JA] Enter organization name",
+        "organizationSlug": "[JA] organization-slug",
+        "orgDescription": "[JA] Describe your organization..."
+      }
     },
     "apiKeys": {
       "title": "APIキー",
@@ -455,7 +480,17 @@
       "phoneNumber": "[JA] Phone Number",
       "location": "[JA] Location",
       "saving": "[JA] Saving...",
-      "saveChanges": "[JA] Save Changes"
+      "saveChanges": "[JA] Save Changes",
+      "loading": "[JA] Loading...",
+      "placeholders": {
+        "firstName": "[JA] Enter first name",
+        "lastName": "[JA] Enter last name",
+        "email": "[JA] you@company.com",
+        "jobTitle": "[JA] Enter your job title",
+        "bio": "[JA] Tell us about yourself...",
+        "phone": "[JA] +1 (555) 000-0000",
+        "location": "[JA] City, State"
+      }
     },
     "team": {
       "title": "[JA] Team Management",
@@ -534,7 +569,18 @@
       "hoursAgo": "[JA] {count} hour ago",
       "hoursAgoPlural": "[JA] {count} hours ago",
       "daysAgo": "[JA] {count} day ago",
-      "daysAgoPlural": "[JA] {count} days ago"
+      "daysAgoPlural": "[JA] {count} days ago",
+      "toast": {
+        "loadFailed": "[JA] Failed to load team data",
+        "invitationSent": "[JA] Invitation sent successfully",
+        "invitationFailed": "[JA] Failed to send invitation",
+        "roleUpdated": "[JA] Role updated successfully",
+        "roleUpdateFailed": "[JA] Failed to update role",
+        "memberRemoved": "[JA] Member removed successfully",
+        "memberRemoveFailed": "[JA] Failed to remove member",
+        "invitationRevoked": "[JA] Invitation revoked",
+        "revokeFailed": "[JA] Failed to revoke invitation"
+      }
     },
     "billing": {
       "title": "[JA] Billing & Subscription",
@@ -635,6 +681,9 @@
               "accountManager": "[JA] Dedicated account manager"
             }
           }
+        },
+        "toast": {
+          "checkoutFailed": "[JA] Failed to start checkout"
         }
       }
     },
@@ -658,6 +707,9 @@
         "execute": "[JA] Executed",
         "login": "[JA] Logged in",
         "logout": "[JA] Logged out"
+      },
+      "toast": {
+        "loadFailed": "[JA] Failed to load audit logs"
       }
     },
     "webhooks": {
@@ -699,6 +751,12 @@
         "reportGenerated": "[JA] Report Generated",
         "memberAdded": "[JA] Member Added",
         "memberRemoved": "[JA] Member Removed"
+      },
+      "toast": {
+        "urlAndEventRequired": "[JA] URL and at least one event are required",
+        "webhookCreated": "[JA] Webhook created successfully",
+        "createFailed": "[JA] Failed to create webhook",
+        "secretCopied": "[JA] Secret copied to clipboard"
       }
     },
     "alerts": {
@@ -748,6 +806,19 @@
         "report": "[JA] Report",
         "agent": "[JA] Agent",
         "workflow": "[JA] Workflow"
+      },
+      "toast": {
+        "alertCreated": "[JA] Alert created successfully",
+        "createFailed": "[JA] Failed to create alert",
+        "alertUpdated": "[JA] Alert updated successfully",
+        "updateFailed": "[JA] Failed to update alert",
+        "alertDeleted": "[JA] Alert deleted successfully",
+        "deleteFailed": "[JA] Failed to delete alert",
+        "alertEnabled": "[JA] Alert enabled successfully",
+        "alertDisabled": "[JA] Alert disabled successfully",
+        "toggleFailed": "[JA] Failed to toggle alert",
+        "alertAcknowledged": "[JA] Alert acknowledged",
+        "acknowledgeFailed": "[JA] Failed to acknowledge alert"
       }
     },
     "shortcuts": {
@@ -848,6 +919,10 @@
             "whiteLabel": "[JA] White-label"
           }
         }
+      },
+      "toast": {
+        "upgradeRequestSubmitted": "[JA] Upgrade request submitted! Our team will contact you shortly.",
+        "upgradeRequestFailed": "[JA] Failed to submit upgrade request"
       }
     },
     "scheduledExports": {
@@ -905,6 +980,18 @@
         "inHours": "[JA] In {count}h",
         "daysAgo": "[JA] {count}d ago",
         "inDays": "[JA] In {count}d"
+      },
+      "toast": {
+        "exportCreated": "[JA] Scheduled export created",
+        "createFailed": "[JA] Failed to create export",
+        "exportUpdated": "[JA] Scheduled export updated",
+        "updateFailed": "[JA] Failed to update export",
+        "exportDeleted": "[JA] Scheduled export deleted",
+        "deleteFailed": "[JA] Failed to delete export",
+        "exportPaused": "[JA] Export paused",
+        "exportActivated": "[JA] Export activated",
+        "exportStarted": "[JA] Export started",
+        "startFailed": "[JA] Failed to start export"
       }
     },
     "inbox": {
@@ -1965,6 +2052,15 @@
         "memoryDesc": "コンテキスト＆履歴",
         "settings": "設定",
         "help": "ヘルプ"
+      },
+      "demo": {
+        "logoLetter": "[JA] G",
+        "projectName1": "[JA] Gen Z Sustainability",
+        "projectName2": "[JA] Q4 Campaign",
+        "projectName3": "[JA] Market Expansion",
+        "userName": "[JA] John Doe",
+        "userEmail": "[JA] john@company.com",
+        "userInitials": "[JA] JD"
       }
     },
     "performance": {
@@ -2696,7 +2792,8 @@
           "timePeriod": "[JA] Time Period",
           "selectTimePeriod": "[JA] Select time period",
           "dataSource": "[JA] Data Source",
-          "selectDataSource": "[JA] Select data source"
+          "selectDataSource": "[JA] Select data source",
+          "timePeriodPlaceholder": "[JA] Last 12 months"
         },
         "preview": {
           "title": "[JA] Preview",
@@ -2723,7 +2820,10 @@
           "settings": "[JA] Settings",
           "comments": "[JA] Comments",
           "activity": "[JA] Activity",
-          "history": "[JA] History"
+          "history": "[JA] History",
+          "overview": "[JA] Overview",
+          "filters": "[JA] Filters",
+          "notes": "[JA] Notes"
         },
         "actions": {
           "share": "[JA] Share",
@@ -2772,6 +2872,12 @@
           "description": "[JA] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
           "cancel": "[JA] Cancel",
           "delete": "[JA] Delete"
+        },
+        "data": {
+          "searchPlaceholder": "[JA] Search data..."
+        },
+        "annotations": {
+          "addPlaceholder": "[JA] Add a note, observation, or question about this chart..."
         }
       }
     },
@@ -3170,6 +3276,14 @@
       "pageTracker": "[JA] Analytics",
       "title": "[JA] Analytics",
       "description": "[JA] Track your research performance and insights"
+    },
+    "demoActivities": {
+      "audienceExplorerRun": "[JA] Audience Explorer Run",
+      "cultureTrackerRun": "[JA] Culture Tracker Run",
+      "brandAnalystRun": "[JA] Brand Analyst Run",
+      "trendForecasterRun": "[JA] Trend Forecaster Run",
+      "competitiveIntelligenceRun": "[JA] Competitive Intelligence Run",
+      "rateLimitExceeded": "[JA] Rate limit exceeded"
     }
   },
   "audiences": {

@@ -52,7 +52,14 @@
     "settings": "Paramètres",
     "createdAt": "Créé à",
     "lastUpdated": "Dernière mise à jour",
-    "searchPlaceholder": "Recherche..."
+    "searchPlaceholder": "Recherche...",
+    "relativeTime": {
+      "justNow": "[FR] Just now",
+      "minutesAgo": "[FR] {count} min ago",
+      "hoursAgo": "[FR] {count, plural, one {# hour} other {# hours}} ago",
+      "daysAgo": "[FR] {count, plural, one {# day} other {# days}} ago",
+      "recently": "[FR] Recently"
+    }
   },
   "auth": {
     "signIn": "Se connecter",
@@ -344,7 +351,25 @@
       "timezone": "[FR] Timezone",
       "dateFormat": "[FR] Date Format",
       "saving": "[FR] Saving...",
-      "saveChanges": "[FR] Save Changes"
+      "saveChanges": "[FR] Save Changes",
+      "loading": "[FR] Loading...",
+      "timezones": {
+        "americaNewYork": "[FR] America/New York (EST)",
+        "americaLosAngeles": "[FR] America/Los Angeles (PST)",
+        "europeLondon": "[FR] Europe/London (GMT)",
+        "europeParis": "[FR] Europe/Paris (CET)",
+        "asiaTokyo": "[FR] Asia/Tokyo (JST)"
+      },
+      "dateFormats": {
+        "mdy": "[FR] MM/DD/YYYY",
+        "dmy": "[FR] DD/MM/YYYY",
+        "ymd": "[FR] YYYY-MM-DD"
+      },
+      "placeholders": {
+        "organizationName": "[FR] Enter organization name",
+        "organizationSlug": "[FR] organization-slug",
+        "orgDescription": "[FR] Describe your organization..."
+      }
     },
     "apiKeys": {
       "title": "Cles API",
@@ -455,7 +480,17 @@
       "phoneNumber": "[FR] Phone Number",
       "location": "[FR] Location",
       "saving": "[FR] Saving...",
-      "saveChanges": "[FR] Save Changes"
+      "saveChanges": "[FR] Save Changes",
+      "loading": "[FR] Loading...",
+      "placeholders": {
+        "firstName": "[FR] Enter first name",
+        "lastName": "[FR] Enter last name",
+        "email": "[FR] you@company.com",
+        "jobTitle": "[FR] Enter your job title",
+        "bio": "[FR] Tell us about yourself...",
+        "phone": "[FR] +1 (555) 000-0000",
+        "location": "[FR] City, State"
+      }
     },
     "team": {
       "title": "[FR] Team Management",
@@ -534,7 +569,18 @@
       "hoursAgo": "[FR] {count} hour ago",
       "hoursAgoPlural": "[FR] {count} hours ago",
       "daysAgo": "[FR] {count} day ago",
-      "daysAgoPlural": "[FR] {count} days ago"
+      "daysAgoPlural": "[FR] {count} days ago",
+      "toast": {
+        "loadFailed": "[FR] Failed to load team data",
+        "invitationSent": "[FR] Invitation sent successfully",
+        "invitationFailed": "[FR] Failed to send invitation",
+        "roleUpdated": "[FR] Role updated successfully",
+        "roleUpdateFailed": "[FR] Failed to update role",
+        "memberRemoved": "[FR] Member removed successfully",
+        "memberRemoveFailed": "[FR] Failed to remove member",
+        "invitationRevoked": "[FR] Invitation revoked",
+        "revokeFailed": "[FR] Failed to revoke invitation"
+      }
     },
     "billing": {
       "title": "[FR] Billing & Subscription",
@@ -635,6 +681,9 @@
               "accountManager": "[FR] Dedicated account manager"
             }
           }
+        },
+        "toast": {
+          "checkoutFailed": "[FR] Failed to start checkout"
         }
       }
     },
@@ -658,6 +707,9 @@
         "execute": "[FR] Executed",
         "login": "[FR] Logged in",
         "logout": "[FR] Logged out"
+      },
+      "toast": {
+        "loadFailed": "[FR] Failed to load audit logs"
       }
     },
     "webhooks": {
@@ -699,6 +751,12 @@
         "reportGenerated": "[FR] Report Generated",
         "memberAdded": "[FR] Member Added",
         "memberRemoved": "[FR] Member Removed"
+      },
+      "toast": {
+        "urlAndEventRequired": "[FR] URL and at least one event are required",
+        "webhookCreated": "[FR] Webhook created successfully",
+        "createFailed": "[FR] Failed to create webhook",
+        "secretCopied": "[FR] Secret copied to clipboard"
       }
     },
     "alerts": {
@@ -748,6 +806,19 @@
         "report": "[FR] Report",
         "agent": "[FR] Agent",
         "workflow": "[FR] Workflow"
+      },
+      "toast": {
+        "alertCreated": "[FR] Alert created successfully",
+        "createFailed": "[FR] Failed to create alert",
+        "alertUpdated": "[FR] Alert updated successfully",
+        "updateFailed": "[FR] Failed to update alert",
+        "alertDeleted": "[FR] Alert deleted successfully",
+        "deleteFailed": "[FR] Failed to delete alert",
+        "alertEnabled": "[FR] Alert enabled successfully",
+        "alertDisabled": "[FR] Alert disabled successfully",
+        "toggleFailed": "[FR] Failed to toggle alert",
+        "alertAcknowledged": "[FR] Alert acknowledged",
+        "acknowledgeFailed": "[FR] Failed to acknowledge alert"
       }
     },
     "shortcuts": {
@@ -848,6 +919,10 @@
             "whiteLabel": "[FR] White-label"
           }
         }
+      },
+      "toast": {
+        "upgradeRequestSubmitted": "[FR] Upgrade request submitted! Our team will contact you shortly.",
+        "upgradeRequestFailed": "[FR] Failed to submit upgrade request"
       }
     },
     "scheduledExports": {
@@ -905,6 +980,18 @@
         "inHours": "[FR] In {count}h",
         "daysAgo": "[FR] {count}d ago",
         "inDays": "[FR] In {count}d"
+      },
+      "toast": {
+        "exportCreated": "[FR] Scheduled export created",
+        "createFailed": "[FR] Failed to create export",
+        "exportUpdated": "[FR] Scheduled export updated",
+        "updateFailed": "[FR] Failed to update export",
+        "exportDeleted": "[FR] Scheduled export deleted",
+        "deleteFailed": "[FR] Failed to delete export",
+        "exportPaused": "[FR] Export paused",
+        "exportActivated": "[FR] Export activated",
+        "exportStarted": "[FR] Export started",
+        "startFailed": "[FR] Failed to start export"
       }
     },
     "inbox": {
@@ -1965,6 +2052,15 @@
         "memoryDesc": "Contexte et historique",
         "settings": "Parametres",
         "help": "Aide"
+      },
+      "demo": {
+        "logoLetter": "[FR] G",
+        "projectName1": "[FR] Gen Z Sustainability",
+        "projectName2": "[FR] Q4 Campaign",
+        "projectName3": "[FR] Market Expansion",
+        "userName": "[FR] John Doe",
+        "userEmail": "[FR] john@company.com",
+        "userInitials": "[FR] JD"
       }
     },
     "performance": {
@@ -2696,7 +2792,8 @@
           "timePeriod": "[FR] Time Period",
           "selectTimePeriod": "[FR] Select time period",
           "dataSource": "[FR] Data Source",
-          "selectDataSource": "[FR] Select data source"
+          "selectDataSource": "[FR] Select data source",
+          "timePeriodPlaceholder": "[FR] Last 12 months"
         },
         "preview": {
           "title": "[FR] Preview",
@@ -2723,7 +2820,10 @@
           "settings": "[FR] Settings",
           "comments": "[FR] Comments",
           "activity": "[FR] Activity",
-          "history": "[FR] History"
+          "history": "[FR] History",
+          "overview": "[FR] Overview",
+          "filters": "[FR] Filters",
+          "notes": "[FR] Notes"
         },
         "actions": {
           "share": "[FR] Share",
@@ -2772,6 +2872,12 @@
           "description": "[FR] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
           "cancel": "[FR] Cancel",
           "delete": "[FR] Delete"
+        },
+        "data": {
+          "searchPlaceholder": "[FR] Search data..."
+        },
+        "annotations": {
+          "addPlaceholder": "[FR] Add a note, observation, or question about this chart..."
         }
       }
     },
@@ -3170,6 +3276,14 @@
       "pageTracker": "[FR] Analytics",
       "title": "[FR] Analytics",
       "description": "[FR] Track your research performance and insights"
+    },
+    "demoActivities": {
+      "audienceExplorerRun": "[FR] Audience Explorer Run",
+      "cultureTrackerRun": "[FR] Culture Tracker Run",
+      "brandAnalystRun": "[FR] Brand Analyst Run",
+      "trendForecasterRun": "[FR] Trend Forecaster Run",
+      "competitiveIntelligenceRun": "[FR] Competitive Intelligence Run",
+      "rateLimitExceeded": "[FR] Rate limit exceeded"
     }
   },
   "audiences": {

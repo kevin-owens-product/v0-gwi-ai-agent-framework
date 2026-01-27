@@ -109,7 +109,7 @@ export default function UpgradePage() {
       }
     } catch (error) {
       console.error("Checkout error:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to start checkout")
+      toast.error(error instanceof Error ? error.message : t("toast.checkoutFailed"))
     } finally {
       setLoadingTier(null)
     }

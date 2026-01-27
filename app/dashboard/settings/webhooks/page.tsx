@@ -75,7 +75,7 @@ interface Webhook {
 
   const handleCreate = async () => {
     if (!url || selectedEvents.length === 0) {
-      toast.error('URL and at least one event are required')
+      toast.error(t('toast.urlAndEventRequired'))
       return
     }
 
@@ -89,14 +89,14 @@ interface Webhook {
 
       if (!response.ok) throw new Error('Failed to create webhook')
 
-      toast.success('Webhook created successfully')
+      toast.success(t('toast.webhookCreated'))
       setDialogOpen(false)
       setUrl('')
       setDescription('')
       setSelectedEvents([])
       fetchWebhooks()
     } catch {
-      toast.error('Failed to create webhook')
+      toast.error(t('toast.createFailed'))
     } finally {
       setCreating(false)
     }
@@ -105,7 +105,7 @@ interface Webhook {
   const copySecret = (secret: string, id: string) => {
     navigator.clipboard.writeText(secret)
     setCopiedSecret(id)
-    toast.success('Secret copied to clipboard')
+    toast.success(t('toast.secretCopied'))
     setTimeout(() => setCopiedSecret(null), 2000)
   }
 

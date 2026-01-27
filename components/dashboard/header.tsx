@@ -14,6 +14,7 @@ export function DashboardHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [systemStatus, setSystemStatus] = useState<SystemStatus>("operational")
   const t = useTranslations('dashboard.header')
+  const tSidebar = useTranslations('dashboard.sidebar')
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -21,7 +22,7 @@ export function DashboardHeader() {
         const response = await fetch("/api/status")
         const data = await response.json()
         setSystemStatus(data.status || "operational")
-      } catch (error) {
+      } catch {
         // Default to operational if fetch fails
         setSystemStatus("operational")
       }
@@ -65,7 +66,7 @@ export function DashboardHeader() {
             <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
           </Button>
           <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center lg:hidden">
-            <span className="text-xs font-medium text-accent">JD</span>
+            <span className="text-xs font-medium text-accent">{tSidebar('demo.userInitials')}</span>
           </div>
         </div>
       </header>

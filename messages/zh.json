@@ -52,7 +52,14 @@
     "settings": "设置",
     "createdAt": "创建于",
     "lastUpdated": "最后更新",
-    "searchPlaceholder": "搜索..."
+    "searchPlaceholder": "搜索...",
+    "relativeTime": {
+      "justNow": "[ZH] Just now",
+      "minutesAgo": "[ZH] {count} min ago",
+      "hoursAgo": "[ZH] {count, plural, one {# hour} other {# hours}} ago",
+      "daysAgo": "[ZH] {count, plural, one {# day} other {# days}} ago",
+      "recently": "[ZH] Recently"
+    }
   },
   "auth": {
     "signIn": "登录",
@@ -344,7 +351,25 @@
       "timezone": "[ZH] Timezone",
       "dateFormat": "[ZH] Date Format",
       "saving": "[ZH] Saving...",
-      "saveChanges": "[ZH] Save Changes"
+      "saveChanges": "[ZH] Save Changes",
+      "loading": "[ZH] Loading...",
+      "timezones": {
+        "americaNewYork": "[ZH] America/New York (EST)",
+        "americaLosAngeles": "[ZH] America/Los Angeles (PST)",
+        "europeLondon": "[ZH] Europe/London (GMT)",
+        "europeParis": "[ZH] Europe/Paris (CET)",
+        "asiaTokyo": "[ZH] Asia/Tokyo (JST)"
+      },
+      "dateFormats": {
+        "mdy": "[ZH] MM/DD/YYYY",
+        "dmy": "[ZH] DD/MM/YYYY",
+        "ymd": "[ZH] YYYY-MM-DD"
+      },
+      "placeholders": {
+        "organizationName": "[ZH] Enter organization name",
+        "organizationSlug": "[ZH] organization-slug",
+        "orgDescription": "[ZH] Describe your organization..."
+      }
     },
     "apiKeys": {
       "title": "API 密钥",
@@ -455,7 +480,17 @@
       "phoneNumber": "[ZH] Phone Number",
       "location": "[ZH] Location",
       "saving": "[ZH] Saving...",
-      "saveChanges": "[ZH] Save Changes"
+      "saveChanges": "[ZH] Save Changes",
+      "loading": "[ZH] Loading...",
+      "placeholders": {
+        "firstName": "[ZH] Enter first name",
+        "lastName": "[ZH] Enter last name",
+        "email": "[ZH] you@company.com",
+        "jobTitle": "[ZH] Enter your job title",
+        "bio": "[ZH] Tell us about yourself...",
+        "phone": "[ZH] +1 (555) 000-0000",
+        "location": "[ZH] City, State"
+      }
     },
     "team": {
       "title": "[ZH] Team Management",
@@ -534,7 +569,18 @@
       "hoursAgo": "[ZH] {count} hour ago",
       "hoursAgoPlural": "[ZH] {count} hours ago",
       "daysAgo": "[ZH] {count} day ago",
-      "daysAgoPlural": "[ZH] {count} days ago"
+      "daysAgoPlural": "[ZH] {count} days ago",
+      "toast": {
+        "loadFailed": "[ZH] Failed to load team data",
+        "invitationSent": "[ZH] Invitation sent successfully",
+        "invitationFailed": "[ZH] Failed to send invitation",
+        "roleUpdated": "[ZH] Role updated successfully",
+        "roleUpdateFailed": "[ZH] Failed to update role",
+        "memberRemoved": "[ZH] Member removed successfully",
+        "memberRemoveFailed": "[ZH] Failed to remove member",
+        "invitationRevoked": "[ZH] Invitation revoked",
+        "revokeFailed": "[ZH] Failed to revoke invitation"
+      }
     },
     "billing": {
       "title": "[ZH] Billing & Subscription",
@@ -635,6 +681,9 @@
               "accountManager": "[ZH] Dedicated account manager"
             }
           }
+        },
+        "toast": {
+          "checkoutFailed": "[ZH] Failed to start checkout"
         }
       }
     },
@@ -658,6 +707,9 @@
         "execute": "[ZH] Executed",
         "login": "[ZH] Logged in",
         "logout": "[ZH] Logged out"
+      },
+      "toast": {
+        "loadFailed": "[ZH] Failed to load audit logs"
       }
     },
     "webhooks": {
@@ -699,6 +751,12 @@
         "reportGenerated": "[ZH] Report Generated",
         "memberAdded": "[ZH] Member Added",
         "memberRemoved": "[ZH] Member Removed"
+      },
+      "toast": {
+        "urlAndEventRequired": "[ZH] URL and at least one event are required",
+        "webhookCreated": "[ZH] Webhook created successfully",
+        "createFailed": "[ZH] Failed to create webhook",
+        "secretCopied": "[ZH] Secret copied to clipboard"
       }
     },
     "alerts": {
@@ -748,6 +806,19 @@
         "report": "[ZH] Report",
         "agent": "[ZH] Agent",
         "workflow": "[ZH] Workflow"
+      },
+      "toast": {
+        "alertCreated": "[ZH] Alert created successfully",
+        "createFailed": "[ZH] Failed to create alert",
+        "alertUpdated": "[ZH] Alert updated successfully",
+        "updateFailed": "[ZH] Failed to update alert",
+        "alertDeleted": "[ZH] Alert deleted successfully",
+        "deleteFailed": "[ZH] Failed to delete alert",
+        "alertEnabled": "[ZH] Alert enabled successfully",
+        "alertDisabled": "[ZH] Alert disabled successfully",
+        "toggleFailed": "[ZH] Failed to toggle alert",
+        "alertAcknowledged": "[ZH] Alert acknowledged",
+        "acknowledgeFailed": "[ZH] Failed to acknowledge alert"
       }
     },
     "shortcuts": {
@@ -848,6 +919,10 @@
             "whiteLabel": "[ZH] White-label"
           }
         }
+      },
+      "toast": {
+        "upgradeRequestSubmitted": "[ZH] Upgrade request submitted! Our team will contact you shortly.",
+        "upgradeRequestFailed": "[ZH] Failed to submit upgrade request"
       }
     },
     "scheduledExports": {
@@ -905,6 +980,18 @@
         "inHours": "[ZH] In {count}h",
         "daysAgo": "[ZH] {count}d ago",
         "inDays": "[ZH] In {count}d"
+      },
+      "toast": {
+        "exportCreated": "[ZH] Scheduled export created",
+        "createFailed": "[ZH] Failed to create export",
+        "exportUpdated": "[ZH] Scheduled export updated",
+        "updateFailed": "[ZH] Failed to update export",
+        "exportDeleted": "[ZH] Scheduled export deleted",
+        "deleteFailed": "[ZH] Failed to delete export",
+        "exportPaused": "[ZH] Export paused",
+        "exportActivated": "[ZH] Export activated",
+        "exportStarted": "[ZH] Export started",
+        "startFailed": "[ZH] Failed to start export"
       }
     },
     "inbox": {
@@ -1965,6 +2052,15 @@
         "memoryDesc": "上下文和历史",
         "settings": "设置",
         "help": "帮助"
+      },
+      "demo": {
+        "logoLetter": "[ZH] G",
+        "projectName1": "[ZH] Gen Z Sustainability",
+        "projectName2": "[ZH] Q4 Campaign",
+        "projectName3": "[ZH] Market Expansion",
+        "userName": "[ZH] John Doe",
+        "userEmail": "[ZH] john@company.com",
+        "userInitials": "[ZH] JD"
       }
     },
     "performance": {
@@ -2696,7 +2792,8 @@
           "timePeriod": "[ZH] Time Period",
           "selectTimePeriod": "[ZH] Select time period",
           "dataSource": "[ZH] Data Source",
-          "selectDataSource": "[ZH] Select data source"
+          "selectDataSource": "[ZH] Select data source",
+          "timePeriodPlaceholder": "[ZH] Last 12 months"
         },
         "preview": {
           "title": "[ZH] Preview",
@@ -2723,7 +2820,10 @@
           "settings": "[ZH] Settings",
           "comments": "[ZH] Comments",
           "activity": "[ZH] Activity",
-          "history": "[ZH] History"
+          "history": "[ZH] History",
+          "overview": "[ZH] Overview",
+          "filters": "[ZH] Filters",
+          "notes": "[ZH] Notes"
         },
         "actions": {
           "share": "[ZH] Share",
@@ -2772,6 +2872,12 @@
           "description": "[ZH] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
           "cancel": "[ZH] Cancel",
           "delete": "[ZH] Delete"
+        },
+        "data": {
+          "searchPlaceholder": "[ZH] Search data..."
+        },
+        "annotations": {
+          "addPlaceholder": "[ZH] Add a note, observation, or question about this chart..."
         }
       }
     },
@@ -3170,6 +3276,14 @@
       "pageTracker": "[ZH] Analytics",
       "title": "[ZH] Analytics",
       "description": "[ZH] Track your research performance and insights"
+    },
+    "demoActivities": {
+      "audienceExplorerRun": "[ZH] Audience Explorer Run",
+      "cultureTrackerRun": "[ZH] Culture Tracker Run",
+      "brandAnalystRun": "[ZH] Brand Analyst Run",
+      "trendForecasterRun": "[ZH] Trend Forecaster Run",
+      "competitiveIntelligenceRun": "[ZH] Competitive Intelligence Run",
+      "rateLimitExceeded": "[ZH] Rate limit exceeded"
     }
   },
   "audiences": {

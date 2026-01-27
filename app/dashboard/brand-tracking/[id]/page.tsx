@@ -956,16 +956,16 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Brand Tracker</AlertDialogTitle>
+            <AlertDialogTitle>{t("delete.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{brandTracking.brandName}"? This action cannot be undone and all snapshots will be lost.
+              {t("delete.description", { name: brandTracking.brandName })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("delete.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
               {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-              Delete
+              {t("delete.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -975,39 +975,39 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Share Brand Tracker</DialogTitle>
+            <DialogTitle>{t("share.title")}</DialogTitle>
             <DialogDescription>
-              Share this brand tracker with team members or external collaborators.
+              {t("share.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="flex gap-2">
               <div className="flex-1">
-                <Label htmlFor="shareEmail">Email address</Label>
+                <Label htmlFor="shareEmail">{t("share.emailLabel")}</Label>
                 <Input
                   id="shareEmail"
-                  placeholder="email@example.com"
+                  placeholder={t("share.emailPlaceholder")}
                   value={shareEmail}
                   onChange={(e) => setShareEmail(e.target.value)}
                   className="mt-2"
                 />
               </div>
               <div>
-                <Label>Role</Label>
+                <Label>{t("share.roleLabel")}</Label>
                 <Select value={shareRole} onValueChange={setShareRole}>
                   <SelectTrigger className="mt-2 w-[120px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="viewer">Viewer</SelectItem>
-                    <SelectItem value="editor">Editor</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="viewer">{t("share.viewer")}</SelectItem>
+                    <SelectItem value="editor">{t("share.editor")}</SelectItem>
+                    <SelectItem value="admin">{t("share.admin")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div className="p-3 bg-muted rounded-lg">
-              <Label className="text-xs text-muted-foreground">Share link</Label>
+              <Label className="text-xs text-muted-foreground">{t("share.shareLink")}</Label>
               <div className="flex items-center gap-2 mt-1">
                 <Input value={typeof window !== 'undefined' ? window.location.href : ''} readOnly className="text-xs" />
                 <Button size="sm" variant="outline" onClick={handleCopyLink}>
@@ -1017,9 +1017,9 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowShareDialog(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowShareDialog(false)}>{t("share.cancel")}</Button>
             <Button onClick={() => { setShowShareDialog(false); setShareEmail(""); }}>
-              <UserPlus className="h-4 w-4 mr-2" /> Share
+              <UserPlus className="h-4 w-4 mr-2" /> {t("share.share")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1029,40 +1029,40 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
       <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Schedule Report</DialogTitle>
-            <DialogDescription>Set up automatic email delivery of this brand tracking report.</DialogDescription>
+            <DialogTitle>{t("schedule.title")}</DialogTitle>
+            <DialogDescription>{t("schedule.description")}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label>Recipients</Label>
-              <Input placeholder="email@example.com, team@example.com" className="mt-2" />
+              <Label>{t("schedule.recipients")}</Label>
+              <Input placeholder={t("schedule.recipientsPlaceholder")} className="mt-2" />
             </div>
             <div>
-              <Label>Frequency</Label>
+              <Label>{t("schedule.frequency")}</Label>
               <Select defaultValue="weekly">
                 <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="daily">{t("schedule.daily")}</SelectItem>
+                  <SelectItem value="weekly">{t("schedule.weekly")}</SelectItem>
+                  <SelectItem value="monthly">{t("schedule.monthly")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label>Format</Label>
+              <Label>{t("schedule.format")}</Label>
               <Select defaultValue="pdf">
                 <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pdf">PDF</SelectItem>
-                  <SelectItem value="csv">CSV</SelectItem>
-                  <SelectItem value="json">JSON</SelectItem>
+                  <SelectItem value="pdf">{t("schedule.pdf")}</SelectItem>
+                  <SelectItem value="csv">{t("schedule.csv")}</SelectItem>
+                  <SelectItem value="json">{t("schedule.json")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>Cancel</Button>
-            <Button><Mail className="h-4 w-4 mr-2" /> Schedule</Button>
+            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>{t("schedule.cancel")}</Button>
+            <Button><Mail className="h-4 w-4 mr-2" /> {t("schedule.schedule")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

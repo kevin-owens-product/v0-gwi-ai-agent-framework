@@ -52,7 +52,14 @@
     "settings": "Ρυθμίσεις",
     "createdAt": "Δημιουργήθηκε στο",
     "lastUpdated": "Τελευταία Ενημέρωση",
-    "searchPlaceholder": "Ερευνα..."
+    "searchPlaceholder": "Ερευνα...",
+    "relativeTime": {
+      "justNow": "[EL] Just now",
+      "minutesAgo": "[EL] {count} min ago",
+      "hoursAgo": "[EL] {count, plural, one {# hour} other {# hours}} ago",
+      "daysAgo": "[EL] {count, plural, one {# day} other {# days}} ago",
+      "recently": "[EL] Recently"
+    }
   },
   "auth": {
     "signIn": "Συνδεθείτε",
@@ -310,7 +317,25 @@
       "timezone": "[EL] Timezone",
       "dateFormat": "[EL] Date Format",
       "saving": "[EL] Saving...",
-      "saveChanges": "[EL] Save Changes"
+      "saveChanges": "[EL] Save Changes",
+      "loading": "[EL] Loading...",
+      "timezones": {
+        "americaNewYork": "[EL] America/New York (EST)",
+        "americaLosAngeles": "[EL] America/Los Angeles (PST)",
+        "europeLondon": "[EL] Europe/London (GMT)",
+        "europeParis": "[EL] Europe/Paris (CET)",
+        "asiaTokyo": "[EL] Asia/Tokyo (JST)"
+      },
+      "dateFormats": {
+        "mdy": "[EL] MM/DD/YYYY",
+        "dmy": "[EL] DD/MM/YYYY",
+        "ymd": "[EL] YYYY-MM-DD"
+      },
+      "placeholders": {
+        "organizationName": "[EL] Enter organization name",
+        "organizationSlug": "[EL] organization-slug",
+        "orgDescription": "[EL] Describe your organization..."
+      }
     },
     "appearance": {
       "title": "Εμφάνιση",
@@ -455,7 +480,17 @@
       "phoneNumber": "[EL] Phone Number",
       "location": "[EL] Location",
       "saving": "[EL] Saving...",
-      "saveChanges": "[EL] Save Changes"
+      "saveChanges": "[EL] Save Changes",
+      "loading": "[EL] Loading...",
+      "placeholders": {
+        "firstName": "[EL] Enter first name",
+        "lastName": "[EL] Enter last name",
+        "email": "[EL] you@company.com",
+        "jobTitle": "[EL] Enter your job title",
+        "bio": "[EL] Tell us about yourself...",
+        "phone": "[EL] +1 (555) 000-0000",
+        "location": "[EL] City, State"
+      }
     },
     "team": {
       "title": "[EL] Team Management",
@@ -534,7 +569,18 @@
       "hoursAgo": "[EL] {count} hour ago",
       "hoursAgoPlural": "[EL] {count} hours ago",
       "daysAgo": "[EL] {count} day ago",
-      "daysAgoPlural": "[EL] {count} days ago"
+      "daysAgoPlural": "[EL] {count} days ago",
+      "toast": {
+        "loadFailed": "[EL] Failed to load team data",
+        "invitationSent": "[EL] Invitation sent successfully",
+        "invitationFailed": "[EL] Failed to send invitation",
+        "roleUpdated": "[EL] Role updated successfully",
+        "roleUpdateFailed": "[EL] Failed to update role",
+        "memberRemoved": "[EL] Member removed successfully",
+        "memberRemoveFailed": "[EL] Failed to remove member",
+        "invitationRevoked": "[EL] Invitation revoked",
+        "revokeFailed": "[EL] Failed to revoke invitation"
+      }
     },
     "billing": {
       "title": "[EL] Billing & Subscription",
@@ -635,6 +681,9 @@
               "accountManager": "[EL] Dedicated account manager"
             }
           }
+        },
+        "toast": {
+          "checkoutFailed": "[EL] Failed to start checkout"
         }
       }
     },
@@ -658,6 +707,9 @@
         "execute": "[EL] Executed",
         "login": "[EL] Logged in",
         "logout": "[EL] Logged out"
+      },
+      "toast": {
+        "loadFailed": "[EL] Failed to load audit logs"
       }
     },
     "webhooks": {
@@ -699,6 +751,12 @@
         "reportGenerated": "[EL] Report Generated",
         "memberAdded": "[EL] Member Added",
         "memberRemoved": "[EL] Member Removed"
+      },
+      "toast": {
+        "urlAndEventRequired": "[EL] URL and at least one event are required",
+        "webhookCreated": "[EL] Webhook created successfully",
+        "createFailed": "[EL] Failed to create webhook",
+        "secretCopied": "[EL] Secret copied to clipboard"
       }
     },
     "alerts": {
@@ -748,6 +806,19 @@
         "report": "[EL] Report",
         "agent": "[EL] Agent",
         "workflow": "[EL] Workflow"
+      },
+      "toast": {
+        "alertCreated": "[EL] Alert created successfully",
+        "createFailed": "[EL] Failed to create alert",
+        "alertUpdated": "[EL] Alert updated successfully",
+        "updateFailed": "[EL] Failed to update alert",
+        "alertDeleted": "[EL] Alert deleted successfully",
+        "deleteFailed": "[EL] Failed to delete alert",
+        "alertEnabled": "[EL] Alert enabled successfully",
+        "alertDisabled": "[EL] Alert disabled successfully",
+        "toggleFailed": "[EL] Failed to toggle alert",
+        "alertAcknowledged": "[EL] Alert acknowledged",
+        "acknowledgeFailed": "[EL] Failed to acknowledge alert"
       }
     },
     "shortcuts": {
@@ -848,6 +919,10 @@
             "whiteLabel": "[EL] White-label"
           }
         }
+      },
+      "toast": {
+        "upgradeRequestSubmitted": "[EL] Upgrade request submitted! Our team will contact you shortly.",
+        "upgradeRequestFailed": "[EL] Failed to submit upgrade request"
       }
     },
     "scheduledExports": {
@@ -905,6 +980,18 @@
         "inHours": "[EL] In {count}h",
         "daysAgo": "[EL] {count}d ago",
         "inDays": "[EL] In {count}d"
+      },
+      "toast": {
+        "exportCreated": "[EL] Scheduled export created",
+        "createFailed": "[EL] Failed to create export",
+        "exportUpdated": "[EL] Scheduled export updated",
+        "updateFailed": "[EL] Failed to update export",
+        "exportDeleted": "[EL] Scheduled export deleted",
+        "deleteFailed": "[EL] Failed to delete export",
+        "exportPaused": "[EL] Export paused",
+        "exportActivated": "[EL] Export activated",
+        "exportStarted": "[EL] Export started",
+        "startFailed": "[EL] Failed to start export"
       }
     },
     "inbox": {
@@ -1965,6 +2052,15 @@
         "memoryDesc": "Περιεχόμενο και ιστορία",
         "settings": "Ρυθμίσεις",
         "help": "Βοήθεια"
+      },
+      "demo": {
+        "logoLetter": "[EL] G",
+        "projectName1": "[EL] Gen Z Sustainability",
+        "projectName2": "[EL] Q4 Campaign",
+        "projectName3": "[EL] Market Expansion",
+        "userName": "[EL] John Doe",
+        "userEmail": "[EL] john@company.com",
+        "userInitials": "[EL] JD"
       }
     },
     "performance": {
@@ -2696,7 +2792,8 @@
           "timePeriod": "[EL] Time Period",
           "selectTimePeriod": "[EL] Select time period",
           "dataSource": "[EL] Data Source",
-          "selectDataSource": "[EL] Select data source"
+          "selectDataSource": "[EL] Select data source",
+          "timePeriodPlaceholder": "[EL] Last 12 months"
         },
         "preview": {
           "title": "[EL] Preview",
@@ -2723,7 +2820,10 @@
           "settings": "[EL] Settings",
           "comments": "[EL] Comments",
           "activity": "[EL] Activity",
-          "history": "[EL] History"
+          "history": "[EL] History",
+          "overview": "[EL] Overview",
+          "filters": "[EL] Filters",
+          "notes": "[EL] Notes"
         },
         "actions": {
           "share": "[EL] Share",
@@ -2772,6 +2872,12 @@
           "description": "[EL] Are you sure you want to delete \"{name}\"? This action cannot be undone.",
           "cancel": "[EL] Cancel",
           "delete": "[EL] Delete"
+        },
+        "data": {
+          "searchPlaceholder": "[EL] Search data..."
+        },
+        "annotations": {
+          "addPlaceholder": "[EL] Add a note, observation, or question about this chart..."
         }
       }
     },
@@ -3170,6 +3276,14 @@
       "pageTracker": "[EL] Analytics",
       "title": "[EL] Analytics",
       "description": "[EL] Track your research performance and insights"
+    },
+    "demoActivities": {
+      "audienceExplorerRun": "[EL] Audience Explorer Run",
+      "cultureTrackerRun": "[EL] Culture Tracker Run",
+      "brandAnalystRun": "[EL] Brand Analyst Run",
+      "trendForecasterRun": "[EL] Trend Forecaster Run",
+      "competitiveIntelligenceRun": "[EL] Competitive Intelligence Run",
+      "rateLimitExceeded": "[EL] Rate limit exceeded"
     }
   },
   "audiences": {

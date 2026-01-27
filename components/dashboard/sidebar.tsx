@@ -75,10 +75,10 @@ const getNavGroups = (t: ReturnType<typeof useTranslations<'dashboard.sidebar'>>
     label: t('sections.projects'),
     defaultOpen: true,
     items: [{ name: t('items.allProjects'), href: "/dashboard/projects", icon: Folder, description: t('items.allProjectsDesc') }],
-    children: [
-      { name: "Gen Z Sustainability", href: "/dashboard/projects/gen-z-sustainability", color: "bg-emerald-500" },
-      { name: "Q4 Campaign", href: "/dashboard/projects/q4-campaign", color: "bg-blue-500" },
-      { name: "Market Expansion", href: "/dashboard/projects/market-expansion", color: "bg-amber-500" },
+    children: (t: ReturnType<typeof useTranslations<'dashboard.sidebar'>>) => [
+      { name: t('demo.projectName1'), href: "/dashboard/projects/gen-z-sustainability", color: "bg-emerald-500" },
+      { name: t('demo.projectName2'), href: "/dashboard/projects/q4-campaign", color: "bg-blue-500" },
+      { name: t('demo.projectName3'), href: "/dashboard/projects/market-expansion", color: "bg-amber-500" },
     ],
   },
   {
@@ -174,7 +174,7 @@ export function DashboardSidebar() {
         >
           <Link href="/" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent shrink-0">
-              <span className="text-sm font-bold text-accent-foreground">G</span>
+              <span className="text-sm font-bold text-accent-foreground">{t('demo.logoLetter')}</span>
             </div>
             {!isCompact && <span className="text-base font-semibold text-sidebar-foreground">{t('brandName')}</span>}
           </Link>
@@ -282,7 +282,7 @@ export function DashboardSidebar() {
                   {/* Project Children */}
                   {group.children && !isCompact && (
                     <div className="ml-4 mt-1 space-y-0.5 border-l border-sidebar-border pl-3">
-                      {group.children.map((child) => (
+                      {group.children(t).map((child) => (
                         <Link
                           key={child.name}
                           href={child.href}
@@ -366,25 +366,25 @@ export function DashboardSidebar() {
               <TooltipTrigger asChild>
                 <button className="flex h-9 w-full items-center justify-center rounded-md hover:bg-sidebar-accent/50">
                   <div className="h-7 w-7 rounded-full bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center">
-                    <span className="text-xs font-medium text-accent-foreground">JD</span>
+                    <span className="text-xs font-medium text-accent-foreground">{t('demo.userInitials')}</span>
                   </div>
                 </button>
               </TooltipTrigger>
               <TooltipContent side="right">
                 <div>
-                  <p className="font-medium">John Doe</p>
-                  <p className="text-xs text-muted-foreground">john@company.com</p>
+                  <p className="font-medium">{t('demo.userName')}</p>
+                  <p className="text-xs text-muted-foreground">{t('demo.userEmail')}</p>
                 </div>
               </TooltipContent>
             </Tooltip>
           ) : (
             <div className="flex items-center gap-3">
               <div className="h-8 w-8 rounded-full bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center shrink-0">
-                <span className="text-xs font-medium text-accent-foreground">JD</span>
+                <span className="text-xs font-medium text-accent-foreground">{t('demo.userInitials')}</span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-sidebar-foreground truncate">John Doe</p>
-                <p className="text-xs text-sidebar-foreground/50 truncate">john@company.com</p>
+                <p className="text-sm font-medium text-sidebar-foreground truncate">{t('demo.userName')}</p>
+                <p className="text-xs text-sidebar-foreground/50 truncate">{t('demo.userEmail')}</p>
               </div>
               <Button
                 variant="ghost"

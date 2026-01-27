@@ -229,7 +229,7 @@ export default function NewChartPage() {
               <Label>{t("dataConfig.selectTimePeriod")}</Label>
               <Select value={timePeriod} onValueChange={setTimePeriod}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Last 12 months" />
+                  <SelectValue placeholder={t("dataConfig.timePeriodPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="12m">Last 12 months</SelectItem>

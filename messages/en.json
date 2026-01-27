@@ -52,7 +52,14 @@
     "settings": "Settings",
     "createdAt": "Created At",
     "lastUpdated": "Last Updated",
-    "searchPlaceholder": "Search..."
+    "searchPlaceholder": "Search...",
+    "relativeTime": {
+      "justNow": "Just now",
+      "minutesAgo": "{count} min ago",
+      "hoursAgo": "{count, plural, one {# hour} other {# hours}} ago",
+      "daysAgo": "{count, plural, one {# day} other {# days}} ago",
+      "recently": "Recently"
+    }
   },
   "auth": {
     "signIn": "Sign in",
@@ -458,7 +465,25 @@
       "timezone": "Timezone",
       "dateFormat": "Date Format",
       "saving": "Saving...",
-      "saveChanges": "Save Changes"
+      "saveChanges": "Save Changes",
+      "loading": "Loading...",
+      "timezones": {
+        "americaNewYork": "America/New York (EST)",
+        "americaLosAngeles": "America/Los Angeles (PST)",
+        "europeLondon": "Europe/London (GMT)",
+        "europeParis": "Europe/Paris (CET)",
+        "asiaTokyo": "Asia/Tokyo (JST)"
+      },
+      "dateFormats": {
+        "mdy": "MM/DD/YYYY",
+        "dmy": "DD/MM/YYYY",
+        "ymd": "YYYY-MM-DD"
+      },
+      "placeholders": {
+        "organizationName": "Enter organization name",
+        "organizationSlug": "organization-slug",
+        "orgDescription": "Describe your organization..."
+      }
     },
     "profile": {
       "title": "Profile Settings",
@@ -474,6 +499,16 @@
       "bio": "Bio",
       "contactInfo": "Contact Information",
       "contactDescription": "How colleagues can reach you",
+      "loading": "Loading...",
+      "placeholders": {
+        "firstName": "Enter first name",
+        "lastName": "Enter last name",
+        "email": "you@company.com",
+        "jobTitle": "Enter your job title",
+        "bio": "Tell us about yourself...",
+        "phone": "+1 (555) 000-0000",
+        "location": "City, State"
+      },
       "phoneNumber": "Phone Number",
       "location": "Location",
       "saving": "Saving...",
@@ -635,7 +670,18 @@
       "hoursAgo": "{count} hour ago",
       "hoursAgoPlural": "{count} hours ago",
       "daysAgo": "{count} day ago",
-      "daysAgoPlural": "{count} days ago"
+      "daysAgoPlural": "{count} days ago",
+      "toast": {
+        "loadFailed": "Failed to load team data",
+        "invitationSent": "Invitation sent successfully",
+        "invitationFailed": "Failed to send invitation",
+        "roleUpdated": "Role updated successfully",
+        "roleUpdateFailed": "Failed to update role",
+        "memberRemoved": "Member removed successfully",
+        "memberRemoveFailed": "Failed to remove member",
+        "invitationRevoked": "Invitation revoked",
+        "revokeFailed": "Failed to revoke invitation"
+      }
     },
     "billing": {
       "title": "Billing & Subscription",
@@ -736,6 +782,9 @@
               "accountManager": "Dedicated account manager"
             }
           }
+        },
+        "toast": {
+          "checkoutFailed": "Failed to start checkout"
         }
       }
     },
@@ -759,6 +808,9 @@
         "execute": "Executed",
         "login": "Logged in",
         "logout": "Logged out"
+      },
+      "toast": {
+        "loadFailed": "Failed to load audit logs"
       }
     },
     "webhooks": {
@@ -800,6 +852,12 @@
         "reportGenerated": "Report Generated",
         "memberAdded": "Member Added",
         "memberRemoved": "Member Removed"
+      },
+      "toast": {
+        "urlAndEventRequired": "URL and at least one event are required",
+        "webhookCreated": "Webhook created successfully",
+        "createFailed": "Failed to create webhook",
+        "secretCopied": "Secret copied to clipboard"
       }
     },
     "alerts": {
@@ -849,6 +907,19 @@
         "report": "Report",
         "agent": "Agent",
         "workflow": "Workflow"
+      },
+      "toast": {
+        "alertCreated": "Alert created successfully",
+        "createFailed": "Failed to create alert",
+        "alertUpdated": "Alert updated successfully",
+        "updateFailed": "Failed to update alert",
+        "alertDeleted": "Alert deleted successfully",
+        "deleteFailed": "Failed to delete alert",
+        "alertEnabled": "Alert enabled successfully",
+        "alertDisabled": "Alert disabled successfully",
+        "toggleFailed": "Failed to toggle alert",
+        "alertAcknowledged": "Alert acknowledged",
+        "acknowledgeFailed": "Failed to acknowledge alert"
       }
     },
     "shortcuts": {
@@ -949,6 +1020,10 @@
             "whiteLabel": "White-label"
           }
         }
+      },
+      "toast": {
+        "upgradeRequestSubmitted": "Upgrade request submitted! Our team will contact you shortly.",
+        "upgradeRequestFailed": "Failed to submit upgrade request"
       }
     },
     "scheduledExports": {
@@ -1006,6 +1081,18 @@
         "inHours": "In {count}h",
         "daysAgo": "{count}d ago",
         "inDays": "In {count}d"
+      },
+      "toast": {
+        "exportCreated": "Scheduled export created",
+        "createFailed": "Failed to create export",
+        "exportUpdated": "Scheduled export updated",
+        "updateFailed": "Failed to update export",
+        "exportDeleted": "Scheduled export deleted",
+        "deleteFailed": "Failed to delete export",
+        "exportPaused": "Export paused",
+        "exportActivated": "Export activated",
+        "exportStarted": "Export started",
+        "startFailed": "Failed to start export"
       }
     },
     "inbox": {
@@ -2033,6 +2120,14 @@
       "noRecentActivity": "No recent activity",
       "runAgentToSeeActivity": "Run an agent to see activity here"
     },
+    "demoActivities": {
+      "audienceExplorerRun": "Audience Explorer Run",
+      "cultureTrackerRun": "Culture Tracker Run",
+      "brandAnalystRun": "Brand Analyst Run",
+      "trendForecasterRun": "Trend Forecaster Run",
+      "competitiveIntelligenceRun": "Competitive Intelligence Run",
+      "rateLimitExceeded": "Rate limit exceeded"
+    },
     "insights": {
       "topInsights": "Top Insights",
       "newCount": "{count} new",
@@ -2091,6 +2186,15 @@
         "memoryDesc": "Context & history",
         "settings": "Settings",
         "help": "Help"
+      },
+      "demo": {
+        "logoLetter": "G",
+        "projectName1": "Gen Z Sustainability",
+        "projectName2": "Q4 Campaign",
+        "projectName3": "Market Expansion",
+        "userName": "John Doe",
+        "userEmail": "john@company.com",
+        "userInitials": "JD"
       }
     },
     "performance": {
@@ -3381,8 +3485,8 @@
           "schedule": "Schedule"
         },
         "delete": {
-          "title": "Delete Brand Study",
-          "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+          "title": "Delete Brand Tracker",
+          "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone and all snapshots will be lost.",
           "cancel": "Cancel",
           "delete": "Delete"
         }
@@ -3620,6 +3724,7 @@
           "selectAudience": "Select audience",
           "timePeriod": "Time Period",
           "selectTimePeriod": "Select time period",
+          "timePeriodPlaceholder": "Last 12 months",
           "dataSource": "Data Source",
           "selectDataSource": "Select data source"
         },
@@ -3644,7 +3749,10 @@
         "removeFromFavorites": "Remove from favorites",
         "tabs": {
           "chart": "Chart",
+          "overview": "Overview",
           "data": "Data",
+          "filters": "Filters",
+          "notes": "Notes",
           "settings": "Settings",
           "comments": "Comments",
           "activity": "Activity",
@@ -3668,6 +3776,12 @@
           "asPng": "Export as PNG",
           "asSvg": "Export as SVG",
           "toPowerPoint": "Export to PowerPoint"
+        },
+        "data": {
+          "searchPlaceholder": "Search data..."
+        },
+        "annotations": {
+          "addPlaceholder": "Add a note, observation, or question about this chart..."
         },
         "info": {
           "chartInfo": "Chart Info",

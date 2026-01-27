@@ -101,7 +101,7 @@ export default function TeamSettingsPage() {
       }
     } catch (error) {
       console.error('Failed to fetch team data:', error)
-      toast.error('Failed to load team data')
+      toast.error(t('toast.loadFailed'))
     } finally {
       setIsLoading(false)
     }
@@ -109,6 +109,7 @@ export default function TeamSettingsPage() {
 
   useEffect(() => {
     fetchTeamData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleInvite = async () => {
@@ -127,13 +128,13 @@ export default function TeamSettingsPage() {
         throw new Error(data.error || 'Failed to send invitation')
       }
 
-      toast.success('Invitation sent successfully')
+      toast.success(t('toast.invitationSent'))
       setDialogOpen(false)
       setInviteEmail("")
       setInviteRole("MEMBER")
       fetchTeamData()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to send invitation')
+      toast.error(error instanceof Error ? error.message : t('toast.invitationFailed'))
     } finally {
       setIsInviting(false)
     }
@@ -153,10 +154,10 @@ export default function TeamSettingsPage() {
         throw new Error(data.error || 'Failed to update role')
       }
 
-      toast.success('Role updated successfully')
+      toast.success(t('toast.roleUpdated'))
       fetchTeamData()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to update role')
+      toast.error(error instanceof Error ? error.message : t('toast.roleUpdateFailed'))
     } finally {
       setChangingRole(null)
     }
@@ -175,11 +176,11 @@ export default function TeamSettingsPage() {
         throw new Error(data.error || 'Failed to remove member')
       }
 
-      toast.success('Member removed successfully')
+      toast.success(t('toast.memberRemoved'))
       setRemoveMember(null)
       fetchTeamData()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to remove member')
+      toast.error(error instanceof Error ? error.message : t('toast.memberRemoveFailed'))
     }
   }
 
@@ -194,10 +195,10 @@ export default function TeamSettingsPage() {
         throw new Error(data.error || 'Failed to revoke invitation')
       }
 
-      toast.success('Invitation revoked')
+      toast.success(t('toast.invitationRevoked'))
       fetchTeamData()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to revoke invitation')
+      toast.error(error instanceof Error ? error.message : t('toast.revokeFailed'))
     }
   }
 
