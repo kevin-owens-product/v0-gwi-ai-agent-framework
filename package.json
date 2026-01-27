@@ -32,7 +32,10 @@
     "test:e2e:report": "playwright show-report",
     "test:all": "npm run test:coverage && npm run test:e2e",
     "type-check": "tsc --noEmit",
-    "ci": "npm run type-check && npm run lint && npm run test:coverage && npm run build"
+    "i18n:validate": "node scripts/validate-translations.js",
+    "i18n:validate:verbose": "node scripts/validate-translations.js --verbose",
+    "i18n:fix": "node scripts/validate-translations.js --fix",
+    "ci": "npm run type-check && npm run lint && npm run i18n:validate && npm run test:coverage && npm run build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
