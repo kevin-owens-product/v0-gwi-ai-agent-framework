@@ -187,8 +187,7 @@
     "pricing": "料金",
     "solutions": "ソリューション",
     "agents": "エージェント",
-    "theme": "テーマ",
-    "language": "言語"
+    "theme": "テーマ"
   },
   "settings": {
     "title": "設定",
@@ -446,10 +445,7 @@
       "language": "言語"
     },
     "hero": {
-      "title": "AIで実現する消費者インサイト",
       "subtitle": "AIを活用したグローバル調査データの分析で、消費者への深い理解を実現",
-      "cta": "無料トライアルを開始",
-      "secondaryCta": "デモを見る",
       "badge": "[JA] Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports",
       "titleMain": "[JA] AI agents that",
       "titleHighlight": "[JA] understand people.",
@@ -517,14 +513,7 @@
     "pricing": {
       "title": "シンプルで透明な料金体系",
       "subtitle": "ニーズに合ったプランをお選びください",
-      "monthly": "月額",
-      "annual": "年額",
-      "perMonth": "/月",
-      "perYear": "/年",
       "mostPopular": "人気No.1",
-      "getStarted": "始める",
-      "contactSales": "営業に問い合わせ",
-      "features": "機能",
       "starter": "[JA] Starter",
       "starterPrice": "[JA] $499",
       "starterPeriod": "[JA] /month",
@@ -571,7 +560,6 @@
     "cta": {
       "title": "始める準備はできましたか？",
       "subtitle": "GWI Insightsを利用する数千の企業に参加しましょう",
-      "button": "無料トライアルを開始",
       "getStartedFree": "[JA] Get Started Free",
       "scheduleDemo": "[JA] Schedule Demo"
     },
@@ -587,9 +575,7 @@
       "security": "セキュリティ",
       "roadmap": "ロードマップ",
       "resources": "リソース",
-      "docs": "ドキュメント",
       "blog": "ブログ",
-      "support": "サポート",
       "changelog": "更新履歴",
       "legal": "法的情報",
       "privacy": "プライバシー",

@@ -187,8 +187,7 @@
     "pricing": "Цены",
     "solutions": "Решения",
     "agents": "Агенты",
-    "theme": "Тема",
-    "language": "Язык"
+    "theme": "Тема"
   },
   "settings": {
     "title": "Настройки",
@@ -446,10 +445,7 @@
       "language": "Язык"
     },
     "hero": {
-      "title": "Потребительские инсайты на базе ИИ",
       "subtitle": "Получите глубокое понимание потребителей с помощью ИИ-анализа глобальных данных опросов",
-      "cta": "Начать бесплатный пробный период",
-      "secondaryCta": "Посмотреть демо",
       "badge": "[RU] Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports",
       "titleMain": "[RU] AI agents that",
       "titleHighlight": "[RU] understand people.",
@@ -517,14 +513,7 @@
     "pricing": {
       "title": "Простые и прозрачные цены",
       "subtitle": "Выберите план, который подходит вам",
-      "monthly": "Ежемесячно",
-      "annual": "Ежегодно",
-      "perMonth": "/месяц",
-      "perYear": "/год",
       "mostPopular": "Самый популярный",
-      "getStarted": "Начать",
-      "contactSales": "Связаться с отделом продаж",
-      "features": "Возможности",
       "starter": "[RU] Starter",
       "starterPrice": "[RU] $499",
       "starterPeriod": "[RU] /month",
@@ -571,7 +560,6 @@
     "cta": {
       "title": "Готовы начать?",
       "subtitle": "Присоединяйтесь к тысячам компаний, использующих GWI Insights",
-      "button": "Начать бесплатный пробный период",
       "getStartedFree": "[RU] Get Started Free",
       "scheduleDemo": "[RU] Schedule Demo"
     },
@@ -587,9 +575,7 @@
       "security": "Безопасность",
       "roadmap": "Дорожная карта",
       "resources": "Ресурсы",
-      "docs": "Документация",
       "blog": "Блог",
-      "support": "Поддержка",
       "changelog": "История изменений",
       "legal": "Правовая информация",
       "privacy": "Конфиденциальность",

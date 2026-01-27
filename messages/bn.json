@@ -187,8 +187,7 @@
     "pricing": "মূল্য",
     "solutions": "সমাধান",
     "agents": "এজেন্ট",
-    "theme": "থিম",
-    "language": "ভাষা"
+    "theme": "থিম"
   },
   "settings": {
     "title": "সেটিংস",
@@ -446,10 +445,7 @@
       "language": "ভাষা"
     },
     "hero": {
-      "title": "AI দ্বারা চালিত ভোক্তা অন্তর্দৃষ্টি",
       "subtitle": "বৈশ্বিক সার্ভে ডেটার AI-চালিত বিশ্লেষণের মাধ্যমে গভীর ভোক্তা বোঝাপড়া আনলক করুন",
-      "cta": "বিনামূল্যে ট্রায়াল শুরু করুন",
-      "secondaryCta": "ডেমো দেখুন",
       "badge": "[BN] Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports",
       "titleMain": "[BN] AI agents that",
       "titleHighlight": "[BN] understand people.",
@@ -517,14 +513,7 @@
     "pricing": {
       "title": "সহজ, স্বচ্ছ মূল্য",
       "subtitle": "আপনার প্রয়োজন অনুযায়ী প্ল্যান বেছে নিন",
-      "monthly": "মাসিক",
-      "annual": "বার্ষিক",
-      "perMonth": "/মাস",
-      "perYear": "/বছর",
       "mostPopular": "সবচেয়ে জনপ্রিয়",
-      "getStarted": "শুরু করুন",
-      "contactSales": "সেলসের সাথে যোগাযোগ করুন",
-      "features": "বৈশিষ্ট্যসমূহ",
       "starter": "[BN] Starter",
       "starterPrice": "[BN] $499",
       "starterPeriod": "[BN] /month",
@@ -571,7 +560,6 @@
     "cta": {
       "title": "শুরু করতে প্রস্তুত?",
       "subtitle": "হাজার হাজার কোম্পানি GWI Insights ব্যবহার করছে, আপনিও যোগ দিন",
-      "button": "বিনামূল্যে ট্রায়াল শুরু করুন",
       "getStartedFree": "[BN] Get Started Free",
       "scheduleDemo": "[BN] Schedule Demo"
     },
@@ -587,9 +575,7 @@
       "security": "নিরাপত্তা",
       "roadmap": "রোডম্যাপ",
       "resources": "রিসোর্স",
-      "docs": "ডকুমেন্টেশন",
       "blog": "ব্লগ",
-      "support": "সহায়তা",
       "changelog": "পরিবর্তন লগ",
       "legal": "আইনি",
       "privacy": "গোপনীয়তা",

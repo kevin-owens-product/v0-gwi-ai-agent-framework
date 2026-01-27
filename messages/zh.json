@@ -445,10 +445,7 @@
       "language": "语言"
     },
     "hero": {
-      "title": "AI 驱动的消费者洞察",
       "subtitle": "通过 AI 驱动的全球调研数据分析，解锁深度消费者洞察",
-      "cta": "开始免费试用",
-      "secondaryCta": "观看演示",
       "badge": "[ZH] Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports",
       "titleMain": "[ZH] AI agents that",
       "titleHighlight": "[ZH] understand people.",
@@ -516,14 +513,7 @@
     "pricing": {
       "title": "简单透明的定价",
       "subtitle": "选择适合您需求的方案",
-      "monthly": "按月付费",
-      "annual": "按年付费",
-      "perMonth": "/月",
-      "perYear": "/年",
       "mostPopular": "最受欢迎",
-      "getStarted": "立即开始",
-      "contactSales": "联系销售",
-      "features": "功能",
       "starter": "[ZH] Starter",
       "starterPrice": "[ZH] $499",
       "starterPeriod": "[ZH] /month",
@@ -570,7 +560,6 @@
     "cta": {
       "title": "准备好开始了吗？",
       "subtitle": "加入数千家使用 GWI Insights 的公司",
-      "button": "开始免费试用",
       "getStartedFree": "[ZH] Get Started Free",
       "scheduleDemo": "[ZH] Schedule Demo"
     },
@@ -586,9 +575,7 @@
       "security": "安全",
       "roadmap": "路线图",
       "resources": "资源",
-      "docs": "文档",
       "blog": "博客",
-      "support": "支持",
       "changelog": "更新日志",
       "legal": "法律",
       "privacy": "隐私政策",

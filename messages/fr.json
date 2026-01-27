@@ -187,8 +187,7 @@
     "pricing": "Tarifs",
     "solutions": "Solutions",
     "agents": "Agents",
-    "theme": "Theme",
-    "language": "Langue"
+    "theme": "Theme"
   },
   "settings": {
     "title": "Parametres",
@@ -446,10 +445,7 @@
       "language": "Langue"
     },
     "hero": {
-      "title": "Insights consommateurs propulses par l'IA",
       "subtitle": "Debloquez une comprehension approfondie des consommateurs grace a l'analyse par IA des donnees d'enquete mondiales",
-      "cta": "Demarrer l'essai gratuit",
-      "secondaryCta": "Voir la demo",
       "badge": "[FR] Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports",
       "titleMain": "[FR] AI agents that",
       "titleHighlight": "[FR] understand people.",
@@ -517,14 +513,7 @@
     "pricing": {
       "title": "Tarification simple et transparente",
       "subtitle": "Choisissez le forfait qui correspond a vos besoins",
-      "monthly": "Mensuel",
-      "annual": "Annuel",
-      "perMonth": "/mois",
-      "perYear": "/an",
       "mostPopular": "Le plus populaire",
-      "getStarted": "Commencer",
-      "contactSales": "Contacter les ventes",
-      "features": "Fonctionnalites",
       "starter": "[FR] Starter",
       "starterPrice": "[FR] $499",
       "starterPeriod": "[FR] /month",
@@ -571,7 +560,6 @@
     "cta": {
       "title": "Pret a commencer ?",
       "subtitle": "Rejoignez des milliers d'entreprises utilisant GWI Insights",
-      "button": "Demarrer l'essai gratuit",
       "getStartedFree": "[FR] Get Started Free",
       "scheduleDemo": "[FR] Schedule Demo"
     },
@@ -587,9 +575,7 @@
       "security": "Securite",
       "roadmap": "Feuille de route",
       "resources": "Ressources",
-      "docs": "Documentation",
       "blog": "Blog",
-      "support": "Support",
       "changelog": "Journal des modifications",
       "legal": "Mentions legales",
       "privacy": "Confidentialite",

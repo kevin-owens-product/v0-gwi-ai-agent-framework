@@ -187,8 +187,7 @@
     "pricing": "الأسعار",
     "solutions": "الحلول",
     "agents": "الوكلاء",
-    "theme": "المظهر",
-    "language": "اللغة"
+    "theme": "المظهر"
   },
   "settings": {
     "title": "الإعدادات",
@@ -446,10 +445,7 @@
       "language": "اللغة"
     },
     "hero": {
-      "title": "رؤى المستهلك بقوة الذكاء الاصطناعي",
       "subtitle": "اكتشف فهماً عميقاً للمستهلكين من خلال التحليل المدعوم بالذكاء الاصطناعي لبيانات الاستطلاعات العالمية",
-      "cta": "ابدأ التجربة المجانية",
-      "secondaryCta": "شاهد العرض التوضيحي",
       "badge": "[AR] Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports",
       "titleMain": "[AR] AI agents that",
       "titleHighlight": "[AR] understand people.",
@@ -517,14 +513,7 @@
     "pricing": {
       "title": "أسعار بسيطة وشفافة",
       "subtitle": "اختر الخطة التي تناسب احتياجاتك",
-      "monthly": "شهري",
-      "annual": "سنوي",
-      "perMonth": "/شهر",
-      "perYear": "/سنة",
       "mostPopular": "الأكثر شعبية",
-      "getStarted": "ابدأ الآن",
-      "contactSales": "تواصل مع المبيعات",
-      "features": "الميزات",
       "starter": "[AR] Starter",
       "starterPrice": "[AR] $499",
       "starterPeriod": "[AR] /month",
@@ -571,7 +560,6 @@
     "cta": {
       "title": "هل أنت مستعد للبدء؟",
       "subtitle": "انضم إلى آلاف الشركات التي تستخدم GWI Insights",
-      "button": "ابدأ التجربة المجانية",
       "getStartedFree": "[AR] Get Started Free",
       "scheduleDemo": "[AR] Schedule Demo"
     },
@@ -587,9 +575,7 @@
       "security": "الأمان",
       "roadmap": "خارطة الطريق",
       "resources": "الموارد",
-      "docs": "الوثائق",
       "blog": "المدونة",
-      "support": "الدعم",
       "changelog": "سجل التغييرات",
       "legal": "قانوني",
       "privacy": "الخصوصية",

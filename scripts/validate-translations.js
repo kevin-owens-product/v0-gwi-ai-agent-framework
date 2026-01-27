@@ -9,10 +9,11 @@
  * - Value types match (string vs object structure)
  *
  * Usage:
- *   node scripts/validate-translations.js [--fix] [--verbose]
+ *   node scripts/validate-translations.js [--fix] [--clean] [--verbose]
  *
  * Options:
  *   --fix      Create placeholder entries for missing keys
+ *   --clean    Remove orphaned keys not present in base locale
  *   --verbose  Show all keys being checked
  *   --strict   Fail on extra keys (not just missing)
  */
@@ -26,6 +27,7 @@ const BASE_LOCALE = 'en';
 // Parse command line arguments
 const args = process.argv.slice(2);
 const FIX_MODE = args.includes('--fix');
+const CLEAN_MODE = args.includes('--clean');
 const VERBOSE = args.includes('--verbose');
 const STRICT = args.includes('--strict');
 
@@ -88,6 +90,40 @@ function setValueAtPath(obj, path, value) {
   }
 
   current[keys[keys.length - 1]] = value;
+}
+
+/**
+ * Delete a key at a dot-notation path and clean up empty parent objects
+ */
+function deleteKeyAtPath(obj, path) {
+  const keys = path.split('.');
+
+  // Build path to parent objects
+  const parents = [];
+  let current = obj;
+
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!current[keys[i]]) return false;
+    parents.push({ obj: current, key: keys[i] });
+    current = current[keys[i]];
+  }
+
+  // Delete the leaf key
+  const leafKey = keys[keys.length - 1];
+  if (!(leafKey in current)) return false;
+  delete current[leafKey];
+
+  // Clean up empty parent objects (from deepest to shallowest)
+  for (let i = parents.length - 1; i >= 0; i--) {
+    const { obj: parentObj, key: parentKey } = parents[i];
+    if (Object.keys(parentObj[parentKey]).length === 0) {
+      delete parentObj[parentKey];
+    } else {
+      break; // Stop if parent is not empty
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -304,9 +340,31 @@ function main() {
     log('\nPlaceholder keys added. Search for "[XX]" to find keys needing translation.', 'yellow');
   }
 
+  // Clean mode - remove orphaned keys
+  if (CLEAN_MODE && totalExtra > 0) {
+    log('\n=== Cleaning Orphaned Keys ===\n', 'cyan');
+
+    for (const locale of locales) {
+      const { extra, data, filePath } = results[locale];
+
+      if (extra.length === 0) continue;
+
+      log(`  Cleaning ${locale}...`, 'blue');
+
+      for (const key of extra) {
+        deleteKeyAtPath(data, key);
+      }
+
+      saveJsonFile(filePath, data);
+      log(`    Removed ${extra.length} orphaned keys`, 'green');
+    }
+
+    log('\nOrphaned keys removed.', 'green');
+  }
+
   // Exit code
   if (hasErrors) {
-    log('\nValidation failed. Run with --fix to add placeholders for missing keys.', 'red');
+    log('\nValidation failed. Run with --fix to add placeholders, --clean to remove orphans.', 'red');
     process.exit(1);
   } else {
     log('\nAll translations are valid!', 'green');

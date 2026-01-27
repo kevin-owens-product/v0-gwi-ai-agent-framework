@@ -187,8 +187,7 @@
     "pricing": "मूल्य निर्धारण",
     "solutions": "समाधान",
     "agents": "एजेंट्स",
-    "theme": "थीम",
-    "language": "भाषा"
+    "theme": "थीम"
   },
   "settings": {
     "title": "सेटिंग्स",
@@ -446,10 +445,7 @@
       "language": "भाषा"
     },
     "hero": {
-      "title": "AI द्वारा संचालित उपभोक्ता इनसाइट्स",
       "subtitle": "वैश्विक सर्वेक्षण डेटा के AI-संचालित विश्लेषण के साथ गहरी उपभोक्ता समझ प्राप्त करें",
-      "cta": "मुफ़्त ट्रायल शुरू करें",
-      "secondaryCta": "डेमो देखें",
       "badge": "[HI] Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports",
       "titleMain": "[HI] AI agents that",
       "titleHighlight": "[HI] understand people.",
@@ -517,14 +513,7 @@
     "pricing": {
       "title": "सरल, पारदर्शी मूल्य निर्धारण",
       "subtitle": "अपनी आवश्यकताओं के अनुसार योजना चुनें",
-      "monthly": "मासिक",
-      "annual": "वार्षिक",
-      "perMonth": "/माह",
-      "perYear": "/वर्ष",
       "mostPopular": "सबसे लोकप्रिय",
-      "getStarted": "शुरू करें",
-      "contactSales": "बिक्री से संपर्क करें",
-      "features": "सुविधाएं",
       "starter": "[HI] Starter",
       "starterPrice": "[HI] $499",
       "starterPeriod": "[HI] /month",
@@ -571,7 +560,6 @@
     "cta": {
       "title": "शुरू करने के लिए तैयार हैं?",
       "subtitle": "GWI Insights का उपयोग करने वाली हज़ारों कंपनियों से जुड़ें",
-      "button": "मुफ़्त ट्रायल शुरू करें",
       "getStartedFree": "[HI] Get Started Free",
       "scheduleDemo": "[HI] Schedule Demo"
     },
@@ -587,9 +575,7 @@
       "security": "सुरक्षा",
       "roadmap": "रोडमैप",
       "resources": "संसाधन",
-      "docs": "दस्तावेज़ीकरण",
       "blog": "ब्लॉग",
-      "support": "सहायता",
       "changelog": "परिवर्तन लॉग",
       "legal": "कानूनी",
       "privacy": "गोपनीयता",
