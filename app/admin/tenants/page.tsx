@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -70,24 +71,9 @@ interface Tenant {
   }
 }
 
-const ORG_TYPE_LABELS: Record<string, string> = {
-  STANDARD: "Standard",
-  AGENCY: "Agency",
-  HOLDING_COMPANY: "Holding Company",
-  SUBSIDIARY: "Subsidiary",
-  BRAND: "Brand",
-  SUB_BRAND: "Sub-Brand",
-  DIVISION: "Division",
-  DEPARTMENT: "Department",
-  FRANCHISE: "Franchise",
-  FRANCHISEE: "Franchisee",
-  RESELLER: "Reseller",
-  CLIENT: "Client",
-  REGIONAL: "Regional",
-  PORTFOLIO_COMPANY: "Portfolio Company",
-}
-
 export default function TenantsPage() {
+  const t = useTranslations("admin.tenants")
+  const tCommon = useTranslations("common")
   const [tenants, setTenants] = useState<Tenant[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -449,7 +435,7 @@ export default function TenantsPage() {
   const columns: Column<Tenant>[] = [
     {
       id: "organization",
-      header: "Organization",
+      header: t("organization"),
       cell: (tenant) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -460,7 +446,7 @@ export default function TenantsPage() {
               <p className="font-medium">{tenant.name}</p>
               {(tenant.hierarchyLevel ?? 0) > 0 && (
                 <Badge variant="outline" className="text-xs">
-                  Level {tenant.hierarchyLevel}
+                  {t("level", { level: tenant.hierarchyLevel })}
                 </Badge>
               )}
             </div>
@@ -471,16 +457,16 @@ export default function TenantsPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("type"),
       cell: (tenant) => (
         <Badge variant="outline" className="text-xs">
-          {ORG_TYPE_LABELS[tenant.orgType || "STANDARD"] || tenant.orgType}
+          {t(`orgTypes.${tenant.orgType || "STANDARD"}` as any)}
         </Badge>
       ),
     },
     {
       id: "plan",
-      header: "Plan",
+      header: t("plan"),
       cell: (tenant) => (
         <Badge variant={
           tenant.planTier === "ENTERPRISE" ? "default" :
@@ -492,20 +478,20 @@ export default function TenantsPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: t("status"),
       cell: (tenant) => (
         tenant.isSuspended ? (
-          <Badge variant="destructive">Suspended</Badge>
+          <Badge variant="destructive">{t("suspended")}</Badge>
         ) : tenant.subscription?.status === "ACTIVE" ? (
-          <Badge variant="default" className="bg-green-500">Active</Badge>
+          <Badge variant="default" className="bg-green-500">{t("active")}</Badge>
         ) : (
-          <Badge variant="secondary">{tenant.subscription?.status || "Trial"}</Badge>
+          <Badge variant="secondary">{tenant.subscription?.status || t("trial")}</Badge>
         )
       ),
     },
     {
       id: "members",
-      header: "Members",
+      header: t("members"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (tenant) => (
@@ -517,7 +503,7 @@ export default function TenantsPage() {
     },
     {
       id: "children",
-      header: "Children",
+      header: t("children"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (tenant) => (
@@ -533,7 +519,7 @@ export default function TenantsPage() {
     },
     {
       id: "created",
-      header: "Created",
+      header: t("created"),
       cell: (tenant) => (
         <span className="text-muted-foreground">
           {new Date(tenant.createdAt).toLocaleDateString()}
@@ -545,27 +531,27 @@ export default function TenantsPage() {
   // Define row actions
   const rowActions: RowAction<Tenant>[] = [
     {
-      label: "Impersonate",
+      label: t("impersonate"),
       icon: <ExternalLink className="h-4 w-4" />,
       onClick: (tenant) => {
         console.log("Impersonate", tenant.id)
       },
     },
     {
-      label: "View Hierarchy",
+      label: t("viewHierarchy"),
       icon: <GitBranch className="h-4 w-4" />,
       href: (tenant) => `/admin/hierarchy?root=${tenant.id}`,
       hidden: (tenant) => !tenant.allowChildOrgs,
     },
     {
-      label: "Lift Suspension",
+      label: t("liftSuspension"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (tenant) => handleLiftSuspension(tenant.id),
       hidden: (tenant) => !tenant.isSuspended,
       separator: true,
     },
     {
-      label: "Suspend",
+      label: t("suspend"),
       icon: <Ban className="h-4 w-4" />,
       onClick: (tenant) => {
         setSelectedTenant(tenant)
@@ -580,64 +566,64 @@ export default function TenantsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Suspend All",
+      label: t("suspendAll"),
       icon: <Ban className="h-4 w-4" />,
       onClick: handleBulkSuspend,
-      confirmTitle: "Suspend Selected Organizations",
-      confirmDescription: "Are you sure you want to suspend all selected organizations? Users will be unable to access the platform.",
+      confirmTitle: t("suspendOrganization"),
+      confirmDescription: t("confirmSuspend"),
     },
     {
-      label: "Unsuspend All",
+      label: t("unsuspendAll"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: handleBulkUnsuspend,
-      confirmTitle: "Unsuspend Selected Organizations",
-      confirmDescription: "Are you sure you want to unsuspend all selected organizations?",
+      confirmTitle: t("unsuspendAll"),
+      confirmDescription: t("confirmUnsuspend"),
     },
     {
-      label: "Upgrade to Starter",
+      label: t("upgradeToStarter"),
       icon: <CreditCard className="h-4 w-4" />,
       onClick: (ids) => handleBulkChangePlan(ids, "STARTER"),
       separator: true,
-      confirmTitle: "Change Plan to Starter",
-      confirmDescription: "Are you sure you want to change the plan to Starter for all selected organizations?",
+      confirmTitle: t("upgradeToStarter"),
+      confirmDescription: t("confirmChangePlan", { plan: "Starter" }),
     },
     {
-      label: "Upgrade to Professional",
+      label: t("upgradeToProfessional"),
       icon: <CreditCard className="h-4 w-4" />,
       onClick: (ids) => handleBulkChangePlan(ids, "PROFESSIONAL"),
-      confirmTitle: "Change Plan to Professional",
-      confirmDescription: "Are you sure you want to upgrade all selected organizations to Professional?",
+      confirmTitle: t("upgradeToProfessional"),
+      confirmDescription: t("confirmChangePlan", { plan: "Professional" }),
     },
     {
-      label: "Upgrade to Enterprise",
+      label: t("upgradeToEnterprise"),
       icon: <CreditCard className="h-4 w-4" />,
       onClick: (ids) => handleBulkChangePlan(ids, "ENTERPRISE"),
-      confirmTitle: "Change Plan to Enterprise",
-      confirmDescription: "Are you sure you want to upgrade all selected organizations to Enterprise?",
+      confirmTitle: t("upgradeToEnterprise"),
+      confirmDescription: t("confirmChangePlan", { plan: "Enterprise" }),
     },
     {
-      label: "Enable Hierarchy",
+      label: t("enableHierarchy"),
       icon: <FolderTree className="h-4 w-4" />,
       onClick: handleBulkEnableHierarchy,
       separator: true,
-      confirmTitle: "Enable Hierarchy",
-      confirmDescription: "Are you sure you want to enable hierarchy features for all selected organizations?",
+      confirmTitle: t("enableHierarchy"),
+      confirmDescription: t("confirmEnableHierarchy"),
     },
     {
-      label: "Disable Hierarchy",
+      label: t("disableHierarchy"),
       icon: <FolderTree className="h-4 w-4" />,
       onClick: handleBulkDisableHierarchy,
-      confirmTitle: "Disable Hierarchy",
-      confirmDescription: "Are you sure you want to disable hierarchy features? Organizations with child organizations cannot be disabled.",
+      confirmTitle: t("disableHierarchy"),
+      confirmDescription: t("confirmDisableHierarchy"),
     },
     {
-      label: "Delete All",
+      label: t("deleteAll"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Selected Organizations",
-      confirmDescription: "Are you sure you want to permanently delete all selected organizations? Organizations with child organizations cannot be deleted. This action cannot be undone.",
+      confirmTitle: t("deleteOrganization"),
+      confirmDescription: t("confirmDeleteAll"),
     },
   ]
 
@@ -647,25 +633,25 @@ export default function TenantsPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Tenant Management</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Manage all organizations on the platform ({total} total)
+                {t("description", { total })}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchTenants} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {t("refresh")}
               </Button>
               <Button asChild variant="outline" size="sm">
                 <Link href="/admin/hierarchy">
                   <Network className="h-4 w-4 mr-2" />
-                  Hierarchy
+                  {t("hierarchy")}
                 </Link>
               </Button>
               <Button onClick={() => setCreateDialogOpen(true)} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                Add Tenant
+                {t("addTenant")}
               </Button>
             </div>
           </div>
@@ -676,7 +662,7 @@ export default function TenantsPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by name or slug..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -684,10 +670,10 @@ export default function TenantsPage() {
             </div>
             <Select value={planFilter} onValueChange={setPlanFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Plan" />
+                <SelectValue placeholder={t("plan")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Plans</SelectItem>
+                <SelectItem value="all">{t("allPlans")}</SelectItem>
                 <SelectItem value="STARTER">Starter</SelectItem>
                 <SelectItem value="PROFESSIONAL">Professional</SelectItem>
                 <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
@@ -695,12 +681,12 @@ export default function TenantsPage() {
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="suspended">Suspended</SelectItem>
+                <SelectItem value="all">{t("allStatus")}</SelectItem>
+                <SelectItem value="active">{t("active")}</SelectItem>
+                <SelectItem value="suspended">{t("suspended")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -711,13 +697,13 @@ export default function TenantsPage() {
             columns={columns}
             getRowId={(tenant) => tenant.id}
             isLoading={isLoading}
-            emptyMessage="No tenants found"
+            emptyMessage={t("noTenants")}
             viewHref={(tenant) => `/admin/tenants/${tenant.id}`}
             editHref={(tenant) => `/admin/tenants/${tenant.id}/edit`}
             onDelete={handleDeleteTenant}
-            deleteConfirmTitle="Delete Organization"
+            deleteConfirmTitle={t("deleteOrganization")}
             deleteConfirmDescription={(tenant) =>
-              `Are you sure you want to delete ${tenant.name}? This action cannot be undone.`
+              t("confirmDelete", { name: tenant.name })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}
@@ -735,30 +721,30 @@ export default function TenantsPage() {
       <Dialog open={suspendDialogOpen} onOpenChange={setSuspendDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Suspend Organization</DialogTitle>
+            <DialogTitle>{t("suspendOrganization")}</DialogTitle>
             <DialogDescription>
-              Suspend {selectedTenant?.name}. Users will be unable to access the platform.
+              {t("suspendDescription", { name: selectedTenant?.name || "" })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Suspension Type</Label>
+              <Label>{t("suspensionType")}</Label>
               <Select value={suspendType} onValueChange={setSuspendType}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="FULL">Full Suspension</SelectItem>
-                  <SelectItem value="PARTIAL">Partial (Limited Access)</SelectItem>
-                  <SelectItem value="BILLING_HOLD">Billing Hold</SelectItem>
-                  <SelectItem value="INVESTIGATION">Under Investigation</SelectItem>
+                  <SelectItem value="FULL">{t("fullSuspension")}</SelectItem>
+                  <SelectItem value="PARTIAL">{t("partialSuspension")}</SelectItem>
+                  <SelectItem value="BILLING_HOLD">{t("billingHold")}</SelectItem>
+                  <SelectItem value="INVESTIGATION">{t("underInvestigation")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Reason</Label>
+              <Label>{t("reason")}</Label>
               <Textarea
-                placeholder="Enter the reason for suspension..."
+                placeholder={t("reasonPlaceholder")}
                 value={suspendReason}
                 onChange={(e) => setSuspendReason(e.target.value)}
                 rows={3}
@@ -767,7 +753,7 @@ export default function TenantsPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setSuspendDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -777,10 +763,10 @@ export default function TenantsPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Suspending...
+                  {t("suspending")}
                 </>
               ) : (
-                "Suspend Organization"
+                t("suspendOrganization")
               )}
             </Button>
           </DialogFooter>
@@ -791,27 +777,27 @@ export default function TenantsPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Create New Organization</DialogTitle>
+            <DialogTitle>{t("createNewOrganization")}</DialogTitle>
             <DialogDescription>
-              Add a new tenant organization to the platform.
+              {t("addNewTenant")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Organization Name *</Label>
+                <Label htmlFor="name">{t("organizationName")} *</Label>
                 <Input
                   id="name"
-                  placeholder="Acme Corporation"
+                  placeholder={t("organizationNamePlaceholder")}
                   value={newTenant.name}
                   onChange={(e) => setNewTenant({ ...newTenant, name: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="slug">Slug (auto-generated if empty)</Label>
+                <Label htmlFor="slug">{t("slug")}</Label>
                 <Input
                   id="slug"
-                  placeholder="acme-corporation"
+                  placeholder={t("slugPlaceholder")}
                   value={newTenant.slug}
                   onChange={(e) => setNewTenant({ ...newTenant, slug: e.target.value })}
                 />
@@ -820,7 +806,7 @@ export default function TenantsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Plan Tier</Label>
+                <Label>{t("planTier")}</Label>
                 <Select
                   value={newTenant.planTier}
                   onValueChange={(value) => setNewTenant({ ...newTenant, planTier: value })}
@@ -836,7 +822,7 @@ export default function TenantsPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Organization Type</Label>
+                <Label>{t("organizationType")}</Label>
                 <Select
                   value={newTenant.orgType}
                   onValueChange={(value) => setNewTenant({ ...newTenant, orgType: value })}
@@ -845,8 +831,8 @@ export default function TenantsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(ORG_TYPE_LABELS).map(([value, label]) => (
-                      <SelectItem key={value} value={value}>{label}</SelectItem>
+                    {(["STANDARD", "AGENCY", "HOLDING_COMPANY", "SUBSIDIARY", "BRAND", "SUB_BRAND", "DIVISION", "DEPARTMENT", "FRANCHISE", "FRANCHISEE", "RESELLER", "CLIENT", "REGIONAL", "PORTFOLIO_COMPANY"] as const).map((value) => (
+                      <SelectItem key={value} value={value}>{t(`orgTypes.${value}` as any)}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -855,52 +841,52 @@ export default function TenantsPage() {
 
             {/* Parent Organization Selection */}
             <div className="space-y-2">
-              <Label>Parent Organization (for hierarchy)</Label>
+              <Label>{t("parentOrganization")}</Label>
               <Select
                 value={newTenant.parentOrgId}
                 onValueChange={(value) => setNewTenant({ ...newTenant, parentOrgId: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="None (root organization)" />
+                  <SelectValue placeholder={t("noneRootOrganization")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">None (root organization)</SelectItem>
+                  <SelectItem value="none">{t("noneRootOrganization")}</SelectItem>
                   {parentOrgs.map((org) => (
                     <SelectItem key={org.id} value={org.id}>{org.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                Select a parent to create this organization as a child in the hierarchy
+                {t("parentOrgHint")}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="industry">Industry</Label>
+                <Label htmlFor="industry">{t("industry")}</Label>
                 <Input
                   id="industry"
-                  placeholder="Technology"
+                  placeholder={t("industryPlaceholder")}
                   value={newTenant.industry}
                   onChange={(e) => setNewTenant({ ...newTenant, industry: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Company Size</Label>
+                <Label>{t("companySize")}</Label>
                 <Select
                   value={newTenant.companySize}
                   onValueChange={(value) => setNewTenant({ ...newTenant, companySize: value })}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select size" />
+                    <SelectValue placeholder={t("selectSize")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="SOLO">Solo (1)</SelectItem>
-                    <SelectItem value="SMALL">Small (2-10)</SelectItem>
-                    <SelectItem value="MEDIUM">Medium (11-50)</SelectItem>
-                    <SelectItem value="LARGE">Large (51-200)</SelectItem>
-                    <SelectItem value="ENTERPRISE">Enterprise (201-1000)</SelectItem>
-                    <SelectItem value="GLOBAL">Global (1000+)</SelectItem>
+                    <SelectItem value="SOLO">{t("soloSize")}</SelectItem>
+                    <SelectItem value="SMALL">{t("smallSize")}</SelectItem>
+                    <SelectItem value="MEDIUM">{t("mediumSize")}</SelectItem>
+                    <SelectItem value="LARGE">{t("largeSize")}</SelectItem>
+                    <SelectItem value="ENTERPRISE">{t("enterpriseSize")}</SelectItem>
+                    <SelectItem value="GLOBAL">{t("globalSize")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -908,19 +894,19 @@ export default function TenantsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="country">Country</Label>
+                <Label htmlFor="country">{t("country")}</Label>
                 <Input
                   id="country"
-                  placeholder="United States"
+                  placeholder={t("countryPlaceholder")}
                   value={newTenant.country}
                   onChange={(e) => setNewTenant({ ...newTenant, country: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="timezone">Timezone</Label>
+                <Label htmlFor="timezone">{t("timezone")}</Label>
                 <Input
                   id="timezone"
-                  placeholder="UTC"
+                  placeholder={t("timezonePlaceholder")}
                   value={newTenant.timezone}
                   onChange={(e) => setNewTenant({ ...newTenant, timezone: e.target.value })}
                 />
@@ -928,23 +914,23 @@ export default function TenantsPage() {
             </div>
 
             <div className="border-t pt-4 mt-2">
-              <h4 className="text-sm font-medium mb-3">Owner Information (Optional)</h4>
+              <h4 className="text-sm font-medium mb-3">{t("ownerInformation")}</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="ownerEmail">Owner Email</Label>
+                  <Label htmlFor="ownerEmail">{t("ownerEmail")}</Label>
                   <Input
                     id="ownerEmail"
                     type="email"
-                    placeholder="owner@example.com"
+                    placeholder={t("ownerEmailPlaceholder")}
                     value={newTenant.ownerEmail}
                     onChange={(e) => setNewTenant({ ...newTenant, ownerEmail: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="ownerName">Owner Name</Label>
+                  <Label htmlFor="ownerName">{t("ownerName")}</Label>
                   <Input
                     id="ownerName"
-                    placeholder="John Doe"
+                    placeholder={t("ownerNamePlaceholder")}
                     value={newTenant.ownerName}
                     onChange={(e) => setNewTenant({ ...newTenant, ownerName: e.target.value })}
                   />
@@ -959,13 +945,13 @@ export default function TenantsPage() {
                 onCheckedChange={(checked) => setNewTenant({ ...newTenant, allowChildOrgs: checked as boolean })}
               />
               <Label htmlFor="allowChildOrgs" className="text-sm">
-                Allow child organizations (enables hierarchy features)
+                {t("allowChildOrgs")}
               </Label>
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={handleCreateTenant}
@@ -974,10 +960,10 @@ export default function TenantsPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {t("creating")}
                 </>
               ) : (
-                "Create Organization"
+                t("createOrganization")
               )}
             </Button>
           </DialogFooter>

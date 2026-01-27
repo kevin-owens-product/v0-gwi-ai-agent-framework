@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -60,6 +61,8 @@ interface Ticket {
 }
 
 export default function SupportPage() {
+  const t = useTranslations("admin.support")
+  const tCommon = useTranslations("common")
   const { admin } = useAdmin()
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -220,7 +223,7 @@ export default function SupportPage() {
   const columns: Column<Ticket>[] = [
     {
       id: "ticket",
-      header: "Ticket",
+      header: t("ticket"),
       cell: (ticket) => (
         <div className="flex items-center gap-3">
           <div className={`h-9 w-9 rounded-lg flex items-center justify-center ${
@@ -241,12 +244,12 @@ export default function SupportPage() {
     },
     {
       id: "category",
-      header: "Category",
+      header: t("category"),
       cell: (ticket) => <Badge variant="outline">{ticket.category}</Badge>,
     },
     {
       id: "priority",
-      header: "Priority",
+      header: t("priority"),
       cell: (ticket) => (
         <Badge className={getPriorityColor(ticket.priority)}>
           {ticket.priority === "URGENT" && <AlertTriangle className="h-3 w-3 mr-1" />}
@@ -256,7 +259,7 @@ export default function SupportPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: tCommon("status"),
       cell: (ticket) => (
         <Badge className={getStatusColor(ticket.status)}>
           {ticket.status.replace(/_/g, " ")}
@@ -265,21 +268,21 @@ export default function SupportPage() {
     },
     {
       id: "assigned",
-      header: "Assigned",
+      header: t("assigned"),
       cell: (ticket) => (
         ticket.assignedTo ? (
           <div className="flex items-center gap-1 text-sm">
             <User className="h-3 w-3 text-muted-foreground" />
-            Assigned
+            {t("assignedLabel")}
           </div>
         ) : (
-          <span className="text-xs text-muted-foreground">Unassigned</span>
+          <span className="text-xs text-muted-foreground">{t("unassigned")}</span>
         )
       ),
     },
     {
       id: "created",
-      header: "Created",
+      header: t("created"),
       cell: (ticket) => (
         <div className="flex items-center gap-1 text-muted-foreground">
           <Clock className="h-3 w-3" />
@@ -292,7 +295,7 @@ export default function SupportPage() {
   // Define row actions
   const rowActions: RowAction<Ticket>[] = [
     {
-      label: "Assign to me",
+      label: t("assignToMe"),
       icon: <UserPlus className="h-4 w-4" />,
       onClick: (ticket) => handleAssign(ticket.id),
       hidden: (ticket) => !!ticket.assignedTo,
@@ -302,19 +305,19 @@ export default function SupportPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Resolve Selected",
+      label: t("resolveSelected"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: handleBulkResolve,
-      confirmTitle: "Resolve Selected Tickets",
-      confirmDescription: "Are you sure you want to mark all selected tickets as resolved?",
+      confirmTitle: t("resolveTicketsTitle"),
+      confirmDescription: t("confirmResolve"),
     },
     {
-      label: "Close Selected",
+      label: t("closeSelected"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: handleBulkClose,
       separator: true,
-      confirmTitle: "Close Selected Tickets",
-      confirmDescription: "Are you sure you want to close all selected tickets?",
+      confirmTitle: t("closeTicketsTitle"),
+      confirmDescription: t("confirmClose"),
     },
   ]
 
@@ -324,14 +327,14 @@ export default function SupportPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Support Tickets</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Manage customer support requests ({total} total)
+                {t("description", { total })}
               </CardDescription>
             </div>
             <Button onClick={fetchTickets} variant="outline" size="sm">
               <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
+              {tCommon("refresh")}
             </Button>
           </div>
         </CardHeader>
@@ -340,28 +343,28 @@ export default function SupportPage() {
           <div className="flex gap-4 mb-6">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="OPEN">Open</SelectItem>
-                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                <SelectItem value="WAITING_ON_CUSTOMER">Waiting on Customer</SelectItem>
-                <SelectItem value="WAITING_ON_INTERNAL">Waiting Internal</SelectItem>
-                <SelectItem value="RESOLVED">Resolved</SelectItem>
-                <SelectItem value="CLOSED">Closed</SelectItem>
+                <SelectItem value="all">{t("allStatus")}</SelectItem>
+                <SelectItem value="OPEN">{t("statuses.open")}</SelectItem>
+                <SelectItem value="IN_PROGRESS">{t("statuses.inProgress")}</SelectItem>
+                <SelectItem value="WAITING_ON_CUSTOMER">{t("statuses.waitingOnCustomer")}</SelectItem>
+                <SelectItem value="WAITING_ON_INTERNAL">{t("statuses.waitingInternal")}</SelectItem>
+                <SelectItem value="RESOLVED">{t("statuses.resolved")}</SelectItem>
+                <SelectItem value="CLOSED">{t("statuses.closed")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={priorityFilter} onValueChange={setPriorityFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Priority" />
+                <SelectValue placeholder={t("priority")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Priority</SelectItem>
-                <SelectItem value="URGENT">Urgent</SelectItem>
-                <SelectItem value="HIGH">High</SelectItem>
-                <SelectItem value="MEDIUM">Medium</SelectItem>
-                <SelectItem value="LOW">Low</SelectItem>
+                <SelectItem value="all">{t("allPriority")}</SelectItem>
+                <SelectItem value="URGENT">{t("priorities.urgent")}</SelectItem>
+                <SelectItem value="HIGH">{t("priorities.high")}</SelectItem>
+                <SelectItem value="MEDIUM">{t("priorities.medium")}</SelectItem>
+                <SelectItem value="LOW">{t("priorities.low")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -372,7 +375,7 @@ export default function SupportPage() {
             columns={columns}
             getRowId={(ticket) => ticket.id}
             isLoading={isLoading}
-            emptyMessage="No tickets found"
+            emptyMessage={t("noTickets")}
             viewHref={(ticket) => `/admin/support/${ticket.id}`}
             rowActions={rowActions}
             bulkActions={bulkActions}
@@ -403,7 +406,7 @@ export default function SupportPage() {
                 {/* Ticket Info */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-muted-foreground">Status</p>
+                    <p className="text-xs text-muted-foreground">{tCommon("status")}</p>
                     <Select
                       value={selectedTicket.status}
                       onValueChange={(v) => handleStatusChange(selectedTicket.id, v)}
@@ -412,27 +415,27 @@ export default function SupportPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="OPEN">Open</SelectItem>
-                        <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                        <SelectItem value="WAITING_ON_CUSTOMER">Waiting on Customer</SelectItem>
-                        <SelectItem value="WAITING_ON_INTERNAL">Waiting Internal</SelectItem>
-                        <SelectItem value="RESOLVED">Resolved</SelectItem>
-                        <SelectItem value="CLOSED">Closed</SelectItem>
+                        <SelectItem value="OPEN">{t("statuses.open")}</SelectItem>
+                        <SelectItem value="IN_PROGRESS">{t("statuses.inProgress")}</SelectItem>
+                        <SelectItem value="WAITING_ON_CUSTOMER">{t("statuses.waitingOnCustomer")}</SelectItem>
+                        <SelectItem value="WAITING_ON_INTERNAL">{t("statuses.waitingInternal")}</SelectItem>
+                        <SelectItem value="RESOLVED">{t("statuses.resolved")}</SelectItem>
+                        <SelectItem value="CLOSED">{t("statuses.closed")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Priority</p>
+                    <p className="text-xs text-muted-foreground">{t("priority")}</p>
                     <Badge className={`mt-1 ${getPriorityColor(selectedTicket.priority)}`}>
                       {selectedTicket.priority}
                     </Badge>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Category</p>
+                    <p className="text-xs text-muted-foreground">{t("category")}</p>
                     <Badge variant="outline" className="mt-1">{selectedTicket.category}</Badge>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Organization</p>
+                    <p className="text-xs text-muted-foreground">{t("organization")}</p>
                     <div className="flex items-center gap-1 mt-1 text-sm">
                       <Building2 className="h-3 w-3" />
                       {selectedTicket.orgId}
@@ -442,7 +445,7 @@ export default function SupportPage() {
 
                 {/* Original Description */}
                 <div className="rounded-lg border p-4 bg-muted/50">
-                  <p className="text-xs text-muted-foreground mb-2">Original Request</p>
+                  <p className="text-xs text-muted-foreground mb-2">{t("originalRequest")}</p>
                   <p className="text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
                   <p className="text-xs text-muted-foreground mt-2">
                     {new Date(selectedTicket.createdAt).toLocaleString()}
@@ -451,9 +454,9 @@ export default function SupportPage() {
 
                 {/* Responses */}
                 <div className="space-y-4">
-                  <p className="font-medium">Conversation</p>
+                  <p className="font-medium">{t("conversation")}</p>
                   {selectedTicket.responses.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No responses yet</p>
+                    <p className="text-sm text-muted-foreground">{t("noResponses")}</p>
                   ) : (
                     selectedTicket.responses.map((response) => (
                       <div
@@ -466,11 +469,11 @@ export default function SupportPage() {
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge variant={response.responderType === "admin" ? "default" : "secondary"}>
-                              {response.responderType === "admin" ? "Support" : "Customer"}
+                              {response.responderType === "admin" ? t("supportLabel") : t("customerLabel")}
                             </Badge>
                             {response.isInternal && (
                               <Badge variant="outline" className="text-amber-500 border-amber-500/20">
-                                Internal Note
+                                {t("internalNote")}
                               </Badge>
                             )}
                           </div>
@@ -487,7 +490,7 @@ export default function SupportPage() {
                 {/* Reply Form */}
                 <div className="space-y-4 pt-4 border-t">
                   <Textarea
-                    placeholder="Type your response..."
+                    placeholder={t("replyPlaceholder")}
                     value={replyMessage}
                     onChange={(e) => setReplyMessage(e.target.value)}
                     rows={4}
@@ -500,7 +503,7 @@ export default function SupportPage() {
                         onChange={(e) => setIsInternal(e.target.checked)}
                         className="rounded border-gray-300"
                       />
-                      Internal note (not visible to customer)
+                      {t("internalNoteLabel")}
                     </label>
                     <Button onClick={handleReply} disabled={!replyMessage.trim() || isSubmitting}>
                       {isSubmitting ? (
@@ -508,7 +511,7 @@ export default function SupportPage() {
                       ) : (
                         <>
                           <Send className="h-4 w-4 mr-2" />
-                          Send Reply
+                          {t("sendReply")}
                         </>
                       )}
                     </Button>

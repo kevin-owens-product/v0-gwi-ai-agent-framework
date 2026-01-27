@@ -13,23 +13,25 @@ import { Search, Plus, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { agentCountsByCategory } from "@/lib/solution-agents"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { useTranslations } from "next-intl"
 
 export default function AgentsPage() {
   const [search, setSearch] = useState("")
   const [activeTab, setActiveTab] = useState("solutions")
+  const t = useTranslations('dashboard.pages.agents')
 
   return (
     <div className="space-y-6">
       <PageTracker pageName="Agents List" metadata={{ activeTab }} />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Agent Library</h1>
-          <p className="text-muted-foreground">Browse, configure, and deploy AI agents for your research workflows.</p>
+          <h1 className="text-2xl font-bold text-foreground">{t('title')}</h1>
+          <p className="text-muted-foreground">{t('description')}</p>
         </div>
         <Link href="/dashboard/agents/new">
           <Button className="gap-2">
             <Plus className="h-4 w-4" />
-            Create Agent
+            {t('createAgent')}
           </Button>
         </Link>
       </div>
@@ -39,12 +41,12 @@ export default function AgentsPage() {
           <TabsList className="bg-secondary">
             <TabsTrigger value="solutions" className="gap-2">
               <Sparkles className="h-4 w-4" />
-              Solution Agents ({agentCountsByCategory.total})
+              {t('solutionAgents')} ({agentCountsByCategory.total})
             </TabsTrigger>
-            <TabsTrigger value="all">All Agents</TabsTrigger>
-            <TabsTrigger value="custom">My Agents</TabsTrigger>
-            <TabsTrigger value="marketplace">Marketplace</TabsTrigger>
-            <TabsTrigger value="performance">Performance</TabsTrigger>
+            <TabsTrigger value="all">{t('allAgents')}</TabsTrigger>
+            <TabsTrigger value="custom">{t('myAgents')}</TabsTrigger>
+            <TabsTrigger value="marketplace">{t('marketplace')}</TabsTrigger>
+            <TabsTrigger value="performance">{t('performance')}</TabsTrigger>
           </TabsList>
 
           {(activeTab === "all" || activeTab === "custom") && (
@@ -52,7 +54,7 @@ export default function AgentsPage() {
               <div className="relative flex-1 sm:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search agents..."
+                  placeholder={t('searchPlaceholder')}
                   className="pl-10 bg-secondary"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}

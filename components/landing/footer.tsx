@@ -1,37 +1,43 @@
-import Link from "next/link"
+"use client"
 
-const footerLinks = {
-  Product: [
-    { label: "Features", href: "/#features" },
-    { label: "Agents", href: "/#agents" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Changelog", href: "/changelog" },
-    { label: "Roadmap", href: "/roadmap" },
-  ],
-  Resources: [
-    { label: "Documentation", href: "/docs" },
-    { label: "API Reference", href: "/docs/api" },
-    { label: "Tutorials", href: "/tutorials" },
-    { label: "Blog", href: "/blog" },
-    { label: "Case Studies", href: "/case-studies" },
-  ],
-  Company: [
-    { label: "About", href: "/about" },
-    { label: "Careers", href: "/careers" },
-    { label: "Press", href: "/press" },
-    { label: "Contact", href: "/contact" },
-    { label: "Partners", href: "/partners" },
-  ],
-  Legal: [
-    { label: "Privacy", href: "/privacy" },
-    { label: "Terms", href: "/terms" },
-    { label: "Security", href: "/security" },
-    { label: "Cookies", href: "/cookies" },
-    { label: "Compliance", href: "/compliance" },
-  ],
-}
+import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 export function Footer() {
+  const t = useTranslations("landing.footer")
+  const currentYear = new Date().getFullYear()
+
+  const footerLinks = {
+    product: [
+      { labelKey: "features", href: "/#features" },
+      { labelKey: "agents", href: "/#agents" },
+      { labelKey: "pricing", href: "/pricing" },
+      { labelKey: "changelog", href: "/changelog" },
+      { labelKey: "roadmap", href: "/roadmap" },
+    ],
+    resources: [
+      { labelKey: "documentation", href: "/docs" },
+      { labelKey: "apiReference", href: "/docs/api" },
+      { labelKey: "tutorials", href: "/tutorials" },
+      { labelKey: "blog", href: "/blog" },
+      { labelKey: "caseStudies", href: "/case-studies" },
+    ],
+    company: [
+      { labelKey: "about", href: "/about" },
+      { labelKey: "careers", href: "/careers" },
+      { labelKey: "press", href: "/press" },
+      { labelKey: "contact", href: "/contact" },
+      { labelKey: "partners", href: "/partners" },
+    ],
+    legal: [
+      { labelKey: "privacy", href: "/privacy" },
+      { labelKey: "terms", href: "/terms" },
+      { labelKey: "security", href: "/security" },
+      { labelKey: "cookies", href: "/cookies" },
+      { labelKey: "compliance", href: "/compliance" },
+    ],
+  }
+
   return (
     <footer className="border-t border-border py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -41,30 +47,73 @@ export function Footer() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
                 <span className="text-sm font-bold text-accent-foreground">G</span>
               </div>
-              <span className="text-lg font-semibold text-foreground">GWI Insights</span>
+              <span className="text-lg font-semibold text-foreground">{t("brandName")}</span>
             </Link>
-            <p className="text-sm text-muted-foreground">Real-world, human-sourced data powering smarter business decisions since 2009.</p>
+            <p className="text-sm text-muted-foreground">{t("brandDesc")}</p>
           </div>
-          {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category}>
-              <h4 className="font-medium text-foreground mb-4">{category}</h4>
-              <ul className="space-y-2">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div>
+            <h4 className="font-medium text-foreground mb-4">{t("product")}</h4>
+            <ul className="space-y-2">
+              {footerLinks.product.map((link) => (
+                <li key={link.labelKey}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t(link.labelKey)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium text-foreground mb-4">{t("resources")}</h4>
+            <ul className="space-y-2">
+              {footerLinks.resources.map((link) => (
+                <li key={link.labelKey}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t(link.labelKey)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium text-foreground mb-4">{t("company")}</h4>
+            <ul className="space-y-2">
+              {footerLinks.company.map((link) => (
+                <li key={link.labelKey}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t(link.labelKey)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium text-foreground mb-4">{t("legal")}</h4>
+            <ul className="space-y-2">
+              {footerLinks.legal.map((link) => (
+                <li key={link.labelKey}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t(link.labelKey)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">© 2025 GWI. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">{t("copyright", { year: currentYear })}</p>
           <div className="flex items-center gap-6">
             <Link
               href="https://twitter.com/GWI_Data"
@@ -72,7 +121,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Twitter
+              {t("twitter")}
             </Link>
             <Link
               href="https://linkedin.com/company/gwidotcom"
@@ -80,7 +129,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              LinkedIn
+              {t("linkedin")}
             </Link>
             <Link
               href="https://www.gwi.com"
@@ -88,7 +137,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              GWI.com
+              {t("gwicom")}
             </Link>
           </div>
         </div>

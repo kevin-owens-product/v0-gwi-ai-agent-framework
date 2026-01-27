@@ -115,7 +115,7 @@ function ResetPasswordForm() {
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
               <Brain className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="text-xl font-semibold">GWI Agents</span>
+            <span className="text-xl font-semibold">{t('layout.brandName')}</span>
           </Link>
         </div>
         <div className="flex flex-col items-center gap-4">
@@ -135,7 +135,7 @@ function ResetPasswordForm() {
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
               <Brain className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="text-xl font-semibold">GWI Agents</span>
+            <span className="text-xl font-semibold">{t('layout.brandName')}</span>
           </Link>
         </div>
         <div className="mx-auto w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
@@ -164,7 +164,7 @@ function ResetPasswordForm() {
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
               <Brain className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="text-xl font-semibold">GWI Agents</span>
+            <span className="text-xl font-semibold">{t('layout.brandName')}</span>
           </Link>
         </div>
         <div className="mx-auto w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center">
@@ -191,7 +191,7 @@ function ResetPasswordForm() {
           <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
             <Brain className="h-6 w-6 text-primary-foreground" />
           </div>
-          <span className="text-xl font-semibold">GWI Agents</span>
+          <span className="text-xl font-semibold">{t('layout.brandName')}</span>
         </Link>
       </div>
 

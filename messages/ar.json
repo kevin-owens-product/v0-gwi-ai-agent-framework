@@ -446,5 +446,179 @@
       "selectAll": "تحديد الكل",
       "deselectAll": "إلغاء تحديد الكل"
     }
+  },
+  "toast": {
+    "success": {
+      "saved": "تم حفظ التغييرات بنجاح",
+      "created": "تم الإنشاء بنجاح",
+      "updated": "تم التحديث بنجاح",
+      "deleted": "تم الحذف بنجاح",
+      "copied": "تم النسخ إلى الحافظة",
+      "exported": "اكتمل التصدير",
+      "imported": "اكتمل الاستيراد",
+      "subscribed": "تم الاشتراك بنجاح",
+      "unsubscribed": "تم إلغاء الاشتراك بنجاح"
+    },
+    "error": {
+      "general": "حدث خطأ",
+      "saveFailed": "فشل في حفظ التغييرات",
+      "createFailed": "فشل في الإنشاء",
+      "updateFailed": "فشل في التحديث",
+      "deleteFailed": "فشل في الحذف",
+      "loadFailed": "فشل في تحميل البيانات",
+      "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك.",
+      "serverError": "خطأ في الخادم. يرجى المحاولة لاحقاً.",
+      "validationError": "يرجى التحقق من مدخلاتك والمحاولة مرة أخرى",
+      "permissionDenied": "ليس لديك إذن لتنفيذ هذا الإجراء",
+      "sessionExpired": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى.",
+      "rateLimitExceeded": "تم تجاوز حد الطلبات. يرجى المحاولة لاحقاً.",
+      "exportFailed": "فشل التصدير",
+      "importFailed": "فشل الاستيراد"
+    },
+    "loading": {
+      "saving": "جارٍ الحفظ...",
+      "loading": "جارٍ التحميل...",
+      "processing": "جارٍ المعالجة...",
+      "exporting": "جارٍ التصدير...",
+      "importing": "جارٍ الاستيراد...",
+      "uploading": "جارٍ الرفع..."
+    },
+    "info": {
+      "noChanges": "لا توجد تغييرات للحفظ",
+      "inProgress": "العملية قيد التنفيذ",
+      "scheduled": "تمت الجدولة بنجاح"
+    },
+    "warning": {
+      "unsavedChanges": "لديك تغييرات غير محفوظة",
+      "limitApproaching": "أنت تقترب من حد الاستخدام الخاص بك",
+      "deprecationNotice": "سيتم إيقاف هذه الميزة قريباً"
+    },
+    "actions": {
+      "undo": "تراجع",
+      "retry": "إعادة المحاولة",
+      "dismiss": "تجاهل",
+      "viewDetails": "عرض التفاصيل"
+    }
+  },
+  "notifications": {
+    "page": {
+      "title": "الإشعارات",
+      "description": "لديك {count, plural, =0 {لا إشعارات غير مقروءة} one {إشعار واحد غير مقروء} two {إشعاران غير مقروءان} few {# إشعارات غير مقروءة} many {# إشعاراً غير مقروء} other {# إشعار غير مقروء}}",
+      "allCaughtUp": "أنت على اطلاع!",
+      "noNotifications": "لا توجد إشعارات",
+      "markAllRead": "تعليم الكل كمقروء",
+      "settings": "الإعدادات",
+      "selectAll": "تحديد الكل",
+      "selected": "تم تحديد {count}",
+      "viewDetails": "عرض التفاصيل"
+    },
+    "types": {
+      "all": "الكل",
+      "workflow": "سير العمل",
+      "agent": "الوكلاء",
+      "team": "الفريق",
+      "system": "النظام",
+      "report": "التقارير"
+    },
+    "titles": {
+      "workflowCompleted": "اكتمل سير العمل",
+      "workflowFailed": "فشل سير العمل",
+      "newAgentAvailable": "وكيل جديد متاح",
+      "agentUpdateAvailable": "تحديث وكيل متاح",
+      "teamMemberJoined": "انضم عضو للفريق",
+      "usageLimitApproaching": "حد الاستخدام يقترب",
+      "reportReady": "التقرير جاهز للتنزيل",
+      "scheduledMaintenance": "صيانة مجدولة"
+    },
+    "settings": {
+      "title": "تفضيلات الإشعارات",
+      "description": "اختر كيف ومتى تريد أن يتم إشعارك",
+      "savePreferences": "حفظ التفضيلات",
+      "saving": "جارٍ الحفظ...",
+      "channels": {
+        "email": "البريد الإلكتروني",
+        "push": "الإشعارات الفورية",
+        "slack": "Slack"
+      },
+      "categories": {
+        "agentActivity": "نشاط الوكيل",
+        "reportsExports": "التقارير والتصدير",
+        "teamCollaboration": "الفريق والتعاون",
+        "systemSecurity": "النظام والأمان"
+      },
+      "items": {
+        "agentTaskCompleted": "اكتملت مهمة الوكيل",
+        "agentTaskCompletedDesc": "الحصول على إشعار عند انتهاء وكيل من مهمة",
+        "agentErrors": "أخطاء الوكيل",
+        "agentErrorsDesc": "تنبيه عند مواجهة وكيل لخطأ",
+        "approvalRequests": "طلبات الموافقة",
+        "approvalRequestsDesc": "عندما يحتاج وكيل موافقة بشرية للمتابعة",
+        "reportReady": "التقرير جاهز",
+        "reportReadyDesc": "عند إنشاء تقرير جديد",
+        "exportComplete": "اكتمل التصدير",
+        "exportCompleteDesc": "عندما تكون صادرات البيانات جاهزة للتنزيل",
+        "mentions": "الإشارات",
+        "mentionsDesc": "عندما يذكرك أحد في تعليق",
+        "sharedWithMe": "تمت المشاركة معي",
+        "sharedWithMeDesc": "عندما يشارك أحد تقريراً أو سير عمل معك",
+        "teamInvitations": "دعوات الفريق",
+        "teamInvitationsDesc": "عضو فريق جديد ينضم أو تم إرسال دعوة",
+        "loginAlerts": "تنبيهات تسجيل الدخول",
+        "loginAlertsDesc": "الإشعار بتسجيلات الدخول من أجهزة جديدة",
+        "systemMaintenance": "صيانة النظام",
+        "systemMaintenanceDesc": "التوقف المجدول والتحديثات"
+      }
+    },
+    "admin": {
+      "title": "إشعارات النظام",
+      "description": "إرسال إعلانات وتنبيهات وتحديثات لمستخدمي المنصة",
+      "newNotification": "إشعار جديد",
+      "editNotification": "تعديل الإشعار",
+      "createNotification": "إنشاء إشعار",
+      "sendNotification": "إرسال إشعار لمستخدمي المنصة",
+      "refresh": "تحديث",
+      "types": {
+        "info": "معلومات",
+        "warning": "تحذير",
+        "alert": "تنبيه",
+        "maintenance": "صيانة",
+        "feature": "ميزة",
+        "promotion": "ترويج"
+      },
+      "form": {
+        "type": "النوع",
+        "targetAudience": "الجمهور المستهدف",
+        "allUsers": "جميع المستخدمين",
+        "specificPlans": "خطط محددة",
+        "specificOrgs": "مؤسسات محددة",
+        "title": "العنوان",
+        "titlePlaceholder": "عنوان الإشعار",
+        "message": "الرسالة",
+        "messagePlaceholder": "رسالة الإشعار...",
+        "targetPlans": "الخطط المستهدفة",
+        "scheduleFor": "جدولة لـ (اختياري)",
+        "expiresAt": "ينتهي في (اختياري)",
+        "active": "نشط",
+        "activeDescription": "إظهار هذا الإشعار فوراً"
+      },
+      "table": {
+        "notification": "الإشعار",
+        "type": "النوع",
+        "target": "الهدف",
+        "status": "الحالة",
+        "schedule": "الجدولة",
+        "immediate": "فوري",
+        "created": "تاريخ الإنشاء",
+        "custom": "مخصص"
+      },
+      "actions": {
+        "edit": "تعديل",
+        "markInactive": "تعليم كغير نشط",
+        "deleteSelected": "حذف المحدد"
+      },
+      "empty": "لا توجد إشعارات منشأة",
+      "confirmDelete": "حذف الإشعار",
+      "confirmDeleteDescription": "هل أنت متأكد أنك تريد حذف \"{title}\"؟ لا يمكن التراجع عن هذا الإجراء."
+    }
   }
 }

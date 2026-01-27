@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Folder, ArrowRight, Loader2, Plus, CheckCircle2, Clock, AlertCircle } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface Project {
   id: string
@@ -71,14 +72,15 @@ function getDemoProjects(): Project[] {
 }
 
 const statusConfig = {
-  active: { icon: Clock, color: "text-blue-400", bg: "bg-blue-500/10", label: "Active" },
-  completed: { icon: CheckCircle2, color: "text-emerald-400", bg: "bg-emerald-500/10", label: "Completed" },
-  on_hold: { icon: AlertCircle, color: "text-amber-400", bg: "bg-amber-500/10", label: "On Hold" },
+  active: { icon: Clock, color: "text-blue-400", bg: "bg-blue-500/10", labelKey: "active" },
+  completed: { icon: CheckCircle2, color: "text-emerald-400", bg: "bg-emerald-500/10", labelKey: "completed" },
+  on_hold: { icon: AlertCircle, color: "text-amber-400", bg: "bg-amber-500/10", labelKey: "onHold" },
 }
 
 export function ProjectsOverview() {
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const t = useTranslations('dashboard.projects')
 
   useEffect(() => {
     async function fetchProjects() {
@@ -119,10 +121,10 @@ export function ProjectsOverview() {
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
-        <CardTitle className="text-base font-medium">Active Projects</CardTitle>
+        <CardTitle className="text-base font-medium">{t('activeProjects')}</CardTitle>
         <Link href="/dashboard/projects">
           <Button variant="ghost" size="sm" className="text-xs gap-1">
-            View all
+            {t('viewAll')}
             <ArrowRight className="h-3 w-3" />
           </Button>
         </Link>
@@ -135,11 +137,11 @@ export function ProjectsOverview() {
         ) : projects.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <Folder className="h-8 w-8 mb-2 opacity-50" />
-            <p className="text-sm">No projects yet</p>
+            <p className="text-sm">{t('noProjectsYet')}</p>
             <Link href="/dashboard/projects/new">
               <Button variant="outline" size="sm" className="mt-2 gap-1">
                 <Plus className="h-3 w-3" />
-                New Project
+                {t('newProject')}
               </Button>
             </Link>
           </div>
@@ -173,7 +175,7 @@ export function ProjectsOverview() {
                     <div className="flex items-center gap-2 mt-1.5">
                       <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${status.bg} ${status.color} border-0`}>
                         <StatusIcon className="h-2.5 w-2.5 mr-1" />
-                        {status.label}
+                        {t(status.labelKey)}
                       </Badge>
                       <span className="text-xs text-muted-foreground">
                         Updated {formatRelativeTime(new Date(project.lastUpdated))}

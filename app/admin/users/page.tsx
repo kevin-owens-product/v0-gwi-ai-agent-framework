@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -70,6 +71,8 @@ interface User {
 }
 
 export default function UsersPage() {
+  const t = useTranslations("admin.users")
+  const tCommon = useTranslations("common")
   const [users, setUsers] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -428,7 +431,7 @@ export default function UsersPage() {
   const columns: Column<User>[] = [
     {
       id: "user",
-      header: "User",
+      header: t("user"),
       cell: (user) => (
         <div className="flex items-center gap-3">
           <Avatar className="h-9 w-9">
@@ -436,7 +439,7 @@ export default function UsersPage() {
             <AvatarFallback>{getInitials(user.name, user.email)}</AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium">{user.name || "No name"}</p>
+            <p className="font-medium">{user.name || t("noName")}</p>
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <Mail className="h-3 w-3" />
               {user.email}
@@ -447,7 +450,7 @@ export default function UsersPage() {
     },
     {
       id: "organizations",
-      header: "Organizations",
+      header: t("organizations"),
       cell: (user) => (
         <div className="flex flex-wrap gap-1">
           {user.memberships.slice(0, 2).map((m) => (
@@ -459,31 +462,31 @@ export default function UsersPage() {
           ))}
           {user.memberships.length > 2 && (
             <Badge variant="outline" className="text-xs">
-              +{user.memberships.length - 2} more
+              {t("moreOrgs", { count: user.memberships.length - 2 })}
             </Badge>
           )}
           {user.memberships.length === 0 && (
-            <span className="text-xs text-muted-foreground">No organizations</span>
+            <span className="text-xs text-muted-foreground">{t("noOrganizations")}</span>
           )}
         </div>
       ),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("status"),
       cell: (user) => (
         user.isBanned ? (
-          <Badge variant="destructive">Banned</Badge>
+          <Badge variant="destructive">{t("banned")}</Badge>
         ) : user.emailVerified ? (
-          <Badge variant="default" className="bg-green-500">Verified</Badge>
+          <Badge variant="default" className="bg-green-500">{t("verified")}</Badge>
         ) : (
-          <Badge variant="secondary">Unverified</Badge>
+          <Badge variant="secondary">{t("unverified")}</Badge>
         )
       ),
     },
     {
       id: "sessions",
-      header: "Sessions",
+      header: t("sessions"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (user) => (
@@ -495,7 +498,7 @@ export default function UsersPage() {
     },
     {
       id: "joined",
-      header: "Joined",
+      header: t("joined"),
       cell: (user) => (
         <span className="text-muted-foreground">
           {new Date(user.createdAt).toLocaleDateString()}
@@ -507,7 +510,7 @@ export default function UsersPage() {
   // Define row actions
   const rowActions: RowAction<User>[] = [
     {
-      label: "Impersonate",
+      label: t("impersonate"),
       icon: <ExternalLink className="h-4 w-4" />,
       onClick: (user) => {
         // Impersonate logic
@@ -515,7 +518,7 @@ export default function UsersPage() {
       },
     },
     {
-      label: "Lift Ban",
+      label: t("liftBan"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (user) => {
         if (user.ban) {
@@ -526,7 +529,7 @@ export default function UsersPage() {
       separator: true,
     },
     {
-      label: "Ban User",
+      label: t("banUser"),
       icon: <Ban className="h-4 w-4" />,
       onClick: (user) => {
         setSelectedUser(user)
@@ -541,49 +544,49 @@ export default function UsersPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Ban Selected",
+      label: t("banSelected"),
       icon: <Ban className="h-4 w-4" />,
       onClick: handleBulkBan,
-      confirmTitle: "Ban Selected Users",
-      confirmDescription: "Are you sure you want to ban all selected users? They will be unable to access the platform.",
+      confirmTitle: t("banUserTitle"),
+      confirmDescription: t("confirmBan"),
     },
     {
-      label: "Unban Selected",
+      label: t("unbanSelected"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: handleBulkUnban,
-      confirmTitle: "Unban Selected Users",
-      confirmDescription: "Are you sure you want to unban all selected users?",
+      confirmTitle: t("unbanSelected"),
+      confirmDescription: t("confirmUnban"),
     },
     {
-      label: "Verify Emails",
+      label: t("verifyEmails"),
       icon: <BadgeCheck className="h-4 w-4" />,
       onClick: handleBulkVerifyEmail,
       separator: true,
-      confirmTitle: "Verify Selected Emails",
-      confirmDescription: "Are you sure you want to mark all selected users as email verified?",
+      confirmTitle: t("verifyEmails"),
+      confirmDescription: t("confirmVerify"),
     },
     {
-      label: "Reset Passwords",
+      label: t("resetPasswords"),
       icon: <KeyRound className="h-4 w-4" />,
       onClick: handleBulkResetPassword,
-      confirmTitle: "Reset Passwords",
-      confirmDescription: "Are you sure you want to reset passwords for all selected users? They will receive new temporary passwords.",
+      confirmTitle: t("resetPasswords"),
+      confirmDescription: t("confirmResetPassword"),
     },
     {
-      label: "Revoke Sessions",
+      label: t("revokeSessions"),
       icon: <LogOut className="h-4 w-4" />,
       onClick: handleBulkRevokeSessions,
-      confirmTitle: "Revoke All Sessions",
-      confirmDescription: "Are you sure you want to revoke all active sessions for selected users? They will be logged out immediately.",
+      confirmTitle: t("revokeSessions"),
+      confirmDescription: t("confirmRevokeSessions"),
     },
     {
-      label: "Delete Selected",
+      label: t("deleteSelected"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Selected Users",
-      confirmDescription: "Are you sure you want to permanently delete all selected users? This action cannot be undone.",
+      confirmTitle: t("deleteUser"),
+      confirmDescription: t("confirmDeleteAll"),
     },
   ]
 
@@ -593,19 +596,19 @@ export default function UsersPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>User Management</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Manage all users across the platform ({total} total)
+                {t("description", { total })}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchUsers} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {t("refresh")}
               </Button>
               <Button onClick={openCreateDialog} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                Add User
+                {t("addUser")}
               </Button>
             </div>
           </div>
@@ -616,7 +619,7 @@ export default function UsersPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by email or name..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -624,12 +627,12 @@ export default function UsersPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Users</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="banned">Banned</SelectItem>
+                <SelectItem value="all">{t("allUsers")}</SelectItem>
+                <SelectItem value="active">{t("active")}</SelectItem>
+                <SelectItem value="banned">{t("banned")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -640,13 +643,13 @@ export default function UsersPage() {
             columns={columns}
             getRowId={(user) => user.id}
             isLoading={isLoading}
-            emptyMessage="No users found"
+            emptyMessage={t("noUsers")}
             viewHref={(user) => `/admin/users/${user.id}`}
             editHref={(user) => `/admin/users/${user.id}/edit`}
             onDelete={handleDeleteUser}
-            deleteConfirmTitle="Delete User"
+            deleteConfirmTitle={t("deleteUser")}
             deleteConfirmDescription={(user) =>
-              `Are you sure you want to delete ${user.name || user.email}? This action cannot be undone.`
+              t("confirmDelete", { name: user.name || user.email })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}
@@ -664,29 +667,29 @@ export default function UsersPage() {
       <Dialog open={banDialogOpen} onOpenChange={setBanDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Ban User</DialogTitle>
+            <DialogTitle>{t("banUserTitle")}</DialogTitle>
             <DialogDescription>
-              Ban {selectedUser?.name || selectedUser?.email}. They will be unable to access the platform.
+              {t("banDescription", { name: selectedUser?.name || selectedUser?.email || "" })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Ban Type</Label>
+              <Label>{t("banType")}</Label>
               <Select value={banType} onValueChange={setBanType}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="TEMPORARY">Temporary</SelectItem>
-                  <SelectItem value="PERMANENT">Permanent</SelectItem>
-                  <SelectItem value="SHADOW">Shadow Ban</SelectItem>
+                  <SelectItem value="TEMPORARY">{t("temporary")}</SelectItem>
+                  <SelectItem value="PERMANENT">{t("permanent")}</SelectItem>
+                  <SelectItem value="SHADOW">{t("shadowBan")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Reason</Label>
+              <Label>{t("reasonLabel")}</Label>
               <Textarea
-                placeholder="Enter the reason for banning..."
+                placeholder={t("reasonPlaceholder")}
                 value={banReason}
                 onChange={(e) => setBanReason(e.target.value)}
                 rows={3}
@@ -695,7 +698,7 @@ export default function UsersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setBanDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -705,10 +708,10 @@ export default function UsersPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Banning...
+                  {t("banning")}
                 </>
               ) : (
-                "Ban User"
+                t("banUser")
               )}
             </Button>
           </DialogFooter>
@@ -719,58 +722,58 @@ export default function UsersPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Create New User</DialogTitle>
+            <DialogTitle>{t("createNewUser")}</DialogTitle>
             <DialogDescription>
-              Add a new user to the platform. They can optionally be added to an organization.
+              {t("addNewUserDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email *</Label>
+              <Label htmlFor="email">{t("email")} *</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="user@example.com"
+                placeholder={t("emailPlaceholder")}
                 value={newUser.email}
                 onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="userName">Name</Label>
+              <Label htmlFor="userName">{t("name")}</Label>
               <Input
                 id="userName"
-                placeholder="John Doe"
+                placeholder={t("namePlaceholder")}
                 value={newUser.name}
                 onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password (optional)</Label>
+              <Label htmlFor="password">{t("password")}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Leave empty for invite-only"
+                placeholder={t("passwordPlaceholder")}
                 value={newUser.password}
                 onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
               />
             </div>
 
             <div className="border-t pt-4 mt-2">
-              <h4 className="text-sm font-medium mb-3">Organization Assignment (Optional)</h4>
+              <h4 className="text-sm font-medium mb-3">{t("organizationAssignment")}</h4>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Organization</Label>
+                  <Label>{t("organizations")}</Label>
                   <Select
                     value={newUser.orgId}
                     onValueChange={(value) => setNewUser({ ...newUser, orgId: value })}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select organization (optional)" />
+                      <SelectValue placeholder={t("selectOrganization")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">No organization</SelectItem>
+                      <SelectItem value="none">{t("noOrganization")}</SelectItem>
                       {organizations.map((org) => (
                         <SelectItem key={org.id} value={org.id}>
                           {org.name} ({org.slug})
@@ -782,7 +785,7 @@ export default function UsersPage() {
 
                 {newUser.orgId && newUser.orgId !== "none" && (
                   <div className="space-y-2">
-                    <Label>Role</Label>
+                    <Label>{t("role")}</Label>
                     <Select
                       value={newUser.role}
                       onValueChange={(value) => setNewUser({ ...newUser, role: value })}
@@ -791,10 +794,10 @@ export default function UsersPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="OWNER">Owner</SelectItem>
-                        <SelectItem value="ADMIN">Admin</SelectItem>
-                        <SelectItem value="MEMBER">Member</SelectItem>
-                        <SelectItem value="VIEWER">Viewer</SelectItem>
+                        <SelectItem value="OWNER">{t("owner")}</SelectItem>
+                        <SelectItem value="ADMIN">{t("admin")}</SelectItem>
+                        <SelectItem value="MEMBER">{t("member")}</SelectItem>
+                        <SelectItem value="VIEWER">{t("viewer")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -804,7 +807,7 @@ export default function UsersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={handleCreateUser}
@@ -813,10 +816,10 @@ export default function UsersPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {t("creating")}
                 </>
               ) : (
-                "Create User"
+                t("createUser")
               )}
             </Button>
           </DialogFooter>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import {
   Shield,
@@ -49,6 +50,7 @@ interface RecentEvent {
 }
 
 export default function SecurityOverviewPage() {
+  const t = useTranslations("admin.security")
   const [stats, setStats] = useState<SecurityStats | null>(null)
   const [recentEvents, setRecentEvents] = useState<RecentEvent[]>([])
   const [loading, setLoading] = useState(true)
@@ -86,8 +88,8 @@ export default function SecurityOverviewPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Security Center</h1>
-            <p className="text-muted-foreground">Loading security overview...</p>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
+            <p className="text-muted-foreground">{t("loading")}</p>
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -113,17 +115,17 @@ export default function SecurityOverviewPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Shield className="h-8 w-8 text-primary" />
-            Security Center
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Platform-wide security monitoring and threat management
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
             <Link href="/admin/security/policies">
               <Lock className="h-4 w-4 mr-2" />
-              Manage Policies
+              {t("managePolicies")}
             </Link>
           </Button>
         </div>
@@ -134,29 +136,29 @@ export default function SecurityOverviewPage() {
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Platform Security Score</p>
+              <p className="text-sm font-medium text-muted-foreground">{t("platformSecurityScore")}</p>
               <div className="flex items-center gap-4 mt-2">
                 <span className="text-5xl font-bold text-primary">
                   {stats ? Math.round(100 - (stats.openViolations / Math.max(stats.totalViolations, 1)) * 100) : 0}
                 </span>
                 <div className="flex items-center text-green-500">
                   <TrendingUp className="h-5 w-5 mr-1" />
-                  <span className="text-sm font-medium">+2.3% this week</span>
+                  <span className="text-sm font-medium">{t("thisWeek")}</span>
                 </div>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-8 text-center">
               <div>
                 <p className="text-2xl font-bold text-green-500">{stats?.activePolicies || 0}</p>
-                <p className="text-xs text-muted-foreground">Active Policies</p>
+                <p className="text-xs text-muted-foreground">{t("activePolicies")}</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-yellow-500">{stats?.openViolations || 0}</p>
-                <p className="text-xs text-muted-foreground">Open Violations</p>
+                <p className="text-xs text-muted-foreground">{t("openViolations")}</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-red-500">{stats?.activeThreats || 0}</p>
-                <p className="text-xs text-muted-foreground">Active Threats</p>
+                <p className="text-xs text-muted-foreground">{t("activeThreats")}</p>
               </div>
             </div>
           </div>
@@ -167,78 +169,78 @@ export default function SecurityOverviewPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Security Policies</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("securityPolicies")}</CardTitle>
             <Lock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.totalPolicies || 0}</div>
             <p className="text-xs text-muted-foreground">
-              {stats?.activePolicies || 0} active, enforcing security
+              {t("totalPoliciesActive", { count: stats?.activePolicies || 0 })}
             </p>
             <Link
               href="/admin/security/policies"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              View policies <ArrowRight className="h-3 w-3 ml-1" />
+              {t("viewPolicies")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Security Violations</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("securityViolations")}</CardTitle>
             <Eye className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.openViolations || 0}</div>
             <div className="flex items-center gap-2">
               <Badge variant="destructive" className="text-xs">
-                {stats?.criticalViolations || 0} critical
+                {t("critical", { count: stats?.criticalViolations || 0 })}
               </Badge>
             </div>
             <Link
               href="/admin/security/violations"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              Review violations <ArrowRight className="h-3 w-3 ml-1" />
+              {t("reviewViolations")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Active Threats</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("activeThreats")}</CardTitle>
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-500">{stats?.activeThreats || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Requiring immediate attention
+              {t("requireImmediateAttention")}
             </p>
             <Link
               href="/admin/security/threats"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              View threats <ArrowRight className="h-3 w-3 ml-1" />
+              {t("viewThreats")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Blocked IPs</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("blockedIPs")}</CardTitle>
             <Globe className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.blockedIPs || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Platform-wide IP restrictions
+              {t("platformWideRestrictions")}
             </p>
             <Link
               href="/admin/security/ip-blocklist"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              Manage IPs <ArrowRight className="h-3 w-3 ml-1" />
+              {t("manageIPs")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
@@ -248,20 +250,20 @@ export default function SecurityOverviewPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Authentication Overview</CardTitle>
-            <CardDescription>Login activity and security adoption metrics</CardDescription>
+            <CardTitle>{t("authenticationOverview")}</CardTitle>
+            <CardDescription>{t("loginActivityMetrics")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span>MFA Adoption Rate</span>
+                <span>{t("mfaAdoptionRate")}</span>
                 <span className="font-medium">{stats?.mfaAdoption || 0}%</span>
               </div>
               <Progress value={stats?.mfaAdoption || 0} className="h-2" />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span>SSO Adoption Rate</span>
+                <span>{t("ssoAdoptionRate")}</span>
                 <span className="font-medium">{stats?.ssoAdoption || 0}%</span>
               </div>
               <Progress value={stats?.ssoAdoption || 0} className="h-2" />
@@ -269,11 +271,11 @@ export default function SecurityOverviewPage() {
             <div className="grid grid-cols-2 gap-4 pt-4 border-t">
               <div className="text-center">
                 <p className="text-2xl font-bold">{stats?.recentLoginAttempts || 0}</p>
-                <p className="text-xs text-muted-foreground">Login attempts (24h)</p>
+                <p className="text-xs text-muted-foreground">{t("loginAttempts24h")}</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-yellow-500">{stats?.failedLogins || 0}</p>
-                <p className="text-xs text-muted-foreground">Failed logins (24h)</p>
+                <p className="text-xs text-muted-foreground">{t("failedLogins24h")}</p>
               </div>
             </div>
           </CardContent>
@@ -281,14 +283,14 @@ export default function SecurityOverviewPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Security Events</CardTitle>
-            <CardDescription>Latest security-related activities</CardDescription>
+            <CardTitle>{t("recentSecurityEvents")}</CardTitle>
+            <CardDescription>{t("latestSecurityActivities")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {recentEvents.length === 0 ? (
                 <p className="text-center text-muted-foreground py-8">
-                  No recent security events
+                  {t("noRecentEvents")}
                 </p>
               ) : (
                 recentEvents.slice(0, 5).map((event) => (
@@ -327,7 +329,7 @@ export default function SecurityOverviewPage() {
             {recentEvents.length > 0 && (
               <Button variant="outline" className="w-full mt-4" asChild>
                 <Link href="/admin/security/violations">
-                  View All Events
+                  {t("viewAllEvents")}
                 </Link>
               </Button>
             )}
@@ -345,8 +347,8 @@ export default function SecurityOverviewPage() {
                   <Lock className="h-6 w-6 text-blue-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Security Policies</p>
-                  <p className="text-sm text-muted-foreground">Configure enforcement rules</p>
+                  <p className="font-medium">{t("securityPolicies")}</p>
+                  <p className="text-sm text-muted-foreground">{t("configureRules")}</p>
                 </div>
               </div>
             </CardContent>
@@ -361,8 +363,8 @@ export default function SecurityOverviewPage() {
                   <AlertTriangle className="h-6 w-6 text-red-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Threat Detection</p>
-                  <p className="text-sm text-muted-foreground">Monitor active threats</p>
+                  <p className="font-medium">{t("threatDetection")}</p>
+                  <p className="text-sm text-muted-foreground">{t("monitorThreats")}</p>
                 </div>
               </div>
             </CardContent>
@@ -377,8 +379,8 @@ export default function SecurityOverviewPage() {
                   <Eye className="h-6 w-6 text-yellow-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Violations</p>
-                  <p className="text-sm text-muted-foreground">Review policy violations</p>
+                  <p className="font-medium">{t("violations")}</p>
+                  <p className="text-sm text-muted-foreground">{t("reviewPolicyViolations")}</p>
                 </div>
               </div>
             </CardContent>
@@ -393,8 +395,8 @@ export default function SecurityOverviewPage() {
                   <Globe className="h-6 w-6 text-purple-500" />
                 </div>
                 <div>
-                  <p className="font-medium">IP Blocklist</p>
-                  <p className="text-sm text-muted-foreground">Manage blocked addresses</p>
+                  <p className="font-medium">{t("ipBlocklist")}</p>
+                  <p className="text-sm text-muted-foreground">{t("manageBlockedAddresses")}</p>
                 </div>
               </div>
             </CardContent>

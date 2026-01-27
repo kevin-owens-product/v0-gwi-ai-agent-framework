@@ -10,6 +10,23 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { ThemeToggle, ThemeToggleSimple, themeOptions } from "./theme-toggle"
 
+// Mock next-intl for i18n
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      'light': 'Light',
+      'lightDesc': 'Light background with dark text',
+      'dark': 'Dark',
+      'darkDesc': 'Dark background with light text',
+      'system': 'System',
+      'systemDesc': 'Match your system settings',
+      'toggleTheme': 'Toggle theme',
+      'theme': 'Theme',
+    }
+    return translations[key] || key
+  }
+}))
+
 // Mock next-themes - the component now uses this directly
 const mockSetTheme = vi.fn()
 vi.mock("next-themes", () => ({
@@ -226,13 +243,13 @@ describe("themeOptions", () => {
     expect(themeOptions.map((o) => o.value)).toEqual(["light", "dark", "system"])
   })
 
-  it("has labels for each option", () => {
-    expect(themeOptions.map((o) => o.label)).toEqual(["Light", "Dark", "System"])
+  it("has labelKeys for each option (for i18n)", () => {
+    expect(themeOptions.map((o) => o.labelKey)).toEqual(["light", "dark", "system"])
   })
 
-  it("has descriptions for each option", () => {
+  it("has descriptionKeys for each option (for i18n)", () => {
     themeOptions.forEach((option) => {
-      expect(option.description).toBeTruthy()
+      expect(option.descriptionKey).toBeTruthy()
     })
   })
 

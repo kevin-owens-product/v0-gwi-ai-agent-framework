@@ -22,6 +22,7 @@ import {
   Workflow,
   Shield,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const actionIcons: Record<string, typeof Activity> = {
   CREATE: FileText,
@@ -64,14 +65,15 @@ async function getAuditLogs() {
 
 async function ActivityContent() {
   const { logs, todayCount } = await getAuditLogs()
+  const t = await getTranslations('gwi.activity')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Activity Feed</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
         <p className="text-muted-foreground">
-          Recent actions and audit logs across the GWI portal
+          {t('description')}
         </p>
       </div>
 
@@ -85,7 +87,7 @@ async function ActivityContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{todayCount}</p>
-                <p className="text-sm text-muted-foreground">Actions Today</p>
+                <p className="text-sm text-muted-foreground">{t('actionsToday')}</p>
               </div>
             </div>
           </CardContent>
@@ -100,7 +102,7 @@ async function ActivityContent() {
                 <p className="text-2xl font-bold">
                   {new Set(logs.map((l) => l.adminId)).size}
                 </p>
-                <p className="text-sm text-muted-foreground">Active Users</p>
+                <p className="text-sm text-muted-foreground">{t('activeUsers')}</p>
               </div>
             </div>
           </CardContent>
@@ -115,7 +117,7 @@ async function ActivityContent() {
                 <p className="text-2xl font-bold">
                   {new Set(logs.map((l) => l.resourceType)).size}
                 </p>
-                <p className="text-sm text-muted-foreground">Resource Types</p>
+                <p className="text-sm text-muted-foreground">{t('resourceTypes')}</p>
               </div>
             </div>
           </CardContent>
@@ -128,31 +130,31 @@ async function ActivityContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search activity..." className="pl-9" />
+              <Input placeholder={t('searchPlaceholder')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Resource Type" />
+                <SelectValue placeholder={t('resourceType')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Resources</SelectItem>
-                <SelectItem value="pipeline">Pipelines</SelectItem>
-                <SelectItem value="survey">Surveys</SelectItem>
-                <SelectItem value="llm">LLM Config</SelectItem>
-                <SelectItem value="agent">Agents</SelectItem>
-                <SelectItem value="data_source">Data Sources</SelectItem>
+                <SelectItem value="all">{t('allResources')}</SelectItem>
+                <SelectItem value="pipeline">{t('resources.pipeline')}</SelectItem>
+                <SelectItem value="survey">{t('resources.survey')}</SelectItem>
+                <SelectItem value="llm">{t('resources.llm')}</SelectItem>
+                <SelectItem value="agent">{t('resources.agent')}</SelectItem>
+                <SelectItem value="data_source">{t('resources.dataSource')}</SelectItem>
               </SelectContent>
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Action" />
+                <SelectValue placeholder={t('action')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Actions</SelectItem>
-                <SelectItem value="CREATE">Create</SelectItem>
-                <SelectItem value="UPDATE">Update</SelectItem>
-                <SelectItem value="DELETE">Delete</SelectItem>
-                <SelectItem value="VIEW">View</SelectItem>
+                <SelectItem value="all">{t('allActions')}</SelectItem>
+                <SelectItem value="CREATE">{t('actions.create')}</SelectItem>
+                <SelectItem value="UPDATE">{t('actions.update')}</SelectItem>
+                <SelectItem value="DELETE">{t('actions.delete')}</SelectItem>
+                <SelectItem value="VIEW">{t('actions.view')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -162,8 +164,8 @@ async function ActivityContent() {
       {/* Activity Timeline */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Audit log of all actions in the GWI portal</CardDescription>
+          <CardTitle>{t('recentActivity')}</CardTitle>
+          <CardDescription>{t('recentActivityDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           {logs.length > 0 ? (
@@ -192,7 +194,7 @@ async function ActivityContent() {
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {new Date(log.createdAt).toLocaleString()}
-                        {log.ipAddress && ` from ${log.ipAddress}`}
+                        {log.ipAddress && ` ${t('from')} ${log.ipAddress}`}
                       </p>
                     </div>
                   </div>
@@ -202,9 +204,9 @@ async function ActivityContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Activity className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No activity yet</h3>
+              <h3 className="text-lg font-medium">{t('noActivityYet')}</h3>
               <p className="text-muted-foreground">
-                Actions will appear here as users interact with the portal
+                {t('actionsWillAppear')}
               </p>
             </div>
           )}
@@ -214,14 +216,16 @@ async function ActivityContent() {
   )
 }
 
-export default function ActivityPage() {
+export default async function ActivityPage() {
+  const t = await getTranslations('gwi.activity')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Activity Feed</h1>
-            <p className="text-muted-foreground">Loading activity...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

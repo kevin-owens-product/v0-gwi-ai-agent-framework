@@ -446,5 +446,179 @@
       "selectAll": "सभी चुनें",
       "deselectAll": "सभी अचयनित करें"
     }
+  },
+  "toast": {
+    "success": {
+      "saved": "परिवर्तन सफलतापूर्वक सहेजे गए",
+      "created": "सफलतापूर्वक बनाया गया",
+      "updated": "सफलतापूर्वक अपडेट किया गया",
+      "deleted": "सफलतापूर्वक हटाया गया",
+      "copied": "क्लिपबोर्ड पर कॉपी किया गया",
+      "exported": "निर्यात पूर्ण",
+      "imported": "आयात पूर्ण",
+      "subscribed": "सफलतापूर्वक सदस्यता ली गई",
+      "unsubscribed": "सफलतापूर्वक सदस्यता रद्द की गई"
+    },
+    "error": {
+      "general": "एक त्रुटि हुई",
+      "saveFailed": "परिवर्तन सहेजने में विफल",
+      "createFailed": "बनाने में विफल",
+      "updateFailed": "अपडेट करने में विफल",
+      "deleteFailed": "हटाने में विफल",
+      "loadFailed": "डेटा लोड करने में विफल",
+      "networkError": "नेटवर्क त्रुटि। कृपया अपना कनेक्शन जाँचें।",
+      "serverError": "सर्वर त्रुटि। कृपया बाद में पुनः प्रयास करें।",
+      "validationError": "कृपया अपना इनपुट जाँचें और पुनः प्रयास करें",
+      "permissionDenied": "आपको यह कार्य करने की अनुमति नहीं है",
+      "sessionExpired": "आपका सत्र समाप्त हो गया है। कृपया पुनः लॉग इन करें।",
+      "rateLimitExceeded": "दर सीमा पार हो गई। कृपया बाद में पुनः प्रयास करें।",
+      "exportFailed": "निर्यात विफल",
+      "importFailed": "आयात विफल"
+    },
+    "loading": {
+      "saving": "सहेज रहा है...",
+      "loading": "लोड हो रहा है...",
+      "processing": "प्रसंस्करण हो रहा है...",
+      "exporting": "निर्यात हो रहा है...",
+      "importing": "आयात हो रहा है...",
+      "uploading": "अपलोड हो रहा है..."
+    },
+    "info": {
+      "noChanges": "सहेजने के लिए कोई परिवर्तन नहीं",
+      "inProgress": "कार्य प्रगति पर है",
+      "scheduled": "सफलतापूर्वक शेड्यूल किया गया"
+    },
+    "warning": {
+      "unsavedChanges": "आपके पास सहेजे नहीं गए परिवर्तन हैं",
+      "limitApproaching": "आप अपनी उपयोग सीमा के करीब पहुंच रहे हैं",
+      "deprecationNotice": "यह सुविधा जल्द ही बंद कर दी जाएगी"
+    },
+    "actions": {
+      "undo": "पूर्ववत करें",
+      "retry": "पुनः प्रयास करें",
+      "dismiss": "खारिज करें",
+      "viewDetails": "विवरण देखें"
+    }
+  },
+  "notifications": {
+    "page": {
+      "title": "सूचनाएं",
+      "description": "आपके पास {count, plural, =0 {कोई अपठित सूचना नहीं है} one {# अपठित सूचना है} other {# अपठित सूचनाएं हैं}}",
+      "allCaughtUp": "आप अप टू डेट हैं!",
+      "noNotifications": "कोई सूचना नहीं",
+      "markAllRead": "सभी को पढ़ा हुआ चिह्नित करें",
+      "settings": "सेटिंग्स",
+      "selectAll": "सभी चुनें",
+      "selected": "{count} चयनित",
+      "viewDetails": "विवरण देखें"
+    },
+    "types": {
+      "all": "सभी",
+      "workflow": "वर्कफ़्लो",
+      "agent": "एजेंट",
+      "team": "टीम",
+      "system": "सिस्टम",
+      "report": "रिपोर्ट"
+    },
+    "titles": {
+      "workflowCompleted": "वर्कफ़्लो पूर्ण",
+      "workflowFailed": "वर्कफ़्लो विफल",
+      "newAgentAvailable": "नया एजेंट उपलब्ध",
+      "agentUpdateAvailable": "एजेंट अपडेट उपलब्ध",
+      "teamMemberJoined": "टीम सदस्य शामिल हुए",
+      "usageLimitApproaching": "उपयोग सीमा निकट",
+      "reportReady": "रिपोर्ट डाउनलोड के लिए तैयार",
+      "scheduledMaintenance": "निर्धारित रखरखाव"
+    },
+    "settings": {
+      "title": "सूचना प्राथमिकताएं",
+      "description": "चुनें कि आप कैसे और कब सूचित होना चाहते हैं",
+      "savePreferences": "प्राथमिकताएं सहेजें",
+      "saving": "सहेज रहा है...",
+      "channels": {
+        "email": "ईमेल",
+        "push": "पुश",
+        "slack": "Slack"
+      },
+      "categories": {
+        "agentActivity": "एजेंट गतिविधि",
+        "reportsExports": "रिपोर्ट और निर्यात",
+        "teamCollaboration": "टीम और सहयोग",
+        "systemSecurity": "सिस्टम और सुरक्षा"
+      },
+      "items": {
+        "agentTaskCompleted": "एजेंट कार्य पूर्ण",
+        "agentTaskCompletedDesc": "जब एजेंट कार्य पूर्ण करे तो सूचित करें",
+        "agentErrors": "एजेंट त्रुटियां",
+        "agentErrorsDesc": "जब एजेंट को त्रुटि आए तो अलर्ट करें",
+        "approvalRequests": "अनुमोदन अनुरोध",
+        "approvalRequestsDesc": "जब एजेंट को आगे बढ़ने के लिए मानव अनुमोदन की आवश्यकता हो",
+        "reportReady": "रिपोर्ट तैयार",
+        "reportReadyDesc": "जब नई रिपोर्ट तैयार हो",
+        "exportComplete": "निर्यात पूर्ण",
+        "exportCompleteDesc": "जब डेटा निर्यात डाउनलोड के लिए तैयार हो",
+        "mentions": "उल्लेख",
+        "mentionsDesc": "जब कोई आपको टिप्पणी में उल्लेख करे",
+        "sharedWithMe": "मेरे साथ साझा",
+        "sharedWithMeDesc": "जब कोई आपके साथ रिपोर्ट या वर्कफ़्लो साझा करे",
+        "teamInvitations": "टीम आमंत्रण",
+        "teamInvitationsDesc": "नया टीम सदस्य शामिल हो या आमंत्रण भेजा जाए",
+        "loginAlerts": "लॉगिन अलर्ट",
+        "loginAlertsDesc": "नए डिवाइस लॉगिन के बारे में सूचित करें",
+        "systemMaintenance": "सिस्टम रखरखाव",
+        "systemMaintenanceDesc": "निर्धारित डाउनटाइम और अपडेट"
+      }
+    },
+    "admin": {
+      "title": "सिस्टम सूचनाएं",
+      "description": "प्लेटफ़ॉर्म उपयोगकर्ताओं को घोषणाएं, अलर्ट और अपडेट भेजें",
+      "newNotification": "नई सूचना",
+      "editNotification": "सूचना संपादित करें",
+      "createNotification": "सूचना बनाएं",
+      "sendNotification": "प्लेटफ़ॉर्म उपयोगकर्ताओं को सूचना भेजें",
+      "refresh": "ताज़ा करें",
+      "types": {
+        "info": "जानकारी",
+        "warning": "चेतावनी",
+        "alert": "अलर्ट",
+        "maintenance": "रखरखाव",
+        "feature": "सुविधा",
+        "promotion": "प्रचार"
+      },
+      "form": {
+        "type": "प्रकार",
+        "targetAudience": "लक्षित दर्शक",
+        "allUsers": "सभी उपयोगकर्ता",
+        "specificPlans": "विशिष्ट योजनाएं",
+        "specificOrgs": "विशिष्ट संगठन",
+        "title": "शीर्षक",
+        "titlePlaceholder": "सूचना शीर्षक",
+        "message": "संदेश",
+        "messagePlaceholder": "सूचना संदेश...",
+        "targetPlans": "लक्षित योजनाएं",
+        "scheduleFor": "के लिए शेड्यूल करें (वैकल्पिक)",
+        "expiresAt": "समाप्ति तिथि (वैकल्पिक)",
+        "active": "सक्रिय",
+        "activeDescription": "यह सूचना तुरंत दिखाएं"
+      },
+      "table": {
+        "notification": "सूचना",
+        "type": "प्रकार",
+        "target": "लक्ष्य",
+        "status": "स्थिति",
+        "schedule": "शेड्यूल",
+        "immediate": "तत्काल",
+        "created": "बनाया गया",
+        "custom": "कस्टम"
+      },
+      "actions": {
+        "edit": "संपादित करें",
+        "markInactive": "निष्क्रिय के रूप में चिह्नित करें",
+        "deleteSelected": "चयनित हटाएं"
+      },
+      "empty": "कोई सूचना नहीं बनाई गई",
+      "confirmDelete": "सूचना हटाएं",
+      "confirmDeleteDescription": "क्या आप वाकई \"{title}\" को हटाना चाहते हैं? यह कार्य पूर्ववत नहीं किया जा सकता।"
+    }
   }
 }

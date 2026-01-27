@@ -8,10 +8,12 @@ import { useState, useEffect } from "react"
 import { MobileSidebar } from "./mobile-sidebar"
 import { StatusBadge, type SystemStatus } from "@/components/status"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 export function DashboardHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [systemStatus, setSystemStatus] = useState<SystemStatus>("operational")
+  const t = useTranslations('dashboard.header')
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -46,9 +48,9 @@ export function DashboardHeader() {
           <div className="relative max-w-md flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search agents, workflows, or insights..."
+              placeholder={t('searchPlaceholder')}
               className="pl-10 bg-secondary border-border"
-              aria-label="Search"
+              aria-label={t('searchPlaceholder')}
             />
           </div>
         </div>
@@ -58,7 +60,7 @@ export function DashboardHeader() {
             <StatusBadge status={systemStatus} size="sm" showLabel={systemStatus !== "operational"} />
           </Link>
           <ThemeToggle />
-          <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
+          <Button variant="ghost" size="icon" className="relative" aria-label={t('notifications')}>
             <Bell className="h-4 w-4" />
             <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
           </Button>

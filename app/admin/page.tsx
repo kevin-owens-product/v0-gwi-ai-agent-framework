@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { prisma } from "@/lib/db"
+import { getTranslations } from "@/lib/i18n/server"
 import {
   Building2,
   Users,
@@ -96,6 +97,7 @@ async function getStats() {
 
 export default async function AdminDashboard() {
   const stats = await getStats()
+  const t = await getTranslations("admin.dashboard")
 
   return (
     <div className="space-y-6">
@@ -103,7 +105,7 @@ export default async function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Tenants</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("totalTenants")}</CardTitle>
             <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -117,14 +119,14 @@ export default async function AdminDashboard() {
               <span className={stats.orgGrowth >= 0 ? "text-green-500" : "text-red-500"}>
                 {stats.orgGrowth}%
               </span>
-              <span className="ml-1">vs last month</span>
+              <span className="ml-1">{t("vsLastMonth")}</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("totalUsers")}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -138,14 +140,14 @@ export default async function AdminDashboard() {
               <span className={stats.userGrowth >= 0 ? "text-green-500" : "text-red-500"}>
                 {stats.userGrowth}%
               </span>
-              <span className="ml-1">vs last month</span>
+              <span className="ml-1">{t("vsLastMonth")}</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Agent Runs</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("agentRuns")}</CardTitle>
             <Bot className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -159,21 +161,21 @@ export default async function AdminDashboard() {
               <span className={stats.runGrowth >= 0 ? "text-green-500" : "text-red-500"}>
                 {stats.runGrowth}%
               </span>
-              <span className="ml-1">vs last month</span>
+              <span className="ml-1">{t("vsLastMonth")}</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Tokens Used</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("tokensUsed")}</CardTitle>
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {(stats.totalTokens / 1000000).toFixed(1)}M
             </div>
-            <p className="text-xs text-muted-foreground">Total platform consumption</p>
+            <p className="text-xs text-muted-foreground">{t("totalPlatformConsumption")}</p>
           </CardContent>
         </Card>
       </div>
@@ -182,46 +184,46 @@ export default async function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card className={stats.urgentTickets > 0 ? "border-red-500/50" : ""}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Urgent Tickets</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("urgentTickets")}</CardTitle>
             <TicketCheck className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-500">{stats.urgentTickets}</div>
-            <p className="text-xs text-muted-foreground">{stats.openTickets} total open</p>
+            <p className="text-xs text-muted-foreground">{t("totalOpen", { count: stats.openTickets })}</p>
           </CardContent>
         </Card>
 
         <Card className={stats.atRiskTenants > 0 ? "border-amber-500/50" : ""}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">At-Risk Tenants</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("atRiskTenants")}</CardTitle>
             <AlertTriangle className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-amber-500">{stats.atRiskTenants}</div>
-            <p className="text-xs text-muted-foreground">Require attention</p>
+            <p className="text-xs text-muted-foreground">{t("requireAttention")}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Suspended</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("suspended")}</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.suspendedOrgs}</div>
-            <p className="text-xs text-muted-foreground">Organizations</p>
+            <p className="text-xs text-muted-foreground">{t("organizations")}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Enterprise</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("enterprise")}</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.orgsByPlan.ENTERPRISE || 0}</div>
             <p className="text-xs text-muted-foreground">
-              {stats.orgsByPlan.PROFESSIONAL || 0} Pro, {stats.orgsByPlan.STARTER || 0} Starter
+              {t("pro", { count: stats.orgsByPlan.PROFESSIONAL || 0 })}, {t("starter", { count: stats.orgsByPlan.STARTER || 0 })}
             </p>
           </CardContent>
         </Card>
@@ -233,11 +235,11 @@ export default async function AdminDashboard() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Recent Signups</CardTitle>
-                <CardDescription>New organizations in the last 30 days</CardDescription>
+                <CardTitle>{t("recentSignups")}</CardTitle>
+                <CardDescription>{t("newOrgsLastDays")}</CardDescription>
               </div>
               <Link href="/admin/tenants">
-                <Button variant="outline" size="sm">View All</Button>
+                <Button variant="outline" size="sm">{t("viewAll")}</Button>
               </Link>
             </div>
           </CardHeader>
@@ -252,7 +254,7 @@ export default async function AdminDashboard() {
                     <div>
                       <p className="text-sm font-medium">{org.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {org._count.members} members
+                        {t("members", { count: org._count.members })}
                       </p>
                     </div>
                   </div>
@@ -268,7 +270,7 @@ export default async function AdminDashboard() {
               ))}
               {stats.recentOrgs.length === 0 && (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  No recent signups
+                  {t("noRecentSignups")}
                 </p>
               )}
             </div>
@@ -279,11 +281,11 @@ export default async function AdminDashboard() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Open Support Tickets</CardTitle>
-                <CardDescription>Tickets requiring attention</CardDescription>
+                <CardTitle>{t("openSupportTickets")}</CardTitle>
+                <CardDescription>{t("ticketsRequiringAttention")}</CardDescription>
               </div>
               <Link href="/admin/support">
-                <Button variant="outline" size="sm">View All</Button>
+                <Button variant="outline" size="sm">{t("viewAll")}</Button>
               </Link>
             </div>
           </CardHeader>
@@ -322,7 +324,7 @@ export default async function AdminDashboard() {
               ))}
               {stats.recentTickets.length === 0 && (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  No open tickets
+                  {t("noOpenTickets")}
                 </p>
               )}
             </div>

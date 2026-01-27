@@ -4,25 +4,27 @@ import { useState } from "react"
 import { FileText, Presentation, BarChart3, Table, Download, Share2, ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-
-const outputTypes = [
-  { id: "presentation", icon: Presentation, name: "Presentations", description: "AI-generated slide decks" },
-  { id: "dashboard", icon: BarChart3, name: "Dashboards", description: "Interactive data viz" },
-  { id: "report", icon: FileText, name: "Reports", description: "Detailed PDF exports" },
-  { id: "data", icon: Table, name: "Data Exports", description: "CSV & Excel files" },
-]
-
-const templates = [
-  "Persona Deep Dive",
-  "Segment Comparison",
-  "Market Snapshot",
-  "Trend Report",
-  "Competitive Analysis",
-  "Brand Health Tracker",
-]
+import { useTranslations } from "next-intl"
 
 export function ReportsSection() {
+  const t = useTranslations("landing.reports")
   const [activeType, setActiveType] = useState("presentation")
+
+  const outputTypes = [
+    { id: "presentation", icon: Presentation, name: t("presentations"), description: t("presentationsDesc") },
+    { id: "dashboard", icon: BarChart3, name: t("dashboards"), description: t("dashboardsDesc") },
+    { id: "report", icon: FileText, name: t("reports"), description: t("reportsDesc") },
+    { id: "data", icon: Table, name: t("dataExports"), description: t("dataExportsDesc") },
+  ]
+
+  const templates = [
+    t("templatePersona"),
+    t("templateSegment"),
+    t("templateMarket"),
+    t("templateTrend"),
+    t("templateCompetitive"),
+    t("templateBrand"),
+  ]
 
   return (
     <section className="py-24 bg-secondary/20">
@@ -30,16 +32,15 @@ export function ReportsSection() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-sm text-accent mb-6">
             <FileText className="h-3 w-3" />
-            Report Builder
+            {t("badge")}
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            From insight to deliverable
+            {t("title")}
             <br />
-            <span className="text-muted-foreground">in minutes, not days</span>
+            <span className="text-muted-foreground">{t("titleHighlight")}</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Transform your analysis into polished presentations, interactive dashboards, and comprehensive reports with
-            AI-assisted editing and 8+ pre-built templates.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -52,7 +53,7 @@ export function ReportsSection() {
                   <div className="w-3 h-3 rounded-full bg-chart-3/60" />
                   <div className="w-3 h-3 rounded-full bg-chart-5/60" />
                 </div>
-                <span className="text-xs text-muted-foreground ml-2">Report Builder</span>
+                <span className="text-xs text-muted-foreground ml-2">{t("badge")}</span>
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-6">
@@ -90,7 +91,7 @@ export function ReportsSection() {
                             </div>
                           )}
                         </div>
-                        <div className="text-[10px] text-muted-foreground mt-2">Slide {slide}</div>
+                        <div className="text-[10px] text-muted-foreground mt-2">{t("slide")} {slide}</div>
                       </div>
                     ))}
                   </div>
@@ -99,12 +100,12 @@ export function ReportsSection() {
                 {activeType === "dashboard" && (
                   <div className="grid grid-cols-2 gap-4">
                     <div className="rounded-lg border border-border bg-secondary/50 p-4">
-                      <div className="text-xs text-muted-foreground mb-2">Audience Size</div>
+                      <div className="text-xs text-muted-foreground mb-2">{t("audienceSize")}</div>
                       <div className="text-2xl font-bold text-foreground">2.4M</div>
-                      <div className="text-xs text-chart-5">+12% vs last period</div>
+                      <div className="text-xs text-chart-5">{t("vsLastPeriod")}</div>
                     </div>
                     <div className="rounded-lg border border-border bg-secondary/50 p-4">
-                      <div className="text-xs text-muted-foreground mb-2">Engagement</div>
+                      <div className="text-xs text-muted-foreground mb-2">{t("engagement")}</div>
                       <div className="h-12 flex items-end gap-1">
                         {[40, 65, 45, 80, 55, 70, 85].map((h, i) => (
                           <div key={i} className="flex-1 bg-chart-2/60 rounded-t" style={{ height: `${h}%` }} />
@@ -129,13 +130,13 @@ export function ReportsSection() {
                     <table className="w-full text-xs">
                       <thead className="bg-muted/50">
                         <tr>
-                          <th className="px-3 py-2 text-left text-muted-foreground">Segment</th>
-                          <th className="px-3 py-2 text-left text-muted-foreground">Size</th>
-                          <th className="px-3 py-2 text-left text-muted-foreground">Index</th>
+                          <th className="px-3 py-2 text-left text-muted-foreground">{t("segment")}</th>
+                          <th className="px-3 py-2 text-left text-muted-foreground">{t("size")}</th>
+                          <th className="px-3 py-2 text-left text-muted-foreground">{t("index")}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
-                        {["Eco-Warriors", "Digital Natives", "Value Seekers"].map((seg) => (
+                        {[t("ecoWarriors"), t("digitalNatives"), t("valueSeekers")].map((seg) => (
                           <tr key={seg}>
                             <td className="px-3 py-2 text-foreground">{seg}</td>
                             <td className="px-3 py-2 text-muted-foreground">1.2M</td>
@@ -151,16 +152,16 @@ export function ReportsSection() {
                   <div className="flex items-center gap-2">
                     <Button variant="outline" size="sm" className="gap-1 bg-transparent">
                       <Sparkles className="h-3 w-3" />
-                      AI Enhance
+                      {t("aiEnhance")}
                     </Button>
                     <Button variant="outline" size="sm" className="gap-1 bg-transparent">
                       <Download className="h-3 w-3" />
-                      Export
+                      {t("export")}
                     </Button>
                   </div>
                   <Button variant="outline" size="sm" className="gap-1 bg-transparent">
                     <Share2 className="h-3 w-3" />
-                    Share
+                    {t("share")}
                   </Button>
                 </div>
               </div>
@@ -169,7 +170,7 @@ export function ReportsSection() {
 
           <div className="space-y-6">
             <div className="rounded-xl border border-border bg-card p-6">
-              <h3 className="font-semibold text-foreground mb-4">Pre-built Templates</h3>
+              <h3 className="font-semibold text-foreground mb-4">{t("prebuiltTemplates")}</h3>
               <div className="space-y-2">
                 {templates.map((template) => (
                   <div
@@ -185,7 +186,7 @@ export function ReportsSection() {
 
             <Link href="/dashboard/reports">
               <Button className="w-full gap-2">
-                Open Report Builder
+                {t("openReportBuilder")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -48,6 +49,7 @@ interface Plan {
 
 export default function PlansPage() {
   const router = useRouter()
+  const t = useTranslations("admin.plans")
   const [plans, setPlans] = useState<Plan[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -123,7 +125,7 @@ export default function PlansPage() {
   }
 
   const formatPrice = (cents: number) => {
-    if (cents === 0) return "Free"
+    if (cents === 0) return t("free")
     return `$${(cents / 100).toFixed(0)}`
   }
 
@@ -142,7 +144,7 @@ export default function PlansPage() {
   const columns: Column<Plan>[] = [
     {
       id: "plan",
-      header: "Plan",
+      header: t("plan"),
       cell: (plan) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -157,7 +159,7 @@ export default function PlansPage() {
     },
     {
       id: "tier",
-      header: "Tier",
+      header: t("tier"),
       cell: (plan) => (
         <Badge variant={getTierBadgeVariant(plan.tier)}>
           {plan.tier}
@@ -166,7 +168,7 @@ export default function PlansPage() {
     },
     {
       id: "monthly",
-      header: "Monthly",
+      header: t("monthly"),
       headerClassName: "text-right",
       className: "text-right",
       cell: (plan) => (
@@ -178,7 +180,7 @@ export default function PlansPage() {
     },
     {
       id: "yearly",
-      header: "Yearly",
+      header: t("yearly"),
       headerClassName: "text-right",
       className: "text-right",
       cell: (plan) => (
@@ -190,36 +192,36 @@ export default function PlansPage() {
     },
     {
       id: "features",
-      header: "Features",
+      header: t("features"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (plan) => <Badge variant="outline">{plan._count.features}</Badge>,
     },
     {
       id: "tenants",
-      header: "Tenants",
+      header: t("tenantsCount"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (plan) => <Badge variant="outline">{plan._count.tenantEntitlements}</Badge>,
     },
     {
       id: "status",
-      header: "Status",
+      header: t("statusLabel"),
       cell: (plan) => (
         <div className="flex items-center gap-2">
           {plan.isActive ? (
             <Badge variant="default" className="bg-green-500">
               <Check className="h-3 w-3 mr-1" />
-              Active
+              {t("activeStatus")}
             </Badge>
           ) : (
             <Badge variant="secondary">
               <X className="h-3 w-3 mr-1" />
-              Inactive
+              {t("inactive")}
             </Badge>
           )}
           {plan.isPublic && (
-            <Badge variant="outline" className="text-xs">Public</Badge>
+            <Badge variant="outline" className="text-xs">{t("public")}</Badge>
           )}
         </div>
       ),
@@ -229,18 +231,18 @@ export default function PlansPage() {
   // Bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Activate Plans",
+      label: t("activatePlans"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusUpdate(ids, true),
-      confirmTitle: "Activate Plans",
-      confirmDescription: "Are you sure you want to activate the selected plans?",
+      confirmTitle: t("activatePlans"),
+      confirmDescription: t("confirmActivate"),
     },
     {
-      label: "Deactivate Plans",
+      label: t("deactivatePlans"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusUpdate(ids, false),
-      confirmTitle: "Deactivate Plans",
-      confirmDescription: "Are you sure you want to deactivate the selected plans?",
+      confirmTitle: t("deactivatePlans"),
+      confirmDescription: t("confirmDeactivate"),
       separator: true,
     },
   ]
@@ -253,20 +255,20 @@ export default function PlansPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="h-5 w-5" />
-                Plan Management
+                {t("title")}
               </CardTitle>
               <CardDescription>
-                Manage subscription plans and their features ({total} total)
+                {t("description", { total })}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchPlans} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {t("refresh")}
               </Button>
               <Button onClick={() => router.push("/admin/plans/new")} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                New Plan
+                {t("newPlan")}
               </Button>
             </div>
           </div>
@@ -277,7 +279,7 @@ export default function PlansPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by name or description..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -285,23 +287,23 @@ export default function PlansPage() {
             </div>
             <Select value={tierFilter} onValueChange={setTierFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Tier" />
+                <SelectValue placeholder={t("tier")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Tiers</SelectItem>
-                <SelectItem value="STARTER">Starter</SelectItem>
-                <SelectItem value="PROFESSIONAL">Professional</SelectItem>
-                <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
+                <SelectItem value="all">{t("allTiers")}</SelectItem>
+                <SelectItem value="STARTER">{t("starter")}</SelectItem>
+                <SelectItem value="PROFESSIONAL">{t("professional")}</SelectItem>
+                <SelectItem value="ENTERPRISE">{t("enterprise")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("statusLabel")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="true">Active</SelectItem>
-                <SelectItem value="false">Inactive</SelectItem>
+                <SelectItem value="all">{t("allStatus")}</SelectItem>
+                <SelectItem value="true">{t("activeStatus")}</SelectItem>
+                <SelectItem value="false">{t("inactive")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -312,17 +314,16 @@ export default function PlansPage() {
             columns={columns}
             getRowId={(plan) => plan.id}
             isLoading={isLoading}
-            emptyMessage="No plans found"
+            emptyMessage={t("noPlans")}
             viewHref={(plan) => `/admin/plans/${plan.id}`}
             editHref={(plan) => `/admin/plans/${plan.id}?edit=true`}
             onDelete={handleDelete}
-            deleteConfirmTitle="Delete Plan"
+            deleteConfirmTitle={t("deletePlan")}
             deleteConfirmDescription={(plan) =>
-              `Are you sure you want to delete "${plan.displayName}"? This action cannot be undone.${
-                plan._count.tenantEntitlements > 0
-                  ? " Warning: This plan has active tenant entitlements."
-                  : ""
-              }`
+              t("confirmDelete", { name: plan.displayName }) +
+              (plan._count.tenantEntitlements > 0
+                ? t("warningActiveTenants")
+                : "")
             }
             bulkActions={bulkActions}
             selectedIds={selectedIds}

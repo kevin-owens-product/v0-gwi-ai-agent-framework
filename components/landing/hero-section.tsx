@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Play, Command, Sparkles, LayoutGrid, MessageSquare } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 
 export function HeroSection() {
+  const t = useTranslations("landing.hero")
   const [activeMode, setActiveMode] = useState<"chat" | "canvas" | "split">("chat")
 
   return (
@@ -20,37 +22,36 @@ export function HeroSection() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
             </span>
-            Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports
+            {t("badge")}
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.1] text-balance">
-            AI agents that
+            {t("titleMain")}
             <br />
-            <span className="text-muted-foreground">understand people.</span>
+            <span className="text-muted-foreground">{t("titleHighlight")}</span>
           </h1>
 
           <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-pretty">
-            Build autonomous workflows that analyze human behavior, uncover audience motivations, and deliver strategic
-            insights—all powered by the world&apos;s largest study of consumers.
+            {t("subtitle")}
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/dashboard">
               <Button size="lg" className="gap-2 px-8">
-                Start Building
+                {t("startBuilding")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <Button variant="outline" size="lg" className="gap-2 px-8 bg-transparent">
               <Play className="h-4 w-4" />
-              Watch Demo
+              {t("watchDemo")}
             </Button>
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground/60 flex items-center justify-center gap-2">
             <Command className="h-3 w-3" />
             <span>
-              Press <kbd className="px-1.5 py-0.5 rounded bg-secondary text-xs">⌘K</kbd> anywhere to access templates
+              {t("shortcutHint")} <kbd className="px-1.5 py-0.5 rounded bg-secondary text-xs">⌘K</kbd> {t("shortcutAction")}
             </span>
           </p>
         </div>
@@ -65,7 +66,7 @@ export function HeroSection() {
                   <div className="w-3 h-3 rounded-full bg-chart-3/60" />
                   <div className="w-3 h-3 rounded-full bg-chart-5/60" />
                 </div>
-                <span className="text-xs text-muted-foreground font-mono">GWI Insights Playground</span>
+                <span className="text-xs text-muted-foreground font-mono">{t("playgroundTitle")}</span>
               </div>
               {/* Mode switcher */}
               <div className="flex items-center gap-1 bg-secondary/50 rounded-lg p-1">
@@ -78,7 +79,7 @@ export function HeroSection() {
                   }`}
                 >
                   <MessageSquare className="h-3 w-3" />
-                  Chat
+                  {t("chat")}
                 </button>
                 <button
                   onClick={() => setActiveMode("canvas")}
@@ -89,7 +90,7 @@ export function HeroSection() {
                   }`}
                 >
                   <LayoutGrid className="h-3 w-3" />
-                  Canvas
+                  {t("canvas")}
                 </button>
                 <button
                   onClick={() => setActiveMode("split")}
@@ -100,7 +101,7 @@ export function HeroSection() {
                   }`}
                 >
                   <Sparkles className="h-3 w-3" />
-                  Split
+                  {t("split")}
                 </button>
               </div>
             </div>
@@ -111,11 +112,11 @@ export function HeroSection() {
                     <div className="rounded-lg border border-border bg-secondary/30 p-4">
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                          <span className="text-xs font-medium text-accent">AI</span>
+                          <span className="text-xs font-medium text-accent">{t("aiLabel")}</span>
                         </div>
                         <div className="space-y-2 flex-1">
                           <p className="text-sm text-foreground">
-                            Analyzing Gen Z motivations around sustainable fashion choices and brand loyalty drivers...
+                            {t("analyzing")}
                           </p>
                           <div className="flex items-center gap-2">
                             <div className="h-1 flex-1 bg-muted rounded-full overflow-hidden">
@@ -129,21 +130,21 @@ export function HeroSection() {
                     <div className="rounded-lg border border-border bg-secondary/30 p-4">
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 rounded-full bg-chart-2/20 flex items-center justify-center flex-shrink-0">
-                          <span className="text-xs font-medium text-chart-2">PA</span>
+                          <span className="text-xs font-medium text-chart-2">{t("personaArchitectLabel")}</span>
                         </div>
                         <div className="space-y-2 flex-1">
-                          <p className="text-sm text-muted-foreground">Persona Architect agent spawned</p>
+                          <p className="text-sm text-muted-foreground">{t("personaArchitectSpawned")}</p>
                           <p className="text-xs text-muted-foreground/70">
-                            Building detailed audience personas based on behavioral patterns and values
+                            {t("personaArchitectDesc")}
                           </p>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="rounded-lg border border-border bg-secondary/30 p-4">
-                    <h4 className="text-sm font-medium text-foreground mb-3">Active Agents</h4>
+                    <h4 className="text-sm font-medium text-foreground mb-3">{t("activeAgents")}</h4>
                     <div className="space-y-3">
-                      {["Audience Explorer", "Persona Architect", "Culture Tracker"].map((agent, i) => (
+                      {[t("audienceExplorer"), t("personaArchitect"), t("cultureTracker")].map((agent, i) => (
                         <div key={agent} className="flex items-center gap-2">
                           <div
                             className={`w-2 h-2 rounded-full ${i === 0 ? "bg-chart-5 animate-pulse" : "bg-muted-foreground/30"}`}
@@ -162,12 +163,12 @@ export function HeroSection() {
                       <div className="w-6 h-6 rounded bg-chart-1/20 flex items-center justify-center">
                         <span className="text-[10px] font-medium text-chart-1">P</span>
                       </div>
-                      <span className="text-xs font-medium text-foreground">Persona Card</span>
+                      <span className="text-xs font-medium text-foreground">{t("personaCard")}</span>
                     </div>
                     <div className="text-center py-4">
                       <div className="w-12 h-12 rounded-full bg-chart-2/20 mx-auto mb-2" />
-                      <p className="text-xs font-medium text-foreground">Eco-Conscious Emma</p>
-                      <p className="text-[10px] text-muted-foreground">Gen Z, Urban, 18-24</p>
+                      <p className="text-xs font-medium text-foreground">{t("ecoConsciousEmma")}</p>
+                      <p className="text-[10px] text-muted-foreground">{t("genZUrban")}</p>
                     </div>
                   </div>
                   <div className="rounded-lg border border-border bg-secondary/30 p-4">
@@ -175,7 +176,7 @@ export function HeroSection() {
                       <div className="w-6 h-6 rounded bg-chart-3/20 flex items-center justify-center">
                         <span className="text-[10px] font-medium text-chart-3">C</span>
                       </div>
-                      <span className="text-xs font-medium text-foreground">Chart</span>
+                      <span className="text-xs font-medium text-foreground">{t("chart")}</span>
                     </div>
                     <div className="h-20 flex items-end gap-1 px-2">
                       {[40, 65, 45, 80, 55, 70].map((h, i) => (
@@ -188,10 +189,10 @@ export function HeroSection() {
                       <div className="w-6 h-6 rounded bg-chart-5/20 flex items-center justify-center">
                         <span className="text-[10px] font-medium text-chart-5">I</span>
                       </div>
-                      <span className="text-xs font-medium text-foreground">Insight</span>
+                      <span className="text-xs font-medium text-foreground">{t("insight")}</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      73% of Gen Z prioritize brand authenticity over price
+                      {t("insightText")}
                     </p>
                     <div className="mt-2 flex items-center gap-1">
                       <div className="h-1 flex-1 bg-chart-5/30 rounded-full">
@@ -207,31 +208,30 @@ export function HeroSection() {
                   <div className="space-y-3">
                     <div className="rounded-lg border border-border bg-secondary/30 p-3">
                       <p className="text-xs text-muted-foreground">
-                        You: Compare sustainability attitudes between Gen Z and Millennials
+                        {t("youLabel")} {t("compareQuestion")}
                       </p>
                     </div>
                     <div className="rounded-lg border border-accent/30 bg-accent/5 p-3">
                       <p className="text-xs text-foreground">
-                        Based on our analysis of 450K consumers across 12 markets, Gen Z shows 34% higher engagement
-                        with sustainability messaging...
+                        {t("analysisResponse")}
                       </p>
                     </div>
                   </div>
                   <div className="rounded-lg border border-border bg-secondary/30 p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-medium text-foreground">Comparison Chart</span>
-                      <span className="text-[10px] text-muted-foreground">Live Preview</span>
+                      <span className="text-xs font-medium text-foreground">{t("comparisonChart")}</span>
+                      <span className="text-[10px] text-muted-foreground">{t("livePreview")}</span>
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-muted-foreground w-16">Gen Z</span>
+                        <span className="text-[10px] text-muted-foreground w-16">{t("genZ")}</span>
                         <div className="flex-1 h-4 bg-muted rounded-full overflow-hidden">
                           <div className="h-full w-[78%] bg-chart-1 rounded-full" />
                         </div>
                         <span className="text-[10px] text-chart-1">78%</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-muted-foreground w-16">Millennials</span>
+                        <span className="text-[10px] text-muted-foreground w-16">{t("millennials")}</span>
                         <div className="flex-1 h-4 bg-muted rounded-full overflow-hidden">
                           <div className="h-full w-[58%] bg-chart-2 rounded-full" />
                         </div>

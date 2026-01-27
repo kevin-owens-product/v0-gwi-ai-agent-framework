@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ArrowLeft, Activity, CheckCircle, XCircle, Clock, Loader2, Eye } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const statusConfig = {
   PENDING: { color: "bg-yellow-100 text-yellow-700", icon: Clock },
@@ -50,6 +51,7 @@ async function getPipelineRuns() {
 
 async function PipelineRunsContent() {
   const { runs, pipelines } = await getPipelineRuns()
+  const t = await getTranslations('gwi.pipelines.runs')
 
   return (
     <div className="space-y-6">
@@ -61,9 +63,9 @@ async function PipelineRunsContent() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Pipeline Runs</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            View execution history for all pipelines
+            {t('description')}
           </p>
         </div>
       </div>
@@ -74,10 +76,10 @@ async function PipelineRunsContent() {
           <div className="flex gap-4">
             <Select defaultValue="all">
               <SelectTrigger className="w-[220px]">
-                <SelectValue placeholder="Filter by pipeline" />
+                <SelectValue placeholder={t('filterByPipeline')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Pipelines</SelectItem>
+                <SelectItem value="all">{t('allPipelines')}</SelectItem>
                 {pipelines.map((p) => (
                   <SelectItem key={p.id} value={p.id}>
                     {p.name}
@@ -87,15 +89,15 @@ async function PipelineRunsContent() {
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t('filterByStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="RUNNING">Running</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="FAILED">Failed</SelectItem>
-                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="PENDING">{t('statuses.pending')}</SelectItem>
+                <SelectItem value="RUNNING">{t('statuses.running')}</SelectItem>
+                <SelectItem value="COMPLETED">{t('statuses.completed')}</SelectItem>
+                <SelectItem value="FAILED">{t('statuses.failed')}</SelectItem>
+                <SelectItem value="CANCELLED">{t('statuses.cancelled')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -109,12 +111,12 @@ async function PipelineRunsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Pipeline</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Started</TableHead>
-                  <TableHead>Completed</TableHead>
-                  <TableHead>Records</TableHead>
-                  <TableHead>Duration</TableHead>
+                  <TableHead>{t('pipeline')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
+                  <TableHead>{t('started')}</TableHead>
+                  <TableHead>{t('completed')}</TableHead>
+                  <TableHead>{t('records')}</TableHead>
+                  <TableHead>{t('duration')}</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -167,7 +169,7 @@ async function PipelineRunsContent() {
                             </span>
                             {run.recordsFailed !== null && run.recordsFailed > 0 && (
                               <span className="text-red-600 ml-2">
-                                ({run.recordsFailed} failed)
+                                ({run.recordsFailed} {t('failed')})
                               </span>
                             )}
                           </div>
@@ -199,8 +201,8 @@ async function PipelineRunsContent() {
           ) : (
             <EmptyState
               icon={Activity}
-              title="No pipeline runs yet"
-              description="Pipeline runs will appear here after execution"
+              title={t('noRunsYet')}
+              description={t('runsWillAppear')}
             />
           )}
         </CardContent>
@@ -209,13 +211,15 @@ async function PipelineRunsContent() {
   )
 }
 
-export default function PipelineRunsPage() {
+export default async function PipelineRunsPage() {
+  const t = await getTranslations('gwi.pipelines.runs')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Pipeline Runs</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

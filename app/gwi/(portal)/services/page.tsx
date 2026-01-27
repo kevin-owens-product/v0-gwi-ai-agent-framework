@@ -18,6 +18,7 @@ import {
   DollarSign,
   Loader2,
 } from "lucide-react"
+import { useTranslations } from "@/lib/i18n"
 
 interface DashboardStats {
   clients: { total: number; active: number }
@@ -35,6 +36,7 @@ interface DashboardStats {
 export default function ServicesDashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const t = useTranslations('gwi.services.dashboard')
 
   useEffect(() => {
     // In a real implementation, this would fetch from an API
@@ -67,9 +69,9 @@ export default function ServicesDashboardPage() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Services Dashboard</h1>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
         <p className="text-muted-foreground">
-          Overview of your services business
+          {t('description')}
         </p>
       </div>
 
@@ -77,42 +79,42 @@ export default function ServicesDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Clients</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('activeClients')}</CardTitle>
             <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.clients.active}</div>
             <p className="text-xs text-muted-foreground">
-              of {stats?.clients.total} total clients
+              {t('ofTotalClients', { total: stats?.clients.total })}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('activeProjects')}</CardTitle>
             <FolderKanban className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.projects.inProgress}</div>
             <p className="text-xs text-muted-foreground">
-              of {stats?.projects.total} total projects
+              {t('ofTotalProjects', { total: stats?.projects.total })}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Invoices</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('pendingInvoices')}</CardTitle>
             <Receipt className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.invoices.sent}</div>
             <p className="text-xs text-muted-foreground">
-              {stats?.invoices.overdue} overdue
+              {t('overdue', { count: stats?.invoices.overdue })}
               {stats?.invoices.overdue ? (
                 <Badge variant="destructive" className="ml-2 text-xs">
-                  Attention
+                  {t('attention')}
                 </Badge>
               ) : null}
             </p>
@@ -121,7 +123,7 @@ export default function ServicesDashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Amount Due</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('amountDue')}</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -129,7 +131,7 @@ export default function ServicesDashboardPage() {
               ${stats?.invoices.totalDue.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
-              across all open invoices
+              {t('acrossAllInvoices')}
             </p>
           </CardContent>
         </Card>
@@ -140,15 +142,15 @@ export default function ServicesDashboardPage() {
         {/* Quick Actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common tasks to get started</CardDescription>
+            <CardTitle>{t('quickActions')}</CardTitle>
+            <CardDescription>{t('quickActionsDesc')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
             <Button variant="outline" className="w-full justify-between" asChild>
               <Link href="/gwi/services/clients/new">
                 <span className="flex items-center">
                   <Building2 className="h-4 w-4 mr-2" />
-                  Add New Client
+                  {t('addNewClient')}
                 </span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -157,7 +159,7 @@ export default function ServicesDashboardPage() {
               <Link href="/gwi/services/projects/new">
                 <span className="flex items-center">
                   <FolderKanban className="h-4 w-4 mr-2" />
-                  Create Project
+                  {t('createProject')}
                 </span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -166,7 +168,7 @@ export default function ServicesDashboardPage() {
               <Link href="/gwi/services/time">
                 <span className="flex items-center">
                   <Clock className="h-4 w-4 mr-2" />
-                  Log Time
+                  {t('logTime')}
                 </span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -175,7 +177,7 @@ export default function ServicesDashboardPage() {
               <Link href="/gwi/services/invoicing/new">
                 <span className="flex items-center">
                   <Receipt className="h-4 w-4 mr-2" />
-                  Create Invoice
+                  {t('createInvoice')}
                 </span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -186,8 +188,8 @@ export default function ServicesDashboardPage() {
         {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest updates across services</CardDescription>
+            <CardTitle>{t('recentActivity')}</CardTitle>
+            <CardDescription>{t('recentActivityDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -216,9 +218,9 @@ export default function ServicesDashboardPage() {
           <Link href="/gwi/services/clients" className="block p-4">
             <div className="flex flex-col items-center text-center">
               <Building2 className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-medium">Clients</h3>
+              <h3 className="font-medium">{t('clients')}</h3>
               <p className="text-xs text-muted-foreground">
-                {stats?.clients.total} clients
+                {t('clientsCount', { count: stats?.clients.total })}
               </p>
             </div>
           </Link>
@@ -228,9 +230,9 @@ export default function ServicesDashboardPage() {
           <Link href="/gwi/services/projects" className="block p-4">
             <div className="flex flex-col items-center text-center">
               <FolderKanban className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-medium">Projects</h3>
+              <h3 className="font-medium">{t('projects')}</h3>
               <p className="text-xs text-muted-foreground">
-                {stats?.projects.total} projects
+                {t('projectsCount', { count: stats?.projects.total })}
               </p>
             </div>
           </Link>
@@ -240,8 +242,8 @@ export default function ServicesDashboardPage() {
           <Link href="/gwi/services/time" className="block p-4">
             <div className="flex flex-col items-center text-center">
               <Clock className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-medium">Time Tracking</h3>
-              <p className="text-xs text-muted-foreground">Log & review</p>
+              <h3 className="font-medium">{t('timeTracking')}</h3>
+              <p className="text-xs text-muted-foreground">{t('logAndReview')}</p>
             </div>
           </Link>
         </Card>
@@ -250,9 +252,9 @@ export default function ServicesDashboardPage() {
           <Link href="/gwi/services/invoicing" className="block p-4">
             <div className="flex flex-col items-center text-center">
               <Receipt className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-medium">Invoicing</h3>
+              <h3 className="font-medium">{t('invoicing')}</h3>
               <p className="text-xs text-muted-foreground">
-                {(stats?.invoices.draft ?? 0) + (stats?.invoices.sent ?? 0)} pending
+                {t('pending', { count: (stats?.invoices.draft ?? 0) + (stats?.invoices.sent ?? 0) })}
               </p>
             </div>
           </Link>
@@ -262,8 +264,8 @@ export default function ServicesDashboardPage() {
           <Link href="/gwi/services/vendors" className="block p-4">
             <div className="flex flex-col items-center text-center">
               <Truck className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-medium">Vendors</h3>
-              <p className="text-xs text-muted-foreground">Manage vendors</p>
+              <h3 className="font-medium">{t('vendors')}</h3>
+              <p className="text-xs text-muted-foreground">{t('manageVendors')}</p>
             </div>
           </Link>
         </Card>
@@ -272,9 +274,9 @@ export default function ServicesDashboardPage() {
           <Link href="/gwi/services/team" className="block p-4">
             <div className="flex flex-col items-center text-center">
               <UsersRound className="h-8 w-8 mb-2 text-primary" />
-              <h3 className="font-medium">Team</h3>
+              <h3 className="font-medium">{t('team')}</h3>
               <p className="text-xs text-muted-foreground">
-                {stats?.team.total} members
+                {t('teamMembers', { count: stats?.team.total })}
               </p>
             </div>
           </Link>
@@ -288,14 +290,14 @@ export default function ServicesDashboardPage() {
             <AlertCircle className="h-5 w-5 text-destructive" />
             <div className="flex-1">
               <p className="font-medium text-destructive">
-                {stats?.invoices.overdue} overdue invoice(s)
+                {t('overdueInvoices', { count: stats?.invoices.overdue })}
               </p>
               <p className="text-sm text-muted-foreground">
-                Review and follow up on overdue payments
+                {t('reviewOverdue')}
               </p>
             </div>
             <Button variant="outline" asChild>
-              <Link href="/gwi/services/invoicing?status=OVERDUE">View Overdue</Link>
+              <Link href="/gwi/services/invoicing?status=OVERDUE">{t('viewOverdue')}</Link>
             </Button>
           </CardContent>
         </Card>

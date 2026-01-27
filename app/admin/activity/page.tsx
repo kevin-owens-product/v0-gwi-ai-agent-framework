@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -67,6 +68,7 @@ interface ActivityStats {
 }
 
 export default function AdminActivityPage() {
+  const t = useTranslations("admin.activity")
   const [activities, setActivities] = useState<ActivityItem[]>([])
   const [stats, setStats] = useState<ActivityStats | null>(null)
   const [admins, setAdmins] = useState<Admin[]>([])
@@ -232,20 +234,20 @@ export default function AdminActivityPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
             <Activity className="h-6 w-6" />
-            Admin Activity Dashboard
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Monitor and analyze administrative actions across the platform
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button onClick={handleExport} variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Export
+            {t("export")}
           </Button>
           <Button onClick={handleRefresh} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {t("refresh")}
           </Button>
         </div>
       </div>
@@ -258,11 +260,11 @@ export default function AdminActivityPage() {
         <TabsList>
           <TabsTrigger value="timeline" className="gap-2">
             <Clock className="h-4 w-4" />
-            Activity Timeline
+            {t("activityTimeline")}
           </TabsTrigger>
           <TabsTrigger value="analytics" className="gap-2">
             <BarChart3 className="h-4 w-4" />
-            Analytics
+            {t("analytics")}
           </TabsTrigger>
         </TabsList>
 
@@ -270,7 +272,7 @@ export default function AdminActivityPage() {
           {/* Filters */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-base">Filters</CardTitle>
+              <CardTitle className="text-base">{t("filters")}</CardTitle>
             </CardHeader>
             <CardContent>
               <ActivityFilters
@@ -285,9 +287,9 @@ export default function AdminActivityPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Recent Activity</CardTitle>
+                  <CardTitle>{t("recentActivity")}</CardTitle>
                   <CardDescription>
-                    {total.toLocaleString()} activities found
+                    {t("activitiesFound", { count: total.toLocaleString() })}
                   </CardDescription>
                 </div>
                 {totalPages > 1 && (
@@ -298,10 +300,10 @@ export default function AdminActivityPage() {
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                       disabled={page === 1 || isLoadingActivities}
                     >
-                      Previous
+                      {t("previous")}
                     </Button>
                     <span className="text-sm text-muted-foreground">
-                      Page {page} of {totalPages}
+                      {t("pageOf", { page, total: totalPages })}
                     </span>
                     <Button
                       variant="outline"
@@ -309,7 +311,7 @@ export default function AdminActivityPage() {
                       onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                       disabled={page === totalPages || isLoadingActivities}
                     >
-                      Next
+                      {t("next")}
                     </Button>
                   </div>
                 )}
@@ -319,7 +321,7 @@ export default function AdminActivityPage() {
               <ActivityTimeline
                 activities={activities}
                 isLoading={isLoadingActivities}
-                emptyMessage="No activities found matching your filters"
+                emptyMessage={t("noActivitiesFound")}
               />
             </CardContent>
           </Card>

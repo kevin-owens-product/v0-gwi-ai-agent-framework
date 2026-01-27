@@ -17,6 +17,7 @@ import {
   Clock,
   TrendingUp,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getLLMStats() {
   const [
@@ -68,21 +69,23 @@ async function getLLMStats() {
 
 async function LLMContent() {
   const stats = await getLLMStats()
+  const t = await getTranslations('gwi.llm')
+  const tc = await getTranslations('gwi.common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">LLM Configuration</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage language models, prompts, and usage
+            {t('description')}
           </p>
         </div>
         <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
           <Link href="/gwi/llm/configurations/new">
             <Plus className="mr-2 h-4 w-4" />
-            Add Model
+            {t('addModel')}
           </Link>
         </Button>
       </div>
@@ -97,7 +100,7 @@ async function LLMContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.configurations.length}</p>
-                <p className="text-sm text-muted-foreground">Active Models</p>
+                <p className="text-sm text-muted-foreground">{t('activeModels')}</p>
               </div>
             </div>
           </CardContent>
@@ -110,7 +113,7 @@ async function LLMContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.promptTemplates}</p>
-                <p className="text-sm text-muted-foreground">Prompt Templates</p>
+                <p className="text-sm text-muted-foreground">{t('promptTemplates')}</p>
               </div>
             </div>
           </CardContent>
@@ -125,7 +128,7 @@ async function LLMContent() {
                 <p className="text-2xl font-bold">
                   {(stats.totalTokens / 1000000).toFixed(2)}M
                 </p>
-                <p className="text-sm text-muted-foreground">Total Tokens</p>
+                <p className="text-sm text-muted-foreground">{t('totalTokens')}</p>
               </div>
             </div>
           </CardContent>
@@ -138,7 +141,7 @@ async function LLMContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">${stats.totalCost.toFixed(2)}</p>
-                <p className="text-sm text-muted-foreground">Total Cost</p>
+                <p className="text-sm text-muted-foreground">{t('totalCost')}</p>
               </div>
             </div>
           </CardContent>
@@ -150,25 +153,25 @@ async function LLMContent() {
         <Button variant="outline" asChild>
           <Link href="/gwi/llm/configurations/new">
             <Brain className="mr-2 h-4 w-4" />
-            Add Model
+            {t('addModel')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/llm/prompts">
             <FileCode className="mr-2 h-4 w-4" />
-            Prompt Templates
+            {t('promptTemplates')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/llm/usage">
             <BarChart3 className="mr-2 h-4 w-4" />
-            Usage Analytics
+            {t('usageAnalytics')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/llm/testing">
             <TestTube className="mr-2 h-4 w-4" />
-            Prompt Playground
+            {t('promptPlayground')}
           </Link>
         </Button>
       </div>
@@ -176,8 +179,8 @@ async function LLMContent() {
       {/* Model Configurations */}
       <Card>
         <CardHeader>
-          <CardTitle>Model Configurations</CardTitle>
-          <CardDescription>Active LLM model configurations</CardDescription>
+          <CardTitle>{t('modelConfigurations')}</CardTitle>
+          <CardDescription>{t('modelConfigurationsDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           {stats.configurations.length > 0 ? (
@@ -202,7 +205,7 @@ async function LLMContent() {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="text-sm font-medium">
-                        {config._count.usageRecords.toLocaleString()} requests
+                        {config._count.usageRecords.toLocaleString()} {tc('requests')}
                       </p>
                     </div>
                     <Badge
@@ -218,11 +221,11 @@ async function LLMContent() {
           ) : (
             <div className="text-center py-8">
               <Brain className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <p className="text-muted-foreground">No model configurations yet</p>
+              <p className="text-muted-foreground">{t('noModelConfigs')}</p>
               <Button asChild className="mt-4">
                 <Link href="/gwi/llm/configurations/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  Add First Model
+                  {t('addFirstModel')}
                 </Link>
               </Button>
             </div>
@@ -233,8 +236,8 @@ async function LLMContent() {
       {/* Recent Usage */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Usage</CardTitle>
-          <CardDescription>Latest LLM API calls</CardDescription>
+          <CardTitle>{t('recentUsage')}</CardTitle>
+          <CardDescription>{t('recentUsageDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           {stats.recentUsage.length > 0 ? (
@@ -254,7 +257,7 @@ async function LLMContent() {
                   </div>
                   <div className="flex items-center gap-4 text-sm">
                     <span className="text-muted-foreground">
-                      {(usage.promptTokens + usage.completionTokens).toLocaleString()} tokens
+                      {(usage.promptTokens + usage.completionTokens).toLocaleString()} {tc('tokens')}
                     </span>
                     <span className="text-muted-foreground">
                       {usage.latencyMs}ms
@@ -268,7 +271,7 @@ async function LLMContent() {
             </div>
           ) : (
             <p className="text-muted-foreground text-center py-4">
-              No usage records yet
+              {t('noUsageRecords')}
             </p>
           )}
         </CardContent>
@@ -277,13 +280,15 @@ async function LLMContent() {
   )
 }
 
-export default function LLMPage() {
+export default async function LLMPage() {
+  const t = await getTranslations('gwi.llm')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">LLM Configuration</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

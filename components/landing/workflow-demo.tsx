@@ -2,17 +2,19 @@
 
 import { useState } from "react"
 import { CheckCircle2, Circle, ChevronRight, ArrowRight } from "lucide-react"
-
-const steps = [
-  { id: 1, name: "Define Objective", description: "Set your research goal and target audience" },
-  { id: 2, name: "Select Agents", description: "Choose specialized agents for your workflow" },
-  { id: 3, name: "Configure Pipeline", description: "Connect agents and define data flows" },
-  { id: 4, name: "Execute & Monitor", description: "Run workflow with real-time progress" },
-  { id: 5, name: "Review & Export", description: "Verify insights and export deliverables" },
-]
+import { useTranslations } from "next-intl"
 
 export function WorkflowDemo() {
+  const t = useTranslations("landing.workflow")
   const [activeStep, setActiveStep] = useState(2)
+
+  const steps = [
+    { id: 1, name: t("step1Name"), description: t("step1Desc") },
+    { id: 2, name: t("step2Name"), description: t("step2Desc") },
+    { id: 3, name: t("step3Name"), description: t("step3Desc") },
+    { id: 4, name: t("step4Name"), description: t("step4Desc") },
+    { id: 5, name: t("step5Name"), description: t("step5Desc") },
+  ]
 
   return (
     <section className="py-24">
@@ -20,13 +22,12 @@ export function WorkflowDemo() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              Build workflows in minutes,
+              {t("title")}
               <br />
-              <span className="text-muted-foreground">not weeks</span>
+              <span className="text-muted-foreground">{t("titleHighlight")}</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8">
-              Our visual workflow builder lets you connect agents, define triggers, and orchestrate complex research
-              pipelines without writing code.
+              {t("subtitle")}
             </p>
             <div className="space-y-3">
               {steps.map((step) => (
@@ -66,9 +67,9 @@ export function WorkflowDemo() {
 
           <div className="rounded-xl border border-border bg-card p-6 lg:p-8">
             <div className="flex items-center justify-between mb-6">
-              <h4 className="font-medium text-foreground">Workflow Preview</h4>
+              <h4 className="font-medium text-foreground">{t("workflowPreview")}</h4>
               <span className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded">
-                Step {activeStep} of 5
+                {t("stepOf", { current: activeStep, total: 5 })}
               </span>
             </div>
             <div className="space-y-4">
@@ -92,27 +93,25 @@ export function WorkflowDemo() {
               </div>
               <div className="p-4 rounded-lg bg-secondary/50 border border-border">
                 <p className="text-sm text-muted-foreground">
-                  {activeStep === 1 &&
-                    "Research objective: Identify Gen Z consumers interested in sustainable fashion across EU markets"}
-                  {activeStep === 2 &&
-                    "Selected agents: Audience Strategist → Creative Brief Builder → Trend Forecaster"}
-                  {activeStep === 3 && "Pipeline configured with automatic handoffs and quality checkpoints"}
-                  {activeStep === 4 && "Executing workflow... Processing 2.4M consumer records across 8 markets"}
-                  {activeStep === 5 && "Analysis complete. 12 insights generated with 94% confidence score."}
+                  {activeStep === 1 && t("step1Preview")}
+                  {activeStep === 2 && t("step2Preview")}
+                  {activeStep === 3 && t("step3Preview")}
+                  {activeStep === 4 && t("step4Preview")}
+                  {activeStep === 5 && t("step5Preview")}
                 </p>
               </div>
               <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-chart-5" />
-                  <span className="text-muted-foreground">Completed</span>
+                  <span className="text-muted-foreground">{t("completed")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                  <span className="text-muted-foreground">In Progress</span>
+                  <span className="text-muted-foreground">{t("inProgress")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-muted-foreground/30" />
-                  <span className="text-muted-foreground">Pending</span>
+                  <span className="text-muted-foreground">{t("pending")}</span>
                 </div>
               </div>
             </div>

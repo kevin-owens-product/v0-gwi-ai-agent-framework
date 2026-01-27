@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -48,6 +49,9 @@ interface ApiKey {
 }
 
 export default function ApiKeysSettingsPage() {
+  const t = useTranslations("settings.apiKeys")
+  const tCommon = useTranslations("common")
+  const tToast = useTranslations("toast")
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
@@ -66,7 +70,7 @@ export default function ApiKeysSettingsPage() {
       }
     } catch (error) {
       console.error('Failed to fetch API keys:', error)
-      toast.error('Failed to load API keys')
+      toast.error(t("errors.loadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -89,7 +93,7 @@ export default function ApiKeysSettingsPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Failed to create API key')
+        throw new Error(data.error || t("errors.createFailed"))
       }
 
       const data = await response.json()
@@ -97,7 +101,7 @@ export default function ApiKeysSettingsPage() {
       setNewKeyName("")
       fetchApiKeys()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to create API key')
+      toast.error(error instanceof Error ? error.message : t("errors.createFailed"))
       setDialogOpen(false)
     } finally {
       setIsCreating(false)
@@ -114,26 +118,26 @@ export default function ApiKeysSettingsPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Failed to delete API key')
+        throw new Error(data.error || t("errors.deleteFailed"))
       }
 
-      toast.success('API key deleted')
+      toast.success(t("keyDeleted"))
       setDeleteKey(null)
       fetchApiKeys()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete API key')
+      toast.error(error instanceof Error ? error.message : t("errors.deleteFailed"))
     }
   }
 
   const copyToClipboard = async (text: string) => {
     await navigator.clipboard.writeText(text)
     setCopied(true)
-    toast.success('Copied to clipboard')
+    toast.success(tToast("success.copied"))
     setTimeout(() => setCopied(false), 2000)
   }
 
   const formatDate = (dateString: string | null) => {
-    if (!dateString) return 'Never'
+    if (!dateString) return t("never")
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -142,7 +146,7 @@ export default function ApiKeysSettingsPage() {
   }
 
   const formatRelativeTime = (dateString: string | null) => {
-    if (!dateString) return 'Never'
+    if (!dateString) return t("never")
     const date = new Date(dateString)
     const now = new Date()
     const diffMs = now.getTime() - date.getTime()
@@ -150,10 +154,10 @@ export default function ApiKeysSettingsPage() {
     const diffHours = Math.floor(diffMs / 3600000)
     const diffDays = Math.floor(diffMs / 86400000)
 
-    if (diffMins < 1) return 'Just now'
-    if (diffMins < 60) return `${diffMins} min ago`
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
-    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+    if (diffMins < 1) return t("relativeTime.justNow")
+    if (diffMins < 60) return t("relativeTime.minAgo", { count: diffMins })
+    if (diffHours < 24) return t("relativeTime.hoursAgo", { count: diffHours })
+    return t("relativeTime.daysAgo", { count: diffDays })
   }
 
   if (isLoading) {
@@ -168,8 +172,8 @@ export default function ApiKeysSettingsPage() {
     <div className="p-6 max-w-4xl">
       <PageTracker pageName="Settings - API Keys" metadata={{ totalKeys: apiKeys.length }} />
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">API Keys</h1>
-        <p className="text-muted-foreground">Manage API keys for programmatic access</p>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
 
       <div className="space-y-6">
@@ -177,8 +181,8 @@ export default function ApiKeysSettingsPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Your API Keys</CardTitle>
-                <CardDescription>Use these keys to authenticate API requests</CardDescription>
+                <CardTitle>{t("yourApiKeys")}</CardTitle>
+                <CardDescription>{t("yourApiKeysDescription")}</CardDescription>
               </div>
               <Dialog open={dialogOpen} onOpenChange={(open) => {
                 setDialogOpen(open)
@@ -190,16 +194,16 @@ export default function ApiKeysSettingsPage() {
                 <DialogTrigger asChild>
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
-                    Create Key
+                    {t("createKey")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   {newlyCreatedKey ? (
                     <>
                       <DialogHeader>
-                        <DialogTitle>API Key Created</DialogTitle>
+                        <DialogTitle>{t("keyCreated")}</DialogTitle>
                         <DialogDescription>
-                          Copy this key now. You won't be able to see it again!
+                          {t("copyKeyNow")}
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-4 py-4">
@@ -216,28 +220,28 @@ export default function ApiKeysSettingsPage() {
                         <div className="flex items-start gap-2 text-amber-500 bg-amber-500/10 p-3 rounded-lg">
                           <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                           <p className="text-sm">
-                            Make sure to copy your API key now. For security reasons, we won't show it again.
+                            {t("securityWarning")}
                           </p>
                         </div>
                       </div>
                       <DialogFooter>
-                        <Button onClick={() => setDialogOpen(false)}>Done</Button>
+                        <Button onClick={() => setDialogOpen(false)}>{t("done")}</Button>
                       </DialogFooter>
                     </>
                   ) : (
                     <>
                       <DialogHeader>
-                        <DialogTitle>Create New API Key</DialogTitle>
+                        <DialogTitle>{t("createNewKey")}</DialogTitle>
                         <DialogDescription>
-                          Give your key a name to help you remember what it's for
+                          {t("createNewKeyDescription")}
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                          <Label htmlFor="key-name">Key Name</Label>
+                          <Label htmlFor="key-name">{t("keyName")}</Label>
                           <Input
                             id="key-name"
-                            placeholder="e.g., Production API Key"
+                            placeholder={t("keyNamePlaceholder")}
                             value={newKeyName}
                             onChange={(e) => setNewKeyName(e.target.value)}
                           />
@@ -248,12 +252,12 @@ export default function ApiKeysSettingsPage() {
                           {isCreating ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Creating...
+                              {t("creating")}
                             </>
                           ) : (
                             <>
                               <Key className="mr-2 h-4 w-4" />
-                              Create Key
+                              {t("createKey")}
                             </>
                           )}
                         </Button>
@@ -268,18 +272,18 @@ export default function ApiKeysSettingsPage() {
             {apiKeys.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <Key className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No API keys yet</p>
-                <p className="text-sm">Create your first API key to get started</p>
+                <p>{t("noKeysYet")}</p>
+                <p className="text-sm">{t("createFirstKey")}</p>
               </div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Key</TableHead>
-                    <TableHead>Last Used</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>{tCommon("name")}</TableHead>
+                    <TableHead>{t("key")}</TableHead>
+                    <TableHead>{t("lastUsed")}</TableHead>
+                    <TableHead>{t("created")}</TableHead>
+                    <TableHead>{tCommon("status")}</TableHead>
                     <TableHead className="w-20"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -305,11 +309,11 @@ export default function ApiKeysSettingsPage() {
                         <TableCell>
                           {isExpired ? (
                             <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20">
-                              Expired
+                              {t("status.expired")}
                             </Badge>
                           ) : (
                             <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
-                              Active
+                              {t("status.active")}
                             </Badge>
                           )}
                         </TableCell>
@@ -334,12 +338,12 @@ export default function ApiKeysSettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>API Documentation</CardTitle>
-            <CardDescription>Learn how to use the GWI Agents API</CardDescription>
+            <CardTitle>{t("documentation.title")}</CardTitle>
+            <CardDescription>{t("documentation.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="rounded-lg bg-muted p-4">
-              <p className="text-sm font-mono mb-2">Example Request:</p>
+              <p className="text-sm font-mono mb-2">{t("documentation.exampleRequest")}:</p>
               <pre className="text-sm overflow-x-auto">
                 {`curl -X POST ${typeof window !== 'undefined' ? window.location.origin : ''}/api/v1/agents \\
   -H "Authorization: Bearer gwi_sk_xxx" \\
@@ -348,12 +352,12 @@ export default function ApiKeysSettingsPage() {
               </pre>
             </div>
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <p>Available endpoints:</p>
+              <p>{t("documentation.availableEndpoints")}:</p>
               <ul className="list-disc list-inside space-y-1">
-                <li><code className="bg-muted px-1 rounded">GET /api/v1/agents</code> - List agents</li>
-                <li><code className="bg-muted px-1 rounded">POST /api/v1/agents</code> - Create agent</li>
-                <li><code className="bg-muted px-1 rounded">POST /api/v1/agents/:id/run</code> - Run agent</li>
-                <li><code className="bg-muted px-1 rounded">GET /api/v1/insights</code> - List insights</li>
+                <li><code className="bg-muted px-1 rounded">GET /api/v1/agents</code> - {t("documentation.endpoints.listAgents")}</li>
+                <li><code className="bg-muted px-1 rounded">POST /api/v1/agents</code> - {t("documentation.endpoints.createAgent")}</li>
+                <li><code className="bg-muted px-1 rounded">POST /api/v1/agents/:id/run</code> - {t("documentation.endpoints.runAgent")}</li>
+                <li><code className="bg-muted px-1 rounded">GET /api/v1/insights</code> - {t("documentation.endpoints.listInsights")}</li>
               </ul>
             </div>
           </CardContent>
@@ -363,15 +367,15 @@ export default function ApiKeysSettingsPage() {
       <AlertDialog open={!!deleteKey} onOpenChange={() => setDeleteKey(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete API Key</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteKey")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{deleteKey?.name}"? Any applications using this key will no longer be able to authenticate.
+              {t("deleteKeyConfirmation", { name: deleteKey?.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
-              Delete Key
+              {t("deleteKey")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

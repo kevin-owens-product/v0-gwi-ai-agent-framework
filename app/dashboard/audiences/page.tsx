@@ -20,6 +20,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { useTranslations } from "next-intl"
 
 interface Audience {
   id: string
@@ -223,6 +224,7 @@ export default function AudiencesPage() {
   const [showComparison, setShowComparison] = useState(false)
   const [selectedAudience, setSelectedAudience] = useState<Audience | null>(null)
   const [activeTab, setActiveTab] = useState("all")
+  const t = useTranslations('dashboard.pages.audiences')
 
   useEffect(() => {
     async function fetchAudiences() {
@@ -328,18 +330,18 @@ export default function AudiencesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Audiences</h1>
-          <p className="text-muted-foreground mt-1">Build and analyze custom consumer segments</p>
+          <h1 className="text-3xl font-bold">{t('title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('description')}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => setShowAIBuilder(true)} className="bg-transparent">
             <Sparkles className="h-4 w-4 mr-2" />
-            AI Builder
+            {t('aiBuilder')}
           </Button>
           <Link href="/dashboard/audiences/new">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              New Audience
+              {t('newAudience')}
             </Button>
           </Link>
         </div>
@@ -353,7 +355,7 @@ export default function AudiencesPage() {
               <Users className="h-5 w-5 text-accent-foreground" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Audiences</p>
+              <p className="text-sm text-muted-foreground">{t('totalAudiences')}</p>
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
           </div>
@@ -364,7 +366,7 @@ export default function AudiencesPage() {
               <TrendingUp className="h-5 w-5 text-emerald-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Avg. Reach</p>
+              <p className="text-sm text-muted-foreground">{t('avgReach')}</p>
               <p className="text-2xl font-bold">{stats.avgReach}</p>
             </div>
           </div>
@@ -375,7 +377,7 @@ export default function AudiencesPage() {
               <Globe className="h-5 w-5 text-blue-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Markets</p>
+              <p className="text-sm text-muted-foreground">{t('markets')}</p>
               <p className="text-2xl font-bold">{stats.markets}</p>
             </div>
           </div>
@@ -386,7 +388,7 @@ export default function AudiencesPage() {
               <Clock className="h-5 w-5 text-amber-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Used This Week</p>
+              <p className="text-sm text-muted-foreground">{t('usedThisWeek')}</p>
               <p className="text-2xl font-bold">{stats.usedThisWeek}</p>
             </div>
           </div>
@@ -397,7 +399,7 @@ export default function AudiencesPage() {
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search audiences..."
+          placeholder={t('searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -407,12 +409,12 @@ export default function AudiencesPage() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="all" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="all">All Audiences</TabsTrigger>
-          <TabsTrigger value="recent">Recently Used</TabsTrigger>
-          <TabsTrigger value="favorites">Favorites</TabsTrigger>
+          <TabsTrigger value="all">{t('allAudiences')}</TabsTrigger>
+          <TabsTrigger value="recent">{t('recentlyUsed')}</TabsTrigger>
+          <TabsTrigger value="favorites">{t('favorites')}</TabsTrigger>
           <TabsTrigger value="marketplace" className="flex items-center gap-1">
             <Store className="h-4 w-4" />
-            Marketplace
+            {t('marketplace')}
           </TabsTrigger>
         </TabsList>
         <TabsContent value="all">
@@ -447,10 +449,10 @@ export default function AudiencesPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-primary" />
-              AI Audience Builder
+              {t('aiAudienceBuilder')}
             </DialogTitle>
             <DialogDescription>
-              Describe your target audience in natural language and let AI generate the criteria for you.
+              {t('aiBuilderDescription')}
             </DialogDescription>
           </DialogHeader>
           <AIQueryBuilder
@@ -467,10 +469,10 @@ export default function AudiencesPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <ArrowLeftRight className="h-5 w-5" />
-              Compare Audiences
+              {t('compareAudiences')}
             </DialogTitle>
             <DialogDescription>
-              Compare demographic and behavioral attributes between audiences.
+              {t('compareDescription')}
             </DialogDescription>
           </DialogHeader>
           {selectedAudience && (

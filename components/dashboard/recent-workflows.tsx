@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal, Play, CheckCircle2, Clock, AlertCircle, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface Workflow {
   id: string
@@ -77,6 +78,7 @@ const demoWorkflows: Workflow[] = [
 export function RecentWorkflows() {
   const [workflows, setWorkflows] = useState<Workflow[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const t = useTranslations('dashboard.workflows')
 
   useEffect(() => {
     async function fetchWorkflows() {
@@ -131,10 +133,10 @@ export function RecentWorkflows() {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-lg font-semibold text-foreground">Recent Workflows</CardTitle>
+        <CardTitle className="text-lg font-semibold text-foreground">{t('recentWorkflows')}</CardTitle>
         <Link href="/dashboard/workflows">
           <Button variant="ghost" size="sm">
-            View all
+            {t('viewAll')}
           </Button>
         </Link>
       </CardHeader>
@@ -167,7 +169,7 @@ export function RecentWorkflows() {
                 </div>
                 <div className="text-right flex-shrink-0">
                   <p className="text-sm font-medium text-foreground">{workflow.insights}</p>
-                  <p className="text-xs text-muted-foreground">insights</p>
+                  <p className="text-xs text-muted-foreground">{t('insights')}</p>
                 </div>
                 <Button variant="ghost" size="icon" className="flex-shrink-0">
                   <MoreHorizontal className="h-4 w-4" />

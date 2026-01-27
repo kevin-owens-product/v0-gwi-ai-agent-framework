@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -64,6 +65,8 @@ const actionColors: Record<string, string> = {
 }
 
 export default function AuditLogPage() {
+  const t = useTranslations("admin.audit")
+  const tCommon = useTranslations("common")
   const [logs, setLogs] = useState<AuditLog[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -126,7 +129,7 @@ export default function AuditLogPage() {
   const columns: Column<AuditLog>[] = [
     {
       id: "timestamp",
-      header: "Timestamp",
+      header: t("timestamp"),
       cell: (log) => {
         const { date, time } = formatTimestamp(log.timestamp)
         return (
@@ -142,7 +145,7 @@ export default function AuditLogPage() {
     },
     {
       id: "admin",
-      header: "Admin",
+      header: t("admin"),
       cell: (log) => {
         if (log.admin) {
           return (
@@ -155,22 +158,22 @@ export default function AuditLogPage() {
             </div>
           )
         }
-        return <span className="text-muted-foreground">System</span>
+        return <span className="text-muted-foreground">{t("system")}</span>
       },
     },
     {
       id: "action",
-      header: "Action",
+      header: t("action"),
       cell: (log) => getActionBadge(log.action),
     },
     {
       id: "resource",
-      header: "Resource",
+      header: t("resource"),
       cell: (log) => <Badge variant="outline">{log.resourceType}</Badge>,
     },
     {
       id: "target",
-      header: "Target",
+      header: t("target"),
       cell: (log) => (
         <div className="flex flex-col gap-1">
           {log.targetOrgId && (
@@ -193,7 +196,7 @@ export default function AuditLogPage() {
     },
     {
       id: "ipAddress",
-      header: "IP Address",
+      header: t("ipAddress"),
       cell: (log) => {
         if (log.ipAddress) {
           return (
@@ -211,7 +214,7 @@ export default function AuditLogPage() {
   // Define row actions for AdminDataTable
   const rowActions: RowAction<AuditLog>[] = [
     {
-      label: "View Details",
+      label: tCommon("viewDetails"),
       icon: <Eye className="h-4 w-4" />,
       onClick: (log) => {
         setSelectedLog(log)
@@ -226,14 +229,14 @@ export default function AuditLogPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Platform Audit Log</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Track all administrative actions on the platform ({total} entries)
+                {t("description", { count: total })}
               </CardDescription>
             </div>
             <Button onClick={fetchLogs} variant="outline" size="sm">
               <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
+              {tCommon("refresh")}
             </Button>
           </div>
         </CardHeader>
@@ -243,7 +246,7 @@ export default function AuditLogPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by admin, action, or resource..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -251,30 +254,30 @@ export default function AuditLogPage() {
             </div>
             <Select value={actionFilter} onValueChange={setActionFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Action" />
+                <SelectValue placeholder={t("action")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Actions</SelectItem>
-                <SelectItem value="login">Login</SelectItem>
-                <SelectItem value="logout">Logout</SelectItem>
-                <SelectItem value="suspend_organization">Suspend Org</SelectItem>
-                <SelectItem value="lift_suspension">Lift Suspension</SelectItem>
-                <SelectItem value="ban_user">Ban User</SelectItem>
-                <SelectItem value="lift_ban">Lift Ban</SelectItem>
-                <SelectItem value="impersonate_user">Impersonate</SelectItem>
+                <SelectItem value="all">{t("allActions")}</SelectItem>
+                <SelectItem value="login">{t("actions.login")}</SelectItem>
+                <SelectItem value="logout">{t("actions.logout")}</SelectItem>
+                <SelectItem value="suspend_organization">{t("actions.suspendOrg")}</SelectItem>
+                <SelectItem value="lift_suspension">{t("actions.liftSuspension")}</SelectItem>
+                <SelectItem value="ban_user">{t("actions.banUser")}</SelectItem>
+                <SelectItem value="lift_ban">{t("actions.liftBan")}</SelectItem>
+                <SelectItem value="impersonate_user">{t("actions.impersonate")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={resourceFilter} onValueChange={setResourceFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Resource" />
+                <SelectValue placeholder={t("resource")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Resources</SelectItem>
-                <SelectItem value="super_admin">Super Admin</SelectItem>
-                <SelectItem value="organization">Organization</SelectItem>
-                <SelectItem value="user">User</SelectItem>
-                <SelectItem value="feature_flag">Feature Flag</SelectItem>
-                <SelectItem value="system_rule">System Rule</SelectItem>
+                <SelectItem value="all">{t("allResources")}</SelectItem>
+                <SelectItem value="super_admin">{t("resources.superAdmin")}</SelectItem>
+                <SelectItem value="organization">{t("resources.organization")}</SelectItem>
+                <SelectItem value="user">{t("resources.user")}</SelectItem>
+                <SelectItem value="feature_flag">{t("resources.featureFlag")}</SelectItem>
+                <SelectItem value="system_rule">{t("resources.systemRule")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -285,7 +288,7 @@ export default function AuditLogPage() {
             columns={columns}
             getRowId={(log) => log.id}
             isLoading={isLoading}
-            emptyMessage="No audit logs found"
+            emptyMessage={t("noLogs")}
             rowActions={rowActions}
             page={page}
             totalPages={totalPages}
@@ -304,7 +307,7 @@ export default function AuditLogPage() {
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5" />
-                  Audit Log Details
+                  {t("logDetails")}
                 </SheetTitle>
                 <SheetDescription>
                   {new Date(selectedLog.timestamp).toLocaleString()}
@@ -314,40 +317,40 @@ export default function AuditLogPage() {
               <div className="mt-6 space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-muted-foreground">Action</p>
+                    <p className="text-xs text-muted-foreground">{t("action")}</p>
                     <div className="mt-1">{getActionBadge(selectedLog.action)}</div>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Resource Type</p>
+                    <p className="text-xs text-muted-foreground">{t("resourceType")}</p>
                     <Badge variant="outline" className="mt-1">{selectedLog.resourceType}</Badge>
                   </div>
                   {selectedLog.admin && (
                     <>
                       <div>
-                        <p className="text-xs text-muted-foreground">Admin Name</p>
+                        <p className="text-xs text-muted-foreground">{t("adminName")}</p>
                         <p className="mt-1 text-sm font-medium">{selectedLog.admin.name}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">Admin Email</p>
+                        <p className="text-xs text-muted-foreground">{t("adminEmail")}</p>
                         <p className="mt-1 text-sm">{selectedLog.admin.email}</p>
                       </div>
                     </>
                   )}
                   {selectedLog.targetOrgId && (
                     <div>
-                      <p className="text-xs text-muted-foreground">Target Organization</p>
+                      <p className="text-xs text-muted-foreground">{t("targetOrganization")}</p>
                       <p className="mt-1 text-sm font-mono">{selectedLog.targetOrgId}</p>
                     </div>
                   )}
                   {selectedLog.targetUserId && (
                     <div>
-                      <p className="text-xs text-muted-foreground">Target User</p>
+                      <p className="text-xs text-muted-foreground">{t("targetUser")}</p>
                       <p className="mt-1 text-sm font-mono">{selectedLog.targetUserId}</p>
                     </div>
                   )}
                   {selectedLog.ipAddress && (
                     <div>
-                      <p className="text-xs text-muted-foreground">IP Address</p>
+                      <p className="text-xs text-muted-foreground">{t("ipAddress")}</p>
                       <p className="mt-1 text-sm font-mono">{selectedLog.ipAddress}</p>
                     </div>
                   )}
@@ -355,7 +358,7 @@ export default function AuditLogPage() {
 
                 {selectedLog.userAgent && (
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">User Agent</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("userAgent")}</p>
                     <p className="text-xs font-mono bg-muted p-2 rounded break-all">
                       {selectedLog.userAgent}
                     </p>
@@ -364,7 +367,7 @@ export default function AuditLogPage() {
 
                 {Object.keys(selectedLog.details).length > 0 && (
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">Details</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("details")}</p>
                     <pre className="text-xs font-mono bg-muted p-3 rounded overflow-auto max-h-[300px]">
                       {JSON.stringify(selectedLog.details, null, 2)}
                     </pre>

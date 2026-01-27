@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { FileText, ArrowRight, Loader2, Eye, Clock } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface Report {
   id: string
@@ -74,6 +75,7 @@ const statusStyles = {
 export function RecentReports() {
   const [reports, setReports] = useState<Report[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const t = useTranslations('dashboard.reports')
 
   useEffect(() => {
     async function fetchReports() {
@@ -112,10 +114,10 @@ export function RecentReports() {
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
-        <CardTitle className="text-base font-medium">Recent Reports</CardTitle>
+        <CardTitle className="text-base font-medium">{t('recentReports')}</CardTitle>
         <Link href="/dashboard/reports">
           <Button variant="ghost" size="sm" className="text-xs gap-1">
-            View all
+            {t('viewAll')}
             <ArrowRight className="h-3 w-3" />
           </Button>
         </Link>
@@ -128,10 +130,10 @@ export function RecentReports() {
         ) : reports.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <FileText className="h-8 w-8 mb-2 opacity-50" />
-            <p className="text-sm">No reports yet</p>
+            <p className="text-sm">{t('noReportsYet')}</p>
             <Link href="/dashboard/reports/new">
               <Button variant="outline" size="sm" className="mt-2">
-                Create Report
+                {t('createReport')}
               </Button>
             </Link>
           </div>
@@ -162,7 +164,7 @@ export function RecentReports() {
 
                   <Badge variant="outline" className={`text-xs ${status.badge} flex items-center gap-1`}>
                     <StatusIcon className={`h-3 w-3 ${report.status === "generating" ? "animate-spin" : ""}`} />
-                    {report.status}
+                    {t(report.status)}
                   </Badge>
                 </div>
               </Link>

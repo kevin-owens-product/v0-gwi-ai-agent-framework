@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { TaxonomyTree } from "@/components/gwi/taxonomy/taxonomy-tree"
+import { getTranslations } from "@/lib/i18n/server"
 
 interface CategoryWithChildren {
   id: string
@@ -89,21 +90,22 @@ async function getTaxonomyData() {
 
 async function TaxonomyContent() {
   const { tree, stats } = await getTaxonomyData()
+  const t = await getTranslations('gwi.taxonomy')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Taxonomy</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage categories, attributes, and mapping rules
+            {t('description')}
           </p>
         </div>
         <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
           <Link href="/gwi/taxonomy/categories/new">
             <Plus className="mr-2 h-4 w-4" />
-            New Category
+            {t('newCategory')}
           </Link>
         </Button>
       </div>
@@ -118,7 +120,7 @@ async function TaxonomyContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalCategories}</p>
-                <p className="text-sm text-muted-foreground">Total Categories</p>
+                <p className="text-sm text-muted-foreground">{t('totalCategories')}</p>
               </div>
             </div>
           </CardContent>
@@ -131,7 +133,7 @@ async function TaxonomyContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.activeCategories}</p>
-                <p className="text-sm text-muted-foreground">Active Categories</p>
+                <p className="text-sm text-muted-foreground">{t('activeCategories')}</p>
               </div>
             </div>
           </CardContent>
@@ -144,7 +146,7 @@ async function TaxonomyContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalAttributes}</p>
-                <p className="text-sm text-muted-foreground">Attributes</p>
+                <p className="text-sm text-muted-foreground">{t('attributes')}</p>
               </div>
             </div>
           </CardContent>
@@ -157,7 +159,7 @@ async function TaxonomyContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalMappings}</p>
-                <p className="text-sm text-muted-foreground">Mapping Rules</p>
+                <p className="text-sm text-muted-foreground">{t('mappingRules')}</p>
               </div>
             </div>
           </CardContent>
@@ -169,18 +171,18 @@ async function TaxonomyContent() {
         <Button variant="outline" asChild>
           <Link href="/gwi/taxonomy/attributes">
             <Layers className="mr-2 h-4 w-4" />
-            Manage Attributes
+            {t('manageAttributes')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/taxonomy/mappings">
             <ChevronRight className="mr-2 h-4 w-4" />
-            Mapping Rules
+            {t('mappingRules')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/taxonomy/validation">
-            Validation Testing
+            {t('validationTesting')}
           </Link>
         </Button>
       </div>
@@ -191,7 +193,7 @@ async function TaxonomyContent() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search categories by name or code..."
+              placeholder={t('searchPlaceholder')}
               className="pl-9"
             />
           </div>
@@ -201,9 +203,9 @@ async function TaxonomyContent() {
       {/* Category Tree */}
       <Card>
         <CardHeader>
-          <CardTitle>Category Hierarchy</CardTitle>
+          <CardTitle>{t('categoryHierarchy')}</CardTitle>
           <CardDescription>
-            View and manage the taxonomy category structure
+            {t('categoryHierarchyDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -212,14 +214,14 @@ async function TaxonomyContent() {
           ) : (
             <div className="text-center py-12">
               <FolderTree className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-lg font-medium">No categories yet</h3>
+              <h3 className="text-lg font-medium">{t('noCategoriesYet')}</h3>
               <p className="text-muted-foreground mb-4">
-                Start building your taxonomy by creating categories
+                {t('startBuildingTaxonomy')}
               </p>
               <Button asChild>
                 <Link href="/gwi/taxonomy/categories/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  Create First Category
+                  {t('createFirstCategory')}
                 </Link>
               </Button>
             </div>
@@ -230,14 +232,16 @@ async function TaxonomyContent() {
   )
 }
 
-export default function TaxonomyPage() {
+export default async function TaxonomyPage() {
+  const t = await getTranslations('gwi.taxonomy')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Taxonomy</h1>
-            <p className="text-muted-foreground">Loading taxonomy...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
           <div className="grid gap-4 md:grid-cols-4">
             {[...Array(4)].map((_, i) => (

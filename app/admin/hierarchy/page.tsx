@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -95,32 +96,33 @@ interface Stats {
   orgsByType: Record<string, number>
 }
 
-const ORG_TYPE_LABELS: Record<string, string> = {
-  STANDARD: "Standard",
-  AGENCY: "Agency",
-  HOLDING_COMPANY: "Holding Company",
-  SUBSIDIARY: "Subsidiary",
-  BRAND: "Brand",
-  SUB_BRAND: "Sub-Brand",
-  DIVISION: "Division",
-  DEPARTMENT: "Department",
-  FRANCHISE: "Franchise",
-  FRANCHISEE: "Franchisee",
-  RESELLER: "Reseller",
-  CLIENT: "Client",
-  REGIONAL: "Regional",
-  PORTFOLIO_COMPANY: "Portfolio Company",
+// These labels are used for display and will be translated via component
+const ORG_TYPE_KEYS: Record<string, string> = {
+  STANDARD: "standard",
+  AGENCY: "agency",
+  HOLDING_COMPANY: "holdingCompany",
+  SUBSIDIARY: "subsidiary",
+  BRAND: "brand",
+  SUB_BRAND: "subBrand",
+  DIVISION: "division",
+  DEPARTMENT: "department",
+  FRANCHISE: "franchise",
+  FRANCHISEE: "franchisee",
+  RESELLER: "reseller",
+  CLIENT: "client",
+  REGIONAL: "regional",
+  PORTFOLIO_COMPANY: "portfolioCompany",
 }
 
-const RELATIONSHIP_TYPE_LABELS: Record<string, string> = {
-  OWNERSHIP: "Ownership",
-  MANAGEMENT: "Management",
-  PARTNERSHIP: "Partnership",
-  LICENSING: "Licensing",
-  RESELLER: "Reseller",
-  WHITE_LABEL: "White Label",
-  DATA_SHARING: "Data Sharing",
-  CONSORTIUM: "Consortium",
+const RELATIONSHIP_TYPE_KEYS: Record<string, string> = {
+  OWNERSHIP: "ownership",
+  MANAGEMENT: "management",
+  PARTNERSHIP: "partnership",
+  LICENSING: "licensing",
+  RESELLER: "reseller",
+  WHITE_LABEL: "whiteLabel",
+  DATA_SHARING: "dataSharing",
+  CONSORTIUM: "consortium",
 }
 
 function OrgTreeNode({
@@ -129,12 +131,14 @@ function OrgTreeNode({
   onAddChild,
   onViewDetails,
   onMove,
+  t,
 }: {
   node: HierarchyNode
   level?: number
   onAddChild: (orgId: string, orgName: string) => void
   onViewDetails: (orgId: string) => void
   onMove: (orgId: string, orgName: string) => void
+  t: (key: string, values?: Record<string, unknown>) => string
 }) {
   const [expanded, setExpanded] = useState(level < 2)
   const hasChildren = node._count.childOrgs > 0 || (node.childOrgs && node.childOrgs.length > 0)
@@ -171,7 +175,7 @@ function OrgTreeNode({
           <div className="flex items-center gap-2">
             <span className="font-medium truncate">{node.name}</span>
             <Badge variant="outline" className="text-xs">
-              {ORG_TYPE_LABELS[node.orgType] || node.orgType}
+              {t(`orgTypes.${ORG_TYPE_KEYS[node.orgType]}`) || node.orgType}
             </Badge>
             <Badge
               variant={
@@ -189,12 +193,12 @@ function OrgTreeNode({
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <Users className="h-3 w-3" />
-              {node._count.members} members
+              {t("membersCount", { count: node._count.members })}
             </span>
             {node._count.childOrgs > 0 && (
               <span className="flex items-center gap-1">
                 <GitBranch className="h-3 w-3" />
-                {node._count.childOrgs} children
+                {t("childrenCount", { count: node._count.childOrgs })}
               </span>
             )}
           </div>
@@ -210,24 +214,24 @@ function OrgTreeNode({
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => onViewDetails(node.id)}>
                 <Eye className="h-4 w-4 mr-2" />
-                View Details
+                {t("viewDetails")}
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/admin/tenants/${node.id}`}>
                   <Settings className="h-4 w-4 mr-2" />
-                  Manage Tenant
+                  {t("manageTenant")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {node.allowChildOrgs && (
                 <DropdownMenuItem onClick={() => onAddChild(node.id, node.name)}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Child Organization
+                  {t("addChildOrganization")}
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem onClick={() => onMove(node.id, node.name)}>
                 <Move className="h-4 w-4 mr-2" />
-                Move Organization
+                {t("moveOrganization")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -244,6 +248,7 @@ function OrgTreeNode({
               onAddChild={onAddChild}
               onViewDetails={onViewDetails}
               onMove={onMove}
+              t={t}
             />
           ))}
         </div>
@@ -253,6 +258,8 @@ function OrgTreeNode({
 }
 
 export default function HierarchyPage() {
+  const t = useTranslations("admin.hierarchy")
+  const tCommon = useTranslations("common")
   const [organizations, setOrganizations] = useState<HierarchyNode[]>([])
   const [relationships, setRelationships] = useState<Relationship[]>([])
   const [stats, setStats] = useState<Stats | null>(null)
@@ -521,7 +528,7 @@ export default function HierarchyPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Organizations
+              {t("stats.totalOrganizations")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -531,7 +538,7 @@ export default function HierarchyPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              With Children
+              {t("stats.withChildren")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -541,7 +548,7 @@ export default function HierarchyPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Child Organizations
+              {t("stats.childOrganizations")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -551,7 +558,7 @@ export default function HierarchyPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Max Depth
+              {t("stats.maxDepth")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -567,20 +574,20 @@ export default function HierarchyPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Network className="h-5 w-5" />
-                Organization Hierarchy
+                {t("title")}
               </CardTitle>
               <CardDescription>
-                View and manage the multi-level organization structure
+                {t("description")}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={() => { fetchHierarchy(); fetchRelationships(); }} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               <Button onClick={() => setAddRelDialogOpen(true)} variant="outline" size="sm">
                 <Link2 className="h-4 w-4 mr-2" />
-                Add Relationship
+                {t("addRelationship")}
               </Button>
             </div>
           </div>
@@ -588,11 +595,11 @@ export default function HierarchyPage() {
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList>
-              <TabsTrigger value="tree">Hierarchy Tree</TabsTrigger>
+              <TabsTrigger value="tree">{t("tabs.hierarchyTree")}</TabsTrigger>
               <TabsTrigger value="relationships">
-                Cross-Org Relationships ({relationships.length})
+                {t("tabs.crossOrgRelationships")} ({relationships.length})
               </TabsTrigger>
-              <TabsTrigger value="types">By Type</TabsTrigger>
+              <TabsTrigger value="types">{t("tabs.byType")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="tree" className="mt-4">
@@ -603,8 +610,8 @@ export default function HierarchyPage() {
               ) : organizations.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
                   <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>No organizations found</p>
-                  <p className="text-sm mt-2">Create your first organization from the Tenants page</p>
+                  <p>{t("noOrganizationsFound")}</p>
+                  <p className="text-sm mt-2">{t("createFirstOrganization")}</p>
                 </div>
               ) : (
                 <div className="space-y-1">
@@ -615,6 +622,7 @@ export default function HierarchyPage() {
                       onAddChild={openAddChildDialog}
                       onViewDetails={(id) => window.open(`/admin/tenants/${id}`, "_blank")}
                       onMove={openMoveDialog}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -625,15 +633,15 @@ export default function HierarchyPage() {
               {relationships.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
                   <Link2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>No cross-organization relationships</p>
-                  <p className="text-sm mt-2">Create relationships to connect organizations</p>
+                  <p>{t("noRelationships")}</p>
+                  <p className="text-sm mt-2">{t("createRelationshipsHint")}</p>
                   <Button
                     onClick={() => setAddRelDialogOpen(true)}
                     variant="outline"
                     className="mt-4"
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Relationship
+                    {t("addRelationship")}
                   </Button>
                 </div>
               ) : (
@@ -647,19 +655,19 @@ export default function HierarchyPage() {
                         <div className="text-center">
                           <div className="font-medium">{rel.fromOrg.name}</div>
                           <div className="text-xs text-muted-foreground">
-                            {ORG_TYPE_LABELS[rel.fromOrg.orgType]}
+                            {t(`orgTypes.${ORG_TYPE_KEYS[rel.fromOrg.orgType]}`)}
                           </div>
                         </div>
                         <div className="flex flex-col items-center">
                           <ArrowRight className="h-4 w-4 text-muted-foreground" />
                           <Badge variant="secondary" className="text-xs mt-1">
-                            {RELATIONSHIP_TYPE_LABELS[rel.relationshipType]}
+                            {t(`relationshipTypes.${RELATIONSHIP_TYPE_KEYS[rel.relationshipType]}`)}
                           </Badge>
                         </div>
                         <div className="text-center">
                           <div className="font-medium">{rel.toOrg.name}</div>
                           <div className="text-xs text-muted-foreground">
-                            {ORG_TYPE_LABELS[rel.toOrg.orgType]}
+                            {t(`orgTypes.${ORG_TYPE_KEYS[rel.toOrg.orgType]}`)}
                           </div>
                         </div>
                       </div>
@@ -673,7 +681,7 @@ export default function HierarchyPage() {
                               : "destructive"
                           }
                         >
-                          {rel.status}
+                          {t(`statuses.${rel.status.toLowerCase()}`)}
                         </Badge>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -686,28 +694,28 @@ export default function HierarchyPage() {
                               <DropdownMenuItem
                                 onClick={() => handleUpdateRelationshipStatus(rel.id, "ACTIVE")}
                               >
-                                Approve
+                                {t("actions.approve")}
                               </DropdownMenuItem>
                             )}
                             {rel.status === "ACTIVE" && (
                               <DropdownMenuItem
                                 onClick={() => handleUpdateRelationshipStatus(rel.id, "SUSPENDED")}
                               >
-                                Suspend
+                                {t("actions.suspend")}
                               </DropdownMenuItem>
                             )}
                             {rel.status === "SUSPENDED" && (
                               <DropdownMenuItem
                                 onClick={() => handleUpdateRelationshipStatus(rel.id, "ACTIVE")}
                               >
-                                Reactivate
+                                {t("actions.reactivate")}
                               </DropdownMenuItem>
                             )}
                             <DropdownMenuItem
                               className="text-destructive"
                               onClick={() => handleUpdateRelationshipStatus(rel.id, "TERMINATED")}
                             >
-                              Terminate
+                              {t("actions.terminate")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -725,7 +733,7 @@ export default function HierarchyPage() {
                     <Card key={type}>
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium">
-                          {ORG_TYPE_LABELS[type] || type}
+                          {t(`orgTypes.${ORG_TYPE_KEYS[type]}`) || type}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -743,17 +751,17 @@ export default function HierarchyPage() {
       <Dialog open={addChildDialogOpen} onOpenChange={setAddChildDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Child Organization</DialogTitle>
+            <DialogTitle>{t("dialogs.addChild.title")}</DialogTitle>
             <DialogDescription>
-              Create a new organization under {parentOrg?.name}
+              {t("dialogs.addChild.description", { name: parentOrg?.name })}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="childName">Organization Name *</Label>
+              <Label htmlFor="childName">{t("dialogs.addChild.organizationName")} *</Label>
               <Input
                 id="childName"
-                placeholder="Child Organization"
+                placeholder={t("dialogs.addChild.placeholder")}
                 value={newChild.name}
                 onChange={(e) => setNewChild({ ...newChild, name: e.target.value })}
               />
@@ -761,7 +769,7 @@ export default function HierarchyPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Organization Type</Label>
+                <Label>{t("dialogs.addChild.organizationType")}</Label>
                 <Select
                   value={newChild.orgType}
                   onValueChange={(value) => setNewChild({ ...newChild, orgType: value })}
@@ -770,16 +778,16 @@ export default function HierarchyPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(ORG_TYPE_LABELS).map(([value, label]) => (
+                    {Object.entries(ORG_TYPE_KEYS).map(([value, key]) => (
                       <SelectItem key={value} value={value}>
-                        {label}
+                        {t(`orgTypes.${key}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Plan Tier</Label>
+                <Label>{t("dialogs.addChild.planTier")}</Label>
                 <Select
                   value={newChild.planTier}
                   onValueChange={(value) => setNewChild({ ...newChild, planTier: value })}
@@ -788,9 +796,9 @@ export default function HierarchyPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="STARTER">Starter</SelectItem>
-                    <SelectItem value="PROFESSIONAL">Professional</SelectItem>
-                    <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
+                    <SelectItem value="STARTER">{t("planTiers.starter")}</SelectItem>
+                    <SelectItem value="PROFESSIONAL">{t("planTiers.professional")}</SelectItem>
+                    <SelectItem value="ENTERPRISE">{t("planTiers.enterprise")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -807,22 +815,22 @@ export default function HierarchyPage() {
                 className="rounded border-gray-300"
               />
               <Label htmlFor="inheritSettings" className="text-sm">
-                Inherit settings from parent
+                {t("dialogs.addChild.inheritSettings")}
               </Label>
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAddChildDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button onClick={handleAddChild} disabled={!newChild.name || isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {tCommon("creating")}
                 </>
               ) : (
-                "Create Child"
+                t("dialogs.addChild.createChild")
               )}
             </Button>
           </DialogFooter>
@@ -833,14 +841,14 @@ export default function HierarchyPage() {
       <Dialog open={addRelDialogOpen} onOpenChange={setAddRelDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create Cross-Organization Relationship</DialogTitle>
+            <DialogTitle>{t("dialogs.addRelationship.title")}</DialogTitle>
             <DialogDescription>
-              Define a relationship between two organizations
+              {t("dialogs.addRelationship.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label>From Organization</Label>
+              <Label>{t("dialogs.addRelationship.fromOrganization")}</Label>
               <Select
                 value={newRelationship.fromOrgId}
                 onValueChange={(value) =>
@@ -848,7 +856,7 @@ export default function HierarchyPage() {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select organization" />
+                  <SelectValue placeholder={t("dialogs.addRelationship.selectOrganization")} />
                 </SelectTrigger>
                 <SelectContent>
                   {allOrgs.map((org) => (
@@ -861,7 +869,7 @@ export default function HierarchyPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>To Organization</Label>
+              <Label>{t("dialogs.addRelationship.toOrganization")}</Label>
               <Select
                 value={newRelationship.toOrgId}
                 onValueChange={(value) =>
@@ -869,7 +877,7 @@ export default function HierarchyPage() {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select organization" />
+                  <SelectValue placeholder={t("dialogs.addRelationship.selectOrganization")} />
                 </SelectTrigger>
                 <SelectContent>
                   {allOrgs
@@ -885,7 +893,7 @@ export default function HierarchyPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Relationship Type</Label>
+                <Label>{t("dialogs.addRelationship.relationshipType")}</Label>
                 <Select
                   value={newRelationship.relationshipType}
                   onValueChange={(value) =>
@@ -896,16 +904,16 @@ export default function HierarchyPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(RELATIONSHIP_TYPE_LABELS).map(([value, label]) => (
+                    {Object.entries(RELATIONSHIP_TYPE_KEYS).map(([value, key]) => (
                       <SelectItem key={value} value={value}>
-                        {label}
+                        {t(`relationshipTypes.${key}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Access Level</Label>
+                <Label>{t("dialogs.addRelationship.accessLevel")}</Label>
                 <Select
                   value={newRelationship.accessLevel}
                   onValueChange={(value) =>
@@ -916,10 +924,10 @@ export default function HierarchyPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="NONE">None</SelectItem>
-                    <SelectItem value="READ_ONLY">Read Only</SelectItem>
-                    <SelectItem value="FULL_ACCESS">Full Access</SelectItem>
-                    <SelectItem value="INHERIT">Inherit</SelectItem>
+                    <SelectItem value="NONE">{t("accessLevels.none")}</SelectItem>
+                    <SelectItem value="READ_ONLY">{t("accessLevels.readOnly")}</SelectItem>
+                    <SelectItem value="FULL_ACCESS">{t("accessLevels.fullAccess")}</SelectItem>
+                    <SelectItem value="INHERIT">{t("accessLevels.inherit")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -927,7 +935,7 @@ export default function HierarchyPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAddRelDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={handleAddRelationship}
@@ -938,10 +946,10 @@ export default function HierarchyPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {tCommon("creating")}
                 </>
               ) : (
-                "Create Relationship"
+                t("dialogs.addRelationship.createRelationship")
               )}
             </Button>
           </DialogFooter>
@@ -952,20 +960,20 @@ export default function HierarchyPage() {
       <Dialog open={moveDialogOpen} onOpenChange={setMoveDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Move Organization</DialogTitle>
+            <DialogTitle>{t("dialogs.move.title")}</DialogTitle>
             <DialogDescription>
-              Move {moveOrg?.name} to a new parent organization or make it a root organization
+              {t("dialogs.move.description", { name: moveOrg?.name })}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label>New Parent Organization</Label>
+              <Label>{t("dialogs.move.newParentOrganization")}</Label>
               <Select value={newParentId} onValueChange={setNewParentId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select new parent (or leave empty for root)" />
+                  <SelectValue placeholder={t("dialogs.move.selectNewParent")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="root">Make Root Organization</SelectItem>
+                  <SelectItem value="root">{t("dialogs.move.makeRootOrganization")}</SelectItem>
                   {allOrgs
                     .filter((o) => o.id !== moveOrg?.id)
                     .map((org) => (
@@ -979,16 +987,16 @@ export default function HierarchyPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setMoveDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button onClick={handleMoveOrg} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Moving...
+                  {t("dialogs.move.moving")}
                 </>
               ) : (
-                "Move Organization"
+                t("dialogs.move.moveOrganization")
               )}
             </Button>
           </DialogFooter>

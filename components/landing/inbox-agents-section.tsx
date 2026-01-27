@@ -4,38 +4,40 @@ import { useState } from "react"
 import { Inbox, Mail, MessageSquare, Clock, CheckCircle2, Zap, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-
-const channels = [
-  { id: "slack", name: "Slack", icon: MessageSquare, color: "bg-chart-1" },
-  { id: "email", name: "Email", icon: Mail, color: "bg-chart-2" },
-]
-
-const exampleRequests = [
-  {
-    channel: "slack",
-    from: "Sarah Chen",
-    message: "Can you pull Gen Z attitudes toward sustainable fashion in the UK?",
-    status: "completed",
-    time: "2 min ago",
-  },
-  {
-    channel: "email",
-    from: "marketing@acme.com",
-    message: "Need a competitive analysis of streaming platforms for millennials",
-    status: "processing",
-    time: "Just now",
-  },
-  {
-    channel: "slack",
-    from: "David Park",
-    message: "What's the brand perception of Tesla among Gen X in Germany?",
-    status: "pending",
-    time: "5 min ago",
-  },
-]
+import { useTranslations } from "next-intl"
 
 export function InboxAgentsSection() {
+  const t = useTranslations("landing.inbox")
   const [activeChannel, setActiveChannel] = useState("all")
+
+  const channels = [
+    { id: "slack", name: t("slack"), icon: MessageSquare, color: "bg-chart-1" },
+    { id: "email", name: t("email"), icon: Mail, color: "bg-chart-2" },
+  ]
+
+  const exampleRequests = [
+    {
+      channel: "slack",
+      from: t("request1From"),
+      message: t("request1Message"),
+      status: "completed",
+      time: "2 min ago",
+    },
+    {
+      channel: "email",
+      from: t("request2From"),
+      message: t("request2Message"),
+      status: "processing",
+      time: "Just now",
+    },
+    {
+      channel: "slack",
+      from: t("request3From"),
+      message: t("request3Message"),
+      status: "pending",
+      time: "5 min ago",
+    },
+  ]
 
   return (
     <section className="py-24">
@@ -46,7 +48,7 @@ export function InboxAgentsSection() {
               <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
                 <div className="flex items-center gap-2">
                   <Inbox className="h-4 w-4 text-accent" />
-                  <span className="text-sm font-medium text-foreground">Inbox Agents</span>
+                  <span className="text-sm font-medium text-foreground">{t("badge")}</span>
                 </div>
                 <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
                   <button
@@ -55,7 +57,7 @@ export function InboxAgentsSection() {
                       activeChannel === "all" ? "bg-background text-foreground" : "text-muted-foreground"
                     }`}
                   >
-                    All
+                    {t("all")}
                   </button>
                   {channels.map((ch) => (
                     <button
@@ -97,19 +99,19 @@ export function InboxAgentsSection() {
                             {request.status === "completed" && (
                               <span className="flex items-center gap-1 text-xs text-chart-5">
                                 <CheckCircle2 className="h-3 w-3" />
-                                Completed
+                                {t("completed")}
                               </span>
                             )}
                             {request.status === "processing" && (
                               <span className="flex items-center gap-1 text-xs text-accent">
                                 <Zap className="h-3 w-3 animate-pulse" />
-                                Processing
+                                {t("processing")}
                               </span>
                             )}
                             {request.status === "pending" && (
                               <span className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <Clock className="h-3 w-3" />
-                                Pending Review
+                                {t("pendingReview")}
                               </span>
                             )}
                           </div>
@@ -124,24 +126,18 @@ export function InboxAgentsSection() {
           <div className="order-1 lg:order-2">
             <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-sm text-accent mb-6">
               <Inbox className="h-3 w-3" />
-              Inbox Agents
+              {t("badge")}
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              AI that handles requests
+              {t("title")}
               <br />
-              <span className="text-muted-foreground">while you sleep</span>
+              <span className="text-muted-foreground">{t("titleHighlight")}</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-6">
-              Connect your Slack channels and email inboxes. Inbox Agents automatically detect research requests,
-              process them using your configured workflows, and deliver insights back to the requester.
+              {t("subtitle")}
             </p>
             <ul className="space-y-3 mb-8">
-              {[
-                "Auto-detect research questions from messages",
-                "Route to the right agent based on topic",
-                "Optional human approval before sending",
-                "Full audit trail of all processed requests",
-              ].map((item) => (
+              {[t("feature1"), t("feature2"), t("feature3"), t("feature4")].map((item) => (
                 <li key={item} className="flex items-start gap-3 text-sm">
                   <CheckCircle2 className="h-4 w-4 text-chart-5 mt-0.5 flex-shrink-0" />
                   <span className="text-muted-foreground">{item}</span>
@@ -150,7 +146,7 @@ export function InboxAgentsSection() {
             </ul>
             <Link href="/dashboard/inbox">
               <Button className="gap-2">
-                Set Up Inbox Agents
+                {t("setupButton")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>

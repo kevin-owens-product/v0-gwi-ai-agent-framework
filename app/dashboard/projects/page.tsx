@@ -31,6 +31,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Plus, Search, Folder, Calendar, Users, MoreHorizontal, Bot, FileText, Workflow, Archive, Edit, Trash2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { useTranslations } from "next-intl"
 
 interface Project {
   id: string
@@ -115,6 +116,8 @@ export default function ProjectsPage() {
   const [newProjectDescription, setNewProjectDescription] = useState("")
   const [editName, setEditName] = useState("")
   const [editDescription, setEditDescription] = useState("")
+  const t = useTranslations('dashboard.pages.projects')
+  const tCommon = useTranslations('common')
 
   const filteredProjects = projects.filter(
     (project) =>
@@ -197,38 +200,38 @@ export default function ProjectsPage() {
       <PageTracker pageName="Projects List" metadata={{ searchQuery: !!searchQuery, totalProjects: projects.length }} />
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Projects</h1>
-          <p className="text-muted-foreground">Organize your research and workflows into projects</p>
+          <h1 className="text-2xl font-bold text-foreground">{t('title')}</h1>
+          <p className="text-muted-foreground">{t('description')}</p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              New Project
+              {t('newProject')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create New Project</DialogTitle>
+              <DialogTitle>{t('createNewProject')}</DialogTitle>
               <DialogDescription>
-                Create a new project to organize your workflows, reports, and agents.
+                {t('createProjectDescription')}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Project Name</Label>
+                <Label htmlFor="name">{t('projectName')}</Label>
                 <Input
                   id="name"
-                  placeholder="Enter project name"
+                  placeholder={t('projectNamePlaceholder')}
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t('projectDescription')}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Describe your project"
+                  placeholder={t('projectDescriptionPlaceholder')}
                   rows={3}
                   value={newProjectDescription}
                   onChange={(e) => setNewProjectDescription(e.target.value)}
@@ -237,10 +240,10 @@ export default function ProjectsPage() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon('cancel')}
               </Button>
               <Button onClick={handleCreateProject} disabled={!newProjectName.trim()}>
-                Create Project
+                {t('createProject')}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -250,7 +253,7 @@ export default function ProjectsPage() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Search projects..."
+          placeholder={t('searchPlaceholder')}
           className="pl-10"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -294,11 +297,11 @@ export default function ProjectsPage() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={(e) => handleEditProject(project, e)}>
                         <Edit className="h-4 w-4 mr-2" />
-                        Edit
+                        {tCommon('edit')}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={(e) => handleArchiveProject(project, e)}>
                         <Archive className="h-4 w-4 mr-2" />
-                        {project.status === "archived" ? "Unarchive" : "Archive"}
+                        {project.status === "archived" ? t('unarchive') : t('archive')}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
@@ -306,7 +309,7 @@ export default function ProjectsPage() {
                         onClick={(e) => handleDeleteProject(project, e)}
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        Delete
+                        {tCommon('delete')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -327,15 +330,15 @@ export default function ProjectsPage() {
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex items-center gap-1 text-muted-foreground">
                     <Workflow className="h-3.5 w-3.5" />
-                    {project.workflows} workflows
+                    {project.workflows} {t('workflows')}
                   </div>
                   <div className="flex items-center gap-1 text-muted-foreground">
                     <FileText className="h-3.5 w-3.5" />
-                    {project.reports} reports
+                    {project.reports} {t('reports')}
                   </div>
                   <div className="flex items-center gap-1 text-muted-foreground">
                     <Bot className="h-3.5 w-3.5" />
-                    {project.agents} agents
+                    {project.agents} {t('agents')}
                   </div>
                 </div>
               </CardContent>
@@ -347,8 +350,8 @@ export default function ProjectsPage() {
       {filteredProjects.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <Folder className="h-12 w-12 text-muted-foreground/50" />
-          <h3 className="mt-4 text-lg font-semibold">No projects found</h3>
-          <p className="mt-2 text-sm text-muted-foreground">Try adjusting your search or create a new project.</p>
+          <h3 className="mt-4 text-lg font-semibold">{t('noProjectsFound')}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{t('tryAdjustingSearch')}</p>
         </div>
       )}
 
@@ -356,26 +359,26 @@ export default function ProjectsPage() {
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Project</DialogTitle>
+            <DialogTitle>{t('editProject')}</DialogTitle>
             <DialogDescription>
-              Update your project details.
+              {t('editProjectDescription')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-name">Project Name</Label>
+              <Label htmlFor="edit-name">{t('projectName')}</Label>
               <Input
                 id="edit-name"
-                placeholder="Enter project name"
+                placeholder={t('projectNamePlaceholder')}
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-description">Description</Label>
+              <Label htmlFor="edit-description">{t('projectDescription')}</Label>
               <Textarea
                 id="edit-description"
-                placeholder="Describe your project"
+                placeholder={t('projectDescriptionPlaceholder')}
                 rows={3}
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
@@ -384,10 +387,10 @@ export default function ProjectsPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditOpen(false)}>
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button onClick={handleSaveEdit} disabled={!editName.trim()}>
-              Save Changes
+              {t('saveChanges')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -397,15 +400,15 @@ export default function ProjectsPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Project</AlertDialogTitle>
+            <AlertDialogTitle>{t('deleteProject')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{projectToDelete?.name}"? This will also delete all associated workflows, reports, and agents. This action cannot be undone.
+              {t('deleteProjectDescription', { name: projectToDelete?.name || '' })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Delete
+              {tCommon('delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

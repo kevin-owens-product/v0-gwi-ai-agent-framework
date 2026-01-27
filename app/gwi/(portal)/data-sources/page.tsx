@@ -37,6 +37,7 @@ import {
   FileText,
   LineChart,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const syncStatusColors: Record<string, { color: string; icon: typeof CheckCircle }> = {
   synced: { color: "bg-green-100 text-green-700", icon: CheckCircle },
@@ -58,21 +59,23 @@ async function getDataSources() {
 
 async function DataSourcesContent() {
   const dataSources = await getDataSources()
+  const t = await getTranslations('gwi.dataSources')
+  const tc = await getTranslations('gwi.common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Data Sources</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage external data connections and integrations
+            {t('description')}
           </p>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
           <Link href="/gwi/data-sources/new">
             <Plus className="mr-2 h-4 w-4" />
-            Add Data Source
+            {t('addDataSource')}
           </Link>
         </Button>
       </div>
@@ -82,19 +85,19 @@ async function DataSourcesContent() {
         <Button variant="outline" asChild>
           <Link href="/gwi/data-sources/schemas">
             <FileText className="mr-2 h-4 w-4" />
-            Schema Browser
+            {t('schemaBrowser')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/data-sources/sync">
             <RefreshCw className="mr-2 h-4 w-4" />
-            Sync Status
+            {t('syncStatus')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/data-sources/quality">
             <LineChart className="mr-2 h-4 w-4" />
-            Data Quality
+            {t('dataQuality')}
           </Link>
         </Button>
       </div>
@@ -104,7 +107,7 @@ async function DataSourcesContent() {
         <CardContent className="pt-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search data sources..." className="pl-9" />
+            <Input placeholder={t('searchPlaceholder')} className="pl-9" />
           </div>
         </CardContent>
       </Card>
@@ -116,10 +119,10 @@ async function DataSourcesContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Sync Status</TableHead>
-                  <TableHead>Last Sync</TableHead>
+                  <TableHead>{t('name')}</TableHead>
+                  <TableHead>{t('type')}</TableHead>
+                  <TableHead>{t('syncStatus')}</TableHead>
+                  <TableHead>{t('lastSync')}</TableHead>
                   <TableHead>Active</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
@@ -139,7 +142,7 @@ async function DataSourcesContent() {
                           <div>
                             <p className="font-medium">{ds.name}</p>
                             <p className="text-xs text-muted-foreground">
-                              Created by {ds.createdBy.name}
+                              {tc('createdBy')} {ds.createdBy.name}
                             </p>
                           </div>
                         </div>
@@ -154,13 +157,13 @@ async function DataSourcesContent() {
                               ds.syncStatus === "syncing" ? "animate-spin" : ""
                             }`}
                           />
-                          {ds.syncStatus}
+                          {t(`syncStatuses.${ds.syncStatus}`)}
                         </Badge>
                       </TableCell>
                       <TableCell>
                         {ds.lastSyncAt
                           ? new Date(ds.lastSyncAt).toLocaleString()
-                          : "Never"}
+                          : tc('never')}
                       </TableCell>
                       <TableCell>
                         <Switch checked={ds.isActive} />
@@ -175,18 +178,18 @@ async function DataSourcesContent() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem className="text-blue-600">
                               <RefreshCw className="mr-2 h-4 w-4" />
-                              Sync Now
+                              {tc('syncNow')}
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                               <Link href={`/gwi/data-sources/${ds.id}`}>
                                 <Edit className="mr-2 h-4 w-4" />
-                                Edit
+                                {tc('edit')}
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600">
                               <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
+                              {tc('delete')}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -199,13 +202,13 @@ async function DataSourcesContent() {
           ) : (
             <EmptyState
               icon={Database}
-              title="No data sources configured"
-              description="Connect external data sources to your platform"
+              title={t('noDataSourcesConfigured')}
+              description={t('connectExternalSources')}
             >
               <Button asChild>
                 <Link href="/gwi/data-sources/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  Add First Data Source
+                  {t('addFirstDataSource')}
                 </Link>
               </Button>
             </EmptyState>
@@ -216,13 +219,15 @@ async function DataSourcesContent() {
   )
 }
 
-export default function DataSourcesPage() {
+export default async function DataSourcesPage() {
+  const t = await getTranslations('gwi.dataSources')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Data Sources</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

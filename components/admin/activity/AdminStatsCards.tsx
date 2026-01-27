@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import {
@@ -47,6 +48,7 @@ function formatHour(hour: number): string {
 }
 
 export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsProps) {
+  const t = useTranslations("admin.activity.stats")
   if (isLoading) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -96,7 +98,7 @@ export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsPro
       {/* Total Activities */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Activities</CardTitle>
+          <CardTitle className="text-sm font-medium">{t("totalActivities")}</CardTitle>
           <Activity className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -104,7 +106,7 @@ export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsPro
             {stats.totalActivities.toLocaleString()}
           </div>
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-xs text-muted-foreground">Today:</span>
+            <span className="text-xs text-muted-foreground">{t("today")}:</span>
             <span className="text-sm font-medium">{todayActivity}</span>
             {activityChange !== 0 && (
               <span
@@ -123,7 +125,7 @@ export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsPro
       {/* Success Rate */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+          <CardTitle className="text-sm font-medium">{t("successRate")}</CardTitle>
           <CheckCircle className="h-4 w-4 text-green-500" />
         </CardHeader>
         <CardContent>
@@ -145,7 +147,7 @@ export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsPro
       {/* Active Admins */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Active Admins</CardTitle>
+          <CardTitle className="text-sm font-medium">{t("activeAdmins")}</CardTitle>
           <Users className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -159,10 +161,10 @@ export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsPro
                 className="flex items-center justify-between text-xs"
               >
                 <span className="truncate max-w-[100px]">
-                  {adminActivity.admin?.name || "Unknown"}
+                  {adminActivity.admin?.name || t("unknown")}
                 </span>
                 <span className="text-muted-foreground">
-                  {adminActivity.count} actions
+                  {adminActivity.count} {t("actions")}
                 </span>
               </div>
             ))}
@@ -173,7 +175,7 @@ export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsPro
       {/* Avg Response Time */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Avg Response Time</CardTitle>
+          <CardTitle className="text-sm font-medium">{t("avgResponseTime")}</CardTitle>
           <Clock className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -181,7 +183,7 @@ export function AdminStatsCards({ stats, isLoading = false }: AdminStatsCardsPro
             {Math.round(stats.avgResponseTime)}ms
           </div>
           <div className="mt-2">
-            <p className="text-xs text-muted-foreground mb-1">Busiest Hours</p>
+            <p className="text-xs text-muted-foreground mb-1">{t("busiestHours")}</p>
             <div className="flex gap-2">
               {stats.busiestHours.slice(0, 3).map((hourData, index) => (
                 <span
@@ -208,6 +210,7 @@ export function AdminProductivityCard({
   stats,
   isLoading = false,
 }: AdminProductivityCardProps) {
+  const t = useTranslations("admin.activity.stats")
   if (isLoading) {
     return (
       <Card>
@@ -229,7 +232,7 @@ export function AdminProductivityCard({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5" />
-          Admin Productivity
+          {t("adminProductivity")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -251,15 +254,15 @@ export function AdminProductivityCard({
                     </div>
                     <div>
                       <p className="text-sm font-medium">
-                        {adminActivity.admin?.name || "Unknown Admin"}
+                        {adminActivity.admin?.name || t("unknownAdmin")}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {adminActivity.admin?.role.replace("_", " ") || "Unknown Role"}
+                        {adminActivity.admin?.role.replace("_", " ") || t("unknownRole")}
                       </p>
                     </div>
                   </div>
                   <span className="text-sm font-medium">
-                    {adminActivity.count.toLocaleString()} actions
+                    {adminActivity.count.toLocaleString()} {t("actions")}
                   </span>
                 </div>
                 <Progress value={percentage} className="h-2" />
@@ -269,7 +272,7 @@ export function AdminProductivityCard({
 
           {stats.activitiesByAdmin.length === 0 && (
             <p className="text-center text-muted-foreground py-4">
-              No admin activity data available
+              {t("noActivityData")}
             </p>
           )}
         </div>

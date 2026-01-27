@@ -19,118 +19,121 @@ import {
   Settings,
   Key,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
-const quickActions = [
-  {
-    title: "Create Survey",
-    description: "Design a new survey instrument",
-    icon: ClipboardList,
-    href: "/gwi/surveys/new",
-    color: "bg-emerald-100 text-emerald-600",
-  },
-  {
-    title: "Run Pipeline",
-    description: "Execute a data pipeline manually",
-    icon: Play,
-    href: "/gwi/pipelines",
-    color: "bg-blue-100 text-blue-600",
-  },
-  {
-    title: "Add Data Source",
-    description: "Connect a new external data source",
-    icon: Database,
-    href: "/gwi/data-sources",
-    color: "bg-purple-100 text-purple-600",
-  },
-  {
-    title: "New Agent Template",
-    description: "Create a reusable agent configuration",
-    icon: Bot,
-    href: "/gwi/agents/templates/new",
-    color: "bg-orange-100 text-orange-600",
-  },
-  {
-    title: "Configure LLM",
-    description: "Add or update LLM model settings",
-    icon: Brain,
-    href: "/gwi/llm/models/new",
-    color: "bg-pink-100 text-pink-600",
-  },
-  {
-    title: "Add Taxonomy",
-    description: "Create new taxonomy categories",
-    icon: FolderTree,
-    href: "/gwi/taxonomy",
-    color: "bg-cyan-100 text-cyan-600",
-  },
-]
+export default async function QuickActionsPage() {
+  const t = await getTranslations('gwi.quickActions')
 
-const dataActions = [
-  {
-    title: "Sync All Sources",
-    description: "Trigger sync for all active data sources",
-    icon: RefreshCw,
-    color: "bg-blue-100 text-blue-600",
-  },
-  {
-    title: "Export Data",
-    description: "Export survey responses or analytics",
-    icon: Download,
-    color: "bg-green-100 text-green-600",
-  },
-  {
-    title: "Import Data",
-    description: "Bulk import survey data",
-    icon: Upload,
-    color: "bg-yellow-100 text-yellow-600",
-  },
-  {
-    title: "Generate Report",
-    description: "Create analytics report",
-    icon: FileText,
-    color: "bg-purple-100 text-purple-600",
-  },
-]
+  const quickActions = [
+    {
+      title: t('createSurvey'),
+      description: t('createSurveyDesc'),
+      icon: ClipboardList,
+      href: "/gwi/surveys/new",
+      color: "bg-emerald-100 text-emerald-600",
+    },
+    {
+      title: t('runPipeline'),
+      description: t('runPipelineDesc'),
+      icon: Play,
+      href: "/gwi/pipelines",
+      color: "bg-blue-100 text-blue-600",
+    },
+    {
+      title: t('addDataSource'),
+      description: t('addDataSourceDesc'),
+      icon: Database,
+      href: "/gwi/data-sources",
+      color: "bg-purple-100 text-purple-600",
+    },
+    {
+      title: t('newAgentTemplate'),
+      description: t('newAgentTemplateDesc'),
+      icon: Bot,
+      href: "/gwi/agents/templates/new",
+      color: "bg-orange-100 text-orange-600",
+    },
+    {
+      title: t('configureLlm'),
+      description: t('configureLlmDesc'),
+      icon: Brain,
+      href: "/gwi/llm/models/new",
+      color: "bg-pink-100 text-pink-600",
+    },
+    {
+      title: t('addTaxonomy'),
+      description: t('addTaxonomyDesc'),
+      icon: FolderTree,
+      href: "/gwi/taxonomy",
+      color: "bg-cyan-100 text-cyan-600",
+    },
+  ]
 
-const systemActions = [
-  {
-    title: "View Errors",
-    description: "Check and resolve system errors",
-    icon: AlertTriangle,
-    href: "/gwi/monitoring/errors",
-    color: "bg-red-100 text-red-600",
-  },
-  {
-    title: "System Settings",
-    description: "Configure portal settings",
-    icon: Settings,
-    href: "/gwi/system/settings",
-    color: "bg-slate-100 text-slate-600",
-  },
-  {
-    title: "API Keys",
-    description: "Manage API keys and access",
-    icon: Key,
-    href: "/gwi/system/api-keys",
-    color: "bg-amber-100 text-amber-600",
-  },
-  {
-    title: "View Metrics",
-    description: "Monitor system performance",
-    icon: BarChart3,
-    href: "/gwi/monitoring/pipelines",
-    color: "bg-indigo-100 text-indigo-600",
-  },
-]
+  const dataActions = [
+    {
+      title: t('syncAllSources'),
+      description: t('syncAllSourcesDesc'),
+      icon: RefreshCw,
+      color: "bg-blue-100 text-blue-600",
+    },
+    {
+      title: t('exportData'),
+      description: t('exportDataDesc'),
+      icon: Download,
+      color: "bg-green-100 text-green-600",
+    },
+    {
+      title: t('importData'),
+      description: t('importDataDesc'),
+      icon: Upload,
+      color: "bg-yellow-100 text-yellow-600",
+    },
+    {
+      title: t('generateReport'),
+      description: t('generateReportDesc'),
+      icon: FileText,
+      color: "bg-purple-100 text-purple-600",
+    },
+  ]
 
-export default function QuickActionsPage() {
+  const systemActions = [
+    {
+      title: t('viewErrors'),
+      description: t('viewErrorsDesc'),
+      icon: AlertTriangle,
+      href: "/gwi/monitoring/errors",
+      color: "bg-red-100 text-red-600",
+    },
+    {
+      title: t('systemSettings'),
+      description: t('systemSettingsDesc'),
+      icon: Settings,
+      href: "/gwi/system/settings",
+      color: "bg-slate-100 text-slate-600",
+    },
+    {
+      title: t('apiKeys'),
+      description: t('apiKeysDesc'),
+      icon: Key,
+      href: "/gwi/system/api-keys",
+      color: "bg-amber-100 text-amber-600",
+    },
+    {
+      title: t('viewMetrics'),
+      description: t('viewMetricsDesc'),
+      icon: BarChart3,
+      href: "/gwi/monitoring/pipelines",
+      color: "bg-indigo-100 text-indigo-600",
+    },
+  ]
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Quick Actions</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
         <p className="text-muted-foreground">
-          Frequently used actions and shortcuts
+          {t('description')}
         </p>
       </div>
 
@@ -139,9 +142,9 @@ export default function QuickActionsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Plus className="h-5 w-5" />
-            Create New
+            {t('createNew')}
           </CardTitle>
-          <CardDescription>Quick access to create new resources</CardDescription>
+          <CardDescription>{t('createNewDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -174,9 +177,9 @@ export default function QuickActionsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Database className="h-5 w-5" />
-            Data Operations
+            {t('dataOperations')}
           </CardTitle>
-          <CardDescription>Manage data imports, exports, and syncs</CardDescription>
+          <CardDescription>{t('dataOperationsDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -209,9 +212,9 @@ export default function QuickActionsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Settings className="h-5 w-5" />
-            System & Monitoring
+            {t('systemMonitoring')}
           </CardTitle>
-          <CardDescription>System administration and monitoring</CardDescription>
+          <CardDescription>{t('systemMonitoringDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -242,12 +245,12 @@ export default function QuickActionsPage() {
       {/* Recent Actions Placeholder */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Actions</CardTitle>
-          <CardDescription>Your recently performed actions</CardDescription>
+          <CardTitle>{t('recentActions')}</CardTitle>
+          <CardDescription>{t('recentActionsDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground text-center py-8">
-            Recent actions tracking coming soon...
+            {t('recentActionsTracking')}
           </p>
         </CardContent>
       </Card>

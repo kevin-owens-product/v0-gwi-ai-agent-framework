@@ -102,7 +102,7 @@ export default function SignupPage() {
           <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
             <Brain className="h-6 w-6 text-primary-foreground" />
           </div>
-          <span className="text-xl font-semibold">GWI Agents</span>
+          <span className="text-xl font-semibold">{t('layout.brandName')}</span>
         </Link>
       </div>
 
@@ -207,7 +207,7 @@ export default function SignupPage() {
             <Link href="/terms" className="text-primary hover:underline">
               {t('termsOfService')}
             </Link>{" "}
-            and{" "}
+            {t('termsAnd')}{" "}
             <Link href="/privacy" className="text-primary hover:underline">
               {t('privacyPolicy')}
             </Link>

@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getOverviewStats() {
   const [
@@ -142,14 +143,15 @@ function PipelineRunStatus({ status }: { status: string }) {
 
 async function DashboardContent() {
   const stats = await getOverviewStats()
+  const t = await getTranslations('gwi')
 
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">GWI Team Portal</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.title')}</h1>
         <p className="text-muted-foreground mt-1">
-          Manage surveys, taxonomy, data pipelines, and AI configurations
+          {t('dashboard.description')}
         </p>
       </div>
 
@@ -161,13 +163,13 @@ async function DashboardContent() {
               <AlertTriangle className="h-5 w-5 text-red-600" />
               <div>
                 <p className="font-medium text-red-800">
-                  {stats.recentErrors} unresolved error{stats.recentErrors !== 1 ? "s" : ""} in the last 24 hours
+                  {t('dashboard.unresolvedErrors', { count: stats.recentErrors })}
                 </p>
-                <p className="text-sm text-red-600">Review and resolve issues to maintain system health</p>
+                <p className="text-sm text-red-600">{t('dashboard.reviewErrors')}</p>
               </div>
             </div>
             <Button asChild variant="outline" className="border-red-300 text-red-700 hover:bg-red-100">
-              <Link href="/gwi/monitoring/errors">View Errors</Link>
+              <Link href="/gwi/monitoring/errors">{t('dashboard.viewErrors')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -176,41 +178,41 @@ async function DashboardContent() {
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Surveys"
+          title={t('stats.surveys')}
           value={stats.surveysCount}
-          subValue={`${stats.activeSurveys} active`}
+          subValue={t('stats.active', { count: stats.activeSurveys })}
           icon={ClipboardList}
           href="/gwi/surveys"
           trend="up"
         />
         <StatCard
-          title="Taxonomy Categories"
+          title={t('stats.taxonomyCategories')}
           value={stats.taxonomyCategoriesCount}
           icon={Tags}
           href="/gwi/taxonomy"
         />
         <StatCard
-          title="Data Pipelines"
+          title={t('stats.dataPipelines')}
           value={stats.pipelinesCount}
-          subValue={`${stats.activePipelines} active`}
+          subValue={t('stats.active', { count: stats.activePipelines })}
           icon={Workflow}
           href="/gwi/pipelines"
           trend="neutral"
         />
         <StatCard
-          title="LLM Configurations"
+          title={t('stats.llmConfigurations')}
           value={stats.llmConfigsCount}
           icon={Brain}
           href="/gwi/llm"
         />
         <StatCard
-          title="Agent Templates"
+          title={t('stats.agentTemplates')}
           value={stats.agentTemplatesCount}
           icon={Bot}
           href="/gwi/agents"
         />
         <StatCard
-          title="Data Sources"
+          title={t('stats.dataSources')}
           value={stats.dataSourcesCount}
           icon={Database}
           href="/gwi/data-sources"
@@ -221,11 +223,11 @@ async function DashboardContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Recent Pipeline Runs</CardTitle>
-            <CardDescription>Latest pipeline execution status</CardDescription>
+            <CardTitle>{t('pipelineRuns.title')}</CardTitle>
+            <CardDescription>{t('pipelineRuns.description')}</CardDescription>
           </div>
           <Button asChild variant="outline" size="sm">
-            <Link href="/gwi/pipelines/runs">View All</Link>
+            <Link href="/gwi/pipelines/runs">{t('pipelineRuns.viewAll')}</Link>
           </Button>
         </CardHeader>
         <CardContent>
@@ -241,14 +243,14 @@ async function DashboardContent() {
                     <div>
                       <p className="font-medium">{run.pipeline.name}</p>
                       <p className="text-sm text-muted-foreground">
-                        Started {new Date(run.startedAt).toLocaleString()}
+                        {t('pipelineRuns.started', { date: new Date(run.startedAt).toLocaleString() })}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
                     {run.recordsProcessed !== null && (
                       <span className="text-sm text-muted-foreground">
-                        {run.recordsProcessed.toLocaleString()} records
+                        {t('pipelineRuns.records', { count: run.recordsProcessed.toLocaleString() })}
                       </span>
                     )}
                     <PipelineRunStatus status={run.status} />
@@ -259,9 +261,9 @@ async function DashboardContent() {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <Workflow className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No pipeline runs yet</p>
+              <p>{t('pipelineRuns.noPipelines')}</p>
               <Button asChild variant="link" className="mt-2">
-                <Link href="/gwi/pipelines">Create your first pipeline</Link>
+                <Link href="/gwi/pipelines">{t('pipelineRuns.createFirst')}</Link>
               </Button>
             </div>
           )}
@@ -278,8 +280,8 @@ async function DashboardContent() {
                   <ClipboardList className="h-6 w-6 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Create Survey</h3>
-                  <p className="text-sm text-muted-foreground">Design a new survey</p>
+                  <h3 className="font-semibold">{t('quickActions.createSurvey')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('quickActions.createSurveyDesc')}</p>
                 </div>
               </div>
             </CardContent>
@@ -293,8 +295,8 @@ async function DashboardContent() {
                   <Workflow className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">New Pipeline</h3>
-                  <p className="text-sm text-muted-foreground">Set up data processing</p>
+                  <h3 className="font-semibold">{t('quickActions.newPipeline')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('quickActions.newPipelineDesc')}</p>
                 </div>
               </div>
             </CardContent>
@@ -308,8 +310,8 @@ async function DashboardContent() {
                   <Brain className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Test Prompts</h3>
-                  <p className="text-sm text-muted-foreground">Try prompt templates</p>
+                  <h3 className="font-semibold">{t('quickActions.testPrompts')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('quickActions.testPromptsDesc')}</p>
                 </div>
               </div>
             </CardContent>
@@ -320,14 +322,16 @@ async function DashboardContent() {
   )
 }
 
-export default function GWIDashboardPage() {
+export default async function GWIDashboardPage() {
+  const t = await getTranslations('gwi')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">GWI Team Portal</h1>
-            <p className="text-muted-foreground mt-1">Loading dashboard...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('dashboard.loading')}</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {[...Array(6)].map((_, i) => (

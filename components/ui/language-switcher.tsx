@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { Globe, Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -28,6 +29,7 @@ export function LanguageSwitcher({
   align = 'end',
 }: LanguageSwitcherProps) {
   const router = useRouter();
+  const t = useTranslations('ui.languageSwitcher');
   const [locale, setLocale] = React.useState<Locale>(currentLocale);
   const [isPending, setIsPending] = React.useState(false);
 
@@ -81,7 +83,7 @@ export function LanguageSwitcher({
               {localeFlags[locale]} {localeNames[locale]}
             </span>
           )}
-          <span className="sr-only">Switch language</span>
+          <span className="sr-only">{t('switchLanguage')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="w-48 max-h-80 overflow-y-auto">

@@ -1,11 +1,16 @@
+"use client"
+
+import { useTranslations } from "next-intl"
+
 export function LogoCloud() {
-  const logos = ["Unilever", "Nike", "Samsung", "L'Oréal", "Coca-Cola", "Nestlé", "P&G", "Diageo", "PepsiCo", "Mars"]
+  const t = useTranslations("landing.logoCloud")
+  const logos = ["Unilever", "Nike", "Samsung", "L'Oreal", "Coca-Cola", "Nestle", "P&G", "Diageo", "PepsiCo", "Mars"]
 
   return (
     <section className="py-16 border-y border-border/40">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-center text-sm text-muted-foreground uppercase tracking-widest mb-8">
-          Trusted by leading enterprise teams
+          {t("trustedBy")}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
           {logos.map((logo) => (

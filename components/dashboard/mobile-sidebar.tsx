@@ -22,43 +22,44 @@ import {
   Sparkles,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useTranslations } from "next-intl"
 
 const mobileNavGroups = [
   {
-    section: "Work",
+    sectionKey: "work",
     items: [
-      { name: "Home", href: "/dashboard", icon: LayoutDashboard },
-      { name: "Playground", href: "/dashboard/playground", icon: Sparkles },
-      { name: "Inbox", href: "/dashboard/inbox", icon: Inbox, badge: 3 },
+      { nameKey: "home", href: "/dashboard", icon: LayoutDashboard },
+      { nameKey: "playground", href: "/dashboard/playground", icon: Sparkles },
+      { nameKey: "inbox", href: "/dashboard/inbox", icon: Inbox, badge: 3 },
     ],
   },
   {
-    section: "Projects",
-    items: [{ name: "All Projects", href: "/dashboard/projects", icon: Folder }],
+    sectionKey: "projects",
+    items: [{ nameKey: "allProjects", href: "/dashboard/projects", icon: Folder }],
   },
   {
-    section: "Build",
+    sectionKey: "build",
     items: [
-      { name: "Workflows", href: "/dashboard/workflows", icon: Workflow },
-      { name: "Agents", href: "/dashboard/agents", icon: Bot },
-      { name: "Templates", href: "/dashboard/templates", icon: LayoutTemplate },
+      { nameKey: "workflows", href: "/dashboard/workflows", icon: Workflow },
+      { nameKey: "agents", href: "/dashboard/agents", icon: Bot },
+      { nameKey: "templates", href: "/dashboard/templates", icon: LayoutTemplate },
     ],
   },
   {
-    section: "Discover",
+    sectionKey: "discover",
     items: [
-      { name: "Agent Store", href: "/dashboard/store", icon: Store },
-      { name: "Reports", href: "/dashboard/reports", icon: FileText },
-      { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+      { nameKey: "agentStore", href: "/dashboard/store", icon: Store },
+      { nameKey: "reports", href: "/dashboard/reports", icon: FileText },
+      { nameKey: "analytics", href: "/dashboard/analytics", icon: BarChart3 },
     ],
   },
   {
-    section: "System",
+    sectionKey: "system",
     items: [
-      { name: "Integrations", href: "/dashboard/integrations", icon: Plug },
-      { name: "Memory", href: "/dashboard/memory", icon: Brain },
-      { name: "Settings", href: "/dashboard/settings", icon: Settings },
-      { name: "Help", href: "/dashboard/help", icon: HelpCircle },
+      { nameKey: "integrations", href: "/dashboard/integrations", icon: Plug },
+      { nameKey: "memory", href: "/dashboard/memory", icon: Brain },
+      { nameKey: "settings", href: "/dashboard/settings", icon: Settings },
+      { nameKey: "help", href: "/dashboard/help", icon: HelpCircle },
     ],
   },
 ]
@@ -70,6 +71,7 @@ interface MobileSidebarProps {
 
 export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
   const pathname = usePathname()
+  const t = useTranslations('dashboard.sidebar')
 
   if (!open) return null
 
@@ -83,7 +85,7 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
               <span className="text-sm font-bold text-accent-foreground">G</span>
             </div>
-            <span className="text-base font-semibold text-sidebar-foreground">GWI Insights</span>
+            <span className="text-base font-semibold text-sidebar-foreground">{t('brandName')}</span>
           </Link>
           <button onClick={onClose} className="p-2 text-sidebar-foreground/70 hover:text-sidebar-foreground">
             <X className="h-5 w-5" />
@@ -95,7 +97,7 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
           <Link href="/dashboard/playground" onClick={onClose}>
             <Button className="w-full gap-2" size="sm">
               <Plus className="h-4 w-4" />
-              New Session
+              {t('newSession')}
             </Button>
           </Link>
         </div>
@@ -103,16 +105,16 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
         {/* Navigation Groups */}
         <nav className="flex-1 overflow-y-auto py-2 px-2">
           {mobileNavGroups.map((group) => (
-            <div key={group.section} className="mb-3">
+            <div key={group.sectionKey} className="mb-3">
               <div className="px-3 py-1.5 text-[11px] font-medium uppercase tracking-wider text-sidebar-foreground/40">
-                {group.section}
+                {t(`sections.${group.sectionKey}`)}
               </div>
               <div className="space-y-0.5">
                 {group.items.map((item) => {
                   const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
                   return (
                     <Link
-                      key={item.name}
+                      key={item.nameKey}
                       href={item.href}
                       onClick={onClose}
                       className={cn(
@@ -123,7 +125,7 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
                       )}
                     >
                       <item.icon className="h-4 w-4" />
-                      {item.name}
+                      {t(`items.${item.nameKey}`)}
                       {item.badge && (
                         <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] font-medium text-accent-foreground">
                           {item.badge}

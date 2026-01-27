@@ -446,5 +446,179 @@
       "selectAll": "すべて選択",
       "deselectAll": "すべて選択解除"
     }
+  },
+  "toast": {
+    "success": {
+      "saved": "変更が正常に保存されました",
+      "created": "正常に作成されました",
+      "updated": "正常に更新されました",
+      "deleted": "正常に削除されました",
+      "copied": "クリップボードにコピーしました",
+      "exported": "エクスポートが完了しました",
+      "imported": "インポートが完了しました",
+      "subscribed": "正常に登録されました",
+      "unsubscribed": "正常に登録解除されました"
+    },
+    "error": {
+      "general": "エラーが発生しました",
+      "saveFailed": "変更の保存に失敗しました",
+      "createFailed": "作成に失敗しました",
+      "updateFailed": "更新に失敗しました",
+      "deleteFailed": "削除に失敗しました",
+      "loadFailed": "データの読み込みに失敗しました",
+      "networkError": "ネットワークエラーです。接続を確認してください。",
+      "serverError": "サーバーエラーです。後でもう一度お試しください。",
+      "validationError": "入力内容を確認して、もう一度お試しください",
+      "permissionDenied": "この操作を実行する権限がありません",
+      "sessionExpired": "セッションが期限切れです。再度ログインしてください。",
+      "rateLimitExceeded": "リクエスト制限を超えました。後でもう一度お試しください。",
+      "exportFailed": "エクスポートに失敗しました",
+      "importFailed": "インポートに失敗しました"
+    },
+    "loading": {
+      "saving": "保存中...",
+      "loading": "読み込み中...",
+      "processing": "処理中...",
+      "exporting": "エクスポート中...",
+      "importing": "インポート中...",
+      "uploading": "アップロード中..."
+    },
+    "info": {
+      "noChanges": "保存する変更はありません",
+      "inProgress": "処理を実行中",
+      "scheduled": "正常にスケジュールされました"
+    },
+    "warning": {
+      "unsavedChanges": "保存されていない変更があります",
+      "limitApproaching": "使用制限に近づいています",
+      "deprecationNotice": "この機能は間もなく廃止されます"
+    },
+    "actions": {
+      "undo": "元に戻す",
+      "retry": "再試行",
+      "dismiss": "閉じる",
+      "viewDetails": "詳細を表示"
+    }
+  },
+  "notifications": {
+    "page": {
+      "title": "通知",
+      "description": "未読通知が{count, plural, =0 {ありません} other {#件あります}}",
+      "allCaughtUp": "すべて確認済みです！",
+      "noNotifications": "通知はありません",
+      "markAllRead": "すべて既読にする",
+      "settings": "設定",
+      "selectAll": "すべて選択",
+      "selected": "{count}件選択中",
+      "viewDetails": "詳細を表示"
+    },
+    "types": {
+      "all": "すべて",
+      "workflow": "ワークフロー",
+      "agent": "エージェント",
+      "team": "チーム",
+      "system": "システム",
+      "report": "レポート"
+    },
+    "titles": {
+      "workflowCompleted": "ワークフロー完了",
+      "workflowFailed": "ワークフロー失敗",
+      "newAgentAvailable": "新しいエージェントが利用可能",
+      "agentUpdateAvailable": "エージェントの更新が利用可能",
+      "teamMemberJoined": "チームメンバーが参加",
+      "usageLimitApproaching": "使用制限に近づいています",
+      "reportReady": "レポートのダウンロード準備完了",
+      "scheduledMaintenance": "定期メンテナンス"
+    },
+    "settings": {
+      "title": "通知設定",
+      "description": "通知の受信方法とタイミングを選択",
+      "savePreferences": "設定を保存",
+      "saving": "保存中...",
+      "channels": {
+        "email": "メール",
+        "push": "プッシュ",
+        "slack": "Slack"
+      },
+      "categories": {
+        "agentActivity": "エージェントのアクティビティ",
+        "reportsExports": "レポートとエクスポート",
+        "teamCollaboration": "チームとコラボレーション",
+        "systemSecurity": "システムとセキュリティ"
+      },
+      "items": {
+        "agentTaskCompleted": "エージェントタスク完了",
+        "agentTaskCompletedDesc": "エージェントがタスクを完了したときに通知を受け取る",
+        "agentErrors": "エージェントエラー",
+        "agentErrorsDesc": "エージェントでエラーが発生したときにアラートを受け取る",
+        "approvalRequests": "承認リクエスト",
+        "approvalRequestsDesc": "エージェントが続行するために人間の承認が必要なとき",
+        "reportReady": "レポート準備完了",
+        "reportReadyDesc": "新しいレポートが生成されたとき",
+        "exportComplete": "エクスポート完了",
+        "exportCompleteDesc": "データエクスポートがダウンロード可能になったとき",
+        "mentions": "メンション",
+        "mentionsDesc": "コメントであなたがメンションされたとき",
+        "sharedWithMe": "共有されたもの",
+        "sharedWithMeDesc": "レポートやワークフローが共有されたとき",
+        "teamInvitations": "チーム招待",
+        "teamInvitationsDesc": "新しいチームメンバーの参加または招待送信時",
+        "loginAlerts": "ログインアラート",
+        "loginAlertsDesc": "新しいデバイスからのログインを通知",
+        "systemMaintenance": "システムメンテナンス",
+        "systemMaintenanceDesc": "定期的なダウンタイムとアップデート"
+      }
+    },
+    "admin": {
+      "title": "システム通知",
+      "description": "プラットフォームユーザーにお知らせ、アラート、アップデートを送信",
+      "newNotification": "新規通知",
+      "editNotification": "通知を編集",
+      "createNotification": "通知を作成",
+      "sendNotification": "プラットフォームユーザーに通知を送信",
+      "refresh": "更新",
+      "types": {
+        "info": "情報",
+        "warning": "警告",
+        "alert": "アラート",
+        "maintenance": "メンテナンス",
+        "feature": "機能",
+        "promotion": "プロモーション"
+      },
+      "form": {
+        "type": "タイプ",
+        "targetAudience": "対象者",
+        "allUsers": "全ユーザー",
+        "specificPlans": "特定のプラン",
+        "specificOrgs": "特定の組織",
+        "title": "タイトル",
+        "titlePlaceholder": "通知タイトル",
+        "message": "メッセージ",
+        "messagePlaceholder": "通知メッセージ...",
+        "targetPlans": "対象プラン",
+        "scheduleFor": "スケジュール（任意）",
+        "expiresAt": "有効期限（任意）",
+        "active": "有効",
+        "activeDescription": "この通知を即座に表示する"
+      },
+      "table": {
+        "notification": "通知",
+        "type": "タイプ",
+        "target": "対象",
+        "status": "ステータス",
+        "schedule": "スケジュール",
+        "immediate": "即時",
+        "created": "作成日",
+        "custom": "カスタム"
+      },
+      "actions": {
+        "edit": "編集",
+        "markInactive": "無効にする",
+        "deleteSelected": "選択項目を削除"
+      },
+      "empty": "通知が作成されていません",
+      "confirmDelete": "通知を削除",
+      "confirmDeleteDescription": "「{title}」を削除してもよろしいですか？この操作は取り消せません。"
+    }
   }
 }

@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Plus, Search, Edit, Trash2, Layers, ArrowLeft } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getAttributes() {
   const attributes = await prisma.taxonomyAttribute.findMany({
@@ -41,6 +42,7 @@ async function getAttributes() {
 
 async function AttributesContent() {
   const { attributes, categories } = await getAttributes()
+  const t = await getTranslations('gwi.taxonomy')
 
   const dataTypeColors: Record<string, string> = {
     string: "bg-blue-100 text-blue-700",
@@ -62,15 +64,15 @@ async function AttributesContent() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Attributes</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('attributesTitle')}</h1>
             <p className="text-muted-foreground">
-              Manage taxonomy attributes and their definitions
+              {t('attributesDesc')}
             </p>
           </div>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Plus className="mr-2 h-4 w-4" />
-          New Attribute
+          {t('newAttribute')}
         </Button>
       </div>
 
@@ -80,14 +82,14 @@ async function AttributesContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search attributes..." className="pl-9" />
+              <Input placeholder={t('searchAttributes')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[220px]">
-                <SelectValue placeholder="Filter by category" />
+                <SelectValue placeholder={t('filterByCategory')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="all">{t('allCategories')}</SelectItem>
                 {categories.map((cat) => (
                   <SelectItem key={cat.id} value={cat.id}>
                     {cat.name}
@@ -97,15 +99,15 @@ async function AttributesContent() {
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Data type" />
+                <SelectValue placeholder={t('dataType')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="string">String</SelectItem>
-                <SelectItem value="number">Number</SelectItem>
-                <SelectItem value="boolean">Boolean</SelectItem>
-                <SelectItem value="date">Date</SelectItem>
-                <SelectItem value="array">Array</SelectItem>
+                <SelectItem value="all">{t('allTypes')}</SelectItem>
+                <SelectItem value="string">{t('dataTypes.string')}</SelectItem>
+                <SelectItem value="number">{t('dataTypes.number')}</SelectItem>
+                <SelectItem value="boolean">{t('dataTypes.boolean')}</SelectItem>
+                <SelectItem value="date">{t('dataTypes.date')}</SelectItem>
+                <SelectItem value="array">{t('dataTypes.array')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -119,10 +121,10 @@ async function AttributesContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Attribute</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Data Type</TableHead>
-                  <TableHead>Required</TableHead>
+                  <TableHead>{t('attribute')}</TableHead>
+                  <TableHead>{t('category')}</TableHead>
+                  <TableHead>{t('dataType')}</TableHead>
+                  <TableHead>{t('required')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -156,9 +158,9 @@ async function AttributesContent() {
                     </TableCell>
                     <TableCell>
                       {attr.isRequired ? (
-                        <Badge className="bg-red-100 text-red-700">Required</Badge>
+                        <Badge className="bg-red-100 text-red-700">{t('required')}</Badge>
                       ) : (
-                        <span className="text-muted-foreground">Optional</span>
+                        <span className="text-muted-foreground">{t('optional')}</span>
                       )}
                     </TableCell>
                     <TableCell>
@@ -182,13 +184,13 @@ async function AttributesContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Layers className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No attributes yet</h3>
+              <h3 className="text-lg font-medium">{t('noAttributesYet')}</h3>
               <p className="text-muted-foreground mb-4">
-                Define attributes for your taxonomy categories
+                {t('defineAttributes')}
               </p>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Create Attribute
+                {t('createAttribute')}
               </Button>
             </div>
           )}
@@ -198,13 +200,15 @@ async function AttributesContent() {
   )
 }
 
-export default function AttributesPage() {
+export default async function AttributesPage() {
+  const t = await getTranslations('gwi.taxonomy')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Attributes</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('attributesTitle')}</h1>
             <LoadingText />
           </div>
         </div>

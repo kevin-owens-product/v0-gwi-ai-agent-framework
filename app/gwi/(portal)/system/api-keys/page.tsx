@@ -25,6 +25,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Key, Plus, Search, Copy, Trash2, Eye, EyeOff, Clock, Shield } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getApiKeys() {
   const keys = await prisma.gWIApiKey.findMany({
@@ -39,69 +40,71 @@ async function getApiKeys() {
 
 async function ApiKeysContent() {
   const keys = await getApiKeys()
+  const t = await getTranslations('gwi.system.apiKeys')
+  const tc = await getTranslations('gwi.common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">API Keys</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage API keys for programmatic access
+            {t('description')}
           </p>
         </div>
         <Dialog>
           <DialogTrigger asChild>
             <Button className="bg-emerald-600 hover:bg-emerald-700">
               <Plus className="mr-2 h-4 w-4" />
-              Create API Key
+              {t('createApiKey')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create API Key</DialogTitle>
+              <DialogTitle>{t('createApiKey')}</DialogTitle>
               <DialogDescription>
-                Generate a new API key for programmatic access
+                {t('createApiKeyDesc')}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="key-name">Key Name</Label>
-                <Input id="key-name" placeholder="My API Key" />
+                <Label htmlFor="key-name">{t('keyName')}</Label>
+                <Input id="key-name" placeholder={t('keyNamePlaceholder')} />
               </div>
               <div className="space-y-2">
-                <Label>Permissions</Label>
+                <Label>{t('permissions')}</Label>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Read Surveys</span>
+                    <span className="text-sm">{t('readSurveys')}</span>
                     <Switch />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Write Surveys</span>
+                    <span className="text-sm">{t('writeSurveys')}</span>
                     <Switch />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Read Pipelines</span>
+                    <span className="text-sm">{t('readPipelines')}</span>
                     <Switch />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Execute Pipelines</span>
+                    <span className="text-sm">{t('executePipelines')}</span>
                     <Switch />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Read LLM Data</span>
+                    <span className="text-sm">{t('readLlmData')}</span>
                     <Switch />
                   </div>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="expiry">Expiry (optional)</Label>
+                <Label htmlFor="expiry">{t('expiry')}</Label>
                 <Input id="expiry" type="date" />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline">Cancel</Button>
-              <Button>Create Key</Button>
+              <Button variant="outline">{tc('cancel')}</Button>
+              <Button>{t('createKey')}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -113,11 +116,9 @@ async function ApiKeysContent() {
           <div className="flex items-start gap-4">
             <Shield className="h-5 w-5 text-amber-600 mt-0.5" />
             <div>
-              <p className="font-medium text-amber-800">Security Notice</p>
+              <p className="font-medium text-amber-800">{t('securityNotice')}</p>
               <p className="text-sm text-amber-700">
-                API keys provide programmatic access to the GWI portal. Treat them like
-                passwords and never share them publicly. Consider using short-lived keys
-                when possible.
+                {t('securityNoticeDesc')}
               </p>
             </div>
           </div>
@@ -129,7 +130,7 @@ async function ApiKeysContent() {
         <CardContent className="pt-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search API keys..." className="pl-9" />
+            <Input placeholder={t('searchPlaceholder')} className="pl-9" />
           </div>
         </CardContent>
       </Card>
@@ -141,12 +142,12 @@ async function ApiKeysContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Key Prefix</TableHead>
-                  <TableHead>Created By</TableHead>
-                  <TableHead>Last Used</TableHead>
-                  <TableHead>Expires</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t('name')}</TableHead>
+                  <TableHead>{t('keyPrefix')}</TableHead>
+                  <TableHead>{t('createdBy')}</TableHead>
+                  <TableHead>{t('lastUsed')}</TableHead>
+                  <TableHead>{t('expires')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -168,7 +169,7 @@ async function ApiKeysContent() {
                     <TableCell>
                       {key.lastUsedAt
                         ? new Date(key.lastUsedAt).toLocaleDateString()
-                        : "Never"}
+                        : tc('never')}
                     </TableCell>
                     <TableCell>
                       {key.expiresAt ? (
@@ -177,7 +178,7 @@ async function ApiKeysContent() {
                           {new Date(key.expiresAt).toLocaleDateString()}
                         </div>
                       ) : (
-                        "Never"
+                        tc('never')
                       )}
                     </TableCell>
                     <TableCell>
@@ -188,7 +189,7 @@ async function ApiKeysContent() {
                             : "bg-gray-100 text-gray-700"
                         }
                       >
-                        {key.isActive ? "Active" : "Revoked"}
+                        {key.isActive ? t('active') : t('revoked')}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -212,20 +213,20 @@ async function ApiKeysContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Key className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No API keys yet</h3>
+              <h3 className="text-lg font-medium">{t('noApiKeysYet')}</h3>
               <p className="text-muted-foreground mb-4">
-                Create API keys for programmatic access to the GWI portal
+                {t('createKeysForAccess')}
               </p>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
-                    Create First API Key
+                    {t('createFirstApiKey')}
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Create API Key</DialogTitle>
+                    <DialogTitle>{t('createApiKey')}</DialogTitle>
                   </DialogHeader>
                 </DialogContent>
               </Dialog>
@@ -237,13 +238,15 @@ async function ApiKeysContent() {
   )
 }
 
-export default function ApiKeysPage() {
+export default async function ApiKeysPage() {
+  const t = await getTranslations('gwi.system.apiKeys')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">API Keys</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

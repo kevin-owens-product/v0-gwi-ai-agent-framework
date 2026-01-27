@@ -1,8 +1,13 @@
+"use client"
+
 import type { ReactNode } from "react"
 import Link from "next/link"
 import { Brain } from "lucide-react"
+import { useTranslations } from "@/lib/i18n"
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
+  const t = useTranslations('auth')
+
   return (
     <div className="min-h-screen bg-background flex">
       {/* Left side - Branding */}
@@ -11,27 +16,26 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
             <Brain className="h-6 w-6 text-primary-foreground" />
           </div>
-          <span className="text-xl font-semibold">GWI Agents</span>
+          <span className="text-xl font-semibold">{t('layout.brandName')}</span>
         </Link>
 
         <div className="space-y-6">
           <blockquote className="text-2xl font-medium leading-relaxed">
-            "GWI Agents transformed how we approach consumer research. What used to take weeks now happens in hours with
-            unprecedented accuracy."
+            "{t('layout.testimonialQuote')}"
           </blockquote>
           <div>
-            <p className="font-semibold">Sarah Chen</p>
-            <p className="text-muted-foreground">VP of Insights, Unilever</p>
+            <p className="font-semibold">{t('layout.testimonialAuthor')}</p>
+            <p className="text-muted-foreground">{t('layout.testimonialRole')}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-8 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-emerald-500" />
-            <span>99.9% uptime</span>
+            <span>{t('layout.uptime')}</span>
           </div>
-          <div>SOC 2 Compliant</div>
-          <div>GDPR Ready</div>
+          <div>{t('layout.soc2')}</div>
+          <div>{t('layout.gdpr')}</div>
         </div>
       </div>
 

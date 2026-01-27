@@ -16,6 +16,7 @@
 import * as React from "react"
 import { Moon, Sun, Monitor, Check } from "lucide-react"
 import { useTheme as useNextTheme } from "next-themes"
+import { useTranslations } from "next-intl"
 
 type Theme = "light" | "dark" | "system"
 import { Button } from "@/components/ui/button"
@@ -32,34 +33,48 @@ import { cn } from "@/lib/utils"
  */
 interface ThemeOption {
   value: Theme
-  label: string
+  labelKey: string
   icon: React.ComponentType<{ className?: string }>
-  description: string
+  descriptionKey: string
 }
 
 /**
- * Available theme options
+ * Available theme options (keys for localization)
  */
-const themeOptions: ThemeOption[] = [
+const themeOptionConfigs: ThemeOption[] = [
   {
     value: "light",
-    label: "Light",
+    labelKey: "light",
     icon: Sun,
-    description: "Light background with dark text",
+    descriptionKey: "lightDesc",
   },
   {
     value: "dark",
-    label: "Dark",
+    labelKey: "dark",
     icon: Moon,
-    description: "Dark background with light text",
+    descriptionKey: "darkDesc",
   },
   {
     value: "system",
-    label: "System",
+    labelKey: "system",
     icon: Monitor,
-    description: "Match your system settings",
+    descriptionKey: "systemDesc",
   },
 ]
+
+/**
+ * Hook to get localized theme options
+ */
+function useLocalizedThemeOptions() {
+  const t = useTranslations('ui.theme')
+
+  return themeOptionConfigs.map(config => ({
+    value: config.value,
+    label: t(config.labelKey),
+    icon: config.icon,
+    description: t(config.descriptionKey),
+  }))
+}
 
 /**
  * Props for the ThemeToggle component
@@ -121,6 +136,8 @@ export function ThemeToggle({
 }: ThemeToggleProps) {
   const { theme, setTheme, resolvedTheme } = useNextTheme()
   const [mounted, setMounted] = React.useState(false)
+  const t = useTranslations('ui.theme')
+  const themeOptions = useLocalizedThemeOptions()
 
   // Prevent hydration mismatch
   React.useEffect(() => {
@@ -135,17 +152,11 @@ export function ThemeToggle({
     [setTheme, onThemeChange]
   )
 
-  // Get current icon based on resolved theme
-  const CurrentIcon = React.useMemo(() => {
-    if (!mounted) return Sun
-    return resolvedTheme === "dark" ? Moon : Sun
-  }, [mounted, resolvedTheme])
-
   // Get label for current theme
   const currentLabel = React.useMemo(() => {
     const option = themeOptions.find((opt) => opt.value === theme)
-    return option?.label || "Theme"
-  }, [theme])
+    return option?.label || t('theme')
+  }, [theme, themeOptions, t])
 
   // Don't render anything until mounted to prevent hydration mismatch
   if (!mounted) {
@@ -157,8 +168,8 @@ export function ThemeToggle({
         disabled
       >
         <Sun className="h-[1.2rem] w-[1.2rem]" />
-        {showLabel && <span className="ml-2">Theme</span>}
-        <span className="sr-only">Toggle theme</span>
+        {showLabel && <span className="ml-2">{t('theme')}</span>}
+        <span className="sr-only">{t('toggleTheme')}</span>
       </Button>
     )
   }
@@ -190,7 +201,7 @@ export function ThemeToggle({
             />
           </div>
           {showLabel && <span className="ml-2">{currentLabel}</span>}
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">{t('toggleTheme')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="w-40">
@@ -231,6 +242,7 @@ export function ThemeToggleSimple({
 }: Pick<ThemeToggleProps, "className" | "size" | "variant">) {
   const { theme, setTheme, resolvedTheme } = useNextTheme()
   const [mounted, setMounted] = React.useState(false)
+  const t = useTranslations('ui.theme')
 
   React.useEffect(() => {
     setMounted(true)
@@ -238,7 +250,7 @@ export function ThemeToggleSimple({
 
   const cycleTheme = React.useCallback(() => {
     const themes: Theme[] = ["light", "dark", "system"]
-    const currentIndex = themes.indexOf(theme)
+    const currentIndex = themes.indexOf(theme as Theme)
     const nextIndex = (currentIndex + 1) % themes.length
     setTheme(themes[nextIndex])
   }, [theme, setTheme])
@@ -247,7 +259,7 @@ export function ThemeToggleSimple({
     return (
       <Button variant={variant} size={size} className={className} disabled>
         <Sun className="h-[1.2rem] w-[1.2rem]" />
-        <span className="sr-only">Toggle theme</span>
+        <span className="sr-only">{t('toggleTheme')}</span>
       </Button>
     )
   }
@@ -277,10 +289,20 @@ export function ThemeToggleSimple({
           )}
         />
       </div>
-      <span className="sr-only">Toggle theme</span>
+      <span className="sr-only">{t('toggleTheme')}</span>
     </Button>
   )
 }
 
-export { themeOptions }
-export type { ThemeOption, ThemeToggleProps }
+/**
+ * Localized theme option (runtime)
+ */
+interface LocalizedThemeOption {
+  value: Theme
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  description: string
+}
+
+export { themeOptionConfigs as themeOptions, useLocalizedThemeOptions }
+export type { ThemeOption, ThemeToggleProps, LocalizedThemeOption }

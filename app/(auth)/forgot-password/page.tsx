@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
               <Brain className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="text-xl font-semibold">GWI Agents</span>
+            <span className="text-xl font-semibold">{t('layout.brandName')}</span>
           </Link>
         </div>
 
@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
           <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
             <Brain className="h-6 w-6 text-primary-foreground" />
           </div>
-          <span className="text-xl font-semibold">GWI Agents</span>
+          <span className="text-xl font-semibold">{t('layout.brandName')}</span>
         </Link>
       </div>
 

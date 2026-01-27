@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -94,6 +95,7 @@ const datePresets = [
 ]
 
 export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps) {
+  const t = useTranslations("admin.activity.filters")
   const [filters, setFilters] = useState<FilterState>({
     adminId: "all",
     action: "all",
@@ -159,10 +161,10 @@ export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps
           onValueChange={(value) => handleFilterChange("adminId", value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="All Admins" />
+            <SelectValue placeholder={t("allAdmins")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Admins</SelectItem>
+            <SelectItem value="all">{t("allAdmins")}</SelectItem>
             {admins.map((admin) => (
               <SelectItem key={admin.id} value={admin.id}>
                 {admin.name}
@@ -176,7 +178,7 @@ export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps
           onValueChange={(value) => handleFilterChange("action", value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="All Actions" />
+            <SelectValue placeholder={t("allActions")} />
           </SelectTrigger>
           <SelectContent>
             {actionOptions.map((option) => (
@@ -192,7 +194,7 @@ export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps
           onValueChange={(value) => handleFilterChange("resourceType", value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="All Resources" />
+            <SelectValue placeholder={t("allResources")} />
           </SelectTrigger>
           <SelectContent>
             {resourceTypeOptions.map((option) => (
@@ -210,7 +212,7 @@ export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps
           <PopoverTrigger asChild>
             <Button variant="outline" size="sm" className="gap-2">
               <Calendar className="h-4 w-4" />
-              Date Range
+              {t("dateRange")}
               {(filters.startDate || filters.endDate) && (
                 <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
                   1
@@ -222,7 +224,7 @@ export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label className="text-xs text-muted-foreground">
-                  Quick Select
+                  {t("quickSelect")}
                 </Label>
                 <div className="flex flex-wrap gap-2">
                   {datePresets.map((preset) => (
@@ -240,11 +242,11 @@ export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps
 
               <div className="space-y-2">
                 <Label className="text-xs text-muted-foreground">
-                  Custom Range
+                  {t("customRange")}
                 </Label>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <Label className="text-xs">Start Date</Label>
+                    <Label className="text-xs">{t("startDate")}</Label>
                     <Input
                       type="date"
                       value={filters.startDate}
@@ -254,7 +256,7 @@ export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps
                     />
                   </div>
                   <div>
-                    <Label className="text-xs">End Date</Label>
+                    <Label className="text-xs">{t("endDate")}</Label>
                     <Input
                       type="date"
                       value={filters.endDate}
@@ -277,7 +279,7 @@ export function ActivityFilters({ admins, onFilterChange }: ActivityFiltersProps
             className="gap-2"
           >
             <X className="h-4 w-4" />
-            Clear
+            {t("clear")}
             {activeFilterCount > 0 && (
               <span className="rounded-full bg-muted px-2 py-0.5 text-xs">
                 {activeFilterCount}

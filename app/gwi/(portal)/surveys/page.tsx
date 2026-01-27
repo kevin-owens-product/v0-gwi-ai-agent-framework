@@ -40,6 +40,7 @@ import {
   FileText,
   MessageSquare,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const statusColors = {
   DRAFT: "bg-slate-100 text-slate-700",
@@ -87,21 +88,23 @@ async function SurveyList({
   searchParams: { status?: string; search?: string }
 }) {
   const surveys = await getSurveys(searchParams)
+  const t = await getTranslations('gwi.surveys')
+  const tc = await getTranslations('gwi.common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Surveys</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Create and manage survey questionnaires
+            {t('description')}
           </p>
         </div>
         <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
           <Link href="/gwi/surveys/new">
             <Plus className="mr-2 h-4 w-4" />
-            New Survey
+            {t('newSurvey')}
           </Link>
         </Button>
       </div>
@@ -113,22 +116,22 @@ async function SurveyList({
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search surveys..."
+                placeholder={t('searchPlaceholder')}
                 className="pl-9"
                 defaultValue={searchParams.search}
               />
             </div>
             <Select defaultValue={searchParams.status || "all"}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t('filterByStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="PAUSED">Paused</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="ARCHIVED">Archived</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="DRAFT">{t('statuses.draft')}</SelectItem>
+                <SelectItem value="ACTIVE">{t('statuses.active')}</SelectItem>
+                <SelectItem value="PAUSED">{t('statuses.paused')}</SelectItem>
+                <SelectItem value="COMPLETED">{t('statuses.completed')}</SelectItem>
+                <SelectItem value="ARCHIVED">{t('statuses.archived')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -142,12 +145,12 @@ async function SurveyList({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Survey Name</TableHead>
+                  <TableHead>{t('surveyName')}</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Questions</TableHead>
-                  <TableHead className="text-center">Responses</TableHead>
-                  <TableHead>Created By</TableHead>
-                  <TableHead>Created At</TableHead>
+                  <TableHead className="text-center">{t('questions')}</TableHead>
+                  <TableHead className="text-center">{t('responses')}</TableHead>
+                  <TableHead>{t('createdBy')}</TableHead>
+                  <TableHead>{t('createdAt')}</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -175,7 +178,7 @@ async function SurveyList({
                           statusColors[survey.status as keyof typeof statusColors]
                         }
                       >
-                        {survey.status}
+                        {t(`statuses.${survey.status.toLowerCase()}`)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center">
@@ -205,36 +208,36 @@ async function SurveyList({
                           <DropdownMenuItem asChild>
                             <Link href={`/gwi/surveys/${survey.id}`}>
                               <Edit className="mr-2 h-4 w-4" />
-                              Edit
+                              {tc('edit')}
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
                             <Link href={`/gwi/surveys/${survey.id}/responses`}>
                               <Eye className="mr-2 h-4 w-4" />
-                              View Responses
+                              {tc('viewResponses')}
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <Copy className="mr-2 h-4 w-4" />
-                            Duplicate
+                            {tc('duplicate')}
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           {survey.status === "DRAFT" && (
                             <DropdownMenuItem className="text-green-600">
                               <Play className="mr-2 h-4 w-4" />
-                              Activate
+                              {tc('activate')}
                             </DropdownMenuItem>
                           )}
                           {survey.status === "ACTIVE" && (
                             <DropdownMenuItem className="text-yellow-600">
                               <Pause className="mr-2 h-4 w-4" />
-                              Pause
+                              {tc('pause')}
                             </DropdownMenuItem>
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-red-600">
                             <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
+                            {tc('delete')}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -246,14 +249,14 @@ async function SurveyList({
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No surveys found</h3>
+              <h3 className="text-lg font-medium">{t('noSurveysFound')}</h3>
               <p className="text-muted-foreground mb-4">
-                Get started by creating your first survey
+                {t('getStartedSurvey')}
               </p>
               <Button asChild>
                 <Link href="/gwi/surveys/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Survey
+                  {t('newSurvey')}
                 </Link>
               </Button>
             </div>
@@ -270,6 +273,7 @@ export default async function SurveysPage({
   searchParams: Promise<{ status?: string; search?: string }>
 }) {
   const params = await searchParams
+  const t = await getTranslations('gwi.surveys')
 
   return (
     <Suspense
@@ -277,8 +281,8 @@ export default async function SurveysPage({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Surveys</h1>
-              <p className="text-muted-foreground">Loading surveys...</p>
+              <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+              <p className="text-muted-foreground">{t('loading')}</p>
             </div>
           </div>
           <Card>

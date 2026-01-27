@@ -26,6 +26,7 @@ import {
   BarChart3,
   Activity,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getLLMUsageStats() {
   const [
@@ -110,26 +111,27 @@ async function getLLMUsageStats() {
 
 async function LLMUsageContent() {
   const stats = await getLLMUsageStats()
+  const t = await getTranslations('gwi.llm.usage')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">LLM Usage & Costs</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Monitor language model usage, costs, and performance
+            {t('description')}
           </p>
         </div>
         <Select defaultValue="7d">
           <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Time Range" />
+            <SelectValue placeholder={t('timeRange')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="24h">Last 24 hours</SelectItem>
-            <SelectItem value="7d">Last 7 days</SelectItem>
-            <SelectItem value="30d">Last 30 days</SelectItem>
-            <SelectItem value="90d">Last 90 days</SelectItem>
+            <SelectItem value="24h">{t('last24Hours')}</SelectItem>
+            <SelectItem value="7d">{t('last7Days')}</SelectItem>
+            <SelectItem value="30d">{t('last30Days')}</SelectItem>
+            <SelectItem value="90d">{t('last90Days')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -144,7 +146,7 @@ async function LLMUsageContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">${stats.totalCost.toFixed(2)}</p>
-                <p className="text-sm text-muted-foreground">Total Cost</p>
+                <p className="text-sm text-muted-foreground">{t('totalCost')}</p>
               </div>
             </div>
           </CardContent>
@@ -159,7 +161,7 @@ async function LLMUsageContent() {
                 <p className="text-2xl font-bold">
                   {(stats.totalTokens / 1000000).toFixed(2)}M
                 </p>
-                <p className="text-sm text-muted-foreground">Total Tokens</p>
+                <p className="text-sm text-muted-foreground">{t('totalTokens')}</p>
               </div>
             </div>
           </CardContent>
@@ -174,7 +176,7 @@ async function LLMUsageContent() {
                 <p className="text-2xl font-bold">
                   {stats.totalRequests.toLocaleString()}
                 </p>
-                <p className="text-sm text-muted-foreground">Total Requests</p>
+                <p className="text-sm text-muted-foreground">{t('totalRequests')}</p>
               </div>
             </div>
           </CardContent>
@@ -187,7 +189,7 @@ async function LLMUsageContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.avgLatency}ms</p>
-                <p className="text-sm text-muted-foreground">Avg Latency</p>
+                <p className="text-sm text-muted-foreground">{t('avgLatency')}</p>
               </div>
             </div>
           </CardContent>
@@ -199,16 +201,16 @@ async function LLMUsageContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
-            Usage Over Time
+            {t('usageOverTime')}
           </CardTitle>
-          <CardDescription>Token usage and costs by day</CardDescription>
+          <CardDescription>{t('usageOverTimeDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center border rounded-lg bg-slate-50">
             <div className="text-center">
               <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground">
-                Usage charts coming soon...
+                {t('usageChartsComingSoon')}
               </p>
             </div>
           </div>
@@ -218,20 +220,20 @@ async function LLMUsageContent() {
       {/* Model Breakdown */}
       <Card>
         <CardHeader>
-          <CardTitle>Usage by Model</CardTitle>
-          <CardDescription>Cost and usage breakdown per LLM model</CardDescription>
+          <CardTitle>{t('usageByModel')}</CardTitle>
+          <CardDescription>{t('usageByModelDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           {stats.modelStats.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Model</TableHead>
-                  <TableHead>Provider</TableHead>
-                  <TableHead className="text-right">Requests</TableHead>
-                  <TableHead className="text-right">Tokens</TableHead>
-                  <TableHead className="text-right">Avg Latency</TableHead>
-                  <TableHead className="text-right">Cost</TableHead>
+                  <TableHead>{t('model')}</TableHead>
+                  <TableHead>{t('provider')}</TableHead>
+                  <TableHead className="text-right">{t('requests')}</TableHead>
+                  <TableHead className="text-right">{t('tokens')}</TableHead>
+                  <TableHead className="text-right">{t('latency')}</TableHead>
+                  <TableHead className="text-right">{t('cost')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -272,7 +274,7 @@ async function LLMUsageContent() {
           ) : (
             <div className="py-12 text-center">
               <Brain className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No usage data yet</p>
+              <p className="text-muted-foreground">{t('noUsageData')}</p>
             </div>
           )}
         </CardContent>
@@ -281,8 +283,8 @@ async function LLMUsageContent() {
       {/* Recent Requests */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Requests</CardTitle>
-          <CardDescription>Latest LLM API calls</CardDescription>
+          <CardTitle>{t('recentRequests')}</CardTitle>
+          <CardDescription>{t('recentRequestsDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           {stats.recentUsage.length > 0 ? (
@@ -310,17 +312,17 @@ async function LLMUsageContent() {
                       <p className="font-medium">
                         {(usage.promptTokens + usage.completionTokens).toLocaleString()}
                       </p>
-                      <p className="text-xs text-muted-foreground">tokens</p>
+                      <p className="text-xs text-muted-foreground">{t('tokens')}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-medium">{usage.latencyMs}ms</p>
-                      <p className="text-xs text-muted-foreground">latency</p>
+                      <p className="text-xs text-muted-foreground">{t('latency')}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-medium text-orange-600">
                         ${Number(usage.totalCost).toFixed(4)}
                       </p>
-                      <p className="text-xs text-muted-foreground">cost</p>
+                      <p className="text-xs text-muted-foreground">{t('cost')}</p>
                     </div>
                   </div>
                 </div>
@@ -328,7 +330,7 @@ async function LLMUsageContent() {
             </div>
           ) : (
             <p className="text-muted-foreground text-center py-8">
-              No recent requests
+              {t('noRecentRequests')}
             </p>
           )}
         </CardContent>
@@ -337,14 +339,16 @@ async function LLMUsageContent() {
   )
 }
 
-export default function LLMUsagePage() {
+export default async function LLMUsagePage() {
+  const t = await getTranslations('gwi.llm.usage')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">LLM Usage & Costs</h1>
-            <p className="text-muted-foreground">Loading usage data...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

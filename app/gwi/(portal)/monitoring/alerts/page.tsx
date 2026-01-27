@@ -43,12 +43,13 @@ import {
   Clock,
   BellRing,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
-const alertTypeConfig: Record<string, { icon: typeof Bell; color: string; label: string }> = {
-  pipeline: { icon: Workflow, color: "bg-blue-100 text-blue-600", label: "Pipeline" },
-  llm: { icon: Brain, color: "bg-purple-100 text-purple-600", label: "LLM" },
-  data_quality: { icon: Database, color: "bg-green-100 text-green-600", label: "Data Quality" },
-  system: { icon: Server, color: "bg-orange-100 text-orange-600", label: "System" },
+const alertTypeConfig: Record<string, { icon: typeof Bell; color: string; labelKey: string }> = {
+  pipeline: { icon: Workflow, color: "bg-blue-100 text-blue-600", labelKey: "types.pipeline" },
+  llm: { icon: Brain, color: "bg-purple-100 text-purple-600", labelKey: "types.llm" },
+  data_quality: { icon: Database, color: "bg-green-100 text-green-600", labelKey: "types.dataQuality" },
+  system: { icon: Server, color: "bg-orange-100 text-orange-600", labelKey: "types.system" },
 }
 
 async function getAlertsData() {
@@ -72,20 +73,22 @@ async function getAlertsData() {
 
 async function AlertsContent() {
   const { alerts, activeCount, triggeredToday } = await getAlertsData()
+  const t = await getTranslations('gwi.monitoring.alerts')
+  const tc = await getTranslations('gwi.common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Alerts Management</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Configure and manage monitoring alerts
+            {t('description')}
           </p>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Plus className="mr-2 h-4 w-4" />
-          Create Alert
+          {t('createAlert')}
         </Button>
       </div>
 
@@ -99,7 +102,7 @@ async function AlertsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{alerts.length}</p>
-                <p className="text-sm text-muted-foreground">Total Alerts</p>
+                <p className="text-sm text-muted-foreground">{t('totalAlerts')}</p>
               </div>
             </div>
           </CardContent>
@@ -112,7 +115,7 @@ async function AlertsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeCount}</p>
-                <p className="text-sm text-muted-foreground">Active Alerts</p>
+                <p className="text-sm text-muted-foreground">{t('activeAlerts')}</p>
               </div>
             </div>
           </CardContent>
@@ -125,7 +128,7 @@ async function AlertsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{triggeredToday}</p>
-                <p className="text-sm text-muted-foreground">Triggered Today</p>
+                <p className="text-sm text-muted-foreground">{t('triggeredToday')}</p>
               </div>
             </div>
           </CardContent>
@@ -140,7 +143,7 @@ async function AlertsContent() {
                 <p className="text-2xl font-bold">
                   {alerts.reduce((sum, a) => sum + a.triggerCount, 0)}
                 </p>
-                <p className="text-sm text-muted-foreground">Total Triggers</p>
+                <p className="text-sm text-muted-foreground">{t('totalTriggers')}</p>
               </div>
             </div>
           </CardContent>
@@ -153,28 +156,28 @@ async function AlertsContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search alerts..." className="pl-9" />
+              <Input placeholder={t('searchPlaceholder')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t('type')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="pipeline">Pipeline</SelectItem>
-                <SelectItem value="llm">LLM</SelectItem>
-                <SelectItem value="data_quality">Data Quality</SelectItem>
-                <SelectItem value="system">System</SelectItem>
+                <SelectItem value="all">{t('allTypes')}</SelectItem>
+                <SelectItem value="pipeline">{t('types.pipeline')}</SelectItem>
+                <SelectItem value="llm">{t('types.llm')}</SelectItem>
+                <SelectItem value="data_quality">{t('types.dataQuality')}</SelectItem>
+                <SelectItem value="system">{t('types.system')}</SelectItem>
               </SelectContent>
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t('status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="all">{t('all')}</SelectItem>
+                <SelectItem value="active">{t('active')}</SelectItem>
+                <SelectItem value="inactive">{t('inactive')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -184,9 +187,9 @@ async function AlertsContent() {
       {/* Alerts Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Configured Alerts</CardTitle>
+          <CardTitle>{t('configuredAlerts')}</CardTitle>
           <CardDescription>
-            All monitoring alerts and their trigger history
+            {t('configuredAlertsDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -194,12 +197,12 @@ async function AlertsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Alert</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Recipients</TableHead>
-                  <TableHead>Last Triggered</TableHead>
-                  <TableHead>Trigger Count</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>{t('alert')}</TableHead>
+                  <TableHead>{t('type')}</TableHead>
+                  <TableHead>{t('recipients')}</TableHead>
+                  <TableHead>{t('lastTriggered')}</TableHead>
+                  <TableHead>{t('triggerCount')}</TableHead>
+                  <TableHead>{t('active')}</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -217,14 +220,14 @@ async function AlertsContent() {
                           <div>
                             <p className="font-medium">{alert.name}</p>
                             <p className="text-xs text-muted-foreground">
-                              by {alert.createdBy.name}
+                              {tc('createdBy')} {alert.createdBy.name}
                             </p>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
                         <Badge className={typeConfig.color}>
-                          {typeConfig.label}
+                          {t(typeConfig.labelKey)}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -252,7 +255,7 @@ async function AlertsContent() {
                             </p>
                           </div>
                         ) : (
-                          <span className="text-muted-foreground">Never</span>
+                          <span className="text-muted-foreground">{tc('never')}</span>
                         )}
                       </TableCell>
                       <TableCell>
@@ -271,16 +274,16 @@ async function AlertsContent() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem>
                               <Edit className="mr-2 h-4 w-4" />
-                              Edit Alert
+                              {t('editAlert')}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <Bell className="mr-2 h-4 w-4" />
-                              Test Alert
+                              {t('testAlert')}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600">
                               <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
+                              {tc('delete')}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -293,13 +296,13 @@ async function AlertsContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Bell className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No Alerts Configured</h3>
+              <h3 className="text-lg font-medium">{t('noAlertsConfigured')}</h3>
               <p className="text-muted-foreground mb-4">
-                Create alerts to monitor your pipelines, LLMs, and data quality
+                {t('createAlertsToMonitor')}
               </p>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Create First Alert
+                {t('createFirstAlert')}
               </Button>
             </div>
           )}
@@ -309,42 +312,42 @@ async function AlertsContent() {
       {/* Alert Templates */}
       <Card>
         <CardHeader>
-          <CardTitle>Quick Setup Templates</CardTitle>
+          <CardTitle>{t('quickSetupTemplates')}</CardTitle>
           <CardDescription>
-            Common alert configurations you can set up instantly
+            {t('quickSetupTemplatesDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[
               {
-                name: "Pipeline Failure",
-                description: "Alert when any pipeline run fails",
+                nameKey: "templates.pipelineFailure",
+                descKey: "templates.pipelineFailureDesc",
                 type: "pipeline",
               },
               {
-                name: "High LLM Latency",
-                description: "Alert when LLM response time exceeds threshold",
+                nameKey: "templates.highLlmLatency",
+                descKey: "templates.highLlmLatencyDesc",
                 type: "llm",
               },
               {
-                name: "Data Quality Drop",
-                description: "Alert when quality score falls below target",
+                nameKey: "templates.dataQualityDrop",
+                descKey: "templates.dataQualityDropDesc",
                 type: "data_quality",
               },
               {
-                name: "Sync Error",
-                description: "Alert when data source sync fails",
+                nameKey: "templates.syncError",
+                descKey: "templates.syncErrorDesc",
                 type: "system",
               },
               {
-                name: "Cost Threshold",
-                description: "Alert when LLM costs exceed budget",
+                nameKey: "templates.costThreshold",
+                descKey: "templates.costThresholdDesc",
                 type: "llm",
               },
               {
-                name: "Error Rate Spike",
-                description: "Alert on unusual error rate increase",
+                nameKey: "templates.errorRateSpike",
+                descKey: "templates.errorRateSpikeDesc",
                 type: "system",
               },
             ].map((template) => {
@@ -352,20 +355,20 @@ async function AlertsContent() {
               const Icon = config.icon
               return (
                 <div
-                  key={template.name}
+                  key={template.nameKey}
                   className="flex items-center gap-4 p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"
                 >
                   <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${config.color.split(" ")[0]}`}>
                     <Icon className={`h-5 w-5 ${config.color.split(" ")[1]}`} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium">{template.name}</p>
+                    <p className="font-medium">{t(template.nameKey)}</p>
                     <p className="text-sm text-muted-foreground">
-                      {template.description}
+                      {t(template.descKey)}
                     </p>
                   </div>
                   <Button variant="outline" size="sm">
-                    Setup
+                    {t('setup')}
                   </Button>
                 </div>
               )
@@ -377,14 +380,16 @@ async function AlertsContent() {
   )
 }
 
-export default function AlertsPage() {
+export default async function AlertsPage() {
+  const t = await getTranslations('gwi.monitoring.alerts')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Alerts Management</h1>
-            <p className="text-muted-foreground">Loading alerts...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

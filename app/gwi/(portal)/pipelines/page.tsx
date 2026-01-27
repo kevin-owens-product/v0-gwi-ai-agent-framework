@@ -35,6 +35,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const pipelineTypeColors: Record<string, string> = {
   ETL: "bg-blue-100 text-blue-700",
@@ -64,21 +65,23 @@ async function getPipelines() {
 
 async function PipelinesContent() {
   const pipelines = await getPipelines()
+  const t = await getTranslations('gwi.pipelines')
+  const tc = await getTranslations('gwi.common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Data Pipelines</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Configure and manage data processing pipelines
+            {t('description')}
           </p>
         </div>
         <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
           <Link href="/gwi/pipelines/new">
             <Plus className="mr-2 h-4 w-4" />
-            New Pipeline
+            {t('newPipeline')}
           </Link>
         </Button>
       </div>
@@ -88,19 +91,19 @@ async function PipelinesContent() {
         <Button variant="outline" asChild>
           <Link href="/gwi/pipelines/runs">
             <Activity className="mr-2 h-4 w-4" />
-            All Runs
+            {t('allRuns')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/pipelines/schedules">
             <Clock className="mr-2 h-4 w-4" />
-            Schedules
+            {t('schedules')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/pipelines/validation">
             <CheckCircle className="mr-2 h-4 w-4" />
-            Validation Rules
+            {t('validationRules')}
           </Link>
         </Button>
       </div>
@@ -110,7 +113,7 @@ async function PipelinesContent() {
         <CardContent className="pt-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search pipelines..." className="pl-9" />
+            <Input placeholder={t('searchPlaceholder')} className="pl-9" />
           </div>
         </CardContent>
       </Card>
@@ -122,11 +125,11 @@ async function PipelinesContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Pipeline</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Schedule</TableHead>
-                  <TableHead>Last Run</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>{t('pipeline')}</TableHead>
+                  <TableHead>{t('type')}</TableHead>
+                  <TableHead>{t('schedule')}</TableHead>
+                  <TableHead>{t('lastRun')}</TableHead>
+                  <TableHead>{t('active')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -161,7 +164,7 @@ async function PipelinesContent() {
                             {pipeline.schedule}
                           </code>
                         ) : (
-                          <span className="text-muted-foreground">Manual</span>
+                          <span className="text-muted-foreground">{tc('manual')}</span>
                         )}
                       </TableCell>
                       <TableCell>
@@ -181,7 +184,7 @@ async function PipelinesContent() {
                             </span>
                           </div>
                         ) : (
-                          <span className="text-muted-foreground">Never</span>
+                          <span className="text-muted-foreground">{tc('never')}</span>
                         )}
                       </TableCell>
                       <TableCell>
@@ -197,24 +200,24 @@ async function PipelinesContent() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem className="text-green-600">
                               <Play className="mr-2 h-4 w-4" />
-                              Run Now
+                              {tc('runNow')}
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                               <Link href={`/gwi/pipelines/${pipeline.id}`}>
                                 <Edit className="mr-2 h-4 w-4" />
-                                Edit
+                                {tc('edit')}
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                               <Link href={`/gwi/pipelines/${pipeline.id}/runs`}>
                                 <Activity className="mr-2 h-4 w-4" />
-                                View Runs
+                                {tc('viewRuns')}
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600">
                               <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
+                              {tc('delete')}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -227,14 +230,14 @@ async function PipelinesContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Workflow className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No pipelines yet</h3>
+              <h3 className="text-lg font-medium">{t('noPipelinesYet')}</h3>
               <p className="text-muted-foreground mb-4">
-                Create your first data pipeline to start processing data
+                {t('createFirstPipeline')}
               </p>
               <Button asChild>
                 <Link href="/gwi/pipelines/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Pipeline
+                  {t('createPipeline')}
                 </Link>
               </Button>
             </div>
@@ -245,14 +248,16 @@ async function PipelinesContent() {
   )
 }
 
-export default function PipelinesPage() {
+export default async function PipelinesPage() {
+  const t = await getTranslations('gwi.pipelines')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Data Pipelines</h1>
-            <p className="text-muted-foreground">Loading pipelines...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

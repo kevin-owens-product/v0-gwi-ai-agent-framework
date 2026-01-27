@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Users, Lightbulb, Target, TrendingUp, PieChart, ArrowRight, Play, Bot, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface Agent {
   id: string
@@ -68,6 +69,7 @@ const demoAgents: Agent[] = [
 export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
   const [agents, setAgents] = useState<Agent[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const t = useTranslations('dashboard.agents')
 
   useEffect(() => {
     async function fetchAgents() {
@@ -97,10 +99,10 @@ export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
-        <CardTitle className="text-base font-medium">Agent Orchestrator</CardTitle>
+        <CardTitle className="text-base font-medium">{t('agentOrchestrator')}</CardTitle>
         <Link href="/dashboard/agents">
           <Button variant="ghost" size="sm" className="text-xs gap-1">
-            Manage
+            {t('manage')}
             <ArrowRight className="h-3 w-3" />
           </Button>
         </Link>
@@ -113,10 +115,10 @@ export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
         ) : agents.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <Bot className="h-8 w-8 mb-2 opacity-50" />
-            <p className="text-sm">No agents yet</p>
+            <p className="text-sm">{t('noAgentsYet')}</p>
             <Link href="/dashboard/agents/new">
               <Button variant="outline" size="sm" className="mt-2">
-                Create Agent
+                {t('createAgent')}
               </Button>
             </Link>
           </div>
@@ -141,7 +143,7 @@ export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
                       <div className="flex items-center gap-2">
                         {isActive ? (
                           <span className="text-xs text-muted-foreground">
-                            {runCount} run{runCount !== 1 ? "s" : ""}
+                            {runCount === 1 ? t('runsCount', { count: runCount }) : t('runsCountPlural', { count: runCount })}
                           </span>
                         ) : (
                           <Button
@@ -170,7 +172,7 @@ export function AgentOrchestrator({ orgId }: AgentOrchestratorProps) {
                             }}
                           >
                             <Play className="h-3 w-3 mr-1" />
-                            Activate
+                            {t('activate')}
                           </Button>
                         )}
                       </div>

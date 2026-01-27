@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dialog"
 import { LoadingText } from "@/components/ui/loading-text"
 import { AlertTriangle, Search, Eye, CheckCircle, Clock, RefreshCw } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getErrorLogs() {
   const errors = await prisma.gWIErrorLog.findMany({
@@ -46,6 +47,8 @@ async function getErrorLogs() {
 
 async function ErrorLogsContent() {
   const { errors, unresolvedCount } = await getErrorLogs()
+  const t = await getTranslations('gwi.monitoring.errorLogs')
+  const tc = await getTranslations('gwi.common')
 
   const sourceColors: Record<string, string> = {
     pipeline: "bg-blue-100 text-blue-700",
@@ -59,14 +62,14 @@ async function ErrorLogsContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Error Logs</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            View and resolve system errors
+            {t('description')}
           </p>
         </div>
         <Button variant="outline">
           <RefreshCw className="mr-2 h-4 w-4" />
-          Refresh
+          {tc('refresh')}
         </Button>
       </div>
 
@@ -80,7 +83,7 @@ async function ErrorLogsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-red-600">{unresolvedCount}</p>
-                <p className="text-sm text-muted-foreground">Unresolved Errors</p>
+                <p className="text-sm text-muted-foreground">{t('unresolvedErrors')}</p>
               </div>
             </div>
           </CardContent>
@@ -95,7 +98,7 @@ async function ErrorLogsContent() {
                 <p className="text-2xl font-bold">
                   {errors.filter((e) => e.resolvedAt).length}
                 </p>
-                <p className="text-sm text-muted-foreground">Resolved Today</p>
+                <p className="text-sm text-muted-foreground">{t('resolvedToday')}</p>
               </div>
             </div>
           </CardContent>
@@ -108,7 +111,7 @@ async function ErrorLogsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{errors.length}</p>
-                <p className="text-sm text-muted-foreground">Total Errors (24h)</p>
+                <p className="text-sm text-muted-foreground">{t('totalErrors24h')}</p>
               </div>
             </div>
           </CardContent>
@@ -121,28 +124,28 @@ async function ErrorLogsContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search errors..." className="pl-9" />
+              <Input placeholder={t('searchPlaceholder')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Source" />
+                <SelectValue placeholder={t('source')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Sources</SelectItem>
-                <SelectItem value="pipeline">Pipeline</SelectItem>
-                <SelectItem value="llm">LLM</SelectItem>
-                <SelectItem value="agent">Agent</SelectItem>
-                <SelectItem value="data_source">Data Source</SelectItem>
+                <SelectItem value="all">{t('allSources')}</SelectItem>
+                <SelectItem value="pipeline">{t('sources.pipeline')}</SelectItem>
+                <SelectItem value="llm">{t('sources.llm')}</SelectItem>
+                <SelectItem value="agent">{t('sources.agent')}</SelectItem>
+                <SelectItem value="data_source">{t('sources.dataSource')}</SelectItem>
               </SelectContent>
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t('status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="unresolved">Unresolved</SelectItem>
-                <SelectItem value="resolved">Resolved</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="unresolved">{t('unresolved')}</SelectItem>
+                <SelectItem value="resolved">{t('resolved')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -156,11 +159,11 @@ async function ErrorLogsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Error</TableHead>
-                  <TableHead>Source</TableHead>
+                  <TableHead>{t('error')}</TableHead>
+                  <TableHead>{t('source')}</TableHead>
                   <TableHead>Type</TableHead>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t('timestamp')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -189,12 +192,12 @@ async function ErrorLogsContent() {
                       {error.resolvedAt ? (
                         <Badge className="bg-green-100 text-green-700">
                           <CheckCircle className="mr-1 h-3 w-3" />
-                          Resolved
+                          {t('resolved')}
                         </Badge>
                       ) : (
                         <Badge className="bg-red-100 text-red-700">
                           <AlertTriangle className="mr-1 h-3 w-3" />
-                          Open
+                          {t('open')}
                         </Badge>
                       )}
                     </TableCell>
@@ -207,21 +210,21 @@ async function ErrorLogsContent() {
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl">
                           <DialogHeader>
-                            <DialogTitle>Error Details</DialogTitle>
+                            <DialogTitle>{t('errorDetails')}</DialogTitle>
                             <DialogDescription>
                               {error.errorType} - {error.source}
                             </DialogDescription>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div>
-                              <p className="text-sm font-medium">Message</p>
+                              <p className="text-sm font-medium">{t('message')}</p>
                               <p className="text-sm text-muted-foreground">
                                 {error.message}
                               </p>
                             </div>
                             {error.stackTrace && (
                               <div>
-                                <p className="text-sm font-medium">Stack Trace</p>
+                                <p className="text-sm font-medium">{t('stackTrace')}</p>
                                 <pre className="text-xs bg-slate-100 p-3 rounded overflow-auto max-h-48">
                                   {error.stackTrace}
                                 </pre>
@@ -229,7 +232,7 @@ async function ErrorLogsContent() {
                             )}
                             {error.context && (
                               <div>
-                                <p className="text-sm font-medium">Context</p>
+                                <p className="text-sm font-medium">{t('context')}</p>
                                 <pre className="text-xs bg-slate-100 p-3 rounded overflow-auto max-h-32">
                                   {JSON.stringify(error.context, null, 2)}
                                 </pre>
@@ -238,7 +241,7 @@ async function ErrorLogsContent() {
                             {!error.resolvedAt && (
                               <Button className="w-full">
                                 <CheckCircle className="mr-2 h-4 w-4" />
-                                Mark as Resolved
+                                {tc('markAsResolved')}
                               </Button>
                             )}
                           </div>
@@ -252,9 +255,9 @@ async function ErrorLogsContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
-              <h3 className="text-lg font-medium">No errors found</h3>
+              <h3 className="text-lg font-medium">{t('noErrorsFound')}</h3>
               <p className="text-muted-foreground">
-                All systems are running smoothly
+                {t('allSystemsRunning')}
               </p>
             </div>
           )}
@@ -264,13 +267,15 @@ async function ErrorLogsContent() {
   )
 }
 
-export default function ErrorLogsPage() {
+export default async function ErrorLogsPage() {
+  const t = await getTranslations('gwi.monitoring.errorLogs')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Error Logs</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

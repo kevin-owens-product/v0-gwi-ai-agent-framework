@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -60,6 +61,8 @@ const roleColors: Record<string, string> = {
 }
 
 export default function AdminsPage() {
+  const t = useTranslations("admin.admins")
+  const tCommon = useTranslations("common")
   const { admin: currentAdmin } = useAdmin()
   const [admins, setAdmins] = useState<Admin[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -155,7 +158,7 @@ export default function AdminsPage() {
 
   const handleDelete = async (admin: Admin) => {
     if (admin.id === currentAdmin.id) {
-      toast.error("You cannot delete your own account")
+      toast.error(t("cannotDeleteSelf"))
       return
     }
     try {
@@ -206,7 +209,7 @@ export default function AdminsPage() {
   const columns: Column<Admin>[] = [
     {
       id: "admin",
-      header: "Admin",
+      header: t("admin"),
       cell: (admin) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -216,7 +219,7 @@ export default function AdminsPage() {
             <p className="font-medium">
               {admin.name}
               {admin.id === currentAdmin.id && (
-                <span className="ml-2 text-xs text-muted-foreground">(You)</span>
+                <span className="ml-2 text-xs text-muted-foreground">({t("you")})</span>
               )}
             </p>
             <p className="text-xs text-muted-foreground">{admin.email}</p>
@@ -226,7 +229,7 @@ export default function AdminsPage() {
     },
     {
       id: "role",
-      header: "Role",
+      header: t("role"),
       cell: (admin) => (
         <Badge className={`${roleColors[admin.role]} text-white`}>
           {admin.role.replace("_", " ")}
@@ -235,19 +238,19 @@ export default function AdminsPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: tCommon("status"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (admin) =>
         admin.isActive ? (
-          <Badge variant="default" className="bg-green-500">Active</Badge>
+          <Badge variant="default" className="bg-green-500">{tCommon("active")}</Badge>
         ) : (
-          <Badge variant="secondary">Inactive</Badge>
+          <Badge variant="secondary">{tCommon("inactive")}</Badge>
         ),
     },
     {
       id: "2fa",
-      header: "2FA",
+      header: t("twoFactor"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (admin) =>
@@ -259,7 +262,7 @@ export default function AdminsPage() {
     },
     {
       id: "lastLogin",
-      header: "Last Login",
+      header: t("lastLogin"),
       cell: (admin) =>
         admin.lastLoginAt ? (
           <div>
@@ -275,12 +278,12 @@ export default function AdminsPage() {
             )}
           </div>
         ) : (
-          <span className="text-muted-foreground">Never</span>
+          <span className="text-muted-foreground">{t("never")}</span>
         ),
     },
     {
       id: "created",
-      header: "Created",
+      header: t("created"),
       cell: (admin) => (
         <span className="text-muted-foreground">
           {new Date(admin.createdAt).toLocaleDateString()}
@@ -293,7 +296,7 @@ export default function AdminsPage() {
   const rowActions: RowAction<Admin>[] = isSuperAdmin
     ? [
         {
-          label: "Edit",
+          label: tCommon("edit"),
           icon: <Pencil className="h-4 w-4" />,
           onClick: (admin) => handleOpenDialog(admin),
         },
@@ -304,19 +307,19 @@ export default function AdminsPage() {
   const bulkActions: BulkAction[] = isSuperAdmin
     ? [
         {
-          label: "Activate Selected",
+          label: t("activateSelected"),
           icon: <CheckCircle className="h-4 w-4" />,
           onClick: handleBulkActivate,
-          confirmTitle: "Activate Admins",
-          confirmDescription: "Are you sure you want to activate the selected admin accounts?",
+          confirmTitle: t("activateAdmins"),
+          confirmDescription: t("confirmActivate"),
         },
         {
-          label: "Deactivate Selected",
+          label: t("deactivateSelected"),
           icon: <XCircle className="h-4 w-4" />,
           onClick: handleBulkDeactivate,
           variant: "destructive",
-          confirmTitle: "Deactivate Admins",
-          confirmDescription: "Are you sure you want to deactivate the selected admin accounts?",
+          confirmTitle: t("deactivateAdmins"),
+          confirmDescription: t("confirmDeactivate"),
         },
       ]
     : []
@@ -327,65 +330,65 @@ export default function AdminsPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Admin Management</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Manage platform administrators and their permissions
+                {t("description")}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchAdmins} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               {isSuperAdmin && (
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                   <DialogTrigger asChild>
                     <Button size="sm" onClick={() => handleOpenDialog()}>
                       <Plus className="h-4 w-4 mr-2" />
-                      New Admin
+                      {t("newAdmin")}
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>
-                        {editingAdmin ? "Edit Admin" : "Create Admin"}
+                        {editingAdmin ? t("editAdmin") : t("createAdmin")}
                       </DialogTitle>
                       <DialogDescription>
                         {editingAdmin
-                          ? "Update administrator details"
-                          : "Add a new platform administrator"}
+                          ? t("updateAdminDetails")
+                          : t("addNewAdmin")}
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Email</Label>
+                        <Label>{t("email")}</Label>
                         <Input
                           type="email"
-                          placeholder="admin@example.com"
+                          placeholder={t("emailPlaceholder")}
                           value={formData.email}
                           onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                           disabled={!!editingAdmin}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Name</Label>
+                        <Label>{tCommon("name")}</Label>
                         <Input
-                          placeholder="Full name"
+                          placeholder={t("namePlaceholder")}
                           value={formData.name}
                           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>{editingAdmin ? "New Password (leave empty to keep current)" : "Password"}</Label>
+                        <Label>{editingAdmin ? t("newPassword") : t("password")}</Label>
                         <Input
                           type="password"
-                          placeholder={editingAdmin ? "Leave empty to keep current" : "Password"}
+                          placeholder={editingAdmin ? t("leaveEmptyToKeep") : t("password")}
                           value={formData.password}
                           onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Role</Label>
+                        <Label>{t("role")}</Label>
                         <Select
                           value={formData.role}
                           onValueChange={(v) => setFormData(prev => ({ ...prev, role: v }))}
@@ -394,17 +397,17 @@ export default function AdminsPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
-                            <SelectItem value="ADMIN">Admin</SelectItem>
-                            <SelectItem value="SUPPORT">Support</SelectItem>
-                            <SelectItem value="ANALYST">Analyst</SelectItem>
+                            <SelectItem value="SUPER_ADMIN">{t("roles.superAdmin")}</SelectItem>
+                            <SelectItem value="ADMIN">{t("roles.admin")}</SelectItem>
+                            <SelectItem value="SUPPORT">{t("roles.support")}</SelectItem>
+                            <SelectItem value="ANALYST">{t("roles.analyst")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
-                          <Label>Active</Label>
-                          <p className="text-xs text-muted-foreground">Allow login to admin portal</p>
+                          <Label>{tCommon("active")}</Label>
+                          <p className="text-xs text-muted-foreground">{t("allowLogin")}</p>
                         </div>
                         <Switch
                           checked={formData.isActive}
@@ -414,7 +417,7 @@ export default function AdminsPage() {
                     </div>
                     <DialogFooter>
                       <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                        Cancel
+                        {tCommon("cancel")}
                       </Button>
                       <Button
                         onClick={handleSubmit}
@@ -423,12 +426,12 @@ export default function AdminsPage() {
                         {isSubmitting ? (
                           <>
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Saving...
+                            {t("saving")}
                           </>
                         ) : editingAdmin ? (
-                          "Update Admin"
+                          t("updateAdmin")
                         ) : (
-                          "Create Admin"
+                          t("createAdmin")
                         )}
                       </Button>
                     </DialogFooter>
@@ -444,7 +447,7 @@ export default function AdminsPage() {
             columns={columns}
             getRowId={(admin) => admin.id}
             isLoading={isLoading}
-            emptyMessage="No admins found"
+            emptyMessage={t("noAdmins")}
             viewHref={isSuperAdmin ? (admin) => `/admin/admins/${admin.id}` : undefined}
             onDelete={
               isSuperAdmin
@@ -455,9 +458,9 @@ export default function AdminsPage() {
                   }
                 : undefined
             }
-            deleteConfirmTitle="Delete Admin"
+            deleteConfirmTitle={t("deleteAdmin")}
             deleteConfirmDescription={(admin) =>
-              `Are you sure you want to delete ${admin.name}? This action cannot be undone.`
+              t("confirmDeleteAdmin", { name: admin.name })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}

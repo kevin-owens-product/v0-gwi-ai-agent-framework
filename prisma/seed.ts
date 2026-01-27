@@ -107,6 +107,36 @@ async function main() {
   await safeDeleteMany(() => prisma.analysisHistory.deleteMany())
   await safeDeleteMany(() => prisma.entityVersion.deleteMany())
 
+  // Clean GWI portal data (must be before SuperAdmin due to foreign keys)
+  await safeDeleteMany(() => prisma.gWIAuditLog.deleteMany())
+  await safeDeleteMany(() => prisma.gWIApiKey.deleteMany())
+  await safeDeleteMany(() => prisma.gWIMonitoringAlert.deleteMany())
+  await safeDeleteMany(() => prisma.gWIErrorLog.deleteMany())
+  await safeDeleteMany(() => prisma.gWIPortalSettings.deleteMany())
+  await safeDeleteMany(() => prisma.gWIDataSourceConnection.deleteMany())
+
+  // Clean LLM and pipeline data
+  await safeDeleteMany(() => prisma.lLMUsageRecord.deleteMany())
+  await safeDeleteMany(() => prisma.lLMConfiguration.deleteMany())
+  await safeDeleteMany(() => prisma.promptTemplate.deleteMany())
+  await safeDeleteMany(() => prisma.pipelineValidationRule.deleteMany())
+  await safeDeleteMany(() => prisma.pipelineRun.deleteMany())
+  await safeDeleteMany(() => prisma.dataPipeline.deleteMany())
+
+  // Clean survey data
+  await safeDeleteMany(() => prisma.surveyDistribution.deleteMany())
+  await safeDeleteMany(() => prisma.surveyResponse.deleteMany())
+  await safeDeleteMany(() => prisma.surveyQuestion.deleteMany())
+  await safeDeleteMany(() => prisma.survey.deleteMany())
+
+  // Clean taxonomy data
+  await safeDeleteMany(() => prisma.taxonomyMappingRule.deleteMany())
+  await safeDeleteMany(() => prisma.taxonomyAttribute.deleteMany())
+  await safeDeleteMany(() => prisma.taxonomyCategory.deleteMany())
+
+  // Clean agent templates
+  await safeDeleteMany(() => prisma.systemAgentTemplate.deleteMany())
+
   // Clean super admin portal data
   await safeDeleteMany(() => prisma.platformAuditLog.deleteMany())
   await safeDeleteMany(() => prisma.roleAuditLog.deleteMany())

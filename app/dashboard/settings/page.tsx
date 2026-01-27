@@ -9,9 +9,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2 } from "lucide-react"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { useTranslations } from "next-intl"
 
 export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false)
+  const t = useTranslations('dashboard.settings')
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -23,37 +25,37 @@ export default function SettingsPage() {
     <div className="p-6 max-w-3xl">
       <PageTracker pageName="Settings" />
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">General Settings</h1>
-        <p className="text-muted-foreground">Manage your organization&apos;s settings and preferences</p>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('description')}</p>
       </div>
 
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Organization Details</CardTitle>
-            <CardDescription>Update your organization&apos;s information</CardDescription>
+            <CardTitle>{t('organizationDetails')}</CardTitle>
+            <CardDescription>{t('updateOrgInfo')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4">
               <div className="h-20 w-20 rounded-lg bg-muted flex items-center justify-center text-2xl font-bold">
                 AC
               </div>
-              <Button variant="outline">Change Logo</Button>
+              <Button variant="outline">{t('changeLogo')}</Button>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="org-name">Organization Name</Label>
+                <Label htmlFor="org-name">{t('organizationName')}</Label>
                 <Input id="org-name" defaultValue="Acme Corporation" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="org-slug">Organization Slug</Label>
+                <Label htmlFor="org-slug">{t('organizationSlug')}</Label>
                 <Input id="org-slug" defaultValue="acme-corp" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="org-description">Description</Label>
+              <Label htmlFor="org-description">{t('orgDescription')}</Label>
               <Textarea
                 id="org-description"
                 defaultValue="Leading consumer goods company focused on sustainable products."
@@ -63,33 +65,33 @@ export default function SettingsPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="industry">Industry</Label>
+                <Label htmlFor="industry">{t('industry')}</Label>
                 <Select defaultValue="consumer-goods">
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="consumer-goods">Consumer Goods</SelectItem>
-                    <SelectItem value="technology">Technology</SelectItem>
-                    <SelectItem value="finance">Finance</SelectItem>
-                    <SelectItem value="healthcare">Healthcare</SelectItem>
-                    <SelectItem value="retail">Retail</SelectItem>
-                    <SelectItem value="media">Media & Entertainment</SelectItem>
+                    <SelectItem value="consumer-goods">{t('consumerGoods')}</SelectItem>
+                    <SelectItem value="technology">{t('technology')}</SelectItem>
+                    <SelectItem value="finance">{t('finance')}</SelectItem>
+                    <SelectItem value="healthcare">{t('healthcare')}</SelectItem>
+                    <SelectItem value="retail">{t('retail')}</SelectItem>
+                    <SelectItem value="media">{t('mediaEntertainment')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="size">Company Size</Label>
+                <Label htmlFor="size">{t('companySize')}</Label>
                 <Select defaultValue="1000-5000">
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1-50">1-50 employees</SelectItem>
-                    <SelectItem value="50-200">50-200 employees</SelectItem>
-                    <SelectItem value="200-1000">200-1000 employees</SelectItem>
-                    <SelectItem value="1000-5000">1000-5000 employees</SelectItem>
-                    <SelectItem value="5000+">5000+ employees</SelectItem>
+                    <SelectItem value="1-50">{t('employees1to50')}</SelectItem>
+                    <SelectItem value="50-200">{t('employees50to200')}</SelectItem>
+                    <SelectItem value="200-1000">{t('employees200to1000')}</SelectItem>
+                    <SelectItem value="1000-5000">{t('employees1000to5000')}</SelectItem>
+                    <SelectItem value="5000+">{t('employees5000plus')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -99,13 +101,13 @@ export default function SettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Regional Settings</CardTitle>
-            <CardDescription>Set your timezone and date format preferences</CardDescription>
+            <CardTitle>{t('regionalSettings')}</CardTitle>
+            <CardDescription>{t('regionalDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="timezone">Timezone</Label>
+                <Label htmlFor="timezone">{t('timezone')}</Label>
                 <Select defaultValue="america-new-york">
                   <SelectTrigger>
                     <SelectValue />
@@ -120,7 +122,7 @@ export default function SettingsPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="date-format">Date Format</Label>
+                <Label htmlFor="date-format">{t('dateFormat')}</Label>
                 <Select defaultValue="mdy">
                   <SelectTrigger>
                     <SelectValue />
@@ -141,10 +143,10 @@ export default function SettingsPage() {
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
+                {t('saving')}
               </>
             ) : (
-              "Save Changes"
+              t('saveChanges')
             )}
           </Button>
         </div>

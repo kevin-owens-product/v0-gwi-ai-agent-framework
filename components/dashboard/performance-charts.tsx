@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, BarChart, Bar, CartesianGrid } from "recharts"
 import { Loader2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface PerformanceChartsProps {
   orgId?: string
@@ -27,6 +28,7 @@ export function PerformanceCharts({ orgId }: PerformanceChartsProps) {
   const [agentUsageData, setAgentUsageData] = useState<AgentUsageData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [totals, setTotals] = useState({ runs: 0, insights: 0 })
+  const t = useTranslations('dashboard.performance')
 
   useEffect(() => {
     async function fetchPerformanceData() {
@@ -83,14 +85,14 @@ export function PerformanceCharts({ orgId }: PerformanceChartsProps) {
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-base font-medium">Performance</CardTitle>
+        <CardTitle className="text-base font-medium">{t('title')}</CardTitle>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="h-8 bg-muted/50">
             <TabsTrigger value="queries" className="text-xs h-6 px-3">
-              Activity
+              {t('activity')}
             </TabsTrigger>
             <TabsTrigger value="agents" className="text-xs h-6 px-3">
-              Agents
+              {t('agents')}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -101,12 +103,12 @@ export function PerformanceCharts({ orgId }: PerformanceChartsProps) {
             <div className="flex items-center gap-6 text-sm">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-blue-500" />
-                <span className="text-muted-foreground">Runs</span>
+                <span className="text-muted-foreground">{t('runs')}</span>
                 <span className="font-medium text-foreground">{totals.runs.toLocaleString()}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-emerald-500" />
-                <span className="text-muted-foreground">Insights</span>
+                <span className="text-muted-foreground">{t('insights')}</span>
                 <span className="font-medium text-foreground">{totals.insights.toLocaleString()}</span>
               </div>
             </div>
@@ -163,8 +165,8 @@ export function PerformanceCharts({ orgId }: PerformanceChartsProps) {
           <div className="h-[280px]">
             {agentUsageData.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-                <p className="text-sm">No agent usage data yet</p>
-                <p className="text-xs">Create and run agents to see usage</p>
+                <p className="text-sm">{t('noAgentUsage')}</p>
+                <p className="text-xs">{t('createAgentsToSee')}</p>
               </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">

@@ -13,39 +13,48 @@ import {
   CheckCircle2,
 } from "lucide-react"
 import Link from "next/link"
-
-const modes = [
-  {
-    id: "chat",
-    icon: MessageSquare,
-    title: "Chat Mode",
-    description: "Conversational interface with streaming responses, sub-agent spawning, and inline citations.",
-  },
-  {
-    id: "canvas",
-    icon: LayoutGrid,
-    title: "Canvas Mode",
-    description: "Visual workspace with draggable blocks—charts, personas, tables, and insights.",
-  },
-  {
-    id: "split",
-    icon: SplitSquareVertical,
-    title: "Split View",
-    description: "Chat on the left, live canvas preview on the right. See outputs as you build.",
-  },
-]
-
-const capabilities = [
-  "Rich output blocks (charts, personas, data tables)",
-  "Command palette with saved templates (⌘K)",
-  "Clickable citations with source preview",
-  "Reasoning mode to see agent thinking",
-  "Multi-model selection (GPT-4o, Claude, Gemini)",
-  "Export to workflows, reports, or API",
-]
+import { useTranslations } from "next-intl"
 
 export function PlaygroundShowcase() {
+  const t = useTranslations("landing.playground")
   const [activeMode, setActiveMode] = useState("chat")
+
+  const modes = [
+    {
+      id: "chat",
+      icon: MessageSquare,
+      title: t("chatMode"),
+      description: t("chatModeDesc"),
+    },
+    {
+      id: "canvas",
+      icon: LayoutGrid,
+      title: t("canvasMode"),
+      description: t("canvasModeDesc"),
+    },
+    {
+      id: "split",
+      icon: SplitSquareVertical,
+      title: t("splitView"),
+      description: t("splitViewDesc"),
+    },
+  ]
+
+  const capabilities = [
+    t("cap1"),
+    t("cap2"),
+    t("cap3"),
+    t("cap4"),
+    t("cap5"),
+    t("cap6"),
+  ]
+
+  const templates = [
+    t("templatePersona"),
+    t("templateSegment"),
+    t("templateTrend"),
+    t("templateBrand"),
+  ]
 
   return (
     <section className="py-24 bg-secondary/20">
@@ -54,11 +63,11 @@ export function PlaygroundShowcase() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-sm text-accent mb-6">
               <Sparkles className="h-3 w-3" />
-              Advanced Playground
+              {t("badge")}
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Three ways to build insights</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{t("title")}</h2>
             <p className="text-muted-foreground text-lg mb-8">
-              Whether you prefer conversational AI, visual building, or both—the Playground adapts to your workflow.
+              {t("subtitle")}
             </p>
 
             <div className="space-y-3 mb-8">
@@ -95,7 +104,7 @@ export function PlaygroundShowcase() {
 
             <Link href="/dashboard/playground">
               <Button className="gap-2">
-                Try the Playground
+                {t("tryPlayground")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -105,7 +114,7 @@ export function PlaygroundShowcase() {
             <div className="rounded-xl border border-border bg-card p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Brain className="h-5 w-5 text-accent" />
-                <h3 className="font-semibold text-foreground">Playground Capabilities</h3>
+                <h3 className="font-semibold text-foreground">{t("capabilities")}</h3>
               </div>
               <ul className="space-y-3">
                 {capabilities.map((cap) => (
@@ -120,14 +129,13 @@ export function PlaygroundShowcase() {
             <div className="rounded-xl border border-border bg-card p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Command className="h-5 w-5 text-accent" />
-                <h3 className="font-semibold text-foreground">Quick Actions</h3>
+                <h3 className="font-semibold text-foreground">{t("quickActions")}</h3>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                Press <kbd className="px-1.5 py-0.5 rounded bg-secondary text-xs">⌘K</kbd> to open the command palette
-                and access:
+                {t("quickActionsDesc")} <kbd className="px-1.5 py-0.5 rounded bg-secondary text-xs">⌘K</kbd> {t("quickActionsDescCont")}
               </p>
               <div className="flex flex-wrap gap-2">
-                {["Persona Deep Dive", "Segment Comparison", "Trend Analysis", "Brand Tracker"].map((template) => (
+                {templates.map((template) => (
                   <span key={template} className="text-xs bg-secondary text-muted-foreground px-2 py-1 rounded">
                     {template}
                   </span>

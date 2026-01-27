@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,6 +28,8 @@ interface SystemConfig {
 }
 
 export default function SettingsPage() {
+  const t = useTranslations("admin.settings")
+  const tCommon = useTranslations("common")
   const [configs, setConfigs] = useState<SystemConfig[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -92,42 +95,42 @@ export default function SettingsPage() {
         <TabsList>
           <TabsTrigger value="general" className="gap-2">
             <Settings className="h-4 w-4" />
-            General
+            {t("tabs.general")}
           </TabsTrigger>
           <TabsTrigger value="security" className="gap-2">
             <Shield className="h-4 w-4" />
-            Security
+            {t("tabs.security")}
           </TabsTrigger>
           <TabsTrigger value="email" className="gap-2">
             <Mail className="h-4 w-4" />
-            Email
+            {t("tabs.email")}
           </TabsTrigger>
           <TabsTrigger value="platform" className="gap-2">
             <Globe className="h-4 w-4" />
-            Platform
+            {t("tabs.platform")}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="space-y-6 mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>General Settings</CardTitle>
+              <CardTitle>{t("general.title")}</CardTitle>
               <CardDescription>
-                Configure general platform settings
+                {t("general.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4">
                 <div className="space-y-2">
-                  <Label>Platform Name</Label>
+                  <Label>{t("general.platformName")}</Label>
                   <Input
                     value={(editedValues["platform.name"] as string) || "GWI Insights"}
                     onChange={(e) => updateValue("platform.name", e.target.value)}
-                    placeholder="Platform Name"
+                    placeholder={t("general.platformNamePlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Support Email</Label>
+                  <Label>{t("general.supportEmail")}</Label>
                   <Input
                     type="email"
                     value={(editedValues["platform.support_email"] as string) || ""}
@@ -136,7 +139,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Default Timezone</Label>
+                  <Label>{t("general.defaultTimezone")}</Label>
                   <Input
                     value={(editedValues["platform.timezone"] as string) || "UTC"}
                     onChange={(e) => updateValue("platform.timezone", e.target.value)}
@@ -145,9 +148,9 @@ export default function SettingsPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label>Maintenance Mode</Label>
+                    <Label>{t("general.maintenanceMode")}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Enable to show maintenance page to all users
+                      {t("general.maintenanceModeDescription")}
                     </p>
                   </div>
                   <Switch
@@ -158,7 +161,7 @@ export default function SettingsPage() {
               </div>
               <Button onClick={() => handleSave("platform.name")} disabled={isSaving}>
                 {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-                Save Changes
+                {tCommon("save")}
               </Button>
             </CardContent>
           </Card>
@@ -167,18 +170,18 @@ export default function SettingsPage() {
         <TabsContent value="security" className="space-y-6 mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Security Settings</CardTitle>
+              <CardTitle>{t("security.title")}</CardTitle>
               <CardDescription>
-                Configure platform security policies
+                {t("security.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label>Require Email Verification</Label>
+                    <Label>{t("security.requireEmailVerification")}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Users must verify email before accessing the platform
+                      {t("security.requireEmailVerificationDesc")}
                     </p>
                   </div>
                   <Switch
@@ -188,9 +191,9 @@ export default function SettingsPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label>Allow Public Registration</Label>
+                    <Label>{t("security.allowPublicRegistration")}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Allow anyone to create an account
+                      {t("security.allowPublicRegistrationDesc")}
                     </p>
                   </div>
                   <Switch
@@ -199,7 +202,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Session Timeout (hours)</Label>
+                  <Label>{t("security.sessionTimeout")}</Label>
                   <Input
                     type="number"
                     value={(editedValues["security.session_timeout_hours"] as number) || 24}
@@ -208,7 +211,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Max Failed Login Attempts</Label>
+                  <Label>{t("security.maxLoginAttempts")}</Label>
                   <Input
                     type="number"
                     value={(editedValues["security.max_login_attempts"] as number) || 5}
@@ -217,18 +220,18 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>IP Whitelist (comma separated)</Label>
+                  <Label>{t("security.ipWhitelist")}</Label>
                   <Textarea
                     value={(editedValues["security.ip_whitelist"] as string) || ""}
                     onChange={(e) => updateValue("security.ip_whitelist", e.target.value)}
-                    placeholder="Leave empty to allow all IPs"
+                    placeholder={t("security.ipWhitelistPlaceholder")}
                     rows={3}
                   />
                 </div>
               </div>
               <Button onClick={() => handleSave("security.require_email_verification")} disabled={isSaving}>
                 {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-                Save Changes
+                {tCommon("save")}
               </Button>
             </CardContent>
           </Card>
@@ -237,15 +240,15 @@ export default function SettingsPage() {
         <TabsContent value="email" className="space-y-6 mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Email Settings</CardTitle>
+              <CardTitle>{t("email.title")}</CardTitle>
               <CardDescription>
-                Configure email delivery settings
+                {t("email.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4">
                 <div className="space-y-2">
-                  <Label>From Email Address</Label>
+                  <Label>{t("email.fromAddress")}</Label>
                   <Input
                     type="email"
                     value={(editedValues["email.from_address"] as string) || ""}
@@ -254,7 +257,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>From Name</Label>
+                  <Label>{t("email.fromName")}</Label>
                   <Input
                     value={(editedValues["email.from_name"] as string) || ""}
                     onChange={(e) => updateValue("email.from_name", e.target.value)}
@@ -263,9 +266,9 @@ export default function SettingsPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label>Send Welcome Emails</Label>
+                    <Label>{t("email.sendWelcome")}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Send welcome email to new users
+                      {t("email.sendWelcomeDesc")}
                     </p>
                   </div>
                   <Switch
@@ -275,9 +278,9 @@ export default function SettingsPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label>Send Activity Digests</Label>
+                    <Label>{t("email.sendDigests")}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Send weekly activity summary to admins
+                      {t("email.sendDigestsDesc")}
                     </p>
                   </div>
                   <Switch
@@ -288,7 +291,7 @@ export default function SettingsPage() {
               </div>
               <Button onClick={() => handleSave("email.from_address")} disabled={isSaving}>
                 {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-                Save Changes
+                {tCommon("save")}
               </Button>
             </CardContent>
           </Card>
@@ -297,15 +300,15 @@ export default function SettingsPage() {
         <TabsContent value="platform" className="space-y-6 mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Platform Limits</CardTitle>
+              <CardTitle>{t("platform.title")}</CardTitle>
               <CardDescription>
-                Configure default platform limits and quotas
+                {t("platform.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Default Rate Limit (req/min)</Label>
+                  <Label>{t("platform.rateLimit")}</Label>
                   <Input
                     type="number"
                     value={(editedValues["limits.default_rate_limit"] as number) || 100}
@@ -314,7 +317,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Max File Upload Size (MB)</Label>
+                  <Label>{t("platform.maxFileSize")}</Label>
                   <Input
                     type="number"
                     value={(editedValues["limits.max_file_size_mb"] as number) || 10}
@@ -323,7 +326,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Trial Period (days)</Label>
+                  <Label>{t("platform.trialPeriod")}</Label>
                   <Input
                     type="number"
                     value={(editedValues["limits.trial_period_days"] as number) || 14}
@@ -332,7 +335,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Max Team Members (Starter)</Label>
+                  <Label>{t("platform.maxTeamMembers")}</Label>
                   <Input
                     type="number"
                     value={(editedValues["limits.starter_max_members"] as number) || 3}
@@ -343,7 +346,7 @@ export default function SettingsPage() {
               </div>
               <Button onClick={() => handleSave("limits.default_rate_limit")} disabled={isSaving}>
                 {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-                Save Changes
+                {tCommon("save")}
               </Button>
             </CardContent>
           </Card>

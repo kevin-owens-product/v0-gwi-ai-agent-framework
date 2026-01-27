@@ -25,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getAgentStats() {
   const [templates, tools] = await Promise.all([
@@ -52,21 +53,23 @@ async function getAgentStats() {
 
 async function AgentsContent() {
   const stats = await getAgentStats()
+  const t = await getTranslations('gwi.agents')
+  const tc = await getTranslations('gwi.common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Agent Configuration</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage AI agent templates and tools
+            {t('description')}
           </p>
         </div>
         <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
           <Link href="/gwi/agents/templates/new">
             <Plus className="mr-2 h-4 w-4" />
-            New Template
+            {t('newTemplate')}
           </Link>
         </Button>
       </div>
@@ -81,7 +84,7 @@ async function AgentsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.templates.length}</p>
-                <p className="text-sm text-muted-foreground">Agent Templates</p>
+                <p className="text-sm text-muted-foreground">{t('agentTemplates')}</p>
               </div>
             </div>
           </CardContent>
@@ -94,7 +97,7 @@ async function AgentsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.publishedTemplates}</p>
-                <p className="text-sm text-muted-foreground">Published</p>
+                <p className="text-sm text-muted-foreground">{t('published')}</p>
               </div>
             </div>
           </CardContent>
@@ -107,7 +110,7 @@ async function AgentsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.tools.length}</p>
-                <p className="text-sm text-muted-foreground">Total Tools</p>
+                <p className="text-sm text-muted-foreground">{t('totalTools')}</p>
               </div>
             </div>
           </CardContent>
@@ -120,7 +123,7 @@ async function AgentsContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.activeTools}</p>
-                <p className="text-sm text-muted-foreground">Active Tools</p>
+                <p className="text-sm text-muted-foreground">{t('activeTools')}</p>
               </div>
             </div>
           </CardContent>
@@ -132,19 +135,19 @@ async function AgentsContent() {
         <Button variant="outline" asChild>
           <Link href="/gwi/agents/templates">
             <FileCode className="mr-2 h-4 w-4" />
-            All Templates
+            {t('allTemplates')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/agents/tools">
             <Wrench className="mr-2 h-4 w-4" />
-            Manage Tools
+            {t('manageTools')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/gwi/agents/capabilities">
             <Puzzle className="mr-2 h-4 w-4" />
-            Capabilities
+            {t('capabilities')}
           </Link>
         </Button>
       </div>
@@ -152,9 +155,9 @@ async function AgentsContent() {
       {/* Templates List */}
       <Card>
         <CardHeader>
-          <CardTitle>Agent Templates</CardTitle>
+          <CardTitle>{t('templatesTitle')}</CardTitle>
           <CardDescription>
-            Reusable agent configurations with pre-defined tools and prompts
+            {t('templatesDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -180,7 +183,7 @@ async function AgentsContent() {
                         </p>
                       )}
                       <p className="text-xs text-muted-foreground mt-1">
-                        Created by {template.createdBy.name} | v{template.version}
+                        {tc('createdBy')} {template.createdBy.name} | v{template.version}
                       </p>
                     </div>
                   </div>
@@ -192,7 +195,7 @@ async function AgentsContent() {
                           : "bg-yellow-100 text-yellow-700"
                       }
                     >
-                      {template.isPublished ? "Published" : "Draft"}
+                      {template.isPublished ? t('published') : t('draft')}
                     </Badge>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -204,17 +207,17 @@ async function AgentsContent() {
                         <DropdownMenuItem asChild>
                           <Link href={`/gwi/agents/templates/${template.id}`}>
                             <Edit className="mr-2 h-4 w-4" />
-                            Edit
+                            {tc('edit')}
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Copy className="mr-2 h-4 w-4" />
-                          Duplicate
+                          {tc('duplicate')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-red-600">
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
+                          {tc('delete')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -225,14 +228,14 @@ async function AgentsContent() {
           ) : (
             <div className="text-center py-12">
               <Bot className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-lg font-medium">No agent templates yet</h3>
+              <h3 className="text-lg font-medium">{t('noTemplatesYet')}</h3>
               <p className="text-muted-foreground mb-4">
-                Create reusable agent configurations
+                {t('createReusable')}
               </p>
               <Button asChild>
                 <Link href="/gwi/agents/templates/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Template
+                  {t('createTemplate')}
                 </Link>
               </Button>
             </div>
@@ -244,11 +247,11 @@ async function AgentsContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>System Tools</CardTitle>
-            <CardDescription>Available tools for agent capabilities</CardDescription>
+            <CardTitle>{t('systemTools')}</CardTitle>
+            <CardDescription>{t('systemToolsDesc')}</CardDescription>
           </div>
           <Button variant="outline" asChild>
-            <Link href="/gwi/agents/tools">View All</Link>
+            <Link href="/gwi/agents/tools">{tc('viewAll')}</Link>
           </Button>
         </CardHeader>
         <CardContent>
@@ -277,7 +280,7 @@ async function AgentsContent() {
             </div>
           ) : (
             <p className="text-muted-foreground text-center py-4">
-              No tools configured yet
+              {t('noToolsConfigured')}
             </p>
           )}
         </CardContent>
@@ -286,13 +289,15 @@ async function AgentsContent() {
   )
 }
 
-export default function AgentsPage() {
+export default async function AgentsPage() {
+  const t = await getTranslations('gwi.agents')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Agent Configuration</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

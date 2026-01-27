@@ -446,5 +446,179 @@
       "selectAll": "Selecionar todos",
       "deselectAll": "Desmarcar todos"
     }
+  },
+  "toast": {
+    "success": {
+      "saved": "Alteracoes salvas com sucesso",
+      "created": "Criado com sucesso",
+      "updated": "Atualizado com sucesso",
+      "deleted": "Excluido com sucesso",
+      "copied": "Copiado para a area de transferencia",
+      "exported": "Exportacao concluida",
+      "imported": "Importacao concluida",
+      "subscribed": "Inscrito com sucesso",
+      "unsubscribed": "Inscricao cancelada com sucesso"
+    },
+    "error": {
+      "general": "Ocorreu um erro",
+      "saveFailed": "Falha ao salvar alteracoes",
+      "createFailed": "Falha ao criar",
+      "updateFailed": "Falha ao atualizar",
+      "deleteFailed": "Falha ao excluir",
+      "loadFailed": "Falha ao carregar dados",
+      "networkError": "Erro de rede. Por favor, verifique sua conexao.",
+      "serverError": "Erro do servidor. Por favor, tente novamente mais tarde.",
+      "validationError": "Por favor, verifique sua entrada e tente novamente",
+      "permissionDenied": "Voce nao tem permissao para realizar esta acao",
+      "sessionExpired": "Sua sessao expirou. Por favor, faca login novamente.",
+      "rateLimitExceeded": "Limite de requisicoes excedido. Por favor, tente novamente mais tarde.",
+      "exportFailed": "Falha na exportacao",
+      "importFailed": "Falha na importacao"
+    },
+    "loading": {
+      "saving": "Salvando...",
+      "loading": "Carregando...",
+      "processing": "Processando...",
+      "exporting": "Exportando...",
+      "importing": "Importando...",
+      "uploading": "Enviando..."
+    },
+    "info": {
+      "noChanges": "Nenhuma alteracao para salvar",
+      "inProgress": "Operacao em andamento",
+      "scheduled": "Agendado com sucesso"
+    },
+    "warning": {
+      "unsavedChanges": "Voce tem alteracoes nao salvas",
+      "limitApproaching": "Voce esta se aproximando do seu limite de uso",
+      "deprecationNotice": "Este recurso sera descontinuado em breve"
+    },
+    "actions": {
+      "undo": "Desfazer",
+      "retry": "Tentar novamente",
+      "dismiss": "Dispensar",
+      "viewDetails": "Ver detalhes"
+    }
+  },
+  "notifications": {
+    "page": {
+      "title": "Notificacoes",
+      "description": "Voce tem {count, plural, =0 {nenhuma notificacao nao lida} one {# notificacao nao lida} other {# notificacoes nao lidas}}",
+      "allCaughtUp": "Voce esta em dia!",
+      "noNotifications": "Sem notificacoes",
+      "markAllRead": "Marcar todas como lidas",
+      "settings": "Configuracoes",
+      "selectAll": "Selecionar todas",
+      "selected": "{count} selecionadas",
+      "viewDetails": "Ver detalhes"
+    },
+    "types": {
+      "all": "Todas",
+      "workflow": "Workflows",
+      "agent": "Agentes",
+      "team": "Equipe",
+      "system": "Sistema",
+      "report": "Relatorios"
+    },
+    "titles": {
+      "workflowCompleted": "Workflow concluido",
+      "workflowFailed": "Workflow falhou",
+      "newAgentAvailable": "Novo agente disponivel",
+      "agentUpdateAvailable": "Atualizacao de agente disponivel",
+      "teamMemberJoined": "Membro da equipe entrou",
+      "usageLimitApproaching": "Limite de uso se aproximando",
+      "reportReady": "Relatorio pronto para download",
+      "scheduledMaintenance": "Manutencao programada"
+    },
+    "settings": {
+      "title": "Preferencias de Notificacao",
+      "description": "Escolha como e quando deseja ser notificado",
+      "savePreferences": "Salvar Preferencias",
+      "saving": "Salvando...",
+      "channels": {
+        "email": "E-mail",
+        "push": "Push",
+        "slack": "Slack"
+      },
+      "categories": {
+        "agentActivity": "Atividade do Agente",
+        "reportsExports": "Relatorios e Exportacoes",
+        "teamCollaboration": "Equipe e Colaboracao",
+        "systemSecurity": "Sistema e Seguranca"
+      },
+      "items": {
+        "agentTaskCompleted": "Tarefa do agente concluida",
+        "agentTaskCompletedDesc": "Ser notificado quando um agente terminar uma tarefa",
+        "agentErrors": "Erros do agente",
+        "agentErrorsDesc": "Alertar quando um agente encontrar um erro",
+        "approvalRequests": "Solicitacoes de aprovacao",
+        "approvalRequestsDesc": "Quando um agente precisa de aprovacao humana para continuar",
+        "reportReady": "Relatorio pronto",
+        "reportReadyDesc": "Quando um novo relatorio e gerado",
+        "exportComplete": "Exportacao concluida",
+        "exportCompleteDesc": "Quando as exportacoes de dados estao prontas para download",
+        "mentions": "Mencoes",
+        "mentionsDesc": "Quando alguem menciona voce em um comentario",
+        "sharedWithMe": "Compartilhado comigo",
+        "sharedWithMeDesc": "Quando alguem compartilha um relatorio ou workflow com voce",
+        "teamInvitations": "Convites da equipe",
+        "teamInvitationsDesc": "Novo membro da equipe entra ou convite enviado",
+        "loginAlerts": "Alertas de login",
+        "loginAlertsDesc": "Notificar sobre novos logins de dispositivos",
+        "systemMaintenance": "Manutencao do sistema",
+        "systemMaintenanceDesc": "Tempo de inatividade programado e atualizacoes"
+      }
+    },
+    "admin": {
+      "title": "Notificacoes do Sistema",
+      "description": "Enviar anuncios, alertas e atualizacoes para usuarios da plataforma",
+      "newNotification": "Nova Notificacao",
+      "editNotification": "Editar Notificacao",
+      "createNotification": "Criar Notificacao",
+      "sendNotification": "Enviar uma notificacao para usuarios da plataforma",
+      "refresh": "Atualizar",
+      "types": {
+        "info": "Informacao",
+        "warning": "Aviso",
+        "alert": "Alerta",
+        "maintenance": "Manutencao",
+        "feature": "Recurso",
+        "promotion": "Promocao"
+      },
+      "form": {
+        "type": "Tipo",
+        "targetAudience": "Publico-alvo",
+        "allUsers": "Todos os usuarios",
+        "specificPlans": "Planos especificos",
+        "specificOrgs": "Organizacoes especificas",
+        "title": "Titulo",
+        "titlePlaceholder": "Titulo da notificacao",
+        "message": "Mensagem",
+        "messagePlaceholder": "Mensagem da notificacao...",
+        "targetPlans": "Planos-alvo",
+        "scheduleFor": "Agendar para (opcional)",
+        "expiresAt": "Expira em (opcional)",
+        "active": "Ativo",
+        "activeDescription": "Mostrar esta notificacao imediatamente"
+      },
+      "table": {
+        "notification": "Notificacao",
+        "type": "Tipo",
+        "target": "Alvo",
+        "status": "Status",
+        "schedule": "Agendamento",
+        "immediate": "Imediato",
+        "created": "Criado",
+        "custom": "Personalizado"
+      },
+      "actions": {
+        "edit": "Editar",
+        "markInactive": "Marcar como inativo",
+        "deleteSelected": "Excluir selecionados"
+      },
+      "empty": "Nenhuma notificacao criada",
+      "confirmDelete": "Excluir Notificacao",
+      "confirmDeleteDescription": "Tem certeza de que deseja excluir \"{title}\"? Esta acao nao pode ser desfeita."
+    }
   }
 }

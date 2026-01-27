@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Plus, Search, Wrench, Edit, Trash2, ArrowLeft } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getTools() {
   const tools = await prisma.systemToolConfiguration.findMany({
@@ -27,6 +28,7 @@ async function getTools() {
 
 async function ToolsContent() {
   const tools = await getTools()
+  const t = await getTranslations('gwi.agents.tools')
 
   const typeColors: Record<string, string> = {
     api: "bg-blue-100 text-blue-700",
@@ -46,15 +48,15 @@ async function ToolsContent() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">System Tools</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <p className="text-muted-foreground">
-              Configure tools available to AI agents
+              {t('description')}
             </p>
           </div>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Plus className="mr-2 h-4 w-4" />
-          Add Tool
+          {t('addTool')}
         </Button>
       </div>
 
@@ -63,7 +65,7 @@ async function ToolsContent() {
         <CardContent className="pt-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search tools..." className="pl-9" />
+            <Input placeholder={t('searchPlaceholder')} className="pl-9" />
           </div>
         </CardContent>
       </Card>
@@ -75,10 +77,10 @@ async function ToolsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Tool Name</TableHead>
-                  <TableHead>Type</TableHead>
+                  <TableHead>{t('toolName')}</TableHead>
+                  <TableHead>{t('type')}</TableHead>
                   <TableHead>Description</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>{t('active')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -127,13 +129,13 @@ async function ToolsContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Wrench className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No tools configured</h3>
+              <h3 className="text-lg font-medium">{t('noToolsConfigured')}</h3>
               <p className="text-muted-foreground mb-4">
-                Add tools to enable agent capabilities
+                {t('addToolsToEnable')}
               </p>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Add First Tool
+                {t('addFirstTool')}
               </Button>
             </div>
           )}
@@ -143,13 +145,15 @@ async function ToolsContent() {
   )
 }
 
-export default function ToolsPage() {
+export default async function ToolsPage() {
+  const t = await getTranslations('gwi.agents.tools')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">System Tools</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

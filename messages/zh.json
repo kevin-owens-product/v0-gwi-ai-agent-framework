@@ -50,6 +50,7 @@
     "signIn": "登录",
     "signOut": "退出登录",
     "signUp": "注册",
+    "signUpForFree": "免费注册",
     "getStarted": "立即开始",
     "email": "邮箱",
     "emailPlaceholder": "请输入邮箱",
@@ -57,36 +58,112 @@
     "passwordPlaceholder": "请输入密码",
     "forgotPassword": "忘记密码？",
     "resetPassword": "重置密码",
+    "sendResetLink": "发送重置链接",
     "confirmPassword": "确认密码",
+    "confirmPasswordPlaceholder": "请确认您的密码",
+    "newPassword": "新密码",
+    "newPasswordPlaceholder": "请创建一个强密码",
     "rememberMe": "记住我",
     "noAccount": "还没有账户？",
     "hasAccount": "已有账户？",
     "createAccount": "创建账户",
+    "creatingAccount": "正在创建账户...",
     "signInWith": "使用 {provider} 登录",
-    "orContinueWith": "或通过以下方式继续",
-    "termsAgreement": "登录即表示您同意我们的服务条款和隐私政策",
+    "signUpWith": "使用 {provider} 注册",
+    "orContinueWith": "或",
+    "termsAgreement": "我同意",
+    "termsOfService": "服务条款",
+    "privacyPolicy": "隐私政策",
     "welcomeBack": "欢迎回来",
     "signInToContinue": "登录以继续访问您的账户",
     "createYourAccount": "创建您的账户",
-    "getStartedFree": "免费开始使用",
+    "getStartedFree": "开始 14 天免费试用，无需信用卡。",
+    "signingIn": "正在登录...",
+    "sendingLink": "正在发送链接...",
+    "resettingPassword": "正在重置密码...",
+    "validatingLink": "正在验证重置链接...",
+    "checkYourEmail": "请查收您的邮件",
+    "emailSentTo": "我们已向以下邮箱发送密码重置链接",
+    "didntReceiveEmail": "没有收到邮件？",
+    "clickToResend": "点击重新发送",
+    "backToSignIn": "返回登录",
+    "passwordReset": "密码已重置！",
+    "passwordResetSuccess": "您的密码已成功重置。您现在可以使用新密码登录。",
+    "createNewPassword": "创建新密码",
+    "enterNewPasswordBelow": "请在下方输入您的新密码",
+    "resetYourPassword": "重置您的密码",
+    "enterEmailForReset": "输入您的邮箱，我们将向您发送重置链接",
+    "requestNewResetLink": "请求新的重置链接",
+    "invalidLink": "无效的链接",
+    "loading": "加载中...",
+    "form": {
+      "fullName": "姓名",
+      "fullNamePlaceholder": "张三",
+      "organization": "组织",
+      "organizationPlaceholder": "某某公司",
+      "workEmail": "工作邮箱",
+      "adminEmail": "管理员邮箱",
+      "adminEmailPlaceholder": "admin@gwi.com",
+      "adminPassword": "密码",
+      "adminPasswordPlaceholder": "请输入管理员密码",
+      "gwiEmail": "GWI 邮箱",
+      "gwiEmailPlaceholder": "you@gwi.com"
+    },
+    "validation": {
+      "atLeast8Characters": "至少 8 个字符",
+      "oneUppercase": "至少一个大写字母",
+      "oneLowercase": "至少一个小写字母",
+      "oneNumber": "至少一个数字",
+      "passwordsMatch": "密码一致",
+      "passwordsDoNotMatch": "密码不一致",
+      "pleaseAgreeToTerms": "您必须同意条款和条件",
+      "meetPasswordRequirements": "请满足所有密码要求"
+    },
     "errors": {
-      "invalidCredentials": "邮箱或密码无效",
+      "invalidCredentials": "邮箱或密码无效，请重试。",
       "emailRequired": "请输入邮箱",
       "passwordRequired": "请输入密码",
       "invalidEmail": "请输入有效的邮箱地址",
-      "passwordTooShort": "密码长度至少为8个字符",
+      "passwordTooShort": "密码长度至少为 8 个字符",
       "accountNotFound": "账户不存在",
-      "accountLocked": "账户已被锁定，请联系客服",
-      "tooManyAttempts": "登录尝试次数过多，请稍后重试",
-      "networkError": "网络错误，请检查您的网络连接"
+      "accountLocked": "账户已被锁定，请联系客服。",
+      "tooManyAttempts": "登录尝试次数过多，请稍后重试。",
+      "networkError": "网络错误，请检查您的网络连接。",
+      "genericError": "发生错误，请重试。",
+      "failedToCreateAccount": "创建账户失败",
+      "failedToResetPassword": "重置密码失败",
+      "failedToValidateLink": "验证重置链接失败",
+      "invalidOrExpiredLink": "重置链接无效或已过期",
+      "noResetToken": "未提供重置令牌",
+      "oauthAccountNotLinked": "此邮箱已与其他账户关联。",
+      "signInError": "登录过程中发生错误。"
+    },
+    "tabs": {
+      "platform": "平台",
+      "user": "用户",
+      "admin": "管理员",
+      "gwi": "GWI"
+    },
+    "portal": {
+      "signInToPlatform": "登录平台",
+      "signInToAdmin": "登录管理员门户",
+      "signInToGwi": "登录 GWI 门户"
     },
     "admin": {
-      "title": "管理员登录",
-      "description": "登录以访问管理员门户"
+      "title": "管理员门户访问",
+      "description": "此登录仅供平台管理员使用。如果您是普通用户，请使用平台标签页。",
+      "accessLogged": "出于安全目的，管理员访问记录将被记录和监控。"
     },
     "gwi": {
-      "title": "GWI 团队登录",
-      "description": "登录以访问 GWI 团队门户"
+      "title": "GWI 团队门户",
+      "description": "GWI 团队成员访问入口：数据工程师、分类法管理员、机器学习工程师和 GWI 管理员。",
+      "manageTools": "管理调研、分类法、管道、大语言模型和数据工具。"
+    },
+    "oauth": {
+      "continueWithGoogle": "使用 Google 继续",
+      "continueWithMicrosoft": "使用 Microsoft 继续",
+      "signUpWithGoogle": "使用 Google 注册",
+      "signUpWithMicrosoft": "使用 Microsoft 注册"
     }
   },
   "navigation": {
@@ -100,8 +177,7 @@
     "pricing": "定价",
     "solutions": "解决方案",
     "agents": "智能体",
-    "theme": "主题",
-    "language": "语言"
+    "theme": "主题"
   },
   "settings": {
     "title": "设置",
@@ -219,6 +295,71 @@
       "normal": "正常",
       "slow": "缓慢",
       "perRun": "每次运行"
+    },
+    "activity": {
+      "liveActivity": "实时活动",
+      "noRecentActivity": "暂无最近活动",
+      "runAgentToSeeActivity": "运行智能体以查看此处的活动"
+    },
+    "insights": {
+      "topInsights": "热门洞察",
+      "newCount": "{count} 个新洞察",
+      "noInsightsYet": "暂无洞察",
+      "runAgentsToGenerate": "运行智能体以生成洞察",
+      "confidence": "{percent}% 置信度"
+    },
+    "sidebar": {
+      "brandName": "GWI Insights",
+      "newSession": "新建会话",
+      "searchShortcut": "搜索",
+      "collapse": "折叠",
+      "sections": {
+        "work": "工作",
+        "projects": "项目",
+        "gwiTools": "GWI 工具",
+        "build": "构建",
+        "discover": "发现",
+        "system": "系统"
+      },
+      "items": {
+        "home": "首页",
+        "homeDesc": "概览和活动",
+        "playground": "实验场",
+        "playgroundDesc": "交互式 AI 工作区",
+        "inbox": "收件箱",
+        "inboxDesc": "自动化请求处理",
+        "allProjects": "所有项目",
+        "allProjectsDesc": "管理所有项目",
+        "newProject": "新建项目",
+        "audiences": "受众",
+        "audiencesDesc": "构建受众细分",
+        "brandTracking": "品牌追踪",
+        "brandTrackingDesc": "监控品牌健康度",
+        "charts": "图表",
+        "chartsDesc": "数据可视化",
+        "crosstabs": "交叉表",
+        "crosstabsDesc": "受众对比",
+        "dashboards": "仪表板",
+        "dashboardsDesc": "综合洞察",
+        "workflows": "工作流",
+        "workflowsDesc": "自动化管道",
+        "agents": "智能体",
+        "agentsDesc": "自定义 AI 智能体",
+        "templates": "模板",
+        "templatesDesc": "可复用的提示词",
+        "agentStore": "智能体商店",
+        "agentStoreDesc": "预构建的智能体",
+        "reports": "报告",
+        "reportsDesc": "生成的输出",
+        "analytics": "分析",
+        "analyticsDesc": "使用情况和性能",
+        "integrations": "集成",
+        "integrationsDesc": "已连接的服务",
+        "memory": "记忆",
+        "memoryDesc": "上下文和历史",
+        "settings": "设置",
+        "help": "帮助"
+      }
     }
   },
   "audiences": {
@@ -313,7 +454,73 @@
       "dataSources": "数据源",
       "monitoring": "监控",
       "system": "系统",
-      "services": "服务"
+      "services": "服务",
+      "sections": {
+        "overview": "概览",
+        "surveyManagement": "调研管理",
+        "taxonomy": "分类法",
+        "dataPipelines": "数据管道",
+        "llmConfiguration": "LLM 配置",
+        "agentConfiguration": "智能体配置",
+        "dataSources": "数据源",
+        "monitoring": "监控",
+        "system": "系统",
+        "servicesManagement": "服务管理"
+      },
+      "items": {
+        "dashboard": "仪表板",
+        "activityFeed": "活动动态",
+        "quickActions": "快捷操作",
+        "surveys": "调研",
+        "questions": "问题",
+        "responses": "响应",
+        "distribution": "分发",
+        "categories": "类别",
+        "attributes": "属性",
+        "mappingRules": "映射规则",
+        "validation": "验证",
+        "pipelines": "管道",
+        "pipelineRuns": "管道运行",
+        "schedules": "计划",
+        "validationRules": "验证规则",
+        "models": "模型",
+        "prompts": "提示词",
+        "usageCosts": "使用与成本",
+        "testing": "测试",
+        "systemAgents": "系统智能体",
+        "agentTemplates": "智能体模板",
+        "tools": "工具",
+        "capabilities": "能力",
+        "connections": "连接",
+        "schemas": "模式",
+        "syncStatus": "同步状态",
+        "dataQuality": "数据质量",
+        "pipelineHealth": "管道健康",
+        "llmPerformance": "LLM 性能",
+        "errorLogs": "错误日志",
+        "alerts": "告警",
+        "settings": "设置",
+        "accessControl": "访问控制",
+        "auditLogs": "审计日志",
+        "apiKeys": "API 密钥",
+        "clients": "客户",
+        "projects": "项目",
+        "timeTracking": "时间追踪",
+        "invoicing": "开票",
+        "vendors": "供应商",
+        "team": "团队"
+      },
+      "controls": {
+        "expandAll": "全部展开",
+        "collapseAll": "全部折叠"
+      },
+      "user": {
+        "signOut": "退出登录"
+      },
+      "portal": {
+        "title": "GWI 门户",
+        "subtitle": "团队工具"
+      }
     }
   },
   "admin": {
@@ -335,7 +542,78 @@
       "scim": "SCIM",
       "hierarchy": "层级",
       "settings": "设置",
-      "entitlements": "权限"
+      "entitlements": "权限",
+      "portal": {
+        "title": "管理员门户",
+        "subtitle": "企业平台"
+      },
+      "controls": {
+        "expandAll": "全部展开",
+        "collapseAll": "全部折叠"
+      },
+      "user": {
+        "signOut": "退出登录"
+      },
+      "navigationMenu": "导航菜单",
+      "sections": {
+        "overview": "概览",
+        "organizationManagement": "组织管理",
+        "securityCenter": "安全中心",
+        "identityAccess": "身份与访问",
+        "complianceLegal": "合规与法务",
+        "platformOperations": "平台运维",
+        "apiIntegrations": "API 与集成",
+        "billingPlans": "账单与套餐",
+        "communication": "通信",
+        "system": "系统"
+      },
+      "items": {
+        "dashboard": "仪表板",
+        "realTimeAnalytics": "实时分析",
+        "tenants": "租户",
+        "users": "用户",
+        "hierarchy": "层级",
+        "healthScores": "健康评分",
+        "securityOverview": "安全概览",
+        "securityPolicies": "安全策略",
+        "threatDetection": "威胁检测",
+        "securityViolations": "安全违规",
+        "ipManagement": "IP 管理",
+        "rolesPermissions": "角色与权限",
+        "domainManagement": "域名管理",
+        "ssoConfiguration": "SSO 配置",
+        "scimProvisioning": "SCIM 配置",
+        "deviceTrust": "设备信任",
+        "deviceManagement": "设备管理",
+        "complianceOverview": "合规概览",
+        "frameworks": "框架",
+        "legalHolds": "法律保留",
+        "attestations": "证明",
+        "audits": "审计",
+        "dataExports": "数据导出",
+        "retentionPolicies": "保留策略",
+        "operationsCenter": "运维中心",
+        "incidents": "事件",
+        "statusPage": "状态页面",
+        "maintenance": "维护",
+        "releases": "发布",
+        "capacity": "容量",
+        "apiClients": "API 客户端",
+        "webhooks": "Webhooks",
+        "appMarketplace": "应用市场",
+        "plans": "套餐",
+        "entitlementFeatures": "功能",
+        "featureFlags": "功能开关",
+        "broadcastCenter": "广播中心",
+        "emailTemplates": "邮件模板",
+        "notifications": "通知",
+        "supportTickets": "支持工单",
+        "systemRules": "系统规则",
+        "adminActivity": "管理员活动",
+        "auditLog": "审计日志",
+        "admins": "管理员",
+        "settings": "设置"
+      }
     },
     "plans": {
       "title": "套餐",
@@ -416,13 +694,13 @@
       "tryAgain": "重试",
       "pageNotFound": "页面未找到",
       "pageNotFoundDescription": "抱歉，我们找不到您要访问的页面。该页面可能已被移动或删除。",
-      "backToDashboard": "返回仪表板",
       "goHome": "返回首页",
+      "backToDashboard": "返回仪表板",
       "unexpectedError": "发生了意外错误",
       "unexpectedErrorDescription": "我们遇到了一个意外错误。我们的团队已收到通知，正在努力修复。",
+      "contactSupport": "联系客服",
       "reloadPage": "重新加载页面",
-      "errorId": "错误 ID：{id}",
-      "contactSupport": "联系客服"
+      "errorId": "错误 ID：{id}"
     },
     "loading": {
       "loading": "加载中...",
@@ -445,6 +723,180 @@
       "sortDescending": "降序排列",
       "selectAll": "全选",
       "deselectAll": "取消全选"
+    }
+  },
+  "toast": {
+    "success": {
+      "saved": "更改已成功保存",
+      "created": "创建成功",
+      "updated": "更新成功",
+      "deleted": "删除成功",
+      "copied": "已复制到剪贴板",
+      "exported": "导出完成",
+      "imported": "导入完成",
+      "subscribed": "订阅成功",
+      "unsubscribed": "取消订阅成功"
+    },
+    "error": {
+      "general": "发生错误",
+      "saveFailed": "保存更改失败",
+      "createFailed": "创建失败",
+      "updateFailed": "更新失败",
+      "deleteFailed": "删除失败",
+      "loadFailed": "加载数据失败",
+      "networkError": "网络错误，请检查您的网络连接。",
+      "serverError": "服务器错误，请稍后重试。",
+      "validationError": "请检查您的输入并重试",
+      "permissionDenied": "您没有执行此操作的权限",
+      "sessionExpired": "您的会话已过期，请重新登录。",
+      "rateLimitExceeded": "请求过于频繁，请稍后重试。",
+      "exportFailed": "导出失败",
+      "importFailed": "导入失败"
+    },
+    "loading": {
+      "saving": "正在保存...",
+      "loading": "正在加载...",
+      "processing": "正在处理...",
+      "exporting": "正在导出...",
+      "importing": "正在导入...",
+      "uploading": "正在上传..."
+    },
+    "info": {
+      "noChanges": "没有需要保存的更改",
+      "inProgress": "操作进行中",
+      "scheduled": "计划成功"
+    },
+    "warning": {
+      "unsavedChanges": "您有未保存的更改",
+      "limitApproaching": "您即将达到使用限制",
+      "deprecationNotice": "此功能即将被弃用"
+    },
+    "actions": {
+      "undo": "撤销",
+      "retry": "重试",
+      "dismiss": "关闭",
+      "viewDetails": "查看详情"
+    }
+  },
+  "notifications": {
+    "page": {
+      "title": "通知",
+      "description": "{count, plural, =0 {没有未读通知} one {# 条未读通知} other {# 条未读通知}}",
+      "allCaughtUp": "您已处理完所有通知！",
+      "noNotifications": "暂无通知",
+      "markAllRead": "全部标为已读",
+      "settings": "设置",
+      "selectAll": "全选",
+      "selected": "已选择 {count} 项",
+      "viewDetails": "查看详情"
+    },
+    "types": {
+      "all": "全部",
+      "workflow": "工作流",
+      "agent": "智能体",
+      "team": "团队",
+      "system": "系统",
+      "report": "报告"
+    },
+    "titles": {
+      "workflowCompleted": "工作流已完成",
+      "workflowFailed": "工作流失败",
+      "newAgentAvailable": "新智能体可用",
+      "agentUpdateAvailable": "智能体更新可用",
+      "teamMemberJoined": "团队成员已加入",
+      "usageLimitApproaching": "使用限制即将达到",
+      "reportReady": "报告已准备好下载",
+      "scheduledMaintenance": "计划维护"
+    },
+    "settings": {
+      "title": "通知偏好设置",
+      "description": "选择您希望如何以及何时收到通知",
+      "savePreferences": "保存偏好设置",
+      "saving": "正在保存...",
+      "channels": {
+        "email": "邮件",
+        "push": "推送",
+        "slack": "Slack"
+      },
+      "categories": {
+        "agentActivity": "智能体活动",
+        "reportsExports": "报告与导出",
+        "teamCollaboration": "团队协作",
+        "systemSecurity": "系统与安全"
+      },
+      "items": {
+        "agentTaskCompleted": "智能体任务完成",
+        "agentTaskCompletedDesc": "当智能体完成任务时收到通知",
+        "agentErrors": "智能体错误",
+        "agentErrorsDesc": "当智能体遇到错误时发出告警",
+        "approvalRequests": "审批请求",
+        "approvalRequestsDesc": "当智能体需要人工批准才能继续时",
+        "reportReady": "报告就绪",
+        "reportReadyDesc": "当新报告生成时",
+        "exportComplete": "导出完成",
+        "exportCompleteDesc": "当数据导出准备好下载时",
+        "mentions": "提及",
+        "mentionsDesc": "当有人在评论中提及您时",
+        "sharedWithMe": "与我分享",
+        "sharedWithMeDesc": "当有人与您分享报告或工作流时",
+        "teamInvitations": "团队邀请",
+        "teamInvitationsDesc": "新团队成员加入或发送邀请",
+        "loginAlerts": "登录告警",
+        "loginAlertsDesc": "收到新设备登录的通知",
+        "systemMaintenance": "系统维护",
+        "systemMaintenanceDesc": "计划停机和更新"
+      }
+    },
+    "admin": {
+      "title": "系统通知",
+      "description": "向平台用户发送公告、告警和更新",
+      "newNotification": "新建通知",
+      "editNotification": "编辑通知",
+      "createNotification": "创建通知",
+      "sendNotification": "向平台用户发送通知",
+      "refresh": "刷新",
+      "types": {
+        "info": "信息",
+        "warning": "警告",
+        "alert": "告警",
+        "maintenance": "维护",
+        "feature": "功能",
+        "promotion": "推广"
+      },
+      "form": {
+        "type": "类型",
+        "targetAudience": "目标受众",
+        "allUsers": "所有用户",
+        "specificPlans": "特定套餐",
+        "specificOrgs": "特定组织",
+        "title": "标题",
+        "titlePlaceholder": "通知标题",
+        "message": "消息",
+        "messagePlaceholder": "通知消息...",
+        "targetPlans": "目标套餐",
+        "scheduleFor": "计划发送时间（可选）",
+        "expiresAt": "过期时间（可选）",
+        "active": "激活",
+        "activeDescription": "立即显示此通知"
+      },
+      "table": {
+        "notification": "通知",
+        "type": "类型",
+        "target": "目标",
+        "status": "状态",
+        "schedule": "计划",
+        "immediate": "立即",
+        "created": "创建时间",
+        "custom": "自定义"
+      },
+      "actions": {
+        "edit": "编辑",
+        "markInactive": "标记为不活跃",
+        "deleteSelected": "删除所选"
+      },
+      "empty": "暂无创建的通知",
+      "confirmDelete": "删除通知",
+      "confirmDeleteDescription": "您确定要删除「{title}」吗？此操作无法撤销。"
     }
   }
 }

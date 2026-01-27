@@ -446,5 +446,179 @@
       "selectAll": "সব নির্বাচন করুন",
       "deselectAll": "সব অনির্বাচিত করুন"
     }
+  },
+  "toast": {
+    "success": {
+      "saved": "পরিবর্তনগুলো সফলভাবে সংরক্ষিত হয়েছে",
+      "created": "সফলভাবে তৈরি হয়েছে",
+      "updated": "সফলভাবে আপডেট হয়েছে",
+      "deleted": "সফলভাবে মুছে ফেলা হয়েছে",
+      "copied": "ক্লিপবোর্ডে কপি হয়েছে",
+      "exported": "এক্সপোর্ট সম্পন্ন",
+      "imported": "ইম্পোর্ট সম্পন্ন",
+      "subscribed": "সফলভাবে সাবস্ক্রাইব করা হয়েছে",
+      "unsubscribed": "সফলভাবে আনসাবস্ক্রাইব করা হয়েছে"
+    },
+    "error": {
+      "general": "একটি ত্রুটি ঘটেছে",
+      "saveFailed": "পরিবর্তন সংরক্ষণ করতে ব্যর্থ",
+      "createFailed": "তৈরি করতে ব্যর্থ",
+      "updateFailed": "আপডেট করতে ব্যর্থ",
+      "deleteFailed": "মুছে ফেলতে ব্যর্থ",
+      "loadFailed": "ডেটা লোড করতে ব্যর্থ",
+      "networkError": "নেটওয়ার্ক ত্রুটি। আপনার সংযোগ পরীক্ষা করুন।",
+      "serverError": "সার্ভার ত্রুটি। পরে আবার চেষ্টা করুন।",
+      "validationError": "আপনার ইনপুট পরীক্ষা করুন এবং আবার চেষ্টা করুন",
+      "permissionDenied": "এই কাজ করার অনুমতি আপনার নেই",
+      "sessionExpired": "আপনার সেশন মেয়াদ শেষ হয়েছে। আবার লগইন করুন।",
+      "rateLimitExceeded": "রিকোয়েস্ট সীমা অতিক্রম করেছে। পরে আবার চেষ্টা করুন।",
+      "exportFailed": "এক্সপোর্ট ব্যর্থ",
+      "importFailed": "ইম্পোর্ট ব্যর্থ"
+    },
+    "loading": {
+      "saving": "সংরক্ষণ হচ্ছে...",
+      "loading": "লোড হচ্ছে...",
+      "processing": "প্রক্রিয়াকরণ হচ্ছে...",
+      "exporting": "এক্সপোর্ট হচ্ছে...",
+      "importing": "ইম্পোর্ট হচ্ছে...",
+      "uploading": "আপলোড হচ্ছে..."
+    },
+    "info": {
+      "noChanges": "সংরক্ষণ করার মতো কোনো পরিবর্তন নেই",
+      "inProgress": "অপারেশন চলছে",
+      "scheduled": "সফলভাবে নির্ধারিত হয়েছে"
+    },
+    "warning": {
+      "unsavedChanges": "আপনার অসংরক্ষিত পরিবর্তন আছে",
+      "limitApproaching": "আপনি আপনার ব্যবহার সীমার কাছাকাছি",
+      "deprecationNotice": "এই বৈশিষ্ট্যটি শীঘ্রই বন্ধ করা হবে"
+    },
+    "actions": {
+      "undo": "পূর্বাবস্থায় ফেরান",
+      "retry": "পুনরায় চেষ্টা করুন",
+      "dismiss": "বাতিল করুন",
+      "viewDetails": "বিস্তারিত দেখুন"
+    }
+  },
+  "notifications": {
+    "page": {
+      "title": "বিজ্ঞপ্তি",
+      "description": "আপনার {count, plural, =0 {কোনো অপঠিত বিজ্ঞপ্তি নেই} one {# টি অপঠিত বিজ্ঞপ্তি আছে} other {# টি অপঠিত বিজ্ঞপ্তি আছে}}",
+      "allCaughtUp": "সব আপডেটে আছেন!",
+      "noNotifications": "কোনো বিজ্ঞপ্তি নেই",
+      "markAllRead": "সব পঠিত হিসেবে চিহ্নিত করুন",
+      "settings": "সেটিংস",
+      "selectAll": "সব নির্বাচন করুন",
+      "selected": "{count} টি নির্বাচিত",
+      "viewDetails": "বিস্তারিত দেখুন"
+    },
+    "types": {
+      "all": "সব",
+      "workflow": "ওয়ার্কফ্লো",
+      "agent": "এজেন্ট",
+      "team": "টিম",
+      "system": "সিস্টেম",
+      "report": "রিপোর্ট"
+    },
+    "titles": {
+      "workflowCompleted": "ওয়ার্কফ্লো সম্পন্ন",
+      "workflowFailed": "ওয়ার্কফ্লো ব্যর্থ",
+      "newAgentAvailable": "নতুন এজেন্ট উপলব্ধ",
+      "agentUpdateAvailable": "এজেন্ট আপডেট উপলব্ধ",
+      "teamMemberJoined": "টিম সদস্য যোগ দিয়েছেন",
+      "usageLimitApproaching": "ব্যবহার সীমা কাছাকাছি",
+      "reportReady": "রিপোর্ট ডাউনলোডের জন্য প্রস্তুত",
+      "scheduledMaintenance": "নির্ধারিত রক্ষণাবেক্ষণ"
+    },
+    "settings": {
+      "title": "বিজ্ঞপ্তি পছন্দসমূহ",
+      "description": "কীভাবে এবং কখন বিজ্ঞপ্তি পেতে চান তা বেছে নিন",
+      "savePreferences": "পছন্দ সংরক্ষণ করুন",
+      "saving": "সংরক্ষণ হচ্ছে...",
+      "channels": {
+        "email": "ইমেইল",
+        "push": "পুশ",
+        "slack": "Slack"
+      },
+      "categories": {
+        "agentActivity": "এজেন্ট কার্যকলাপ",
+        "reportsExports": "রিপোর্ট এবং এক্সপোর্ট",
+        "teamCollaboration": "টিম এবং সহযোগিতা",
+        "systemSecurity": "সিস্টেম এবং নিরাপত্তা"
+      },
+      "items": {
+        "agentTaskCompleted": "এজেন্ট টাস্ক সম্পন্ন",
+        "agentTaskCompletedDesc": "এজেন্ট একটি টাস্ক শেষ করলে বিজ্ঞপ্তি পান",
+        "agentErrors": "এজেন্ট ত্রুটি",
+        "agentErrorsDesc": "এজেন্টে ত্রুটি হলে সতর্কতা",
+        "approvalRequests": "অনুমোদন অনুরোধ",
+        "approvalRequestsDesc": "এজেন্টের এগিয়ে যেতে মানুষের অনুমোদন প্রয়োজন হলে",
+        "reportReady": "রিপোর্ট প্রস্তুত",
+        "reportReadyDesc": "নতুন রিপোর্ট তৈরি হলে",
+        "exportComplete": "এক্সপোর্ট সম্পন্ন",
+        "exportCompleteDesc": "ডেটা এক্সপোর্ট ডাউনলোডের জন্য প্রস্তুত হলে",
+        "mentions": "উল্লেখ",
+        "mentionsDesc": "কেউ মন্তব্যে আপনাকে উল্লেখ করলে",
+        "sharedWithMe": "আমার সাথে শেয়ার করা",
+        "sharedWithMeDesc": "কেউ আপনার সাথে রিপোর্ট বা ওয়ার্কফ্লো শেয়ার করলে",
+        "teamInvitations": "টিম আমন্ত্রণ",
+        "teamInvitationsDesc": "নতুন টিম সদস্য যোগ দিলে বা আমন্ত্রণ পাঠানো হলে",
+        "loginAlerts": "লগইন সতর্কতা",
+        "loginAlertsDesc": "নতুন ডিভাইস থেকে লগইনের বিজ্ঞপ্তি",
+        "systemMaintenance": "সিস্টেম রক্ষণাবেক্ষণ",
+        "systemMaintenanceDesc": "নির্ধারিত ডাউনটাইম এবং আপডেট"
+      }
+    },
+    "admin": {
+      "title": "সিস্টেম বিজ্ঞপ্তি",
+      "description": "প্ল্যাটফর্ম ব্যবহারকারীদের ঘোষণা, সতর্কতা এবং আপডেট পাঠান",
+      "newNotification": "নতুন বিজ্ঞপ্তি",
+      "editNotification": "বিজ্ঞপ্তি সম্পাদনা",
+      "createNotification": "বিজ্ঞপ্তি তৈরি করুন",
+      "sendNotification": "প্ল্যাটফর্ম ব্যবহারকারীদের বিজ্ঞপ্তি পাঠান",
+      "refresh": "রিফ্রেশ",
+      "types": {
+        "info": "তথ্য",
+        "warning": "সতর্কতা",
+        "alert": "অ্যালার্ট",
+        "maintenance": "রক্ষণাবেক্ষণ",
+        "feature": "বৈশিষ্ট্য",
+        "promotion": "প্রমোশন"
+      },
+      "form": {
+        "type": "ধরন",
+        "targetAudience": "লক্ষ্য দর্শক",
+        "allUsers": "সব ব্যবহারকারী",
+        "specificPlans": "নির্দিষ্ট প্ল্যান",
+        "specificOrgs": "নির্দিষ্ট সংস্থা",
+        "title": "শিরোনাম",
+        "titlePlaceholder": "বিজ্ঞপ্তির শিরোনাম",
+        "message": "বার্তা",
+        "messagePlaceholder": "বিজ্ঞপ্তির বার্তা...",
+        "targetPlans": "লক্ষ্য প্ল্যান",
+        "scheduleFor": "নির্ধারিত সময় (ঐচ্ছিক)",
+        "expiresAt": "মেয়াদ শেষ (ঐচ্ছিক)",
+        "active": "সক্রিয়",
+        "activeDescription": "এই বিজ্ঞপ্তি অবিলম্বে দেখান"
+      },
+      "table": {
+        "notification": "বিজ্ঞপ্তি",
+        "type": "ধরন",
+        "target": "লক্ষ্য",
+        "status": "অবস্থা",
+        "schedule": "সময়সূচী",
+        "immediate": "তাৎক্ষণিক",
+        "created": "তৈরির তারিখ",
+        "custom": "কাস্টম"
+      },
+      "actions": {
+        "edit": "সম্পাদনা",
+        "markInactive": "নিষ্ক্রিয় হিসেবে চিহ্নিত করুন",
+        "deleteSelected": "নির্বাচিত মুছুন"
+      },
+      "empty": "কোনো বিজ্ঞপ্তি তৈরি করা হয়নি",
+      "confirmDelete": "বিজ্ঞপ্তি মুছুন",
+      "confirmDeleteDescription": "আপনি কি নিশ্চিত যে আপনি \"{title}\" মুছে ফেলতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।"
+    }
   }
 }

@@ -2,8 +2,11 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { SurveyEditor } from "@/components/gwi/surveys/survey-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
-export default function NewSurveyPage() {
+export default async function NewSurveyPage() {
+  const t = await getTranslations('gwi.surveys')
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -14,9 +17,9 @@ export default function NewSurveyPage() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Create New Survey</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('createNew')}</h1>
           <p className="text-muted-foreground">
-            Set up a new survey questionnaire
+            {t('createNewDesc')}
           </p>
         </div>
       </div>

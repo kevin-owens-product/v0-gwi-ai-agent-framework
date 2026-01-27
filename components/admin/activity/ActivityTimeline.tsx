@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -114,10 +115,12 @@ function formatTimeAgo(dateString: string): string {
 export function ActivityTimeline({
   activities,
   isLoading = false,
-  emptyMessage = "No activities found",
+  emptyMessage,
 }: ActivityTimelineProps) {
+  const t = useTranslations("admin.activity")
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
+  const defaultEmptyMessage = emptyMessage || t("noActivitiesFound")
 
   const handleActivityClick = (activity: Activity) => {
     setSelectedActivity(activity)
@@ -136,7 +139,7 @@ export function ActivityTimeline({
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Clock className="h-12 w-12 text-muted-foreground/50 mb-4" />
-        <p className="text-muted-foreground">{emptyMessage}</p>
+        <p className="text-muted-foreground">{defaultEmptyMessage}</p>
       </div>
     )
   }
@@ -256,7 +259,7 @@ export function ActivityTimeline({
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5" />
-                  Activity Details
+                  {t("activityDetails")}
                 </SheetTitle>
                 <SheetDescription>
                   {new Date(selectedActivity.createdAt).toLocaleString()}
@@ -266,13 +269,13 @@ export function ActivityTimeline({
               <div className="mt-6 space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-muted-foreground">Action</p>
+                    <p className="text-xs text-muted-foreground">{t("actionLabel")}</p>
                     <p className="mt-1 font-medium">
                       {formatActionName(selectedActivity.action)}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Status</p>
+                    <p className="text-xs text-muted-foreground">{t("statusLabel")}</p>
                     <div className="mt-1">
                       <Badge
                         className={`${
@@ -284,14 +287,14 @@ export function ActivityTimeline({
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Resource Type</p>
+                    <p className="text-xs text-muted-foreground">{t("resourceType")}</p>
                     <Badge variant="outline" className="mt-1">
                       {selectedActivity.resourceType}
                     </Badge>
                   </div>
                   {selectedActivity.resourceId && (
                     <div>
-                      <p className="text-xs text-muted-foreground">Resource ID</p>
+                      <p className="text-xs text-muted-foreground">{t("resourceId")}</p>
                       <p className="mt-1 text-sm font-mono truncate">
                         {selectedActivity.resourceId}
                       </p>
@@ -300,26 +303,26 @@ export function ActivityTimeline({
                   {selectedActivity.admin && (
                     <>
                       <div>
-                        <p className="text-xs text-muted-foreground">Admin Name</p>
+                        <p className="text-xs text-muted-foreground">{t("adminName")}</p>
                         <p className="mt-1 text-sm font-medium">
                           {selectedActivity.admin.name}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">Admin Email</p>
+                        <p className="text-xs text-muted-foreground">{t("adminEmail")}</p>
                         <p className="mt-1 text-sm">{selectedActivity.admin.email}</p>
                       </div>
                     </>
                   )}
                   {selectedActivity.duration !== null && (
                     <div>
-                      <p className="text-xs text-muted-foreground">Duration</p>
+                      <p className="text-xs text-muted-foreground">{t("duration")}</p>
                       <p className="mt-1 text-sm">{selectedActivity.duration}ms</p>
                     </div>
                   )}
                   {selectedActivity.ipAddress && (
                     <div>
-                      <p className="text-xs text-muted-foreground">IP Address</p>
+                      <p className="text-xs text-muted-foreground">{t("ipAddress")}</p>
                       <p className="mt-1 text-sm font-mono">
                         {selectedActivity.ipAddress}
                       </p>
@@ -329,14 +332,14 @@ export function ActivityTimeline({
 
                 {selectedActivity.description && (
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">Description</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("descriptionLabel")}</p>
                     <p className="text-sm">{selectedActivity.description}</p>
                   </div>
                 )}
 
                 {selectedActivity.errorMessage && (
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">Error Message</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("errorMessage")}</p>
                     <p className="text-sm text-red-500 bg-red-50 dark:bg-red-950 p-2 rounded">
                       {selectedActivity.errorMessage}
                     </p>
@@ -345,7 +348,7 @@ export function ActivityTimeline({
 
                 {selectedActivity.userAgent && (
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">User Agent</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("userAgent")}</p>
                     <p className="text-xs font-mono bg-muted p-2 rounded break-all">
                       {selectedActivity.userAgent}
                     </p>
@@ -354,7 +357,7 @@ export function ActivityTimeline({
 
                 {Object.keys(selectedActivity.metadata).length > 0 && (
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">Metadata</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("metadata")}</p>
                     <pre className="text-xs font-mono bg-muted p-3 rounded overflow-auto max-h-[200px]">
                       {JSON.stringify(selectedActivity.metadata, null, 2)}
                     </pre>

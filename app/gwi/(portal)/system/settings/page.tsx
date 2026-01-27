@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { LoadingText } from "@/components/ui/loading-text"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Save, Settings, Bell, Shield, Database, Zap } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getSettings() {
   const settings = await prisma.gWIPortalSettings.findMany({
@@ -20,6 +21,7 @@ async function getSettings() {
 
 async function SettingsContent() {
   const settings = await getSettings()
+  const t = await getTranslations('gwi.settings')
 
   const settingsByCategory = settings.reduce((acc, setting) => {
     if (!acc[setting.category]) {
@@ -34,14 +36,14 @@ async function SettingsContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Configure GWI portal settings and preferences
+            {t('description')}
           </p>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Save className="mr-2 h-4 w-4" />
-          Save Changes
+          {t('saveChanges')}
         </Button>
       </div>
 
@@ -50,57 +52,57 @@ async function SettingsContent() {
         <TabsList>
           <TabsTrigger value="general" className="gap-2">
             <Settings className="h-4 w-4" />
-            General
+            {t('tabs.general')}
           </TabsTrigger>
           <TabsTrigger value="notifications" className="gap-2">
             <Bell className="h-4 w-4" />
-            Notifications
+            {t('tabs.notifications')}
           </TabsTrigger>
           <TabsTrigger value="security" className="gap-2">
             <Shield className="h-4 w-4" />
-            Security
+            {t('tabs.security')}
           </TabsTrigger>
           <TabsTrigger value="integrations" className="gap-2">
             <Database className="h-4 w-4" />
-            Integrations
+            {t('tabs.integrations')}
           </TabsTrigger>
           <TabsTrigger value="performance" className="gap-2">
             <Zap className="h-4 w-4" />
-            Performance
+            {t('tabs.performance')}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">
           <Card>
             <CardHeader>
-              <CardTitle>General Settings</CardTitle>
+              <CardTitle>{t('general.title')}</CardTitle>
               <CardDescription>
-                Basic configuration for the GWI portal
+                {t('general.description')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="portal-name">Portal Name</Label>
+                <Label htmlFor="portal-name">{t('general.portalName')}</Label>
                 <Input id="portal-name" defaultValue="GWI Team Portal" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="timezone">Default Timezone</Label>
+                <Label htmlFor="timezone">{t('general.defaultTimezone')}</Label>
                 <Input id="timezone" defaultValue="UTC" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Dark Mode</Label>
+                  <Label>{t('general.darkMode')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Enable dark mode for the portal
+                    {t('general.darkModeDesc')}
                   </p>
                 </div>
                 <Switch />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Auto-refresh Dashboards</Label>
+                  <Label>{t('general.autoRefresh')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Automatically refresh dashboard data
+                    {t('general.autoRefreshDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
@@ -112,45 +114,45 @@ async function SettingsContent() {
         <TabsContent value="notifications">
           <Card>
             <CardHeader>
-              <CardTitle>Notification Settings</CardTitle>
+              <CardTitle>{t('notifications.title')}</CardTitle>
               <CardDescription>
-                Configure alerts and notification preferences
+                {t('notifications.description')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Pipeline Failure Alerts</Label>
+                  <Label>{t('notifications.pipelineFailure')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Get notified when a pipeline fails
+                    {t('notifications.pipelineFailureDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>LLM Usage Alerts</Label>
+                  <Label>{t('notifications.llmUsage')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Alert when approaching token limits
+                    {t('notifications.llmUsageDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Data Quality Alerts</Label>
+                  <Label>{t('notifications.dataQuality')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Notify on data quality issues
+                    {t('notifications.dataQualityDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="alert-email">Alert Email</Label>
+                <Label htmlFor="alert-email">{t('notifications.alertEmail')}</Label>
                 <Input
                   id="alert-email"
                   type="email"
-                  placeholder="alerts@company.com"
+                  placeholder={t('notifications.alertEmailPlaceholder')}
                 />
               </div>
             </CardContent>
@@ -160,39 +162,39 @@ async function SettingsContent() {
         <TabsContent value="security">
           <Card>
             <CardHeader>
-              <CardTitle>Security Settings</CardTitle>
+              <CardTitle>{t('security.title')}</CardTitle>
               <CardDescription>
-                Configure security and access controls
+                {t('security.description')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Require 2FA</Label>
+                  <Label>{t('security.require2fa')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Require two-factor authentication for all users
+                    {t('security.require2faDesc')}
                   </p>
                 </div>
                 <Switch />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Session Timeout</Label>
+                  <Label>{t('security.sessionTimeout')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Auto-logout after inactivity
+                    {t('security.sessionTimeoutDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="session-duration">Session Duration (hours)</Label>
+                <Label htmlFor="session-duration">{t('security.sessionDuration')}</Label>
                 <Input id="session-duration" type="number" defaultValue="24" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Audit Logging</Label>
+                  <Label>{t('security.auditLogging')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Log all user actions
+                    {t('security.auditLoggingDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
@@ -204,34 +206,34 @@ async function SettingsContent() {
         <TabsContent value="integrations">
           <Card>
             <CardHeader>
-              <CardTitle>Integration Settings</CardTitle>
+              <CardTitle>{t('integrations.title')}</CardTitle>
               <CardDescription>
-                Configure external service integrations
+                {t('integrations.description')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="webhook-url">Webhook URL</Label>
+                <Label htmlFor="webhook-url">{t('integrations.webhookUrl')}</Label>
                 <Input
                   id="webhook-url"
-                  placeholder="https://..."
+                  placeholder={t('integrations.webhookUrlPlaceholder')}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Receive notifications via webhook
+                  {t('integrations.webhookUrlDesc')}
                 </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="slack-webhook">Slack Webhook</Label>
+                <Label htmlFor="slack-webhook">{t('integrations.slackWebhook')}</Label>
                 <Input
                   id="slack-webhook"
-                  placeholder="https://hooks.slack.com/..."
+                  placeholder={t('integrations.slackWebhookPlaceholder')}
                 />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Enable External APIs</Label>
+                  <Label>{t('integrations.enableExternalApis')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Allow external API access
+                    {t('integrations.enableExternalApisDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
@@ -243,34 +245,34 @@ async function SettingsContent() {
         <TabsContent value="performance">
           <Card>
             <CardHeader>
-              <CardTitle>Performance Settings</CardTitle>
+              <CardTitle>{t('performance.title')}</CardTitle>
               <CardDescription>
-                Configure performance and caching options
+                {t('performance.description')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Enable Caching</Label>
+                  <Label>{t('performance.enableCaching')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Cache frequently accessed data
+                    {t('performance.enableCachingDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cache-ttl">Cache TTL (seconds)</Label>
+                <Label htmlFor="cache-ttl">{t('performance.cacheTtl')}</Label>
                 <Input id="cache-ttl" type="number" defaultValue="300" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="batch-size">Default Batch Size</Label>
+                <Label htmlFor="batch-size">{t('performance.defaultBatchSize')}</Label>
                 <Input id="batch-size" type="number" defaultValue="1000" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Parallel Processing</Label>
+                  <Label>{t('performance.parallelProcessing')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Enable parallel pipeline execution
+                    {t('performance.parallelProcessingDesc')}
                   </p>
                 </div>
                 <Switch defaultChecked />
@@ -283,13 +285,15 @@ async function SettingsContent() {
   )
 }
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const t = await getTranslations('gwi.settings')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

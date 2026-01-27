@@ -10,6 +10,7 @@
  */
 
 import { Keyboard } from "lucide-react"
+import { useTranslations } from "next-intl"
 import {
   Dialog,
   DialogContent,
@@ -62,6 +63,8 @@ export function ShortcutsModal({
   onOpenChange,
   shortcuts = DEFAULT_SHORTCUTS,
 }: ShortcutsModalProps) {
+  const t = useTranslations('ui.shortcuts')
+  const tFooter = useTranslations('ui.shortcuts.footer')
   const groupedShortcuts = getShortcutsByCategory(shortcuts)
 
   // Filter out empty categories
@@ -75,17 +78,17 @@ export function ShortcutsModal({
         <DialogHeader className="px-6 pt-6 pb-4 border-b">
           <div className="flex items-center gap-2">
             <Keyboard className="h-5 w-5 text-muted-foreground" />
-            <DialogTitle>Keyboard Shortcuts</DialogTitle>
+            <DialogTitle>{t('title')}</DialogTitle>
           </div>
           <DialogDescription>
-            Navigate and perform actions quickly with keyboard shortcuts
+            {t('description')}
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[60vh]">
           <div className="p-6 space-y-6">
             {activeCategories.map((category) => (
-              <ShortcutCategory
+              <ShortcutCategorySection
                 key={category}
                 title={CATEGORY_LABELS[category]}
                 shortcuts={groupedShortcuts[category]}
@@ -96,13 +99,13 @@ export function ShortcutsModal({
 
         <div className="border-t px-6 py-4 bg-muted/30">
           <p className="text-sm text-muted-foreground text-center">
-            Press{" "}
+            {tFooter('pressToClose')}{" "}
             <ShortcutKey binding="escape" size="sm" variant="outline" />{" "}
-            to close or{" "}
+            {tFooter('toCloseOr')}{" "}
             <span className="text-foreground font-medium">
-              Settings {">"} Shortcuts
+              {t('settingsShortcuts')}
             </span>{" "}
-            to customize
+            {tFooter('toCustomize')}
           </p>
         </div>
       </DialogContent>
@@ -113,7 +116,7 @@ export function ShortcutsModal({
 /**
  * Category section with shortcuts list
  */
-function ShortcutCategory({
+function ShortcutCategorySection({
   title,
   shortcuts,
 }: {
@@ -173,6 +176,7 @@ export function ShortcutsReference({
   maxItems?: number
   className?: string
 }) {
+  const t = useTranslations('ui.shortcuts')
   const topShortcuts = shortcuts
     .filter((s) => s.enabledByDefault)
     .slice(0, maxItems)
@@ -193,8 +197,8 @@ export function ShortcutsReference({
         </div>
       ))}
       <div className="pt-2 border-t text-center">
-        <span className="text-xs text-muted-foreground">
-          Press <ShortcutKey binding="?" size="sm" variant="ghost" /> for all shortcuts
+        <span className="text-xs text-muted-foreground flex items-center justify-center gap-1">
+          <ShortcutKey binding="?" size="sm" variant="ghost" /> {t('forAllShortcuts')}
         </span>
       </div>
     </div>

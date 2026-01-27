@@ -36,6 +36,201 @@ import { useTranslations } from "next-intl"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { ShortcutKey } from "@/components/ui/shortcut-key"
 
+/**
+ * Hook to get localized default navigation items
+ */
+function useLocalizedNavigationItems(): CommandItem[] {
+  const t = useTranslations('ui.commandPalette.items')
+
+  return [
+    {
+      id: "dashboard",
+      name: t('dashboard'),
+      description: t('dashboardDesc'),
+      icon: LayoutDashboard,
+      shortcut: "g d",
+      href: "/dashboard",
+      category: "navigation",
+      keywords: ["home", "overview"],
+    },
+    {
+      id: "agents",
+      name: t('agents'),
+      description: t('agentsDesc'),
+      icon: Bot,
+      shortcut: "g a",
+      href: "/dashboard/agents",
+      category: "navigation",
+      keywords: ["ai", "automation", "bots"],
+    },
+    {
+      id: "workflows",
+      name: t('workflows'),
+      description: t('workflowsDesc'),
+      icon: Workflow,
+      shortcut: "g w",
+      href: "/dashboard/workflows",
+      category: "navigation",
+      keywords: ["automation", "pipelines"],
+    },
+    {
+      id: "reports",
+      name: t('reports'),
+      description: t('reportsDesc'),
+      icon: FileText,
+      shortcut: "g r",
+      href: "/dashboard/reports",
+      category: "navigation",
+      keywords: ["documents", "exports"],
+    },
+    {
+      id: "analytics",
+      name: t('analytics'),
+      description: t('analyticsDesc'),
+      icon: BarChart3,
+      href: "/dashboard/analytics",
+      category: "navigation",
+      keywords: ["stats", "metrics", "usage"],
+    },
+    {
+      id: "integrations",
+      name: t('integrations'),
+      description: t('integrationsDesc'),
+      icon: Plug,
+      href: "/dashboard/integrations",
+      category: "navigation",
+      keywords: ["connections", "apps", "services"],
+    },
+    {
+      id: "memory",
+      name: t('memory'),
+      description: t('memoryDesc'),
+      icon: Brain,
+      href: "/dashboard/memory",
+      category: "navigation",
+      keywords: ["context", "history", "data"],
+    },
+    {
+      id: "store",
+      name: t('store'),
+      description: t('storeDesc'),
+      icon: Store,
+      href: "/dashboard/store",
+      category: "navigation",
+      keywords: ["marketplace", "templates"],
+    },
+    {
+      id: "inbox",
+      name: t('inbox'),
+      description: t('inboxDesc'),
+      icon: Inbox,
+      href: "/dashboard/inbox",
+      category: "navigation",
+      keywords: ["messages", "requests", "notifications"],
+    },
+    {
+      id: "projects",
+      name: t('projects'),
+      description: t('projectsDesc'),
+      icon: Folder,
+      href: "/dashboard/projects",
+      category: "navigation",
+      keywords: ["workspaces", "folders"],
+    },
+    {
+      id: "team",
+      name: t('team'),
+      description: t('teamDesc'),
+      icon: Users,
+      href: "/dashboard/settings/team",
+      category: "navigation",
+      keywords: ["members", "users", "people"],
+    },
+    {
+      id: "settings",
+      name: t('settings'),
+      description: t('settingsDesc'),
+      icon: Settings,
+      shortcut: "g s",
+      href: "/dashboard/settings",
+      category: "navigation",
+      keywords: ["preferences", "configuration"],
+    },
+  ]
+}
+
+/**
+ * Hook to get localized default action items
+ */
+function useLocalizedActionItems(): CommandItem[] {
+  const t = useTranslations('ui.commandPalette.items')
+
+  return [
+    {
+      id: "new-agent",
+      name: t('newAgent'),
+      description: t('newAgentDesc'),
+      icon: Plus,
+      href: "/dashboard/agents/new",
+      category: "actions",
+      keywords: ["create", "add"],
+    },
+    {
+      id: "new-workflow",
+      name: t('newWorkflow'),
+      description: t('newWorkflowDesc'),
+      icon: Plus,
+      href: "/dashboard/workflows/new",
+      category: "actions",
+      keywords: ["create", "add"],
+    },
+    {
+      id: "new-report",
+      name: t('newReport'),
+      description: t('newReportDesc'),
+      icon: Plus,
+      href: "/dashboard/reports/new",
+      category: "actions",
+      keywords: ["create", "add"],
+    },
+  ]
+}
+
+/**
+ * Hook to get localized default settings items
+ */
+function useLocalizedSettingsItems(): CommandItem[] {
+  const t = useTranslations('ui.commandPalette.items')
+
+  return [
+    {
+      id: "profile",
+      name: t('profile'),
+      description: t('profileDesc'),
+      icon: User,
+      href: "/dashboard/settings/profile",
+      category: "settings",
+    },
+    {
+      id: "shortcuts",
+      name: t('shortcuts'),
+      description: t('shortcutsDesc'),
+      icon: Keyboard,
+      shortcut: "?",
+      href: "/dashboard/settings/shortcuts",
+      category: "settings",
+    },
+    {
+      id: "help",
+      name: t('help'),
+      description: t('helpDesc'),
+      icon: HelpCircle,
+      href: "/dashboard/help",
+      category: "settings",
+    },
+  ]
+}
+
 export interface CommandItem {
   id: string
   name: string
@@ -54,180 +249,6 @@ interface CommandPaletteProps {
   recentItems?: CommandItem[]
   customItems?: CommandItem[]
 }
-
-const defaultNavigationItems: CommandItem[] = [
-  {
-    id: "dashboard",
-    name: "Dashboard",
-    description: "Go to dashboard overview",
-    icon: LayoutDashboard,
-    shortcut: "g d",
-    href: "/dashboard",
-    category: "navigation",
-    keywords: ["home", "overview"],
-  },
-  {
-    id: "agents",
-    name: "Agents",
-    description: "Manage AI agents",
-    icon: Bot,
-    shortcut: "g a",
-    href: "/dashboard/agents",
-    category: "navigation",
-    keywords: ["ai", "automation", "bots"],
-  },
-  {
-    id: "workflows",
-    name: "Workflows",
-    description: "View and edit workflows",
-    icon: Workflow,
-    shortcut: "g w",
-    href: "/dashboard/workflows",
-    category: "navigation",
-    keywords: ["automation", "pipelines"],
-  },
-  {
-    id: "reports",
-    name: "Reports",
-    description: "View generated reports",
-    icon: FileText,
-    shortcut: "g r",
-    href: "/dashboard/reports",
-    category: "navigation",
-    keywords: ["documents", "exports"],
-  },
-  {
-    id: "analytics",
-    name: "Analytics",
-    description: "Usage and performance metrics",
-    icon: BarChart3,
-    href: "/dashboard/analytics",
-    category: "navigation",
-    keywords: ["stats", "metrics", "usage"],
-  },
-  {
-    id: "integrations",
-    name: "Integrations",
-    description: "Connected services",
-    icon: Plug,
-    href: "/dashboard/integrations",
-    category: "navigation",
-    keywords: ["connections", "apps", "services"],
-  },
-  {
-    id: "memory",
-    name: "Memory",
-    description: "Context and history",
-    icon: Brain,
-    href: "/dashboard/memory",
-    category: "navigation",
-    keywords: ["context", "history", "data"],
-  },
-  {
-    id: "store",
-    name: "Agent Store",
-    description: "Browse pre-built agents",
-    icon: Store,
-    href: "/dashboard/store",
-    category: "navigation",
-    keywords: ["marketplace", "templates"],
-  },
-  {
-    id: "inbox",
-    name: "Inbox",
-    description: "Automated request handling",
-    icon: Inbox,
-    href: "/dashboard/inbox",
-    category: "navigation",
-    keywords: ["messages", "requests", "notifications"],
-  },
-  {
-    id: "projects",
-    name: "Projects",
-    description: "Manage all projects",
-    icon: Folder,
-    href: "/dashboard/projects",
-    category: "navigation",
-    keywords: ["workspaces", "folders"],
-  },
-  {
-    id: "team",
-    name: "Team",
-    description: "Team members and invitations",
-    icon: Users,
-    href: "/dashboard/settings/team",
-    category: "navigation",
-    keywords: ["members", "users", "people"],
-  },
-  {
-    id: "settings",
-    name: "Settings",
-    description: "Application settings",
-    icon: Settings,
-    shortcut: "g s",
-    href: "/dashboard/settings",
-    category: "navigation",
-    keywords: ["preferences", "configuration"],
-  },
-]
-
-const defaultActionItems: CommandItem[] = [
-  {
-    id: "new-agent",
-    name: "New Agent",
-    description: "Create a new AI agent",
-    icon: Plus,
-    href: "/dashboard/agents/new",
-    category: "actions",
-    keywords: ["create", "add"],
-  },
-  {
-    id: "new-workflow",
-    name: "New Workflow",
-    description: "Create a new workflow",
-    icon: Plus,
-    href: "/dashboard/workflows/new",
-    category: "actions",
-    keywords: ["create", "add"],
-  },
-  {
-    id: "new-report",
-    name: "New Report",
-    description: "Generate a new report",
-    icon: Plus,
-    href: "/dashboard/reports/new",
-    category: "actions",
-    keywords: ["create", "add"],
-  },
-]
-
-const defaultSettingsItems: CommandItem[] = [
-  {
-    id: "profile",
-    name: "Profile Settings",
-    description: "Edit your profile",
-    icon: User,
-    href: "/dashboard/settings/profile",
-    category: "settings",
-  },
-  {
-    id: "shortcuts",
-    name: "Keyboard Shortcuts",
-    description: "View and customize shortcuts",
-    icon: Keyboard,
-    shortcut: "?",
-    href: "/dashboard/settings/shortcuts",
-    category: "settings",
-  },
-  {
-    id: "help",
-    name: "Help & Support",
-    description: "Get help and documentation",
-    icon: HelpCircle,
-    href: "/dashboard/help",
-    category: "settings",
-  },
-]
 
 /**
  * Command Palette component for quick navigation and actions
@@ -254,8 +275,15 @@ export function CommandPalette({
   customItems = [],
 }: CommandPaletteProps) {
   const router = useRouter()
-  const t = useTranslations('common')
+  const t = useTranslations('ui.commandPalette')
+  const tCategories = useTranslations('ui.commandPalette.categories')
+  const tFooter = useTranslations('ui.commandPalette.footer')
   const [search, setSearch] = useState("")
+
+  // Get localized items
+  const defaultNavigationItems = useLocalizedNavigationItems()
+  const defaultActionItems = useLocalizedActionItems()
+  const defaultSettingsItems = useLocalizedSettingsItems()
 
   const allItems = React.useMemo(() => {
     const items = [
@@ -269,7 +297,7 @@ export function CommandPalette({
     return items.filter(
       (item, index, self) => index === self.findIndex((t) => t.id === item.id)
     )
-  }, [recentItems, customItems])
+  }, [recentItems, customItems, defaultNavigationItems, defaultActionItems, defaultSettingsItems])
 
   const runCommand = useCallback(
     (item: CommandItem) => {
@@ -325,7 +353,7 @@ export function CommandPalette({
             <CommandPrimitive.Input
               value={search}
               onValueChange={setSearch}
-              placeholder="Type a command or search..."
+              placeholder={t('placeholder')}
               className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
             />
             <ShortcutKey binding="escape" size="sm" variant="ghost" />
@@ -339,9 +367,9 @@ export function CommandPalette({
 
             {/* Recent Items */}
             {groupedItems.recent.length > 0 && (
-              <CommandPrimitive.Group heading="Recent">
+              <CommandPrimitive.Group heading={tCategories('recent')}>
                 <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
-                  Recent
+                  {tCategories('recent')}
                 </div>
                 {groupedItems.recent.map((item) => (
                   <CommandItemRow
@@ -357,7 +385,7 @@ export function CommandPalette({
             {groupedItems.navigation.length > 0 && (
               <CommandPrimitive.Group>
                 <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
-                  Navigation
+                  {tCategories('navigation')}
                 </div>
                 {groupedItems.navigation.map((item) => (
                   <CommandItemRow
@@ -373,7 +401,7 @@ export function CommandPalette({
             {groupedItems.actions.length > 0 && (
               <CommandPrimitive.Group>
                 <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
-                  Actions
+                  {tCategories('actions')}
                 </div>
                 {groupedItems.actions.map((item) => (
                   <CommandItemRow
@@ -389,7 +417,7 @@ export function CommandPalette({
             {groupedItems.settings.length > 0 && (
               <CommandPrimitive.Group>
                 <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
-                  Settings
+                  {tCategories('settings')}
                 </div>
                 {groupedItems.settings.map((item) => (
                   <CommandItemRow
@@ -408,16 +436,16 @@ export function CommandPalette({
               <span className="flex items-center gap-1">
                 <ShortcutKey binding="arrowup" size="sm" variant="ghost" />
                 <ShortcutKey binding="arrowdown" size="sm" variant="ghost" />
-                <span>to navigate</span>
+                <span>{tFooter('toNavigate')}</span>
               </span>
               <span className="flex items-center gap-1">
                 <ShortcutKey binding="enter" size="sm" variant="ghost" />
-                <span>to select</span>
+                <span>{tFooter('toSelect')}</span>
               </span>
             </div>
             <span className="flex items-center gap-1">
               <ShortcutKey binding="?" size="sm" variant="ghost" />
-              <span>for shortcuts</span>
+              <span>{tFooter('forShortcuts')}</span>
             </span>
           </div>
         </CommandPrimitive>

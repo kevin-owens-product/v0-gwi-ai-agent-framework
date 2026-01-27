@@ -446,5 +446,179 @@
       "selectAll": "Выбрать все",
       "deselectAll": "Снять выделение со всех"
     }
+  },
+  "toast": {
+    "success": {
+      "saved": "Изменения успешно сохранены",
+      "created": "Успешно создано",
+      "updated": "Успешно обновлено",
+      "deleted": "Успешно удалено",
+      "copied": "Скопировано в буфер обмена",
+      "exported": "Экспорт завершён",
+      "imported": "Импорт завершён",
+      "subscribed": "Подписка оформлена",
+      "unsubscribed": "Подписка отменена"
+    },
+    "error": {
+      "general": "Произошла ошибка",
+      "saveFailed": "Не удалось сохранить изменения",
+      "createFailed": "Не удалось создать",
+      "updateFailed": "Не удалось обновить",
+      "deleteFailed": "Не удалось удалить",
+      "loadFailed": "Не удалось загрузить данные",
+      "networkError": "Ошибка сети. Проверьте подключение.",
+      "serverError": "Ошибка сервера. Повторите попытку позже.",
+      "validationError": "Проверьте введённые данные и попробуйте снова",
+      "permissionDenied": "У вас нет разрешения на выполнение этого действия",
+      "sessionExpired": "Ваша сессия истекла. Войдите снова.",
+      "rateLimitExceeded": "Превышен лимит запросов. Повторите попытку позже.",
+      "exportFailed": "Ошибка экспорта",
+      "importFailed": "Ошибка импорта"
+    },
+    "loading": {
+      "saving": "Сохранение...",
+      "loading": "Загрузка...",
+      "processing": "Обработка...",
+      "exporting": "Экспорт...",
+      "importing": "Импорт...",
+      "uploading": "Загрузка файла..."
+    },
+    "info": {
+      "noChanges": "Нет изменений для сохранения",
+      "inProgress": "Операция выполняется",
+      "scheduled": "Успешно запланировано"
+    },
+    "warning": {
+      "unsavedChanges": "У вас есть несохранённые изменения",
+      "limitApproaching": "Вы приближаетесь к лимиту использования",
+      "deprecationNotice": "Эта функция скоро будет прекращена"
+    },
+    "actions": {
+      "undo": "Отменить",
+      "retry": "Повторить",
+      "dismiss": "Закрыть",
+      "viewDetails": "Подробнее"
+    }
+  },
+  "notifications": {
+    "page": {
+      "title": "Уведомления",
+      "description": "У вас {count, plural, =0 {нет непрочитанных уведомлений} one {# непрочитанное уведомление} few {# непрочитанных уведомления} many {# непрочитанных уведомлений} other {# непрочитанных уведомлений}}",
+      "allCaughtUp": "Вы в курсе всех событий!",
+      "noNotifications": "Нет уведомлений",
+      "markAllRead": "Отметить все как прочитанные",
+      "settings": "Настройки",
+      "selectAll": "Выбрать все",
+      "selected": "Выбрано: {count}",
+      "viewDetails": "Подробнее"
+    },
+    "types": {
+      "all": "Все",
+      "workflow": "Рабочие процессы",
+      "agent": "Агенты",
+      "team": "Команда",
+      "system": "Система",
+      "report": "Отчёты"
+    },
+    "titles": {
+      "workflowCompleted": "Рабочий процесс завершён",
+      "workflowFailed": "Ошибка рабочего процесса",
+      "newAgentAvailable": "Доступен новый агент",
+      "agentUpdateAvailable": "Доступно обновление агента",
+      "teamMemberJoined": "Новый участник команды",
+      "usageLimitApproaching": "Приближение к лимиту использования",
+      "reportReady": "Отчёт готов к загрузке",
+      "scheduledMaintenance": "Запланированное обслуживание"
+    },
+    "settings": {
+      "title": "Настройки уведомлений",
+      "description": "Выберите, как и когда вы хотите получать уведомления",
+      "savePreferences": "Сохранить настройки",
+      "saving": "Сохранение...",
+      "channels": {
+        "email": "Электронная почта",
+        "push": "Push-уведомления",
+        "slack": "Slack"
+      },
+      "categories": {
+        "agentActivity": "Активность агента",
+        "reportsExports": "Отчёты и экспорт",
+        "teamCollaboration": "Команда и совместная работа",
+        "systemSecurity": "Система и безопасность"
+      },
+      "items": {
+        "agentTaskCompleted": "Задача агента выполнена",
+        "agentTaskCompletedDesc": "Получать уведомление, когда агент завершает задачу",
+        "agentErrors": "Ошибки агента",
+        "agentErrorsDesc": "Оповещение при возникновении ошибки у агента",
+        "approvalRequests": "Запросы на одобрение",
+        "approvalRequestsDesc": "Когда агенту требуется одобрение для продолжения",
+        "reportReady": "Отчёт готов",
+        "reportReadyDesc": "Когда создан новый отчёт",
+        "exportComplete": "Экспорт завершён",
+        "exportCompleteDesc": "Когда экспорт данных готов к загрузке",
+        "mentions": "Упоминания",
+        "mentionsDesc": "Когда кто-то упоминает вас в комментарии",
+        "sharedWithMe": "Поделились со мной",
+        "sharedWithMeDesc": "Когда кто-то делится с вами отчётом или процессом",
+        "teamInvitations": "Приглашения в команду",
+        "teamInvitationsDesc": "Новый участник присоединился или отправлено приглашение",
+        "loginAlerts": "Оповещения о входе",
+        "loginAlertsDesc": "Уведомление о входе с нового устройства",
+        "systemMaintenance": "Обслуживание системы",
+        "systemMaintenanceDesc": "Плановые простои и обновления"
+      }
+    },
+    "admin": {
+      "title": "Системные уведомления",
+      "description": "Отправляйте объявления, оповещения и обновления пользователям платформы",
+      "newNotification": "Новое уведомление",
+      "editNotification": "Редактировать уведомление",
+      "createNotification": "Создать уведомление",
+      "sendNotification": "Отправить уведомление пользователям платформы",
+      "refresh": "Обновить",
+      "types": {
+        "info": "Информация",
+        "warning": "Предупреждение",
+        "alert": "Оповещение",
+        "maintenance": "Обслуживание",
+        "feature": "Функция",
+        "promotion": "Акция"
+      },
+      "form": {
+        "type": "Тип",
+        "targetAudience": "Целевая аудитория",
+        "allUsers": "Все пользователи",
+        "specificPlans": "Определённые планы",
+        "specificOrgs": "Определённые организации",
+        "title": "Заголовок",
+        "titlePlaceholder": "Заголовок уведомления",
+        "message": "Сообщение",
+        "messagePlaceholder": "Сообщение уведомления...",
+        "targetPlans": "Целевые планы",
+        "scheduleFor": "Запланировать на (опционально)",
+        "expiresAt": "Срок действия до (опционально)",
+        "active": "Активно",
+        "activeDescription": "Показать это уведомление немедленно"
+      },
+      "table": {
+        "notification": "Уведомление",
+        "type": "Тип",
+        "target": "Цель",
+        "status": "Статус",
+        "schedule": "Расписание",
+        "immediate": "Немедленно",
+        "created": "Создано",
+        "custom": "Пользовательский"
+      },
+      "actions": {
+        "edit": "Редактировать",
+        "markInactive": "Отметить как неактивное",
+        "deleteSelected": "Удалить выбранные"
+      },
+      "empty": "Уведомления не созданы",
+      "confirmDelete": "Удалить уведомление",
+      "confirmDeleteDescription": "Вы уверены, что хотите удалить \"{title}\"? Это действие нельзя отменить."
+    }
   }
 }
