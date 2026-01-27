@@ -202,6 +202,54 @@ npx ts-node --compiler-options '{"module":"CommonJS"}' prisma/seed-gwi.ts
 
 ## Common Patterns
 
+### Internationalization (i18n)
+All GWI pages must use translations. Never hardcode user-facing strings.
+
+**Client Components:**
+```typescript
+"use client"
+import { useTranslations } from "next-intl"
+
+export default function MyPage() {
+  const t = useTranslations("gwi.surveys")      // Section-specific
+  const tCommon = useTranslations("common")     // Shared terms
+
+  return (
+    <div>
+      <h1>{t("title")}</h1>
+      <button>{tCommon("save")}</button>
+    </div>
+  )
+}
+```
+
+**Server Components:**
+```typescript
+import { getTranslations } from "@/lib/i18n/server"
+
+export default async function MyPage() {
+  const t = await getTranslations("gwi.pipelines")
+  const tCommon = await getTranslations("common")
+  // ...
+}
+```
+
+**Key Namespace Structure:**
+- `gwi.surveys.*` - Survey management
+- `gwi.taxonomy.*` - Taxonomy system
+- `gwi.pipelines.*` - Data pipelines
+- `gwi.llm.*` - LLM configuration
+- `gwi.agents.*` - Agent templates
+- `gwi.dataSources.*` - Data source management
+- `gwi.services.*` - Services module
+- `gwi.monitoring.*` - Monitoring dashboards
+- `gwi.system.*` - System settings
+
+**Adding New Keys:**
+1. Add to `/messages/en.json` under `gwi.[feature].*`
+2. Run `npm run i18n:fix` to sync to all 10 languages
+3. Run `npm run i18n:validate` to verify
+
 ### Form Handling
 - Use shadcn/ui form components
 - Validate with Zod schemas
@@ -213,6 +261,6 @@ npx ts-node --compiler-options '{"module":"CommonJS"}' prisma/seed-gwi.ts
 - Include search, filter, and sort capabilities
 
 ### Error Handling
-- Display errors using toast notifications
+- Display errors using toast notifications (use `tCommon("error")` for labels)
 - Log errors to `GWIErrorLog` for tracking
 - Show user-friendly messages, hide technical details

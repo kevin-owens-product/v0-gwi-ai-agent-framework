@@ -6,6 +6,18 @@
         "app/api/gwi/**/*.ts": {
           "reminder": "GWI API routes must: 1) Use gwiToken cookie, 2) Check permissions with hasGWIPermission(), 3) Log write actions to GWIAuditLog"
         },
+        "app/gwi/**/*.tsx": {
+          "reminder": "GWI pages must use translations: import { useTranslations } from 'next-intl' for client components, or getTranslations from '@/lib/i18n/server' for server components. Use gwi.* namespace."
+        },
+        "app/admin/**/*.tsx": {
+          "reminder": "Admin pages must use translations: import { useTranslations } from 'next-intl'. Use admin.* namespace. Common terms use common.* namespace."
+        },
+        "app/(dashboard)/**/*.tsx": {
+          "reminder": "Dashboard pages must use translations: import { useTranslations } from 'next-intl'. Use dashboard.* namespace."
+        },
+        "messages/en.json": {
+          "reminder": "After adding keys to en.json, run: npm run i18n:fix to sync to all language files"
+        },
         "prisma/schema.prisma": {
           "reminder": "After schema changes, run: npx prisma generate && npx prisma migrate dev"
         },
@@ -22,6 +34,13 @@
         },
         "lib/gwi-permissions.ts": {
           "reminder": "Permission changes may require updating sidebar navigation in components/gwi/sidebar.tsx"
+        },
+        "messages/en.json": {
+          "command": "npm run i18n:fix",
+          "description": "Sync new translation keys to all language files"
+        },
+        "messages/*.json": {
+          "reminder": "Run npm run i18n:validate to check translation coverage across all languages"
         }
       }
     },
@@ -51,11 +70,35 @@
       "steps": [
         "1. Add Prisma models if needed",
         "2. Create API routes at app/api/gwi/[feature]/",
-        "3. Create page at app/gwi/(portal)/[feature]/",
-        "4. Add permissions to lib/gwi-permissions.ts",
+        "3. Create page at app/gwi/(portal)/[feature]/ with i18n (useTranslations)",
+        "4. Add translation keys to messages/en.json under gwi.[feature].*",
+        "5. Run npm run i18n:fix to sync translations",
+        "6. Add permissions to lib/gwi-permissions.ts",
+        "7. Update sidebar navigation",
+        "8. Add tests",
+        "9. Update CLAUDE.md if significant"
+      ]
+    },
+    "onNewAdminFeature": {
+      "description": "Checklist when adding a new Admin feature",
+      "steps": [
+        "1. Create page at app/admin/[feature]/ with i18n (useTranslations)",
+        "2. Add translation keys to messages/en.json under admin.[feature].*",
+        "3. Run npm run i18n:fix to sync translations",
+        "4. Add API routes if needed at app/api/admin/[feature]/",
         "5. Update sidebar navigation",
-        "6. Add tests",
-        "7. Update CLAUDE.md if significant"
+        "6. Add tests"
+      ]
+    },
+    "onI18nChanges": {
+      "description": "Checklist when modifying translations",
+      "steps": [
+        "1. Add/modify keys in messages/en.json first (base language)",
+        "2. Run npm run i18n:fix to add placeholders to other languages",
+        "3. Run npm run i18n:validate to verify coverage",
+        "4. Search for [XX] markers to find keys needing translation",
+        "5. Use hierarchical namespaces: portal.section.subsection.key",
+        "6. Prefer common.* namespace for shared terms (save, cancel, etc.)"
       ]
     }
   }

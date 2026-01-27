@@ -151,6 +151,61 @@ export async function GET(
 }
 ```
 
+## Internationalization (i18n)
+
+This application supports **10 languages** with 5,118+ translation keys using `next-intl`.
+
+### Supported Languages
+`en`, `es`, `zh`, `hi`, `fr`, `ar`, `pt`, `ru`, `ja`, `bn`
+
+### Translation Files
+- Location: `/messages/*.json`
+- Base language: `en.json`
+- Namespace structure: `portal.section.subsection.key`
+
+### Using Translations
+
+**Client Components:**
+```typescript
+"use client"
+import { useTranslations } from "next-intl"
+
+export default function MyPage() {
+  const t = useTranslations("gwi.surveys")
+  const tCommon = useTranslations("common")
+  return <h1>{t("title")}</h1>
+}
+```
+
+**Server Components:**
+```typescript
+import { getTranslations } from "@/lib/i18n/server"
+
+export default async function MyPage() {
+  const t = await getTranslations("admin.settings")
+  return <h1>{t("title")}</h1>
+}
+```
+
+### Key Namespaces
+- `common.*` - Shared terms (save, cancel, delete, loading)
+- `admin.*` - Admin Portal
+- `gwi.*` - GWI Portal
+- `dashboard.*` - User Dashboard
+
+### i18n Commands
+```bash
+npm run i18n:validate      # Check all translations
+npm run i18n:fix           # Add missing keys as placeholders
+npm run i18n:clean         # Remove orphaned keys
+npm run i18n:sync          # Fix + clean combined
+```
+
+### Adding New Translation Keys
+1. Add keys to `/messages/en.json` under appropriate namespace
+2. Run `npm run i18n:fix` to sync to all languages
+3. Search for `[XX]` placeholders to find keys needing translation
+
 ## Test Accounts
 
 ### GWI Portal
