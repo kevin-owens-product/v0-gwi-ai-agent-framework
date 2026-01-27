@@ -16,6 +16,7 @@ import {
   Plus,
 } from "lucide-react"
 import { CategoryEditor } from "@/components/gwi/taxonomy/category-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getCategory(id: string) {
   const category = await prisma.taxonomyCategory.findUnique({
@@ -70,6 +71,9 @@ async function CategoryDetail({ id }: { id: string }) {
     notFound()
   }
 
+  const t = await getTranslations('gwi.taxonomy.detail')
+  const tCommon = await getTranslations('common')
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -87,10 +91,10 @@ async function CategoryDetail({ id }: { id: string }) {
                 variant={category.isActive ? "default" : "secondary"}
                 className={category.isActive ? "bg-green-100 text-green-700" : ""}
               >
-                {category.isActive ? "Active" : "Inactive"}
+                {category.isActive ? tCommon('active') : tCommon('inactive')}
               </Badge>
               {category.orgId === null && (
-                <Badge variant="outline">Global</Badge>
+                <Badge variant="outline">{t('global')}</Badge>
               )}
             </div>
             <div className="flex items-center gap-2 mt-1">
@@ -120,7 +124,7 @@ async function CategoryDetail({ id }: { id: string }) {
           <Button variant="outline" asChild>
             <Link href={`/gwi/taxonomy/categories/new?parentId=${category.id}`}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Child
+              {t('addChild')}
             </Link>
           </Button>
         </div>
@@ -136,7 +140,7 @@ async function CategoryDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{category._count.children}</p>
-                <p className="text-sm text-muted-foreground">Child Categories</p>
+                <p className="text-sm text-muted-foreground">{t('childCategories')}</p>
               </div>
             </div>
           </CardContent>
@@ -149,7 +153,7 @@ async function CategoryDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{category._count.attributes}</p>
-                <p className="text-sm text-muted-foreground">Attributes</p>
+                <p className="text-sm text-muted-foreground">{t('attributes')}</p>
               </div>
             </div>
           </CardContent>
@@ -162,7 +166,7 @@ async function CategoryDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">v{category.version}</p>
-                <p className="text-sm text-muted-foreground">Version</p>
+                <p className="text-sm text-muted-foreground">{t('version')}</p>
               </div>
             </div>
           </CardContent>
@@ -175,9 +179,9 @@ async function CategoryDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">
-                  {category.organization?.name || "Global"}
+                  {category.organization?.name || t('global')}
                 </p>
-                <p className="text-sm text-muted-foreground">Scope</p>
+                <p className="text-sm text-muted-foreground">{t('scope')}</p>
               </div>
             </div>
           </CardContent>
@@ -189,24 +193,24 @@ async function CategoryDetail({ id }: { id: string }) {
         <TabsList>
           <TabsTrigger value="children" className="flex items-center gap-2">
             <FolderTree className="h-4 w-4" />
-            Children ({category._count.children})
+            {t('children')} ({category._count.children})
           </TabsTrigger>
           <TabsTrigger value="attributes" className="flex items-center gap-2">
             <Layers className="h-4 w-4" />
-            Attributes ({category._count.attributes})
+            {t('attributes')} ({category._count.attributes})
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Settings
+            {t('settings')}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="children">
           <Card>
             <CardHeader>
-              <CardTitle>Child Categories</CardTitle>
+              <CardTitle>{t('childCategories')}</CardTitle>
               <CardDescription>
-                Sub-categories within this taxonomy category
+                {t('childCategoriesDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -233,16 +237,16 @@ async function CategoryDetail({ id }: { id: string }) {
                       </div>
                       <div className="flex items-center gap-2">
                         {!child.isActive && (
-                          <Badge variant="secondary">Inactive</Badge>
+                          <Badge variant="secondary">{tCommon('inactive')}</Badge>
                         )}
                         {child._count.attributes > 0 && (
                           <Badge variant="outline">
-                            {child._count.attributes} attrs
+                            {child._count.attributes} {t('attrs')}
                           </Badge>
                         )}
                         {child._count.children > 0 && (
                           <Badge variant="outline">
-                            {child._count.children} children
+                            {child._count.children} {t('children')}
                           </Badge>
                         )}
                         <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -252,21 +256,21 @@ async function CategoryDetail({ id }: { id: string }) {
                   <Button variant="outline" className="w-full mt-4" asChild>
                     <Link href={`/gwi/taxonomy/categories/new?parentId=${category.id}`}>
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Child Category
+                      {t('addChildCategory')}
                     </Link>
                   </Button>
                 </div>
               ) : (
                 <div className="text-center py-8">
                   <FolderTree className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No child categories</p>
+                  <p className="text-muted-foreground">{t('noChildCategories')}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Add sub-categories to organize this taxonomy
+                    {t('addSubCategories')}
                   </p>
                   <Button className="mt-4" asChild>
                     <Link href={`/gwi/taxonomy/categories/new?parentId=${category.id}`}>
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Child Category
+                      {t('addChildCategory')}
                     </Link>
                   </Button>
                 </div>
@@ -278,9 +282,9 @@ async function CategoryDetail({ id }: { id: string }) {
         <TabsContent value="attributes">
           <Card>
             <CardHeader>
-              <CardTitle>Category Attributes</CardTitle>
+              <CardTitle>{t('categoryAttributes')}</CardTitle>
               <CardDescription>
-                Data attributes defined for this category
+                {t('dataAttributesDefined')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -300,7 +304,7 @@ async function CategoryDetail({ id }: { id: string }) {
                       <div className="flex items-center gap-2">
                         <Badge variant="outline">{attr.dataType}</Badge>
                         {attr.isRequired && (
-                          <Badge className="bg-red-100 text-red-700">Required</Badge>
+                          <Badge className="bg-red-100 text-red-700">{tCommon('required')}</Badge>
                         )}
                       </div>
                     </div>
@@ -308,21 +312,21 @@ async function CategoryDetail({ id }: { id: string }) {
                   <Button variant="outline" className="w-full mt-4" asChild>
                     <Link href={`/gwi/taxonomy/attributes/new?categoryId=${category.id}`}>
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Attribute
+                      {t('addAttribute')}
                     </Link>
                   </Button>
                 </div>
               ) : (
                 <div className="text-center py-8">
                   <Layers className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No attributes defined</p>
+                  <p className="text-muted-foreground">{t('noAttributesDefined')}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Define data attributes for this category
+                    {t('defineDataAttributes')}
                   </p>
                   <Button className="mt-4" asChild>
                     <Link href={`/gwi/taxonomy/attributes/new?categoryId=${category.id}`}>
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Attribute
+                      {t('addAttribute')}
                     </Link>
                   </Button>
                 </div>
@@ -352,27 +356,27 @@ async function CategoryDetail({ id }: { id: string }) {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Category Information
+            {t('categoryInformation')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <dt className="text-muted-foreground">ID</dt>
+              <dt className="text-muted-foreground">{t('info.categoryId')}</dt>
               <dd className="font-medium font-mono text-xs">{category.id}</dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Version</dt>
+              <dt className="text-muted-foreground">{t('version')}</dt>
               <dd className="font-medium">{category.version}</dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created At</dt>
+              <dt className="text-muted-foreground">{t('info.createdAt')}</dt>
               <dd className="font-medium">
                 {new Date(category.createdAt).toLocaleDateString()}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Last Updated</dt>
+              <dt className="text-muted-foreground">{t('info.updatedAt')}</dt>
               <dd className="font-medium">
                 {new Date(category.updatedAt).toLocaleDateString()}
               </dd>

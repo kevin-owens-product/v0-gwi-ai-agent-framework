@@ -2,8 +2,11 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Bot } from "lucide-react"
 import { AgentTemplateEditor } from "@/components/gwi/agents/agent-template-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
-export default function NewAgentTemplatePage() {
+export default async function NewAgentTemplatePage() {
+  const t = await getTranslations('gwi.agents.templates')
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -18,9 +21,9 @@ export default function NewAgentTemplatePage() {
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Create Agent Template</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('createTitle')}</h1>
             <p className="text-muted-foreground">
-              Define a reusable agent configuration with tools and prompts
+              {t('createDescription')}
             </p>
           </div>
         </div>

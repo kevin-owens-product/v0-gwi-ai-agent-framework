@@ -31,6 +31,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getLLMPerformanceData() {
   const [configurations, usageRecords] = await Promise.all([
@@ -96,26 +97,28 @@ async function getLLMPerformanceData() {
 
 async function LLMMonitoringContent() {
   const stats = await getLLMPerformanceData()
+  const t = await getTranslations('gwi.monitoring.llmPerformance')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">LLM Performance</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Monitor language model response times and reliability
+            {t('description')}
           </p>
         </div>
         <Select defaultValue="24h">
           <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Time Range" />
+            <SelectValue placeholder={t('timeRange')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="1h">Last hour</SelectItem>
-            <SelectItem value="24h">Last 24 hours</SelectItem>
-            <SelectItem value="7d">Last 7 days</SelectItem>
-            <SelectItem value="30d">Last 30 days</SelectItem>
+            <SelectItem value="1h">{t('lastHour')}</SelectItem>
+            <SelectItem value="24h">{t('last24Hours')}</SelectItem>
+            <SelectItem value="7d">{t('last7Days')}</SelectItem>
+            <SelectItem value="30d">{t('last30Days')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -130,7 +133,7 @@ async function LLMMonitoringContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.avgLatency}ms</p>
-                <p className="text-sm text-muted-foreground">Avg Latency</p>
+                <p className="text-sm text-muted-foreground">{t('avgLatency')}</p>
               </div>
             </div>
           </CardContent>
@@ -143,7 +146,7 @@ async function LLMMonitoringContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalRequests}</p>
-                <p className="text-sm text-muted-foreground">Total Requests</p>
+                <p className="text-sm text-muted-foreground">{t('totalRequests')}</p>
               </div>
             </div>
           </CardContent>
@@ -158,7 +161,7 @@ async function LLMMonitoringContent() {
                 <p className="text-2xl font-bold">
                   {(stats.totalTokens / 1000).toFixed(1)}K
                 </p>
-                <p className="text-sm text-muted-foreground">Tokens Processed</p>
+                <p className="text-sm text-muted-foreground">{t('tokensProcessed')}</p>
               </div>
             </div>
           </CardContent>
@@ -171,7 +174,7 @@ async function LLMMonitoringContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">99.8%</p>
-                <p className="text-sm text-muted-foreground">Success Rate</p>
+                <p className="text-sm text-muted-foreground">{t('successRate')}</p>
               </div>
             </div>
           </CardContent>
@@ -183,16 +186,16 @@ async function LLMMonitoringContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
-            Latency Distribution
+            {t('latencyDistribution')}
           </CardTitle>
-          <CardDescription>Response time distribution over the selected period</CardDescription>
+          <CardDescription>{t('latencyDistributionDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center border rounded-lg bg-slate-50">
             <div className="text-center">
               <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground">
-                Latency distribution chart coming soon...
+                {t('chartsComingSoon')}
               </p>
             </div>
           </div>
@@ -202,8 +205,8 @@ async function LLMMonitoringContent() {
       {/* Model Performance */}
       <Card>
         <CardHeader>
-          <CardTitle>Performance by Model</CardTitle>
-          <CardDescription>Latency and throughput metrics per LLM model</CardDescription>
+          <CardTitle>{t('performanceByModel')}</CardTitle>
+          <CardDescription>{t('performanceByModelDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           {stats.modelMetrics.length > 0 ? (
@@ -239,24 +242,24 @@ async function LLMMonitoringContent() {
                           ) : (
                             <XCircle className="mr-1 h-3 w-3" />
                           )}
-                          {latencyHealth}
+                          {t(`health.${latencyHealth}`)}
                         </Badge>
                       </div>
                       <div className="grid grid-cols-4 gap-4 text-sm">
                         <div>
-                          <p className="text-muted-foreground">Avg Latency</p>
+                          <p className="text-muted-foreground">{t('avgLatency')}</p>
                           <p className="font-medium">{model.avgLatency}ms</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground">P95 Latency</p>
+                          <p className="text-muted-foreground">{t('p95Latency')}</p>
                           <p className="font-medium">{model.p95Latency}ms</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground">Requests</p>
+                          <p className="text-muted-foreground">{t('requests')}</p>
                           <p className="font-medium">{model.requestCount.toLocaleString()}</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground">Tokens</p>
+                          <p className="text-muted-foreground">{t('tokens')}</p>
                           <p className="font-medium">
                             {(model.totalTokens / 1000).toFixed(1)}K
                           </p>
@@ -270,7 +273,7 @@ async function LLMMonitoringContent() {
           ) : (
             <div className="text-center py-8">
               <Brain className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No LLM configurations found</p>
+              <p className="text-muted-foreground">{t('noConfigurations')}</p>
             </div>
           )}
         </CardContent>
@@ -280,14 +283,14 @@ async function LLMMonitoringContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Recent Requests</CardTitle>
-            <CardDescription>Latest LLM API calls with performance data</CardDescription>
+            <CardTitle>{t('recentRequests')}</CardTitle>
+            <CardDescription>{t('recentRequestsDescription')}</CardDescription>
           </div>
           <Link
             href="/gwi/llm/usage"
             className="text-sm text-emerald-600 hover:underline"
           >
-            View All Usage
+            {t('viewAllUsage')}
           </Link>
         </CardHeader>
         <CardContent className="p-0">
@@ -295,11 +298,11 @@ async function LLMMonitoringContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Model</TableHead>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead className="text-right">Tokens</TableHead>
-                  <TableHead className="text-right">Latency</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t('model')}</TableHead>
+                  <TableHead>{t('timestamp')}</TableHead>
+                  <TableHead className="text-right">{t('tokens')}</TableHead>
+                  <TableHead className="text-right">{t('latency')}</TableHead>
+                  <TableHead>{tCommon('status')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -340,7 +343,7 @@ async function LLMMonitoringContent() {
                       </TableCell>
                       <TableCell>
                         <Badge className={statusColors[latencyStatus]}>
-                          {latencyStatus}
+                          {t(`speed.${latencyStatus}`)}
                         </Badge>
                       </TableCell>
                     </TableRow>
@@ -351,7 +354,7 @@ async function LLMMonitoringContent() {
           ) : (
             <div className="py-8 text-center">
               <Activity className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No LLM requests yet</p>
+              <p className="text-muted-foreground">{t('noRequestsYet')}</p>
             </div>
           )}
         </CardContent>
@@ -360,14 +363,16 @@ async function LLMMonitoringContent() {
   )
 }
 
-export default function LLMMonitoringPage() {
+export default async function LLMMonitoringPage() {
+  const t = await getTranslations('gwi.monitoring.llmPerformance')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">LLM Performance</h1>
-            <p className="text-muted-foreground">Loading performance data...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

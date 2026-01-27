@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -133,6 +134,8 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
   const { id } = use(params)
   const router = useRouter()
   const { data: session, status: sessionStatus } = useSession()
+  const t = useTranslations("dashboard.charts.edit")
+  const tCommon = useTranslations("common")
 
   // Form state
   const [chart, setChart] = useState<ChartData | null>(null)
@@ -383,10 +386,10 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
       <div className="flex-1 space-y-6 p-6">
         <Card className="p-12 text-center">
           <AlertCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Authentication Required</h2>
-          <p className="text-muted-foreground mb-4">Please sign in to edit this chart.</p>
+          <h2 className="text-xl font-semibold mb-2">{t("authRequired")}</h2>
+          <p className="text-muted-foreground mb-4">{t("pleaseSignIn")}</p>
           <Link href="/login">
-            <Button>Sign In</Button>
+            <Button>{t("signIn")}</Button>
           </Link>
         </Card>
       </div>
@@ -403,14 +406,14 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold">Edit Chart</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
         </div>
         <Card className="p-12 text-center">
           <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error</h2>
+          <h2 className="text-xl font-semibold mb-2">{tCommon("error")}</h2>
           <p className="text-muted-foreground mb-4">{error}</p>
           <Link href="/dashboard/charts">
-            <Button>Back to Charts</Button>
+            <Button>{t("backToCharts")}</Button>
           </Link>
         </Card>
       </div>
@@ -427,15 +430,15 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
           </Button>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold">Edit Chart</h1>
+              <h1 className="text-2xl font-bold">{t("title")}</h1>
               {hasChanges && (
                 <Badge variant="secondary" className="text-xs">
-                  Unsaved changes
+                  {t("unsavedChanges")}
                 </Badge>
               )}
             </div>
             <p className="text-muted-foreground">
-              Modify your chart configuration and settings
+              {t("description")}
             </p>
           </div>
         </div>
@@ -443,22 +446,22 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
           <Link href={`/dashboard/charts/${id}`}>
             <Button variant="outline" size="sm">
               <Eye className="h-4 w-4 mr-2" />
-              Preview
+              {t("preview")}
             </Button>
           </Link>
           <Button variant="outline" onClick={handleCancel} disabled={isSaving}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button onClick={handleSave} disabled={isSaving || !hasChanges}>
             {isSaving ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Saving...
+                {t("saving")}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4 mr-2" />
-                Save Changes
+                {t("saveChanges")}
               </>
             )}
           </Button>
@@ -481,40 +484,40 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
           {/* Basic Information */}
           <Card>
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
+              <CardTitle>{t("basicInfo.title")}</CardTitle>
               <CardDescription>
-                Set the name and description for your chart
+                {t("basicInfo.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Chart Name *</Label>
+                <Label htmlFor="name">{t("basicInfo.chartName")} *</Label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter chart name"
+                  placeholder={t("basicInfo.chartNamePlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe what this chart shows"
+                  placeholder={t("basicInfo.descriptionPlaceholder")}
                   rows={3}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="status">Status</Label>
+                  <Label htmlFor="status">{tCommon("status")}</Label>
                   <Select
                     value={chartStatus}
                     onValueChange={(value: "DRAFT" | "PUBLISHED" | "ARCHIVED") => setChartStatus(value)}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
+                      <SelectValue placeholder={t("basicInfo.selectStatus")} />
                     </SelectTrigger>
                     <SelectContent>
                       {statusOptions.map((option) => (
@@ -526,10 +529,10 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="dataSource">Data Source</Label>
+                  <Label htmlFor="dataSource">{t("basicInfo.dataSource")}</Label>
                   <Select value={dataSource} onValueChange={setDataSource}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select data source" />
+                      <SelectValue placeholder={t("basicInfo.selectDataSource")} />
                     </SelectTrigger>
                     <SelectContent>
                       {dataSourceOptions.map((option) => (
@@ -547,9 +550,9 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
           {/* Chart Type */}
           <Card>
             <CardHeader>
-              <CardTitle>Chart Type</CardTitle>
+              <CardTitle>{t("chartType.title")}</CardTitle>
               <CardDescription>
-                Select the visualization type for your data
+                {t("chartType.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -573,18 +576,18 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
           {/* Data Configuration */}
           <Card>
             <CardHeader>
-              <CardTitle>Data Configuration</CardTitle>
+              <CardTitle>{t("dataConfig.title")}</CardTitle>
               <CardDescription>
-                Configure the data for your chart
+                {t("dataConfig.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="audience">Target Audience</Label>
+                  <Label htmlFor="audience">{t("dataConfig.targetAudience")}</Label>
                   <Select value={audienceId} onValueChange={setAudienceId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select audience" />
+                      <SelectValue placeholder={t("dataConfig.selectAudience")} />
                     </SelectTrigger>
                     <SelectContent>
                       {audienceOptions.map((option) => (
@@ -596,10 +599,10 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="timePeriod">Time Period</Label>
+                  <Label htmlFor="timePeriod">{t("dataConfig.timePeriod")}</Label>
                   <Select value={timePeriod} onValueChange={setTimePeriod}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select time period" />
+                      <SelectValue placeholder={t("dataConfig.selectTimePeriod")} />
                     </SelectTrigger>
                     <SelectContent>
                       {timePeriodOptions.map((option) => (
@@ -613,12 +616,12 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="metric">Primary Metric</Label>
+                <Label htmlFor="metric">{t("dataConfig.primaryMetric")}</Label>
                 <Input
                   id="metric"
                   value={metric}
                   onChange={(e) => setMetric(e.target.value)}
-                  placeholder="e.g., Social Media Usage (%)"
+                  placeholder={t("dataConfig.primaryMetricPlaceholder")}
                 />
               </div>
 
@@ -626,15 +629,15 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
 
               {/* Dimensions */}
               <div className="space-y-2">
-                <Label>Dimensions</Label>
+                <Label>{t("dataConfig.dimensions")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Categories for grouping your data (e.g., Age Group, Region)
+                  {t("dataConfig.dimensionsHint")}
                 </p>
                 <div className="flex gap-2">
                   <Input
                     value={newDimension}
                     onChange={(e) => setNewDimension(e.target.value)}
-                    placeholder="Add a dimension"
+                    placeholder={t("dataConfig.addDimension")}
                     onKeyDown={(e) => e.key === "Enter" && handleAddDimension()}
                   />
                   <Button variant="outline" onClick={handleAddDimension}>
@@ -660,15 +663,15 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
 
               {/* Measures */}
               <div className="space-y-2">
-                <Label>Measures</Label>
+                <Label>{t("dataConfig.measures")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Numeric values to display (e.g., Count, Percentage)
+                  {t("dataConfig.measuresHint")}
                 </p>
                 <div className="flex gap-2">
                   <Input
                     value={newMeasure}
                     onChange={(e) => setNewMeasure(e.target.value)}
-                    placeholder="Add a measure"
+                    placeholder={t("dataConfig.addMeasure")}
                     onKeyDown={(e) => e.key === "Enter" && handleAddMeasure()}
                   />
                   <Button variant="outline" onClick={handleAddMeasure}>
@@ -698,14 +701,14 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Filters</Label>
+                    <Label>{t("dataConfig.filters")}</Label>
                     <p className="text-xs text-muted-foreground">
-                      Add conditions to filter your data
+                      {t("dataConfig.filtersHint")}
                     </p>
                   </div>
                   <Button variant="outline" size="sm" onClick={handleAddFilter}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Filter
+                    {t("dataConfig.addFilter")}
                   </Button>
                 </div>
                 {filters.length > 0 && (
@@ -715,7 +718,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                         <Input
                           value={filter.field}
                           onChange={(e) => handleUpdateFilter(index, { field: e.target.value })}
-                          placeholder="Field"
+                          placeholder={t("dataConfig.field")}
                           className="flex-1"
                         />
                         <Select
@@ -726,17 +729,17 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="equals">Equals</SelectItem>
-                            <SelectItem value="not_equals">Not equals</SelectItem>
-                            <SelectItem value="contains">Contains</SelectItem>
-                            <SelectItem value="greater_than">Greater than</SelectItem>
-                            <SelectItem value="less_than">Less than</SelectItem>
+                            <SelectItem value="equals">{t("dataConfig.operators.equals")}</SelectItem>
+                            <SelectItem value="not_equals">{t("dataConfig.operators.notEquals")}</SelectItem>
+                            <SelectItem value="contains">{t("dataConfig.operators.contains")}</SelectItem>
+                            <SelectItem value="greater_than">{t("dataConfig.operators.greaterThan")}</SelectItem>
+                            <SelectItem value="less_than">{t("dataConfig.operators.lessThan")}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Input
                           value={filter.value}
                           onChange={(e) => handleUpdateFilter(index, { value: e.target.value })}
-                          placeholder="Value"
+                          placeholder={t("dataConfig.value")}
                           className="flex-1"
                         />
                         <Button
@@ -760,9 +763,9 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
           {/* Preview */}
           <Card>
             <CardHeader>
-              <CardTitle>Preview</CardTitle>
+              <CardTitle>{t("preview.title")}</CardTitle>
               <CardDescription>
-                How your chart will look
+                {t("preview.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -784,14 +787,14 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
           {/* Display Options */}
           <Card>
             <CardHeader>
-              <CardTitle>Display Options</CardTitle>
+              <CardTitle>{t("displayOptions.title")}</CardTitle>
               <CardDescription>
-                Customize chart appearance
+                {t("displayOptions.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label htmlFor="showLegend">Show Legend</Label>
+                <Label htmlFor="showLegend">{t("displayOptions.showLegend")}</Label>
                 <Switch
                   id="showLegend"
                   checked={showLegend}
@@ -799,7 +802,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="showGrid">Show Grid</Label>
+                <Label htmlFor="showGrid">{t("displayOptions.showGrid")}</Label>
                 <Switch
                   id="showGrid"
                   checked={showGrid}
@@ -807,7 +810,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="showTooltip">Show Tooltip</Label>
+                <Label htmlFor="showTooltip">{t("displayOptions.showTooltip")}</Label>
                 <Switch
                   id="showTooltip"
                   checked={showTooltip}
@@ -821,22 +824,22 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
           {chart && (
             <Card>
               <CardHeader>
-                <CardTitle>Chart Info</CardTitle>
+                <CardTitle>{t("chartInfo.title")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">ID</span>
+                  <span className="text-muted-foreground">{t("chartInfo.id")}</span>
                   <span className="font-mono text-xs">{chart.id}</span>
                 </div>
                 {chart.createdAt && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Created</span>
+                    <span className="text-muted-foreground">{t("chartInfo.created")}</span>
                     <span>{new Date(chart.createdAt).toLocaleDateString()}</span>
                   </div>
                 )}
                 {chart.updatedAt && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Last Updated</span>
+                    <span className="text-muted-foreground">{t("chartInfo.lastUpdated")}</span>
                     <span>{new Date(chart.updatedAt).toLocaleDateString()}</span>
                   </div>
                 )}
@@ -850,18 +853,18 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
       <AlertDialog open={showDiscardDialog} onOpenChange={setShowDiscardDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Discard Changes?</AlertDialogTitle>
+            <AlertDialogTitle>{t("discardDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              You have unsaved changes. Are you sure you want to leave? Your changes will be lost.
+              {t("discardDialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Editing</AlertDialogCancel>
+            <AlertDialogCancel>{t("discardDialog.keepEditing")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => router.push(`/dashboard/charts/${id}`)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Discard Changes
+              {t("discardDialog.discardChanges")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

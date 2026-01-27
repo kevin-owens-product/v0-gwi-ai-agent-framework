@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   ArrowLeft,
   Sparkles,
@@ -74,26 +75,16 @@ interface Feature {
   updatedAt: string
 }
 
-const CATEGORIES = [
-  { value: "CORE", label: "Core Features" },
-  { value: "ANALYTICS", label: "Analytics" },
-  { value: "SECURITY", label: "Security" },
-  { value: "INTEGRATION", label: "Integrations" },
-  { value: "AI", label: "AI Features" },
-  { value: "SUPPORT", label: "Support" },
-  { value: "COMPLIANCE", label: "Compliance" },
-]
+const CATEGORY_KEYS = ["CORE", "ANALYTICS", "SECURITY", "INTEGRATION", "AI", "SUPPORT", "COMPLIANCE"] as const
 
-const VALUE_TYPES = [
-  { value: "BOOLEAN", label: "Boolean (On/Off)" },
-  { value: "NUMBER", label: "Number (Limit)" },
-  { value: "STRING", label: "String (Value)" },
-  { value: "JSON", label: "JSON (Complex)" },
-]
+const VALUE_TYPE_KEYS = ["BOOLEAN", "NUMBER", "STRING", "JSON"] as const
 
 export default function FeatureDetailPage() {
   const router = useRouter()
   const params = useParams()
+  const t = useTranslations("admin.entitlementFeatures")
+  const tCommon = useTranslations("common")
+
   const [feature, setFeature] = useState<Feature | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -137,7 +128,7 @@ export default function FeatureDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch feature:", error)
-      toast.error("Failed to fetch feature")
+      toast.error(t("errors.fetchFailed"))
       router.push("/admin/entitlement-features")
     } finally {
       setLoading(false)
@@ -160,7 +151,7 @@ export default function FeatureDetailPage() {
         try {
           parsedDefaultValue = JSON.parse(formData.defaultValue)
         } catch {
-          toast.error("Invalid JSON format")
+          toast.error(t("errors.invalidJson"))
           return
         }
       }
@@ -178,10 +169,10 @@ export default function FeatureDetailPage() {
         throw new Error("Failed to update feature")
       }
 
-      toast.success("Feature updated successfully")
+      toast.success(t("messages.featureUpdated"))
       fetchFeature()
     } catch (error) {
-      toast.error("Failed to update feature")
+      toast.error(t("errors.updateFailed"))
     } finally {
       setSaving(false)
     }
@@ -204,15 +195,15 @@ export default function FeatureDetailPage() {
         throw new Error("Failed to delete feature")
       }
 
-      toast.success("Feature deleted")
+      toast.success(t("messages.featureDeleted"))
       router.push("/admin/entitlement-features")
     } catch (error) {
-      toast.error("Failed to delete feature")
+      toast.error(t("errors.deleteFailed"))
     } finally {
       setDeleting(false)
       setShowDeleteDialog(false)
     }
-  }, [feature, router])
+  }, [feature, router, t])
 
   const handleToggleActive = async () => {
     if (!feature) return
@@ -228,10 +219,10 @@ export default function FeatureDetailPage() {
         throw new Error("Failed to update feature status")
       }
 
-      toast.success(`Feature ${feature.isActive ? "disabled" : "enabled"} successfully`)
+      toast.success(feature.isActive ? t("messages.featureDisabled") : t("messages.featureEnabled"))
       fetchFeature()
     } catch (error) {
-      toast.error("Failed to update feature status")
+      toast.error(t("errors.statusUpdateFailed"))
     }
   }
 
@@ -245,17 +236,17 @@ export default function FeatureDetailPage() {
       SUPPORT: "bg-cyan-500",
       COMPLIANCE: "bg-orange-500",
     }
-    return <Badge className={colors[category] || ""}>{category}</Badge>
+    return <Badge className={colors[category] || ""}>{t(`categories.${category.toLowerCase()}`)}</Badge>
   }
 
   const getPlanBadge = (plan: string) => {
     switch (plan) {
       case "ENTERPRISE":
-        return <Badge className="bg-purple-500">Enterprise</Badge>
+        return <Badge className="bg-purple-500">{t("plans.enterprise")}</Badge>
       case "PROFESSIONAL":
-        return <Badge className="bg-blue-500">Professional</Badge>
+        return <Badge className="bg-blue-500">{t("plans.professional")}</Badge>
       case "STARTER":
-        return <Badge variant="secondary">Starter</Badge>
+        return <Badge variant="secondary">{t("plans.starter")}</Badge>
       default:
         return <Badge variant="outline">{plan}</Badge>
     }
@@ -274,14 +265,14 @@ export default function FeatureDetailPage() {
     return (
       <div className="text-center py-12">
         <Sparkles className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <p className="text-muted-foreground">Feature not found</p>
+        <p className="text-muted-foreground">{t("featureNotFound")}</p>
         <Button
           variant="outline"
           className="mt-4"
           onClick={() => router.push("/admin/entitlement-features")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Features
+          {t("backToFeatures")}
         </Button>
       </div>
     )
@@ -294,7 +285,7 @@ export default function FeatureDetailPage() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => router.push("/admin/entitlement-features")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            {tCommon("back")}
           </Button>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-3">
@@ -307,9 +298,9 @@ export default function FeatureDetailPage() {
         <div className="flex items-center gap-2">
           {getCategoryBadge(feature.category)}
           {feature.isActive ? (
-            <Badge className="bg-green-500">Active</Badge>
+            <Badge className="bg-green-500">{tCommon("active")}</Badge>
           ) : (
-            <Badge variant="secondary">Inactive</Badge>
+            <Badge variant="secondary">{tCommon("inactive")}</Badge>
           )}
         </div>
       </div>
@@ -319,15 +310,15 @@ export default function FeatureDetailPage() {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Feature Configuration</CardTitle>
+              <CardTitle>{t("detail.featureConfiguration")}</CardTitle>
               <CardDescription>
-                Configure the feature settings and defaults
+                {t("detail.featureConfigurationDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Feature Name</Label>
+                  <Label htmlFor="name">{t("form.featureName")}</Label>
                   <Input
                     id="name"
                     value={formData.name}
@@ -335,19 +326,19 @@ export default function FeatureDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="key">Feature Key</Label>
+                  <Label htmlFor="key">{t("form.featureKey")}</Label>
                   <Input
                     id="key"
                     value={formData.key}
                     onChange={(e) => setFormData({ ...formData, key: e.target.value })}
                     className="font-mono"
-                    placeholder="feature_key_name"
+                    placeholder={t("form.featureKeyPlaceholder")}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
@@ -360,7 +351,7 @@ export default function FeatureDetailPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Category</Label>
+                  <Label>{t("columns.category")}</Label>
                   <Select
                     value={formData.category}
                     onValueChange={(value) => setFormData({ ...formData, category: value })}
@@ -369,16 +360,16 @@ export default function FeatureDetailPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {CATEGORIES.map((cat) => (
-                        <SelectItem key={cat.value} value={cat.value}>
-                          {cat.label}
+                      {CATEGORY_KEYS.map((cat) => (
+                        <SelectItem key={cat} value={cat}>
+                          {t(`categories.${cat.toLowerCase()}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Value Type</Label>
+                  <Label>{t("form.valueType")}</Label>
                   <Select
                     value={formData.valueType}
                     onValueChange={(value) => setFormData({ ...formData, valueType: value })}
@@ -387,9 +378,9 @@ export default function FeatureDetailPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {VALUE_TYPES.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
+                      {VALUE_TYPE_KEYS.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {t(`valueTypes.${type.toLowerCase()}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -398,7 +389,7 @@ export default function FeatureDetailPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="defaultValue">Default Value</Label>
+                <Label htmlFor="defaultValue">{t("form.defaultValue")}</Label>
                 {formData.valueType === 'JSON' ? (
                   <Textarea
                     id="defaultValue"
@@ -417,8 +408,8 @@ export default function FeatureDetailPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="true">True (Enabled)</SelectItem>
-                      <SelectItem value="false">False (Disabled)</SelectItem>
+                      <SelectItem value="true">{t("form.trueEnabled")}</SelectItem>
+                      <SelectItem value="false">{t("form.falseDisabled")}</SelectItem>
                     </SelectContent>
                   </Select>
                 ) : (
@@ -440,11 +431,11 @@ export default function FeatureDetailPage() {
                     checked={formData.isActive}
                     onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
                   />
-                  <Label htmlFor="isActive">Feature Active</Label>
+                  <Label htmlFor="isActive">{t("form.featureActive")}</Label>
                 </div>
                 <Button onClick={handleSave} disabled={saving}>
                   <Save className="h-4 w-4 mr-2" />
-                  {saving ? "Saving..." : "Save Changes"}
+                  {saving ? t("form.saving") : t("form.saveChanges")}
                 </Button>
               </div>
             </CardContent>
@@ -456,20 +447,20 @@ export default function FeatureDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Building className="h-5 w-5" />
-                  Tenant Overrides ({feature._count?.entitlements || 0})
+                  {t("detail.tenantOverrides")} ({feature._count?.entitlements || 0})
                 </CardTitle>
                 <CardDescription>
-                  Organizations with custom entitlements for this feature
+                  {t("detail.tenantOverridesDescription")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Organization</TableHead>
-                      <TableHead>Plan</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Expires</TableHead>
+                      <TableHead>{t("detail.organization")}</TableHead>
+                      <TableHead>{t("detail.plan")}</TableHead>
+                      <TableHead>{tCommon("status")}</TableHead>
+                      <TableHead>{t("detail.expires")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -484,9 +475,9 @@ export default function FeatureDetailPage() {
                         <TableCell>{getPlanBadge(entitlement.organization.planTier)}</TableCell>
                         <TableCell>
                           {entitlement.isEnabled ? (
-                            <Badge className="bg-green-500">Enabled</Badge>
+                            <Badge className="bg-green-500">{tCommon("enabled")}</Badge>
                           ) : (
-                            <Badge variant="secondary">Disabled</Badge>
+                            <Badge variant="secondary">{tCommon("disabled")}</Badge>
                           )}
                         </TableCell>
                         <TableCell>
@@ -496,7 +487,7 @@ export default function FeatureDetailPage() {
                               {new Date(entitlement.expiresAt).toLocaleDateString()}
                             </span>
                           ) : (
-                            <span className="text-muted-foreground">Never</span>
+                            <span className="text-muted-foreground">{t("detail.never")}</span>
                           )}
                         </TableCell>
                       </TableRow>
@@ -511,7 +502,7 @@ export default function FeatureDetailPage() {
           {feature.metadata && Object.keys(feature.metadata).length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Metadata</CardTitle>
+                <CardTitle>{t("detail.metadata")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <pre className="p-4 bg-muted rounded-lg text-sm overflow-auto">
@@ -526,7 +517,7 @@ export default function FeatureDetailPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>{t("detail.quickActions")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <Button
@@ -537,12 +528,12 @@ export default function FeatureDetailPage() {
                 {feature.isActive ? (
                   <>
                     <XCircle className="h-4 w-4 mr-2" />
-                    Disable Feature
+                    {t("actions.disableFeature")}
                   </>
                 ) : (
                   <>
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Enable Feature
+                    {t("actions.enableFeature")}
                   </>
                 )}
               </Button>
@@ -553,7 +544,7 @@ export default function FeatureDetailPage() {
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                {deleting ? "Deleting..." : "Delete Feature"}
+                {deleting ? t("form.deleting") : t("actions.deleteFeature")}
               </Button>
             </CardContent>
           </Card>
@@ -561,43 +552,43 @@ export default function FeatureDetailPage() {
           <ConfirmationDialog
             open={showDeleteDialog}
             onOpenChange={setShowDeleteDialog}
-            title="Delete Feature"
-            description="Are you sure you want to delete this feature? This will also remove all associated entitlements. This action cannot be undone."
-            confirmText={deleting ? "Deleting..." : "Delete"}
+            title={t("dialogs.deleteFeature")}
+            description={t("dialogs.deleteFeatureDetailDescription")}
+            confirmText={deleting ? t("form.deleting") : tCommon("delete")}
             onConfirm={handleDeleteConfirm}
             variant="destructive"
           />
 
           <Card>
             <CardHeader>
-              <CardTitle>Statistics</CardTitle>
+              <CardTitle>{t("detail.statistics")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground flex items-center gap-2">
                   <Users className="h-4 w-4" />
-                  Tenant Overrides
+                  {t("detail.tenantOverrides")}
                 </span>
                 <Badge variant="outline">{feature._count?.entitlements || 0}</Badge>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Value Type</span>
-                <Badge variant="secondary">{feature.valueType}</Badge>
+                <span className="text-muted-foreground">{t("form.valueType")}</span>
+                <Badge variant="secondary">{t(`valueTypes.${feature.valueType.toLowerCase()}`)}</Badge>
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Feature Info</CardTitle>
+              <CardTitle>{t("detail.featureInfo")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div>
-                <Label className="text-muted-foreground">Created</Label>
+                <Label className="text-muted-foreground">{t("detail.created")}</Label>
                 <p>{new Date(feature.createdAt).toLocaleString()}</p>
               </div>
               <div>
-                <Label className="text-muted-foreground">Last Updated</Label>
+                <Label className="text-muted-foreground">{t("detail.lastUpdated")}</Label>
                 <p>{new Date(feature.updatedAt).toLocaleString()}</p>
               </div>
             </CardContent>

@@ -49,6 +49,7 @@ import {
   XCircle,
 } from "lucide-react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 interface TimeEntry {
   id: string
@@ -81,6 +82,8 @@ const statusColors: Record<string, string> = {
 }
 
 export default function TimeTrackingPage() {
+  const t = useTranslations('gwi.services.time')
+  const tCommon = useTranslations('common')
   const [entries, setEntries] = useState<TimeEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -129,36 +132,36 @@ export default function TimeTrackingPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Time Tracking</h1>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Log and manage time entries for projects
+            {t('description')}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/gwi/services/time/timesheet">
               <Calendar className="h-4 w-4 mr-2" />
-              Timesheet View
+              {t('timesheetView')}
             </Link>
           </Button>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                Log Time
+                {t('logTime')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Log Time Entry</DialogTitle>
+                <DialogTitle>{t('logTimeEntry')}</DialogTitle>
                 <DialogDescription>
-                  Record time spent on a project or task
+                  {t('logTimeDescription')}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label>Date</Label>
+                    <Label>{t('date')}</Label>
                     <Input
                       type="date"
                       value={formData.date}
@@ -168,7 +171,7 @@ export default function TimeTrackingPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Hours</Label>
+                    <Label>{t('hours')}</Label>
                     <Input
                       type="number"
                       step="0.25"
@@ -183,9 +186,9 @@ export default function TimeTrackingPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Description</Label>
+                  <Label>{t('descriptionField')}</Label>
                   <Textarea
-                    placeholder="What did you work on?"
+                    placeholder={t('descriptionPlaceholder')}
                     value={formData.description}
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
@@ -193,7 +196,7 @@ export default function TimeTrackingPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Category</Label>
+                  <Label>{t('category')}</Label>
                   <Select
                     value={formData.category}
                     onValueChange={(value) =>
@@ -201,30 +204,30 @@ export default function TimeTrackingPage() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={t('selectCategory')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="development">Development</SelectItem>
-                      <SelectItem value="design">Design</SelectItem>
-                      <SelectItem value="meetings">Meetings</SelectItem>
-                      <SelectItem value="planning">Planning</SelectItem>
-                      <SelectItem value="testing">Testing</SelectItem>
-                      <SelectItem value="documentation">Documentation</SelectItem>
-                      <SelectItem value="support">Support</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="development">{t('categories.development')}</SelectItem>
+                      <SelectItem value="design">{t('categories.design')}</SelectItem>
+                      <SelectItem value="meetings">{t('categories.meetings')}</SelectItem>
+                      <SelectItem value="planning">{t('categories.planning')}</SelectItem>
+                      <SelectItem value="testing">{t('categories.testing')}</SelectItem>
+                      <SelectItem value="documentation">{t('categories.documentation')}</SelectItem>
+                      <SelectItem value="support">{t('categories.support')}</SelectItem>
+                      <SelectItem value="other">{t('categories.other')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancel
+                  {tCommon('cancel')}
                 </Button>
                 <Button onClick={() => {
-                  toast.info("Time entry feature coming soon")
+                  toast.info(t('featureComingSoon'))
                   setDialogOpen(false)
                 }}>
-                  Save Entry
+                  {t('saveEntry')}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -236,7 +239,7 @@ export default function TimeTrackingPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Entries</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('totalEntries')}</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -245,7 +248,7 @@ export default function TimeTrackingPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Hours</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('totalHours')}</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -254,7 +257,7 @@ export default function TimeTrackingPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Billable Hours</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('billableHours')}</CardTitle>
             <Clock className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -266,15 +269,15 @@ export default function TimeTrackingPage() {
       {/* Filters & Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Time Entries</CardTitle>
-          <CardDescription>View and manage logged time</CardDescription>
+          <CardTitle>{t('timeEntries')}</CardTitle>
+          <CardDescription>{t('timeEntriesDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search entries..."
+                placeholder={t('searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -282,15 +285,15 @@ export default function TimeTrackingPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t('filterByStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="SUBMITTED">Submitted</SelectItem>
-                <SelectItem value="APPROVED">Approved</SelectItem>
-                <SelectItem value="REJECTED">Rejected</SelectItem>
-                <SelectItem value="BILLED">Billed</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="DRAFT">{t('statuses.draft')}</SelectItem>
+                <SelectItem value="SUBMITTED">{t('statuses.submitted')}</SelectItem>
+                <SelectItem value="APPROVED">{t('statuses.approved')}</SelectItem>
+                <SelectItem value="REJECTED">{t('statuses.rejected')}</SelectItem>
+                <SelectItem value="BILLED">{t('statuses.billed')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -302,26 +305,26 @@ export default function TimeTrackingPage() {
           ) : entries.length === 0 ? (
             <div className="text-center py-12">
               <Clock className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No time entries found</h3>
+              <h3 className="text-lg font-medium">{t('noTimeEntriesFound')}</h3>
               <p className="text-muted-foreground mb-4">
-                Start logging time to see entries here
+                {t('startLoggingTime')}
               </p>
               <Button onClick={() => setDialogOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Log Time
+                {t('logTime')}
               </Button>
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Employee</TableHead>
-                  <TableHead>Project</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead className="text-right">Hours</TableHead>
-                  <TableHead>Billable</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t('date')}</TableHead>
+                  <TableHead>{t('employee')}</TableHead>
+                  <TableHead>{t('project')}</TableHead>
+                  <TableHead>{t('descriptionField')}</TableHead>
+                  <TableHead className="text-right">{t('hours')}</TableHead>
+                  <TableHead>{t('billable')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -343,7 +346,7 @@ export default function TimeTrackingPage() {
                           {entry.project.name}
                         </Link>
                       ) : (
-                        <span className="text-muted-foreground">No project</span>
+                        <span className="text-muted-foreground">{t('noProject')}</span>
                       )}
                     </TableCell>
                     <TableCell className="max-w-[200px] truncate">

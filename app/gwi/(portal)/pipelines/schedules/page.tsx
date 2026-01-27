@@ -30,6 +30,7 @@ import {
   RefreshCw,
   Workflow,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getScheduledPipelines() {
   const pipelines = await prisma.dataPipeline.findMany({
@@ -68,21 +69,23 @@ function parseSchedule(cron: string): string {
 
 async function SchedulesContent() {
   const { pipelines, activeCount } = await getScheduledPipelines()
+  const t = await getTranslations('gwi.pipelines.schedules')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Pipeline Schedules</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage scheduled pipeline executions
+            {t('description')}
           </p>
         </div>
         <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
           <Link href="/gwi/pipelines/new">
             <Plus className="mr-2 h-4 w-4" />
-            New Schedule
+            {t('newSchedule')}
           </Link>
         </Button>
       </div>
@@ -97,7 +100,7 @@ async function SchedulesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{pipelines.length}</p>
-                <p className="text-sm text-muted-foreground">Total Schedules</p>
+                <p className="text-sm text-muted-foreground">{t('totalSchedules')}</p>
               </div>
             </div>
           </CardContent>
@@ -110,7 +113,7 @@ async function SchedulesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeCount}</p>
-                <p className="text-sm text-muted-foreground">Active Schedules</p>
+                <p className="text-sm text-muted-foreground">{t('activeSchedules')}</p>
               </div>
             </div>
           </CardContent>
@@ -123,7 +126,7 @@ async function SchedulesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{pipelines.length - activeCount}</p>
-                <p className="text-sm text-muted-foreground">Paused Schedules</p>
+                <p className="text-sm text-muted-foreground">{t('pausedSchedules')}</p>
               </div>
             </div>
           </CardContent>
@@ -133,9 +136,9 @@ async function SchedulesContent() {
       {/* Schedules Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Scheduled Pipelines</CardTitle>
+          <CardTitle>{t('scheduledPipelines')}</CardTitle>
           <CardDescription>
-            Pipelines configured to run on a schedule
+            {t('scheduledPipelinesDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -143,12 +146,12 @@ async function SchedulesContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Pipeline</TableHead>
-                  <TableHead>Schedule</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Last Run</TableHead>
-                  <TableHead>Next Run</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>{t('pipeline')}</TableHead>
+                  <TableHead>{t('schedule')}</TableHead>
+                  <TableHead>{tCommon('type')}</TableHead>
+                  <TableHead>{t('lastRun')}</TableHead>
+                  <TableHead>{t('nextRun')}</TableHead>
+                  <TableHead>{tCommon('active')}</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -170,7 +173,7 @@ async function SchedulesContent() {
                               {pipeline.name}
                             </Link>
                             <p className="text-xs text-muted-foreground">
-                              by {pipeline.createdBy.name}
+                              {t('by', { name: pipeline.createdBy.name })}
                             </p>
                           </div>
                         </div>
@@ -197,12 +200,12 @@ async function SchedulesContent() {
                             {new Date(lastRun.startedAt).toLocaleString()}
                           </span>
                         ) : (
-                          <span className="text-muted-foreground">Never</span>
+                          <span className="text-muted-foreground">{t('never')}</span>
                         )}
                       </TableCell>
                       <TableCell>
                         <span className="text-sm text-muted-foreground">
-                          Calculated at runtime
+                          {t('calculatedAtRuntime')}
                         </span>
                       </TableCell>
                       <TableCell>
@@ -218,12 +221,12 @@ async function SchedulesContent() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem className="text-green-600">
                               <Play className="mr-2 h-4 w-4" />
-                              Run Now
+                              {t('runNow')}
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                               <Link href={`/gwi/pipelines/${pipeline.id}`}>
                                 <Edit className="mr-2 h-4 w-4" />
-                                Edit Schedule
+                                {t('editSchedule')}
                               </Link>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -237,14 +240,14 @@ async function SchedulesContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No Scheduled Pipelines</h3>
+              <h3 className="text-lg font-medium">{t('noScheduledPipelines')}</h3>
               <p className="text-muted-foreground mb-4">
-                Create a pipeline with a schedule to automate data processing
+                {t('noScheduledPipelinesDescription')}
               </p>
               <Button asChild>
                 <Link href="/gwi/pipelines/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Scheduled Pipeline
+                  {t('createScheduledPipeline')}
                 </Link>
               </Button>
             </div>
@@ -255,14 +258,16 @@ async function SchedulesContent() {
   )
 }
 
-export default function PipelineSchedulesPage() {
+export default async function PipelineSchedulesPage() {
+  const t = await getTranslations('gwi.pipelines.schedules')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Pipeline Schedules</h1>
-            <p className="text-muted-foreground">Loading schedules...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   Key,
@@ -17,7 +18,7 @@ import {
   TestTube,
   Building2,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -35,7 +36,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
@@ -63,27 +63,14 @@ interface SSOConfig {
   organization: Organization | null
 }
 
-const ssoProviders = [
-  { value: "SAML", label: "SAML 2.0" },
-  { value: "OIDC", label: "OpenID Connect" },
-  { value: "AZURE_AD", label: "Azure AD" },
-  { value: "OKTA", label: "Okta" },
-  { value: "GOOGLE_WORKSPACE", label: "Google Workspace" },
-  { value: "ONELOGIN", label: "OneLogin" },
-  { value: "PING_IDENTITY", label: "Ping Identity" },
-  { value: "CUSTOM", label: "Custom" },
-]
-
-const statusOptions = [
-  { value: "CONFIGURING", label: "Configuring" },
-  { value: "TESTING", label: "Testing" },
-  { value: "ACTIVE", label: "Active" },
-  { value: "DISABLED", label: "Disabled" },
-  { value: "ERROR", label: "Error" },
-]
+const SSO_PROVIDER_KEYS = ["SAML", "OIDC", "AZURE_AD", "OKTA", "GOOGLE_WORKSPACE", "ONELOGIN", "PING_IDENTITY", "CUSTOM"] as const
+const STATUS_KEYS = ["CONFIGURING", "TESTING", "ACTIVE", "DISABLED", "ERROR"] as const
 
 export default function SSOListingPage() {
   const router = useRouter()
+  const t = useTranslations("admin.sso")
+  const tCommon = useTranslations("common")
+
   const [ssoConfigs, setSsoConfigs] = useState<SSOConfig[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -130,7 +117,7 @@ export default function SSOListingPage() {
       }
     } catch (error) {
       console.error("Failed to fetch SSO configs:", error)
-      toast.error("Failed to fetch SSO configurations")
+      toast.error(t("errors.fetchFailed"))
     } finally {
       setLoading(false)
     }
@@ -138,7 +125,7 @@ export default function SSOListingPage() {
 
   const handleCreateConfig = async () => {
     if (!newConfig.orgId || !newConfig.provider) {
-      toast.error("Organization ID and provider are required")
+      toast.error(t("errors.orgIdAndProviderRequired"))
       return
     }
 
@@ -151,10 +138,10 @@ export default function SSOListingPage() {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to create SSO configuration")
+        throw new Error(error.error || t("errors.createFailed"))
       }
 
-      toast.success("SSO configuration created successfully")
+      toast.success(t("messages.configCreated"))
       setIsCreateOpen(false)
       setNewConfig({
         orgId: "",
@@ -166,7 +153,7 @@ export default function SSOListingPage() {
       })
       fetchSSOConfigs()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create SSO configuration")
+      toast.error(error instanceof Error ? error.message : t("errors.createFailed"))
     }
   }
 
@@ -181,13 +168,13 @@ export default function SSOListingPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update status")
+        throw new Error(t("errors.statusUpdateFailed"))
       }
 
-      toast.success(`SSO ${newStatus === "ACTIVE" ? "activated" : "disabled"} successfully`)
+      toast.success(newStatus === "ACTIVE" ? t("messages.configActivated") : t("messages.configDisabled"))
       fetchSSOConfigs()
     } catch (error) {
-      toast.error("Failed to update SSO status")
+      toast.error(t("errors.statusUpdateFailed"))
     }
   }
 
@@ -206,13 +193,13 @@ export default function SSOListingPage() {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to delete")
+        throw new Error(error.error || t("errors.deleteFailed"))
       }
 
-      toast.success("SSO configuration deleted successfully")
+      toast.success(t("messages.configDeleted"))
       fetchSSOConfigs()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete SSO configuration")
+      toast.error(error instanceof Error ? error.message : t("errors.deleteFailed"))
     } finally {
       setShowDeleteConfirm(false)
       setConfigToDelete(null)
@@ -225,35 +212,35 @@ export default function SSOListingPage() {
         return (
           <Badge className="bg-green-500">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Active
+            {t("statuses.active")}
           </Badge>
         )
       case "CONFIGURING":
         return (
           <Badge variant="secondary">
             <Settings className="h-3 w-3 mr-1" />
-            Configuring
+            {t("statuses.configuring")}
           </Badge>
         )
       case "TESTING":
         return (
           <Badge variant="secondary" className="bg-blue-100 text-blue-700">
             <TestTube className="h-3 w-3 mr-1" />
-            Testing
+            {t("statuses.testing")}
           </Badge>
         )
       case "DISABLED":
         return (
           <Badge variant="outline">
             <Pause className="h-3 w-3 mr-1" />
-            Disabled
+            {t("statuses.disabled")}
           </Badge>
         )
       case "ERROR":
         return (
           <Badge variant="destructive">
             <XCircle className="h-3 w-3 mr-1" />
-            Error
+            {t("statuses.error")}
           </Badge>
         )
       default:
@@ -262,7 +249,6 @@ export default function SSOListingPage() {
   }
 
   const getProviderIcon = (provider: string) => {
-    // All providers use Key icon for simplicity
     return <Key className="h-4 w-4" />
   }
 
@@ -277,11 +263,11 @@ export default function SSOListingPage() {
           })
         )
       )
-      toast.success(`Successfully enabled ${ids.length} SSO configuration${ids.length > 1 ? "s" : ""}`)
+      toast.success(t("messages.bulkEnabled", { count: ids.length }))
       fetchSSOConfigs()
       setSelectedIds(new Set())
     } catch (error) {
-      toast.error("Failed to enable SSO configurations")
+      toast.error(t("errors.bulkEnableFailed"))
     }
   }
 
@@ -296,11 +282,11 @@ export default function SSOListingPage() {
           })
         )
       )
-      toast.success(`Successfully disabled ${ids.length} SSO configuration${ids.length > 1 ? "s" : ""}`)
+      toast.success(t("messages.bulkDisabled", { count: ids.length }))
       fetchSSOConfigs()
       setSelectedIds(new Set())
     } catch (error) {
-      toast.error("Failed to disable SSO configurations")
+      toast.error(t("errors.bulkDisableFailed"))
     }
   }
 
@@ -308,7 +294,7 @@ export default function SSOListingPage() {
   const columns: Column<SSOConfig>[] = [
     {
       id: "organization",
-      header: "Organization",
+      header: t("columns.organization"),
       cell: (config) => (
         <Link href={`/admin/identity/sso/${config.id}`} className="hover:underline">
           <div className="flex items-center gap-2">
@@ -329,32 +315,32 @@ export default function SSOListingPage() {
     },
     {
       id: "provider",
-      header: "Provider",
+      header: t("columns.provider"),
       cell: (config) => (
         <div className="flex items-center gap-2">
           {getProviderIcon(config.provider)}
           <Badge variant="outline">
-            {ssoProviders.find((p) => p.value === config.provider)?.label || config.provider}
+            {t(`providers.${config.provider.toLowerCase()}`)}
           </Badge>
         </div>
       ),
     },
     {
       id: "status",
-      header: "Status",
+      header: tCommon("status"),
       cell: (config) => getStatusBadge(config.status),
     },
     {
       id: "provisioning",
-      header: "Provisioning",
+      header: t("columns.provisioning"),
       cell: (config) => (
         <div className="flex flex-col gap-1">
           <Badge variant={config.jitProvisioning ? "default" : "secondary"} className="text-xs w-fit">
-            JIT: {config.jitProvisioning ? "On" : "Off"}
+            {t("jit")}: {config.jitProvisioning ? t("on") : t("off")}
           </Badge>
           {config.autoDeactivate && (
             <Badge variant="outline" className="text-xs w-fit">
-              Auto-deactivate
+              {t("autoDeactivate")}
             </Badge>
           )}
         </div>
@@ -362,7 +348,7 @@ export default function SSOListingPage() {
     },
     {
       id: "lastSync",
-      header: "Last Sync",
+      header: t("columns.lastSync"),
       cell: (config) =>
         config.lastSyncAt ? (
           <span className="flex items-center gap-1 text-sm">
@@ -370,7 +356,7 @@ export default function SSOListingPage() {
             {new Date(config.lastSyncAt).toLocaleDateString()}
           </span>
         ) : (
-          <span className="text-muted-foreground text-sm">Never</span>
+          <span className="text-muted-foreground text-sm">{t("never")}</span>
         ),
     },
   ]
@@ -378,13 +364,13 @@ export default function SSOListingPage() {
   // Define row actions
   const rowActions: RowAction<SSOConfig>[] = [
     {
-      label: "Activate",
+      label: t("actions.activate"),
       icon: <Play className="h-4 w-4" />,
       onClick: handleToggleStatus,
       hidden: (config) => config.status === "ACTIVE",
     },
     {
-      label: "Disable",
+      label: t("actions.disable"),
       icon: <Pause className="h-4 w-4" />,
       onClick: handleToggleStatus,
       hidden: (config) => config.status !== "ACTIVE",
@@ -394,18 +380,18 @@ export default function SSOListingPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Enable Selected",
+      label: t("actions.enableSelected"),
       icon: <Play className="h-4 w-4" />,
       onClick: handleBulkEnable,
-      confirmTitle: "Enable SSO Configurations",
-      confirmDescription: "Are you sure you want to enable the selected SSO configurations?",
+      confirmTitle: t("dialogs.enableConfigs"),
+      confirmDescription: t("dialogs.enableConfigsDescription"),
     },
     {
-      label: "Disable Selected",
+      label: t("actions.disableSelected"),
       icon: <Pause className="h-4 w-4" />,
       onClick: handleBulkDisable,
-      confirmTitle: "Disable SSO Configurations",
-      confirmDescription: "Are you sure you want to disable the selected SSO configurations?",
+      confirmTitle: t("dialogs.disableConfigs"),
+      confirmDescription: t("dialogs.disableConfigsDescription"),
     },
   ]
 
@@ -423,34 +409,34 @@ export default function SSOListingPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Key className="h-8 w-8 text-primary" />
-            SSO Configurations
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage enterprise Single Sign-On configurations
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button asChild>
             <Link href="/admin/identity/sso/new">
               <Plus className="h-4 w-4 mr-2" />
-              Add SSO Configuration
+              {t("addConfiguration")}
             </Link>
           </Button>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle>Create SSO Configuration</DialogTitle>
+              <DialogTitle>{t("dialogs.createConfig")}</DialogTitle>
               <DialogDescription>
-                Configure Single Sign-On for an organization
+                {t("dialogs.createConfigDescription")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="orgId">Organization ID</Label>
+                <Label htmlFor="orgId">{t("form.organizationId")}</Label>
                 <Input
                   id="orgId"
-                  placeholder="Enter organization ID"
+                  placeholder={t("form.organizationIdPlaceholder")}
                   value={newConfig.orgId}
                   onChange={(e) =>
                     setNewConfig({ ...newConfig, orgId: e.target.value })
@@ -458,7 +444,7 @@ export default function SSOListingPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label>SSO Provider</Label>
+                <Label>{t("form.ssoProvider")}</Label>
                 <Select
                   value={newConfig.provider}
                   onValueChange={(value) =>
@@ -469,19 +455,19 @@ export default function SSOListingPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {ssoProviders.map((provider) => (
-                      <SelectItem key={provider.value} value={provider.value}>
-                        {provider.label}
+                    {SSO_PROVIDER_KEYS.map((provider) => (
+                      <SelectItem key={provider} value={provider}>
+                        {t(`providers.${provider.toLowerCase()}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="displayName">Display Name (Optional)</Label>
+                <Label htmlFor="displayName">{t("form.displayName")}</Label>
                 <Input
                   id="displayName"
-                  placeholder="e.g., Acme Corp SSO"
+                  placeholder={t("form.displayNamePlaceholder")}
                   value={newConfig.displayName}
                   onChange={(e) =>
                     setNewConfig({ ...newConfig, displayName: e.target.value })
@@ -489,7 +475,7 @@ export default function SSOListingPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label>Default Role</Label>
+                <Label>{t("form.defaultRole")}</Label>
                 <Select
                   value={newConfig.defaultRole}
                   onValueChange={(value) =>
@@ -500,9 +486,9 @@ export default function SSOListingPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="MEMBER">Member</SelectItem>
-                    <SelectItem value="VIEWER">Viewer</SelectItem>
-                    <SelectItem value="ADMIN">Admin</SelectItem>
+                    <SelectItem value="MEMBER">{t("roles.member")}</SelectItem>
+                    <SelectItem value="VIEWER">{t("roles.viewer")}</SelectItem>
+                    <SelectItem value="ADMIN">{t("roles.admin")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -514,7 +500,7 @@ export default function SSOListingPage() {
                     setNewConfig({ ...newConfig, jitProvisioning: checked })
                   }
                 />
-                <Label htmlFor="jitProvisioning">Enable Just-in-Time Provisioning</Label>
+                <Label htmlFor="jitProvisioning">{t("form.enableJit")}</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Switch
@@ -524,15 +510,15 @@ export default function SSOListingPage() {
                     setNewConfig({ ...newConfig, autoDeactivate: checked })
                   }
                 />
-                <Label htmlFor="autoDeactivate">Auto-deactivate removed users</Label>
+                <Label htmlFor="autoDeactivate">{t("form.autoDeactivateUsers")}</Label>
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button onClick={handleCreateConfig} disabled={!newConfig.orgId}>
-                Create Configuration
+                {t("form.createConfiguration")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -544,7 +530,7 @@ export default function SSOListingPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{ssoConfigs.length}</div>
-            <p className="text-xs text-muted-foreground">Total Configurations</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalConfigurations")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -552,7 +538,7 @@ export default function SSOListingPage() {
             <div className="text-2xl font-bold text-green-500">
               {ssoConfigs.filter((c) => c.status === "ACTIVE").length}
             </div>
-            <p className="text-xs text-muted-foreground">Active</p>
+            <p className="text-xs text-muted-foreground">{t("statuses.active")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -560,7 +546,7 @@ export default function SSOListingPage() {
             <div className="text-2xl font-bold text-yellow-500">
               {ssoConfigs.filter((c) => c.status === "CONFIGURING" || c.status === "TESTING").length}
             </div>
-            <p className="text-xs text-muted-foreground">In Setup</p>
+            <p className="text-xs text-muted-foreground">{t("stats.inSetup")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -568,7 +554,7 @@ export default function SSOListingPage() {
             <div className="text-2xl font-bold text-red-500">
               {ssoConfigs.filter((c) => c.status === "ERROR").length}
             </div>
-            <p className="text-xs text-muted-foreground">Errors</p>
+            <p className="text-xs text-muted-foreground">{t("stats.errors")}</p>
           </CardContent>
         </Card>
       </div>
@@ -581,7 +567,7 @@ export default function SSOListingPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search configurations..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -591,26 +577,26 @@ export default function SSOListingPage() {
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                {statusOptions.map((status) => (
-                  <SelectItem key={status.value} value={status.value}>
-                    {status.label}
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
+                {STATUS_KEYS.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {t(`statuses.${status.toLowerCase()}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={providerFilter} onValueChange={setProviderFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Provider" />
+                <SelectValue placeholder={t("columns.provider")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Providers</SelectItem>
-                {ssoProviders.map((provider) => (
-                  <SelectItem key={provider.value} value={provider.value}>
-                    {provider.label}
+                <SelectItem value="all">{t("filters.allProviders")}</SelectItem>
+                {SSO_PROVIDER_KEYS.map((provider) => (
+                  <SelectItem key={provider} value={provider}>
+                    {t(`providers.${provider.toLowerCase()}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -625,14 +611,12 @@ export default function SSOListingPage() {
         columns={columns}
         getRowId={(config) => config.id}
         isLoading={loading}
-        emptyMessage="No SSO configurations found"
+        emptyMessage={t("noConfigurations")}
         viewHref={(config) => `/admin/identity/sso/${config.id}`}
         onDelete={handleDeleteClick}
-        deleteConfirmTitle="Delete SSO Configuration"
+        deleteConfirmTitle={t("dialogs.deleteConfig")}
         deleteConfirmDescription={(config) =>
-          `Are you sure you want to delete the SSO configuration for ${
-            config.displayName || config.organization?.name || config.orgId
-          }? This action cannot be undone.`
+          t("dialogs.deleteConfigDescription", { name: config.displayName || config.organization?.name || config.orgId })
         }
         rowActions={rowActions}
         bulkActions={bulkActions}
@@ -648,9 +632,9 @@ export default function SSOListingPage() {
       <ConfirmationDialog
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
-        title="Delete SSO Configuration"
-        description="Are you sure you want to delete this SSO configuration? Users will no longer be able to sign in using this provider."
-        confirmText="Delete"
+        title={t("dialogs.deleteConfig")}
+        description={t("dialogs.deleteConfigWarning")}
+        confirmText={tCommon("delete")}
         variant="destructive"
         onConfirm={handleConfirmDelete}
       />

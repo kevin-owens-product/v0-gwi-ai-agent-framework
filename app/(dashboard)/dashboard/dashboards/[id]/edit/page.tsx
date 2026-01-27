@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -78,6 +79,8 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
   const { id } = use(params)
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
+  const t = useTranslations("dashboard.dashboards.edit")
+  const tCommon = useTranslations("common")
 
   const [dashboard, setDashboard] = useState<Dashboard | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -281,7 +284,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Edit Dashboard</h1>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
           </div>
         </div>
         <Card className="p-6">
@@ -291,7 +294,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
           </div>
           <div className="mt-4">
             <Link href="/dashboard/dashboards">
-              <Button variant="outline">Back to Dashboards</Button>
+              <Button variant="outline">{t("backToDashboards")}</Button>
             </Link>
           </div>
         </Card>
@@ -310,9 +313,9 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Edit Dashboard</h1>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
             <p className="text-muted-foreground mt-1">
-              Update your dashboard settings and configuration
+              {t("description")}
             </p>
           </div>
         </div>
@@ -321,18 +324,18 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
             <AlertDialogTrigger asChild>
               <Button variant="outline" className="text-destructive hover:text-destructive">
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete
+                {tCommon("delete")}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete Dashboard</AlertDialogTitle>
+                <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete this dashboard? This action cannot be undone.
+                  {t("deleteDialog.description")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleDelete}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -341,10 +344,10 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
                   {isDeleting ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Deleting...
+                      {t("deleting")}
                     </>
                   ) : (
-                    "Delete"
+                    tCommon("delete")
                   )}
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -354,12 +357,12 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
             {isSaving ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Saving...
+                {t("saving")}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4 mr-2" />
-                Save Changes
+                {t("saveChanges")}
               </>
             )}
           </Button>
@@ -385,28 +388,28 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
           {/* Basic Info */}
           <Card>
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
+              <CardTitle>{t("basicInfo.title")}</CardTitle>
               <CardDescription>
-                Update the name and description of your dashboard
+                {t("basicInfo.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Dashboard Name</Label>
+                <Label htmlFor="name">{t("basicInfo.dashboardName")}</Label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g., Q4 Campaign Performance"
+                  placeholder={t("basicInfo.dashboardNamePlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Brief description of this dashboard..."
+                  placeholder={t("basicInfo.descriptionPlaceholder")}
                   rows={3}
                 />
               </div>
@@ -416,14 +419,14 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
           {/* Layout Settings */}
           <Card>
             <CardHeader>
-              <CardTitle>Layout Settings</CardTitle>
+              <CardTitle>{t("layout.title")}</CardTitle>
               <CardDescription>
-                Choose how widgets are arranged on your dashboard
+                {t("layout.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Layout Type</Label>
+                <Label>{t("layout.layoutType")}</Label>
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     type="button"
@@ -435,7 +438,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
                     }`}
                   >
                     <Grid3X3 className="h-6 w-6" />
-                    <span className="text-sm font-medium">Grid</span>
+                    <span className="text-sm font-medium">{t("layout.grid")}</span>
                   </button>
                   <button
                     type="button"
@@ -447,7 +450,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
                     }`}
                   >
                     <LayoutGrid className="h-6 w-6" />
-                    <span className="text-sm font-medium">Freeform</span>
+                    <span className="text-sm font-medium">{t("layout.freeform")}</span>
                   </button>
                   <button
                     type="button"
@@ -459,7 +462,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
                     }`}
                   >
                     <Rows3 className="h-6 w-6" />
-                    <span className="text-sm font-medium">Rows</span>
+                    <span className="text-sm font-medium">{t("layout.rows")}</span>
                   </button>
                 </div>
               </div>
@@ -471,14 +474,14 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Widgets</CardTitle>
+                  <CardTitle>{t("widgets.title")}</CardTitle>
                   <CardDescription>
-                    Manage the widgets displayed on your dashboard
+                    {t("widgets.description")}
                   </CardDescription>
                 </div>
                 <Button variant="outline" size="sm" onClick={addWidget}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Widget
+                  {t("widgets.addWidget")}
                 </Button>
               </div>
             </CardHeader>
@@ -486,8 +489,8 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
               {widgets.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <LayoutGrid className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                  <p>No widgets added yet</p>
-                  <p className="text-sm">Click "Add Widget" to get started</p>
+                  <p>{t("widgets.noWidgets")}</p>
+                  <p className="text-sm">{t("widgets.noWidgetsHint")}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -504,21 +507,21 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
                         value={widget.title}
                         onChange={(e) => updateWidgetTitle(widget.id, e.target.value)}
                         className="flex-1"
-                        placeholder="Widget title"
+                        placeholder={t("widgets.widgetTitlePlaceholder")}
                       />
                       <Select
                         value={widget.type}
                         onValueChange={(value) => updateWidgetType(widget.id, value)}
                       >
                         <SelectTrigger className="w-32">
-                          <SelectValue placeholder="Type" />
+                          <SelectValue placeholder={tCommon("type")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="chart">Chart</SelectItem>
-                          <SelectItem value="table">Table</SelectItem>
-                          <SelectItem value="metric">Metric</SelectItem>
-                          <SelectItem value="text">Text</SelectItem>
-                          <SelectItem value="image">Image</SelectItem>
+                          <SelectItem value="chart">{t("widgets.types.chart")}</SelectItem>
+                          <SelectItem value="table">{t("widgets.types.table")}</SelectItem>
+                          <SelectItem value="metric">{t("widgets.types.metric")}</SelectItem>
+                          <SelectItem value="text">{t("widgets.types.text")}</SelectItem>
+                          <SelectItem value="image">{t("widgets.types.image")}</SelectItem>
                         </SelectContent>
                       </Select>
                       <Button
@@ -542,32 +545,32 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
           {/* Status & Visibility */}
           <Card>
             <CardHeader>
-              <CardTitle>Status & Visibility</CardTitle>
+              <CardTitle>{t("statusVisibility.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Status</Label>
+                <Label>{tCommon("status")}</Label>
                 <Select value={status} onValueChange={(value: "DRAFT" | "PUBLISHED" | "ARCHIVED") => setStatus(value)}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t("statusVisibility.selectStatus")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="DRAFT">
                       <div className="flex items-center gap-2">
                         <EyeOff className="h-4 w-4" />
-                        Draft
+                        {t("statusVisibility.statuses.draft")}
                       </div>
                     </SelectItem>
                     <SelectItem value="PUBLISHED">
                       <div className="flex items-center gap-2">
                         <Eye className="h-4 w-4" />
-                        Published
+                        {t("statusVisibility.statuses.published")}
                       </div>
                     </SelectItem>
                     <SelectItem value="ARCHIVED">
                       <div className="flex items-center gap-2">
                         <Lock className="h-4 w-4" />
-                        Archived
+                        {t("statusVisibility.statuses.archived")}
                       </div>
                     </SelectItem>
                   </SelectContent>
@@ -578,9 +581,9 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Public Access</Label>
+                  <Label>{t("statusVisibility.publicAccess")}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Allow anyone with the link to view
+                    {t("statusVisibility.publicAccessDescription")}
                   </p>
                 </div>
                 <Switch checked={isPublic} onCheckedChange={setIsPublic} />
@@ -590,12 +593,12 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
                 {isPublic ? (
                   <>
                     <Globe className="h-4 w-4 text-emerald-500" />
-                    <span className="text-sm">Visible to anyone with link</span>
+                    <span className="text-sm">{t("statusVisibility.visibleToAnyone")}</span>
                   </>
                 ) : (
                   <>
                     <Users className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Only visible to team members</span>
+                    <span className="text-sm">{t("statusVisibility.visibleToTeam")}</span>
                   </>
                 )}
               </div>
@@ -605,19 +608,19 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
           {/* Dashboard Info */}
           <Card>
             <CardHeader>
-              <CardTitle>Dashboard Info</CardTitle>
+              <CardTitle>{t("dashboardInfo.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Views</span>
+                <span className="text-muted-foreground">{t("dashboardInfo.views")}</span>
                 <span className="font-medium">{dashboard?.views?.toLocaleString() || 0}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Widgets</span>
+                <span className="text-muted-foreground">{t("widgets.title")}</span>
                 <span className="font-medium">{widgets.length}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Status</span>
+                <span className="text-muted-foreground">{tCommon("status")}</span>
                 <Badge
                   variant={
                     status === "PUBLISHED"
@@ -632,7 +635,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
               </div>
               {dashboard?.createdAt && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Created</span>
+                  <span className="text-muted-foreground">{t("dashboardInfo.created")}</span>
                   <span className="font-medium">
                     {new Date(dashboard.createdAt).toLocaleDateString()}
                   </span>
@@ -640,7 +643,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
               )}
               {dashboard?.updatedAt && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Last updated</span>
+                  <span className="text-muted-foreground">{t("dashboardInfo.lastUpdated")}</span>
                   <span className="font-medium">
                     {new Date(dashboard.updatedAt).toLocaleDateString()}
                   </span>
@@ -659,12 +662,12 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
               {isSaving ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Saving...
+                  {t("saving")}
                 </>
               ) : (
                 <>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Changes
+                  {t("saveChanges")}
                 </>
               )}
             </Button>
@@ -674,7 +677,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
               onClick={() => router.push(`/dashboard/dashboards/${id}`)}
               disabled={isSaving}
             >
-              Cancel
+              {tCommon("cancel")}
             </Button>
           </div>
         </div>

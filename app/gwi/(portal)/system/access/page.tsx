@@ -41,6 +41,7 @@ import {
   Settings,
   Crown,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const roleConfig: Record<string, { color: string; label: string }> = {
   SUPER_ADMIN: { color: "bg-red-100 text-red-700", label: "Super Admin" },
@@ -81,20 +82,22 @@ async function getAccessData() {
 
 async function AccessControlContent() {
   const { admins, roles, apiKeys, activeUsers, activeKeys } = await getAccessData()
+  const t = await getTranslations('gwi.system.access')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Access Control</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage user access, roles, and permissions
+            {t('description')}
           </p>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Plus className="mr-2 h-4 w-4" />
-          Invite User
+          {t('inviteUser')}
         </Button>
       </div>
 
@@ -108,7 +111,7 @@ async function AccessControlContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{admins.length}</p>
-                <p className="text-sm text-muted-foreground">Total Users</p>
+                <p className="text-sm text-muted-foreground">{t('totalUsers')}</p>
               </div>
             </div>
           </CardContent>
@@ -121,7 +124,7 @@ async function AccessControlContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeUsers}</p>
-                <p className="text-sm text-muted-foreground">Active Users</p>
+                <p className="text-sm text-muted-foreground">{t('activeUsers')}</p>
               </div>
             </div>
           </CardContent>
@@ -134,7 +137,7 @@ async function AccessControlContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{roles.length}</p>
-                <p className="text-sm text-muted-foreground">Roles</p>
+                <p className="text-sm text-muted-foreground">{t('roles')}</p>
               </div>
             </div>
           </CardContent>
@@ -147,7 +150,7 @@ async function AccessControlContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeKeys}</p>
-                <p className="text-sm text-muted-foreground">Active API Keys</p>
+                <p className="text-sm text-muted-foreground">{t('activeApiKeys')}</p>
               </div>
             </div>
           </CardContent>
@@ -158,20 +161,20 @@ async function AccessControlContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Users</CardTitle>
-            <CardDescription>GWI portal users and their roles</CardDescription>
+            <CardTitle>{t('users')}</CardTitle>
+            <CardDescription>{t('usersDescription')}</CardDescription>
           </div>
           <div className="flex gap-2">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search users..." className="pl-9 w-[250px]" />
+              <Input placeholder={t('searchUsersPlaceholder')} className="pl-9 w-[250px]" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Role" />
+                <SelectValue placeholder={t('role')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Roles</SelectItem>
+                <SelectItem value="all">{t('allRoles')}</SelectItem>
                 {roles.map((role) => (
                   <SelectItem key={role.id} value={role.name}>
                     {role.name}
@@ -186,11 +189,11 @@ async function AccessControlContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>User</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Last Login</TableHead>
-                  <TableHead>Joined</TableHead>
+                  <TableHead>{t('user')}</TableHead>
+                  <TableHead>{t('role')}</TableHead>
+                  <TableHead>{tCommon('status')}</TableHead>
+                  <TableHead>{t('lastLogin')}</TableHead>
+                  <TableHead>{t('joined')}</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -225,19 +228,19 @@ async function AccessControlContent() {
                         {admin.isActive ? (
                           <Badge className="bg-green-100 text-green-700">
                             <UserCheck className="mr-1 h-3 w-3" />
-                            Active
+                            {tCommon('active')}
                           </Badge>
                         ) : (
                           <Badge className="bg-red-100 text-red-700">
                             <UserX className="mr-1 h-3 w-3" />
-                            Inactive
+                            {tCommon('inactive')}
                           </Badge>
                         )}
                       </TableCell>
                       <TableCell>
                         {admin.lastLoginAt
                           ? new Date(admin.lastLoginAt).toLocaleDateString()
-                          : "Never"}
+                          : t('never')}
                       </TableCell>
                       <TableCell>
                         {new Date(admin.createdAt).toLocaleDateString()}
@@ -252,20 +255,20 @@ async function AccessControlContent() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem>
                               <Edit className="mr-2 h-4 w-4" />
-                              Edit User
+                              {t('editUser')}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <Shield className="mr-2 h-4 w-4" />
-                              Change Role
+                              {t('changeRole')}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <Lock className="mr-2 h-4 w-4" />
-                              Reset Password
+                              {t('resetPassword')}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600">
                               <UserX className="mr-2 h-4 w-4" />
-                              Deactivate
+                              {t('deactivate')}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -278,7 +281,7 @@ async function AccessControlContent() {
           ) : (
             <div className="py-12 text-center">
               <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No users found</p>
+              <p className="text-muted-foreground">{t('noUsersFound')}</p>
             </div>
           )}
         </CardContent>
@@ -288,12 +291,12 @@ async function AccessControlContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Roles & Permissions</CardTitle>
-            <CardDescription>Define what each role can access</CardDescription>
+            <CardTitle>{t('rolesAndPermissions')}</CardTitle>
+            <CardDescription>{t('rolesDescription')}</CardDescription>
           </div>
           <Button variant="outline">
             <Settings className="mr-2 h-4 w-4" />
-            Configure Roles
+            {t('configureRoles')}
           </Button>
         </CardHeader>
         <CardContent>
@@ -306,11 +309,11 @@ async function AccessControlContent() {
                 <div className="flex items-center justify-between mb-2">
                   <Badge variant="outline">{role.displayName || role.name}</Badge>
                   <span className="text-sm text-muted-foreground">
-                    {role._count.superAdmins} users
+                    {t('usersCount', { count: role._count.superAdmins })}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {role.description || "No description"}
+                  {role.description || t('noDescription')}
                 </p>
               </div>
             ))}
@@ -322,11 +325,11 @@ async function AccessControlContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>API Keys</CardTitle>
-            <CardDescription>Active API keys for programmatic access</CardDescription>
+            <CardTitle>{t('apiKeys')}</CardTitle>
+            <CardDescription>{t('apiKeysDescription')}</CardDescription>
           </div>
           <Button variant="outline" asChild>
-            <a href="/gwi/system/api-keys">Manage API Keys</a>
+            <a href="/gwi/system/api-keys">{t('manageApiKeys')}</a>
           </Button>
         </CardHeader>
         <CardContent>
@@ -344,7 +347,7 @@ async function AccessControlContent() {
                     <div>
                       <p className="font-medium">{key.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {key.keyPrefix}... - Created by {key.createdBy.name}
+                        {key.keyPrefix}... - {t('createdBy', { name: key.createdBy.name })}
                       </p>
                     </div>
                   </div>
@@ -355,7 +358,7 @@ async function AccessControlContent() {
                         : "bg-slate-100 text-slate-700"
                     }
                   >
-                    {key.isActive ? "Active" : "Inactive"}
+                    {key.isActive ? tCommon('active') : tCommon('inactive')}
                   </Badge>
                 </div>
               ))}
@@ -363,7 +366,7 @@ async function AccessControlContent() {
           ) : (
             <div className="text-center py-8">
               <Key className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No API keys created</p>
+              <p className="text-muted-foreground">{t('noApiKeys')}</p>
             </div>
           )}
         </CardContent>
@@ -372,14 +375,16 @@ async function AccessControlContent() {
   )
 }
 
-export default function AccessControlPage() {
+export default async function AccessControlPage() {
+  const t = await getTranslations('gwi.system.access')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Access Control</h1>
-            <p className="text-muted-foreground">Loading access data...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

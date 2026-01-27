@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -76,7 +77,14 @@ const platformColors: Record<string, string> = {
   LINUX: "bg-orange-500",
 }
 
+const DEVICE_TYPE_KEYS = ["PHONE", "TABLET", "LAPTOP", "DESKTOP"] as const
+const TRUST_STATUS_KEYS = ["TRUSTED", "PENDING", "REVOKED", "BLOCKED"] as const
+const PLATFORM_KEYS = ["MACOS", "WINDOWS", "IOS", "ANDROID", "LINUX"] as const
+
 export default function DevicesPage() {
+  const t = useTranslations("admin.devices")
+  const tCommon = useTranslations("common")
+
   const [devices, setDevices] = useState<Device[]>([])
   const [stats, setStats] = useState<Stats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -102,7 +110,7 @@ export default function DevicesPage() {
       })
       const response = await fetch(`/api/admin/devices?${params}`)
       if (!response.ok) {
-        throw new Error("Failed to fetch devices")
+        throw new Error(t("errors.fetchFailed"))
       }
       const data = await response.json()
       setDevices(data.devices || [])
@@ -111,11 +119,11 @@ export default function DevicesPage() {
       setStats(data.stats || null)
     } catch (error) {
       console.error("Failed to fetch devices:", error)
-      toast.error("Failed to fetch devices")
+      toast.error(t("errors.fetchFailed"))
     } finally {
       setIsLoading(false)
     }
-  }, [page, search, typeFilter, statusFilter, platformFilter])
+  }, [page, search, typeFilter, statusFilter, platformFilter, t])
 
   useEffect(() => {
     const debounce = setTimeout(() => {
@@ -130,12 +138,12 @@ export default function DevicesPage() {
         method: "POST",
       })
       if (!response.ok) {
-        throw new Error("Failed to trust device")
+        throw new Error(t("errors.trustFailed"))
       }
-      toast.success("Device trusted successfully")
+      toast.success(t("messages.deviceTrusted"))
       fetchDevices()
     } catch (error) {
-      toast.error("Failed to trust device")
+      toast.error(t("errors.trustFailed"))
     }
   }
 
@@ -145,12 +153,12 @@ export default function DevicesPage() {
         method: "POST",
       })
       if (!response.ok) {
-        throw new Error("Failed to revoke device")
+        throw new Error(t("errors.revokeFailed"))
       }
-      toast.success("Device trust revoked")
+      toast.success(t("messages.trustRevoked"))
       fetchDevices()
     } catch (error) {
-      toast.error("Failed to revoke device trust")
+      toast.error(t("errors.revokeFailed"))
     }
   }
 
@@ -160,12 +168,12 @@ export default function DevicesPage() {
         method: "POST",
       })
       if (!response.ok) {
-        throw new Error("Failed to block device")
+        throw new Error(t("errors.blockFailed"))
       }
-      toast.success("Device blocked successfully")
+      toast.success(t("messages.deviceBlocked"))
       fetchDevices()
     } catch (error) {
-      toast.error("Failed to block device")
+      toast.error(t("errors.blockFailed"))
     }
   }
 
@@ -175,10 +183,10 @@ export default function DevicesPage() {
         fetch(`/api/admin/devices/${id}/revoke`, { method: "POST" })
       )
       await Promise.all(promises)
-      toast.success(`${deviceIds.length} device(s) revoked successfully`)
+      toast.success(t("messages.bulkRevoked", { count: deviceIds.length }))
       fetchDevices()
     } catch (error) {
-      toast.error("Failed to revoke some devices")
+      toast.error(t("errors.bulkRevokeFailed"))
     }
   }
 
@@ -188,23 +196,23 @@ export default function DevicesPage() {
         fetch(`/api/admin/devices/${id}/block`, { method: "POST" })
       )
       await Promise.all(promises)
-      toast.success(`${deviceIds.length} device(s) blocked successfully`)
+      toast.success(t("messages.bulkBlocked", { count: deviceIds.length }))
       fetchDevices()
     } catch (error) {
-      toast.error("Failed to block some devices")
+      toast.error(t("errors.bulkBlockFailed"))
     }
   }
 
   const getTrustStatusBadge = (status: string) => {
     switch (status) {
       case "TRUSTED":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Trusted</Badge>
+        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />{t("trustStatuses.trusted")}</Badge>
       case "PENDING":
-        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Pending</Badge>
+        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />{t("trustStatuses.pending")}</Badge>
       case "REVOKED":
-        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Revoked</Badge>
+        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />{t("trustStatuses.revoked")}</Badge>
       case "BLOCKED":
-        return <Badge variant="destructive"><ShieldOff className="h-3 w-3 mr-1" />Blocked</Badge>
+        return <Badge variant="destructive"><ShieldOff className="h-3 w-3 mr-1" />{t("trustStatuses.blocked")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -214,7 +222,7 @@ export default function DevicesPage() {
   const columns: Column<Device>[] = [
     {
       id: "device",
-      header: "Device",
+      header: t("columns.device"),
       cell: (device) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -223,7 +231,7 @@ export default function DevicesPage() {
           <div>
             <p className="font-medium">{device.name || device.deviceId}</p>
             <p className="text-xs text-muted-foreground">
-              {device.model || device.manufacturer || "Unknown model"}
+              {device.model || device.manufacturer || t("unknownModel")}
             </p>
           </div>
         </div>
@@ -231,21 +239,21 @@ export default function DevicesPage() {
     },
     {
       id: "user",
-      header: "User",
+      header: t("columns.user"),
       cell: (device) => (
         <div>
-          <p className="font-medium">{device.user?.name || "No name"}</p>
+          <p className="font-medium">{device.user?.name || t("noName")}</p>
           <p className="text-xs text-muted-foreground">{device.user?.email}</p>
         </div>
       ),
     },
     {
       id: "platform",
-      header: "Platform",
+      header: t("columns.platform"),
       cell: (device) => (
         <div className="flex items-center gap-2">
           <Badge className={platformColors[device.platform || ""] || "bg-gray-500"}>
-            {device.platform || "Unknown"}
+            {device.platform ? t(`platforms.${device.platform.toLowerCase()}`) : t("unknown")}
           </Badge>
           {device.osVersion && (
             <span className="text-xs text-muted-foreground">{device.osVersion}</span>
@@ -255,28 +263,28 @@ export default function DevicesPage() {
     },
     {
       id: "compliance",
-      header: "Compliance",
+      header: t("columns.compliance"),
       cell: (device) =>
         device.isCompliant ? (
           <Badge className="bg-green-500">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Compliant
+            {t("complianceStatuses.compliant")}
           </Badge>
         ) : (
           <Badge variant="destructive">
             <AlertTriangle className="h-3 w-3 mr-1" />
-            Non-Compliant
+            {t("complianceStatuses.nonCompliant")}
           </Badge>
         ),
     },
     {
       id: "trustStatus",
-      header: "Trust Status",
+      header: t("columns.trustStatus"),
       cell: (device) => getTrustStatusBadge(device.trustStatus),
     },
     {
       id: "lastActive",
-      header: "Last Active",
+      header: t("columns.lastActive"),
       cell: (device) =>
         device.lastActiveAt ? (
           <div className="text-muted-foreground">
@@ -284,7 +292,7 @@ export default function DevicesPage() {
             <p className="text-xs">{device.lastLocation || device.lastIpAddress || ""}</p>
           </div>
         ) : (
-          <span className="text-muted-foreground">Never</span>
+          <span className="text-muted-foreground">{t("never")}</span>
         ),
     },
   ]
@@ -292,13 +300,13 @@ export default function DevicesPage() {
   // Define row actions
   const rowActions: RowAction<Device>[] = [
     {
-      label: "Trust Device",
+      label: t("actions.trustDevice"),
       icon: <Shield className="h-4 w-4" />,
       onClick: (device) => handleTrust(device.id),
       hidden: (device) => device.trustStatus !== "PENDING" && device.trustStatus !== "REVOKED",
     },
     {
-      label: "Revoke Trust",
+      label: t("actions.revokeTrust"),
       icon: <ShieldOff className="h-4 w-4" />,
       onClick: (device) => handleRevoke(device.id),
       variant: "destructive",
@@ -306,7 +314,7 @@ export default function DevicesPage() {
       separator: true,
     },
     {
-      label: "Block Device",
+      label: t("actions.blockDevice"),
       icon: <Ban className="h-4 w-4" />,
       onClick: (device) => handleBlock(device.id),
       variant: "destructive",
@@ -317,20 +325,20 @@ export default function DevicesPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Bulk Revoke Trust",
+      label: t("actions.bulkRevokeTrust"),
       icon: <ShieldOff className="h-4 w-4" />,
       onClick: handleBulkRevoke,
       variant: "destructive",
-      confirmTitle: "Revoke Trust for Multiple Devices",
-      confirmDescription: "Are you sure you want to revoke trust for the selected devices? This action cannot be undone.",
+      confirmTitle: t("dialogs.revokeMultiple"),
+      confirmDescription: t("dialogs.revokeMultipleDescription"),
     },
     {
-      label: "Bulk Block Devices",
+      label: t("actions.bulkBlockDevices"),
       icon: <Ban className="h-4 w-4" />,
       onClick: handleBulkBlock,
       variant: "destructive",
-      confirmTitle: "Block Multiple Devices",
-      confirmDescription: "Are you sure you want to block the selected devices? This will prevent them from accessing the platform.",
+      confirmTitle: t("dialogs.blockMultiple"),
+      confirmDescription: t("dialogs.blockMultipleDescription"),
       separator: true,
     },
   ]
@@ -343,15 +351,15 @@ export default function DevicesPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                Device Trust Management
+                {t("title")}
               </CardTitle>
               <CardDescription>
-                Manage trusted devices across the platform ({total} total)
+                {t("description", { total })}
               </CardDescription>
             </div>
             <Button onClick={fetchDevices} variant="outline" size="sm">
               <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
+              {tCommon("refresh")}
             </Button>
           </div>
         </CardHeader>
@@ -361,19 +369,19 @@ export default function DevicesPage() {
             <div className="grid grid-cols-4 gap-4 mb-6">
               <div className="rounded-lg border p-4">
                 <div className="text-2xl font-bold">{stats.total}</div>
-                <p className="text-xs text-muted-foreground">Total Devices</p>
+                <p className="text-xs text-muted-foreground">{t("stats.totalDevices")}</p>
               </div>
               <div className="rounded-lg border p-4">
                 <div className="text-2xl font-bold text-green-500">{stats.trusted}</div>
-                <p className="text-xs text-muted-foreground">Trusted</p>
+                <p className="text-xs text-muted-foreground">{t("trustStatuses.trusted")}</p>
               </div>
               <div className="rounded-lg border p-4">
                 <div className="text-2xl font-bold text-yellow-500">{stats.pending}</div>
-                <p className="text-xs text-muted-foreground">Pending Approval</p>
+                <p className="text-xs text-muted-foreground">{t("stats.pendingApproval")}</p>
               </div>
               <div className="rounded-lg border p-4">
                 <div className="text-2xl font-bold text-red-500">{stats.nonCompliant}</div>
-                <p className="text-xs text-muted-foreground">Non-Compliant</p>
+                <p className="text-xs text-muted-foreground">{t("complianceStatuses.nonCompliant")}</p>
               </div>
             </div>
           )}
@@ -383,7 +391,7 @@ export default function DevicesPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search devices, users..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -391,39 +399,41 @@ export default function DevicesPage() {
             </div>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Device Type" />
+                <SelectValue placeholder={t("filters.deviceType")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="PHONE">Phone</SelectItem>
-                <SelectItem value="TABLET">Tablet</SelectItem>
-                <SelectItem value="LAPTOP">Laptop</SelectItem>
-                <SelectItem value="DESKTOP">Desktop</SelectItem>
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
+                {DEVICE_TYPE_KEYS.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {t(`deviceTypes.${type.toLowerCase()}`)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Trust Status" />
+                <SelectValue placeholder={t("columns.trustStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="TRUSTED">Trusted</SelectItem>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="REVOKED">Revoked</SelectItem>
-                <SelectItem value="BLOCKED">Blocked</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
+                {TRUST_STATUS_KEYS.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {t(`trustStatuses.${status.toLowerCase()}`)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Select value={platformFilter} onValueChange={setPlatformFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Platform" />
+                <SelectValue placeholder={t("columns.platform")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Platforms</SelectItem>
-                <SelectItem value="MACOS">macOS</SelectItem>
-                <SelectItem value="WINDOWS">Windows</SelectItem>
-                <SelectItem value="IOS">iOS</SelectItem>
-                <SelectItem value="ANDROID">Android</SelectItem>
-                <SelectItem value="LINUX">Linux</SelectItem>
+                <SelectItem value="all">{t("filters.allPlatforms")}</SelectItem>
+                {PLATFORM_KEYS.map((platform) => (
+                  <SelectItem key={platform} value={platform}>
+                    {t(`platforms.${platform.toLowerCase()}`)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -434,7 +444,7 @@ export default function DevicesPage() {
             columns={columns}
             getRowId={(device) => device.id}
             isLoading={isLoading}
-            emptyMessage="No devices found"
+            emptyMessage={t("noDevices")}
             viewHref={(device) => `/admin/identity/devices/${device.id}`}
             rowActions={rowActions}
             bulkActions={bulkActions}

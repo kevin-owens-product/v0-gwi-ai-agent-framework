@@ -31,6 +31,7 @@ import {
   Play,
   BarChart3,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const statusConfig = {
   PENDING: { color: "bg-yellow-100 text-yellow-700", icon: Clock },
@@ -97,6 +98,8 @@ async function PipelineRunsContent({ id }: { id: string }) {
   }
 
   const { pipeline, stats } = data
+  const t = await getTranslations('gwi.pipelines.runsPage')
+  const tRuns = await getTranslations('gwi.pipelines.runs')
 
   return (
     <div className="space-y-6">
@@ -110,16 +113,16 @@ async function PipelineRunsContent({ id }: { id: string }) {
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              Pipeline Runs: {pipeline.name}
+              {t('title', { name: pipeline.name })}
             </h1>
             <p className="text-muted-foreground">
-              View execution history for this pipeline
+              {t('description')}
             </p>
           </div>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Play className="mr-2 h-4 w-4" />
-          Trigger Run
+          {t('triggerRun')}
         </Button>
       </div>
 
@@ -133,7 +136,7 @@ async function PipelineRunsContent({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalRuns}</p>
-                <p className="text-sm text-muted-foreground">Total Runs</p>
+                <p className="text-sm text-muted-foreground">{t('totalRuns')}</p>
               </div>
             </div>
           </CardContent>
@@ -146,7 +149,7 @@ async function PipelineRunsContent({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.successfulRuns}</p>
-                <p className="text-sm text-muted-foreground">Successful</p>
+                <p className="text-sm text-muted-foreground">{t('successful')}</p>
               </div>
             </div>
           </CardContent>
@@ -159,7 +162,7 @@ async function PipelineRunsContent({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.failedRuns}</p>
-                <p className="text-sm text-muted-foreground">Failed</p>
+                <p className="text-sm text-muted-foreground">{t('failed')}</p>
               </div>
             </div>
           </CardContent>
@@ -172,7 +175,7 @@ async function PipelineRunsContent({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.successRate}%</p>
-                <p className="text-sm text-muted-foreground">Success Rate</p>
+                <p className="text-sm text-muted-foreground">{t('successRate')}</p>
               </div>
             </div>
           </CardContent>
@@ -185,15 +188,15 @@ async function PipelineRunsContent({ id }: { id: string }) {
           <div className="flex gap-4">
             <Select defaultValue="all">
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t('filterByStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="RUNNING">Running</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="FAILED">Failed</SelectItem>
-                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="PENDING">{tRuns('statuses.pending')}</SelectItem>
+                <SelectItem value="RUNNING">{tRuns('statuses.running')}</SelectItem>
+                <SelectItem value="COMPLETED">{tRuns('statuses.completed')}</SelectItem>
+                <SelectItem value="FAILED">{tRuns('statuses.failed')}</SelectItem>
+                <SelectItem value="CANCELLED">{tRuns('statuses.cancelled')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -203,9 +206,9 @@ async function PipelineRunsContent({ id }: { id: string }) {
       {/* Runs Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Run History</CardTitle>
+          <CardTitle>{t('runHistory')}</CardTitle>
           <CardDescription>
-            {stats.totalRecordsProcessed.toLocaleString()} total records processed
+            {t('totalRecordsProcessed', { count: stats.totalRecordsProcessed.toLocaleString() })}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -213,12 +216,12 @@ async function PipelineRunsContent({ id }: { id: string }) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Run ID</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Started</TableHead>
-                  <TableHead>Completed</TableHead>
-                  <TableHead>Records</TableHead>
-                  <TableHead>Duration</TableHead>
+                  <TableHead>{t('runId')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
+                  <TableHead>{t('started')}</TableHead>
+                  <TableHead>{t('completed')}</TableHead>
+                  <TableHead>{t('records')}</TableHead>
+                  <TableHead>{t('duration')}</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -268,7 +271,7 @@ async function PipelineRunsContent({ id }: { id: string }) {
                             </span>
                             {run.recordsFailed !== null && run.recordsFailed > 0 && (
                               <span className="text-red-600 ml-2">
-                                ({run.recordsFailed} failed)
+                                ({t('failedCount', { count: run.recordsFailed })})
                               </span>
                             )}
                           </div>
@@ -284,7 +287,7 @@ async function PipelineRunsContent({ id }: { id: string }) {
                               : `${duration}s`}
                           </span>
                         ) : run.status === "RUNNING" ? (
-                          <span className="text-blue-600">Running...</span>
+                          <span className="text-blue-600">{t('running')}</span>
                         ) : (
                           "-"
                         )}
@@ -304,9 +307,9 @@ async function PipelineRunsContent({ id }: { id: string }) {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Activity className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No pipeline runs yet</h3>
+              <h3 className="text-lg font-medium">{t('noPipelineRuns')}</h3>
               <p className="text-muted-foreground">
-                Click &quot;Trigger Run&quot; to execute this pipeline
+                {t('clickTriggerRun')}
               </p>
             </div>
           )}

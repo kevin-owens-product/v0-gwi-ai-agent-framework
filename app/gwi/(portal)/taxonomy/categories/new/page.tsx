@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { CategoryEditor } from "@/components/gwi/taxonomy/category-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
 interface SearchParams {
   parentId?: string
@@ -23,6 +24,7 @@ async function getAllCategories() {
 
 async function NewCategoryContent({ parentId }: { parentId?: string }) {
   const categories = await getAllCategories()
+  const t = await getTranslations('gwi.taxonomy.categories')
 
   // Validate parentId if provided
   let validParentId: string | undefined
@@ -43,9 +45,9 @@ async function NewCategoryContent({ parentId }: { parentId?: string }) {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Create New Category</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('createTitle')}</h1>
           <p className="text-muted-foreground">
-            Set up a new taxonomy category for data classification
+            {t('createDescription')}
           </p>
         </div>
       </div>

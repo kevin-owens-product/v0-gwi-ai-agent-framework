@@ -20,6 +20,7 @@ import {
   BarChart3,
 } from "lucide-react"
 import { PipelineEditor } from "@/components/gwi/pipelines/pipeline-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
 const pipelineTypeColors: Record<string, string> = {
   ETL: "bg-blue-100 text-blue-700",
@@ -87,6 +88,8 @@ async function PipelineDetail({ id }: { id: string }) {
   }
 
   const stats = await getPipelineStats(id)
+  const t = await getTranslations('gwi.pipelines.detail')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
@@ -105,7 +108,7 @@ async function PipelineDetail({ id }: { id: string }) {
                 {pipeline.type}
               </Badge>
               <Badge variant={pipeline.isActive ? "default" : "secondary"}>
-                {pipeline.isActive ? "Active" : "Inactive"}
+                {pipeline.isActive ? tCommon('active') : tCommon('inactive')}
               </Badge>
             </div>
             {pipeline.description && (
@@ -117,17 +120,17 @@ async function PipelineDetail({ id }: { id: string }) {
           {pipeline.isActive ? (
             <Button variant="outline" className="text-yellow-600 border-yellow-300">
               <Pause className="mr-2 h-4 w-4" />
-              Pause Pipeline
+              {t('pausePipeline')}
             </Button>
           ) : (
             <Button variant="outline" className="text-green-600 border-green-300">
               <Play className="mr-2 h-4 w-4" />
-              Activate Pipeline
+              {t('activatePipeline')}
             </Button>
           )}
           <Button className="bg-emerald-600 hover:bg-emerald-700">
             <Play className="mr-2 h-4 w-4" />
-            Run Now
+            {t('runNow')}
           </Button>
         </div>
       </div>
@@ -142,7 +145,7 @@ async function PipelineDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalRuns}</p>
-                <p className="text-sm text-muted-foreground">Total Runs</p>
+                <p className="text-sm text-muted-foreground">{t('totalRuns')}</p>
               </div>
             </div>
           </CardContent>
@@ -155,7 +158,7 @@ async function PipelineDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.successfulRuns}</p>
-                <p className="text-sm text-muted-foreground">Successful</p>
+                <p className="text-sm text-muted-foreground">{t('successful')}</p>
               </div>
             </div>
           </CardContent>
@@ -168,7 +171,7 @@ async function PipelineDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.failedRuns}</p>
-                <p className="text-sm text-muted-foreground">Failed</p>
+                <p className="text-sm text-muted-foreground">{tCommon('failed')}</p>
               </div>
             </div>
           </CardContent>
@@ -181,7 +184,7 @@ async function PipelineDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.successRate}%</p>
-                <p className="text-sm text-muted-foreground">Success Rate</p>
+                <p className="text-sm text-muted-foreground">{t('successRate')}</p>
               </div>
             </div>
           </CardContent>
@@ -194,7 +197,7 @@ async function PipelineDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalRecordsProcessed.toLocaleString()}</p>
-                <p className="text-sm text-muted-foreground">Records Processed</p>
+                <p className="text-sm text-muted-foreground">{t('recordsProcessed')}</p>
               </div>
             </div>
           </CardContent>
@@ -206,24 +209,24 @@ async function PipelineDetail({ id }: { id: string }) {
         <TabsList>
           <TabsTrigger value="runs" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
-            Recent Runs
+            {t('recentRuns')}
           </TabsTrigger>
           <TabsTrigger value="validation" className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4" />
-            Validation Rules
+            {t('validationRules')}
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Settings
+            {t('settings')}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="runs">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Pipeline Runs</CardTitle>
+              <CardTitle>{t('recentPipelineRuns')}</CardTitle>
               <CardDescription>
-                View the execution history of this pipeline
+                {t('recentPipelineRunsDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -250,10 +253,10 @@ async function PipelineDetail({ id }: { id: string }) {
                           </p>
                           <p className="text-sm text-muted-foreground">
                             {run.recordsProcessed !== null
-                              ? `${run.recordsProcessed.toLocaleString()} records processed`
-                              : "No records processed"}
+                              ? t('recordsProcessedCount', { count: run.recordsProcessed })
+                              : t('noRecordsProcessed')}
                             {run.recordsFailed && run.recordsFailed > 0
-                              ? ` (${run.recordsFailed} failed)`
+                              ? ` (${t('failedCount', { count: run.recordsFailed })})`
                               : ""}
                           </p>
                         </div>
@@ -264,7 +267,7 @@ async function PipelineDetail({ id }: { id: string }) {
                         </Badge>
                         {run.completedAt && (
                           <span className="text-sm text-muted-foreground">
-                            Duration:{" "}
+                            {t('duration')}:{" "}
                             {Math.round(
                               (new Date(run.completedAt).getTime() -
                                 new Date(run.startedAt).getTime()) /
@@ -278,16 +281,16 @@ async function PipelineDetail({ id }: { id: string }) {
                   ))}
                   <Button variant="outline" className="w-full" asChild>
                     <Link href={`/gwi/pipelines/${pipeline.id}/runs`}>
-                      View All Runs
+                      {t('viewAllRuns')}
                     </Link>
                   </Button>
                 </div>
               ) : (
                 <div className="text-center py-8">
                   <Activity className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No runs yet</p>
+                  <p className="text-muted-foreground">{t('noRunsYet')}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Click &quot;Run Now&quot; to execute this pipeline
+                    {t('clickRunNow')}
                   </p>
                 </div>
               )}
@@ -298,9 +301,9 @@ async function PipelineDetail({ id }: { id: string }) {
         <TabsContent value="validation">
           <Card>
             <CardHeader>
-              <CardTitle>Validation Rules</CardTitle>
+              <CardTitle>{t('validationRules')}</CardTitle>
               <CardDescription>
-                Rules that validate data processed by this pipeline
+                {t('validationRulesDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -314,23 +317,23 @@ async function PipelineDetail({ id }: { id: string }) {
                       <div>
                         <p className="font-medium">{rule.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          {rule.description || "No description"}
+                          {rule.description || t('noDescription')}
                         </p>
                       </div>
                       <Badge variant={rule.isActive ? "default" : "secondary"}>
-                        {rule.isActive ? "Active" : "Inactive"}
+                        {rule.isActive ? tCommon('active') : tCommon('inactive')}
                       </Badge>
                     </div>
                   ))}
                   <Button variant="outline" className="w-full">
-                    Add Validation Rule
+                    {t('addValidationRule')}
                   </Button>
                 </div>
               ) : (
                 <div className="text-center py-8">
                   <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No validation rules</p>
-                  <Button className="mt-4">Add Validation Rule</Button>
+                  <p className="text-muted-foreground">{t('noValidationRules')}</p>
+                  <Button className="mt-4">{t('addValidationRule')}</Button>
                 </div>
               )}
             </CardContent>
@@ -356,35 +359,35 @@ async function PipelineDetail({ id }: { id: string }) {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Pipeline Information
+            {t('pipelineInformation')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <dt className="text-muted-foreground">Schedule</dt>
+              <dt className="text-muted-foreground">{t('schedule')}</dt>
               <dd className="font-medium">
                 {pipeline.schedule ? (
                   <code className="px-2 py-1 bg-slate-100 rounded text-xs">
                     {pipeline.schedule}
                   </code>
                 ) : (
-                  "Manual"
+                  t('manual')
                 )}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created By</dt>
+              <dt className="text-muted-foreground">{t('createdBy')}</dt>
               <dd className="font-medium">{pipeline.createdBy.name}</dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created At</dt>
+              <dt className="text-muted-foreground">{t('createdAt')}</dt>
               <dd className="font-medium">
                 {new Date(pipeline.createdAt).toLocaleDateString()}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Last Updated</dt>
+              <dt className="text-muted-foreground">{t('lastUpdated')}</dt>
               <dd className="font-medium">
                 {new Date(pipeline.updatedAt).toLocaleDateString()}
               </dd>

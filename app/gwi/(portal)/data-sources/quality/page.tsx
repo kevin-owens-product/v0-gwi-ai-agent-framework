@@ -26,6 +26,7 @@ import {
   FileWarning,
   RefreshCw,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getDataQualityMetrics() {
   const dataSources = await prisma.gWIDataSourceConnection.findMany({
@@ -97,6 +98,7 @@ const qualityIssues = [
 
 async function DataQualityContent() {
   const { dataSources } = await getDataQualityMetrics()
+  const t = await getTranslations('gwi.dataSources.quality')
 
   const overallScore = mockQualityMetrics.reduce((sum, m) => sum + m.score, 0) / mockQualityMetrics.length
 
@@ -105,25 +107,25 @@ async function DataQualityContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Data Quality</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Monitor and improve data quality across all sources
+            {t('description')}
           </p>
         </div>
         <div className="flex gap-2">
           <Select defaultValue="7d">
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Time Range" />
+              <SelectValue placeholder={t('timeRange')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="24h">Last 24 hours</SelectItem>
-              <SelectItem value="7d">Last 7 days</SelectItem>
-              <SelectItem value="30d">Last 30 days</SelectItem>
+              <SelectItem value="24h">{t('last24Hours')}</SelectItem>
+              <SelectItem value="7d">{t('last7Days')}</SelectItem>
+              <SelectItem value="30d">{t('last30Days')}</SelectItem>
             </SelectContent>
           </Select>
           <Button variant="outline">
             <RefreshCw className="mr-2 h-4 w-4" />
-            Run Quality Check
+            {t('runQualityCheck')}
           </Button>
         </div>
       </div>
@@ -139,15 +141,15 @@ async function DataQualityContent() {
                 </span>
               </div>
               <div>
-                <h2 className="text-xl font-semibold">Overall Data Quality Score</h2>
+                <h2 className="text-xl font-semibold">{t('overallScore')}</h2>
                 <p className="text-muted-foreground">
-                  Aggregated across {dataSources.length} data sources
+                  {t('aggregatedAcross', { count: dataSources.length })}
                 </p>
               </div>
             </div>
             <Badge className="bg-green-100 text-green-700 text-lg px-4 py-1">
               <CheckCircle className="mr-2 h-4 w-4" />
-              Healthy
+              {t('healthy')}
             </Badge>
           </div>
         </CardContent>
@@ -196,16 +198,16 @@ async function DataQualityContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
-            Quality Score Trends
+            {t('qualityScoreTrends')}
           </CardTitle>
-          <CardDescription>Data quality metrics over time</CardDescription>
+          <CardDescription>{t('metricsOverTime')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center border rounded-lg bg-slate-50">
             <div className="text-center">
               <LineChart className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground">
-                Quality trend charts coming soon...
+                {t('trendChartsComingSoon')}
               </p>
             </div>
           </div>
@@ -217,9 +219,9 @@ async function DataQualityContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileWarning className="h-5 w-5" />
-            Active Quality Issues
+            {t('activeQualityIssues')}
           </CardTitle>
-          <CardDescription>Issues requiring attention</CardDescription>
+          <CardDescription>{t('issuesRequiringAttention')}</CardDescription>
         </CardHeader>
         <CardContent>
           {qualityIssues.length > 0 ? (
@@ -250,11 +252,11 @@ async function DataQualityContent() {
                         {issue.issue}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Detected {issue.detected}
+                        {t('detected')} {issue.detected}
                       </p>
                     </div>
                     <Button variant="outline" size="sm">
-                      Investigate
+                      {t('investigate')}
                     </Button>
                   </div>
                 )
@@ -263,7 +265,7 @@ async function DataQualityContent() {
           ) : (
             <div className="text-center py-8">
               <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
-              <p className="text-muted-foreground">No quality issues detected</p>
+              <p className="text-muted-foreground">{t('noQualityIssues')}</p>
             </div>
           )}
         </CardContent>
@@ -272,8 +274,8 @@ async function DataQualityContent() {
       {/* Per-Source Quality */}
       <Card>
         <CardHeader>
-          <CardTitle>Quality by Data Source</CardTitle>
-          <CardDescription>Quality scores for each connected source</CardDescription>
+          <CardTitle>{t('qualityByDataSource')}</CardTitle>
+          <CardDescription>{t('qualityScoresPerSource')}</CardDescription>
         </CardHeader>
         <CardContent>
           {dataSources.length > 0 ? (
@@ -311,7 +313,7 @@ async function DataQualityContent() {
           ) : (
             <EmptyState
               icon={Database}
-              title="No data sources connected"
+              title={t('noDataSourcesConnected')}
             />
           )}
         </CardContent>
@@ -320,13 +322,15 @@ async function DataQualityContent() {
   )
 }
 
-export default function DataQualityPage() {
+export default async function DataQualityPage() {
+  const t = await getTranslations('gwi.dataSources.quality')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Data Quality</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

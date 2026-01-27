@@ -22,6 +22,7 @@ import {
 } from "lucide-react"
 import { SurveyEditor } from "@/components/gwi/surveys/survey-editor"
 import { QuestionList } from "@/components/gwi/surveys/question-list"
+import { getTranslations } from "@/lib/i18n/server"
 
 const statusColors = {
   DRAFT: "bg-slate-100 text-slate-700",
@@ -65,6 +66,9 @@ async function SurveyDetail({ id }: { id: string }) {
     0
   )
 
+  const t = await getTranslations("gwi.surveys")
+  const tCommon = await getTranslations("common")
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -81,7 +85,7 @@ async function SurveyDetail({ id }: { id: string }) {
               <Badge
                 className={statusColors[survey.status as keyof typeof statusColors]}
               >
-                {survey.status}
+                {t(`statuses.${survey.status.toLowerCase()}`)}
               </Badge>
             </div>
             {survey.description && (
@@ -93,18 +97,18 @@ async function SurveyDetail({ id }: { id: string }) {
           {survey.status === "DRAFT" && (
             <Button className="bg-green-600 hover:bg-green-700">
               <Play className="mr-2 h-4 w-4" />
-              Activate Survey
+              {t("detail.activateSurvey")}
             </Button>
           )}
           {survey.status === "ACTIVE" && (
             <Button variant="outline" className="text-yellow-600 border-yellow-300">
               <Pause className="mr-2 h-4 w-4" />
-              Pause Survey
+              {t("detail.pauseSurvey")}
             </Button>
           )}
           <Button variant="outline">
             <Settings className="mr-2 h-4 w-4" />
-            Settings
+            {tCommon("settings")}
           </Button>
         </div>
       </div>
@@ -119,7 +123,7 @@ async function SurveyDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{survey.questions.length}</p>
-                <p className="text-sm text-muted-foreground">Questions</p>
+                <p className="text-sm text-muted-foreground">{t("detail.questions")}</p>
               </div>
             </div>
           </CardContent>
@@ -132,7 +136,7 @@ async function SurveyDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{survey._count.responses}</p>
-                <p className="text-sm text-muted-foreground">Total Responses</p>
+                <p className="text-sm text-muted-foreground">{t("detail.totalResponses")}</p>
               </div>
             </div>
           </CardContent>
@@ -145,7 +149,7 @@ async function SurveyDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{completedResponses}</p>
-                <p className="text-sm text-muted-foreground">Completed</p>
+                <p className="text-sm text-muted-foreground">{t("detail.completed")}</p>
               </div>
             </div>
           </CardContent>
@@ -158,7 +162,7 @@ async function SurveyDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{totalTargeted}</p>
-                <p className="text-sm text-muted-foreground">Target Count</p>
+                <p className="text-sm text-muted-foreground">{t("detail.targetCount")}</p>
               </div>
             </div>
           </CardContent>
@@ -170,19 +174,19 @@ async function SurveyDetail({ id }: { id: string }) {
         <TabsList>
           <TabsTrigger value="questions" className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
-            Questions
+            {t("detail.questions")}
           </TabsTrigger>
           <TabsTrigger value="responses" className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4" />
-            Responses
+            {t("detail.responses")}
           </TabsTrigger>
           <TabsTrigger value="distribution" className="flex items-center gap-2">
             <Send className="h-4 w-4" />
-            Distribution
+            {t("detail.distribution")}
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Settings
+            {tCommon("settings")}
           </TabsTrigger>
         </TabsList>
 
@@ -193,9 +197,9 @@ async function SurveyDetail({ id }: { id: string }) {
         <TabsContent value="responses">
           <Card>
             <CardHeader>
-              <CardTitle>Survey Responses</CardTitle>
+              <CardTitle>{t("detail.surveyResponses")}</CardTitle>
               <CardDescription>
-                View and analyze responses collected from this survey
+                {t("detail.surveyResponsesDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -204,21 +208,20 @@ async function SurveyDetail({ id }: { id: string }) {
                   <div className="flex justify-end">
                     <Button asChild>
                       <Link href={`/gwi/surveys/${survey.id}/responses`}>
-                        View All Responses
+                        {t("detail.viewAllResponses")}
                       </Link>
                     </Button>
                   </div>
                   <p className="text-muted-foreground">
-                    {survey._count.responses} response(s) collected so far.{" "}
-                    {completedResponses} completed.
+                    {t("detail.responsesCollected", { count: survey._count.responses, completed: completedResponses })}
                   </p>
                 </div>
               ) : (
                 <div className="text-center py-8">
                   <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No responses yet</p>
+                  <p className="text-muted-foreground">{t("detail.noResponsesYet")}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Responses will appear here once respondents start the survey
+                    {t("detail.responsesWillAppear")}
                   </p>
                 </div>
               )}
@@ -229,9 +232,9 @@ async function SurveyDetail({ id }: { id: string }) {
         <TabsContent value="distribution">
           <Card>
             <CardHeader>
-              <CardTitle>Distribution Channels</CardTitle>
+              <CardTitle>{t("detail.distributionChannels")}</CardTitle>
               <CardDescription>
-                Manage how and where the survey is distributed
+                {t("detail.distributionDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -245,8 +248,7 @@ async function SurveyDetail({ id }: { id: string }) {
                       <div>
                         <p className="font-medium">{dist.channel}</p>
                         <p className="text-sm text-muted-foreground">
-                          Target: {dist.targetCount} | Completed:{" "}
-                          {dist.completedCount}
+                          {t("detail.target")}: {dist.targetCount} | {t("detail.completed")}: {dist.completedCount}
                         </p>
                       </div>
                       <Badge
@@ -257,14 +259,14 @@ async function SurveyDetail({ id }: { id: string }) {
                     </div>
                   ))}
                   <Button variant="outline" className="w-full">
-                    Add Distribution Channel
+                    {t("detail.addDistributionChannel")}
                   </Button>
                 </div>
               ) : (
                 <div className="text-center py-8">
                   <Send className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No distribution channels</p>
-                  <Button className="mt-4">Add Distribution Channel</Button>
+                  <p className="text-muted-foreground">{t("detail.noDistributionChannels")}</p>
+                  <Button className="mt-4">{t("detail.addDistributionChannel")}</Button>
                 </div>
               )}
             </CardContent>
@@ -280,27 +282,27 @@ async function SurveyDetail({ id }: { id: string }) {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Survey Information
+            {t("detail.surveyInformation")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <dt className="text-muted-foreground">Version</dt>
+              <dt className="text-muted-foreground">{t("detail.version")}</dt>
               <dd className="font-medium">{survey.version}</dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created By</dt>
+              <dt className="text-muted-foreground">{t("detail.createdBy")}</dt>
               <dd className="font-medium">{survey.createdBy.name}</dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created At</dt>
+              <dt className="text-muted-foreground">{tCommon("createdAt")}</dt>
               <dd className="font-medium">
                 {new Date(survey.createdAt).toLocaleDateString()}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Last Updated</dt>
+              <dt className="text-muted-foreground">{tCommon("lastUpdated")}</dt>
               <dd className="font-medium">
                 {new Date(survey.updatedAt).toLocaleDateString()}
               </dd>

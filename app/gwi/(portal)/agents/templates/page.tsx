@@ -31,6 +31,7 @@ import {
   Eye,
   Star,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getAgentTemplates() {
   const templates = await prisma.systemAgentTemplate.findMany({
@@ -48,21 +49,23 @@ async function getAgentTemplates() {
 
 async function AgentTemplatesContent() {
   const { templates, publishedCount, categories } = await getAgentTemplates()
+  const t = await getTranslations('gwi.agents.templates')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Agent Templates</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Reusable agent configurations with pre-defined tools and prompts
+            {t('description')}
           </p>
         </div>
         <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
           <Link href="/gwi/agents/templates/new">
             <Plus className="mr-2 h-4 w-4" />
-            New Template
+            {t('newTemplate')}
           </Link>
         </Button>
       </div>
@@ -77,7 +80,7 @@ async function AgentTemplatesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{templates.length}</p>
-                <p className="text-sm text-muted-foreground">Total Templates</p>
+                <p className="text-sm text-muted-foreground">{t('totalTemplates')}</p>
               </div>
             </div>
           </CardContent>
@@ -90,7 +93,7 @@ async function AgentTemplatesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{publishedCount}</p>
-                <p className="text-sm text-muted-foreground">Published</p>
+                <p className="text-sm text-muted-foreground">{t('published')}</p>
               </div>
             </div>
           </CardContent>
@@ -103,7 +106,7 @@ async function AgentTemplatesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{categories.length}</p>
-                <p className="text-sm text-muted-foreground">Categories</p>
+                <p className="text-sm text-muted-foreground">{t('categories')}</p>
               </div>
             </div>
           </CardContent>
@@ -116,14 +119,14 @@ async function AgentTemplatesContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search templates..." className="pl-9" />
+              <Input placeholder={t('searchPlaceholder')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Category" />
+                <SelectValue placeholder={t('category')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="all">{t('allCategories')}</SelectItem>
                 {categories.map((cat) => (
                   <SelectItem key={cat} value={cat}>
                     {cat}
@@ -133,12 +136,12 @@ async function AgentTemplatesContent() {
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon('status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="published">Published</SelectItem>
-                <SelectItem value="draft">Draft</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="published">{t('published')}</SelectItem>
+                <SelectItem value="draft">{t('draft')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -165,23 +168,23 @@ async function AgentTemplatesContent() {
                       <DropdownMenuItem asChild>
                         <Link href={`/gwi/agents/templates/${template.id}`}>
                           <Eye className="mr-2 h-4 w-4" />
-                          View
+                          {t('view')}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link href={`/gwi/agents/templates/${template.id}/edit`}>
                           <Edit className="mr-2 h-4 w-4" />
-                          Edit
+                          {tCommon('edit')}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Copy className="mr-2 h-4 w-4" />
-                        Duplicate
+                        {t('duplicate')}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem className="text-red-600">
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
+                        {tCommon('delete')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -189,7 +192,7 @@ async function AgentTemplatesContent() {
                 <div className="mt-3">
                   <CardTitle className="text-lg">{template.name}</CardTitle>
                   <CardDescription className="mt-1">
-                    {template.description || "No description"}
+                    {template.description || t('noDescription')}
                   </CardDescription>
                 </div>
               </CardHeader>
@@ -204,7 +207,7 @@ async function AgentTemplatesContent() {
                           : "bg-yellow-100 text-yellow-700"
                       }
                     >
-                      {template.isPublished ? "Published" : "Draft"}
+                      {template.isPublished ? t('published') : t('draft')}
                     </Badge>
                   </div>
                   <span className="text-xs text-muted-foreground">
@@ -212,7 +215,7 @@ async function AgentTemplatesContent() {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3">
-                  Created by {template.createdBy.name}
+                  {t('createdBy', { name: template.createdBy.name })}
                 </p>
               </CardContent>
             </Card>
@@ -222,14 +225,14 @@ async function AgentTemplatesContent() {
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Bot className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium">No Agent Templates Yet</h3>
+                <h3 className="text-lg font-medium">{t('noTemplates')}</h3>
                 <p className="text-muted-foreground mb-4">
-                  Create reusable agent configurations for your team
+                  {t('noTemplatesDescription')}
                 </p>
                 <Button asChild>
                   <Link href="/gwi/agents/templates/new">
                     <Plus className="mr-2 h-4 w-4" />
-                    Create First Template
+                    {t('createFirstTemplate')}
                   </Link>
                 </Button>
               </CardContent>
@@ -241,14 +244,16 @@ async function AgentTemplatesContent() {
   )
 }
 
-export default function AgentTemplatesPage() {
+export default async function AgentTemplatesPage() {
+  const t = await getTranslations('gwi.agents.templates')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Agent Templates</h1>
-            <p className="text-muted-foreground">Loading templates...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

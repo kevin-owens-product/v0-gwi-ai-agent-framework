@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -71,6 +72,8 @@ const statusColors: Record<string, string> = {
 }
 
 export default function InvoicingPage() {
+  const t = useTranslations("gwi.services.invoicing")
+  const tCommon = useTranslations("common")
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -92,7 +95,7 @@ export default function InvoicingPage() {
       setInvoices(data)
     } catch (error) {
       console.error("Failed to fetch invoices:", error)
-      toast.error("Failed to load invoices")
+      toast.error(t("failedToLoad"))
     } finally {
       setLoading(false)
     }
@@ -107,15 +110,15 @@ export default function InvoicingPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Invoicing</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground">
-            Create and manage client invoices
+            {t("description")}
           </p>
         </div>
         <Button asChild>
           <Link href="/gwi/services/invoicing/new">
             <Plus className="h-4 w-4 mr-2" />
-            New Invoice
+            {t("newInvoice")}
           </Link>
         </Button>
       </div>
@@ -124,7 +127,7 @@ export default function InvoicingPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Invoices</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("totalInvoices")}</CardTitle>
             <Receipt className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -133,7 +136,7 @@ export default function InvoicingPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Outstanding</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("outstanding")}</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -144,7 +147,7 @@ export default function InvoicingPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Paid</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("paid")}</CardTitle>
             <Receipt className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -155,7 +158,7 @@ export default function InvoicingPage() {
         </Card>
         <Card className={overdueCount > 0 ? "border-destructive/50" : ""}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Overdue</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("overdue")}</CardTitle>
             <AlertCircle className={`h-4 w-4 ${overdueCount > 0 ? "text-destructive" : "text-muted-foreground"}`} />
           </CardHeader>
           <CardContent>
@@ -169,15 +172,15 @@ export default function InvoicingPage() {
       {/* Filters & Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Invoice List</CardTitle>
-          <CardDescription>View and manage all invoices</CardDescription>
+          <CardTitle>{t("invoiceList")}</CardTitle>
+          <CardDescription>{t("invoiceListDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search invoices..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -185,18 +188,18 @@ export default function InvoicingPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t("filterByStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="SENT">Sent</SelectItem>
-                <SelectItem value="VIEWED">Viewed</SelectItem>
-                <SelectItem value="PARTIAL">Partial</SelectItem>
-                <SelectItem value="PAID">Paid</SelectItem>
-                <SelectItem value="OVERDUE">Overdue</SelectItem>
-                <SelectItem value="VOID">Void</SelectItem>
+                <SelectItem value="all">{t("allStatuses")}</SelectItem>
+                <SelectItem value="DRAFT">{t("statuses.draft")}</SelectItem>
+                <SelectItem value="PENDING">{t("statuses.pending")}</SelectItem>
+                <SelectItem value="SENT">{t("statuses.sent")}</SelectItem>
+                <SelectItem value="VIEWED">{t("statuses.viewed")}</SelectItem>
+                <SelectItem value="PARTIAL">{t("statuses.partial")}</SelectItem>
+                <SelectItem value="PAID">{t("statuses.paid")}</SelectItem>
+                <SelectItem value="OVERDUE">{t("statuses.overdue")}</SelectItem>
+                <SelectItem value="VOID">{t("statuses.void")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -208,17 +211,17 @@ export default function InvoicingPage() {
           ) : invoices.length === 0 ? (
             <div className="text-center py-12">
               <Receipt className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No invoices found</h3>
+              <h3 className="text-lg font-medium">{t("noInvoicesFound")}</h3>
               <p className="text-muted-foreground mb-4">
                 {search || statusFilter !== "all"
-                  ? "Try adjusting your filters"
-                  : "Create your first invoice to get started"}
+                  ? t("tryAdjustingFilters")
+                  : t("createFirstInvoice")}
               </p>
               {!search && statusFilter === "all" && (
                 <Button asChild>
                   <Link href="/gwi/services/invoicing/new">
                     <Plus className="h-4 w-4 mr-2" />
-                    New Invoice
+                    {t("newInvoice")}
                   </Link>
                 </Button>
               )}
@@ -227,13 +230,13 @@ export default function InvoicingPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Invoice</TableHead>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Issue Date</TableHead>
-                  <TableHead>Due Date</TableHead>
-                  <TableHead className="text-right">Total</TableHead>
-                  <TableHead className="text-right">Amount Due</TableHead>
+                  <TableHead>{t("table.invoice")}</TableHead>
+                  <TableHead>{t("table.client")}</TableHead>
+                  <TableHead>{tCommon("status")}</TableHead>
+                  <TableHead>{t("table.issueDate")}</TableHead>
+                  <TableHead>{t("table.dueDate")}</TableHead>
+                  <TableHead className="text-right">{t("table.total")}</TableHead>
+                  <TableHead className="text-right">{t("table.amountDue")}</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -259,7 +262,7 @@ export default function InvoicingPage() {
                     </TableCell>
                     <TableCell>
                       <Badge className={statusColors[invoice.status]}>
-                        {invoice.status}
+                        {t(`statuses.${invoice.status.toLowerCase()}`)}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -277,7 +280,7 @@ export default function InvoicingPage() {
                     <TableCell>
                       <Button variant="ghost" size="sm" asChild>
                         <Link href={`/gwi/services/invoicing/${invoice.id}`}>
-                          View
+                          {tCommon("viewDetails")}
                         </Link>
                       </Button>
                     </TableCell>

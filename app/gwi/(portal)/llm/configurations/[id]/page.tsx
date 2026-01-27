@@ -17,6 +17,7 @@ import {
   Activity,
 } from "lucide-react"
 import { LLMConfigurationEditor } from "@/components/gwi/llm/llm-configuration-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getLLMConfiguration(id: string) {
   const configuration = await prisma.lLMConfiguration.findUnique({
@@ -75,6 +76,8 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
   }
 
   const usageStats = await getUsageStats(id)
+  const t = await getTranslations('gwi.llm.configurations')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
@@ -98,7 +101,7 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
                     : "bg-slate-100 text-slate-700"
                 }
               >
-                {configuration.isActive ? "Active" : "Inactive"}
+                {configuration.isActive ? tCommon('active') : tCommon('inactive')}
               </Badge>
             </div>
             <p className="text-muted-foreground mt-1">
@@ -120,7 +123,7 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
                 <p className="text-2xl font-bold">
                   {usageStats.totalRequests.toLocaleString()}
                 </p>
-                <p className="text-sm text-muted-foreground">Total Requests</p>
+                <p className="text-sm text-muted-foreground">{t('totalRequests')}</p>
               </div>
             </div>
           </CardContent>
@@ -135,7 +138,7 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
                 <p className="text-2xl font-bold">
                   {(usageStats.totalTokens / 1000).toFixed(1)}K
                 </p>
-                <p className="text-sm text-muted-foreground">Total Tokens</p>
+                <p className="text-sm text-muted-foreground">{t('totalTokens')}</p>
               </div>
             </div>
           </CardContent>
@@ -150,7 +153,7 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
                 <p className="text-2xl font-bold">
                   ${usageStats.totalCost.toFixed(2)}
                 </p>
-                <p className="text-sm text-muted-foreground">Total Cost</p>
+                <p className="text-sm text-muted-foreground">{t('totalCost')}</p>
               </div>
             </div>
           </CardContent>
@@ -163,7 +166,7 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{usageStats.avgLatency}ms</p>
-                <p className="text-sm text-muted-foreground">Avg Latency</p>
+                <p className="text-sm text-muted-foreground">{t('avgLatency')}</p>
               </div>
             </div>
           </CardContent>
@@ -175,11 +178,11 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
         <TabsList>
           <TabsTrigger value="settings" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Settings
+            {t('settings')}
           </TabsTrigger>
           <TabsTrigger value="usage" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
-            Usage History
+            {t('usageHistory')}
           </TabsTrigger>
         </TabsList>
 
@@ -203,20 +206,20 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
         <TabsContent value="usage">
           <Card>
             <CardHeader>
-              <CardTitle>Usage History</CardTitle>
+              <CardTitle>{t('usageHistory')}</CardTitle>
               <CardDescription>
-                Recent API calls made with this configuration
+                {t('usageHistoryDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {usageStats.recentUsage.length > 0 ? (
                 <div className="space-y-3">
                   <div className="grid grid-cols-5 gap-4 text-sm font-medium text-muted-foreground pb-2 border-b">
-                    <div>Timestamp</div>
-                    <div>Prompt Tokens</div>
-                    <div>Completion Tokens</div>
-                    <div>Latency</div>
-                    <div>Cost</div>
+                    <div>{t('timestamp')}</div>
+                    <div>{t('promptTokens')}</div>
+                    <div>{t('completionTokens')}</div>
+                    <div>{t('latency')}</div>
+                    <div>{t('cost')}</div>
                   </div>
                   {usageStats.recentUsage.map((usage) => (
                     <div
@@ -238,9 +241,9 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
               ) : (
                 <div className="text-center py-8">
                   <BarChart3 className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No usage records yet</p>
+                  <p className="text-muted-foreground">{t('noUsageRecords')}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Usage will appear here once this configuration is used
+                    {t('usageWillAppear')}
                   </p>
                 </div>
               )}
@@ -251,16 +254,16 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
           {usageStats.totalTokens > 0 && (
             <Card className="mt-4">
               <CardHeader>
-                <CardTitle>Token Breakdown</CardTitle>
+                <CardTitle>{t('tokenBreakdown')}</CardTitle>
                 <CardDescription>
-                  Distribution of tokens used
+                  {t('tokenBreakdownDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">
-                      Prompt Tokens
+                      {t('promptTokens')}
                     </span>
                     <span className="font-medium">
                       {usageStats.promptTokens.toLocaleString()}
@@ -278,7 +281,7 @@ async function LLMConfigurationDetail({ id }: { id: string }) {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">
-                      Completion Tokens
+                      {t('completionTokens')}
                     </span>
                     <span className="font-medium">
                       {usageStats.completionTokens.toLocaleString()}

@@ -25,13 +25,14 @@ import {
   Calendar,
   Activity,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
-const syncStatusConfig: Record<string, { color: string; icon: typeof CheckCircle; label: string }> = {
-  synced: { color: "bg-green-100 text-green-700", icon: CheckCircle, label: "Synced" },
-  syncing: { color: "bg-blue-100 text-blue-700", icon: RefreshCw, label: "Syncing" },
-  pending: { color: "bg-yellow-100 text-yellow-700", icon: Clock, label: "Pending" },
-  error: { color: "bg-red-100 text-red-700", icon: XCircle, label: "Error" },
-  paused: { color: "bg-slate-100 text-slate-700", icon: Pause, label: "Paused" },
+const syncStatusConfig: Record<string, { color: string; icon: typeof CheckCircle; labelKey: string }> = {
+  synced: { color: "bg-green-100 text-green-700", icon: CheckCircle, labelKey: "synced" },
+  syncing: { color: "bg-blue-100 text-blue-700", icon: RefreshCw, labelKey: "syncing" },
+  pending: { color: "bg-yellow-100 text-yellow-700", icon: Clock, labelKey: "pending" },
+  error: { color: "bg-red-100 text-red-700", icon: XCircle, labelKey: "error" },
+  paused: { color: "bg-slate-100 text-slate-700", icon: Pause, labelKey: "paused" },
 }
 
 async function getDataSourceSyncStatus() {
@@ -51,20 +52,22 @@ async function getDataSourceSyncStatus() {
 
 async function DataSourceSyncContent() {
   const { dataSources, syncedCount, errorCount, syncingCount } = await getDataSourceSyncStatus()
+  const t = await getTranslations('gwi.dataSources.sync')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Sync Status</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Monitor and manage data source synchronization
+            {t('description')}
           </p>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <RefreshCw className="mr-2 h-4 w-4" />
-          Sync All
+          {t('syncAll')}
         </Button>
       </div>
 
@@ -78,7 +81,7 @@ async function DataSourceSyncContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{dataSources.length}</p>
-                <p className="text-sm text-muted-foreground">Total Sources</p>
+                <p className="text-sm text-muted-foreground">{t('totalSources')}</p>
               </div>
             </div>
           </CardContent>
@@ -91,7 +94,7 @@ async function DataSourceSyncContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{syncedCount}</p>
-                <p className="text-sm text-muted-foreground">Synced</p>
+                <p className="text-sm text-muted-foreground">{t('statuses.synced')}</p>
               </div>
             </div>
           </CardContent>
@@ -104,7 +107,7 @@ async function DataSourceSyncContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{syncingCount}</p>
-                <p className="text-sm text-muted-foreground">Syncing</p>
+                <p className="text-sm text-muted-foreground">{t('statuses.syncing')}</p>
               </div>
             </div>
           </CardContent>
@@ -117,7 +120,7 @@ async function DataSourceSyncContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{errorCount}</p>
-                <p className="text-sm text-muted-foreground">Errors</p>
+                <p className="text-sm text-muted-foreground">{t('errors')}</p>
               </div>
             </div>
           </CardContent>
@@ -127,9 +130,9 @@ async function DataSourceSyncContent() {
       {/* Sync Status Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Synchronization Status</CardTitle>
+          <CardTitle>{t('syncStatusTitle')}</CardTitle>
           <CardDescription>
-            Real-time status of all data source connections
+            {t('syncStatusDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -137,11 +140,11 @@ async function DataSourceSyncContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Data Source</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Last Sync</TableHead>
-                  <TableHead>Next Sync</TableHead>
+                  <TableHead>{t('dataSource')}</TableHead>
+                  <TableHead>{tCommon('type')}</TableHead>
+                  <TableHead>{tCommon('status')}</TableHead>
+                  <TableHead>{t('lastSync')}</TableHead>
+                  <TableHead>{t('nextSync')}</TableHead>
                   <TableHead className="w-[120px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -164,7 +167,7 @@ async function DataSourceSyncContent() {
                               {ds.name}
                             </Link>
                             <p className="text-xs text-muted-foreground">
-                              by {ds.createdBy.name}
+                              {t('by', { name: ds.createdBy.name })}
                             </p>
                           </div>
                         </div>
@@ -179,7 +182,7 @@ async function DataSourceSyncContent() {
                               ds.syncStatus === "syncing" ? "animate-spin" : ""
                             }`}
                           />
-                          {statusConfig.label}
+                          {t(`statuses.${statusConfig.labelKey}`)}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -193,12 +196,12 @@ async function DataSourceSyncContent() {
                             </p>
                           </div>
                         ) : (
-                          <span className="text-muted-foreground">Never</span>
+                          <span className="text-muted-foreground">{t('never')}</span>
                         )}
                       </TableCell>
                       <TableCell>
                         <span className="text-muted-foreground text-sm">
-                          Scheduled
+                          {t('scheduled')}
                         </span>
                       </TableCell>
                       <TableCell>
@@ -233,12 +236,12 @@ async function DataSourceSyncContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Database className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No Data Sources</h3>
+              <h3 className="text-lg font-medium">{t('noDataSources')}</h3>
               <p className="text-muted-foreground mb-4">
-                Add data sources to monitor their sync status
+                {t('noDataSourcesDescription')}
               </p>
               <Button asChild>
-                <Link href="/gwi/data-sources">Go to Data Sources</Link>
+                <Link href="/gwi/data-sources">{t('goToDataSources')}</Link>
               </Button>
             </div>
           )}
@@ -248,14 +251,14 @@ async function DataSourceSyncContent() {
       {/* Sync History */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Sync Activity</CardTitle>
-          <CardDescription>History of recent synchronization events</CardDescription>
+          <CardTitle>{t('recentActivity')}</CardTitle>
+          <CardDescription>{t('recentActivityDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-8">
             <Activity className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-muted-foreground">
-              Sync history tracking coming soon...
+              {t('comingSoon')}
             </p>
           </div>
         </CardContent>
@@ -277,14 +280,16 @@ function getRelativeTime(date: Date): string {
   return `${days}d ago`
 }
 
-export default function DataSourceSyncPage() {
+export default async function DataSourceSyncPage() {
+  const t = await getTranslations('gwi.dataSources.sync')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Sync Status</h1>
-            <p className="text-muted-foreground">Loading sync status...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

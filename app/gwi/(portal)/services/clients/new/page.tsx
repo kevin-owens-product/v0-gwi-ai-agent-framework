@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -24,21 +25,23 @@ import {
 import { ArrowLeft, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
-const industries = [
-  "Technology",
-  "Healthcare",
-  "Finance",
-  "Retail",
-  "Manufacturing",
-  "Education",
-  "Media & Entertainment",
-  "Professional Services",
-  "Non-profit",
-  "Government",
-  "Other",
+const industryKeys = [
+  "technology",
+  "healthcare",
+  "finance",
+  "retail",
+  "manufacturing",
+  "education",
+  "mediaEntertainment",
+  "professionalServices",
+  "nonProfit",
+  "government",
+  "other",
 ]
 
 export default function NewClientPage() {
+  const t = useTranslations("gwi.services.clients")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -72,11 +75,11 @@ export default function NewClientPage() {
       }
 
       const client = await res.json()
-      toast.success("Client created successfully")
+      toast.success(t("clientCreated"))
       router.push(`/gwi/services/clients/${client.id}`)
     } catch (error) {
       console.error("Failed to create client:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create client")
+      toast.error(error instanceof Error ? error.message : t("failedToCreate"))
     } finally {
       setLoading(false)
     }
@@ -90,11 +93,11 @@ export default function NewClientPage() {
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Clients
+          {t("backToClients")}
         </Link>
-        <h1 className="text-2xl font-bold">Add New Client</h1>
+        <h1 className="text-2xl font-bold">{t("addNewClient")}</h1>
         <p className="text-muted-foreground">
-          Create a new client record to track your engagements
+          {t("addNewClientDescription")}
         </p>
       </div>
 
@@ -102,28 +105,28 @@ export default function NewClientPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
+              <CardTitle>{t("form.basicInformation")}</CardTitle>
               <CardDescription>
-                Enter the client's basic details
+                {t("form.basicInformationDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Company Name *</Label>
+                <Label htmlFor="name">{t("form.companyName")} *</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="Acme Corporation"
+                  placeholder={t("form.companyNamePlaceholder")}
                   required
                 />
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="industry">Industry</Label>
+                  <Label htmlFor="industry">{t("form.industry")}</Label>
                   <Select
                     value={formData.industry}
                     onValueChange={(value) =>
@@ -131,12 +134,12 @@ export default function NewClientPage() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select industry" />
+                      <SelectValue placeholder={t("form.selectIndustry")} />
                     </SelectTrigger>
                     <SelectContent>
-                      {industries.map((industry) => (
-                        <SelectItem key={industry} value={industry}>
-                          {industry}
+                      {industryKeys.map((key) => (
+                        <SelectItem key={key} value={t(`industries.${key}`)}>
+                          {t(`industries.${key}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -144,7 +147,7 @@ export default function NewClientPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="status">Status</Label>
+                  <Label htmlFor="status">{tCommon("status")}</Label>
                   <Select
                     value={formData.status}
                     onValueChange={(value) =>
@@ -155,18 +158,18 @@ export default function NewClientPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="LEAD">Lead</SelectItem>
-                      <SelectItem value="PROSPECT">Prospect</SelectItem>
-                      <SelectItem value="ACTIVE">Active</SelectItem>
-                      <SelectItem value="ON_HOLD">On Hold</SelectItem>
-                      <SelectItem value="INACTIVE">Inactive</SelectItem>
+                      <SelectItem value="LEAD">{t("statuses.lead")}</SelectItem>
+                      <SelectItem value="PROSPECT">{t("statuses.prospect")}</SelectItem>
+                      <SelectItem value="ACTIVE">{tCommon("active")}</SelectItem>
+                      <SelectItem value="ON_HOLD">{t("statuses.onHold")}</SelectItem>
+                      <SelectItem value="INACTIVE">{tCommon("inactive")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="website">Website</Label>
+                <Label htmlFor="website">{t("form.website")}</Label>
                 <Input
                   id="website"
                   type="url"
@@ -182,15 +185,15 @@ export default function NewClientPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Billing Information</CardTitle>
+              <CardTitle>{t("form.billingInformation")}</CardTitle>
               <CardDescription>
-                Configure billing preferences for this client
+                {t("form.billingInformationDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="paymentTerms">Payment Terms (days)</Label>
+                  <Label htmlFor="paymentTerms">{t("form.paymentTerms")}</Label>
                   <Select
                     value={formData.paymentTerms}
                     onValueChange={(value) =>
@@ -201,18 +204,18 @@ export default function NewClientPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="0">Due on Receipt</SelectItem>
-                      <SelectItem value="15">Net 15</SelectItem>
-                      <SelectItem value="30">Net 30</SelectItem>
-                      <SelectItem value="45">Net 45</SelectItem>
-                      <SelectItem value="60">Net 60</SelectItem>
-                      <SelectItem value="90">Net 90</SelectItem>
+                      <SelectItem value="0">{t("form.dueOnReceipt")}</SelectItem>
+                      <SelectItem value="15">{t("form.net15")}</SelectItem>
+                      <SelectItem value="30">{t("form.net30")}</SelectItem>
+                      <SelectItem value="45">{t("form.net45")}</SelectItem>
+                      <SelectItem value="60">{t("form.net60")}</SelectItem>
+                      <SelectItem value="90">{t("form.net90")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="currency">Currency</Label>
+                  <Label htmlFor="currency">{t("form.currency")}</Label>
                   <Select
                     value={formData.currency}
                     onValueChange={(value) =>
@@ -224,8 +227,8 @@ export default function NewClientPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="USD">USD ($)</SelectItem>
-                      <SelectItem value="EUR">EUR (€)</SelectItem>
-                      <SelectItem value="GBP">GBP (£)</SelectItem>
+                      <SelectItem value="EUR">EUR (E)</SelectItem>
+                      <SelectItem value="GBP">GBP (P)</SelectItem>
                       <SelectItem value="CAD">CAD ($)</SelectItem>
                       <SelectItem value="AUD">AUD ($)</SelectItem>
                     </SelectContent>
@@ -233,14 +236,14 @@ export default function NewClientPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="taxId">Tax ID</Label>
+                  <Label htmlFor="taxId">{t("form.taxId")}</Label>
                   <Input
                     id="taxId"
                     value={formData.taxId}
                     onChange={(e) =>
                       setFormData({ ...formData, taxId: e.target.value })
                     }
-                    placeholder="Tax identification number"
+                    placeholder={t("form.taxIdPlaceholder")}
                   />
                 </div>
               </div>
@@ -249,9 +252,9 @@ export default function NewClientPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Additional Notes</CardTitle>
+              <CardTitle>{t("form.additionalNotes")}</CardTitle>
               <CardDescription>
-                Any additional information about this client
+                {t("form.additionalNotesDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -260,7 +263,7 @@ export default function NewClientPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, notes: e.target.value })
                 }
-                placeholder="Add notes about this client..."
+                placeholder={t("form.notesPlaceholder")}
                 rows={4}
               />
             </CardContent>
@@ -268,16 +271,16 @@ export default function NewClientPage() {
 
           <div className="flex items-center justify-end gap-4">
             <Button type="button" variant="outline" asChild>
-              <Link href="/gwi/services/clients">Cancel</Link>
+              <Link href="/gwi/services/clients">{tCommon("cancel")}</Link>
             </Button>
             <Button type="submit" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {tCommon("creating")}
                 </>
               ) : (
-                "Create Client"
+                t("createClient")
               )}
             </Button>
           </div>

@@ -33,6 +33,7 @@ import {
   RefreshCw,
   AlertTriangle,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getPipelineHealthData() {
   const [pipelines, recentRuns] = await Promise.all([
@@ -95,26 +96,28 @@ const runStatusConfig: Record<string, { color: string; icon: typeof CheckCircle 
 
 async function PipelineHealthContent() {
   const stats = await getPipelineHealthData()
+  const t = await getTranslations('gwi.monitoring.pipelineHealth')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Pipeline Health</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Monitor pipeline performance and reliability
+            {t('description')}
           </p>
         </div>
         <Select defaultValue="24h">
           <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Time Range" />
+            <SelectValue placeholder={t('timeRange')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="1h">Last hour</SelectItem>
-            <SelectItem value="24h">Last 24 hours</SelectItem>
-            <SelectItem value="7d">Last 7 days</SelectItem>
-            <SelectItem value="30d">Last 30 days</SelectItem>
+            <SelectItem value="1h">{t('lastHour')}</SelectItem>
+            <SelectItem value="24h">{t('last24Hours')}</SelectItem>
+            <SelectItem value="7d">{t('last7Days')}</SelectItem>
+            <SelectItem value="30d">{t('last30Days')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -129,7 +132,7 @@ async function PipelineHealthContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.successRate.toFixed(1)}%</p>
-                <p className="text-sm text-muted-foreground">Success Rate</p>
+                <p className="text-sm text-muted-foreground">{t('successRate')}</p>
               </div>
             </div>
           </CardContent>
@@ -142,7 +145,7 @@ async function PipelineHealthContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalRuns}</p>
-                <p className="text-sm text-muted-foreground">Total Runs</p>
+                <p className="text-sm text-muted-foreground">{t('totalRuns')}</p>
               </div>
             </div>
           </CardContent>
@@ -155,7 +158,7 @@ async function PipelineHealthContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.failedRuns}</p>
-                <p className="text-sm text-muted-foreground">Failed Runs</p>
+                <p className="text-sm text-muted-foreground">{t('failedRuns')}</p>
               </div>
             </div>
           </CardContent>
@@ -168,7 +171,7 @@ async function PipelineHealthContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.avgDuration}s</p>
-                <p className="text-sm text-muted-foreground">Avg Duration</p>
+                <p className="text-sm text-muted-foreground">{t('avgDuration')}</p>
               </div>
             </div>
           </CardContent>
@@ -180,16 +183,16 @@ async function PipelineHealthContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
-            Pipeline Performance
+            {t('pipelinePerformance')}
           </CardTitle>
-          <CardDescription>Success rate and execution time over time</CardDescription>
+          <CardDescription>{t('performanceChartDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center border rounded-lg bg-slate-50">
             <div className="text-center">
               <TrendingUp className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground">
-                Performance charts coming soon...
+                {t('chartsComingSoon')}
               </p>
             </div>
           </div>
@@ -199,8 +202,8 @@ async function PipelineHealthContent() {
       {/* Pipeline Health by Type */}
       <Card>
         <CardHeader>
-          <CardTitle>Health by Pipeline</CardTitle>
-          <CardDescription>Individual pipeline performance metrics</CardDescription>
+          <CardTitle>{t('healthByPipeline')}</CardTitle>
+          <CardDescription>{t('healthByPipelineDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           {stats.pipelines.length > 0 ? (
@@ -232,8 +235,8 @@ async function PipelineHealthContent() {
                           <Badge variant="outline">{pipeline.type}</Badge>
                         </div>
                         <div className="flex items-center gap-4 text-sm">
-                          <span className="text-green-600">{completed} passed</span>
-                          <span className="text-red-600">{failed} failed</span>
+                          <span className="text-green-600">{completed} {t('passed')}</span>
+                          <span className="text-red-600">{failed} {t('failed')}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
@@ -255,7 +258,7 @@ async function PipelineHealthContent() {
           ) : (
             <div className="text-center py-8">
               <Workflow className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No pipelines configured</p>
+              <p className="text-muted-foreground">{t('noPipelines')}</p>
             </div>
           )}
         </CardContent>
@@ -265,11 +268,11 @@ async function PipelineHealthContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Recent Pipeline Runs</CardTitle>
-            <CardDescription>Latest pipeline execution history</CardDescription>
+            <CardTitle>{t('recentRuns')}</CardTitle>
+            <CardDescription>{t('recentRunsDescription')}</CardDescription>
           </div>
           <Button variant="outline" asChild>
-            <Link href="/gwi/pipelines/runs">View All</Link>
+            <Link href="/gwi/pipelines/runs">{tCommon('viewAll')}</Link>
           </Button>
         </CardHeader>
         <CardContent className="p-0">
@@ -277,11 +280,11 @@ async function PipelineHealthContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Pipeline</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Started</TableHead>
-                  <TableHead>Duration</TableHead>
-                  <TableHead>Records</TableHead>
+                  <TableHead>{t('pipeline')}</TableHead>
+                  <TableHead>{tCommon('status')}</TableHead>
+                  <TableHead>{t('started')}</TableHead>
+                  <TableHead>{t('duration')}</TableHead>
+                  <TableHead>{t('records')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -331,7 +334,7 @@ async function PipelineHealthContent() {
           ) : (
             <div className="py-8 text-center">
               <Activity className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No pipeline runs yet</p>
+              <p className="text-muted-foreground">{t('noRunsYet')}</p>
             </div>
           )}
         </CardContent>
@@ -340,14 +343,16 @@ async function PipelineHealthContent() {
   )
 }
 
-export default function PipelineHealthPage() {
+export default async function PipelineHealthPage() {
+  const t = await getTranslations('gwi.monitoring.pipelineHealth')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Pipeline Health</h1>
-            <p className="text-muted-foreground">Loading health metrics...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

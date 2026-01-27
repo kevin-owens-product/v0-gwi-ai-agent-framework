@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -152,6 +153,8 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
   const { id } = use(params)
   const router = useRouter()
   const { data: session, status } = useSession()
+  const t = useTranslations("dashboard.crosstabs.edit")
+  const tCommon = useTranslations("common")
 
   // State
   const [crosstab, setCrosstab] = useState<CrosstabData | null>(null)
@@ -395,19 +398,19 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Edit Crosstab</h1>
-            <p className="text-muted-foreground mt-1">Unable to load crosstab</p>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
+            <p className="text-muted-foreground mt-1">{t("unableToLoad")}</p>
           </div>
         </div>
         <Card className="p-12 text-center">
           <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading Crosstab</h2>
+          <h2 className="text-xl font-semibold mb-2">{t("loadError")}</h2>
           <p className="text-muted-foreground mb-4">{error}</p>
           <div className="flex justify-center gap-4">
             <Link href="/dashboard/crosstabs">
-              <Button variant="outline">Back to Crosstabs</Button>
+              <Button variant="outline">{t("backToCrosstabs")}</Button>
             </Link>
-            <Button onClick={() => window.location.reload()}>Try Again</Button>
+            <Button onClick={() => window.location.reload()}>{t("tryAgain")}</Button>
           </div>
         </Card>
       </div>
@@ -425,18 +428,18 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Edit Crosstab</h1>
-            <p className="text-muted-foreground mt-1">Authentication required</p>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
+            <p className="text-muted-foreground mt-1">{t("authRequired")}</p>
           </div>
         </div>
         <Card className="p-12 text-center">
           <AlertCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Authentication Required</h2>
+          <h2 className="text-xl font-semibold mb-2">{t("authRequired")}</h2>
           <p className="text-muted-foreground mb-4">
-            Please sign in to edit this crosstab.
+            {t("pleaseSignIn")}
           </p>
           <Link href="/login">
-            <Button>Sign In</Button>
+            <Button>{t("signIn")}</Button>
           </Link>
         </Card>
       </div>
@@ -452,13 +455,13 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Edit Crosstab</h1>
-            <p className="text-muted-foreground">Modify crosstab configuration and settings</p>
+            <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
+            <p className="text-muted-foreground">{t("description")}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={handleCancel} disabled={isSaving}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button onClick={handleSave} disabled={isSaving || !hasChanges} className="gap-2">
             {isSaving ? (
@@ -466,7 +469,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             ) : (
               <Save className="h-4 w-4" />
             )}
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </div>
       </div>
@@ -488,20 +491,20 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Table2 className="h-5 w-5" />
-                Basic Information
+                {t("basicInfo.title")}
               </CardTitle>
-              <CardDescription>Update the crosstab name and description</CardDescription>
+              <CardDescription>{t("basicInfo.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">
-                  Crosstab Name <span className="text-destructive">*</span>
+                  {t("basicInfo.crosstabName")} <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g., Generational Social Media Analysis"
+                  placeholder={t("basicInfo.crosstabNamePlaceholder")}
                   className={validationErrors.name ? "border-destructive" : ""}
                 />
                 {validationErrors.name && (
@@ -509,12 +512,12 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe the purpose and insights from this crosstab"
+                  placeholder={t("basicInfo.descriptionPlaceholder")}
                   rows={3}
                 />
               </div>
@@ -526,16 +529,16 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                Row Variables (Audiences)
+                {t("rowVariables.title")}
               </CardTitle>
               <CardDescription>
-                Select audience segments to compare in rows
+                {t("rowVariables.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  {selectedAudiences.length} selected
+                  {t("rowVariables.selected", { count: selectedAudiences.length })}
                 </span>
                 <div className="flex gap-2">
                   <Button
@@ -543,14 +546,14 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                     size="sm"
                     onClick={() => setSelectedAudiences(availableAudiences.slice(0, 10))}
                   >
-                    Select Suggested
+                    {t("rowVariables.selectSuggested")}
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setSelectedAudiences([])}
                   >
-                    Clear
+                    {t("clear")}
                   </Button>
                 </div>
               </div>
@@ -585,7 +588,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
               {/* Add custom audience */}
               <div className="flex gap-2">
                 <Input
-                  placeholder="Add custom audience..."
+                  placeholder={t("rowVariables.addCustomPlaceholder")}
                   value={customAudience}
                   onChange={(e) => setCustomAudience(e.target.value)}
                   onKeyDown={(e) => {
@@ -612,16 +615,16 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <BarChart3 className="h-5 w-5" />
-                Column Variables (Metrics)
+                {t("columnVariables.title")}
               </CardTitle>
               <CardDescription>
-                Select metrics to display in columns
+                {t("columnVariables.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
-                  {selectedMetrics.length} selected
+                  {t("columnVariables.selected", { count: selectedMetrics.length })}
                 </span>
                 <div className="flex gap-2">
                   <Button
@@ -629,14 +632,14 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                     size="sm"
                     onClick={() => setSelectedMetrics(availableMetrics.slice(0, 8))}
                   >
-                    Select Suggested
+                    {t("columnVariables.selectSuggested")}
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setSelectedMetrics([])}
                   >
-                    Clear
+                    {t("clear")}
                   </Button>
                 </div>
               </div>
@@ -671,7 +674,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
               {/* Add custom metric */}
               <div className="flex gap-2">
                 <Input
-                  placeholder="Add custom metric..."
+                  placeholder={t("columnVariables.addCustomPlaceholder")}
                   value={customMetric}
                   onChange={(e) => setCustomMetric(e.target.value)}
                   onKeyDown={(e) => {
@@ -698,17 +701,17 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Filter className="h-5 w-5" />
-                Filters & Settings
+                {t("filtersSettings.title")}
               </CardTitle>
-              <CardDescription>Configure data source and filtering options</CardDescription>
+              <CardDescription>{t("filtersSettings.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="dataSource">Data Source</Label>
+                  <Label htmlFor="dataSource">{t("filtersSettings.dataSource")}</Label>
                   <Select value={dataSource} onValueChange={setDataSource}>
                     <SelectTrigger id="dataSource">
-                      <SelectValue placeholder="Select data source" />
+                      <SelectValue placeholder={t("filtersSettings.selectDataSource")} />
                     </SelectTrigger>
                     <SelectContent>
                       {availableDataSources.map((source) => (
@@ -720,10 +723,10 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
+                  <Label htmlFor="category">{t("filtersSettings.category")}</Label>
                   <Select value={category} onValueChange={setCategory}>
                     <SelectTrigger id="category">
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={t("filtersSettings.selectCategory")} />
                     </SelectTrigger>
                     <SelectContent>
                       {availableCategories.map((cat) => (
@@ -743,16 +746,16 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Scale className="h-5 w-5" />
-                Weighting & Statistical Settings
+                {t("weighting.title")}
               </CardTitle>
-              <CardDescription>Configure statistical analysis options</CardDescription>
+              <CardDescription>{t("weighting.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="weighting">Weighting Method</Label>
+                <Label htmlFor="weighting">{t("weighting.method")}</Label>
                 <Select value={weighting} onValueChange={setWeighting}>
                   <SelectTrigger id="weighting">
-                    <SelectValue placeholder="Select weighting" />
+                    <SelectValue placeholder={t("weighting.selectMethod")} />
                   </SelectTrigger>
                   <SelectContent>
                     {weightingOptions.map((option) => (
@@ -765,13 +768,13 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confidenceLevel">Confidence Level</Label>
+                <Label htmlFor="confidenceLevel">{t("weighting.confidenceLevel")}</Label>
                 <Select
                   value={confidenceLevel.toString()}
                   onValueChange={(val) => setConfidenceLevel(parseInt(val))}
                 >
                   <SelectTrigger id="confidenceLevel">
-                    <SelectValue placeholder="Select confidence level" />
+                    <SelectValue placeholder={t("weighting.selectConfidence")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="90">90%</SelectItem>
@@ -784,8 +787,8 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
               <div className="space-y-4 pt-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Show Percentages</Label>
-                    <p className="text-sm text-muted-foreground">Display values as percentages</p>
+                    <Label>{t("weighting.showPercentages")}</Label>
+                    <p className="text-sm text-muted-foreground">{t("weighting.showPercentagesDesc")}</p>
                   </div>
                   <Switch
                     checked={showPercentages}
@@ -794,8 +797,8 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Show Counts</Label>
-                    <p className="text-sm text-muted-foreground">Display raw count values</p>
+                    <Label>{t("weighting.showCounts")}</Label>
+                    <p className="text-sm text-muted-foreground">{t("weighting.showCountsDesc")}</p>
                   </div>
                   <Switch checked={showCounts} onCheckedChange={setShowCounts} />
                 </div>
@@ -809,17 +812,17 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
           {/* Summary */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Summary</CardTitle>
-              <CardDescription>Review your selections</CardDescription>
+              <CardTitle>{t("summary.title")}</CardTitle>
+              <CardDescription>{t("summary.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Audiences ({selectedAudiences.length})
+                  {t("summary.audiences", { count: selectedAudiences.length })}
                 </p>
                 <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
                   {selectedAudiences.length === 0 ? (
-                    <span className="text-sm text-muted-foreground italic">None selected</span>
+                    <span className="text-sm text-muted-foreground italic">{t("summary.noneSelected")}</span>
                   ) : (
                     selectedAudiences.map((audience) => (
                       <Badge key={audience} variant="secondary" className="text-xs">
@@ -840,11 +843,11 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
 
               <div>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Metrics ({selectedMetrics.length})
+                  {t("summary.metrics", { count: selectedMetrics.length })}
                 </p>
                 <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
                   {selectedMetrics.length === 0 ? (
-                    <span className="text-sm text-muted-foreground italic">None selected</span>
+                    <span className="text-sm text-muted-foreground italic">{t("summary.noneSelected")}</span>
                   ) : (
                     selectedMetrics.map((metric) => (
                       <Badge key={metric} variant="outline" className="text-xs">
@@ -867,12 +870,12 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                 <div className="pt-2 border-t">
                   {dataSource && (
                     <p className="text-sm">
-                      <span className="text-muted-foreground">Source:</span> {dataSource}
+                      <span className="text-muted-foreground">{t("summary.source")}:</span> {dataSource}
                     </p>
                   )}
                   {category && (
                     <p className="text-sm">
-                      <span className="text-muted-foreground">Category:</span> {category}
+                      <span className="text-muted-foreground">{t("summary.category")}:</span> {category}
                     </p>
                   )}
                 </div>
@@ -891,12 +894,12 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                 {isSaving ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Saving...
+                    {t("saving")}
                   </>
                 ) : (
                   <>
                     <Save className="h-4 w-4 mr-2" />
-                    Save Changes
+                    {t("saveChanges")}
                   </>
                 )}
               </Button>
@@ -906,11 +909,11 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                 onClick={handleCancel}
                 disabled={isSaving}
               >
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Link href={`/dashboard/crosstabs/${id}`} className="block">
                 <Button variant="ghost" className="w-full" disabled={isSaving}>
-                  View Crosstab
+                  {t("viewCrosstab")}
                 </Button>
               </Link>
             </CardContent>
@@ -920,7 +923,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
           {hasChanges && (
             <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
               <AlertCircle className="h-4 w-4" />
-              <span>You have unsaved changes</span>
+              <span>{t("unsavedChanges")}</span>
             </div>
           )}
         </div>
@@ -930,20 +933,19 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
       <AlertDialog open={showDiscardDialog} onOpenChange={setShowDiscardDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Discard Changes?</AlertDialogTitle>
+            <AlertDialogTitle>{t("discardDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              You have unsaved changes. Are you sure you want to leave this page? Your changes will
-              be lost.
+              {t("discardDialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Continue Editing</AlertDialogCancel>
+            <AlertDialogCancel>{t("discardDialog.continueEditing")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => router.push(`/dashboard/crosstabs/${id}`)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Discard Changes
+              {t("discardDialog.discardChanges")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

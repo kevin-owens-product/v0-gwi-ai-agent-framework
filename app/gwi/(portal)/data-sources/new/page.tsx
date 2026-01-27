@@ -2,8 +2,11 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Database } from "lucide-react"
 import { DataSourceEditor } from "@/components/gwi/data-sources/data-source-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
-export default function NewDataSourcePage() {
+export default async function NewDataSourcePage() {
+  const t = await getTranslations('gwi.dataSources')
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -18,9 +21,9 @@ export default function NewDataSourcePage() {
             <Database className="h-5 w-5 text-emerald-600" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Add Data Source</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('addTitle')}</h1>
             <p className="text-muted-foreground">
-              Connect a new external data source to the platform
+              {t('addDescription')}
             </p>
           </div>
         </div>

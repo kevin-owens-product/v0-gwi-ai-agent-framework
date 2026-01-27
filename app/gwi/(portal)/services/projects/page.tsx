@@ -38,6 +38,7 @@ import {
   Loader2,
 } from "lucide-react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 interface Project {
   id: string
@@ -75,6 +76,8 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
+  const t = useTranslations('gwi.services.projects')
+  const tCommon = useTranslations('common')
 
   useEffect(() => {
     fetchProjects()
@@ -92,7 +95,7 @@ export default function ProjectsPage() {
       setProjects(data)
     } catch (error) {
       console.error("Failed to fetch projects:", error)
-      toast.error("Failed to load projects")
+      toast.error(t('loadError'))
     } finally {
       setLoading(false)
     }
@@ -108,15 +111,15 @@ export default function ProjectsPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Projects</h1>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage your project engagements and deliverables
+            {t('description')}
           </p>
         </div>
         <Button asChild>
           <Link href="/gwi/services/projects/new">
             <Plus className="h-4 w-4 mr-2" />
-            New Project
+            {t('newProject')}
           </Link>
         </Button>
       </div>
@@ -125,7 +128,7 @@ export default function ProjectsPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('totalProjects')}</CardTitle>
             <FolderKanban className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -134,7 +137,7 @@ export default function ProjectsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('inProgress')}</CardTitle>
             <Clock className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -143,7 +146,7 @@ export default function ProjectsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('completed')}</CardTitle>
             <FolderKanban className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -155,15 +158,15 @@ export default function ProjectsPage() {
       {/* Filters & Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Project List</CardTitle>
-          <CardDescription>View and manage all your projects</CardDescription>
+          <CardTitle>{t('projectList')}</CardTitle>
+          <CardDescription>{t('projectListDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search projects..."
+                placeholder={t('searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -171,17 +174,17 @@ export default function ProjectsPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t('filterByStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="PROPOSED">Proposed</SelectItem>
-                <SelectItem value="APPROVED">Approved</SelectItem>
-                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                <SelectItem value="ON_HOLD">On Hold</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="DRAFT">{t('statuses.draft')}</SelectItem>
+                <SelectItem value="PROPOSED">{t('statuses.proposed')}</SelectItem>
+                <SelectItem value="APPROVED">{t('statuses.approved')}</SelectItem>
+                <SelectItem value="IN_PROGRESS">{t('statuses.inProgress')}</SelectItem>
+                <SelectItem value="ON_HOLD">{t('statuses.onHold')}</SelectItem>
+                <SelectItem value="COMPLETED">{t('statuses.completed')}</SelectItem>
+                <SelectItem value="CANCELLED">{t('statuses.cancelled')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -193,17 +196,17 @@ export default function ProjectsPage() {
           ) : projects.length === 0 ? (
             <div className="text-center py-12">
               <FolderKanban className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No projects found</h3>
+              <h3 className="text-lg font-medium">{t('noProjectsFound')}</h3>
               <p className="text-muted-foreground mb-4">
                 {search || statusFilter !== "all"
-                  ? "Try adjusting your filters"
-                  : "Get started by creating your first project"}
+                  ? t('tryAdjustingFilters')
+                  : t('getStarted')}
               </p>
               {!search && statusFilter === "all" && (
                 <Button asChild>
                   <Link href="/gwi/services/projects/new">
                     <Plus className="h-4 w-4 mr-2" />
-                    New Project
+                    {t('newProject')}
                   </Link>
                 </Button>
               )}
@@ -212,12 +215,12 @@ export default function ProjectsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Project</TableHead>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Progress</TableHead>
-                  <TableHead className="text-center">Team</TableHead>
-                  <TableHead>Timeline</TableHead>
+                  <TableHead>{t('project')}</TableHead>
+                  <TableHead>{t('client')}</TableHead>
+                  <TableHead>{tCommon('status')}</TableHead>
+                  <TableHead>{t('progress')}</TableHead>
+                  <TableHead className="text-center">{t('team')}</TableHead>
+                  <TableHead>{t('timeline')}</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -267,7 +270,7 @@ export default function ProjectsPage() {
                       <div className="text-sm">
                         {project.startDate
                           ? new Date(project.startDate).toLocaleDateString()
-                          : "Not set"}
+                          : t('notSet')}
                         {project.endDate && (
                           <>
                             {" - "}
@@ -278,7 +281,7 @@ export default function ProjectsPage() {
                     </TableCell>
                     <TableCell>
                       <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/gwi/services/projects/${project.id}`}>View</Link>
+                        <Link href={`/gwi/services/projects/${project.id}`}>{tCommon('view')}</Link>
                       </Button>
                     </TableCell>
                   </TableRow>

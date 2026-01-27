@@ -2,8 +2,11 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { PipelineEditor } from "@/components/gwi/pipelines/pipeline-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
-export default function NewPipelinePage() {
+export default async function NewPipelinePage() {
+  const t = await getTranslations('gwi.pipelines')
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -14,9 +17,9 @@ export default function NewPipelinePage() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Create New Pipeline</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('createTitle')}</h1>
           <p className="text-muted-foreground">
-            Set up a new data processing pipeline
+            {t('createDescription')}
           </p>
         </div>
       </div>

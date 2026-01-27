@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { ArrowLeft, Play, Loader2, Copy, RotateCcw, Sparkles } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export default function LLMTestingPage() {
   const [prompt, setPrompt] = useState("")
@@ -23,6 +24,9 @@ export default function LLMTestingPage() {
   const [model, setModel] = useState("gpt-4")
   const [temperature, setTemperature] = useState([0.7])
   const [maxTokens, setMaxTokens] = useState([1024])
+
+  const t = useTranslations('gwi.llm.testing')
+  const tCommon = useTranslations('common')
 
   const handleTest = async () => {
     if (!prompt.trim()) return
@@ -46,10 +50,10 @@ export default function LLMTestingPage() {
         const data = await res.json()
         setResponse(data.response)
       } else {
-        setResponse("Error: Failed to get response from LLM")
+        setResponse(t('errorFailedResponse'))
       }
     } catch (error) {
-      setResponse("Error: Failed to connect to API")
+      setResponse(t('errorFailedConnect'))
     } finally {
       setIsLoading(false)
     }
@@ -74,9 +78,9 @@ export default function LLMTestingPage() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Prompt Playground</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Test and experiment with LLM prompts
+            {t('description')}
           </p>
         </div>
       </div>
@@ -85,12 +89,12 @@ export default function LLMTestingPage() {
         {/* Configuration Panel */}
         <Card>
           <CardHeader>
-            <CardTitle>Configuration</CardTitle>
-            <CardDescription>Adjust model parameters</CardDescription>
+            <CardTitle>{t('configuration')}</CardTitle>
+            <CardDescription>{t('configurationDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label>Model</Label>
+              <Label>{t('model')}</Label>
               <Select value={model} onValueChange={setModel}>
                 <SelectTrigger>
                   <SelectValue />
@@ -107,7 +111,7 @@ export default function LLMTestingPage() {
 
             <div className="space-y-2">
               <div className="flex justify-between">
-                <Label>Temperature</Label>
+                <Label>{t('temperature')}</Label>
                 <span className="text-sm text-muted-foreground">
                   {temperature[0]}
                 </span>
@@ -120,13 +124,13 @@ export default function LLMTestingPage() {
                 step={0.1}
               />
               <p className="text-xs text-muted-foreground">
-                Higher values make output more random
+                {t('temperatureHint')}
               </p>
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between">
-                <Label>Max Tokens</Label>
+                <Label>{t('maxTokens')}</Label>
                 <span className="text-sm text-muted-foreground">
                   {maxTokens[0]}
                 </span>
@@ -139,7 +143,7 @@ export default function LLMTestingPage() {
                 step={256}
               />
               <p className="text-xs text-muted-foreground">
-                Maximum length of the response
+                {t('maxTokensHint')}
               </p>
             </div>
           </CardContent>
@@ -150,20 +154,20 @@ export default function LLMTestingPage() {
           {/* Prompt Input */}
           <Card>
             <CardHeader>
-              <CardTitle>Prompt</CardTitle>
-              <CardDescription>Enter your prompt to test</CardDescription>
+              <CardTitle>{t('prompt')}</CardTitle>
+              <CardDescription>{t('promptDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Enter your prompt here..."
+                placeholder={t('promptPlaceholder')}
                 className="min-h-[200px] font-mono"
               />
               <div className="flex justify-between mt-4">
                 <Button variant="outline" onClick={handleClear}>
                   <RotateCcw className="mr-2 h-4 w-4" />
-                  Clear
+                  {t('clear')}
                 </Button>
                 <Button
                   onClick={handleTest}
@@ -173,12 +177,12 @@ export default function LLMTestingPage() {
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Running...
+                      {t('running')}
                     </>
                   ) : (
                     <>
                       <Play className="mr-2 h-4 w-4" />
-                      Run Test
+                      {t('runTest')}
                     </>
                   )}
                 </Button>
@@ -190,13 +194,13 @@ export default function LLMTestingPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Response</CardTitle>
-                <CardDescription>LLM output will appear here</CardDescription>
+                <CardTitle>{t('response')}</CardTitle>
+                <CardDescription>{t('responseDescription')}</CardDescription>
               </div>
               {response && (
                 <Button variant="outline" size="sm" onClick={handleCopyResponse}>
                   <Copy className="mr-2 h-4 w-4" />
-                  Copy
+                  {t('copy')}
                 </Button>
               )}
             </CardHeader>
@@ -208,7 +212,7 @@ export default function LLMTestingPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
                   <Sparkles className="h-12 w-12 mb-4 opacity-50" />
-                  <p>Run a test to see the response</p>
+                  <p>{t('runToSeeResponse')}</p>
                 </div>
               )}
             </CardContent>

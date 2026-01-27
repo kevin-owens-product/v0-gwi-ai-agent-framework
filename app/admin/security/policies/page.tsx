@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Lock,
   Plus,
@@ -12,14 +13,12 @@ import {
   Globe,
   FileText,
   Clock,
-  Users,
   Edit,
   Trash,
   Power,
   PowerOff,
-  AlertCircle,
 } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -73,36 +72,19 @@ const policyTypeIcons: Record<string, React.ReactNode> = {
   DEFAULT: <Shield className="h-4 w-4" />,
 }
 
-const policyTypes = [
-  { value: "PASSWORD", label: "Password Policy" },
-  { value: "SESSION", label: "Session Policy" },
-  { value: "MFA", label: "MFA Requirements" },
-  { value: "IP_ALLOWLIST", label: "IP Allowlist" },
-  { value: "DATA_ACCESS", label: "Data Access" },
-  { value: "FILE_SHARING", label: "File Sharing" },
-  { value: "EXTERNAL_SHARING", label: "External Sharing" },
-  { value: "DLP", label: "Data Loss Prevention" },
-  { value: "ENCRYPTION", label: "Encryption" },
-  { value: "DEVICE_TRUST", label: "Device Trust" },
-  { value: "API_ACCESS", label: "API Access" },
-  { value: "RETENTION", label: "Data Retention" },
-]
+const POLICY_TYPE_KEYS = [
+  "PASSWORD", "SESSION", "MFA", "IP_ALLOWLIST", "DATA_ACCESS", "FILE_SHARING",
+  "EXTERNAL_SHARING", "DLP", "ENCRYPTION", "DEVICE_TRUST", "API_ACCESS", "RETENTION"
+] as const
 
-const scopeOptions = [
-  { value: "PLATFORM", label: "Platform-wide" },
-  { value: "ENTERPRISE_ONLY", label: "Enterprise Only" },
-  { value: "SPECIFIC_ORGS", label: "Specific Organizations" },
-  { value: "SPECIFIC_PLANS", label: "Specific Plans" },
-]
+const SCOPE_KEYS = ["PLATFORM", "ENTERPRISE_ONLY", "SPECIFIC_ORGS", "SPECIFIC_PLANS"] as const
 
-const enforcementModes = [
-  { value: "MONITOR", label: "Monitor Only" },
-  { value: "WARN", label: "Warn" },
-  { value: "ENFORCE", label: "Enforce" },
-  { value: "STRICT", label: "Strict" },
-]
+const ENFORCEMENT_MODE_KEYS = ["MONITOR", "WARN", "ENFORCE", "STRICT"] as const
 
 export default function SecurityPoliciesPage() {
+  const t = useTranslations("admin.securityPolicies")
+  const tCommon = useTranslations("common")
+
   const [policies, setPolicies] = useState<SecurityPolicy[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -137,7 +119,7 @@ export default function SecurityPoliciesPage() {
       setPolicies(data.policies || [])
     } catch (error) {
       console.error("Failed to fetch policies:", error)
-      toast.error("Failed to fetch security policies")
+      toast.error(t("errors.fetchFailed"))
     } finally {
       setLoading(false)
     }
@@ -152,10 +134,10 @@ export default function SecurityPoliciesPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to create policy")
+        throw new Error(t("errors.createFailed"))
       }
 
-      toast.success("Security policy created successfully")
+      toast.success(t("messages.policyCreated"))
       setIsCreateOpen(false)
       setNewPolicy({
         name: "",
@@ -168,7 +150,7 @@ export default function SecurityPoliciesPage() {
       })
       fetchPolicies()
     } catch (error) {
-      toast.error("Failed to create security policy")
+      toast.error(t("errors.createFailed"))
     }
   }
 
@@ -181,13 +163,13 @@ export default function SecurityPoliciesPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update policy")
+        throw new Error(t("errors.updateFailed"))
       }
 
-      toast.success(`Policy ${policy.isActive ? "disabled" : "enabled"} successfully`)
+      toast.success(policy.isActive ? t("messages.policyDisabled") : t("messages.policyEnabled"))
       fetchPolicies()
     } catch (error) {
-      toast.error("Failed to update policy")
+      toast.error(t("errors.updateFailed"))
     }
   }
 
@@ -198,14 +180,14 @@ export default function SecurityPoliciesPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to delete policy")
+        throw new Error(t("errors.deleteFailed"))
       }
 
-      toast.success("Policy deleted successfully")
+      toast.success(t("messages.policyDeleted"))
       fetchPolicies()
     } catch (error) {
-      toast.error("Failed to delete policy")
-      throw error // Re-throw to let AdminDataTable handle the error state
+      toast.error(t("errors.deleteFailed"))
+      throw error
     }
   }
 
@@ -227,7 +209,7 @@ export default function SecurityPoliciesPage() {
     },
     {
       id: "name",
-      header: "Policy Name",
+      header: t("columns.policyName"),
       cell: (policy) => (
         <div>
           <p className="font-medium">{policy.name}</p>
@@ -241,25 +223,25 @@ export default function SecurityPoliciesPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("columns.type"),
       cell: (policy) => (
         <Badge variant="outline">
-          {policy.type.replace(/_/g, " ")}
+          {t(`policyTypes.${policy.type.toLowerCase()}`)}
         </Badge>
       ),
     },
     {
       id: "scope",
-      header: "Scope",
+      header: t("columns.scope"),
       cell: (policy) => (
         <Badge variant="secondary">
-          {policy.scope.replace(/_/g, " ")}
+          {t(`scopes.${policy.scope.toLowerCase()}`)}
         </Badge>
       ),
     },
     {
       id: "enforcement",
-      header: "Enforcement",
+      header: t("columns.enforcement"),
       cell: (policy) => (
         <Badge
           variant={
@@ -270,22 +252,22 @@ export default function SecurityPoliciesPage() {
               : "secondary"
           }
         >
-          {policy.enforcementMode}
+          {t(`enforcementModes.${policy.enforcementMode.toLowerCase()}`)}
         </Badge>
       ),
     },
     {
       id: "status",
-      header: "Status",
+      header: tCommon("status"),
       cell: (policy) => (
         <Badge variant={policy.isActive ? "default" : "outline"}>
-          {policy.isActive ? "Active" : "Inactive"}
+          {policy.isActive ? tCommon("active") : tCommon("inactive")}
         </Badge>
       ),
     },
     {
       id: "violations",
-      header: "Violations",
+      header: t("columns.violations"),
       cell: (policy) =>
         policy.violationCount > 0 ? (
           <Badge variant="destructive">{policy.violationCount}</Badge>
@@ -298,21 +280,20 @@ export default function SecurityPoliciesPage() {
   // Define row actions
   const rowActions: RowAction<SecurityPolicy>[] = [
     {
-      label: "Edit Policy",
+      label: t("actions.editPolicy"),
       icon: <Edit className="h-4 w-4" />,
       onClick: (policy) => {
-        // TODO: Implement edit functionality
-        toast.info("Edit functionality coming soon")
+        toast.info(t("messages.editComingSoon"))
       },
     },
     {
-      label: "Enable",
+      label: t("actions.enable"),
       icon: <Power className="h-4 w-4" />,
       onClick: handleTogglePolicy,
       hidden: (policy) => policy.isActive,
     },
     {
-      label: "Disable",
+      label: t("actions.disable"),
       icon: <PowerOff className="h-4 w-4" />,
       onClick: handleTogglePolicy,
       hidden: (policy) => !policy.isActive,
@@ -322,7 +303,7 @@ export default function SecurityPoliciesPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Enable Selected",
+      label: t("actions.enableSelected"),
       icon: <Power className="h-4 w-4" />,
       onClick: async (ids) => {
         try {
@@ -339,17 +320,17 @@ export default function SecurityPoliciesPage() {
               return Promise.resolve()
             })
           )
-          toast.success(`Enabled ${ids.length} policies`)
+          toast.success(t("messages.bulkEnabled", { count: ids.length }))
           fetchPolicies()
         } catch (error) {
-          toast.error("Failed to enable policies")
+          toast.error(t("errors.bulkEnableFailed"))
         }
       },
-      confirmTitle: "Enable Policies",
-      confirmDescription: "Are you sure you want to enable the selected policies?",
+      confirmTitle: t("dialogs.enablePolicies"),
+      confirmDescription: t("dialogs.enablePoliciesDescription"),
     },
     {
-      label: "Disable Selected",
+      label: t("actions.disableSelected"),
       icon: <PowerOff className="h-4 w-4" />,
       onClick: async (ids) => {
         try {
@@ -366,17 +347,17 @@ export default function SecurityPoliciesPage() {
               return Promise.resolve()
             })
           )
-          toast.success(`Disabled ${ids.length} policies`)
+          toast.success(t("messages.bulkDisabled", { count: ids.length }))
           fetchPolicies()
         } catch (error) {
-          toast.error("Failed to disable policies")
+          toast.error(t("errors.bulkDisableFailed"))
         }
       },
-      confirmTitle: "Disable Policies",
-      confirmDescription: "Are you sure you want to disable the selected policies?",
+      confirmTitle: t("dialogs.disablePolicies"),
+      confirmDescription: t("dialogs.disablePoliciesDescription"),
     },
     {
-      label: "Delete Selected",
+      label: t("actions.deleteSelected"),
       icon: <Trash className="h-4 w-4" />,
       onClick: async (ids) => {
         try {
@@ -387,16 +368,16 @@ export default function SecurityPoliciesPage() {
               })
             )
           )
-          toast.success(`Deleted ${ids.length} policies`)
+          toast.success(t("messages.bulkDeleted", { count: ids.length }))
           fetchPolicies()
         } catch (error) {
-          toast.error("Failed to delete policies")
+          toast.error(t("errors.bulkDeleteFailed"))
         }
       },
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Policies",
-      confirmDescription: "Are you sure you want to delete the selected policies? This action cannot be undone.",
+      confirmTitle: t("dialogs.deletePolicies"),
+      confirmDescription: t("dialogs.deletePoliciesDescription"),
     },
   ]
 
@@ -407,32 +388,32 @@ export default function SecurityPoliciesPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Lock className="h-8 w-8 text-primary" />
-            Security Policies
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Configure and manage platform-wide security enforcement rules
+            {t("description")}
           </p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Create Policy
+              {t("createPolicy")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Create Security Policy</DialogTitle>
+              <DialogTitle>{t("dialogs.createPolicy")}</DialogTitle>
               <DialogDescription>
-                Define a new security policy to enforce across the platform
+                {t("dialogs.createPolicyDescription")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="name">Policy Name</Label>
+                <Label htmlFor="name">{t("form.policyName")}</Label>
                 <Input
                   id="name"
-                  placeholder="e.g., Enterprise Password Policy"
+                  placeholder={t("form.policyNamePlaceholder")}
                   value={newPolicy.name}
                   onChange={(e) =>
                     setNewPolicy({ ...newPolicy, name: e.target.value })
@@ -440,10 +421,10 @@ export default function SecurityPoliciesPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Describe what this policy enforces..."
+                  placeholder={t("form.descriptionPlaceholder")}
                   value={newPolicy.description}
                   onChange={(e) =>
                     setNewPolicy({ ...newPolicy, description: e.target.value })
@@ -452,7 +433,7 @@ export default function SecurityPoliciesPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label>Policy Type</Label>
+                  <Label>{t("form.policyType")}</Label>
                   <Select
                     value={newPolicy.type}
                     onValueChange={(value) =>
@@ -463,16 +444,16 @@ export default function SecurityPoliciesPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {policyTypes.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
+                      {POLICY_TYPE_KEYS.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {t(`policyTypes.${type.toLowerCase()}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="grid gap-2">
-                  <Label>Scope</Label>
+                  <Label>{t("form.scope")}</Label>
                   <Select
                     value={newPolicy.scope}
                     onValueChange={(value) =>
@@ -483,9 +464,9 @@ export default function SecurityPoliciesPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {scopeOptions.map((scope) => (
-                        <SelectItem key={scope.value} value={scope.value}>
-                          {scope.label}
+                      {SCOPE_KEYS.map((scope) => (
+                        <SelectItem key={scope} value={scope}>
+                          {t(`scopes.${scope.toLowerCase()}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -494,7 +475,7 @@ export default function SecurityPoliciesPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label>Enforcement Mode</Label>
+                  <Label>{t("form.enforcementMode")}</Label>
                   <Select
                     value={newPolicy.enforcementMode}
                     onValueChange={(value) =>
@@ -505,16 +486,16 @@ export default function SecurityPoliciesPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {enforcementModes.map((mode) => (
-                        <SelectItem key={mode.value} value={mode.value}>
-                          {mode.label}
+                      {ENFORCEMENT_MODE_KEYS.map((mode) => (
+                        <SelectItem key={mode} value={mode}>
+                          {t(`enforcementModes.${mode.toLowerCase()}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="priority">Priority (higher = first)</Label>
+                  <Label htmlFor="priority">{t("form.priority")}</Label>
                   <Input
                     id="priority"
                     type="number"
@@ -533,15 +514,15 @@ export default function SecurityPoliciesPage() {
                     setNewPolicy({ ...newPolicy, isActive: checked })
                   }
                 />
-                <Label htmlFor="isActive">Enable policy immediately</Label>
+                <Label htmlFor="isActive">{t("form.enableImmediately")}</Label>
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button onClick={handleCreatePolicy} disabled={!newPolicy.name}>
-                Create Policy
+                {t("createPolicy")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -553,7 +534,7 @@ export default function SecurityPoliciesPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{policies.length}</div>
-            <p className="text-xs text-muted-foreground">Total Policies</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalPolicies")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -561,7 +542,7 @@ export default function SecurityPoliciesPage() {
             <div className="text-2xl font-bold text-green-500">
               {policies.filter((p) => p.isActive).length}
             </div>
-            <p className="text-xs text-muted-foreground">Active Policies</p>
+            <p className="text-xs text-muted-foreground">{t("stats.activePolicies")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -569,7 +550,7 @@ export default function SecurityPoliciesPage() {
             <div className="text-2xl font-bold text-blue-500">
               {policies.filter((p) => p.enforcementMode === "ENFORCE" || p.enforcementMode === "STRICT").length}
             </div>
-            <p className="text-xs text-muted-foreground">Enforcing Policies</p>
+            <p className="text-xs text-muted-foreground">{t("stats.enforcingPolicies")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -577,7 +558,7 @@ export default function SecurityPoliciesPage() {
             <div className="text-2xl font-bold text-yellow-500">
               {policies.reduce((acc, p) => acc + (p.violationCount || 0), 0)}
             </div>
-            <p className="text-xs text-muted-foreground">Total Violations</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalViolations")}</p>
           </CardContent>
         </Card>
       </div>
@@ -590,7 +571,7 @@ export default function SecurityPoliciesPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search policies..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -600,26 +581,26 @@ export default function SecurityPoliciesPage() {
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Policy Type" />
+                <SelectValue placeholder={t("form.policyType")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                {policyTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
+                {POLICY_TYPE_KEYS.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {t(`policyTypes.${type.toLowerCase()}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={scopeFilter} onValueChange={setScopeFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Scope" />
+                <SelectValue placeholder={t("form.scope")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Scopes</SelectItem>
-                {scopeOptions.map((scope) => (
-                  <SelectItem key={scope.value} value={scope.value}>
-                    {scope.label}
+                <SelectItem value="all">{t("filters.allScopes")}</SelectItem>
+                {SCOPE_KEYS.map((scope) => (
+                  <SelectItem key={scope} value={scope}>
+                    {t(`scopes.${scope.toLowerCase()}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -639,23 +620,23 @@ export default function SecurityPoliciesPage() {
             emptyMessage={
               <div className="text-center py-12">
                 <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">No security policies found</p>
+                <p className="text-muted-foreground">{t("noPolicies")}</p>
                 <Button
                   variant="outline"
                   className="mt-4"
                   onClick={() => setIsCreateOpen(true)}
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Create First Policy
+                  {t("createFirstPolicy")}
                 </Button>
               </div>
             }
             onDelete={async (policy) => {
               await handleDeletePolicy(policy.id)
             }}
-            deleteConfirmTitle="Delete Security Policy"
+            deleteConfirmTitle={t("dialogs.deletePolicy")}
             deleteConfirmDescription={(policy) =>
-              `Are you sure you want to delete "${policy.name}"? This action cannot be undone.`
+              t("dialogs.deletePolicyDescription", { name: policy.name })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}

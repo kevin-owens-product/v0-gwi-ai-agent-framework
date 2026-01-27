@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -113,6 +114,8 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
   const { id } = use(params)
   const router = useRouter()
   const { data: session, status: sessionStatus } = useSession()
+  const t = useTranslations("dashboard.audiences.edit")
+  const tCommon = useTranslations("common")
 
   // Form state
   const [name, setName] = useState("")
@@ -317,20 +320,20 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Audience Not Found</h1>
+            <h1 className="text-3xl font-bold">{t("notFound")}</h1>
             <p className="text-muted-foreground mt-1">
-              The audience you're trying to edit doesn't exist
+              {t("notFoundDescription")}
             </p>
           </div>
         </div>
         <Card className="p-12 text-center">
           <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Audience not found</h2>
+          <h2 className="text-xl font-semibold mb-2">{t("notFound")}</h2>
           <p className="text-muted-foreground mb-4">
-            The audience you're looking for doesn't exist or has been deleted.
+            {t("notFoundDetailedDescription")}
           </p>
           <Link href="/dashboard/audiences">
-            <Button>Back to Audiences</Button>
+            <Button>{t("backToAudiences")}</Button>
           </Link>
         </Card>
       </div>
@@ -346,26 +349,26 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">Edit Audience</h1>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
             <p className="text-muted-foreground mt-1">
-              Update the configuration for this audience segment
+              {t("description")}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={handleCancel} disabled={isSaving}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button onClick={handleSave} disabled={isSaving || !hasChanges}>
             {isSaving ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Saving...
+                {t("saving")}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4 mr-2" />
-                Save Changes
+                {t("saveChanges")}
               </>
             )}
           </Button>
@@ -388,26 +391,26 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
           {/* Basic Info */}
           <Card>
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
+              <CardTitle>{t("basicInfo.title")}</CardTitle>
               <CardDescription>
-                Set the name and description for this audience
+                {t("basicInfo.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Audience Name *</Label>
+                <Label htmlFor="name">{t("basicInfo.audienceName")} *</Label>
                 <Input
                   id="name"
-                  placeholder="e.g., Eco-Conscious Millennials"
+                  placeholder={t("basicInfo.audienceNamePlaceholder")}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Brief description of this audience segment"
+                  placeholder={t("basicInfo.descriptionPlaceholder")}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={3}
@@ -421,22 +424,22 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-primary" />
-                AI-Powered Query
+                {t("aiQuery.title")}
               </CardTitle>
               <CardDescription>
-                Describe your audience in natural language
+                {t("aiQuery.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Textarea
-                placeholder="e.g., Show me millennials who care about sustainability, live in urban areas, and shop at eco-friendly brands"
+                placeholder={t("aiQuery.placeholder")}
                 value={aiQuery}
                 onChange={(e) => setAiQuery(e.target.value)}
                 rows={3}
               />
               <Button variant="outline" className="w-full" disabled>
                 <Sparkles className="h-4 w-4 mr-2" />
-                Generate Attributes (Coming Soon)
+                {t("aiQuery.generateButton")}
               </Button>
             </CardContent>
           </Card>
@@ -446,14 +449,14 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Targeting Attributes</CardTitle>
+                  <CardTitle>{t("attributes.title")}</CardTitle>
                   <CardDescription>
-                    Define specific criteria for this audience
+                    {t("attributes.description")}
                   </CardDescription>
                 </div>
                 <Button variant="outline" size="sm" onClick={addAttribute}>
                   <Plus className="h-4 w-4 mr-1" />
-                  Add Attribute
+                  {t("attributes.addAttribute")}
                 </Button>
               </div>
             </CardHeader>
@@ -461,9 +464,9 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
               {attributes.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <Users className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                  <p className="text-sm">No attributes defined yet</p>
+                  <p className="text-sm">{t("attributes.noAttributes")}</p>
                   <p className="text-xs mt-1">
-                    Add attributes to define your audience criteria
+                    {t("attributes.noAttributesHint")}
                   </p>
                 </div>
               ) : (
@@ -502,7 +505,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
                       </Select>
                       <Input
                         className="flex-1"
-                        placeholder="Value"
+                        placeholder={t("attributes.valuePlaceholder")}
                         value={attr.value}
                         onChange={(e) => updateAttribute(index, "value", e.target.value)}
                       />
@@ -529,10 +532,10 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                Markets
+                {t("markets.title")}
               </CardTitle>
               <CardDescription>
-                Select the markets for this audience
+                {t("markets.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -553,7 +556,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
               </div>
               {selectedMarkets.length === 0 && (
                 <p className="text-xs text-muted-foreground mt-3">
-                  Select at least one market
+                  {t("markets.selectAtLeastOne")}
                 </p>
               )}
             </CardContent>
@@ -562,7 +565,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
           {/* Estimated Reach */}
           <Card>
             <CardHeader>
-              <CardTitle>Estimated Reach</CardTitle>
+              <CardTitle>{t("estimatedReach.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">
@@ -572,10 +575,10 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
                     : estimatedSize >= 1000
                       ? `${(estimatedSize / 1000).toFixed(0)}K`
                       : estimatedSize
-                  : "TBD"}
+                  : t("estimatedReach.tbd")}
               </div>
               <p className="text-sm text-muted-foreground mt-1">
-                consumers match these criteria
+                {t("estimatedReach.matchCriteria")}
               </p>
             </CardContent>
           </Card>
@@ -583,7 +586,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
           {/* Quick Actions */}
           <Card>
             <CardHeader>
-              <CardTitle>Actions</CardTitle>
+              <CardTitle>{tCommon("actions")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <Button
@@ -593,7 +596,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
                 disabled={isSaving || !hasChanges}
               >
                 <Save className="h-4 w-4 mr-2" />
-                Save Changes
+                {t("saveChanges")}
               </Button>
               <Button
                 variant="outline"
@@ -602,7 +605,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
                 disabled={isSaving}
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Cancel
+                {tCommon("cancel")}
               </Button>
             </CardContent>
           </Card>
@@ -613,18 +616,18 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
       <AlertDialog open={showDiscardDialog} onOpenChange={setShowDiscardDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Discard Changes?</AlertDialogTitle>
+            <AlertDialogTitle>{t("discardDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              You have unsaved changes. Are you sure you want to leave? Your changes will be lost.
+              {t("discardDialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Editing</AlertDialogCancel>
+            <AlertDialogCancel>{t("discardDialog.keepEditing")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => router.push(`/dashboard/audiences/${id}`)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Discard Changes
+              {t("discardDialog.discardChanges")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

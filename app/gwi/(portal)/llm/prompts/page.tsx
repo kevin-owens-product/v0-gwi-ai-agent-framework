@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Plus, Search, FileCode, Edit, Trash2, Copy, TestTube, ArrowLeft } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getPromptTemplates() {
   const templates = await prisma.promptTemplate.findMany({
@@ -38,6 +39,8 @@ async function getPromptTemplates() {
 
 async function PromptsContent() {
   const { templates, categories } = await getPromptTemplates()
+  const t = await getTranslations('gwi.llm.prompts')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
@@ -50,15 +53,15 @@ async function PromptsContent() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Prompt Templates</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <p className="text-muted-foreground">
-              Manage reusable prompt templates for LLM interactions
+              {t('description')}
             </p>
           </div>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Plus className="mr-2 h-4 w-4" />
-          New Template
+          {t('newTemplate')}
         </Button>
       </div>
 
@@ -68,14 +71,14 @@ async function PromptsContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search prompts..." className="pl-9" />
+              <Input placeholder={t('searchPlaceholder')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Category" />
+                <SelectValue placeholder={t('category')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="all">{t('allCategories')}</SelectItem>
                 {categories.map((cat) => (
                   <SelectItem key={cat} value={cat}>
                     {cat}
@@ -94,11 +97,11 @@ async function PromptsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Template Name</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Version</TableHead>
-                  <TableHead>Created By</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t('templateName')}</TableHead>
+                  <TableHead>{t('category')}</TableHead>
+                  <TableHead>{t('version')}</TableHead>
+                  <TableHead>{t('createdBy')}</TableHead>
+                  <TableHead>{tCommon('status')}</TableHead>
                   <TableHead className="w-[150px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -128,7 +131,7 @@ async function PromptsContent() {
                             : "bg-gray-100 text-gray-700"
                         }
                       >
-                        {template.isActive ? "Active" : "Inactive"}
+                        {template.isActive ? tCommon('active') : tCommon('inactive')}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -160,13 +163,13 @@ async function PromptsContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <FileCode className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No prompt templates yet</h3>
+              <h3 className="text-lg font-medium">{t('noTemplates')}</h3>
               <p className="text-muted-foreground mb-4">
-                Create reusable prompt templates for your LLM workflows
+                {t('noTemplatesDescription')}
               </p>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Create Template
+                {t('createTemplate')}
               </Button>
             </div>
           )}
@@ -176,13 +179,15 @@ async function PromptsContent() {
   )
 }
 
-export default function PromptsPage() {
+export default async function PromptsPage() {
+  const t = await getTranslations('gwi.llm.prompts')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Prompt Templates</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

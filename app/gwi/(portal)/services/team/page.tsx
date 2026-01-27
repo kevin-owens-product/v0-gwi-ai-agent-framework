@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -77,14 +78,9 @@ const statusColors: Record<string, string> = {
   CONTRACTOR: "bg-blue-100 text-blue-700",
 }
 
-const employmentTypeLabels: Record<string, string> = {
-  FULL_TIME: "Full-time",
-  PART_TIME: "Part-time",
-  CONTRACT: "Contract",
-  INTERN: "Intern",
-}
-
 export default function TeamPage() {
+  const t = useTranslations("gwi.services.team")
+  const tCommon = useTranslations("common")
   const [employees, setEmployees] = useState<Employee[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -106,7 +102,7 @@ export default function TeamPage() {
       setEmployees(data)
     } catch (error) {
       console.error("Failed to fetch employees:", error)
-      toast.error("Failed to load team members")
+      toast.error(t("failedToLoad"))
     } finally {
       setLoading(false)
     }
@@ -122,22 +118,22 @@ export default function TeamPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Team</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground">
-            Manage your team members and their assignments
+            {t("description")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/gwi/services/team/departments">
               <Building className="h-4 w-4 mr-2" />
-              Departments
+              {t("departments")}
             </Link>
           </Button>
           <Button asChild>
             <Link href="/gwi/services/team/new">
               <Plus className="h-4 w-4 mr-2" />
-              Add Member
+              {t("addMember")}
             </Link>
           </Button>
         </div>
@@ -147,7 +143,7 @@ export default function TeamPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Members</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("totalMembers")}</CardTitle>
             <UsersRound className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -156,7 +152,7 @@ export default function TeamPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active</CardTitle>
+            <CardTitle className="text-sm font-medium">{tCommon("active")}</CardTitle>
             <UsersRound className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -165,7 +161,7 @@ export default function TeamPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">On Projects</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("onProjects")}</CardTitle>
             <FolderKanban className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -177,15 +173,15 @@ export default function TeamPage() {
       {/* Filters & Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Team Members</CardTitle>
-          <CardDescription>View and manage all employees</CardDescription>
+          <CardTitle>{t("teamMembers")}</CardTitle>
+          <CardDescription>{t("teamMembersDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search team members..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -193,14 +189,14 @@ export default function TeamPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t("filterByStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="ON_LEAVE">On Leave</SelectItem>
-                <SelectItem value="CONTRACTOR">Contractor</SelectItem>
-                <SelectItem value="TERMINATED">Terminated</SelectItem>
+                <SelectItem value="all">{t("allStatuses")}</SelectItem>
+                <SelectItem value="ACTIVE">{tCommon("active")}</SelectItem>
+                <SelectItem value="ON_LEAVE">{t("statuses.onLeave")}</SelectItem>
+                <SelectItem value="CONTRACTOR">{t("statuses.contractor")}</SelectItem>
+                <SelectItem value="TERMINATED">{t("statuses.terminated")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -212,17 +208,17 @@ export default function TeamPage() {
           ) : employees.length === 0 ? (
             <div className="text-center py-12">
               <UsersRound className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No team members found</h3>
+              <h3 className="text-lg font-medium">{t("noMembersFound")}</h3>
               <p className="text-muted-foreground mb-4">
                 {search || statusFilter !== "all"
-                  ? "Try adjusting your filters"
-                  : "Add your first team member to get started"}
+                  ? t("tryAdjustingFilters")
+                  : t("addFirstMember")}
               </p>
               {!search && statusFilter === "all" && (
                 <Button asChild>
                   <Link href="/gwi/services/team/new">
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Member
+                    {t("addMember")}
                   </Link>
                 </Button>
               )}
@@ -231,12 +227,12 @@ export default function TeamPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Department</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Employment</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Projects</TableHead>
+                  <TableHead>{tCommon("name")}</TableHead>
+                  <TableHead>{t("table.department")}</TableHead>
+                  <TableHead>{t("table.role")}</TableHead>
+                  <TableHead>{t("table.employment")}</TableHead>
+                  <TableHead>{tCommon("status")}</TableHead>
+                  <TableHead className="text-center">{t("table.projects")}</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -277,12 +273,11 @@ export default function TeamPage() {
                       )}
                     </TableCell>
                     <TableCell>
-                      {employmentTypeLabels[employee.employmentType] ||
-                        employee.employmentType}
+                      {t(`employmentTypes.${employee.employmentType.toLowerCase()}`)}
                     </TableCell>
                     <TableCell>
                       <Badge className={statusColors[employee.status]}>
-                        {employee.status.replace("_", " ")}
+                        {t(`statuses.${employee.status.toLowerCase()}`)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center">
@@ -293,7 +288,7 @@ export default function TeamPage() {
                     </TableCell>
                     <TableCell>
                       <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/gwi/services/team/${employee.id}`}>View</Link>
+                        <Link href={`/gwi/services/team/${employee.id}`}>{tCommon("viewDetails")}</Link>
                       </Button>
                     </TableCell>
                   </TableRow>

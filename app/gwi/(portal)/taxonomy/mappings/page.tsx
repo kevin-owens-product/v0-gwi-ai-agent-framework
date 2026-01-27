@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Plus, Search, Edit, Trash2, GitBranch, ArrowLeft, ArrowRight } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getMappings() {
   const mappings = await prisma.taxonomyMappingRule.findMany({
@@ -27,6 +28,8 @@ async function getMappings() {
 
 async function MappingsContent() {
   const mappings = await getMappings()
+  const t = await getTranslations('gwi.taxonomy.mappings')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
@@ -39,15 +42,15 @@ async function MappingsContent() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Mapping Rules</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <p className="text-muted-foreground">
-              Define rules for mapping data to taxonomy categories
+              {t('description')}
             </p>
           </div>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Plus className="mr-2 h-4 w-4" />
-          New Mapping Rule
+          {t('newMappingRule')}
         </Button>
       </div>
 
@@ -56,7 +59,7 @@ async function MappingsContent() {
         <CardContent className="pt-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search mapping rules..." className="pl-9" />
+            <Input placeholder={t('searchPlaceholder')} className="pl-9" />
           </div>
         </CardContent>
       </Card>
@@ -68,12 +71,12 @@ async function MappingsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Rule Name</TableHead>
-                  <TableHead>Source Field</TableHead>
+                  <TableHead>{t('ruleName')}</TableHead>
+                  <TableHead>{t('sourceField')}</TableHead>
                   <TableHead></TableHead>
-                  <TableHead>Target Category</TableHead>
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>{t('targetCategory')}</TableHead>
+                  <TableHead>{t('priority')}</TableHead>
+                  <TableHead>{tCommon('active')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -130,13 +133,13 @@ async function MappingsContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <GitBranch className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No mapping rules yet</h3>
+              <h3 className="text-lg font-medium">{t('noMappingRules')}</h3>
               <p className="text-muted-foreground mb-4">
-                Create rules to automatically map data to taxonomy
+                {t('noMappingRulesDescription')}
               </p>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Create Mapping Rule
+                {t('createMappingRule')}
               </Button>
             </div>
           )}
@@ -146,13 +149,15 @@ async function MappingsContent() {
   )
 }
 
-export default function MappingsPage() {
+export default async function MappingsPage() {
+  const t = await getTranslations('gwi.taxonomy.mappings')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Mapping Rules</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

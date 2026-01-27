@@ -23,6 +23,7 @@ import {
   FolderTree,
   RefreshCw,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getTaxonomyData() {
   const [categories, mappingRules, attributes] = await Promise.all([
@@ -43,20 +44,22 @@ async function getTaxonomyData() {
 
 async function TaxonomyValidationContent() {
   const { categories, mappingRules, attributeCount } = await getTaxonomyData()
+  const t = await getTranslations('gwi.taxonomy.validation')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Taxonomy Validation</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Test and validate taxonomy mappings and rules
+            {t('description')}
           </p>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Play className="mr-2 h-4 w-4" />
-          Run All Tests
+          {t('runAllTests')}
         </Button>
       </div>
 
@@ -70,7 +73,7 @@ async function TaxonomyValidationContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{categories.length}</p>
-                <p className="text-sm text-muted-foreground">Categories</p>
+                <p className="text-sm text-muted-foreground">{t('categories')}</p>
               </div>
             </div>
           </CardContent>
@@ -83,7 +86,7 @@ async function TaxonomyValidationContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{attributeCount}</p>
-                <p className="text-sm text-muted-foreground">Attributes</p>
+                <p className="text-sm text-muted-foreground">{t('attributes')}</p>
               </div>
             </div>
           </CardContent>
@@ -96,7 +99,7 @@ async function TaxonomyValidationContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{mappingRules.length}</p>
-                <p className="text-sm text-muted-foreground">Mapping Rules</p>
+                <p className="text-sm text-muted-foreground">{t('mappingRules')}</p>
               </div>
             </div>
           </CardContent>
@@ -109,7 +112,7 @@ async function TaxonomyValidationContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">--</p>
-                <p className="text-sm text-muted-foreground">Tests Passed</p>
+                <p className="text-sm text-muted-foreground">{t('testsPassed')}</p>
               </div>
             </div>
           </CardContent>
@@ -121,34 +124,34 @@ async function TaxonomyValidationContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TestTube className="h-5 w-5" />
-            Test Mapping
+            {t('testMapping')}
           </CardTitle>
           <CardDescription>
-            Enter sample data to test taxonomy mapping rules
+            {t('testMappingDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Source Field</label>
+              <label className="text-sm font-medium">{t('sourceField')}</label>
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select source field" />
+                  <SelectValue placeholder={t('selectSourceField')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="age">Age</SelectItem>
-                  <SelectItem value="gender">Gender</SelectItem>
-                  <SelectItem value="country">Country</SelectItem>
-                  <SelectItem value="income">Income</SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
+                  <SelectItem value="age">{t('fields.age')}</SelectItem>
+                  <SelectItem value="gender">{t('fields.gender')}</SelectItem>
+                  <SelectItem value="country">{t('fields.country')}</SelectItem>
+                  <SelectItem value="income">{t('fields.income')}</SelectItem>
+                  <SelectItem value="education">{t('fields.education')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Target Category</label>
+              <label className="text-sm font-medium">{t('targetCategory')}</label>
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select target category" />
+                  <SelectValue placeholder={t('selectTargetCategory')} />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
@@ -161,7 +164,7 @@ async function TaxonomyValidationContent() {
             </div>
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Test Input (JSON)</label>
+            <label className="text-sm font-medium">{t('testInputJson')}</label>
             <Textarea
               placeholder='{"age": 25, "gender": "male", "country": "US"}'
               className="font-mono text-sm"
@@ -171,11 +174,11 @@ async function TaxonomyValidationContent() {
           <div className="flex gap-2">
             <Button className="bg-emerald-600 hover:bg-emerald-700">
               <Play className="mr-2 h-4 w-4" />
-              Test Mapping
+              {t('testMapping')}
             </Button>
             <Button variant="outline">
               <RefreshCw className="mr-2 h-4 w-4" />
-              Clear
+              {tCommon('clear')}
             </Button>
           </div>
         </CardContent>
@@ -184,15 +187,15 @@ async function TaxonomyValidationContent() {
       {/* Test Results Placeholder */}
       <Card>
         <CardHeader>
-          <CardTitle>Test Results</CardTitle>
-          <CardDescription>Results from the last validation test</CardDescription>
+          <CardTitle>{t('testResults')}</CardTitle>
+          <CardDescription>{t('testResultsDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <TestTube className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No Test Results Yet</h3>
+            <h3 className="text-lg font-medium">{t('noTestResults')}</h3>
             <p className="text-muted-foreground max-w-md">
-              Enter test data and run a mapping test to see results here
+              {t('noTestResultsDescription')}
             </p>
           </div>
         </CardContent>
@@ -201,9 +204,9 @@ async function TaxonomyValidationContent() {
       {/* Mapping Rules Overview */}
       <Card>
         <CardHeader>
-          <CardTitle>Active Mapping Rules</CardTitle>
+          <CardTitle>{t('activeMappingRules')}</CardTitle>
           <CardDescription>
-            Rules used for taxonomy mapping validation
+            {t('activeMappingRulesDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -227,7 +230,7 @@ async function TaxonomyValidationContent() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline">Priority: {rule.priority}</Badge>
+                    <Badge variant="outline">{t('priority', { value: rule.priority })}</Badge>
                     <Button variant="ghost" size="sm">
                       <Play className="h-4 w-4" />
                     </Button>
@@ -238,7 +241,7 @@ async function TaxonomyValidationContent() {
           ) : (
             <div className="text-center py-8">
               <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-yellow-500" />
-              <p className="text-muted-foreground">No mapping rules configured</p>
+              <p className="text-muted-foreground">{t('noMappingRules')}</p>
             </div>
           )}
         </CardContent>
@@ -247,13 +250,15 @@ async function TaxonomyValidationContent() {
   )
 }
 
-export default function TaxonomyValidationPage() {
+export default async function TaxonomyValidationPage() {
+  const t = await getTranslations('gwi.taxonomy.validation')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Taxonomy Validation</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

@@ -26,6 +26,7 @@ import {
   Wrench,
   Zap,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const capabilityIcons: Record<string, typeof Puzzle> = {
   analysis: BarChart3,
@@ -108,20 +109,22 @@ async function getCapabilitiesData() {
 
 async function CapabilitiesContent() {
   const { tools, activeTools, toolTypes } = await getCapabilitiesData()
+  const t = await getTranslations('gwi.agents.capabilities')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Agent Capabilities</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Configure what agents can do and access
+            {t('description')}
           </p>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Plus className="mr-2 h-4 w-4" />
-          Add Capability
+          {t('addCapability')}
         </Button>
       </div>
 
@@ -135,7 +138,7 @@ async function CapabilitiesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{builtInCapabilities.length}</p>
-                <p className="text-sm text-muted-foreground">Core Capabilities</p>
+                <p className="text-sm text-muted-foreground">{t('coreCapabilities')}</p>
               </div>
             </div>
           </CardContent>
@@ -148,7 +151,7 @@ async function CapabilitiesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{tools.length}</p>
-                <p className="text-sm text-muted-foreground">Custom Tools</p>
+                <p className="text-sm text-muted-foreground">{t('customTools')}</p>
               </div>
             </div>
           </CardContent>
@@ -161,7 +164,7 @@ async function CapabilitiesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeTools}</p>
-                <p className="text-sm text-muted-foreground">Active Tools</p>
+                <p className="text-sm text-muted-foreground">{t('activeTools')}</p>
               </div>
             </div>
           </CardContent>
@@ -174,7 +177,7 @@ async function CapabilitiesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{toolTypes.length}</p>
-                <p className="text-sm text-muted-foreground">Tool Types</p>
+                <p className="text-sm text-muted-foreground">{t('toolTypes')}</p>
               </div>
             </div>
           </CardContent>
@@ -187,28 +190,28 @@ async function CapabilitiesContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search capabilities..." className="pl-9" />
+              <Input placeholder={t('searchPlaceholder')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={tCommon('type')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="analysis">Analysis</SelectItem>
-                <SelectItem value="data_access">Data Access</SelectItem>
-                <SelectItem value="reporting">Reporting</SelectItem>
-                <SelectItem value="workflow">Workflow</SelectItem>
+                <SelectItem value="all">{t('allTypes')}</SelectItem>
+                <SelectItem value="analysis">{t('types.analysis')}</SelectItem>
+                <SelectItem value="data_access">{t('types.dataAccess')}</SelectItem>
+                <SelectItem value="reporting">{t('types.reporting')}</SelectItem>
+                <SelectItem value="workflow">{t('types.workflow')}</SelectItem>
               </SelectContent>
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon('status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="all">{tCommon('all')}</SelectItem>
+                <SelectItem value="active">{tCommon('active')}</SelectItem>
+                <SelectItem value="inactive">{tCommon('inactive')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -218,9 +221,9 @@ async function CapabilitiesContent() {
       {/* Core Capabilities */}
       <Card>
         <CardHeader>
-          <CardTitle>Core Capabilities</CardTitle>
+          <CardTitle>{t('coreCapabilities')}</CardTitle>
           <CardDescription>
-            Built-in capabilities available for all agents
+            {t('coreCapabilitiesDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -259,13 +262,13 @@ async function CapabilitiesContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Custom Tools</CardTitle>
+            <CardTitle>{t('customTools')}</CardTitle>
             <CardDescription>
-              Additional tools configured for specific use cases
+              {t('customToolsDescription')}
             </CardDescription>
           </div>
           <Button variant="outline" asChild>
-            <a href="/gwi/agents/tools">View All Tools</a>
+            <a href="/gwi/agents/tools">{t('viewAllTools')}</a>
           </Button>
         </CardHeader>
         <CardContent>
@@ -297,7 +300,7 @@ async function CapabilitiesContent() {
           ) : (
             <div className="text-center py-8">
               <Wrench className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">No custom tools configured</p>
+              <p className="text-muted-foreground">{t('noCustomTools')}</p>
             </div>
           )}
         </CardContent>
@@ -306,14 +309,16 @@ async function CapabilitiesContent() {
   )
 }
 
-export default function AgentCapabilitiesPage() {
+export default async function AgentCapabilitiesPage() {
+  const t = await getTranslations('gwi.agents.capabilities')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Agent Capabilities</h1>
-            <p className="text-muted-foreground">Loading capabilities...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

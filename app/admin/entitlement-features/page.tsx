@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,7 +29,6 @@ import {
   Search,
   Sparkles,
   Pencil,
-  Trash2,
   Plus,
   Loader2,
   RefreshCw,
@@ -37,24 +37,9 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
-const CATEGORIES = [
-  { value: "CORE", label: "Core" },
-  { value: "ANALYTICS", label: "Analytics" },
-  { value: "AGENTS", label: "Agents" },
-  { value: "INTEGRATIONS", label: "Integrations" },
-  { value: "SECURITY", label: "Security" },
-  { value: "SUPPORT", label: "Support" },
-  { value: "CUSTOMIZATION", label: "Customization" },
-  { value: "API", label: "API" },
-  { value: "ADVANCED", label: "Advanced" },
-]
+const CATEGORY_KEYS = ["CORE", "ANALYTICS", "AGENTS", "INTEGRATIONS", "SECURITY", "SUPPORT", "CUSTOMIZATION", "API", "ADVANCED"] as const
 
-const VALUE_TYPES = [
-  { value: "BOOLEAN", label: "Boolean (on/off)" },
-  { value: "NUMBER", label: "Number" },
-  { value: "STRING", label: "String" },
-  { value: "JSON", label: "JSON" },
-]
+const VALUE_TYPE_KEYS = ["BOOLEAN", "NUMBER", "STRING", "JSON"] as const
 
 interface Feature {
   id: string
@@ -74,6 +59,9 @@ interface Feature {
 }
 
 export default function FeaturesPage() {
+  const t = useTranslations("admin.entitlementFeatures")
+  const tCommon = useTranslations("common")
+
   const [features, setFeatures] = useState<Feature[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -160,7 +148,7 @@ export default function FeaturesPage() {
         fetchFeatures()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create feature")
+        toast.error(data.error || t("errors.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create feature:", error)
@@ -185,7 +173,7 @@ export default function FeaturesPage() {
         fetchFeatures()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to update feature")
+        toast.error(data.error || t("errors.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update feature:", error)
@@ -234,7 +222,7 @@ export default function FeaturesPage() {
         fetchFeatures()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to delete feature")
+        toast.error(data.error || t("errors.deleteFailed"))
       }
     } catch (error) {
       console.error("Failed to delete feature:", error)
@@ -265,7 +253,7 @@ export default function FeaturesPage() {
   const columns: Column<Feature>[] = [
     {
       id: "feature",
-      header: "Feature",
+      header: t("columns.feature"),
       cell: (feature) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -280,21 +268,21 @@ export default function FeaturesPage() {
     },
     {
       id: "category",
-      header: "Category",
+      header: t("columns.category"),
       cell: (feature) => (
         <Badge className={getCategoryBadgeColor(feature.category)}>
-          {feature.category}
+          {t(`categories.${feature.category.toLowerCase()}`)}
         </Badge>
       ),
     },
     {
       id: "type",
-      header: "Type",
-      cell: (feature) => <Badge variant="outline">{feature.valueType}</Badge>,
+      header: t("columns.type"),
+      cell: (feature) => <Badge variant="outline">{t(`valueTypes.${feature.valueType.toLowerCase()}`)}</Badge>,
     },
     {
       id: "default",
-      header: "Default",
+      header: t("columns.default"),
       cell: (feature) => (
         <span className="font-mono text-sm">
           {typeof feature.defaultValue === "boolean"
@@ -305,24 +293,24 @@ export default function FeaturesPage() {
     },
     {
       id: "plans",
-      header: "Plans",
+      header: t("columns.plans"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (feature) => <Badge variant="outline">{feature._count.plans}</Badge>,
     },
     {
       id: "status",
-      header: "Status",
+      header: tCommon("status"),
       cell: (feature) =>
         feature.isActive ? (
           <Badge variant="default" className="bg-green-500">
             <Check className="h-3 w-3 mr-1" />
-            Active
+            {tCommon("active")}
           </Badge>
         ) : (
           <Badge variant="secondary">
             <X className="h-3 w-3 mr-1" />
-            Inactive
+            {tCommon("inactive")}
           </Badge>
         ),
     },
@@ -331,7 +319,7 @@ export default function FeaturesPage() {
   // Row actions
   const rowActions: RowAction<Feature>[] = [
     {
-      label: "Edit Feature",
+      label: t("actions.editFeature"),
       icon: <Pencil className="h-4 w-4" />,
       onClick: openEditDialog,
     },
@@ -340,18 +328,18 @@ export default function FeaturesPage() {
   // Bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Enable Selected",
+      label: t("actions.enableSelected"),
       icon: <Check className="h-4 w-4" />,
       onClick: (ids) => handleBulkToggleActive(ids, true),
-      confirmTitle: "Enable Features",
-      confirmDescription: "Are you sure you want to enable the selected features?",
+      confirmTitle: t("dialogs.enableFeatures"),
+      confirmDescription: t("dialogs.enableFeaturesDescription"),
     },
     {
-      label: "Disable Selected",
+      label: t("actions.disableSelected"),
       icon: <X className="h-4 w-4" />,
       onClick: (ids) => handleBulkToggleActive(ids, false),
-      confirmTitle: "Disable Features",
-      confirmDescription: "Are you sure you want to disable the selected features?",
+      confirmTitle: t("dialogs.disableFeatures"),
+      confirmDescription: t("dialogs.disableFeaturesDescription"),
       separator: true,
     },
   ]
@@ -364,20 +352,20 @@ export default function FeaturesPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5" />
-                Feature Management
+                {t("title")}
               </CardTitle>
               <CardDescription>
-                Manage entitlement features that can be assigned to plans ({total} total)
+                {t("description", { total })}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchFeatures} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               <Button onClick={() => { resetForm(); setCreateDialogOpen(true) }} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                New Feature
+                {t("newFeature")}
               </Button>
             </div>
           </div>
@@ -388,7 +376,7 @@ export default function FeaturesPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by key, name, or description..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -396,23 +384,23 @@ export default function FeaturesPage() {
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="Category" />
+                <SelectValue placeholder={t("columns.category")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {CATEGORIES.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+                <SelectItem value="all">{t("filters.allCategories")}</SelectItem>
+                {CATEGORY_KEYS.map((cat) => (
+                  <SelectItem key={cat} value={cat}>{t(`categories.${cat.toLowerCase()}`)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="true">Active</SelectItem>
-                <SelectItem value="false">Inactive</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
+                <SelectItem value="true">{tCommon("active")}</SelectItem>
+                <SelectItem value="false">{tCommon("inactive")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -423,19 +411,19 @@ export default function FeaturesPage() {
             columns={columns}
             getRowId={(feature) => feature.id}
             isLoading={isLoading}
-            emptyMessage="No features found"
+            emptyMessage={t("noFeatures")}
             rowActions={rowActions}
             onDelete={(feature) => {
               // Check if feature is used in plans before deleting
               if (feature._count.plans > 0) {
-                toast.error(`Cannot delete this feature as it is used by ${feature._count.plans} plan(s)`)
+                toast.error(t("errors.featureInUse", { count: feature._count.plans }))
                 return Promise.reject(new Error("Feature is in use"))
               }
               return handleDeleteFeature(feature)
             }}
-            deleteConfirmTitle="Delete Feature"
+            deleteConfirmTitle={t("dialogs.deleteFeature")}
             deleteConfirmDescription={(feature) =>
-              `Are you sure you want to delete "${feature.name}"? This action cannot be undone.`
+              t("dialogs.deleteFeatureDescription", { name: feature.name })
             }
             bulkActions={bulkActions}
             selectedIds={selectedIds}
@@ -459,48 +447,48 @@ export default function FeaturesPage() {
       }}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>{editDialogOpen ? "Edit Feature" : "Create New Feature"}</DialogTitle>
+            <DialogTitle>{editDialogOpen ? t("dialogs.editFeature") : t("dialogs.createFeature")}</DialogTitle>
             <DialogDescription>
               {editDialogOpen
-                ? "Update the feature details below."
-                : "Define a new entitlement feature that can be assigned to plans."}
+                ? t("dialogs.editFeatureDescription")
+                : t("dialogs.createFeatureDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Feature Key</Label>
+                <Label>{t("form.featureKey")}</Label>
                 <Input
                   value={formData.key}
                   onChange={(e) => setFormData(prev => ({ ...prev, key: e.target.value.toLowerCase().replace(/\s+/g, "_") }))}
-                  placeholder="advanced_analytics"
+                  placeholder={t("form.featureKeyPlaceholder")}
                   disabled={editDialogOpen}
                 />
-                <p className="text-xs text-muted-foreground">snake_case format</p>
+                <p className="text-xs text-muted-foreground">{t("form.snakeCaseFormat")}</p>
               </div>
               <div className="space-y-2">
-                <Label>Display Name</Label>
+                <Label>{t("form.displayName")}</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Advanced Analytics"
+                  placeholder={t("form.displayNamePlaceholder")}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label>Description</Label>
+              <Label>{tCommon("description")}</Label>
               <Textarea
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Describe what this feature enables..."
+                placeholder={t("form.descriptionPlaceholder")}
                 rows={2}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Category</Label>
+                <Label>{t("columns.category")}</Label>
                 <Select
                   value={formData.category}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
@@ -509,14 +497,14 @@ export default function FeaturesPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {CATEGORIES.map((cat) => (
-                      <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+                    {CATEGORY_KEYS.map((cat) => (
+                      <SelectItem key={cat} value={cat}>{t(`categories.${cat.toLowerCase()}`)}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Value Type</Label>
+                <Label>{t("form.valueType")}</Label>
                 <Select
                   value={formData.valueType}
                   onValueChange={(value) => {
@@ -531,8 +519,8 @@ export default function FeaturesPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {VALUE_TYPES.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
+                    {VALUE_TYPE_KEYS.map((type) => (
+                      <SelectItem key={type} value={type}>{t(`valueTypes.${type.toLowerCase()}`)}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -541,7 +529,7 @@ export default function FeaturesPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Default Value</Label>
+                <Label>{t("form.defaultValue")}</Label>
                 {formData.valueType === "BOOLEAN" ? (
                   <div className="flex items-center gap-2 h-10">
                     <Switch
@@ -549,7 +537,7 @@ export default function FeaturesPage() {
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, defaultValue: checked }))}
                     />
                     <span className="text-sm text-muted-foreground">
-                      {formData.defaultValue ? "Enabled" : "Disabled"}
+                      {formData.defaultValue ? tCommon("enabled") : tCommon("disabled")}
                     </span>
                   </div>
                 ) : formData.valueType === "NUMBER" ? (
@@ -566,7 +554,7 @@ export default function FeaturesPage() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label>Sort Order</Label>
+                <Label>{t("form.sortOrder")}</Label>
                 <Input
                   type="number"
                   value={formData.sortOrder}
@@ -580,7 +568,7 @@ export default function FeaturesPage() {
                 checked={formData.isActive}
                 onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isActive: checked }))}
               />
-              <Label>Active</Label>
+              <Label>{tCommon("active")}</Label>
             </div>
           </div>
           <DialogFooter>
@@ -590,16 +578,16 @@ export default function FeaturesPage() {
               setSelectedFeature(null)
               resetForm()
             }}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button onClick={editDialogOpen ? handleUpdate : handleCreate} disabled={isSubmitting || !formData.key || !formData.name}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  {editDialogOpen ? "Updating..." : "Creating..."}
+                  {editDialogOpen ? t("form.updating") : t("form.creating")}
                 </>
               ) : (
-                editDialogOpen ? "Update Feature" : "Create Feature"
+                editDialogOpen ? t("form.updateFeature") : t("form.createFeature")
               )}
             </Button>
           </DialogFooter>

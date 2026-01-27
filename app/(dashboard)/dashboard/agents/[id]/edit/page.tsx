@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -55,6 +56,8 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
   const { id } = use(params)
   const router = useRouter()
   const { data: session, status: sessionStatus } = useSession()
+  const t = useTranslations("dashboard.agents.edit")
+  const tCommon = useTranslations("common")
 
   // Loading and error states
   const [isLoading, setIsLoading] = useState(true)
@@ -256,10 +259,10 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-        <p className="text-lg font-medium mb-2">Failed to load agent</p>
+        <p className="text-lg font-medium mb-2">{t("loadError")}</p>
         <p className="text-sm text-muted-foreground mb-4">{error}</p>
         <Link href="/dashboard/agents">
-          <Button>Back to Agents</Button>
+          <Button>{t("backToAgents")}</Button>
         </Link>
       </div>
     )
@@ -276,9 +279,9 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Edit Agent</h1>
+            <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
             <p className="text-muted-foreground">
-              Modify agent configuration and settings
+              {t("description")}
             </p>
           </div>
         </div>
@@ -287,7 +290,7 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
             variant="outline"
             onClick={() => router.push(`/dashboard/agents/${id}`)}
           >
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button onClick={handleSave} disabled={isSaving} className="gap-2">
             {isSaving ? (
@@ -295,7 +298,7 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
             ) : (
               <Save className="h-4 w-4" />
             )}
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </div>
       </div>
@@ -306,19 +309,19 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
           {/* Basic Information */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
+              <CardTitle>{t("basicInfo.title")}</CardTitle>
               <CardDescription>
-                Update the agent name, description, and type
+                {t("basicInfo.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Agent Name *</Label>
+                <Label htmlFor="name">{t("basicInfo.agentName")} *</Label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g., Brand Perception Analyzer"
+                  placeholder={t("basicInfo.agentNamePlaceholder")}
                   className={`bg-secondary ${errors.name ? "border-red-500" : ""}`}
                 />
                 {errors.name && (
@@ -326,18 +329,18 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe what this agent does and when to use it..."
+                  placeholder={t("basicInfo.descriptionPlaceholder")}
                   className="bg-secondary min-h-[80px]"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="type">Agent Type</Label>
+                  <Label htmlFor="type">{t("basicInfo.agentType")}</Label>
                   <Select
                     value={type}
                     onValueChange={(v) => setType(v as AgentType)}
@@ -346,16 +349,16 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="RESEARCH">Research</SelectItem>
-                      <SelectItem value="ANALYSIS">Analysis</SelectItem>
-                      <SelectItem value="REPORTING">Reporting</SelectItem>
-                      <SelectItem value="MONITORING">Monitoring</SelectItem>
-                      <SelectItem value="CUSTOM">Custom</SelectItem>
+                      <SelectItem value="RESEARCH">{t("types.research")}</SelectItem>
+                      <SelectItem value="ANALYSIS">{t("types.analysis")}</SelectItem>
+                      <SelectItem value="REPORTING">{t("types.reporting")}</SelectItem>
+                      <SelectItem value="MONITORING">{t("types.monitoring")}</SelectItem>
+                      <SelectItem value="CUSTOM">{t("types.custom")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="status">Status</Label>
+                  <Label htmlFor="status">{tCommon("status")}</Label>
                   <Select
                     value={agentStatus}
                     onValueChange={(v) => setAgentStatus(v as AgentStatus)}
@@ -364,21 +367,21 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="DRAFT">Draft</SelectItem>
-                      <SelectItem value="ACTIVE">Active</SelectItem>
-                      <SelectItem value="PAUSED">Paused</SelectItem>
-                      <SelectItem value="ARCHIVED">Archived</SelectItem>
+                      <SelectItem value="DRAFT">{t("statuses.draft")}</SelectItem>
+                      <SelectItem value="ACTIVE">{t("statuses.active")}</SelectItem>
+                      <SelectItem value="PAUSED">{t("statuses.paused")}</SelectItem>
+                      <SelectItem value="ARCHIVED">{t("statuses.archived")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Tags</Label>
+                <Label>{t("basicInfo.tags")}</Label>
                 <div className="flex gap-2">
                   <Input
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
-                    placeholder="Add a tag"
+                    placeholder={t("basicInfo.addTagPlaceholder")}
                     className="bg-secondary"
                     onKeyDown={(e) =>
                       e.key === "Enter" && (e.preventDefault(), addTag())
@@ -412,36 +415,25 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
           <Card className="bg-card border-border">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>System Prompt</CardTitle>
+                <CardTitle>{t("systemPrompt.title")}</CardTitle>
                 <CardDescription>
-                  Define the agent's personality and behavior
+                  {t("systemPrompt.description")}
                 </CardDescription>
               </div>
               <Button variant="ghost" size="sm" className="gap-2 text-accent">
                 <Sparkles className="h-4 w-4" />
-                Generate with AI
+                {t("systemPrompt.generateWithAI")}
               </Button>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={systemPrompt}
                 onChange={(e) => setSystemPrompt(e.target.value)}
-                placeholder={`You are a specialized research agent focused on...
-
-Your capabilities include:
-- Analyzing consumer data from GWI sources
-- Identifying patterns and trends
-- Generating actionable insights
-
-When responding:
-- Always cite data sources
-- Provide confidence levels for insights
-- Structure responses clearly with headers`}
+                placeholder={t("systemPrompt.placeholder")}
                 className="bg-secondary min-h-[300px] font-mono text-sm"
               />
               <p className="text-xs text-muted-foreground mt-2">
-                Define the agent's personality, capabilities, and response
-                format. Be specific about data handling and output structure.
+                {t("systemPrompt.hint")}
               </p>
             </CardContent>
           </Card>
@@ -449,14 +441,14 @@ When responding:
           {/* Model Configuration */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Model Configuration</CardTitle>
+              <CardTitle>{t("modelConfig.title")}</CardTitle>
               <CardDescription>
-                Configure the AI model and parameters
+                {t("modelConfig.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="model">Model</Label>
+                <Label htmlFor="model">{t("modelConfig.model")}</Label>
                 <Select value={model} onValueChange={setModel}>
                   <SelectTrigger className="bg-secondary">
                     <SelectValue />
@@ -473,23 +465,23 @@ When responding:
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="temperature">Temperature</Label>
+                  <Label htmlFor="temperature">{t("modelConfig.temperature")}</Label>
                   <Select value={temperature} onValueChange={setTemperature}>
                     <SelectTrigger className="bg-secondary">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="0.0">0.0 (Deterministic)</SelectItem>
-                      <SelectItem value="0.3">0.3 (Precise)</SelectItem>
-                      <SelectItem value="0.5">0.5 (Balanced)</SelectItem>
-                      <SelectItem value="0.7">0.7 (Creative)</SelectItem>
-                      <SelectItem value="0.9">0.9 (Exploratory)</SelectItem>
-                      <SelectItem value="1.0">1.0 (Maximum)</SelectItem>
+                      <SelectItem value="0.0">{t("modelConfig.temperatures.deterministic")}</SelectItem>
+                      <SelectItem value="0.3">{t("modelConfig.temperatures.precise")}</SelectItem>
+                      <SelectItem value="0.5">{t("modelConfig.temperatures.balanced")}</SelectItem>
+                      <SelectItem value="0.7">{t("modelConfig.temperatures.creative")}</SelectItem>
+                      <SelectItem value="0.9">{t("modelConfig.temperatures.exploratory")}</SelectItem>
+                      <SelectItem value="1.0">{t("modelConfig.temperatures.maximum")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="maxTokens">Max Tokens</Label>
+                  <Label htmlFor="maxTokens">{t("modelConfig.maxTokens")}</Label>
                   <Input
                     id="maxTokens"
                     type="number"
@@ -509,10 +501,9 @@ When responding:
           {/* Example Prompts */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Example Prompts</CardTitle>
+              <CardTitle>{t("examplePrompts.title")}</CardTitle>
               <CardDescription>
-                Add example prompts to help users understand how to use this
-                agent
+                {t("examplePrompts.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -524,7 +515,7 @@ When responding:
                   <Input
                     value={prompt}
                     onChange={(e) => updateExamplePrompt(i, e.target.value)}
-                    placeholder={`Example prompt ${i + 1}...`}
+                    placeholder={t("examplePrompts.placeholder", { number: i + 1 })}
                     className="bg-secondary"
                   />
                   {examplePrompts.length > 1 && (
@@ -548,7 +539,7 @@ When responding:
                 type="button"
               >
                 <Plus className="h-4 w-4" />
-                Add Example
+                {t("examplePrompts.addExample")}
               </Button>
             </CardContent>
           </Card>
@@ -559,9 +550,9 @@ When responding:
           {/* Data Sources */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Data Sources</CardTitle>
+              <CardTitle>{t("dataSources.title")}</CardTitle>
               <CardDescription>
-                Select which data sources the agent can access
+                {t("dataSources.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -585,9 +576,9 @@ When responding:
           {/* Output Formats */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Output Formats</CardTitle>
+              <CardTitle>{t("outputFormats.title")}</CardTitle>
               <CardDescription>
-                Configure supported output formats
+                {t("outputFormats.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -611,9 +602,9 @@ When responding:
           {/* Tools */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Tools</CardTitle>
+              <CardTitle>{t("tools.title")}</CardTitle>
               <CardDescription>
-                Enable tools the agent can use
+                {t("tools.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -642,14 +633,14 @@ When responding:
           {/* Advanced Settings */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Advanced Settings</CardTitle>
+              <CardTitle>{t("advancedSettings.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label className="text-sm">Enable Memory</Label>
+                  <Label className="text-sm">{t("advancedSettings.enableMemory")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Remember past conversations
+                    {t("advancedSettings.enableMemoryDescription")}
                   </p>
                 </div>
                 <Switch
@@ -659,9 +650,9 @@ When responding:
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <Label className="text-sm">Require Citations</Label>
+                  <Label className="text-sm">{t("advancedSettings.requireCitations")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Always include data sources
+                    {t("advancedSettings.requireCitationsDescription")}
                   </p>
                 </div>
                 <Switch

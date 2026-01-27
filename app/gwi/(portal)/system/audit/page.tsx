@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { FileText, Search, Download, User, Clock } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getAuditLogs() {
   const logs = await prisma.gWIAuditLog.findMany({
@@ -37,6 +38,8 @@ async function getAuditLogs() {
 
 async function AuditLogsContent() {
   const logs = await getAuditLogs()
+  const t = await getTranslations('gwi.system.audit')
+  const tCommon = await getTranslations('common')
 
   const actionColors: Record<string, string> = {
     CREATE: "bg-green-100 text-green-700",
@@ -57,14 +60,14 @@ async function AuditLogsContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Audit Logs</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Track all actions performed in the GWI portal
+            {t('description')}
           </p>
         </div>
         <Button variant="outline">
           <Download className="mr-2 h-4 w-4" />
-          Export Logs
+          {t('exportLogs')}
         </Button>
       </div>
 
@@ -74,30 +77,30 @@ async function AuditLogsContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search audit logs..." className="pl-9" />
+              <Input placeholder={t('searchPlaceholder')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Resource Type" />
+                <SelectValue placeholder={t('resourceType')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="survey">Survey</SelectItem>
-                <SelectItem value="pipeline">Pipeline</SelectItem>
-                <SelectItem value="llm_configuration">LLM Config</SelectItem>
-                <SelectItem value="agent_template">Agent Template</SelectItem>
-                <SelectItem value="taxonomy_category">Taxonomy</SelectItem>
+                <SelectItem value="all">{t('allTypes')}</SelectItem>
+                <SelectItem value="survey">{t('resourceTypes.survey')}</SelectItem>
+                <SelectItem value="pipeline">{t('resourceTypes.pipeline')}</SelectItem>
+                <SelectItem value="llm_configuration">{t('resourceTypes.llmConfig')}</SelectItem>
+                <SelectItem value="agent_template">{t('resourceTypes.agentTemplate')}</SelectItem>
+                <SelectItem value="taxonomy_category">{t('resourceTypes.taxonomy')}</SelectItem>
               </SelectContent>
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Action" />
+                <SelectValue placeholder={tCommon('action')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Actions</SelectItem>
-                <SelectItem value="create">Create</SelectItem>
-                <SelectItem value="update">Update</SelectItem>
-                <SelectItem value="delete">Delete</SelectItem>
+                <SelectItem value="all">{t('allActions')}</SelectItem>
+                <SelectItem value="create">{tCommon('create')}</SelectItem>
+                <SelectItem value="update">{tCommon('update')}</SelectItem>
+                <SelectItem value="delete">{tCommon('delete')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -111,11 +114,11 @@ async function AuditLogsContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead>User</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead>Resource</TableHead>
-                  <TableHead>IP Address</TableHead>
+                  <TableHead>{t('timestamp')}</TableHead>
+                  <TableHead>{t('user')}</TableHead>
+                  <TableHead>{tCommon('action')}</TableHead>
+                  <TableHead>{t('resource')}</TableHead>
+                  <TableHead>{t('ipAddress')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -163,8 +166,8 @@ async function AuditLogsContent() {
           ) : (
             <EmptyState
               icon={FileText}
-              title="No audit logs yet"
-              description="Activity logs will appear here as users interact with the portal"
+              title={t('noAuditLogs')}
+              description={t('noAuditLogsDescription')}
             />
           )}
         </CardContent>
@@ -173,13 +176,15 @@ async function AuditLogsContent() {
   )
 }
 
-export default function AuditPage() {
+export default async function AuditPage() {
+  const t = await getTranslations('gwi.system.audit')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Audit Logs</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
             <LoadingText />
           </div>
         </div>

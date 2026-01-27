@@ -28,6 +28,7 @@ import {
   Copy,
   ChevronRight,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getDataSourcesWithSchemas() {
   const dataSources = await prisma.gWIDataSourceConnection.findMany({
@@ -78,20 +79,22 @@ const mockSchemas: Record<string, Array<{ name: string; columns: Array<{ name: s
 
 async function DataSourceSchemasContent() {
   const dataSources = await getDataSourcesWithSchemas()
+  const t = await getTranslations('gwi.dataSources.schemas')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Data Source Schemas</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Browse and explore table schemas from connected data sources
+            {t('description')}
           </p>
         </div>
         <Button variant="outline">
           <RefreshCw className="mr-2 h-4 w-4" />
-          Refresh Schemas
+          {t('refreshSchemas')}
         </Button>
       </div>
 
@@ -105,7 +108,7 @@ async function DataSourceSchemasContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{dataSources.length}</p>
-                <p className="text-sm text-muted-foreground">Data Sources</p>
+                <p className="text-sm text-muted-foreground">{t('dataSources')}</p>
               </div>
             </div>
           </CardContent>
@@ -118,7 +121,7 @@ async function DataSourceSchemasContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">--</p>
-                <p className="text-sm text-muted-foreground">Total Tables</p>
+                <p className="text-sm text-muted-foreground">{t('totalTables')}</p>
               </div>
             </div>
           </CardContent>
@@ -131,7 +134,7 @@ async function DataSourceSchemasContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">--</p>
-                <p className="text-sm text-muted-foreground">Total Columns</p>
+                <p className="text-sm text-muted-foreground">{t('totalColumns')}</p>
               </div>
             </div>
           </CardContent>
@@ -144,14 +147,14 @@ async function DataSourceSchemasContent() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search tables or columns..." className="pl-9" />
+              <Input placeholder={t('searchPlaceholder')} className="pl-9" />
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Data Source" />
+                <SelectValue placeholder={t('dataSource')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Sources</SelectItem>
+                <SelectItem value="all">{t('allSources')}</SelectItem>
                 {dataSources.map((ds) => (
                   <SelectItem key={ds.id} value={ds.id}>
                     {ds.name}
@@ -179,10 +182,10 @@ async function DataSourceSchemasContent() {
                       <div>
                         <CardTitle className="text-lg">{ds.name}</CardTitle>
                         <CardDescription>
-                          {ds.type} - Last synced:{" "}
+                          {ds.type} - {t('lastSynced')}:{" "}
                           {ds.lastSyncAt
                             ? new Date(ds.lastSyncAt).toLocaleString()
-                            : "Never"}
+                            : t('never')}
                         </CardDescription>
                       </div>
                     </div>
@@ -199,7 +202,7 @@ async function DataSourceSchemasContent() {
                               <Table className="h-4 w-4 text-muted-foreground" />
                               <span className="font-mono">{table.name}</span>
                               <Badge variant="secondary" className="ml-2">
-                                {table.columns.length} columns
+                                {t('columnsCount', { count: table.columns.length })}
                               </Badge>
                             </div>
                           </AccordionTrigger>
@@ -209,13 +212,13 @@ async function DataSourceSchemasContent() {
                                 <thead className="bg-slate-50">
                                   <tr>
                                     <th className="text-left px-4 py-2 font-medium">
-                                      Column
+                                      {t('column')}
                                     </th>
                                     <th className="text-left px-4 py-2 font-medium">
-                                      Type
+                                      {tCommon('type')}
                                     </th>
                                     <th className="text-left px-4 py-2 font-medium">
-                                      Nullable
+                                      {t('nullable')}
                                     </th>
                                     <th className="w-[80px]"></th>
                                   </tr>
@@ -235,7 +238,7 @@ async function DataSourceSchemasContent() {
                                         </code>
                                       </td>
                                       <td className="px-4 py-2">
-                                        {col.nullable ? "Yes" : "No"}
+                                        {col.nullable ? tCommon('yes') : tCommon('no')}
                                       </td>
                                       <td className="px-4 py-2">
                                         <Button variant="ghost" size="sm">
@@ -255,7 +258,7 @@ async function DataSourceSchemasContent() {
                     <div className="text-center py-8">
                       <Table className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                       <p className="text-muted-foreground">
-                        Schema not yet discovered. Sync to fetch schema.
+                        {t('schemaNotDiscovered')}
                       </p>
                     </div>
                   )}
@@ -268,14 +271,14 @@ async function DataSourceSchemasContent() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Database className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No Data Sources Connected</h3>
+            <h3 className="text-lg font-medium">{t('noDataSources')}</h3>
             <p className="text-muted-foreground mb-4">
-              Connect a data source to browse its schema
+              {t('noDataSourcesDescription')}
             </p>
             <Button asChild>
               <Link href="/gwi/data-sources">
                 <ChevronRight className="mr-2 h-4 w-4" />
-                Go to Data Sources
+                {t('goToDataSources')}
               </Link>
             </Button>
           </CardContent>
@@ -285,14 +288,16 @@ async function DataSourceSchemasContent() {
   )
 }
 
-export default function DataSourceSchemasPage() {
+export default async function DataSourceSchemasPage() {
+  const t = await getTranslations('gwi.dataSources.schemas')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Data Source Schemas</h1>
-            <p className="text-muted-foreground">Loading schemas...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

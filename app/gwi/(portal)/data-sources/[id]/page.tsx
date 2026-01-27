@@ -20,12 +20,15 @@ import {
   Shield,
 } from "lucide-react"
 import { DataSourceEditor } from "@/components/gwi/data-sources/data-source-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
-const syncStatusConfig: Record<string, { color: string; icon: typeof CheckCircle; label: string }> = {
-  synced: { color: "bg-green-100 text-green-700", icon: CheckCircle, label: "Synced" },
-  syncing: { color: "bg-blue-100 text-blue-700", icon: RefreshCw, label: "Syncing" },
-  pending: { color: "bg-yellow-100 text-yellow-700", icon: Clock, label: "Pending" },
-  error: { color: "bg-red-100 text-red-700", icon: XCircle, label: "Error" },
+function getSyncStatusConfig(t: (key: string) => string): Record<string, { color: string; icon: typeof CheckCircle; label: string }> {
+  return {
+    synced: { color: "bg-green-100 text-green-700", icon: CheckCircle, label: t('syncStatuses.synced') },
+    syncing: { color: "bg-blue-100 text-blue-700", icon: RefreshCw, label: t('syncStatuses.syncing') },
+    pending: { color: "bg-yellow-100 text-yellow-700", icon: Clock, label: t('syncStatuses.pending') },
+    error: { color: "bg-red-100 text-red-700", icon: XCircle, label: t('syncStatuses.error') },
+  }
 }
 
 async function getDataSource(id: string) {
@@ -63,6 +66,10 @@ async function DataSourceDetail({ id }: { id: string }) {
     notFound()
   }
 
+  const t = await getTranslations('gwi.dataSources')
+  const tCommon = await getTranslations('common')
+
+  const syncStatusConfig = getSyncStatusConfig(t)
   const sanitizedDataSource = sanitizeDataSource(dataSource)
   const statusConfig = syncStatusConfig[dataSource.syncStatus] || syncStatusConfig.pending
   const StatusIcon = statusConfig.icon
@@ -94,9 +101,9 @@ async function DataSourceDetail({ id }: { id: string }) {
                     {statusConfig.label}
                   </Badge>
                   {dataSource.isActive ? (
-                    <Badge className="bg-green-100 text-green-700">Active</Badge>
+                    <Badge className="bg-green-100 text-green-700">{tCommon('active')}</Badge>
                   ) : (
-                    <Badge className="bg-gray-100 text-gray-700">Inactive</Badge>
+                    <Badge className="bg-gray-100 text-gray-700">{tCommon('inactive')}</Badge>
                   )}
                 </div>
               </div>
@@ -106,7 +113,7 @@ async function DataSourceDetail({ id }: { id: string }) {
         <div className="flex items-center gap-2">
           <Button variant="outline" className="text-blue-600 border-blue-200">
             <RefreshCw className="mr-2 h-4 w-4" />
-            Sync Now
+            {t('detail.syncNow')}
           </Button>
         </div>
       </div>
@@ -121,7 +128,7 @@ async function DataSourceDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold capitalize">{dataSource.type}</p>
-                <p className="text-sm text-muted-foreground">Connection Type</p>
+                <p className="text-sm text-muted-foreground">{t('detail.connectionType')}</p>
               </div>
             </div>
           </CardContent>
@@ -134,9 +141,9 @@ async function DataSourceDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">
-                  {dataSource.isActive ? "Active" : "Inactive"}
+                  {dataSource.isActive ? tCommon('active') : tCommon('inactive')}
                 </p>
-                <p className="text-sm text-muted-foreground">Status</p>
+                <p className="text-sm text-muted-foreground">{t('detail.status')}</p>
               </div>
             </div>
           </CardContent>
@@ -151,9 +158,9 @@ async function DataSourceDetail({ id }: { id: string }) {
                 <p className="text-2xl font-bold">
                   {dataSource.lastSyncAt
                     ? new Date(dataSource.lastSyncAt).toLocaleDateString()
-                    : "Never"}
+                    : tCommon('none')}
                 </p>
-                <p className="text-sm text-muted-foreground">Last Sync</p>
+                <p className="text-sm text-muted-foreground">{t('detail.lastSync')}</p>
               </div>
             </div>
           </CardContent>
@@ -166,9 +173,9 @@ async function DataSourceDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">
-                  {dataSource.credentials ? "Yes" : "No"}
+                  {dataSource.credentials ? tCommon('yes') : tCommon('no')}
                 </p>
-                <p className="text-sm text-muted-foreground">Credentials Set</p>
+                <p className="text-sm text-muted-foreground">{t('detail.credentialsSet')}</p>
               </div>
             </div>
           </CardContent>
@@ -181,7 +188,7 @@ async function DataSourceDetail({ id }: { id: string }) {
           <CardHeader>
             <div className="flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-red-600" />
-              <CardTitle className="text-red-800">Sync Error</CardTitle>
+              <CardTitle className="text-red-800">{t('detail.syncError')}</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
@@ -197,11 +204,11 @@ async function DataSourceDetail({ id }: { id: string }) {
         <TabsList>
           <TabsTrigger value="settings" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Settings
+            {t('detail.settings')}
           </TabsTrigger>
           <TabsTrigger value="activity" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
-            Activity Log
+            {t('detail.activityLog')}
           </TabsTrigger>
         </TabsList>
 
@@ -212,17 +219,17 @@ async function DataSourceDetail({ id }: { id: string }) {
         <TabsContent value="activity">
           <Card>
             <CardHeader>
-              <CardTitle>Activity Log</CardTitle>
+              <CardTitle>{t('detail.activityLog')}</CardTitle>
               <CardDescription>
-                Recent sync operations and configuration changes
+                {t('detail.activityLogDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
                 <Activity className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                <p className="text-muted-foreground">No activity recorded yet</p>
+                <p className="text-muted-foreground">{t('detail.noActivityRecorded')}</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Activity will be logged when sync operations are performed
+                  {t('detail.activityWillBeLogged')}
                 </p>
               </div>
             </CardContent>
@@ -234,52 +241,52 @@ async function DataSourceDetail({ id }: { id: string }) {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Data Source Information
+            {t('detail.dataSourceInformation')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <dt className="text-muted-foreground">ID</dt>
+              <dt className="text-muted-foreground">{t('detail.id')}</dt>
               <dd className="font-mono text-xs">{dataSource.id}</dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created By</dt>
+              <dt className="text-muted-foreground">{t('detail.createdBy')}</dt>
               <dd className="font-medium">{dataSource.createdBy.name}</dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created At</dt>
+              <dt className="text-muted-foreground">{t('detail.createdAt')}</dt>
               <dd className="font-medium">
                 {new Date(dataSource.createdAt).toLocaleDateString()}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Last Updated</dt>
+              <dt className="text-muted-foreground">{t('detail.lastUpdated')}</dt>
               <dd className="font-medium">
                 {new Date(dataSource.updatedAt).toLocaleDateString()}
               </dd>
             </div>
             {dataSource.organization && (
               <div>
-                <dt className="text-muted-foreground">Organization</dt>
+                <dt className="text-muted-foreground">{t('detail.organization')}</dt>
                 <dd className="font-medium">{dataSource.organization.name}</dd>
               </div>
             )}
             {config?.database && (
               <div>
-                <dt className="text-muted-foreground">Database</dt>
+                <dt className="text-muted-foreground">{t('detail.database')}</dt>
                 <dd className="font-medium">{config.database}</dd>
               </div>
             )}
             {config?.host && (
               <div>
-                <dt className="text-muted-foreground">Host</dt>
+                <dt className="text-muted-foreground">{t('detail.host')}</dt>
                 <dd className="font-medium">{config.host}</dd>
               </div>
             )}
             {config?.schema && (
               <div>
-                <dt className="text-muted-foreground">Schema</dt>
+                <dt className="text-muted-foreground">{t('detail.schema')}</dt>
                 <dd className="font-medium">{config.schema}</dd>
               </div>
             )}

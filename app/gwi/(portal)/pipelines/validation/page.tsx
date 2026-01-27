@@ -32,6 +32,7 @@ import {
   FileCode,
   Workflow,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 const severityColors: Record<string, string> = {
   error: "bg-red-100 text-red-700",
@@ -62,20 +63,22 @@ async function getValidationRules() {
 
 async function ValidationRulesContent() {
   const { rules, activeCount, errorRules, warningRules } = await getValidationRules()
+  const t = await getTranslations('gwi.pipelines.validationPage')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Validation Rules</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Configure data validation rules for pipelines
+            {t('description')}
           </p>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
           <Plus className="mr-2 h-4 w-4" />
-          Add Rule
+          {t('addRule')}
         </Button>
       </div>
 
@@ -89,7 +92,7 @@ async function ValidationRulesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{rules.length}</p>
-                <p className="text-sm text-muted-foreground">Total Rules</p>
+                <p className="text-sm text-muted-foreground">{t('totalRules')}</p>
               </div>
             </div>
           </CardContent>
@@ -102,7 +105,7 @@ async function ValidationRulesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeCount}</p>
-                <p className="text-sm text-muted-foreground">Active Rules</p>
+                <p className="text-sm text-muted-foreground">{t('activeRules')}</p>
               </div>
             </div>
           </CardContent>
@@ -115,7 +118,7 @@ async function ValidationRulesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{errorRules}</p>
-                <p className="text-sm text-muted-foreground">Error Rules</p>
+                <p className="text-sm text-muted-foreground">{t('errorRules')}</p>
               </div>
             </div>
           </CardContent>
@@ -128,7 +131,7 @@ async function ValidationRulesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{warningRules}</p>
-                <p className="text-sm text-muted-foreground">Warning Rules</p>
+                <p className="text-sm text-muted-foreground">{t('warningRules')}</p>
               </div>
             </div>
           </CardContent>
@@ -138,9 +141,9 @@ async function ValidationRulesContent() {
       {/* Rules Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Validation Rules</CardTitle>
+          <CardTitle>{t('allRules')}</CardTitle>
           <CardDescription>
-            Rules that validate data during pipeline execution
+            {t('allRulesDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -148,11 +151,11 @@ async function ValidationRulesContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Rule Name</TableHead>
-                  <TableHead>Pipeline</TableHead>
-                  <TableHead>Severity</TableHead>
-                  <TableHead>Rule Definition</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>{t('ruleName')}</TableHead>
+                  <TableHead>{t('pipeline')}</TableHead>
+                  <TableHead>{t('severity')}</TableHead>
+                  <TableHead>{t('ruleDefinition')}</TableHead>
+                  <TableHead>{tCommon('active')}</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -202,16 +205,16 @@ async function ValidationRulesContent() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem>
                               <Edit className="mr-2 h-4 w-4" />
-                              Edit Rule
+                              {t('editRule')}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <FileCode className="mr-2 h-4 w-4" />
-                              View Definition
+                              {t('viewDefinition')}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600">
                               <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
+                              {tCommon('delete')}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -224,13 +227,13 @@ async function ValidationRulesContent() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <Shield className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No Validation Rules</h3>
+              <h3 className="text-lg font-medium">{t('noRules')}</h3>
               <p className="text-muted-foreground mb-4">
-                Add validation rules to ensure data quality in your pipelines
+                {t('noRulesDescription')}
               </p>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Create First Rule
+                {t('createFirstRule')}
               </Button>
             </div>
           )}
@@ -240,20 +243,20 @@ async function ValidationRulesContent() {
       {/* Rule Templates */}
       <Card>
         <CardHeader>
-          <CardTitle>Common Rule Templates</CardTitle>
+          <CardTitle>{t('commonTemplates')}</CardTitle>
           <CardDescription>
-            Quick-start templates for common validation scenarios
+            {t('commonTemplatesDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[
-              { name: "Required Field", description: "Ensure a field is not null or empty" },
-              { name: "Data Type Check", description: "Validate field matches expected type" },
-              { name: "Range Validation", description: "Check numeric values are within range" },
-              { name: "Pattern Match", description: "Validate against regex pattern" },
-              { name: "Referential Integrity", description: "Ensure foreign key exists" },
-              { name: "Uniqueness Check", description: "Verify no duplicate values" },
+              { name: t('templates.requiredField'), description: t('templates.requiredFieldDesc') },
+              { name: t('templates.dataTypeCheck'), description: t('templates.dataTypeCheckDesc') },
+              { name: t('templates.rangeValidation'), description: t('templates.rangeValidationDesc') },
+              { name: t('templates.patternMatch'), description: t('templates.patternMatchDesc') },
+              { name: t('templates.referentialIntegrity'), description: t('templates.referentialIntegrityDesc') },
+              { name: t('templates.uniquenessCheck'), description: t('templates.uniquenessCheckDesc') },
             ].map((template) => (
               <div
                 key={template.name}
@@ -277,14 +280,16 @@ async function ValidationRulesContent() {
   )
 }
 
-export default function PipelineValidationPage() {
+export default async function PipelineValidationPage() {
+  const t = await getTranslations('gwi.pipelines.validationPage')
+
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Validation Rules</h1>
-            <p className="text-muted-foreground">Loading rules...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
         </div>
       }

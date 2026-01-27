@@ -38,6 +38,7 @@ import {
   Loader2,
 } from "lucide-react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 interface Client {
   id: string
@@ -73,6 +74,8 @@ export default function ClientsPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
+  const t = useTranslations('gwi.services.clients')
+  const tCommon = useTranslations('common')
 
   useEffect(() => {
     fetchClients()
@@ -90,7 +93,7 @@ export default function ClientsPage() {
       setClients(data)
     } catch (error) {
       console.error("Failed to fetch clients:", error)
-      toast.error("Failed to load clients")
+      toast.error(t('loadError'))
     } finally {
       setLoading(false)
     }
@@ -107,15 +110,15 @@ export default function ClientsPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Clients</h1>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Manage your client relationships and engagements
+            {t('description')}
           </p>
         </div>
         <Button asChild>
           <Link href="/gwi/services/clients/new">
             <Plus className="h-4 w-4 mr-2" />
-            Add Client
+            {t('addClient')}
           </Link>
         </Button>
       </div>
@@ -124,7 +127,7 @@ export default function ClientsPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Clients</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('totalClients')}</CardTitle>
             <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -133,7 +136,7 @@ export default function ClientsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Clients</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('activeClients')}</CardTitle>
             <Users className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -142,7 +145,7 @@ export default function ClientsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Leads & Prospects</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('leadsAndProspects')}</CardTitle>
             <Users className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
@@ -151,7 +154,7 @@ export default function ClientsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('totalProjects')}</CardTitle>
             <FolderKanban className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -163,9 +166,9 @@ export default function ClientsPage() {
       {/* Filters */}
       <Card>
         <CardHeader>
-          <CardTitle>Client List</CardTitle>
+          <CardTitle>{t('clientList')}</CardTitle>
           <CardDescription>
-            View and manage all your clients
+            {t('clientListDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -173,7 +176,7 @@ export default function ClientsPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search clients..."
+                placeholder={t('searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -181,16 +184,16 @@ export default function ClientsPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t('filterByStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="LEAD">Lead</SelectItem>
-                <SelectItem value="PROSPECT">Prospect</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="ON_HOLD">On Hold</SelectItem>
-                <SelectItem value="INACTIVE">Inactive</SelectItem>
-                <SelectItem value="CHURNED">Churned</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="LEAD">{t('statuses.lead')}</SelectItem>
+                <SelectItem value="PROSPECT">{t('statuses.prospect')}</SelectItem>
+                <SelectItem value="ACTIVE">{t('statuses.active')}</SelectItem>
+                <SelectItem value="ON_HOLD">{t('statuses.onHold')}</SelectItem>
+                <SelectItem value="INACTIVE">{t('statuses.inactive')}</SelectItem>
+                <SelectItem value="CHURNED">{t('statuses.churned')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -202,17 +205,17 @@ export default function ClientsPage() {
           ) : clients.length === 0 ? (
             <div className="text-center py-12">
               <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No clients found</h3>
+              <h3 className="text-lg font-medium">{t('noClientsFound')}</h3>
               <p className="text-muted-foreground mb-4">
                 {search || statusFilter !== "all"
-                  ? "Try adjusting your filters"
-                  : "Get started by adding your first client"}
+                  ? t('tryAdjustingFilters')
+                  : t('getStarted')}
               </p>
               {!search && statusFilter === "all" && (
                 <Button asChild>
                   <Link href="/gwi/services/clients/new">
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Client
+                    {t('addClient')}
                   </Link>
                 </Button>
               )}
@@ -221,12 +224,12 @@ export default function ClientsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Industry</TableHead>
-                  <TableHead>Primary Contact</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Projects</TableHead>
-                  <TableHead className="text-center">Invoices</TableHead>
+                  <TableHead>{t('client')}</TableHead>
+                  <TableHead>{t('industry')}</TableHead>
+                  <TableHead>{t('primaryContact')}</TableHead>
+                  <TableHead>{tCommon('status')}</TableHead>
+                  <TableHead className="text-center">{t('projects')}</TableHead>
+                  <TableHead className="text-center">{t('invoices')}</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -271,7 +274,7 @@ export default function ClientsPage() {
                           </p>
                         </div>
                       ) : (
-                        <span className="text-muted-foreground">No contact</span>
+                        <span className="text-muted-foreground">{t('noContact')}</span>
                       )}
                     </TableCell>
                     <TableCell>
@@ -294,7 +297,7 @@ export default function ClientsPage() {
                     <TableCell>
                       <Button variant="ghost" size="sm" asChild>
                         <Link href={`/gwi/services/clients/${client.id}`}>
-                          View
+                          {tCommon('view')}
                         </Link>
                       </Button>
                     </TableCell>

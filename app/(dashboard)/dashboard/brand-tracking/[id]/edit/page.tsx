@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -106,6 +107,8 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
   const { id } = use(params)
   const router = useRouter()
   const { status: sessionStatus } = useSession()
+  const t = useTranslations("dashboard.brandTracking.edit")
+  const tCommon = useTranslations("common")
 
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -319,12 +322,12 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
     return (
       <div className="text-center py-12">
         <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-        <h3 className="text-lg font-semibold">Brand Tracking Study Not Found</h3>
+        <h3 className="text-lg font-semibold">{t("notFound")}</h3>
         <p className="text-muted-foreground mt-2">
-          The study you are looking for does not exist or has been deleted.
+          {t("notFoundDescription")}
         </p>
         <Button className="mt-4" asChild>
-          <Link href="/dashboard/brand-tracking">Back to Brand Tracking</Link>
+          <Link href="/dashboard/brand-tracking">{t("backToBrandTracking")}</Link>
         </Button>
       </div>
     )
@@ -343,20 +346,20 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
           <div>
             <div className="flex items-center gap-2">
               <Target className="h-5 w-5 text-primary" />
-              <h1 className="text-2xl font-bold text-foreground">Edit Brand Tracking</h1>
+              <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
             </div>
             <p className="text-muted-foreground">
-              Modify the configuration for your brand tracking study
+              {t("description")}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => router.push(`/dashboard/brand-tracking/${id}`)}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button onClick={handleSubmit} disabled={isSaving || !brandName} className="gap-2">
             {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </div>
       </div>
@@ -372,38 +375,38 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
         {/* Basic Information */}
         <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
-            <CardDescription>Core details about the brand tracking study</CardDescription>
+            <CardTitle>{t("basicInfo.title")}</CardTitle>
+            <CardDescription>{t("basicInfo.description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="brandName">Brand Name *</Label>
+              <Label htmlFor="brandName">{t("basicInfo.brandName")} *</Label>
               <Input
                 id="brandName"
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value)}
-                placeholder="e.g., Nike, Apple, Coca-Cola"
+                placeholder={t("basicInfo.brandNamePlaceholder")}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{tCommon("description")}</Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe the objectives and scope of this brand tracking study..."
+                placeholder={t("basicInfo.descriptionPlaceholder")}
                 rows={3}
               />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="industry">Industry</Label>
+                <Label htmlFor="industry">{t("basicInfo.industry")}</Label>
                 <Select value={industry} onValueChange={setIndustry}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select industry" />
+                    <SelectValue placeholder={t("basicInfo.selectIndustry")} />
                   </SelectTrigger>
                   <SelectContent>
                     {industries.map((ind) => (
@@ -416,16 +419,16 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
+                <Label htmlFor="status">{tCommon("status")}</Label>
                 <Select value={studyStatus} onValueChange={setStudyStatus}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t("basicInfo.selectStatus")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="DRAFT">Draft</SelectItem>
-                    <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="PAUSED">Paused</SelectItem>
-                    <SelectItem value="ARCHIVED">Archived</SelectItem>
+                    <SelectItem value="DRAFT">{t("statuses.draft")}</SelectItem>
+                    <SelectItem value="ACTIVE">{t("statuses.active")}</SelectItem>
+                    <SelectItem value="PAUSED">{t("statuses.paused")}</SelectItem>
+                    <SelectItem value="ARCHIVED">{t("statuses.archived")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -438,16 +441,16 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Competitors
+              {t("competitors.title")}
             </CardTitle>
             <CardDescription>
-              Add competitor brands to track and compare against
+              {t("competitors.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex gap-2">
               <Input
-                placeholder="Add competitor name..."
+                placeholder={t("competitors.addPlaceholder")}
                 value={competitorInput}
                 onChange={(e) => setCompetitorInput(e.target.value)}
                 onKeyDown={(e) => {
@@ -479,7 +482,7 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
             )}
             {competitors.length === 0 && (
               <p className="text-sm text-muted-foreground">
-                No competitors added yet. Add brands to compare against.
+                {t("competitors.noCompetitors")}
               </p>
             )}
           </CardContent>
@@ -490,10 +493,10 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Target Audiences
+              {t("audiences.title")}
             </CardTitle>
             <CardDescription>
-              Select the demographic segments to track
+              {t("audiences.description")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -522,19 +525,19 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
-              Metrics to Track
+              {t("metrics.title")}
             </CardTitle>
             <CardDescription>
-              Choose which brand health metrics to monitor
+              {t("metrics.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Brand Awareness</Label>
+                  <Label>{t("metrics.awareness")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Track how many people recognize your brand
+                    {t("metrics.awarenessDesc")}
                   </p>
                 </div>
                 <Switch checked={trackAwareness} onCheckedChange={setTrackAwareness} />
@@ -542,9 +545,9 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Consideration</Label>
+                  <Label>{t("metrics.consideration")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Measure purchase intent and consideration
+                    {t("metrics.considerationDesc")}
                   </p>
                 </div>
                 <Switch checked={trackConsideration} onCheckedChange={setTrackConsideration} />
@@ -552,9 +555,9 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Preference</Label>
+                  <Label>{t("metrics.preference")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Track brand preference vs competitors
+                    {t("metrics.preferenceDesc")}
                   </p>
                 </div>
                 <Switch checked={trackPreference} onCheckedChange={setTrackPreference} />
@@ -562,9 +565,9 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Loyalty</Label>
+                  <Label>{t("metrics.loyalty")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Measure customer retention and loyalty
+                    {t("metrics.loyaltyDesc")}
                   </p>
                 </div>
                 <Switch checked={trackLoyalty} onCheckedChange={setTrackLoyalty} />
@@ -572,9 +575,9 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Net Promoter Score (NPS)</Label>
+                  <Label>{t("metrics.nps")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Track customer advocacy and satisfaction
+                    {t("metrics.npsDesc")}
                   </p>
                 </div>
                 <Switch checked={trackNPS} onCheckedChange={setTrackNPS} />
@@ -582,9 +585,9 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Sentiment Analysis</Label>
+                  <Label>{t("metrics.sentiment")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Monitor brand sentiment and perception
+                    {t("metrics.sentimentDesc")}
                   </p>
                 </div>
                 <Switch checked={trackSentiment} onCheckedChange={setTrackSentiment} />
@@ -592,9 +595,9 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Market Share</Label>
+                  <Label>{t("metrics.marketShare")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Track estimated market share over time
+                    {t("metrics.marketShareDesc")}
                   </p>
                 </div>
                 <Switch checked={trackMarketShare} onCheckedChange={setTrackMarketShare} />
@@ -608,31 +611,31 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              Schedule & Date Range
+              {t("schedule.title")}
             </CardTitle>
             <CardDescription>
-              Configure tracking frequency and time period
+              {t("schedule.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="schedule">Tracking Frequency</Label>
+              <Label htmlFor="schedule">{t("schedule.frequency")}</Label>
               <Select value={schedule} onValueChange={setSchedule}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select frequency" />
+                  <SelectValue placeholder={t("schedule.selectFrequency")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="manual">Manual Only</SelectItem>
+                  <SelectItem value="daily">{t("schedule.frequencies.daily")}</SelectItem>
+                  <SelectItem value="weekly">{t("schedule.frequencies.weekly")}</SelectItem>
+                  <SelectItem value="monthly">{t("schedule.frequencies.monthly")}</SelectItem>
+                  <SelectItem value="manual">{t("schedule.frequencies.manual")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="startDate">Start Date (Optional)</Label>
+                <Label htmlFor="startDate">{t("schedule.startDate")}</Label>
                 <Input
                   id="startDate"
                   type="date"
@@ -641,7 +644,7 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="endDate">End Date (Optional)</Label>
+                <Label htmlFor="endDate">{t("schedule.endDate")}</Label>
                 <Input
                   id="endDate"
                   type="date"
@@ -658,18 +661,18 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertCircle className="h-5 w-5" />
-              Alert Thresholds
+              {t("alerts.title")}
             </CardTitle>
             <CardDescription>
-              Get notified when metrics drop below specified thresholds
+              {t("alerts.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <Label>Enable Alerts</Label>
+                <Label>{t("alerts.enable")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Receive notifications when metrics fall below thresholds
+                  {t("alerts.enableDesc")}
                 </p>
               </div>
               <Switch checked={enableAlerts} onCheckedChange={setEnableAlerts} />
@@ -678,7 +681,7 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
             {enableAlerts && (
               <div className="grid gap-4 md:grid-cols-2 pt-4 border-t">
                 <div className="space-y-2">
-                  <Label htmlFor="awarenessThreshold">Minimum Awareness (%)</Label>
+                  <Label htmlFor="awarenessThreshold">{t("alerts.minAwareness")}</Label>
                   <Input
                     id="awarenessThreshold"
                     type="number"
@@ -690,7 +693,7 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="npsThreshold">Minimum NPS Score</Label>
+                  <Label htmlFor="npsThreshold">{t("alerts.minNPS")}</Label>
                   <Input
                     id="npsThreshold"
                     type="number"
@@ -709,11 +712,11 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
         {/* Form Actions */}
         <div className="flex justify-end gap-3 pt-6">
           <Button type="button" variant="outline" asChild>
-            <Link href={`/dashboard/brand-tracking/${id}`}>Cancel</Link>
+            <Link href={`/dashboard/brand-tracking/${id}`}>{tCommon("cancel")}</Link>
           </Button>
           <Button type="submit" disabled={isSaving || !brandName}>
             {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </div>
       </form>

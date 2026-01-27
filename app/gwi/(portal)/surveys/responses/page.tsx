@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Search, Download, Eye, CheckCircle, Clock, MessageSquare } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getResponses(searchParams: { surveyId?: string; status?: string }) {
   const where: Record<string, unknown> = {}
@@ -58,20 +59,22 @@ async function ResponsesList({
   searchParams: { surveyId?: string; status?: string }
 }) {
   const { responses, surveys } = await getResponses(searchParams)
+  const t = await getTranslations('gwi.surveys.responses')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Survey Responses</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            View and analyze responses across all surveys
+            {t('description')}
           </p>
         </div>
         <Button variant="outline">
           <Download className="mr-2 h-4 w-4" />
-          Export Responses
+          {t('exportResponses')}
         </Button>
       </div>
 
@@ -82,16 +85,16 @@ async function ResponsesList({
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by respondent ID..."
+                placeholder={t('searchPlaceholder')}
                 className="pl-9"
               />
             </div>
             <Select defaultValue={searchParams.surveyId || "all"}>
               <SelectTrigger className="w-[220px]">
-                <SelectValue placeholder="Filter by survey" />
+                <SelectValue placeholder={t('filterBySurvey')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Surveys</SelectItem>
+                <SelectItem value="all">{t('allSurveys')}</SelectItem>
                 {surveys.map((survey) => (
                   <SelectItem key={survey.id} value={survey.id}>
                     {survey.name}
@@ -101,12 +104,12 @@ async function ResponsesList({
             </Select>
             <Select defaultValue={searchParams.status || "all"}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder={t('filterByStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="incomplete">Incomplete</SelectItem>
+                <SelectItem value="all">{t('allStatuses')}</SelectItem>
+                <SelectItem value="completed">{t('completed')}</SelectItem>
+                <SelectItem value="incomplete">{t('incomplete')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -120,11 +123,11 @@ async function ResponsesList({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Respondent ID</TableHead>
-                  <TableHead>Survey</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Started At</TableHead>
-                  <TableHead>Completed At</TableHead>
+                  <TableHead>{t('respondentId')}</TableHead>
+                  <TableHead>{t('survey')}</TableHead>
+                  <TableHead>{tCommon('status')}</TableHead>
+                  <TableHead>{t('startedAt')}</TableHead>
+                  <TableHead>{t('completedAt')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -146,12 +149,12 @@ async function ResponsesList({
                       {response.completedAt ? (
                         <Badge className="bg-green-100 text-green-700">
                           <CheckCircle className="mr-1 h-3 w-3" />
-                          Completed
+                          {t('completed')}
                         </Badge>
                       ) : (
                         <Badge className="bg-yellow-100 text-yellow-700">
                           <Clock className="mr-1 h-3 w-3" />
-                          In Progress
+                          {t('inProgress')}
                         </Badge>
                       )}
                     </TableCell>
@@ -179,9 +182,9 @@ async function ResponsesList({
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No responses found</h3>
+              <h3 className="text-lg font-medium">{t('noResponses')}</h3>
               <p className="text-muted-foreground">
-                Responses will appear here once respondents start surveys
+                {t('noResponsesDescription')}
               </p>
             </div>
           )}
@@ -197,14 +200,15 @@ export default async function SurveyResponsesPage({
   searchParams: Promise<{ surveyId?: string; status?: string }>
 }) {
   const params = await searchParams
+  const t = await getTranslations('gwi.surveys.responses')
 
   return (
     <Suspense
       fallback={
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Survey Responses</h1>
-            <p className="text-muted-foreground">Loading responses...</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-muted-foreground">{t('loading')}</p>
           </div>
           <Card>
             <CardContent className="p-6">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -66,16 +67,9 @@ const statusColors: Record<string, string> = {
   SUSPENDED: "bg-red-100 text-red-700",
 }
 
-const typeLabels: Record<string, string> = {
-  CONTRACTOR: "Contractor",
-  FREELANCER: "Freelancer",
-  AGENCY: "Agency",
-  SUPPLIER: "Supplier",
-  CONSULTANT: "Consultant",
-  OTHER: "Other",
-}
-
 export default function VendorsPage() {
+  const t = useTranslations("gwi.services.vendors")
+  const tCommon = useTranslations("common")
   const [vendors, setVendors] = useState<Vendor[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -99,7 +93,7 @@ export default function VendorsPage() {
       setVendors(data)
     } catch (error) {
       console.error("Failed to fetch vendors:", error)
-      toast.error("Failed to load vendors")
+      toast.error(t("failedToLoad"))
     } finally {
       setLoading(false)
     }
@@ -115,15 +109,15 @@ export default function VendorsPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Vendors</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground">
-            Manage contractors, freelancers, and suppliers
+            {t("description")}
           </p>
         </div>
         <Button asChild>
           <Link href="/gwi/services/vendors/new">
             <Plus className="h-4 w-4 mr-2" />
-            Add Vendor
+            {t("addVendor")}
           </Link>
         </Button>
       </div>
@@ -132,7 +126,7 @@ export default function VendorsPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Vendors</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("totalVendors")}</CardTitle>
             <Truck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -141,7 +135,7 @@ export default function VendorsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Vendors</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("activeVendors")}</CardTitle>
             <Truck className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -150,7 +144,7 @@ export default function VendorsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Contractors</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("contractors")}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -162,15 +156,15 @@ export default function VendorsPage() {
       {/* Filters & Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Vendor List</CardTitle>
-          <CardDescription>View and manage all vendors</CardDescription>
+          <CardTitle>{t("vendorList")}</CardTitle>
+          <CardDescription>{t("vendorListDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search vendors..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -178,27 +172,27 @@ export default function VendorsPage() {
             </div>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={tCommon("type")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="CONTRACTOR">Contractor</SelectItem>
-                <SelectItem value="FREELANCER">Freelancer</SelectItem>
-                <SelectItem value="AGENCY">Agency</SelectItem>
-                <SelectItem value="SUPPLIER">Supplier</SelectItem>
-                <SelectItem value="CONSULTANT">Consultant</SelectItem>
+                <SelectItem value="all">{t("allTypes")}</SelectItem>
+                <SelectItem value="CONTRACTOR">{t("types.contractor")}</SelectItem>
+                <SelectItem value="FREELANCER">{t("types.freelancer")}</SelectItem>
+                <SelectItem value="AGENCY">{t("types.agency")}</SelectItem>
+                <SelectItem value="SUPPLIER">{t("types.supplier")}</SelectItem>
+                <SelectItem value="CONSULTANT">{t("types.consultant")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="INACTIVE">Inactive</SelectItem>
-                <SelectItem value="PENDING_APPROVAL">Pending</SelectItem>
-                <SelectItem value="SUSPENDED">Suspended</SelectItem>
+                <SelectItem value="all">{t("allStatuses")}</SelectItem>
+                <SelectItem value="ACTIVE">{tCommon("active")}</SelectItem>
+                <SelectItem value="INACTIVE">{tCommon("inactive")}</SelectItem>
+                <SelectItem value="PENDING_APPROVAL">{tCommon("pending")}</SelectItem>
+                <SelectItem value="SUSPENDED">{t("statuses.suspended")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -210,17 +204,17 @@ export default function VendorsPage() {
           ) : vendors.length === 0 ? (
             <div className="text-center py-12">
               <Truck className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No vendors found</h3>
+              <h3 className="text-lg font-medium">{t("noVendorsFound")}</h3>
               <p className="text-muted-foreground mb-4">
                 {search || statusFilter !== "all" || typeFilter !== "all"
-                  ? "Try adjusting your filters"
-                  : "Add your first vendor to get started"}
+                  ? t("tryAdjustingFilters")
+                  : t("addFirstVendor")}
               </p>
               {!search && statusFilter === "all" && typeFilter === "all" && (
                 <Button asChild>
                   <Link href="/gwi/services/vendors/new">
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Vendor
+                    {t("addVendor")}
                   </Link>
                 </Button>
               )}
@@ -229,11 +223,11 @@ export default function VendorsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Vendor</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Invoices</TableHead>
+                  <TableHead>{t("table.vendor")}</TableHead>
+                  <TableHead>{tCommon("type")}</TableHead>
+                  <TableHead>{t("table.contact")}</TableHead>
+                  <TableHead>{tCommon("status")}</TableHead>
+                  <TableHead className="text-center">{t("table.invoices")}</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -261,7 +255,7 @@ export default function VendorsPage() {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{typeLabels[vendor.type] || vendor.type}</TableCell>
+                    <TableCell>{t(`types.${vendor.type.toLowerCase()}`)}</TableCell>
                     <TableCell>
                       {vendor.contacts.length > 0 ? (
                         <div>
@@ -273,12 +267,12 @@ export default function VendorsPage() {
                           </p>
                         </div>
                       ) : (
-                        <span className="text-muted-foreground">No contact</span>
+                        <span className="text-muted-foreground">{t("noContact")}</span>
                       )}
                     </TableCell>
                     <TableCell>
                       <Badge className={statusColors[vendor.status]}>
-                        {vendor.status.replace("_", " ")}
+                        {t(`statuses.${vendor.status.toLowerCase()}`)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center">
@@ -289,7 +283,7 @@ export default function VendorsPage() {
                     </TableCell>
                     <TableCell>
                       <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/gwi/services/vendors/${vendor.id}`}>View</Link>
+                        <Link href={`/gwi/services/vendors/${vendor.id}`}>{tCommon("viewDetails")}</Link>
                       </Button>
                     </TableCell>
                   </TableRow>

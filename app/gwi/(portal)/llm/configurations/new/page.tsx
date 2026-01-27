@@ -2,8 +2,11 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { LLMConfigurationEditor } from "@/components/gwi/llm/llm-configuration-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
-export default function NewLLMConfigurationPage() {
+export default async function NewLLMConfigurationPage() {
+  const t = await getTranslations('gwi.llm.configurations')
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -15,10 +18,10 @@ export default function NewLLMConfigurationPage() {
         </Button>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Add LLM Configuration
+            {t('addTitle')}
           </h1>
           <p className="text-muted-foreground">
-            Configure a new language model for use in the platform
+            {t('addDescription')}
           </p>
         </div>
       </div>

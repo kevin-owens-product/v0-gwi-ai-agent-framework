@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   Zap,
   Search,
@@ -50,36 +51,26 @@ interface ThreatEvent {
   updatedAt: string
 }
 
-const threatTypes = [
-  { value: "BRUTE_FORCE", label: "Brute Force" },
-  { value: "CREDENTIAL_STUFFING", label: "Credential Stuffing" },
-  { value: "PHISHING_ATTEMPT", label: "Phishing Attempt" },
-  { value: "ACCOUNT_TAKEOVER", label: "Account Takeover" },
-  { value: "DATA_BREACH", label: "Data Breach" },
-  { value: "MALWARE_DETECTED", label: "Malware Detected" },
-  { value: "RANSOMWARE", label: "Ransomware" },
-  { value: "DLP_VIOLATION", label: "DLP Violation" },
-  { value: "INSIDER_THREAT", label: "Insider Threat" },
-  { value: "API_ABUSE", label: "API Abuse" },
-  { value: "BOT_ATTACK", label: "Bot Attack" },
-  { value: "DDOS_ATTEMPT", label: "DDoS Attempt" },
-  { value: "SUSPICIOUS_ACTIVITY", label: "Suspicious Activity" },
-  { value: "COMPLIANCE_VIOLATION", label: "Compliance Violation" },
-]
+const THREAT_TYPE_KEYS = [
+  "BRUTE_FORCE",
+  "CREDENTIAL_STUFFING",
+  "PHISHING_ATTEMPT",
+  "ACCOUNT_TAKEOVER",
+  "DATA_BREACH",
+  "MALWARE_DETECTED",
+  "RANSOMWARE",
+  "DLP_VIOLATION",
+  "INSIDER_THREAT",
+  "API_ABUSE",
+  "BOT_ATTACK",
+  "DDOS_ATTEMPT",
+  "SUSPICIOUS_ACTIVITY",
+  "COMPLIANCE_VIOLATION",
+] as const
 
-const severities = [
-  { value: "INFO", label: "Info" },
-  { value: "WARNING", label: "Warning" },
-  { value: "CRITICAL", label: "Critical" },
-]
+const SEVERITY_KEYS = ["INFO", "WARNING", "CRITICAL"] as const
 
-const statuses = [
-  { value: "ACTIVE", label: "Active" },
-  { value: "CONTAINED", label: "Contained" },
-  { value: "MITIGATED", label: "Mitigated" },
-  { value: "RESOLVED", label: "Resolved" },
-  { value: "FALSE_POSITIVE", label: "False Positive" },
-]
+const STATUS_KEYS = ["ACTIVE", "CONTAINED", "MITIGATED", "RESOLVED", "FALSE_POSITIVE"] as const
 
 const threatTypeIcons: Record<string, React.ReactNode> = {
   BRUTE_FORCE: <Zap className="h-4 w-4" />,
@@ -94,6 +85,9 @@ const threatTypeIcons: Record<string, React.ReactNode> = {
 
 export default function ThreatEventsPage() {
   const router = useRouter()
+  const t = useTranslations("admin.threats")
+  const tCommon = useTranslations("common")
+
   const [threats, setThreats] = useState<ThreatEvent[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -139,7 +133,7 @@ export default function ThreatEventsPage() {
       }))
     } catch (error) {
       console.error("Failed to fetch threats:", error)
-      toast.error("Failed to fetch threat events")
+      toast.error(t("errors.fetchFailed"))
     } finally {
       setLoading(false)
     }
@@ -159,13 +153,13 @@ export default function ThreatEventsPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update threat")
+        throw new Error(t("errors.updateFailed"))
       }
 
-      toast.success(`Threat status updated to ${newStatus}`)
+      toast.success(t("messages.statusUpdated", { status: t(`statuses.${newStatus.toLowerCase()}`) }))
       fetchThreats()
     } catch (error) {
-      toast.error("Failed to update threat status")
+      toast.error(t("errors.updateFailed"))
     }
   }
 
@@ -180,31 +174,22 @@ export default function ThreatEventsPage() {
       )
 
       await Promise.all(promises)
-      toast.success(`${ids.length} threat(s) updated to ${newStatus}`)
+      toast.success(t("messages.bulkStatusUpdated", { count: ids.length, status: t(`statuses.${newStatus.toLowerCase()}`) }))
       fetchThreats()
       setSelectedIds(new Set())
     } catch (error) {
-      toast.error("Failed to update threats")
-    }
-  }
-
-  const handleSort = (column: string) => {
-    if (sortBy === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
-    } else {
-      setSortBy(column)
-      setSortOrder("desc")
+      toast.error(t("errors.bulkUpdateFailed"))
     }
   }
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "CRITICAL":
-        return <Badge variant="destructive">{severity}</Badge>
+        return <Badge variant="destructive">{t(`severities.${severity.toLowerCase()}`)}</Badge>
       case "WARNING":
-        return <Badge variant="default" className="bg-yellow-500">{severity}</Badge>
+        return <Badge variant="default" className="bg-yellow-500">{t(`severities.${severity.toLowerCase()}`)}</Badge>
       case "INFO":
-        return <Badge variant="secondary">{severity}</Badge>
+        return <Badge variant="secondary">{t(`severities.${severity.toLowerCase()}`)}</Badge>
       default:
         return <Badge variant="outline">{severity}</Badge>
     }
@@ -213,15 +198,15 @@ export default function ThreatEventsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "ACTIVE":
-        return <Badge variant="destructive">{status}</Badge>
+        return <Badge variant="destructive">{t(`statuses.${status.toLowerCase()}`)}</Badge>
       case "CONTAINED":
-        return <Badge variant="default" className="bg-orange-500">{status}</Badge>
+        return <Badge variant="default" className="bg-orange-500">{t(`statuses.${status.toLowerCase()}`)}</Badge>
       case "MITIGATED":
-        return <Badge variant="default" className="bg-blue-500">{status}</Badge>
+        return <Badge variant="default" className="bg-blue-500">{t(`statuses.${status.toLowerCase()}`)}</Badge>
       case "RESOLVED":
-        return <Badge variant="default" className="bg-green-500">{status}</Badge>
+        return <Badge variant="default" className="bg-green-500">{t(`statuses.${status.toLowerCase()}`)}</Badge>
       case "FALSE_POSITIVE":
-        return <Badge variant="secondary">{status.replace("_", " ")}</Badge>
+        return <Badge variant="secondary">{t(`statuses.falsePositive`)}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -245,23 +230,23 @@ export default function ThreatEventsPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("columns.type"),
       cell: (threat) => (
         <Badge variant="outline">
-          {threat.type.replace(/_/g, " ")}
+          {t(`types.${threat.type.toLowerCase()}`)}
         </Badge>
       ),
     },
     {
       id: "description",
-      header: "Description",
+      header: tCommon("description"),
       cell: (threat) => (
         <p className="truncate max-w-[250px]">{threat.description}</p>
       ),
     },
     {
       id: "source",
-      header: "Source",
+      header: t("columns.source"),
       cell: (threat) => (
         <div className="flex items-center gap-1 text-sm">
           <Globe className="h-3 w-3" />
@@ -271,26 +256,26 @@ export default function ThreatEventsPage() {
     },
     {
       id: "severity",
-      header: "Severity",
+      header: t("columns.severity"),
       cell: (threat) => getSeverityBadge(threat.severity),
     },
     {
       id: "status",
-      header: "Status",
+      header: tCommon("status"),
       cell: (threat) => getStatusBadge(threat.status),
     },
     {
       id: "indicators",
-      header: "Indicators",
+      header: t("columns.indicators"),
       cell: (threat) => (
         <Badge variant="secondary">
-          {Array.isArray(threat.indicators) ? threat.indicators.length : 0} IOCs
+          {Array.isArray(threat.indicators) ? threat.indicators.length : 0} {t("iocs")}
         </Badge>
       ),
     },
     {
       id: "createdAt",
-      header: "Time",
+      header: t("columns.time"),
       cell: (threat) => (
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <Clock className="h-3 w-3" />
@@ -303,25 +288,25 @@ export default function ThreatEventsPage() {
   // Define row actions
   const rowActions: RowAction<ThreatEvent>[] = [
     {
-      label: "Mark Contained",
+      label: t("actions.markContained"),
       icon: <Shield className="h-4 w-4" />,
       onClick: (threat) => handleStatusChange(threat, "CONTAINED"),
       hidden: (threat) => threat.status !== "ACTIVE",
     },
     {
-      label: "Mark Mitigated",
+      label: t("actions.markMitigated"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (threat) => handleStatusChange(threat, "MITIGATED"),
       hidden: (threat) => threat.status !== "ACTIVE" && threat.status !== "CONTAINED",
     },
     {
-      label: "Mark Resolved",
+      label: t("actions.markResolved"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (threat) => handleStatusChange(threat, "RESOLVED"),
       hidden: (threat) => threat.status === "RESOLVED",
     },
     {
-      label: "Mark False Positive",
+      label: t("actions.markFalsePositive"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (threat) => handleStatusChange(threat, "FALSE_POSITIVE"),
       hidden: (threat) => threat.status === "FALSE_POSITIVE",
@@ -332,32 +317,32 @@ export default function ThreatEventsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Mark as Contained",
+      label: t("actions.markAsContained"),
       icon: <Shield className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "CONTAINED"),
-      confirmTitle: "Mark threats as Contained",
-      confirmDescription: "Are you sure you want to mark the selected threats as contained?",
+      confirmTitle: t("dialogs.markContained"),
+      confirmDescription: t("dialogs.markContainedDescription"),
     },
     {
-      label: "Mark as Mitigated",
+      label: t("actions.markAsMitigated"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "MITIGATED"),
-      confirmTitle: "Mark threats as Mitigated",
-      confirmDescription: "Are you sure you want to mark the selected threats as mitigated?",
+      confirmTitle: t("dialogs.markMitigated"),
+      confirmDescription: t("dialogs.markMitigatedDescription"),
     },
     {
-      label: "Mark as Resolved",
+      label: t("actions.markAsResolved"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "RESOLVED"),
-      confirmTitle: "Mark threats as Resolved",
-      confirmDescription: "Are you sure you want to mark the selected threats as resolved?",
+      confirmTitle: t("dialogs.markResolved"),
+      confirmDescription: t("dialogs.markResolvedDescription"),
     },
     {
-      label: "Mark as False Positive",
+      label: t("actions.markAsFalsePositive"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "FALSE_POSITIVE"),
-      confirmTitle: "Mark threats as False Positive",
-      confirmDescription: "Are you sure you want to mark the selected threats as false positive?",
+      confirmTitle: t("dialogs.markFalsePositive"),
+      confirmDescription: t("dialogs.markFalsePositiveDescription"),
       separator: true,
     },
   ]
@@ -378,10 +363,10 @@ export default function ThreatEventsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Zap className="h-8 w-8 text-orange-500" />
-            Threat Events
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Monitor and respond to security threats across the platform
+            {t("description")}
           </p>
         </div>
       </div>
@@ -391,31 +376,31 @@ export default function ThreatEventsPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{pagination.total}</div>
-            <p className="text-xs text-muted-foreground">Total Threats</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalThreats")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-red-500">{stats.ACTIVE || 0}</div>
-            <p className="text-xs text-muted-foreground">Active</p>
+            <p className="text-xs text-muted-foreground">{t("statuses.active")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-orange-500">{stats.CONTAINED || 0}</div>
-            <p className="text-xs text-muted-foreground">Contained</p>
+            <p className="text-xs text-muted-foreground">{t("statuses.contained")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-blue-500">{stats.MITIGATED || 0}</div>
-            <p className="text-xs text-muted-foreground">Mitigated</p>
+            <p className="text-xs text-muted-foreground">{t("statuses.mitigated")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-green-500">{stats.RESOLVED || 0}</div>
-            <p className="text-xs text-muted-foreground">Resolved</p>
+            <p className="text-xs text-muted-foreground">{t("statuses.resolved")}</p>
           </CardContent>
         </Card>
       </div>
@@ -428,7 +413,7 @@ export default function ThreatEventsPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search threats..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -439,45 +424,45 @@ export default function ThreatEventsPage() {
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("columns.type")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                {threatTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
+                {THREAT_TYPE_KEYS.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {t(`types.${type.toLowerCase()}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={severityFilter} onValueChange={setSeverityFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Severity" />
+                <SelectValue placeholder={t("columns.severity")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Severities</SelectItem>
-                {severities.map((severity) => (
-                  <SelectItem key={severity.value} value={severity.value}>
-                    {severity.label}
+                <SelectItem value="all">{t("filters.allSeverities")}</SelectItem>
+                {SEVERITY_KEYS.map((severity) => (
+                  <SelectItem key={severity} value={severity}>
+                    {t(`severities.${severity.toLowerCase()}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                {statuses.map((status) => (
-                  <SelectItem key={status.value} value={status.value}>
-                    {status.label}
+                <SelectItem value="all">{t("filters.allStatuses")}</SelectItem>
+                {STATUS_KEYS.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {t(`statuses.${status.toLowerCase().replace("_", "")}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={handleSearch}>
-              Search
+              {tCommon("search")}
             </Button>
           </div>
         </CardContent>
@@ -489,7 +474,7 @@ export default function ThreatEventsPage() {
         columns={columns}
         getRowId={(threat) => threat.id}
         isLoading={loading}
-        emptyMessage="No threat events found"
+        emptyMessage={t("noThreats")}
         viewHref={(threat) => `/admin/security/threats/${threat.id}`}
         rowActions={rowActions}
         bulkActions={bulkActions}

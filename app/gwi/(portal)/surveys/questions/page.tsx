@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table"
 import { FileText, HelpCircle } from "lucide-react"
 import Link from "next/link"
+import { getTranslations } from "@/lib/i18n/server"
 
 const questionTypeLabels: Record<string, string> = {
   SINGLE_SELECT: "Single Select",
@@ -41,6 +42,8 @@ async function getQuestions() {
 
 export default async function SurveyQuestionsPage() {
   const { questions, stats } = await getQuestions()
+  const t = await getTranslations('gwi.surveys.questions')
+  const tCommon = await getTranslations('common')
 
   const totalQuestions = questions.length
   const typeStats = stats.reduce(
@@ -52,9 +55,9 @@ export default async function SurveyQuestionsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Survey Questions</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
         <p className="text-muted-foreground">
-          Browse and manage questions across all surveys
+          {t('description')}
         </p>
       </div>
 
@@ -62,7 +65,7 @@ export default async function SurveyQuestionsPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Questions</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('totalQuestions')}</CardTitle>
             <HelpCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -71,7 +74,7 @@ export default async function SurveyQuestionsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Single Select</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('types.singleSelect')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{typeStats.SINGLE_SELECT || 0}</div>
@@ -79,7 +82,7 @@ export default async function SurveyQuestionsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Multi Select</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('types.multiSelect')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{typeStats.MULTI_SELECT || 0}</div>
@@ -87,7 +90,7 @@ export default async function SurveyQuestionsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Open Text</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('types.openText')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{typeStats.OPEN_TEXT || 0}</div>
@@ -98,19 +101,19 @@ export default async function SurveyQuestionsPage() {
       {/* Questions Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Questions</CardTitle>
-          <CardDescription>Questions from all surveys</CardDescription>
+          <CardTitle>{t('allQuestions')}</CardTitle>
+          <CardDescription>{t('allQuestionsDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           {questions.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Code</TableHead>
-                  <TableHead>Question Text</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Survey</TableHead>
-                  <TableHead>Required</TableHead>
+                  <TableHead>{t('code')}</TableHead>
+                  <TableHead>{t('questionText')}</TableHead>
+                  <TableHead>{tCommon('type')}</TableHead>
+                  <TableHead>{t('survey')}</TableHead>
+                  <TableHead>{t('required')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -124,7 +127,7 @@ export default async function SurveyQuestionsPage() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline">
-                        {questionTypeLabels[question.type] || question.type}
+                        {t(`types.${question.type.toLowerCase()}`) || question.type}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -137,9 +140,9 @@ export default async function SurveyQuestionsPage() {
                     </TableCell>
                     <TableCell>
                       {question.required ? (
-                        <Badge className="bg-red-100 text-red-700">Required</Badge>
+                        <Badge className="bg-red-100 text-red-700">{t('required')}</Badge>
                       ) : (
-                        <Badge variant="outline">Optional</Badge>
+                        <Badge variant="outline">{t('optional')}</Badge>
                       )}
                     </TableCell>
                   </TableRow>
@@ -149,9 +152,9 @@ export default async function SurveyQuestionsPage() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
               <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No questions found</h3>
+              <h3 className="text-lg font-medium">{t('noQuestions')}</h3>
               <p className="text-muted-foreground">
-                Questions will appear here once you create surveys
+                {t('noQuestionsDescription')}
               </p>
             </div>
           )}

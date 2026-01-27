@@ -16,6 +16,7 @@ import {
   User,
 } from "lucide-react"
 import { AgentTemplateEditor } from "@/components/gwi/agents/agent-template-editor"
+import { getTranslations } from "@/lib/i18n/server"
 
 async function getAgentTemplate(id: string) {
   const template = await prisma.systemAgentTemplate.findUnique({
@@ -35,6 +36,9 @@ async function AgentTemplateDetail({ id }: { id: string }) {
   if (!template) {
     notFound()
   }
+
+  const t = await getTranslations('gwi.agents.templates.detail')
+  const tCommon = await getTranslations('common')
 
   const configuration = template.configuration as Record<string, unknown>
   const defaultTools = template.defaultTools as string[] | null
@@ -66,7 +70,7 @@ async function AgentTemplateDetail({ id }: { id: string }) {
                         : "bg-yellow-100 text-yellow-700"
                     }
                   >
-                    {template.isPublished ? "Published" : "Draft"}
+                    {template.isPublished ? t('published') : t('draft')}
                   </Badge>
                 </div>
               </div>
@@ -88,7 +92,7 @@ async function AgentTemplateDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">v{template.version}</p>
-                <p className="text-sm text-muted-foreground">Version</p>
+                <p className="text-sm text-muted-foreground">{t('version')}</p>
               </div>
             </div>
           </CardContent>
@@ -101,7 +105,7 @@ async function AgentTemplateDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold">{defaultTools?.length || 0}</p>
-                <p className="text-sm text-muted-foreground">Default Tools</p>
+                <p className="text-sm text-muted-foreground">{t('defaultTools')}</p>
               </div>
             </div>
           </CardContent>
@@ -114,9 +118,9 @@ async function AgentTemplateDetail({ id }: { id: string }) {
               </div>
               <div>
                 <p className="text-2xl font-bold truncate max-w-[120px]" title={template.createdBy.name || ""}>
-                  {template.createdBy.name || "Unknown"}
+                  {template.createdBy.name || tCommon('unknown')}
                 </p>
-                <p className="text-sm text-muted-foreground">Created By</p>
+                <p className="text-sm text-muted-foreground">{t('createdBy')}</p>
               </div>
             </div>
           </CardContent>
@@ -134,7 +138,7 @@ async function AgentTemplateDetail({ id }: { id: string }) {
                     day: "numeric",
                   })}
                 </p>
-                <p className="text-sm text-muted-foreground">Last Updated</p>
+                <p className="text-sm text-muted-foreground">{t('lastUpdated')}</p>
               </div>
             </div>
           </CardContent>
@@ -146,19 +150,19 @@ async function AgentTemplateDetail({ id }: { id: string }) {
         <TabsList>
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <Bot className="h-4 w-4" />
-            Overview
+            {t('overview')}
           </TabsTrigger>
           <TabsTrigger value="configuration" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Configuration
+            {t('configuration')}
           </TabsTrigger>
           <TabsTrigger value="tools" className="flex items-center gap-2">
             <Wrench className="h-4 w-4" />
-            Tools
+            {t('tools')}
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Edit
+            {t('edit')}
           </TabsTrigger>
         </TabsList>
 
@@ -166,34 +170,34 @@ async function AgentTemplateDetail({ id }: { id: string }) {
           <div className="grid gap-6 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Configuration Summary</CardTitle>
+                <CardTitle>{t('configurationSummary')}</CardTitle>
                 <CardDescription>
-                  Model and capability settings
+                  {t('modelAndCapabilitySettings')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <dl className="space-y-4">
                   {typeof configuration.model === "string" && configuration.model && (
                     <div>
-                      <dt className="text-sm font-medium text-muted-foreground">Model</dt>
+                      <dt className="text-sm font-medium text-muted-foreground">{t('model')}</dt>
                       <dd className="text-sm font-mono mt-1">{configuration.model}</dd>
                     </div>
                   )}
                   {configuration.temperature !== undefined && (
                     <div>
-                      <dt className="text-sm font-medium text-muted-foreground">Temperature</dt>
+                      <dt className="text-sm font-medium text-muted-foreground">{t('temperature')}</dt>
                       <dd className="text-sm font-mono mt-1">{String(configuration.temperature)}</dd>
                     </div>
                   )}
                   {configuration.maxIterations !== undefined && (
                     <div>
-                      <dt className="text-sm font-medium text-muted-foreground">Max Iterations</dt>
+                      <dt className="text-sm font-medium text-muted-foreground">{t('maxIterations')}</dt>
                       <dd className="text-sm font-mono mt-1">{String(configuration.maxIterations)}</dd>
                     </div>
                   )}
                   {Array.isArray(configuration.capabilities) && configuration.capabilities.length > 0 && (
                     <div>
-                      <dt className="text-sm font-medium text-muted-foreground">Capabilities</dt>
+                      <dt className="text-sm font-medium text-muted-foreground">{t('capabilities')}</dt>
                       <dd className="flex flex-wrap gap-1 mt-1">
                         {(configuration.capabilities as string[]).map((cap) => (
                           <Badge key={cap} variant="secondary" className="text-xs">
@@ -209,9 +213,9 @@ async function AgentTemplateDetail({ id }: { id: string }) {
 
             <Card>
               <CardHeader>
-                <CardTitle>Default Prompts</CardTitle>
+                <CardTitle>{t('defaultPrompts')}</CardTitle>
                 <CardDescription>
-                  System and template prompts
+                  {t('systemAndTemplatePrompts')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -229,7 +233,7 @@ async function AgentTemplateDetail({ id }: { id: string }) {
                     ))}
                   </dl>
                 ) : (
-                  <p className="text-sm text-muted-foreground">No prompts configured</p>
+                  <p className="text-sm text-muted-foreground">{t('noPromptsConfigured')}</p>
                 )}
               </CardContent>
             </Card>
@@ -239,9 +243,9 @@ async function AgentTemplateDetail({ id }: { id: string }) {
         <TabsContent value="configuration">
           <Card>
             <CardHeader>
-              <CardTitle>Full Configuration</CardTitle>
+              <CardTitle>{t('fullConfiguration')}</CardTitle>
               <CardDescription>
-                Complete JSON configuration for this agent template
+                {t('completeJsonConfiguration')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -255,9 +259,9 @@ async function AgentTemplateDetail({ id }: { id: string }) {
         <TabsContent value="tools">
           <Card>
             <CardHeader>
-              <CardTitle>Default Tools</CardTitle>
+              <CardTitle>{t('defaultTools')}</CardTitle>
               <CardDescription>
-                Tools available to agents created from this template
+                {t('toolsAvailableToAgents')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -278,7 +282,7 @@ async function AgentTemplateDetail({ id }: { id: string }) {
               ) : (
                 <div className="text-center py-8">
                   <Wrench className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <p className="text-muted-foreground">No default tools configured</p>
+                  <p className="text-muted-foreground">{t('noDefaultToolsConfigured')}</p>
                 </div>
               )}
             </CardContent>
@@ -306,31 +310,31 @@ async function AgentTemplateDetail({ id }: { id: string }) {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Template Information
+            {t('templateInformation')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <dt className="text-muted-foreground">ID</dt>
+              <dt className="text-muted-foreground">{t('id')}</dt>
               <dd className="font-mono text-xs truncate" title={template.id}>
                 {template.id}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Scope</dt>
+              <dt className="text-muted-foreground">{t('scope')}</dt>
               <dd className="font-medium">
-                {template.organization ? template.organization.name : "Global"}
+                {template.organization ? template.organization.name : t('global')}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created At</dt>
+              <dt className="text-muted-foreground">{t('createdAt')}</dt>
               <dd className="font-medium">
                 {new Date(template.createdAt).toLocaleDateString()}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Last Updated</dt>
+              <dt className="text-muted-foreground">{t('lastUpdated')}</dt>
               <dd className="font-medium">
                 {new Date(template.updatedAt).toLocaleDateString()}
               </dd>
