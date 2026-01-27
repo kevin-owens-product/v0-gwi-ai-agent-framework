@@ -37,7 +37,8 @@
     "i18n:fix": "node scripts/validate-translations.js --fix",
     "i18n:clean": "node scripts/validate-translations.js --clean",
     "i18n:sync": "node scripts/validate-translations.js --fix --clean",
-    "ci": "npm run type-check && npm run lint && npm run i18n:validate && npm run test:coverage && npm run build"
+    "ci": "npm run type-check && npm run lint && npm run i18n:validate && npm run test:coverage && npm run build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
@@ -129,7 +130,9 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^17.0.0",
+    "husky": "^9.1.7",
     "jsdom": "^27.4.0",
+    "lint-staged": "^16.2.7",
     "msw": "^2.12.7",
     "prisma": "5.22.0",
     "typescript-eslint": "^8.52.0",
@@ -137,5 +140,10 @@
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix --max-warnings 0"
+    ]
   }
 }
