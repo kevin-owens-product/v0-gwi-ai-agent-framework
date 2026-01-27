@@ -1,4 +1,4 @@
-import { PrismaClient, Role, PlanTier, AgentType, AgentStatus, AgentRunStatus, DataSourceType, DataSourceStatus, UsageMetric, SubscriptionStatus, InvitationStatus, BrandTrackingStatus, ReportType, ReportStatus } from '@prisma/client'
+import { PrismaClient, Role, PlanTier, AgentType, AgentStatus, AgentRunStatus, DataSourceType, DataSourceStatus, UsageMetric, SubscriptionStatus, InvitationStatus, BrandTrackingStatus, ReportType, ReportStatus, SnapshotType } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 
@@ -668,7 +668,7 @@ async function main() {
     }
   })
 
-  const _runningRun = await prisma.agentRun.create({
+  await prisma.agentRun.create({
     data: {
       agentId: weeklyReportAgent.id,
       orgId: acmeCorp.id,
@@ -679,7 +679,7 @@ async function main() {
     }
   })
 
-  const _failedRun = await prisma.agentRun.create({
+  await prisma.agentRun.create({
     data: {
       agentId: socialMonitorAgent.id,
       orgId: acmeCorp.id,
@@ -692,7 +692,7 @@ async function main() {
     }
   })
 
-  const _pendingRun = await prisma.agentRun.create({
+  await prisma.agentRun.create({
     data: {
       agentId: customAgent.id,
       orgId: acmeCorp.id,
@@ -1124,7 +1124,7 @@ async function main() {
   console.log('👥 Creating audiences...')
 
   // Create audiences with explicit IDs for reliable API access
-  const _audience1 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '1',
       orgId: acmeCorp.id,
@@ -1146,7 +1146,7 @@ async function main() {
     }
   })
 
-  const _audience2 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '2',
       orgId: acmeCorp.id,
@@ -1168,7 +1168,7 @@ async function main() {
     }
   })
 
-  const _audience3 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '3',
       orgId: acmeCorp.id,
@@ -1189,7 +1189,7 @@ async function main() {
     }
   })
 
-  const _audience4 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '4',
       orgId: acmeCorp.id,
@@ -1210,7 +1210,7 @@ async function main() {
     }
   })
 
-  const _audience5 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '5',
       orgId: acmeCorp.id,
@@ -1230,7 +1230,7 @@ async function main() {
     }
   })
 
-  const _audience6 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '6',
       orgId: acmeCorp.id,
@@ -1251,7 +1251,7 @@ async function main() {
     }
   })
 
-  const _audience7 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '7',
       orgId: acmeCorp.id,
@@ -1272,7 +1272,7 @@ async function main() {
     }
   })
 
-  const _audience8 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '8',
       orgId: acmeCorp.id,
@@ -1294,7 +1294,7 @@ async function main() {
     }
   })
 
-  const _audience9 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '9',
       orgId: techStartup.id,
@@ -1315,7 +1315,7 @@ async function main() {
     }
   })
 
-  const _audience10 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '10',
       orgId: techStartup.id,
@@ -1337,7 +1337,7 @@ async function main() {
     }
   })
 
-  const _audience11 = await prisma.audience.create({
+  await prisma.audience.create({
     data: {
       id: '11',
       orgId: enterpriseCo.id,
@@ -6636,7 +6636,7 @@ async function main() {
     }
   })
 
-  const fedrampFramework = await prisma.complianceFramework.create({
+  await prisma.complianceFramework.create({
     data: {
       name: 'FedRAMP',
       code: 'FEDRAMP',
@@ -6697,7 +6697,7 @@ async function main() {
     }
   })
 
-  const cmmcFramework = await prisma.complianceFramework.create({
+  await prisma.complianceFramework.create({
     data: {
       name: 'CMMC',
       code: 'CMMC',
@@ -6971,7 +6971,7 @@ async function main() {
     }
   })
 
-  const legalHold2 = await prisma.legalHold.create({
+  await prisma.legalHold.create({
     data: {
       name: 'Regulatory Investigation - FTC',
       description: 'Document preservation for FTC investigation into data practices',
@@ -7427,7 +7427,7 @@ async function main() {
     }
   })
 
-  const incident4 = await prisma.platformIncident.create({
+  await prisma.platformIncident.create({
     data: {
       title: 'Scheduled Maintenance - Database Upgrade',
       description: 'Planned maintenance for PostgreSQL version upgrade from 14 to 16.',
@@ -7441,7 +7441,7 @@ async function main() {
     }
   })
 
-  const incident5 = await prisma.platformIncident.create({
+  await prisma.platformIncident.create({
     data: {
       title: 'CDN Cache Invalidation Delay',
       description: 'Static assets not updating after deployments. Cache invalidation taking longer than expected.',
@@ -8220,7 +8220,7 @@ async function main() {
   // ==================== DEVICE POLICIES ====================
   console.log('📱 Creating device policies...')
 
-  const corpDevicePolicy = await prisma.devicePolicy.create({
+  await prisma.devicePolicy.create({
     data: {
       name: 'Enterprise Device Policy',
       description: 'Standard device requirements for enterprise organization access',
@@ -8241,7 +8241,7 @@ async function main() {
     }
   })
 
-  const strictDevicePolicy = await prisma.devicePolicy.create({
+  await prisma.devicePolicy.create({
     data: {
       name: 'High Security Device Policy',
       description: 'Strict requirements for accessing sensitive data',
@@ -9181,7 +9181,7 @@ async function main() {
     const baseOrgs = 156 + Math.floor(Math.random() * 10)
 
     analyticsSnapshots.push({
-      type: 'PLATFORM',
+      type: SnapshotType.PLATFORM,
       period: 'daily',
       periodStart,
       periodEnd,
