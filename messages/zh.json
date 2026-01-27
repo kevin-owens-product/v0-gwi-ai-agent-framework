@@ -100,7 +100,8 @@
     "pricing": "定价",
     "solutions": "解决方案",
     "agents": "智能体",
-    "theme": "主题"
+    "theme": "主题",
+    "language": "语言"
   },
   "settings": {
     "title": "设置",
@@ -130,7 +131,8 @@
       "docs": "文档",
       "signIn": "登录",
       "getStarted": "立即开始",
-      "theme": "主题"
+      "theme": "主题",
+      "language": "语言"
     },
     "hero": {
       "title": "AI 驱动的消费者洞察",

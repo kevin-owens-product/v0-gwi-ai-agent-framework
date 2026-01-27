@@ -100,7 +100,8 @@
     "pricing": "料金",
     "solutions": "ソリューション",
     "agents": "エージェント",
-    "theme": "テーマ"
+    "theme": "テーマ",
+    "language": "言語"
   },
   "settings": {
     "title": "設定",
@@ -130,7 +131,8 @@
       "docs": "ドキュメント",
       "signIn": "ログイン",
       "getStarted": "始める",
-      "theme": "テーマ"
+      "theme": "テーマ",
+      "language": "言語"
     },
     "hero": {
       "title": "AIで実現する消費者インサイト",

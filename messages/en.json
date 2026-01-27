@@ -207,7 +207,8 @@
       "docs": "Docs",
       "signIn": "Sign in",
       "getStarted": "Get Started",
-      "theme": "Theme"
+      "theme": "Theme",
+      "language": "Language"
     },
     "hero": {
       "title": "Consumer Insights Powered by AI",

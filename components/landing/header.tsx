@@ -7,9 +7,11 @@ import { Menu, X, ChevronDown } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { LanguageSwitcher } from "@/components/ui/language-switcher"
+import { useTranslations } from "next-intl"
 
 export function LandingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const t = useTranslations('landing.header')
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
@@ -20,63 +22,63 @@ export function LandingHeader() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
                 <span className="text-sm font-bold text-accent-foreground">G</span>
               </div>
-              <span className="text-lg font-semibold text-foreground">GWI Insights</span>
+              <span className="text-lg font-semibold text-foreground">{t('brandName')}</span>
             </Link>
             <nav className="hidden md:flex items-center gap-6">
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Solutions
+                  {t('solutions')}
                   <ChevronDown className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-48">
                   <DropdownMenuItem asChild>
                     <Link href="/solutions/sales" className="w-full">
-                      Sales Teams
+                      {t('salesTeams')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/solutions/insights" className="w-full">
-                      Insights Teams
+                      {t('insightsTeams')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/solutions/ad-sales" className="w-full">
-                      Ad Sales
+                      {t('adSales')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/solutions/marketing" className="w-full">
-                      Marketing
+                      {t('marketing')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/solutions/product" className="w-full">
-                      Product Development
+                      {t('productDevelopment')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/solutions/market-research" className="w-full">
-                      Market Research
+                      {t('marketResearch')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/solutions/innovation" className="w-full">
-                      Innovation
+                      {t('innovation')}
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <Link href="/#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Features
+                {t('features')}
               </Link>
               <Link href="/#agents" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Agents
+                {t('agents')}
               </Link>
               <Link href="/#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
+                {t('pricing')}
               </Link>
               <Link href="/docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Docs
+                {t('docs')}
               </Link>
             </nav>
           </div>
@@ -85,11 +87,11 @@ export function LandingHeader() {
             <ThemeToggle variant="ghost" />
             <Link href="/login">
               <Button variant="ghost" size="sm">
-                Sign in
+                {t('signIn')}
               </Button>
             </Link>
             <Link href="/dashboard">
-              <Button size="sm">Get Started</Button>
+              <Button size="sm">{t('getStarted')}</Button>
             </Link>
           </div>
           <button
@@ -104,60 +106,60 @@ export function LandingHeader() {
         <div className="md:hidden border-t border-border bg-background">
           <nav className="flex flex-col p-4 gap-4">
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Solutions</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('solutions')}</span>
               <Link href="/solutions/sales" className="pl-4 text-sm text-muted-foreground hover:text-foreground">
-                Sales Teams
+                {t('salesTeams')}
               </Link>
               <Link href="/solutions/insights" className="pl-4 text-sm text-muted-foreground hover:text-foreground">
-                Insights Teams
+                {t('insightsTeams')}
               </Link>
               <Link href="/solutions/ad-sales" className="pl-4 text-sm text-muted-foreground hover:text-foreground">
-                Ad Sales
+                {t('adSales')}
               </Link>
               <Link href="/solutions/marketing" className="pl-4 text-sm text-muted-foreground hover:text-foreground">
-                Marketing
+                {t('marketing')}
               </Link>
               <Link href="/solutions/product" className="pl-4 text-sm text-muted-foreground hover:text-foreground">
-                Product Development
+                {t('productDevelopment')}
               </Link>
               <Link
                 href="/solutions/market-research"
                 className="pl-4 text-sm text-muted-foreground hover:text-foreground"
               >
-                Market Research
+                {t('marketResearch')}
               </Link>
               <Link href="/solutions/innovation" className="pl-4 text-sm text-muted-foreground hover:text-foreground">
-                Innovation
+                {t('innovation')}
               </Link>
             </div>
             <Link href="/#features" className="text-sm text-muted-foreground hover:text-foreground">
-              Features
+              {t('features')}
             </Link>
             <Link href="/#agents" className="text-sm text-muted-foreground hover:text-foreground">
-              Agents
+              {t('agents')}
             </Link>
             <Link href="/#pricing" className="text-sm text-muted-foreground hover:text-foreground">
-              Pricing
+              {t('pricing')}
             </Link>
             <Link href="/docs" className="text-sm text-muted-foreground hover:text-foreground">
-              Docs
+              {t('docs')}
             </Link>
             <div className="flex flex-col gap-2 pt-4 border-t border-border">
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-muted-foreground">Language</span>
+                <span className="text-sm text-muted-foreground">{t('language')}</span>
                 <LanguageSwitcher variant="outline" size="sm" showLabel />
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-muted-foreground">Theme</span>
+                <span className="text-sm text-muted-foreground">{t('theme')}</span>
                 <ThemeToggle variant="outline" size="sm" />
               </div>
               <Link href="/login">
                 <Button variant="ghost" className="w-full">
-                  Sign in
+                  {t('signIn')}
                 </Button>
               </Link>
               <Link href="/dashboard">
-                <Button className="w-full">Get Started</Button>
+                <Button className="w-full">{t('getStarted')}</Button>
               </Link>
             </div>
           </nav>

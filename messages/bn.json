@@ -100,7 +100,8 @@
     "pricing": "মূল্য",
     "solutions": "সমাধান",
     "agents": "এজেন্ট",
-    "theme": "থিম"
+    "theme": "থিম",
+    "language": "ভাষা"
   },
   "settings": {
     "title": "সেটিংস",
@@ -130,7 +131,8 @@
       "docs": "ডকুমেন্টেশন",
       "signIn": "সাইন ইন করুন",
       "getStarted": "শুরু করুন",
-      "theme": "থিম"
+      "theme": "থিম",
+      "language": "ভাষা"
     },
     "hero": {
       "title": "AI দ্বারা চালিত ভোক্তা অন্তর্দৃষ্টি",

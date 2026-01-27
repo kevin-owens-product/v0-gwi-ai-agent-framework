@@ -100,7 +100,8 @@
     "pricing": "Preços",
     "solutions": "Soluções",
     "agents": "Agentes",
-    "theme": "Tema"
+    "theme": "Tema",
+    "language": "Idioma"
   },
   "settings": {
     "title": "Configurações",
@@ -130,7 +131,8 @@
       "docs": "Documentação",
       "signIn": "Entrar",
       "getStarted": "Começar",
-      "theme": "Tema"
+      "theme": "Tema",
+      "language": "Idioma"
     },
     "hero": {
       "title": "Insights do Consumidor com Inteligência Artificial",

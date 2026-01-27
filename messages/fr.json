@@ -100,7 +100,8 @@
     "pricing": "Tarifs",
     "solutions": "Solutions",
     "agents": "Agents",
-    "theme": "Theme"
+    "theme": "Theme",
+    "language": "Langue"
   },
   "settings": {
     "title": "Parametres",
@@ -130,7 +131,8 @@
       "docs": "Documentation",
       "signIn": "Se connecter",
       "getStarted": "Commencer",
-      "theme": "Theme"
+      "theme": "Theme",
+      "language": "Langue"
     },
     "hero": {
       "title": "Insights consommateurs propulses par l'IA",

@@ -177,7 +177,8 @@
     "pricing": "Precios",
     "solutions": "Soluciones",
     "agents": "Agentes",
-    "theme": "Tema"
+    "theme": "Tema",
+    "language": "Idioma"
   },
   "settings": {
     "title": "Configuración",
@@ -207,7 +208,8 @@
       "docs": "Documentación",
       "signIn": "Iniciar sesión",
       "getStarted": "Comenzar",
-      "theme": "Tema"
+      "theme": "Tema",
+      "language": "Idioma"
     },
     "hero": {
       "title": "Conocimiento del consumidor impulsado por IA",
