@@ -153,13 +153,13 @@ describe('AdvancedChartRenderer', () => {
     it('should show loading indicator when isLoading is true', () => {
       render(<AdvancedChartRenderer type="BAR" data={validData} isLoading={true} />)
       expect(screen.getByTestId('loader-icon')).toBeDefined()
-      expect(screen.getByText('Loading chart data...')).toBeDefined()
+      expect(screen.getByText('Please wait...')).toBeDefined()
     })
 
     it('should not show loading indicator when isLoading is false', () => {
       render(<AdvancedChartRenderer type="BAR" data={validData} isLoading={false} />)
       expect(screen.queryByTestId('loader-icon')).toBeNull()
-      expect(screen.queryByText('Loading chart data...')).toBeNull()
+      expect(screen.queryByText('Please wait...')).toBeNull()
     })
   })
 
@@ -168,7 +168,7 @@ describe('AdvancedChartRenderer', () => {
       setSampleDataEmpty(true)
       render(<AdvancedChartRenderer type="BAR" data={[]} />)
       expect(screen.getByText('No data available')).toBeDefined()
-      expect(screen.getByText('Try selecting a different time period or audience')).toBeDefined()
+      expect(screen.getByText('Get started by creating your first item')).toBeDefined()
     })
 
     it('should display activity icon in empty state', () => {
