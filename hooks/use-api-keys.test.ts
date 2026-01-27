@@ -112,8 +112,9 @@ describe('useApiKeys Hook', () => {
     })
 
     it('should calculate days until expiration', () => {
-      const expiresAt = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
-      const daysUntilExpiry = Math.floor((expiresAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000))
+      const now = Date.now()
+      const expiresAt = new Date(now + 15 * 24 * 60 * 60 * 1000)
+      const daysUntilExpiry = Math.floor((expiresAt.getTime() - now) / (24 * 60 * 60 * 1000))
 
       expect(daysUntilExpiry).toBe(15)
     })

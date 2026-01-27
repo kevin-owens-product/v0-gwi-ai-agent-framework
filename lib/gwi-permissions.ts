@@ -52,6 +52,39 @@ export const GWI_PERMISSIONS = {
   'system:audit': 'View audit logs',
   'system:apikeys': 'Manage API keys',
 
+  // Services Business - Client Management
+  'services:clients:read': 'View clients',
+  'services:clients:write': 'Create and edit clients',
+  'services:clients:delete': 'Delete clients',
+
+  // Services Business - Project Management
+  'services:projects:read': 'View projects',
+  'services:projects:write': 'Create and edit projects',
+  'services:projects:manage': 'Manage project teams and deliverables',
+
+  // Services Business - Time Tracking
+  'services:time:read': 'View time entries',
+  'services:time:write': 'Log time entries',
+  'services:time:approve': 'Approve time entries',
+
+  // Services Business - Invoicing
+  'services:invoicing:read': 'View invoices',
+  'services:invoicing:write': 'Create and edit invoices',
+  'services:invoicing:send': 'Send invoices to clients',
+
+  // Services Business - Vendor Management
+  'services:vendors:read': 'View vendors',
+  'services:vendors:write': 'Manage vendors and vendor invoices',
+
+  // Services Business - Team Management
+  'services:team:read': 'View team members',
+  'services:team:write': 'Manage team members',
+  'services:team:manage': 'Manage departments, roles, and skills',
+
+  // Services Business - Financial
+  'services:financial:read': 'View financial reports',
+  'services:financial:approve': 'Approve financial transactions',
+
   // Full Access
   'gwi:*': 'Full GWI portal access',
 } as const
@@ -71,6 +104,8 @@ export const GWI_ROLE_PERMISSIONS: Record<SuperAdminRole, GWIPermission[]> = {
     'datasources:read', 'datasources:write', 'datasources:sync', 'datasources:delete',
     'monitoring:read', 'monitoring:alerts', 'monitoring:errors',
     'system:audit',
+    // Services - limited access
+    'services:time:read', 'services:time:write',
   ],
   TAXONOMY_MANAGER: [
     'surveys:read', 'surveys:write', 'surveys:delete', 'surveys:publish', 'surveys:responses',
@@ -81,6 +116,8 @@ export const GWI_ROLE_PERMISSIONS: Record<SuperAdminRole, GWIPermission[]> = {
     'datasources:read',
     'monitoring:read',
     'system:audit',
+    // Services - limited access
+    'services:time:read', 'services:time:write',
   ],
   ML_ENGINEER: [
     'surveys:read',
@@ -91,6 +128,8 @@ export const GWI_ROLE_PERMISSIONS: Record<SuperAdminRole, GWIPermission[]> = {
     'datasources:read',
     'monitoring:read', 'monitoring:alerts', 'monitoring:errors',
     'system:audit',
+    // Services - limited access
+    'services:time:read', 'services:time:write',
   ],
   ADMIN: [
     'surveys:read',
@@ -100,17 +139,36 @@ export const GWI_ROLE_PERMISSIONS: Record<SuperAdminRole, GWIPermission[]> = {
     'agents:read',
     'datasources:read',
     'monitoring:read',
+    // Services - full access for ADMIN role
+    'services:clients:read', 'services:clients:write', 'services:clients:delete',
+    'services:projects:read', 'services:projects:write', 'services:projects:manage',
+    'services:time:read', 'services:time:write', 'services:time:approve',
+    'services:invoicing:read', 'services:invoicing:write', 'services:invoicing:send',
+    'services:vendors:read', 'services:vendors:write',
+    'services:team:read', 'services:team:write', 'services:team:manage',
+    'services:financial:read', 'services:financial:approve',
   ],
   SUPPORT: [
     'surveys:read',
     'taxonomy:read',
     'monitoring:read', 'monitoring:errors',
+    // Services - read access only
+    'services:clients:read',
+    'services:projects:read',
+    'services:time:read',
+    'services:invoicing:read',
   ],
   ANALYST: [
     'surveys:read', 'surveys:responses',
     'taxonomy:read',
     'llm:usage',
     'monitoring:read',
+    // Services - read access and reporting
+    'services:clients:read',
+    'services:projects:read',
+    'services:time:read',
+    'services:invoicing:read',
+    'services:financial:read',
   ],
 }
 
@@ -152,6 +210,7 @@ export const GWI_NAV_PERMISSIONS = {
   dataSources: ['datasources:read'] as GWIPermission[],
   monitoring: ['monitoring:read'] as GWIPermission[],
   system: ['system:settings', 'system:access', 'system:audit', 'system:apikeys'] as GWIPermission[],
+  services: ['services:clients:read', 'services:projects:read', 'services:time:read'] as GWIPermission[],
 }
 
 // Check if role can see a navigation section

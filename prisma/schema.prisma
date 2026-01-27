@@ -4200,3 +4200,722 @@ enum PortalType {
   ADMIN
   GWI
 }
+
+// ==================== SERVICES BUSINESS MANAGEMENT ====================
+
+// ==================== SERVICE CLIENT MANAGEMENT ====================
+
+enum ServiceClientStatus {
+  LEAD           // Potential client
+  PROSPECT       // In sales pipeline
+  ACTIVE         // Active client
+  ON_HOLD        // Temporarily paused
+  INACTIVE       // No longer active
+  CHURNED        // Former client
+}
+
+model ServiceClient {
+  id              String              @id @default(cuid())
+  name            String
+  slug            String              @unique
+  industry        String?
+  website         String?
+  logoUrl         String?
+  status          ServiceClientStatus @default(LEAD)
+
+  // Billing info
+  billingAddress  Json?
+  taxId           String?
+  paymentTerms    Int                 @default(30) // Days
+  currency        String              @default("USD")
+
+  // Relationship
+  accountManagerId String?
+  notes           String?             @db.Text
+  tags            String[]            @default([])
+
+  // Dates
+  firstEngagementAt DateTime?
+  lastActiveAt    DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  // Relations
+  contacts        ClientContact[]
+  projects        ServiceProject[]
+  invoices        Invoice[]
+
+  @@index([status])
+  @@index([industry])
+  @@index([accountManagerId])
+  @@index([createdAt])
+}
+
+model ClientContact {
+  id              String    @id @default(cuid())
+  clientId        String
+  client          ServiceClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  firstName       String
+  lastName        String
+  email           String
+  phone           String?
+  title           String?
+  department      String?
+  isPrimary       Boolean   @default(false)
+  isActive        Boolean   @default(true)
+
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([clientId])
+  @@index([email])
+  @@index([isPrimary])
+}
+
+// ==================== SERVICE PROJECT MANAGEMENT ====================
+
+enum ServiceProjectStatus {
+  DRAFT          // Being defined
+  PROPOSED       // Sent to client
+  APPROVED       // Client approved
+  IN_PROGRESS    // Work underway
+  ON_HOLD        // Temporarily paused
+  COMPLETED      // Work finished
+  CANCELLED      // Not proceeding
+  ARCHIVED       // Historical
+}
+
+enum ProjectBillingType {
+  FIXED_PRICE    // Fixed project fee
+  TIME_MATERIALS // Hourly billing
+  RETAINER       // Monthly retainer
+  MILESTONE      // Milestone-based
+}
+
+model ServiceProject {
+  id              String                @id @default(cuid())
+  clientId        String
+  client          ServiceClient         @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  name            String
+  code            String                @unique // Project code like "PRJ-001"
+  description     String?               @db.Text
+  status          ServiceProjectStatus  @default(DRAFT)
+  billingType     ProjectBillingType    @default(TIME_MATERIALS)
+
+  // Timeline
+  startDate       DateTime?
+  endDate         DateTime?
+  actualEndDate   DateTime?
+
+  // Budget
+  budgetAmount    Decimal?              @db.Decimal(12, 2)
+  budgetCurrency  String                @default("USD")
+  budgetHours     Decimal?              @db.Decimal(10, 2)
+
+  // Rates
+  defaultHourlyRate Decimal?            @db.Decimal(10, 2)
+
+  // Progress
+  completionPercent Int                 @default(0)
+
+  // Management
+  projectManagerId String?
+  notes           String?               @db.Text
+  tags            String[]              @default([])
+
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  // Relations
+  teamMembers     ProjectTeamMember[]
+  deliverables    ProjectDeliverable[]
+  milestones      ProjectMilestone[]
+  timeEntries     TimeEntry[]
+  invoiceLineItems InvoiceLineItem[]
+
+  @@index([clientId])
+  @@index([status])
+  @@index([projectManagerId])
+  @@index([startDate])
+  @@index([endDate])
+}
+
+model ProjectTeamMember {
+  id              String    @id @default(cuid())
+  projectId       String
+  project         ServiceProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  employeeId      String
+  employee        ServiceEmployee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  role            String    // Role on this project
+  hourlyRate      Decimal?  @db.Decimal(10, 2) // Override rate for this project
+  allocatedHours  Decimal?  @db.Decimal(10, 2)
+  startDate       DateTime?
+  endDate         DateTime?
+  isActive        Boolean   @default(true)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([projectId, employeeId])
+  @@index([projectId])
+  @@index([employeeId])
+  @@index([isActive])
+}
+
+enum DeliverableStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+model ProjectDeliverable {
+  id              String            @id @default(cuid())
+  projectId       String
+  project         ServiceProject    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  name            String
+  description     String?           @db.Text
+  status          DeliverableStatus @default(NOT_STARTED)
+
+  dueDate         DateTime?
+  completedAt     DateTime?
+
+  // Linked milestone
+  milestoneId     String?
+  milestone       ProjectMilestone? @relation(fields: [milestoneId], references: [id])
+
+  assigneeId      String?
+
+  sortOrder       Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([projectId])
+  @@index([milestoneId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+enum MilestoneStatus {
+  UPCOMING
+  IN_PROGRESS
+  COMPLETED
+  MISSED
+}
+
+model ProjectMilestone {
+  id              String          @id @default(cuid())
+  projectId       String
+  project         ServiceProject  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  name            String
+  description     String?
+  status          MilestoneStatus @default(UPCOMING)
+
+  dueDate         DateTime
+  completedAt     DateTime?
+
+  // Billing (for milestone-based billing)
+  billingAmount   Decimal?        @db.Decimal(12, 2)
+  isBillable      Boolean         @default(false)
+  invoicedAt      DateTime?
+
+  sortOrder       Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Relations
+  deliverables    ProjectDeliverable[]
+
+  @@index([projectId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+// ==================== TIME TRACKING ====================
+
+enum TimeEntryStatus {
+  DRAFT          // Not yet submitted
+  SUBMITTED      // Awaiting approval
+  APPROVED       // Approved for billing
+  REJECTED       // Rejected, needs revision
+  BILLED         // Included on invoice
+  PAID           // Invoice paid
+}
+
+model TimeEntry {
+  id              String          @id @default(cuid())
+
+  // Who
+  employeeId      String
+  employee        ServiceEmployee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  // What project
+  projectId       String?
+  project         ServiceProject? @relation(fields: [projectId], references: [id])
+
+  // When
+  date            DateTime
+  hours           Decimal         @db.Decimal(5, 2)
+
+  // What
+  description     String          @db.Text
+  category        String?         // Development, Design, Meetings, etc.
+
+  // Billing
+  isBillable      Boolean         @default(true)
+  hourlyRate      Decimal?        @db.Decimal(10, 2)
+  status          TimeEntryStatus @default(DRAFT)
+
+  // Approval
+  approvedById    String?
+  approvedAt      DateTime?
+  rejectionReason String?
+
+  // Invoice link
+  invoiceLineItemId String?
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([employeeId])
+  @@index([projectId])
+  @@index([date])
+  @@index([status])
+  @@index([isBillable])
+}
+
+// ==================== INVOICING ====================
+
+enum InvoiceStatus {
+  DRAFT          // Being prepared
+  PENDING        // Ready to send
+  SENT           // Sent to client
+  VIEWED         // Client viewed
+  PARTIAL        // Partially paid
+  PAID           // Fully paid
+  OVERDUE        // Past due date
+  VOID           // Cancelled/voided
+  WRITTEN_OFF    // Bad debt
+}
+
+model Invoice {
+  id              String        @id @default(cuid())
+  clientId        String
+  client          ServiceClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  invoiceNumber   String        @unique
+  status          InvoiceStatus @default(DRAFT)
+
+  // Dates
+  issueDate       DateTime      @default(now())
+  dueDate         DateTime
+  sentAt          DateTime?
+  paidAt          DateTime?
+
+  // Amounts (all in invoice currency)
+  currency        String        @default("USD")
+  subtotal        Decimal       @db.Decimal(12, 2) @default(0)
+  taxRate         Decimal       @db.Decimal(5, 4) @default(0)
+  taxAmount       Decimal       @db.Decimal(12, 2) @default(0)
+  discountAmount  Decimal       @db.Decimal(12, 2) @default(0)
+  total           Decimal       @db.Decimal(12, 2) @default(0)
+  amountPaid      Decimal       @db.Decimal(12, 2) @default(0)
+  amountDue       Decimal       @db.Decimal(12, 2) @default(0)
+
+  // Content
+  notes           String?       @db.Text
+  terms           String?       @db.Text
+  footer          String?
+
+  // Template
+  templateId      String?
+
+  // Payment
+  paymentMethod   String?
+  paymentReference String?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  lineItems       InvoiceLineItem[]
+
+  @@index([clientId])
+  @@index([status])
+  @@index([invoiceNumber])
+  @@index([issueDate])
+  @@index([dueDate])
+}
+
+enum InvoiceLineItemType {
+  SERVICE        // Professional services
+  EXPENSE        // Reimbursable expense
+  PRODUCT        // Physical product
+  DISCOUNT       // Discount line
+  TAX            // Tax line
+  OTHER          // Other
+}
+
+model InvoiceLineItem {
+  id              String              @id @default(cuid())
+  invoiceId       String
+  invoice         Invoice             @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  // Optional project link
+  projectId       String?
+  project         ServiceProject?     @relation(fields: [projectId], references: [id])
+
+  type            InvoiceLineItemType @default(SERVICE)
+  description     String
+
+  quantity        Decimal             @db.Decimal(10, 2)
+  unitPrice       Decimal             @db.Decimal(12, 2)
+  amount          Decimal             @db.Decimal(12, 2)
+
+  // For time-based billing
+  hours           Decimal?            @db.Decimal(10, 2)
+  hourlyRate      Decimal?            @db.Decimal(10, 2)
+
+  taxable         Boolean             @default(true)
+  sortOrder       Int                 @default(0)
+
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([invoiceId])
+  @@index([projectId])
+  @@index([type])
+}
+
+model InvoiceTemplate {
+  id              String    @id @default(cuid())
+  name            String
+  description     String?
+
+  // Branding
+  logoUrl         String?
+  primaryColor    String?
+
+  // Content sections
+  headerHtml      String?   @db.Text
+  footerHtml      String?   @db.Text
+  termsText       String?   @db.Text
+  notesText       String?   @db.Text
+
+  // Settings
+  showLogo        Boolean   @default(true)
+  showDueDate     Boolean   @default(true)
+  showTaxBreakdown Boolean  @default(true)
+
+  isDefault       Boolean   @default(false)
+  isActive        Boolean   @default(true)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([isDefault])
+  @@index([isActive])
+}
+
+// ==================== VENDOR MANAGEMENT ====================
+
+enum ServiceVendorStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_APPROVAL
+  SUSPENDED
+}
+
+enum VendorType {
+  CONTRACTOR     // Individual contractor
+  FREELANCER     // Freelancer
+  AGENCY         // Agency/company
+  SUPPLIER       // Product supplier
+  CONSULTANT     // Consultant
+  OTHER
+}
+
+model ServiceVendor {
+  id              String              @id @default(cuid())
+  name            String
+  slug            String              @unique
+  type            VendorType          @default(CONTRACTOR)
+  status          ServiceVendorStatus @default(ACTIVE)
+
+  // Contact info
+  email           String?
+  phone           String?
+  website         String?
+  address         Json?
+
+  // Business info
+  taxId           String?
+  paymentTerms    Int                 @default(30)
+  currency        String              @default("USD")
+
+  // Rates
+  defaultHourlyRate Decimal?          @db.Decimal(10, 2)
+
+  // Banking
+  bankDetails     Json?               // Encrypted bank info
+
+  notes           String?             @db.Text
+  tags            String[]            @default([])
+
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  // Relations
+  contacts        VendorContact[]
+  invoices        VendorInvoice[]
+
+  @@index([status])
+  @@index([type])
+}
+
+model VendorContact {
+  id              String        @id @default(cuid())
+  vendorId        String
+  vendor          ServiceVendor @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  firstName       String
+  lastName        String
+  email           String
+  phone           String?
+  title           String?
+  isPrimary       Boolean       @default(false)
+  isActive        Boolean       @default(true)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([vendorId])
+  @@index([email])
+  @@index([isPrimary])
+}
+
+enum VendorInvoiceStatus {
+  PENDING        // Received, not yet processed
+  APPROVED       // Approved for payment
+  REJECTED       // Rejected
+  SCHEDULED      // Scheduled for payment
+  PAID           // Paid
+  DISPUTED       // Under dispute
+}
+
+model VendorInvoice {
+  id              String              @id @default(cuid())
+  vendorId        String
+  vendor          ServiceVendor       @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  // Invoice details
+  invoiceNumber   String              // Vendor's invoice number
+  status          VendorInvoiceStatus @default(PENDING)
+
+  // Dates
+  invoiceDate     DateTime
+  dueDate         DateTime
+  receivedAt      DateTime            @default(now())
+  approvedAt      DateTime?
+  paidAt          DateTime?
+
+  // Amounts
+  currency        String              @default("USD")
+  subtotal        Decimal             @db.Decimal(12, 2)
+  taxAmount       Decimal             @db.Decimal(12, 2) @default(0)
+  total           Decimal             @db.Decimal(12, 2)
+
+  // Categorization
+  category        String?             // Expense category
+  description     String?
+
+  // Attachments
+  attachmentUrl   String?
+
+  // Approval
+  approvedById    String?
+
+  // Payment
+  paymentMethod   String?
+  paymentReference String?
+
+  notes           String?             @db.Text
+
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([vendorId])
+  @@index([status])
+  @@index([invoiceDate])
+  @@index([dueDate])
+}
+
+// ==================== EMPLOYEE MANAGEMENT ====================
+
+enum ServiceEmployeeStatus {
+  ACTIVE
+  ON_LEAVE
+  TERMINATED
+  CONTRACTOR
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERN
+}
+
+model ServiceEmployee {
+  id              String                @id @default(cuid())
+
+  // Personal info
+  firstName       String
+  lastName        String
+  email           String                @unique
+  phone           String?
+  avatarUrl       String?
+
+  // Employment
+  status          ServiceEmployeeStatus @default(ACTIVE)
+  employmentType  EmploymentType        @default(FULL_TIME)
+
+  // Organization
+  departmentId    String?
+  department      ServiceDepartment?    @relation(fields: [departmentId], references: [id])
+
+  roleId          String?
+  role            ServiceRole?          @relation(fields: [roleId], references: [id])
+
+  managerId       String?
+  manager         ServiceEmployee?      @relation("ManagerRelation", fields: [managerId], references: [id])
+  directReports   ServiceEmployee[]     @relation("ManagerRelation")
+
+  // Dates
+  hireDate        DateTime?
+  terminationDate DateTime?
+
+  // Rates
+  hourlyRate      Decimal?              @db.Decimal(10, 2)
+  annualSalary    Decimal?              @db.Decimal(12, 2)
+
+  // Capacity
+  weeklyCapacityHours Decimal           @db.Decimal(5, 2) @default(40)
+
+  // User link (if employee is also a system user)
+  userId          String?               @unique
+
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  // Relations
+  skills          EmployeeSkill[]
+  projectAssignments ProjectTeamMember[]
+  timeEntries     TimeEntry[]
+
+  @@index([status])
+  @@index([departmentId])
+  @@index([roleId])
+  @@index([managerId])
+}
+
+model ServiceDepartment {
+  id              String    @id @default(cuid())
+  name            String
+  code            String    @unique
+  description     String?
+
+  // Hierarchy
+  parentId        String?
+  parent          ServiceDepartment?  @relation("DepartmentHierarchy", fields: [parentId], references: [id])
+  children        ServiceDepartment[] @relation("DepartmentHierarchy")
+
+  // Head of department
+  headEmployeeId  String?
+
+  isActive        Boolean   @default(true)
+  sortOrder       Int       @default(0)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  employees       ServiceEmployee[]
+  roles           ServiceRole[]
+
+  @@index([parentId])
+  @@index([isActive])
+}
+
+model ServiceRole {
+  id              String    @id @default(cuid())
+  name            String
+  code            String    @unique
+  description     String?
+
+  // Department (optional - can be org-wide)
+  departmentId    String?
+  department      ServiceDepartment? @relation(fields: [departmentId], references: [id])
+
+  // Level/seniority
+  level           Int       @default(0)
+
+  // Default rates
+  defaultHourlyRate Decimal? @db.Decimal(10, 2)
+
+  isActive        Boolean   @default(true)
+  sortOrder       Int       @default(0)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  employees       ServiceEmployee[]
+
+  @@index([departmentId])
+  @@index([isActive])
+  @@index([level])
+}
+
+enum SkillProficiency {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+model EmployeeSkill {
+  id              String           @id @default(cuid())
+  employeeId      String
+  employee        ServiceEmployee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  skillName       String
+  category        String?          // Development, Design, Management, etc.
+  proficiency     SkillProficiency @default(INTERMEDIATE)
+  yearsExperience Int?
+
+  // Certification
+  isCertified     Boolean          @default(false)
+  certificationName String?
+  certificationExpiry DateTime?
+
+  notes           String?
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([employeeId, skillName])
+  @@index([employeeId])
+  @@index([skillName])
+  @@index([category])
+  @@index([proficiency])
+}

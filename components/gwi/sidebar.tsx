@@ -38,6 +38,13 @@ import {
   Sparkles,
   LineChart,
   Layers,
+  Briefcase,
+  Building2,
+  FolderKanban,
+  Clock,
+  Receipt,
+  Truck,
+  UsersRound,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useGWIAdmin } from "@/components/providers/gwi-provider"
@@ -47,6 +54,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
+import { useSidebar } from "@/components/providers/sidebar-provider"
 
 interface NavItem {
   name: string
@@ -189,6 +203,19 @@ const navSections: NavSection[] = [
       { name: "API Keys", href: "/gwi/system/api-keys", icon: Key },
     ],
   },
+  {
+    title: "Services Management",
+    defaultOpen: false,
+    items: [
+      { name: "Dashboard", href: "/gwi/services", icon: Briefcase },
+      { name: "Clients", href: "/gwi/services/clients", icon: Building2 },
+      { name: "Projects", href: "/gwi/services/projects", icon: FolderKanban },
+      { name: "Time Tracking", href: "/gwi/services/time", icon: Clock },
+      { name: "Invoicing", href: "/gwi/services/invoicing", icon: Receipt },
+      { name: "Vendors", href: "/gwi/services/vendors", icon: Truck },
+      { name: "Team", href: "/gwi/services/team", icon: UsersRound },
+    ],
+  },
 ]
 
 function NavSectionComponent({ section }: { section: NavSection }) {
@@ -302,8 +329,108 @@ function NavSectionComponent({ section }: { section: NavSection }) {
   )
 }
 
+function SidebarContent({ onLogout }: { onLogout: () => void }) {
+  const { admin } = useGWIAdmin()
+
+  // Track all section setters for expand/collapse all
+  const sectionSettersRef = useRef<Map<string, (open: boolean) => void>>(new Map())
+
+  const registerSection = useCallback((title: string, setIsOpen: (open: boolean) => void) => {
+    sectionSettersRef.current.set(title, setIsOpen)
+  }, [])
+
+  const unregisterSection = useCallback((title: string) => {
+    sectionSettersRef.current.delete(title)
+  }, [])
+
+  const expandAll = useCallback(() => {
+    sectionSettersRef.current.forEach((setIsOpen) => setIsOpen(true))
+  }, [])
+
+  const collapseAll = useCallback(() => {
+    sectionSettersRef.current.forEach((setIsOpen) => setIsOpen(false))
+  }, [])
+
+  const sidebarContextValue: SidebarContextType = {
+    expandAll,
+    collapseAll,
+    registerSection,
+    unregisterSection,
+  }
+
+  return (
+    <SidebarContext.Provider value={sidebarContextValue}>
+      {/* Logo */}
+      <div className="flex h-16 items-center border-b border-slate-700 px-6">
+        <Link href="/gwi" className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600">
+            <Database className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <span className="text-base font-semibold text-white">GWI Portal</span>
+            <p className="text-xs text-slate-400">Team Tools</p>
+          </div>
+        </Link>
+      </div>
+
+      {/* Navigation Controls */}
+      <div className="px-3 pt-3 pb-1 flex justify-end">
+        <button
+          onClick={expandAll}
+          className="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition-colors"
+          title="Expand all sections"
+          aria-label="Expand all sections"
+        >
+          Expand all
+        </button>
+        <span className="text-slate-600 mx-1">|</span>
+        <button
+          onClick={collapseAll}
+          className="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition-colors"
+          title="Collapse all sections"
+          aria-label="Collapse all sections"
+        >
+          Collapse all
+        </button>
+      </div>
+
+      {/* Navigation */}
+      <ScrollArea className="flex-1 py-2 px-3">
+        {navSections.map((section) => (
+          <NavSectionComponent key={section.title} section={section} />
+        ))}
+      </ScrollArea>
+
+      {/* User Section */}
+      <div className="border-t border-slate-700 p-4">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="h-10 w-10 rounded-full bg-emerald-600/20 flex items-center justify-center">
+            <span className="text-sm font-medium text-emerald-400">
+              {admin.name.split(" ").map(n => n[0]).join("").toUpperCase()}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-white truncate">{admin.name}</p>
+            <p className="text-xs text-slate-400 truncate">{admin.role.replace(/_/g, " ")}</p>
+          </div>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
+          onClick={onLogout}
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          Sign out
+        </Button>
+      </div>
+    </SidebarContext.Provider>
+  )
+}
+
 export function GWISidebar() {
   const { admin } = useGWIAdmin()
+  const { isMobileOpen, setMobileOpen } = useSidebar()
 
   // Track all section setters for expand/collapse all
   const sectionSettersRef = useRef<Map<string, (open: boolean) => void>>(new Map())
@@ -338,72 +465,22 @@ export function GWISidebar() {
 
   return (
     <SidebarContext.Provider value={sidebarContextValue}>
+      {/* Desktop Sidebar */}
       <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-slate-700 bg-slate-900 hidden lg:flex flex-col">
-        {/* Logo */}
-        <div className="flex h-16 items-center border-b border-slate-700 px-6">
-          <Link href="/gwi" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600">
-              <Database className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <span className="text-base font-semibold text-white">GWI Portal</span>
-              <p className="text-xs text-slate-400">Team Tools</p>
-            </div>
-          </Link>
-        </div>
-
-        {/* Navigation Controls */}
-        <div className="px-3 pt-3 pb-1 flex justify-end">
-          <button
-            onClick={expandAll}
-            className="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition-colors"
-            title="Expand all sections"
-            aria-label="Expand all sections"
-          >
-            Expand all
-          </button>
-          <span className="text-slate-600 mx-1">|</span>
-          <button
-            onClick={collapseAll}
-            className="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition-colors"
-            title="Collapse all sections"
-            aria-label="Collapse all sections"
-          >
-            Collapse all
-          </button>
-        </div>
-
-        {/* Navigation */}
-        <ScrollArea className="flex-1 py-2 px-3">
-          {navSections.map((section) => (
-            <NavSectionComponent key={section.title} section={section} />
-          ))}
-        </ScrollArea>
-
-        {/* User Section */}
-        <div className="border-t border-slate-700 p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="h-10 w-10 rounded-full bg-emerald-600/20 flex items-center justify-center">
-              <span className="text-sm font-medium text-emerald-400">
-                {admin.name.split(" ").map(n => n[0]).join("").toUpperCase()}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{admin.name}</p>
-              <p className="text-xs text-slate-400 truncate">{admin.role.replace(/_/g, " ")}</p>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
-            onClick={handleLogout}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Sign out
-          </Button>
-        </div>
+        <SidebarContent onLogout={handleLogout} />
       </aside>
+
+      {/* Mobile Sidebar */}
+      <Sheet open={isMobileOpen} onOpenChange={setMobileOpen}>
+        <SheetContent side="left" className="w-64 p-0 bg-slate-900 border-slate-700">
+          <SheetHeader className="sr-only">
+            <SheetTitle>Navigation Menu</SheetTitle>
+          </SheetHeader>
+          <div className="flex flex-col h-full">
+            <SidebarContent onLogout={handleLogout} />
+          </div>
+        </SheetContent>
+      </Sheet>
     </SidebarContext.Provider>
   )
 }

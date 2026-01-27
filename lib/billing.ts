@@ -205,6 +205,58 @@ export async function createPortalSession(orgId: string, returnUrl: string) {
 
 export async function handleStripeWebhook(event: Stripe.Event) {
   switch (event.type) {
+    case 'checkout.session.completed': {
+      const session = event.data.object as Stripe.Checkout.Session
+      const orgId = session.metadata?.orgId
+      const customerId = session.customer as string
+      const subscriptionId = session.subscription as string
+
+      if (orgId && subscriptionId) {
+        // Get subscription details to determine plan
+        const stripe = getStripe()
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+        const priceId = subscription.items.data[0]?.price.id
+
+        // Determine plan tier from price ID
+        let planTier: PlanTier = 'STARTER'
+        if (priceId === PLAN_PRICES.PROFESSIONAL.monthly || priceId === PLAN_PRICES.PROFESSIONAL.yearly) {
+          planTier = 'PROFESSIONAL'
+        } else if (priceId === PLAN_PRICES.ENTERPRISE.monthly || priceId === PLAN_PRICES.ENTERPRISE.yearly) {
+          planTier = 'ENTERPRISE'
+        }
+
+        // Update billing subscription
+        await prisma.billingSubscription.upsert({
+          where: { orgId },
+          create: {
+            orgId,
+            stripeCustomerId: customerId,
+            stripeSubscriptionId: subscriptionId,
+            planId: planTier.toLowerCase(),
+            status: 'ACTIVE',
+            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+          },
+          update: {
+            stripeCustomerId: customerId,
+            stripeSubscriptionId: subscriptionId,
+            planId: planTier.toLowerCase(),
+            status: 'ACTIVE',
+            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+            cancelAtPeriodEnd: false,
+          }
+        })
+
+        // Update organization plan tier
+        await prisma.organization.update({
+          where: { id: orgId },
+          data: { planTier }
+        })
+
+        console.log(`Checkout completed: org ${orgId} upgraded to ${planTier}`)
+      }
+      break
+    }
+
     case 'customer.subscription.created':
     case 'customer.subscription.updated': {
       const subscription = event.data.object as Stripe.Subscription
@@ -212,6 +264,16 @@ export async function handleStripeWebhook(event: Stripe.Event) {
 
       if (orgId) {
         const status = mapStripeStatus(subscription.status)
+
+        // Determine plan tier from price ID
+        const priceId = subscription.items?.data?.[0]?.price?.id
+        let planTier: PlanTier = 'STARTER'
+        if (priceId === PLAN_PRICES.PROFESSIONAL.monthly || priceId === PLAN_PRICES.PROFESSIONAL.yearly) {
+          planTier = 'PROFESSIONAL'
+        } else if (priceId === PLAN_PRICES.ENTERPRISE.monthly || priceId === PLAN_PRICES.ENTERPRISE.yearly) {
+          planTier = 'ENTERPRISE'
+        }
+
         await prisma.billingSubscription.update({
           where: { orgId },
           data: {
@@ -221,9 +283,18 @@ export async function handleStripeWebhook(event: Stripe.Event) {
             cancelAtPeriodEnd: subscription.cancel_at_period_end,
           }
         })
+
+        // Update plan tier if subscription is active
+        if (status === 'ACTIVE') {
+          await prisma.organization.update({
+            where: { id: orgId },
+            data: { planTier }
+          })
+        }
       }
       break
     }
+
     case 'customer.subscription.deleted': {
       const subscription = event.data.object as Stripe.Subscription
       const orgId = subscription.metadata.orgId
@@ -242,6 +313,55 @@ export async function handleStripeWebhook(event: Stripe.Event) {
           where: { id: orgId },
           data: { planTier: 'STARTER' }
         })
+
+        console.log(`Subscription canceled: org ${orgId} downgraded to STARTER`)
+      }
+      break
+    }
+
+    case 'invoice.paid': {
+      const invoice = event.data.object as Stripe.Invoice
+      const subscriptionId = invoice.subscription as string
+
+      if (subscriptionId) {
+        // Find org by subscription ID
+        const subscription = await prisma.billingSubscription.findFirst({
+          where: { stripeSubscriptionId: subscriptionId }
+        })
+
+        if (subscription) {
+          // Update status to active if it was past due
+          if (subscription.status === 'PAST_DUE') {
+            await prisma.billingSubscription.update({
+              where: { id: subscription.id },
+              data: { status: 'ACTIVE' }
+            })
+            console.log(`Invoice paid: org ${subscription.orgId} restored to ACTIVE`)
+          }
+        }
+      }
+      break
+    }
+
+    case 'invoice.payment_failed': {
+      const invoice = event.data.object as Stripe.Invoice
+      const subscriptionId = invoice.subscription as string
+
+      if (subscriptionId) {
+        // Find org by subscription ID
+        const subscription = await prisma.billingSubscription.findFirst({
+          where: { stripeSubscriptionId: subscriptionId }
+        })
+
+        if (subscription) {
+          await prisma.billingSubscription.update({
+            where: { id: subscription.id },
+            data: { status: 'PAST_DUE' }
+          })
+          console.log(`Payment failed: org ${subscription.orgId} marked as PAST_DUE`)
+
+          // TODO: Send dunning email notification
+        }
       }
       break
     }
