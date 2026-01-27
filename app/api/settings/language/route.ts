@@ -23,15 +23,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid locale' }, { status: 400 });
     }
 
-    // Set cookie for immediate effect
-    const cookieStore = await cookies();
-    cookieStore.set('locale', locale, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 365, // 1 year
-      sameSite: 'lax',
-      httpOnly: false, // Allow JS access for client-side reading
-    });
-
     // Try to update user preferences if authenticated
     try {
       const session = await auth();
@@ -50,7 +41,16 @@ export async function POST(request: NextRequest) {
       console.log('User not authenticated, skipping preferences update');
     }
 
-    return NextResponse.json({ success: true, locale });
+    // Create response with cookie set in header
+    const response = NextResponse.json({ success: true, locale });
+    response.cookies.set('locale', locale, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+      sameSite: 'lax',
+      httpOnly: false, // Allow JS access for client-side reading
+    });
+
+    return response;
   } catch (error) {
     console.error('Error updating language:', error);
     return NextResponse.json({ error: 'Failed to update language' }, { status: 500 });
