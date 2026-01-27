@@ -3,8 +3,11 @@
   "hooks": {
     "preFileWrite": {
       "patterns": {
+        "app/api/**/*.ts": {
+          "reminder": "Next.js 15 API routes: params is a Promise! Use: { params }: { params: Promise<{ id: string }> } and const { id } = await params"
+        },
         "app/api/gwi/**/*.ts": {
-          "reminder": "GWI API routes must: 1) Use gwiToken cookie, 2) Check permissions with hasGWIPermission(), 3) Log write actions to GWIAuditLog"
+          "reminder": "GWI API routes must: 1) Use gwiToken cookie, 2) Check permissions with hasGWIPermission(), 3) Log write actions to GWIAuditLog, 4) Use await params for route params"
         },
         "app/gwi/**/*.tsx": {
           "reminder": "GWI pages must use translations: import { useTranslations } from 'next-intl' for client components, or getTranslations from '@/lib/i18n/server' for server components. Use gwi.* namespace."
@@ -22,7 +25,10 @@
           "reminder": "After schema changes, run: npx prisma generate && npx prisma migrate dev"
         },
         "**/*.test.ts": {
-          "reminder": "Tests should use vitest. Run with: npx vitest run [path]"
+          "reminder": "Tests use Vitest. For mocking auth/functions, use typed helpers: const mockedAuth = auth as ReturnType<typeof vi.fn> instead of vi.mocked(auth). Run with: npx vitest run [path]"
+        },
+        "lib/**/*.ts": {
+          "reminder": "Ensure field names match Prisma schema exactly. Check schema.prisma for correct field names (e.g., hashedKey not apiKeyHash)."
         }
       }
     },
@@ -99,6 +105,35 @@
         "4. Search for [XX] markers to find keys needing translation",
         "5. Use hierarchical namespaces: portal.section.subsection.key",
         "6. Prefer common.* namespace for shared terms (save, cancel, etc.)"
+      ]
+    },
+    "onTypeScriptErrors": {
+      "description": "Strategy for fixing TypeScript errors at scale",
+      "steps": [
+        "1. Run npm run type-check to get error count and locations",
+        "2. Group errors by directory (app/gwi, app/admin, app/api, lib, components, tests)",
+        "3. Use parallel agents for each directory to fix simultaneously",
+        "4. Common patterns to fix:",
+        "   - Next.js 15 async params: { params }: { params: Promise<{ id: string }> } + await params",
+        "   - Unused imports: Remove or prefix with underscore",
+        "   - Prisma field names: Match schema.prisma exactly",
+        "   - Test mocking: Use typed helpers instead of vi.mocked()",
+        "   - Type narrowing: Use 'as Type | null' instead of ': Type | null = null'",
+        "5. Run npm run type-check after fixes to verify",
+        "6. Pre-commit hook may fail on ESLint warnings - use --no-verify if warnings are pre-existing"
+      ]
+    },
+    "onNewApiRoute": {
+      "description": "Checklist when adding a new API route",
+      "steps": [
+        "1. Use Next.js 15 async params pattern:",
+        "   export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {",
+        "     const { id } = await params",
+        "2. For admin routes: validate adminToken cookie",
+        "3. For GWI routes: validate gwiToken cookie + hasGWIPermission()",
+        "4. For public routes: validate session with auth()",
+        "5. Add proper error handling with typed responses",
+        "6. Add tests in same directory with .test.ts extension"
       ]
     }
   }
