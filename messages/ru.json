@@ -98,7 +98,16 @@
       "organizationComplianceAttestations": "Аттестации соответствия организации",
       "complianceAudits": "Аудит соответствия для этой структуры",
       "frameworkRequirements": "Рамочные требования"
-    }
+    },
+    "enable": "[RU] Enable",
+    "disable": "[RU] Disable",
+    "notRequired": "[RU] Not Required",
+    "system": "[RU] System",
+    "noDescription": "[RU] No description",
+    "unknown": "[RU] Unknown",
+    "important": "[RU] Important",
+    "preview": "[RU] Preview",
+    "duration": "[RU] Duration"
   },
   "auth": {
     "signIn": "Войти",
@@ -3239,7 +3248,29 @@
         "exportFailed": "Не удалось экспортировать панель мониторинга."
       },
       "detail": {
-        "title": "Подробности информационной панели"
+        "title": "Подробности информационной панели",
+        "chartTypes": {
+          "bar": "[RU] Bar",
+          "line": "[RU] Line",
+          "pie": "[RU] Pie",
+          "donut": "[RU] Donut",
+          "area": "[RU] Area",
+          "scatter": "[RU] Scatter",
+          "heatmap": "[RU] Heatmap",
+          "treemap": "[RU] Treemap",
+          "funnel": "[RU] Funnel",
+          "radar": "[RU] Radar",
+          "metric": "[RU] Metric"
+        },
+        "export": {
+          "csvHeaders": {
+            "id": "[RU] ID",
+            "name": "[RU] Name",
+            "type": "[RU] Type",
+            "category": "[RU] Category",
+            "dataSource": "[RU] Data Source"
+          }
+        }
       }
     },
     "crosstabs": {
@@ -5823,7 +5854,9 @@
           "deleteFailed": "Не удалось удалить ответ",
           "markCompleteFailed": "Не удалось пометить как завершенное"
         }
-      }
+      },
+      "questionsLabel": "[RU] Questions",
+      "responsesLabel": "[RU] Responses"
     },
     "taxonomy": {
       "title": "Таксономия",
@@ -8234,6 +8267,55 @@
         "featureDeleted": "Функция удалена",
         "featureEnabled": "Функция успешно включена",
         "featureDisabled": "Функция успешно отключена"
+      },
+      "new": {
+        "title": "[RU] Create Entitlement Feature",
+        "description": "[RU] Define a new feature that can be assigned to subscription plans",
+        "back": "[RU] Back",
+        "creating": "[RU] Creating...",
+        "createFeature": "[RU] Create Feature",
+        "noPermission": "[RU] You don't have permission to create entitlement features",
+        "backToFeatures": "[RU] Back to Features",
+        "sections": {
+          "featureDetails": "[RU] Feature Details",
+          "featureDetailsDescription": "[RU] Basic information about the entitlement feature",
+          "categoryClassification": "[RU] Category & Classification",
+          "categoryDescription": "[RU] Organize the feature for easier management",
+          "valueConfiguration": "[RU] Value Configuration",
+          "valueDescription": "[RU] Configure the feature value type and default"
+        },
+        "fields": {
+          "displayName": "[RU] Display Name",
+          "featureKey": "[RU] Feature Key",
+          "description": "[RU] Description",
+          "category": "[RU] Category",
+          "sortOrder": "[RU] Sort Order",
+          "valueType": "[RU] Value Type",
+          "defaultValue": "[RU] Default Value",
+          "active": "[RU] Active"
+        },
+        "placeholders": {
+          "displayName": "[RU] Advanced Analytics",
+          "featureKey": "[RU] advanced_analytics",
+          "description": "[RU] Describe what this feature enables for subscribers...",
+          "jsonDefault": "[RU] {}"
+        },
+        "hints": {
+          "snakeCaseFormat": "[RU] snake_case format: lowercase letters, numbers, underscores",
+          "sortOrderLower": "[RU] Lower numbers appear first in lists",
+          "inactiveFeatures": "[RU] Inactive features are not available for plan assignment"
+        },
+        "validation": {
+          "keyAndNameRequired": "[RU] Key and name are required",
+          "keyFormatInvalid": "[RU] Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)"
+        },
+        "toast": {
+          "createFailed": "[RU] Failed to create feature"
+        },
+        "status": {
+          "enabled": "[RU] Enabled",
+          "disabled": "[RU] Disabled"
+        }
       }
     },
     "identity": {
@@ -8262,7 +8344,18 @@
           "providerUpdated": "Провайдер SSO успешно обновлен",
           "connectionSuccess": "Тест подключения успешен",
           "providerDeleted": "Поставщик системы единого входа успешно удален",
-          "connectionFailed": "Проверка соединения не удалась"
+          "connectionFailed": "Проверка соединения не удалась",
+          "loadFailed": "[RU] Failed to load SSO configuration",
+          "updated": "[RU] SSO configuration updated",
+          "updateFailed": "[RU] Failed to update SSO configuration",
+          "allTestsPassed": "[RU] All tests passed!",
+          "someTestsFailed": "[RU] Some tests failed",
+          "testFailed": "[RU] Failed to test SSO configuration",
+          "activated": "[RU] SSO activated successfully",
+          "disabled": "[RU] SSO disabled successfully",
+          "updateStatusFailed": "[RU] Failed to update status",
+          "deleted": "[RU] SSO configuration deleted successfully",
+          "deleteFailed": "[RU] Failed to delete SSO configuration"
         },
         "filterByProvider": "Фильтровать по поставщику",
         "filterByStatus": "Фильтровать по статусу",
@@ -8334,6 +8427,89 @@
           "certificateRequired": "Требуется сертификат",
           "invalidUrl": "Пожалуйста, введите действительный URL-адрес",
           "invalidCertificate": "Неверный формат сертификата"
+        },
+        "new": {
+          "title": "[RU] Create SSO Configuration",
+          "description": "[RU] Configure Single Sign-On for an organization",
+          "back": "[RU] Back",
+          "creating": "[RU] Creating...",
+          "createConfiguration": "[RU] Create Configuration",
+          "noPermission": "[RU] You don't have permission to create SSO configurations",
+          "backToSSO": "[RU] Back to SSO Configurations",
+          "tabs": {
+            "basic": "[RU] Basic Settings",
+            "provider": "[RU] Provider Configuration",
+            "provisioning": "[RU] User Provisioning"
+          },
+          "sections": {
+            "organizationProvider": "[RU] Organization & Provider",
+            "organizationProviderDescription": "[RU] Select the organization and SSO provider type",
+            "samlConfiguration": "[RU] SAML Configuration",
+            "samlConfigurationDescription": "[RU] Configure SAML 2.0 settings from your Identity Provider",
+            "oidcConfiguration": "[RU] OIDC Configuration",
+            "oidcConfigurationDescription": "[RU] Configure OpenID Connect settings",
+            "userProvisioning": "[RU] User Provisioning Settings",
+            "userProvisioningDescription": "[RU] Configure how users are provisioned through SSO"
+          },
+          "fields": {
+            "organization": "[RU] Organization",
+            "ssoProvider": "[RU] SSO Provider",
+            "displayName": "[RU] Display Name",
+            "allowedEmailDomains": "[RU] Allowed Email Domains",
+            "entityId": "[RU] Entity ID / Issuer",
+            "ssoUrl": "[RU] SSO URL (Login URL)",
+            "sloUrl": "[RU] SLO URL (Logout URL)",
+            "certificate": "[RU] X.509 Certificate",
+            "clientId": "[RU] Client ID",
+            "clientSecret": "[RU] Client Secret",
+            "discoveryUrl": "[RU] Discovery URL",
+            "authorizationUrl": "[RU] Authorization URL",
+            "tokenUrl": "[RU] Token URL",
+            "userInfoUrl": "[RU] User Info URL",
+            "defaultRole": "[RU] Default Role",
+            "jitProvisioning": "[RU] Just-in-Time Provisioning",
+            "autoDeactivate": "[RU] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[RU] Select an organization",
+            "searchOrganizations": "[RU] Search organizations...",
+            "loading": "[RU] Loading...",
+            "noOrganizationsFound": "[RU] No organizations found",
+            "displayName": "[RU] e.g., Acme Corp SSO",
+            "allowedDomains": "[RU] acme.com, acme.org",
+            "entityId": "[RU] https://idp.example.com/entity",
+            "ssoUrl": "[RU] https://idp.example.com/sso",
+            "sloUrl": "[RU] https://idp.example.com/slo",
+            "certificate": "[RU] -----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+            "clientId": "[RU] your-client-id",
+            "clientSecret": "[RU] your-client-secret",
+            "discoveryUrl": "[RU] https://idp.example.com/.well-known/openid-configuration",
+            "authorizationUrl": "[RU] https://idp.example.com/authorize",
+            "tokenUrl": "[RU] https://idp.example.com/token",
+            "userInfoUrl": "[RU] https://idp.example.com/userinfo"
+          },
+          "hints": {
+            "displayName": "[RU] A friendly name for this SSO configuration",
+            "allowedDomains": "[RU] Comma-separated list of email domains allowed to use this SSO",
+            "certificate": "[RU] Paste the public certificate from your Identity Provider",
+            "discoveryUrl": "[RU] If provided, other URLs will be auto-discovered",
+            "manualUrlConfig": "[RU] Manual URL Configuration (optional if discovery URL is provided)",
+            "defaultRole": "[RU] Role assigned to users when they first sign in via SSO",
+            "jitProvisioning": "[RU] Automatically create user accounts on first SSO login",
+            "autoDeactivate": "[RU] Automatically deactivate users removed from Identity Provider"
+          },
+          "roles": {
+            "viewer": "[RU] Viewer",
+            "member": "[RU] Member",
+            "admin": "[RU] Admin"
+          },
+          "validation": {
+            "organizationAndProviderRequired": "[RU] Organization and provider are required"
+          },
+          "toast": {
+            "createSuccess": "[RU] SSO configuration created successfully",
+            "createFailed": "[RU] Failed to create SSO configuration"
+          }
         }
       },
       "domains": {
@@ -8432,7 +8608,17 @@
           "syncStarted": "Синхронизация успешно запущена",
           "connectionUpdated": "Соединение SCIM успешно обновлено",
           "connectionDeleted": "SCIM-соединение успешно удалено",
-          "tokenRegenerated": "Токен носителя успешно восстановлен."
+          "tokenRegenerated": "Токен носителя успешно восстановлен.",
+          "loadFailed": "[RU] Failed to fetch SCIM integration",
+          "updated": "[RU] SCIM integration updated",
+          "updateFailed": "[RU] Failed to update SCIM integration",
+          "activated": "[RU] SCIM integration activated successfully",
+          "paused": "[RU] SCIM integration paused successfully",
+          "updateStatusFailed": "[RU] Failed to update status",
+          "regenerateTokenFailed": "[RU] Failed to regenerate token",
+          "deleted": "[RU] SCIM integration deleted successfully",
+          "deleteFailed": "[RU] Failed to delete SCIM integration",
+          "copied": "[RU] Copied to clipboard"
         },
         "editConnection": "Изменить соединение",
         "deleteConnection": "Удалить соединение",
@@ -8504,6 +8690,61 @@
           "connectionNameRequired": "Укажите имя подключения.",
           "baseUrlRequired": "Укажите базовый URL.",
           "invalidUrl": "Пожалуйста, введите действительный URL-адрес"
+        },
+        "new": {
+          "title": "[RU] Create SCIM Integration",
+          "description": "[RU] Configure SCIM 2.0 user provisioning for an organization",
+          "back": "[RU] Back",
+          "creating": "[RU] Creating...",
+          "createIntegration": "[RU] Create Integration",
+          "noPermission": "[RU] You don't have permission to create SCIM integrations",
+          "backToSCIM": "[RU] Back to SCIM Integrations",
+          "sections": {
+            "organization": "[RU] Organization",
+            "organizationDescription": "[RU] Select the organization to configure SCIM provisioning for",
+            "syncSettings": "[RU] Sync Settings",
+            "syncSettingsDescription": "[RU] Configure what data should be synchronized from your Identity Provider"
+          },
+          "fields": {
+            "organization": "[RU] Organization",
+            "defaultRole": "[RU] Default Role",
+            "syncUsers": "[RU] Sync Users",
+            "syncGroups": "[RU] Sync Groups",
+            "autoDeactivate": "[RU] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[RU] Select an organization",
+            "searchOrganizations": "[RU] Search organizations...",
+            "loading": "[RU] Loading...",
+            "noOrganizationsFound": "[RU] No organizations found"
+          },
+          "hints": {
+            "defaultRole": "[RU] Role assigned to users provisioned via SCIM",
+            "syncUsers": "[RU] Provision and deprovision users automatically",
+            "syncGroups": "[RU] Sync group memberships from Identity Provider",
+            "autoDeactivate": "[RU] Automatically deactivate users when removed from IdP",
+            "important": "[RU] After creating the integration, you will receive a bearer token and endpoint URL. The token will only be shown once, so make sure to save it securely."
+          },
+          "roles": {
+            "viewer": "[RU] Viewer",
+            "member": "[RU] Member",
+            "admin": "[RU] Admin"
+          },
+          "dialog": {
+            "title": "[RU] SCIM Integration Created",
+            "description": "[RU] Save the bearer token below. It will not be shown again.",
+            "bearerToken": "[RU] Bearer Token",
+            "scimEndpointUrl": "[RU] SCIM Endpoint URL",
+            "copyToken": "[RU] Copy Token",
+            "done": "[RU] Done"
+          },
+          "validation": {
+            "organizationRequired": "[RU] Organization is required"
+          },
+          "toast": {
+            "createSuccess": "[RU] SCIM integration created successfully",
+            "createFailed": "[RU] Failed to create SCIM integration"
+          }
         }
       },
       "devices": {
@@ -8576,7 +8817,53 @@
             "sessionDuration": "Продолжительность сеанса (часы)",
             "requireReauth": "Требовать повторной аутентификации",
             "requireReauthDescription": "Требовать повторной аутентификации после завершения сеанса"
-          }
+          },
+          "nameRequired": "[RU] Policy name is required",
+          "created": "[RU] Created",
+          "updated": "[RU] Policy updated successfully",
+          "deleted": "[RU] Policy deleted successfully",
+          "enabled": "[RU] Policy enabled successfully",
+          "disabled": "[RU] Policy disabled successfully",
+          "updateStatusFailed": "[RU] Failed to update status",
+          "notFound": "[RU] Policy not found",
+          "createTitle": "[RU] Create Device Policy",
+          "nameRequiredLabel": "[RU] Policy Name *",
+          "descriptionLabel": "[RU] Description",
+          "scopeLabel": "[RU] Scope",
+          "priorityLabel": "[RU] Priority (higher = first)",
+          "deviceRequirements": "[RU] Device Requirements",
+          "enforcementActions": "[RU] Enforcement Actions",
+          "notifyOnViolation": "[RU] Notify on Violation",
+          "overview": "[RU] Overview",
+          "requirements": "[RU] Requirements",
+          "enforcement": "[RU] Enforcement",
+          "status": "[RU] Status",
+          "createdBy": "[RU] Created By",
+          "lastUpdated": "[RU] Last Updated",
+          "requireEncryption": "[RU] Require Encryption",
+          "requirePasscode": "[RU] Require Passcode",
+          "requireBiometric": "[RU] Require Biometric",
+          "requireMdm": "[RU] Require MDM",
+          "platformRestrictions": "[RU] Platform Restrictions",
+          "allowedPlatforms": "[RU] Allowed Platforms",
+          "allPlatforms": "[RU] All platforms",
+          "blockedPlatforms": "[RU] Blocked Platforms",
+          "blockOnViolation": "[RU] Block on Violation",
+          "blockOnViolationDescription": "[RU] Block access when device is non-compliant",
+          "wipeOnViolation": "[RU] Wipe on Violation",
+          "wipeOnViolationDescription": "[RU] Remote wipe device data on violation",
+          "notifyOnViolationDescription": "[RU] Send notification when policy is violated",
+          "warningWipeEnabled": "[RU] Warning: Wipe on Violation Enabled",
+          "warningWipeDescription": "[RU] This policy will remotely wipe device data when violations occur. Use with extreme caution.",
+          "requirementsDescription": "[RU] Requirements that devices must meet to be compliant",
+          "enforcementDescription": "[RU] Actions taken when a device violates this policy",
+          "editTitle": "[RU] Edit Policy",
+          "details": "[RU] Policy Details",
+          "deleteTitle": "[RU] Delete Policy",
+          "deleteDescription": "[RU] Are you sure you want to delete this policy? This action cannot be undone.",
+          "createButton": "[RU] Create Policy",
+          "namePlaceholder": "[RU] e.g., Enterprise Device Requirements",
+          "descriptionPlaceholder": "[RU] Describe what this policy enforces..."
         },
         "table": {
           "device": "Устройство",
@@ -10912,6 +11199,90 @@
         "CLIENT": "Клиент",
         "REGIONAL": "Региональный",
         "PORTFOLIO_COMPANY": "Портфельная компания"
+      },
+      "plans": {
+        "starter": "[RU] Starter",
+        "professional": "[RU] Professional",
+        "enterprise": "[RU] Enterprise"
+      },
+      "new": {
+        "title": "[RU] Create New Organization",
+        "description": "[RU] Add a new tenant organization to the platform",
+        "back": "[RU] Back",
+        "creating": "[RU] Creating...",
+        "createOrganization": "[RU] Create Organization",
+        "noPermission": "[RU] You don't have permission to create organizations",
+        "backToTenants": "[RU] Back to Tenants",
+        "sections": {
+          "organizationDetails": "[RU] Organization Details",
+          "organizationDetailsDescription": "[RU] Basic information about the organization",
+          "locationTimezone": "[RU] Location & Timezone",
+          "locationTimezoneDescription": "[RU] Regional settings for the organization",
+          "planSubscription": "[RU] Plan & Subscription",
+          "planSubscriptionDescription": "[RU] Subscription tier and billing settings",
+          "hierarchySettings": "[RU] Hierarchy Settings",
+          "hierarchySettingsDescription": "[RU] Configure organization hierarchy and parent relationships",
+          "ownerInformation": "[RU] Owner Information (Optional)",
+          "ownerInformationDescription": "[RU] Automatically create an owner user for this organization",
+          "branding": "[RU] Branding (Optional)",
+          "brandingDescription": "[RU] Custom branding settings for the organization"
+        },
+        "fields": {
+          "organizationName": "[RU] Organization Name",
+          "slug": "[RU] Slug (auto-generated if empty)",
+          "organizationType": "[RU] Organization Type",
+          "industry": "[RU] Industry",
+          "companySize": "[RU] Company Size",
+          "domain": "[RU] Domain",
+          "country": "[RU] Country",
+          "timezone": "[RU] Timezone",
+          "planTier": "[RU] Plan Tier",
+          "parentOrganization": "[RU] Parent Organization",
+          "allowChildOrgs": "[RU] Allow Child Organizations",
+          "ownerEmail": "[RU] Owner Email",
+          "ownerName": "[RU] Owner Name",
+          "logoUrl": "[RU] Logo URL",
+          "brandColor": "[RU] Brand Color"
+        },
+        "placeholders": {
+          "organizationName": "[RU] Acme Corporation",
+          "slug": "[RU] acme-corporation",
+          "industry": "[RU] Technology, Healthcare, etc.",
+          "selectSize": "[RU] Select size",
+          "domain": "[RU] acme.com",
+          "country": "[RU] United States",
+          "timezone": "[RU] UTC",
+          "noneRootOrganization": "[RU] None (root organization)",
+          "ownerEmail": "[RU] owner@example.com",
+          "ownerName": "[RU] John Doe",
+          "logoUrl": "[RU] https://example.com/logo.png",
+          "brandColor": "[RU] #3B82F6"
+        },
+        "hints": {
+          "slug": "[RU] URL-friendly identifier, lowercase with hyphens",
+          "parentOrganization": "[RU] Select a parent to create this organization as a child in the hierarchy",
+          "allowChildOrgs": "[RU] Enable hierarchy features and allow creating sub-organizations",
+          "ownerInformation": "[RU] If provided, a user will be created (or existing user added) as the organization owner"
+        },
+        "companySizes": {
+          "solo": "[RU] Solo (1)",
+          "small": "[RU] Small (2-10)",
+          "medium": "[RU] Medium (11-50)",
+          "large": "[RU] Large (51-200)",
+          "enterprise": "[RU] Enterprise (201-1000)",
+          "global": "[RU] Global (1000+)"
+        },
+        "validation": {
+          "nameRequired": "[RU] Organization name is required"
+        },
+        "toast": {
+          "createFailed": "[RU] Failed to create organization"
+        }
+      },
+      "toast": {
+        "assignPlanFailed": "[RU] Failed to assign plan",
+        "grantFeatureFailed": "[RU] Failed to grant feature",
+        "revokeEntitlementFailed": "[RU] Failed to revoke entitlement"
       }
     },
     "users": {
@@ -11034,7 +11405,32 @@
       "selectOrganizationOptional": "Выберите организацию (необязательно)",
       "organizationLaterHint": "Пользователя можно будет добавить в организации позже.",
       "roleInOrganization": "Роль в организации",
-      "roleHint": "Роль определяет, какие действия может выполнять пользователь."
+      "roleHint": "Роль определяет, какие действия может выполнять пользователь.",
+      "bulkActions": {
+        "banReason": "[RU] Bulk ban action"
+      },
+      "toast": {
+        "banFailed": "[RU] Failed to ban user",
+        "userBanned": "[RU] User banned successfully",
+        "liftBanFailed": "[RU] Failed to lift ban",
+        "banLifted": "[RU] Ban lifted successfully",
+        "deleteFailed": "[RU] Failed to delete user",
+        "userDeleted": "[RU] User deleted successfully",
+        "bulkBanFailed": "[RU] Bulk ban failed",
+        "bulkBanSuccess": "[RU] {count} users banned successfully",
+        "bulkUnbanFailed": "[RU] Bulk unban failed",
+        "bulkUnbanSuccess": "[RU] {count} users unbanned successfully",
+        "bulkDeleteFailed": "[RU] Bulk delete failed",
+        "bulkDeleteSuccess": "[RU] {count} users deleted successfully",
+        "bulkVerifyFailed": "[RU] Bulk verify failed",
+        "bulkVerifySuccess": "[RU] {count} users verified successfully",
+        "bulkResetPasswordFailed": "[RU] Bulk reset password failed",
+        "bulkResetPasswordSuccess": "[RU] {count} password reset emails sent",
+        "bulkRevokeSessionsFailed": "[RU] Bulk revoke sessions failed",
+        "bulkRevokeSessionsSuccess": "[RU] {count} sessions revoked successfully",
+        "createFailed": "[RU] Failed to create user",
+        "userCreated": "[RU] User created successfully"
+      }
     },
     "broadcast": {
       "title": "Вещательный центр",
@@ -11476,7 +11872,23 @@
           "messages": {
             "frameworkUpdated": "Платформа успешно обновлена"
           }
-        }
+        },
+        "createTitle": "[RU] Create Compliance Framework",
+        "createDescription": "[RU] Add a new compliance standard (SOC2, HIPAA, GDPR, etc.)",
+        "createButton": "[RU] Create Framework",
+        "createFailed": "[RU] Failed to create framework",
+        "details": "[RU] Framework Details",
+        "detailsDescription": "[RU] Define the compliance framework standards and requirements",
+        "nameRequired": "[RU] Framework Name *",
+        "codeRequired": "[RU] Code *",
+        "namePlaceholder": "[RU] SOC 2 Type II",
+        "codePlaceholder": "[RU] SOC2",
+        "codeHint": "[RU] Short identifier code (e.g., SOC2, HIPAA, GDPR)",
+        "versionPlaceholder": "[RU] 2023",
+        "versionHint": "[RU] The version or year of the framework standard",
+        "descriptionPlaceholder": "[RU] Service Organization Control 2 compliance framework for security, availability, processing integrity, confidentiality, and privacy...",
+        "activeStatus": "[RU] Active Status",
+        "activeStatusDescription": "[RU] Enable this framework for attestations and audits"
       },
       "frameworksOverview": {
         "title": "Рамки соответствия",
@@ -12828,6 +13240,16 @@
       },
       "validation": {
         "required": "Укажите имя и отображаемое имя."
+      },
+      "colors": {
+        "purple": "[RU] Purple",
+        "blue": "[RU] Blue",
+        "green": "[RU] Green",
+        "amber": "[RU] Amber",
+        "red": "[RU] Red",
+        "gray": "[RU] Gray",
+        "pink": "[RU] Pink",
+        "teal": "[RU] Teal"
       }
     },
     "healthScores": {
@@ -13047,6 +13469,15 @@
           "createFailed": "Не удалось создать инцидент",
           "updateFailed": "Не удалось обновить инцидент.",
           "deleteFailed": "Не удалось удалить инцидент."
+        },
+        "toast": {
+          "loadFailed": "[RU] Failed to load incident",
+          "statusUpdated": "[RU] Status updated",
+          "updateStatusFailed": "[RU] Failed to update status",
+          "updated": "[RU] Incident updated",
+          "updateFailed": "[RU] Failed to update incident",
+          "updatePosted": "[RU] Update posted",
+          "addUpdateFailed": "[RU] Failed to add update"
         }
       },
       "maintenance": {
@@ -13117,6 +13548,73 @@
           "windowStarted": "Окно обслуживания запущено",
           "windowCompleted": "Окно обслуживания завершено",
           "windowCancelled": "Период технического обслуживания отменен"
+        },
+        "toast": {
+          "loadFailed": "[RU] Failed to load maintenance window",
+          "statusUpdated": "[RU] Status updated",
+          "updateStatusFailed": "[RU] Failed to update status",
+          "updated": "[RU] Maintenance window updated",
+          "updateFailed": "[RU] Failed to update maintenance window",
+          "deleted": "[RU] Maintenance window deleted",
+          "deleteFailed": "[RU] Failed to delete maintenance window"
+        },
+        "new": {
+          "title": "[RU] Schedule Maintenance",
+          "description": "[RU] Create a new scheduled maintenance window",
+          "back": "[RU] Back",
+          "scheduling": "[RU] Scheduling...",
+          "scheduleMaintenance": "[RU] Schedule Maintenance",
+          "sections": {
+            "maintenanceDetails": "[RU] Maintenance Details",
+            "maintenanceDetailsDescription": "[RU] Basic information about the maintenance window",
+            "schedule": "[RU] Schedule",
+            "scheduleDescription": "[RU] Set the maintenance window timing",
+            "affectedServices": "[RU] Affected Services",
+            "affectedServicesDescription": "[RU] Select all services that will be affected",
+            "affectedRegions": "[RU] Affected Regions",
+            "affectedRegionsDescription": "[RU] Select the geographic regions impacted"
+          },
+          "fields": {
+            "title": "[RU] Title",
+            "description": "[RU] Description",
+            "type": "[RU] Type",
+            "startTime": "[RU] Start Time",
+            "endTime": "[RU] End Time",
+            "notifyBefore": "[RU] Notify Before (hours)"
+          },
+          "placeholders": {
+            "title": "[RU] e.g., Database upgrade",
+            "description": "[RU] Describe the maintenance work being performed...",
+            "duration": "[RU] Duration: {duration}"
+          },
+          "typeDescriptions": {
+            "scheduled": "[RU] Planned maintenance window",
+            "emergency": "[RU] Urgent maintenance required",
+            "upgrade": "[RU] System or component upgrade",
+            "migration": "[RU] Data or service migration",
+            "securityPatch": "[RU] Security-related updates"
+          },
+          "regions": {
+            "usEast": "[RU] US East",
+            "usWest": "[RU] US West",
+            "euWest": "[RU] EU West",
+            "euCentral": "[RU] EU Central",
+            "asiaPacific": "[RU] Asia Pacific",
+            "global": "[RU] Global"
+          },
+          "hints": {
+            "notifyBefore": "[RU] Users will be notified {hours} hours before maintenance begins",
+            "selectServices": "[RU] Click to select affected services",
+            "selectRegions": "[RU] Click to select affected regions"
+          },
+          "validation": {
+            "titleStartEndRequired": "[RU] Title, start time, and end time are required",
+            "endAfterStart": "[RU] End time must be after start time"
+          },
+          "toast": {
+            "createSuccess": "[RU] Maintenance window scheduled",
+            "createFailed": "[RU] Failed to schedule maintenance"
+          }
         }
       },
       "releases": {
@@ -13194,6 +13692,72 @@
           "rolloutStarted": "Внедрение началось",
           "releaseCompleted": "Выпуск завершен",
           "releaseRolledBack": "Выпуск отменён"
+        },
+        "toast": {
+          "loadFailed": "[RU] Failed to load release",
+          "statusUpdated": "[RU] Status updated",
+          "updateStatusFailed": "[RU] Failed to update status",
+          "updateRolloutFailed": "[RU] Failed to update rollout percentage",
+          "updated": "[RU] Release updated",
+          "updateFailed": "[RU] Failed to update release",
+          "deleted": "[RU] Release deleted",
+          "deleteFailed": "[RU] Failed to delete release"
+        },
+        "new": {
+          "title": "[RU] Create New Release",
+          "description": "[RU] Plan and schedule a new platform release",
+          "back": "[RU] Back",
+          "creating": "[RU] Creating...",
+          "createRelease": "[RU] Create Release",
+          "sections": {
+            "releaseDetails": "[RU] Release Details",
+            "releaseDetailsDescription": "[RU] Basic information about this release",
+            "features": "[RU] Features",
+            "featuresDescription": "[RU] New features included in this release",
+            "bugFixes": "[RU] Bug Fixes",
+            "bugFixesDescription": "[RU] Bug fixes included in this release"
+          },
+          "fields": {
+            "version": "[RU] Version",
+            "name": "[RU] Name (optional)",
+            "description": "[RU] Description",
+            "type": "[RU] Type",
+            "rolloutStrategy": "[RU] Rollout Strategy",
+            "plannedDate": "[RU] Planned Date",
+            "changelogUrl": "[RU] Changelog URL"
+          },
+          "placeholders": {
+            "version": "[RU] e.g., 2.5.0",
+            "name": "[RU] e.g., Phoenix",
+            "description": "[RU] Describe the release...",
+            "changelogUrl": "[RU] https://..."
+          },
+          "typeDescriptions": {
+            "major": "[RU] Breaking changes, significant new features",
+            "minor": "[RU] New features, backward compatible",
+            "patch": "[RU] Bug fixes, minor improvements",
+            "hotfix": "[RU] Critical bug fixes"
+          },
+          "strategyDescriptions": {
+            "bigBang": "[RU] Deploy to all users at once",
+            "staged": "[RU] Deploy in stages by percentage",
+            "canary": "[RU] Deploy to small group first",
+            "blueGreen": "[RU] Switch between environments",
+            "ring": "[RU] Deploy by user rings"
+          },
+          "actions": {
+            "addFeature": "[RU] Add a feature...",
+            "addBugFix": "[RU] Add a bug fix...",
+            "noFeatures": "[RU] No features added yet",
+            "noBugFixes": "[RU] No bug fixes added yet"
+          },
+          "validation": {
+            "versionRequired": "[RU] Version is required"
+          },
+          "toast": {
+            "createSuccess": "[RU] Release created successfully",
+            "createFailed": "[RU] Failed to create release"
+          }
         }
       },
       "capacity": {
@@ -13261,6 +13825,17 @@
           "updateFailed": "Не удалось обновить показатель емкости.",
           "deleteFailed": "Не удалось удалить показатель мощности."
         }
+      },
+      "services": {
+        "apiGateway": "[RU] API Gateway",
+        "authentication": "[RU] Authentication",
+        "database": "[RU] Database",
+        "fileStorage": "[RU] File Storage",
+        "messaging": "[RU] Messaging",
+        "search": "[RU] Search",
+        "analytics": "[RU] Analytics",
+        "payments": "[RU] Payments",
+        "notifications": "[RU] Notifications"
       }
     },
     "integrations": {
@@ -13477,7 +14052,9 @@
           "bulkUpdateFailed": "Не удалось обновить приложения",
           "bulkDeleted": "Приложения: {count} удалено",
           "bulkDeleteFailed": "Не удалось удалить приложения",
-          "updateStatusFailed": "Не удалось обновить статус приложения."
+          "updateStatusFailed": "Не удалось обновить статус приложения.",
+          "updated": "[RU] Integration app updated",
+          "loadFailed": "[RU] Failed to load integration app"
         },
         "table": {
           "noReviews": "Нет отзывов"
@@ -13485,6 +14062,108 @@
         "badges": {
           "official": "Официальное приложение",
           "featured": "Рекомендуемое приложение"
+        },
+        "tabs": {
+          "overview": "[RU] Overview",
+          "installations": "[RU] Installations ({count})",
+          "settings": "[RU] Settings"
+        },
+        "overview": {
+          "status": "[RU] Status",
+          "totalInstalls": "[RU] Total Installs",
+          "rating": "[RU] Rating",
+          "category": "[RU] Category",
+          "noReviews": "[RU] No reviews",
+          "appDetails": "[RU] App Details",
+          "name": "[RU] Name",
+          "slug": "[RU] Slug",
+          "developer": "[RU] Developer",
+          "published": "[RU] Published",
+          "notPublished": "[RU] Not published",
+          "created": "[RU] Created",
+          "links": "[RU] Links",
+          "linksDescription": "[RU] External resources",
+          "description": "[RU] Description",
+          "requiredScopes": "[RU] Required Scopes",
+          "requiredScopesDescription": "[RU] Permissions required by this integration"
+        },
+        "installations": {
+          "title": "[RU] Installation History",
+          "description": "[RU] Organizations using this app",
+          "status": "[RU] Status"
+        },
+        "settings": {
+          "editTitle": "[RU] Edit App Settings",
+          "editDescription": "[RU] Update integration app configuration"
+        },
+        "new": {
+          "title": "[RU] Add Integration App",
+          "description": "[RU] Add a new integration app to the marketplace",
+          "back": "[RU] Back",
+          "creating": "[RU] Creating...",
+          "createApp": "[RU] Create App",
+          "sections": {
+            "appDetails": "[RU] App Details",
+            "appDetailsDescription": "[RU] Basic information about the integration app",
+            "developerInformation": "[RU] Developer Information",
+            "developerInformationDescription": "[RU] Information about the app developer",
+            "assetsLinks": "[RU] Assets & Links",
+            "assetsLinksDescription": "[RU] App icon and related URLs",
+            "appStatus": "[RU] App Status",
+            "appStatusDescription": "[RU] Configure app visibility and badges"
+          },
+          "fields": {
+            "appName": "[RU] App Name",
+            "shortDescription": "[RU] Short Description",
+            "fullDescription": "[RU] Full Description",
+            "category": "[RU] Category",
+            "developerName": "[RU] Developer Name",
+            "developerWebsite": "[RU] Developer Website",
+            "supportEmail": "[RU] Support Email",
+            "iconUrl": "[RU] Icon URL",
+            "appWebsite": "[RU] App Website",
+            "documentationUrl": "[RU] Documentation URL",
+            "officialApp": "[RU] Official App",
+            "featuredApp": "[RU] Featured App"
+          },
+          "placeholders": {
+            "appName": "[RU] My Integration",
+            "shortDescription": "[RU] A brief description of the app",
+            "fullDescription": "[RU] Detailed description of the integration...",
+            "developerName": "[RU] Company or developer name",
+            "developerWebsite": "[RU] https://developer.com",
+            "supportEmail": "[RU] support@developer.com",
+            "iconUrl": "[RU] https://example.com/icon.png",
+            "appWebsite": "[RU] https://myapp.com",
+            "documentationUrl": "[RU] https://docs.myapp.com"
+          },
+          "hints": {
+            "shortDescription": "[RU] Displayed in app listings and search results",
+            "officialApp": "[RU] Mark as an officially supported integration",
+            "featuredApp": "[RU] Highlight this app in the marketplace",
+            "draftStatus": "[RU] The app will be created with Draft status. You can publish it later from the app details page."
+          },
+          "categoryDescriptions": {
+            "productivity": "[RU] Tools to improve workflow efficiency",
+            "communication": "[RU] Messaging, chat, and collaboration",
+            "projectManagement": "[RU] Task tracking and planning",
+            "crm": "[RU] Customer relationship management",
+            "analytics": "[RU] Data analysis and reporting",
+            "security": "[RU] Security and compliance tools",
+            "developerTools": "[RU] Development and DevOps",
+            "hr": "[RU] Human resources management",
+            "finance": "[RU] Financial management tools",
+            "marketing": "[RU] Marketing automation",
+            "customerSupport": "[RU] Help desk and support",
+            "other": "[RU] Other integrations"
+          },
+          "validation": {
+            "nameAndDeveloperRequired": "[RU] Name and developer are required"
+          },
+          "toast": {
+            "createSuccess": "[RU] Integration app created successfully",
+            "createFailed": "[RU] Failed to create app"
+          }
         }
       },
       "webhooks": {
@@ -13568,7 +14247,93 @@
           "testFailed": "Тест не пройден: {ошибка}",
           "testError": "Не удалось отправить тестовый вебхук.",
           "deleted": "Вебхук удален.",
-          "deleteFailed": "Не удалось удалить вебхук."
+          "deleteFailed": "Не удалось удалить вебхук.",
+          "loadFailed": "[RU] Failed to load webhook",
+          "updated": "[RU] Webhook updated",
+          "updateFailed": "[RU] Failed to update webhook",
+          "testDelivered": "[RU] Test webhook delivered successfully",
+          "unknownError": "[RU] Unknown error",
+          "sendTestFailed": "[RU] Failed to send test webhook"
+        },
+        "new": {
+          "title": "[RU] Create Webhook",
+          "description": "[RU] Create a new webhook endpoint to receive event notifications",
+          "back": "[RU] Back",
+          "creating": "[RU] Creating...",
+          "createWebhook": "[RU] Create Webhook",
+          "sections": {
+            "endpointDetails": "[RU] Endpoint Details",
+            "endpointDetailsDescription": "[RU] Configure the webhook endpoint",
+            "settings": "[RU] Settings",
+            "settingsDescription": "[RU] Configure timeout and retry behavior",
+            "eventSubscriptions": "[RU] Event Subscriptions",
+            "eventSubscriptionsDescription": "[RU] Select the events this webhook should receive ({count} selected)"
+          },
+          "fields": {
+            "webhookName": "[RU] Webhook Name",
+            "endpointUrl": "[RU] Endpoint URL",
+            "description": "[RU] Description",
+            "organization": "[RU] Organization",
+            "timeout": "[RU] Timeout (seconds)",
+            "retryCount": "[RU] Retry Count",
+            "customHeaders": "[RU] Custom Headers (JSON)"
+          },
+          "placeholders": {
+            "webhookName": "[RU] My Webhook",
+            "endpointUrl": "[RU] https://example.com/webhooks",
+            "description": "[RU] What is this webhook used for?",
+            "selectOrganization": "[RU] Select organization",
+            "loading": "[RU] Loading...",
+            "customHeaders": "[RU] {\n  \"X-Custom-Header\": \"value\"\n}"
+          },
+          "hints": {
+            "endpointUrl": "[RU] Must be a valid HTTPS URL that can receive POST requests",
+            "customHeaders": "[RU] Optional custom headers to include with webhook requests",
+            "selectEvents": "[RU] Please select at least one event to subscribe to"
+          },
+          "events": {
+            "users": "[RU] Users",
+            "organizations": "[RU] Organizations",
+            "agents": "[RU] Agents",
+            "workflows": "[RU] Workflows",
+            "reports": "[RU] Reports",
+            "billing": "[RU] Billing"
+          },
+          "eventLabels": {
+            "userCreated": "[RU] User Created",
+            "userUpdated": "[RU] User Updated",
+            "userDeleted": "[RU] User Deleted",
+            "organizationCreated": "[RU] Organization Created",
+            "organizationUpdated": "[RU] Organization Updated",
+            "agentRunCompleted": "[RU] Agent Run Completed",
+            "agentRunFailed": "[RU] Agent Run Failed",
+            "workflowCompleted": "[RU] Workflow Completed",
+            "workflowFailed": "[RU] Workflow Failed",
+            "reportGenerated": "[RU] Report Generated",
+            "subscriptionChanged": "[RU] Subscription Changed",
+            "subscriptionCancelled": "[RU] Subscription Cancelled"
+          },
+          "actions": {
+            "selectAll": "[RU] Select All",
+            "deselectAll": "[RU] Deselect All"
+          },
+          "dialog": {
+            "secretTitle": "[RU] Webhook Signing Secret",
+            "secretDescription": "[RU] Copy this secret now - it will not be shown again! Use this to verify webhook signatures.",
+            "copySecret": "[RU] Copy Secret",
+            "done": "[RU] Done"
+          },
+          "validation": {
+            "urlAndOrgRequired": "[RU] URL and organization are required",
+            "atLeastOneEvent": "[RU] Please select at least one event to subscribe to",
+            "invalidUrl": "[RU] Please enter a valid URL",
+            "invalidJsonHeaders": "[RU] Invalid JSON format for custom headers"
+          },
+          "toast": {
+            "createSuccess": "[RU] Webhook created successfully",
+            "createFailed": "[RU] Failed to create webhook",
+            "copied": "[RU] Copied to clipboard"
+          }
         }
       }
     },
@@ -14390,6 +15155,10 @@
       "defaultPlan": "Профессиональный",
       "requiresPlan": "Для этой функции требуется план {plan} или выше.",
       "upgradeButton": "План обновления"
+    },
+    "usage": {
+      "limitReached": "[RU] You've reached your limit. Upgrade your plan to continue.",
+      "approachingLimit": "[RU] You're approaching your limit."
     }
   },
   "blog": {

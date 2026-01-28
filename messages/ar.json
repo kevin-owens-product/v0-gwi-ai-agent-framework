@@ -98,7 +98,16 @@
       "organizationComplianceAttestations": "شهادات الامتثال للمنظمة",
       "complianceAudits": "عمليات تدقيق الامتثال لهذا الإطار",
       "frameworkRequirements": "متطلبات الإطار"
-    }
+    },
+    "enable": "[AR] Enable",
+    "disable": "[AR] Disable",
+    "notRequired": "[AR] Not Required",
+    "system": "[AR] System",
+    "noDescription": "[AR] No description",
+    "unknown": "[AR] Unknown",
+    "important": "[AR] Important",
+    "preview": "[AR] Preview",
+    "duration": "[AR] Duration"
   },
   "auth": {
     "signIn": "تسجيل الدخول",
@@ -3239,7 +3248,29 @@
         "exportFailed": "فشل تصدير لوحة التحكم"
       },
       "detail": {
-        "title": "تفاصيل لوحة القيادة"
+        "title": "تفاصيل لوحة القيادة",
+        "chartTypes": {
+          "bar": "[AR] Bar",
+          "line": "[AR] Line",
+          "pie": "[AR] Pie",
+          "donut": "[AR] Donut",
+          "area": "[AR] Area",
+          "scatter": "[AR] Scatter",
+          "heatmap": "[AR] Heatmap",
+          "treemap": "[AR] Treemap",
+          "funnel": "[AR] Funnel",
+          "radar": "[AR] Radar",
+          "metric": "[AR] Metric"
+        },
+        "export": {
+          "csvHeaders": {
+            "id": "[AR] ID",
+            "name": "[AR] Name",
+            "type": "[AR] Type",
+            "category": "[AR] Category",
+            "dataSource": "[AR] Data Source"
+          }
+        }
       }
     },
     "crosstabs": {
@@ -5823,7 +5854,9 @@
           "deleteFailed": "فشل في حذف الرد",
           "markCompleteFailed": "فشل وضع علامة مكتملة"
         }
-      }
+      },
+      "questionsLabel": "[AR] Questions",
+      "responsesLabel": "[AR] Responses"
     },
     "taxonomy": {
       "title": "التصنيف",
@@ -8234,6 +8267,55 @@
         "featureDeleted": "تم حذف الميزة",
         "featureEnabled": "تم تفعيل الميزة بنجاح",
         "featureDisabled": "تم تعطيل الميزة بنجاح"
+      },
+      "new": {
+        "title": "[AR] Create Entitlement Feature",
+        "description": "[AR] Define a new feature that can be assigned to subscription plans",
+        "back": "[AR] Back",
+        "creating": "[AR] Creating...",
+        "createFeature": "[AR] Create Feature",
+        "noPermission": "[AR] You don't have permission to create entitlement features",
+        "backToFeatures": "[AR] Back to Features",
+        "sections": {
+          "featureDetails": "[AR] Feature Details",
+          "featureDetailsDescription": "[AR] Basic information about the entitlement feature",
+          "categoryClassification": "[AR] Category & Classification",
+          "categoryDescription": "[AR] Organize the feature for easier management",
+          "valueConfiguration": "[AR] Value Configuration",
+          "valueDescription": "[AR] Configure the feature value type and default"
+        },
+        "fields": {
+          "displayName": "[AR] Display Name",
+          "featureKey": "[AR] Feature Key",
+          "description": "[AR] Description",
+          "category": "[AR] Category",
+          "sortOrder": "[AR] Sort Order",
+          "valueType": "[AR] Value Type",
+          "defaultValue": "[AR] Default Value",
+          "active": "[AR] Active"
+        },
+        "placeholders": {
+          "displayName": "[AR] Advanced Analytics",
+          "featureKey": "[AR] advanced_analytics",
+          "description": "[AR] Describe what this feature enables for subscribers...",
+          "jsonDefault": "[AR] {}"
+        },
+        "hints": {
+          "snakeCaseFormat": "[AR] snake_case format: lowercase letters, numbers, underscores",
+          "sortOrderLower": "[AR] Lower numbers appear first in lists",
+          "inactiveFeatures": "[AR] Inactive features are not available for plan assignment"
+        },
+        "validation": {
+          "keyAndNameRequired": "[AR] Key and name are required",
+          "keyFormatInvalid": "[AR] Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)"
+        },
+        "toast": {
+          "createFailed": "[AR] Failed to create feature"
+        },
+        "status": {
+          "enabled": "[AR] Enabled",
+          "disabled": "[AR] Disabled"
+        }
       }
     },
     "identity": {
@@ -8262,7 +8344,18 @@
           "providerUpdated": "تم تحديث موفر SSO بنجاح",
           "connectionSuccess": "نجح اختبار الاتصال",
           "providerDeleted": "تم حذف موفر الدخول الموحّد (SSO) بنجاح",
-          "connectionFailed": "فشل اختبار الاتصال"
+          "connectionFailed": "فشل اختبار الاتصال",
+          "loadFailed": "[AR] Failed to load SSO configuration",
+          "updated": "[AR] SSO configuration updated",
+          "updateFailed": "[AR] Failed to update SSO configuration",
+          "allTestsPassed": "[AR] All tests passed!",
+          "someTestsFailed": "[AR] Some tests failed",
+          "testFailed": "[AR] Failed to test SSO configuration",
+          "activated": "[AR] SSO activated successfully",
+          "disabled": "[AR] SSO disabled successfully",
+          "updateStatusFailed": "[AR] Failed to update status",
+          "deleted": "[AR] SSO configuration deleted successfully",
+          "deleteFailed": "[AR] Failed to delete SSO configuration"
         },
         "filterByProvider": "تصفية حسب المزود",
         "filterByStatus": "التصفية حسب الحالة",
@@ -8334,6 +8427,89 @@
           "certificateRequired": "الشهادة مطلوبة",
           "invalidUrl": "الرجاء إدخال عنوان URL صالح",
           "invalidCertificate": "تنسيق الشهادة غير صالح"
+        },
+        "new": {
+          "title": "[AR] Create SSO Configuration",
+          "description": "[AR] Configure Single Sign-On for an organization",
+          "back": "[AR] Back",
+          "creating": "[AR] Creating...",
+          "createConfiguration": "[AR] Create Configuration",
+          "noPermission": "[AR] You don't have permission to create SSO configurations",
+          "backToSSO": "[AR] Back to SSO Configurations",
+          "tabs": {
+            "basic": "[AR] Basic Settings",
+            "provider": "[AR] Provider Configuration",
+            "provisioning": "[AR] User Provisioning"
+          },
+          "sections": {
+            "organizationProvider": "[AR] Organization & Provider",
+            "organizationProviderDescription": "[AR] Select the organization and SSO provider type",
+            "samlConfiguration": "[AR] SAML Configuration",
+            "samlConfigurationDescription": "[AR] Configure SAML 2.0 settings from your Identity Provider",
+            "oidcConfiguration": "[AR] OIDC Configuration",
+            "oidcConfigurationDescription": "[AR] Configure OpenID Connect settings",
+            "userProvisioning": "[AR] User Provisioning Settings",
+            "userProvisioningDescription": "[AR] Configure how users are provisioned through SSO"
+          },
+          "fields": {
+            "organization": "[AR] Organization",
+            "ssoProvider": "[AR] SSO Provider",
+            "displayName": "[AR] Display Name",
+            "allowedEmailDomains": "[AR] Allowed Email Domains",
+            "entityId": "[AR] Entity ID / Issuer",
+            "ssoUrl": "[AR] SSO URL (Login URL)",
+            "sloUrl": "[AR] SLO URL (Logout URL)",
+            "certificate": "[AR] X.509 Certificate",
+            "clientId": "[AR] Client ID",
+            "clientSecret": "[AR] Client Secret",
+            "discoveryUrl": "[AR] Discovery URL",
+            "authorizationUrl": "[AR] Authorization URL",
+            "tokenUrl": "[AR] Token URL",
+            "userInfoUrl": "[AR] User Info URL",
+            "defaultRole": "[AR] Default Role",
+            "jitProvisioning": "[AR] Just-in-Time Provisioning",
+            "autoDeactivate": "[AR] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[AR] Select an organization",
+            "searchOrganizations": "[AR] Search organizations...",
+            "loading": "[AR] Loading...",
+            "noOrganizationsFound": "[AR] No organizations found",
+            "displayName": "[AR] e.g., Acme Corp SSO",
+            "allowedDomains": "[AR] acme.com, acme.org",
+            "entityId": "[AR] https://idp.example.com/entity",
+            "ssoUrl": "[AR] https://idp.example.com/sso",
+            "sloUrl": "[AR] https://idp.example.com/slo",
+            "certificate": "[AR] -----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+            "clientId": "[AR] your-client-id",
+            "clientSecret": "[AR] your-client-secret",
+            "discoveryUrl": "[AR] https://idp.example.com/.well-known/openid-configuration",
+            "authorizationUrl": "[AR] https://idp.example.com/authorize",
+            "tokenUrl": "[AR] https://idp.example.com/token",
+            "userInfoUrl": "[AR] https://idp.example.com/userinfo"
+          },
+          "hints": {
+            "displayName": "[AR] A friendly name for this SSO configuration",
+            "allowedDomains": "[AR] Comma-separated list of email domains allowed to use this SSO",
+            "certificate": "[AR] Paste the public certificate from your Identity Provider",
+            "discoveryUrl": "[AR] If provided, other URLs will be auto-discovered",
+            "manualUrlConfig": "[AR] Manual URL Configuration (optional if discovery URL is provided)",
+            "defaultRole": "[AR] Role assigned to users when they first sign in via SSO",
+            "jitProvisioning": "[AR] Automatically create user accounts on first SSO login",
+            "autoDeactivate": "[AR] Automatically deactivate users removed from Identity Provider"
+          },
+          "roles": {
+            "viewer": "[AR] Viewer",
+            "member": "[AR] Member",
+            "admin": "[AR] Admin"
+          },
+          "validation": {
+            "organizationAndProviderRequired": "[AR] Organization and provider are required"
+          },
+          "toast": {
+            "createSuccess": "[AR] SSO configuration created successfully",
+            "createFailed": "[AR] Failed to create SSO configuration"
+          }
         }
       },
       "domains": {
@@ -8432,7 +8608,17 @@
           "syncStarted": "بدأت المزامنة بنجاح",
           "connectionUpdated": "تم تحديث اتصال SCIM بنجاح",
           "connectionDeleted": "تم حذف اتصال SCIM بنجاح",
-          "tokenRegenerated": "تم إعادة إنشاء الرمز المميز لحامله بنجاح"
+          "tokenRegenerated": "تم إعادة إنشاء الرمز المميز لحامله بنجاح",
+          "loadFailed": "[AR] Failed to fetch SCIM integration",
+          "updated": "[AR] SCIM integration updated",
+          "updateFailed": "[AR] Failed to update SCIM integration",
+          "activated": "[AR] SCIM integration activated successfully",
+          "paused": "[AR] SCIM integration paused successfully",
+          "updateStatusFailed": "[AR] Failed to update status",
+          "regenerateTokenFailed": "[AR] Failed to regenerate token",
+          "deleted": "[AR] SCIM integration deleted successfully",
+          "deleteFailed": "[AR] Failed to delete SCIM integration",
+          "copied": "[AR] Copied to clipboard"
         },
         "editConnection": "تحرير الاتصال",
         "deleteConnection": "حذف الاتصال",
@@ -8504,6 +8690,61 @@
           "connectionNameRequired": "اسم الاتصال مطلوب",
           "baseUrlRequired": "عنوان URL الأساسي مطلوب",
           "invalidUrl": "الرجاء إدخال عنوان URL صالح"
+        },
+        "new": {
+          "title": "[AR] Create SCIM Integration",
+          "description": "[AR] Configure SCIM 2.0 user provisioning for an organization",
+          "back": "[AR] Back",
+          "creating": "[AR] Creating...",
+          "createIntegration": "[AR] Create Integration",
+          "noPermission": "[AR] You don't have permission to create SCIM integrations",
+          "backToSCIM": "[AR] Back to SCIM Integrations",
+          "sections": {
+            "organization": "[AR] Organization",
+            "organizationDescription": "[AR] Select the organization to configure SCIM provisioning for",
+            "syncSettings": "[AR] Sync Settings",
+            "syncSettingsDescription": "[AR] Configure what data should be synchronized from your Identity Provider"
+          },
+          "fields": {
+            "organization": "[AR] Organization",
+            "defaultRole": "[AR] Default Role",
+            "syncUsers": "[AR] Sync Users",
+            "syncGroups": "[AR] Sync Groups",
+            "autoDeactivate": "[AR] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[AR] Select an organization",
+            "searchOrganizations": "[AR] Search organizations...",
+            "loading": "[AR] Loading...",
+            "noOrganizationsFound": "[AR] No organizations found"
+          },
+          "hints": {
+            "defaultRole": "[AR] Role assigned to users provisioned via SCIM",
+            "syncUsers": "[AR] Provision and deprovision users automatically",
+            "syncGroups": "[AR] Sync group memberships from Identity Provider",
+            "autoDeactivate": "[AR] Automatically deactivate users when removed from IdP",
+            "important": "[AR] After creating the integration, you will receive a bearer token and endpoint URL. The token will only be shown once, so make sure to save it securely."
+          },
+          "roles": {
+            "viewer": "[AR] Viewer",
+            "member": "[AR] Member",
+            "admin": "[AR] Admin"
+          },
+          "dialog": {
+            "title": "[AR] SCIM Integration Created",
+            "description": "[AR] Save the bearer token below. It will not be shown again.",
+            "bearerToken": "[AR] Bearer Token",
+            "scimEndpointUrl": "[AR] SCIM Endpoint URL",
+            "copyToken": "[AR] Copy Token",
+            "done": "[AR] Done"
+          },
+          "validation": {
+            "organizationRequired": "[AR] Organization is required"
+          },
+          "toast": {
+            "createSuccess": "[AR] SCIM integration created successfully",
+            "createFailed": "[AR] Failed to create SCIM integration"
+          }
         }
       },
       "devices": {
@@ -8576,7 +8817,53 @@
             "sessionDuration": "مدة الجلسة (ساعات)",
             "requireReauth": "تتطلب إعادة المصادقة",
             "requireReauthDescription": "تتطلب إعادة المصادقة بعد مدة الجلسة"
-          }
+          },
+          "nameRequired": "[AR] Policy name is required",
+          "created": "[AR] Created",
+          "updated": "[AR] Policy updated successfully",
+          "deleted": "[AR] Policy deleted successfully",
+          "enabled": "[AR] Policy enabled successfully",
+          "disabled": "[AR] Policy disabled successfully",
+          "updateStatusFailed": "[AR] Failed to update status",
+          "notFound": "[AR] Policy not found",
+          "createTitle": "[AR] Create Device Policy",
+          "nameRequiredLabel": "[AR] Policy Name *",
+          "descriptionLabel": "[AR] Description",
+          "scopeLabel": "[AR] Scope",
+          "priorityLabel": "[AR] Priority (higher = first)",
+          "deviceRequirements": "[AR] Device Requirements",
+          "enforcementActions": "[AR] Enforcement Actions",
+          "notifyOnViolation": "[AR] Notify on Violation",
+          "overview": "[AR] Overview",
+          "requirements": "[AR] Requirements",
+          "enforcement": "[AR] Enforcement",
+          "status": "[AR] Status",
+          "createdBy": "[AR] Created By",
+          "lastUpdated": "[AR] Last Updated",
+          "requireEncryption": "[AR] Require Encryption",
+          "requirePasscode": "[AR] Require Passcode",
+          "requireBiometric": "[AR] Require Biometric",
+          "requireMdm": "[AR] Require MDM",
+          "platformRestrictions": "[AR] Platform Restrictions",
+          "allowedPlatforms": "[AR] Allowed Platforms",
+          "allPlatforms": "[AR] All platforms",
+          "blockedPlatforms": "[AR] Blocked Platforms",
+          "blockOnViolation": "[AR] Block on Violation",
+          "blockOnViolationDescription": "[AR] Block access when device is non-compliant",
+          "wipeOnViolation": "[AR] Wipe on Violation",
+          "wipeOnViolationDescription": "[AR] Remote wipe device data on violation",
+          "notifyOnViolationDescription": "[AR] Send notification when policy is violated",
+          "warningWipeEnabled": "[AR] Warning: Wipe on Violation Enabled",
+          "warningWipeDescription": "[AR] This policy will remotely wipe device data when violations occur. Use with extreme caution.",
+          "requirementsDescription": "[AR] Requirements that devices must meet to be compliant",
+          "enforcementDescription": "[AR] Actions taken when a device violates this policy",
+          "editTitle": "[AR] Edit Policy",
+          "details": "[AR] Policy Details",
+          "deleteTitle": "[AR] Delete Policy",
+          "deleteDescription": "[AR] Are you sure you want to delete this policy? This action cannot be undone.",
+          "createButton": "[AR] Create Policy",
+          "namePlaceholder": "[AR] e.g., Enterprise Device Requirements",
+          "descriptionPlaceholder": "[AR] Describe what this policy enforces..."
         },
         "table": {
           "device": "جهاز",
@@ -10912,6 +11199,90 @@
         "CLIENT": "عميل",
         "REGIONAL": "إقليمي",
         "PORTFOLIO_COMPANY": "شركة المحفظة"
+      },
+      "plans": {
+        "starter": "[AR] Starter",
+        "professional": "[AR] Professional",
+        "enterprise": "[AR] Enterprise"
+      },
+      "new": {
+        "title": "[AR] Create New Organization",
+        "description": "[AR] Add a new tenant organization to the platform",
+        "back": "[AR] Back",
+        "creating": "[AR] Creating...",
+        "createOrganization": "[AR] Create Organization",
+        "noPermission": "[AR] You don't have permission to create organizations",
+        "backToTenants": "[AR] Back to Tenants",
+        "sections": {
+          "organizationDetails": "[AR] Organization Details",
+          "organizationDetailsDescription": "[AR] Basic information about the organization",
+          "locationTimezone": "[AR] Location & Timezone",
+          "locationTimezoneDescription": "[AR] Regional settings for the organization",
+          "planSubscription": "[AR] Plan & Subscription",
+          "planSubscriptionDescription": "[AR] Subscription tier and billing settings",
+          "hierarchySettings": "[AR] Hierarchy Settings",
+          "hierarchySettingsDescription": "[AR] Configure organization hierarchy and parent relationships",
+          "ownerInformation": "[AR] Owner Information (Optional)",
+          "ownerInformationDescription": "[AR] Automatically create an owner user for this organization",
+          "branding": "[AR] Branding (Optional)",
+          "brandingDescription": "[AR] Custom branding settings for the organization"
+        },
+        "fields": {
+          "organizationName": "[AR] Organization Name",
+          "slug": "[AR] Slug (auto-generated if empty)",
+          "organizationType": "[AR] Organization Type",
+          "industry": "[AR] Industry",
+          "companySize": "[AR] Company Size",
+          "domain": "[AR] Domain",
+          "country": "[AR] Country",
+          "timezone": "[AR] Timezone",
+          "planTier": "[AR] Plan Tier",
+          "parentOrganization": "[AR] Parent Organization",
+          "allowChildOrgs": "[AR] Allow Child Organizations",
+          "ownerEmail": "[AR] Owner Email",
+          "ownerName": "[AR] Owner Name",
+          "logoUrl": "[AR] Logo URL",
+          "brandColor": "[AR] Brand Color"
+        },
+        "placeholders": {
+          "organizationName": "[AR] Acme Corporation",
+          "slug": "[AR] acme-corporation",
+          "industry": "[AR] Technology, Healthcare, etc.",
+          "selectSize": "[AR] Select size",
+          "domain": "[AR] acme.com",
+          "country": "[AR] United States",
+          "timezone": "[AR] UTC",
+          "noneRootOrganization": "[AR] None (root organization)",
+          "ownerEmail": "[AR] owner@example.com",
+          "ownerName": "[AR] John Doe",
+          "logoUrl": "[AR] https://example.com/logo.png",
+          "brandColor": "[AR] #3B82F6"
+        },
+        "hints": {
+          "slug": "[AR] URL-friendly identifier, lowercase with hyphens",
+          "parentOrganization": "[AR] Select a parent to create this organization as a child in the hierarchy",
+          "allowChildOrgs": "[AR] Enable hierarchy features and allow creating sub-organizations",
+          "ownerInformation": "[AR] If provided, a user will be created (or existing user added) as the organization owner"
+        },
+        "companySizes": {
+          "solo": "[AR] Solo (1)",
+          "small": "[AR] Small (2-10)",
+          "medium": "[AR] Medium (11-50)",
+          "large": "[AR] Large (51-200)",
+          "enterprise": "[AR] Enterprise (201-1000)",
+          "global": "[AR] Global (1000+)"
+        },
+        "validation": {
+          "nameRequired": "[AR] Organization name is required"
+        },
+        "toast": {
+          "createFailed": "[AR] Failed to create organization"
+        }
+      },
+      "toast": {
+        "assignPlanFailed": "[AR] Failed to assign plan",
+        "grantFeatureFailed": "[AR] Failed to grant feature",
+        "revokeEntitlementFailed": "[AR] Failed to revoke entitlement"
       }
     },
     "users": {
@@ -11034,7 +11405,32 @@
       "selectOrganizationOptional": "اختر المنظمة (اختياري)",
       "organizationLaterHint": "يمكن إضافة المستخدم إلى المؤسسات لاحقًا",
       "roleInOrganization": "دور في المنظمة",
-      "roleHint": "يحدد الدور الإجراءات التي يمكن للمستخدم تنفيذها"
+      "roleHint": "يحدد الدور الإجراءات التي يمكن للمستخدم تنفيذها",
+      "bulkActions": {
+        "banReason": "[AR] Bulk ban action"
+      },
+      "toast": {
+        "banFailed": "[AR] Failed to ban user",
+        "userBanned": "[AR] User banned successfully",
+        "liftBanFailed": "[AR] Failed to lift ban",
+        "banLifted": "[AR] Ban lifted successfully",
+        "deleteFailed": "[AR] Failed to delete user",
+        "userDeleted": "[AR] User deleted successfully",
+        "bulkBanFailed": "[AR] Bulk ban failed",
+        "bulkBanSuccess": "[AR] {count} users banned successfully",
+        "bulkUnbanFailed": "[AR] Bulk unban failed",
+        "bulkUnbanSuccess": "[AR] {count} users unbanned successfully",
+        "bulkDeleteFailed": "[AR] Bulk delete failed",
+        "bulkDeleteSuccess": "[AR] {count} users deleted successfully",
+        "bulkVerifyFailed": "[AR] Bulk verify failed",
+        "bulkVerifySuccess": "[AR] {count} users verified successfully",
+        "bulkResetPasswordFailed": "[AR] Bulk reset password failed",
+        "bulkResetPasswordSuccess": "[AR] {count} password reset emails sent",
+        "bulkRevokeSessionsFailed": "[AR] Bulk revoke sessions failed",
+        "bulkRevokeSessionsSuccess": "[AR] {count} sessions revoked successfully",
+        "createFailed": "[AR] Failed to create user",
+        "userCreated": "[AR] User created successfully"
+      }
     },
     "broadcast": {
       "title": "مركز البث",
@@ -11476,7 +11872,23 @@
           "messages": {
             "frameworkUpdated": "تم تحديث الإطار بنجاح"
           }
-        }
+        },
+        "createTitle": "[AR] Create Compliance Framework",
+        "createDescription": "[AR] Add a new compliance standard (SOC2, HIPAA, GDPR, etc.)",
+        "createButton": "[AR] Create Framework",
+        "createFailed": "[AR] Failed to create framework",
+        "details": "[AR] Framework Details",
+        "detailsDescription": "[AR] Define the compliance framework standards and requirements",
+        "nameRequired": "[AR] Framework Name *",
+        "codeRequired": "[AR] Code *",
+        "namePlaceholder": "[AR] SOC 2 Type II",
+        "codePlaceholder": "[AR] SOC2",
+        "codeHint": "[AR] Short identifier code (e.g., SOC2, HIPAA, GDPR)",
+        "versionPlaceholder": "[AR] 2023",
+        "versionHint": "[AR] The version or year of the framework standard",
+        "descriptionPlaceholder": "[AR] Service Organization Control 2 compliance framework for security, availability, processing integrity, confidentiality, and privacy...",
+        "activeStatus": "[AR] Active Status",
+        "activeStatusDescription": "[AR] Enable this framework for attestations and audits"
       },
       "frameworksOverview": {
         "title": "أطر الامتثال",
@@ -12828,6 +13240,16 @@
       },
       "validation": {
         "required": "الاسم واسم العرض مطلوبان"
+      },
+      "colors": {
+        "purple": "[AR] Purple",
+        "blue": "[AR] Blue",
+        "green": "[AR] Green",
+        "amber": "[AR] Amber",
+        "red": "[AR] Red",
+        "gray": "[AR] Gray",
+        "pink": "[AR] Pink",
+        "teal": "[AR] Teal"
       }
     },
     "healthScores": {
@@ -13047,6 +13469,15 @@
           "createFailed": "فشل إنشاء الحادث",
           "updateFailed": "فشل تحديث الحادث",
           "deleteFailed": "فشل في حذف الحادث"
+        },
+        "toast": {
+          "loadFailed": "[AR] Failed to load incident",
+          "statusUpdated": "[AR] Status updated",
+          "updateStatusFailed": "[AR] Failed to update status",
+          "updated": "[AR] Incident updated",
+          "updateFailed": "[AR] Failed to update incident",
+          "updatePosted": "[AR] Update posted",
+          "addUpdateFailed": "[AR] Failed to add update"
         }
       },
       "maintenance": {
@@ -13117,6 +13548,73 @@
           "windowStarted": "بدأت نافذة الصيانة",
           "windowCompleted": "اكتملت نافذة الصيانة",
           "windowCancelled": "تم إلغاء نافذة الصيانة"
+        },
+        "toast": {
+          "loadFailed": "[AR] Failed to load maintenance window",
+          "statusUpdated": "[AR] Status updated",
+          "updateStatusFailed": "[AR] Failed to update status",
+          "updated": "[AR] Maintenance window updated",
+          "updateFailed": "[AR] Failed to update maintenance window",
+          "deleted": "[AR] Maintenance window deleted",
+          "deleteFailed": "[AR] Failed to delete maintenance window"
+        },
+        "new": {
+          "title": "[AR] Schedule Maintenance",
+          "description": "[AR] Create a new scheduled maintenance window",
+          "back": "[AR] Back",
+          "scheduling": "[AR] Scheduling...",
+          "scheduleMaintenance": "[AR] Schedule Maintenance",
+          "sections": {
+            "maintenanceDetails": "[AR] Maintenance Details",
+            "maintenanceDetailsDescription": "[AR] Basic information about the maintenance window",
+            "schedule": "[AR] Schedule",
+            "scheduleDescription": "[AR] Set the maintenance window timing",
+            "affectedServices": "[AR] Affected Services",
+            "affectedServicesDescription": "[AR] Select all services that will be affected",
+            "affectedRegions": "[AR] Affected Regions",
+            "affectedRegionsDescription": "[AR] Select the geographic regions impacted"
+          },
+          "fields": {
+            "title": "[AR] Title",
+            "description": "[AR] Description",
+            "type": "[AR] Type",
+            "startTime": "[AR] Start Time",
+            "endTime": "[AR] End Time",
+            "notifyBefore": "[AR] Notify Before (hours)"
+          },
+          "placeholders": {
+            "title": "[AR] e.g., Database upgrade",
+            "description": "[AR] Describe the maintenance work being performed...",
+            "duration": "[AR] Duration: {duration}"
+          },
+          "typeDescriptions": {
+            "scheduled": "[AR] Planned maintenance window",
+            "emergency": "[AR] Urgent maintenance required",
+            "upgrade": "[AR] System or component upgrade",
+            "migration": "[AR] Data or service migration",
+            "securityPatch": "[AR] Security-related updates"
+          },
+          "regions": {
+            "usEast": "[AR] US East",
+            "usWest": "[AR] US West",
+            "euWest": "[AR] EU West",
+            "euCentral": "[AR] EU Central",
+            "asiaPacific": "[AR] Asia Pacific",
+            "global": "[AR] Global"
+          },
+          "hints": {
+            "notifyBefore": "[AR] Users will be notified {hours} hours before maintenance begins",
+            "selectServices": "[AR] Click to select affected services",
+            "selectRegions": "[AR] Click to select affected regions"
+          },
+          "validation": {
+            "titleStartEndRequired": "[AR] Title, start time, and end time are required",
+            "endAfterStart": "[AR] End time must be after start time"
+          },
+          "toast": {
+            "createSuccess": "[AR] Maintenance window scheduled",
+            "createFailed": "[AR] Failed to schedule maintenance"
+          }
         }
       },
       "releases": {
@@ -13194,6 +13692,72 @@
           "rolloutStarted": "بدأ الطرح",
           "releaseCompleted": "اكتمل الإصدار",
           "releaseRolledBack": "تم التراجع عن الإصدار"
+        },
+        "toast": {
+          "loadFailed": "[AR] Failed to load release",
+          "statusUpdated": "[AR] Status updated",
+          "updateStatusFailed": "[AR] Failed to update status",
+          "updateRolloutFailed": "[AR] Failed to update rollout percentage",
+          "updated": "[AR] Release updated",
+          "updateFailed": "[AR] Failed to update release",
+          "deleted": "[AR] Release deleted",
+          "deleteFailed": "[AR] Failed to delete release"
+        },
+        "new": {
+          "title": "[AR] Create New Release",
+          "description": "[AR] Plan and schedule a new platform release",
+          "back": "[AR] Back",
+          "creating": "[AR] Creating...",
+          "createRelease": "[AR] Create Release",
+          "sections": {
+            "releaseDetails": "[AR] Release Details",
+            "releaseDetailsDescription": "[AR] Basic information about this release",
+            "features": "[AR] Features",
+            "featuresDescription": "[AR] New features included in this release",
+            "bugFixes": "[AR] Bug Fixes",
+            "bugFixesDescription": "[AR] Bug fixes included in this release"
+          },
+          "fields": {
+            "version": "[AR] Version",
+            "name": "[AR] Name (optional)",
+            "description": "[AR] Description",
+            "type": "[AR] Type",
+            "rolloutStrategy": "[AR] Rollout Strategy",
+            "plannedDate": "[AR] Planned Date",
+            "changelogUrl": "[AR] Changelog URL"
+          },
+          "placeholders": {
+            "version": "[AR] e.g., 2.5.0",
+            "name": "[AR] e.g., Phoenix",
+            "description": "[AR] Describe the release...",
+            "changelogUrl": "[AR] https://..."
+          },
+          "typeDescriptions": {
+            "major": "[AR] Breaking changes, significant new features",
+            "minor": "[AR] New features, backward compatible",
+            "patch": "[AR] Bug fixes, minor improvements",
+            "hotfix": "[AR] Critical bug fixes"
+          },
+          "strategyDescriptions": {
+            "bigBang": "[AR] Deploy to all users at once",
+            "staged": "[AR] Deploy in stages by percentage",
+            "canary": "[AR] Deploy to small group first",
+            "blueGreen": "[AR] Switch between environments",
+            "ring": "[AR] Deploy by user rings"
+          },
+          "actions": {
+            "addFeature": "[AR] Add a feature...",
+            "addBugFix": "[AR] Add a bug fix...",
+            "noFeatures": "[AR] No features added yet",
+            "noBugFixes": "[AR] No bug fixes added yet"
+          },
+          "validation": {
+            "versionRequired": "[AR] Version is required"
+          },
+          "toast": {
+            "createSuccess": "[AR] Release created successfully",
+            "createFailed": "[AR] Failed to create release"
+          }
         }
       },
       "capacity": {
@@ -13261,6 +13825,17 @@
           "updateFailed": "فشل تحديث مقياس السعة",
           "deleteFailed": "فشل حذف مقياس السعة"
         }
+      },
+      "services": {
+        "apiGateway": "[AR] API Gateway",
+        "authentication": "[AR] Authentication",
+        "database": "[AR] Database",
+        "fileStorage": "[AR] File Storage",
+        "messaging": "[AR] Messaging",
+        "search": "[AR] Search",
+        "analytics": "[AR] Analytics",
+        "payments": "[AR] Payments",
+        "notifications": "[AR] Notifications"
       }
     },
     "integrations": {
@@ -13477,7 +14052,9 @@
           "bulkUpdateFailed": "فشل في تحديث التطبيقات",
           "bulkDeleted": "تم حذف {count} من التطبيقات",
           "bulkDeleteFailed": "فشل في حذف التطبيقات",
-          "updateStatusFailed": "فشل تحديث حالة التطبيق"
+          "updateStatusFailed": "فشل تحديث حالة التطبيق",
+          "updated": "[AR] Integration app updated",
+          "loadFailed": "[AR] Failed to load integration app"
         },
         "table": {
           "noReviews": "لا توجد تعليقات"
@@ -13485,6 +14062,108 @@
         "badges": {
           "official": "التطبيق الرسمي",
           "featured": "التطبيق المميز"
+        },
+        "tabs": {
+          "overview": "[AR] Overview",
+          "installations": "[AR] Installations ({count})",
+          "settings": "[AR] Settings"
+        },
+        "overview": {
+          "status": "[AR] Status",
+          "totalInstalls": "[AR] Total Installs",
+          "rating": "[AR] Rating",
+          "category": "[AR] Category",
+          "noReviews": "[AR] No reviews",
+          "appDetails": "[AR] App Details",
+          "name": "[AR] Name",
+          "slug": "[AR] Slug",
+          "developer": "[AR] Developer",
+          "published": "[AR] Published",
+          "notPublished": "[AR] Not published",
+          "created": "[AR] Created",
+          "links": "[AR] Links",
+          "linksDescription": "[AR] External resources",
+          "description": "[AR] Description",
+          "requiredScopes": "[AR] Required Scopes",
+          "requiredScopesDescription": "[AR] Permissions required by this integration"
+        },
+        "installations": {
+          "title": "[AR] Installation History",
+          "description": "[AR] Organizations using this app",
+          "status": "[AR] Status"
+        },
+        "settings": {
+          "editTitle": "[AR] Edit App Settings",
+          "editDescription": "[AR] Update integration app configuration"
+        },
+        "new": {
+          "title": "[AR] Add Integration App",
+          "description": "[AR] Add a new integration app to the marketplace",
+          "back": "[AR] Back",
+          "creating": "[AR] Creating...",
+          "createApp": "[AR] Create App",
+          "sections": {
+            "appDetails": "[AR] App Details",
+            "appDetailsDescription": "[AR] Basic information about the integration app",
+            "developerInformation": "[AR] Developer Information",
+            "developerInformationDescription": "[AR] Information about the app developer",
+            "assetsLinks": "[AR] Assets & Links",
+            "assetsLinksDescription": "[AR] App icon and related URLs",
+            "appStatus": "[AR] App Status",
+            "appStatusDescription": "[AR] Configure app visibility and badges"
+          },
+          "fields": {
+            "appName": "[AR] App Name",
+            "shortDescription": "[AR] Short Description",
+            "fullDescription": "[AR] Full Description",
+            "category": "[AR] Category",
+            "developerName": "[AR] Developer Name",
+            "developerWebsite": "[AR] Developer Website",
+            "supportEmail": "[AR] Support Email",
+            "iconUrl": "[AR] Icon URL",
+            "appWebsite": "[AR] App Website",
+            "documentationUrl": "[AR] Documentation URL",
+            "officialApp": "[AR] Official App",
+            "featuredApp": "[AR] Featured App"
+          },
+          "placeholders": {
+            "appName": "[AR] My Integration",
+            "shortDescription": "[AR] A brief description of the app",
+            "fullDescription": "[AR] Detailed description of the integration...",
+            "developerName": "[AR] Company or developer name",
+            "developerWebsite": "[AR] https://developer.com",
+            "supportEmail": "[AR] support@developer.com",
+            "iconUrl": "[AR] https://example.com/icon.png",
+            "appWebsite": "[AR] https://myapp.com",
+            "documentationUrl": "[AR] https://docs.myapp.com"
+          },
+          "hints": {
+            "shortDescription": "[AR] Displayed in app listings and search results",
+            "officialApp": "[AR] Mark as an officially supported integration",
+            "featuredApp": "[AR] Highlight this app in the marketplace",
+            "draftStatus": "[AR] The app will be created with Draft status. You can publish it later from the app details page."
+          },
+          "categoryDescriptions": {
+            "productivity": "[AR] Tools to improve workflow efficiency",
+            "communication": "[AR] Messaging, chat, and collaboration",
+            "projectManagement": "[AR] Task tracking and planning",
+            "crm": "[AR] Customer relationship management",
+            "analytics": "[AR] Data analysis and reporting",
+            "security": "[AR] Security and compliance tools",
+            "developerTools": "[AR] Development and DevOps",
+            "hr": "[AR] Human resources management",
+            "finance": "[AR] Financial management tools",
+            "marketing": "[AR] Marketing automation",
+            "customerSupport": "[AR] Help desk and support",
+            "other": "[AR] Other integrations"
+          },
+          "validation": {
+            "nameAndDeveloperRequired": "[AR] Name and developer are required"
+          },
+          "toast": {
+            "createSuccess": "[AR] Integration app created successfully",
+            "createFailed": "[AR] Failed to create app"
+          }
         }
       },
       "webhooks": {
@@ -13568,7 +14247,93 @@
           "testFailed": "فشل الاختبار: {خطأ}",
           "testError": "فشل إرسال الرد التلقائي على الويب للاختبار",
           "deleted": "تم حذف الرد التلقائي على الويب",
-          "deleteFailed": "فشل حذف الرد التلقائي على الويب"
+          "deleteFailed": "فشل حذف الرد التلقائي على الويب",
+          "loadFailed": "[AR] Failed to load webhook",
+          "updated": "[AR] Webhook updated",
+          "updateFailed": "[AR] Failed to update webhook",
+          "testDelivered": "[AR] Test webhook delivered successfully",
+          "unknownError": "[AR] Unknown error",
+          "sendTestFailed": "[AR] Failed to send test webhook"
+        },
+        "new": {
+          "title": "[AR] Create Webhook",
+          "description": "[AR] Create a new webhook endpoint to receive event notifications",
+          "back": "[AR] Back",
+          "creating": "[AR] Creating...",
+          "createWebhook": "[AR] Create Webhook",
+          "sections": {
+            "endpointDetails": "[AR] Endpoint Details",
+            "endpointDetailsDescription": "[AR] Configure the webhook endpoint",
+            "settings": "[AR] Settings",
+            "settingsDescription": "[AR] Configure timeout and retry behavior",
+            "eventSubscriptions": "[AR] Event Subscriptions",
+            "eventSubscriptionsDescription": "[AR] Select the events this webhook should receive ({count} selected)"
+          },
+          "fields": {
+            "webhookName": "[AR] Webhook Name",
+            "endpointUrl": "[AR] Endpoint URL",
+            "description": "[AR] Description",
+            "organization": "[AR] Organization",
+            "timeout": "[AR] Timeout (seconds)",
+            "retryCount": "[AR] Retry Count",
+            "customHeaders": "[AR] Custom Headers (JSON)"
+          },
+          "placeholders": {
+            "webhookName": "[AR] My Webhook",
+            "endpointUrl": "[AR] https://example.com/webhooks",
+            "description": "[AR] What is this webhook used for?",
+            "selectOrganization": "[AR] Select organization",
+            "loading": "[AR] Loading...",
+            "customHeaders": "[AR] {\n  \"X-Custom-Header\": \"value\"\n}"
+          },
+          "hints": {
+            "endpointUrl": "[AR] Must be a valid HTTPS URL that can receive POST requests",
+            "customHeaders": "[AR] Optional custom headers to include with webhook requests",
+            "selectEvents": "[AR] Please select at least one event to subscribe to"
+          },
+          "events": {
+            "users": "[AR] Users",
+            "organizations": "[AR] Organizations",
+            "agents": "[AR] Agents",
+            "workflows": "[AR] Workflows",
+            "reports": "[AR] Reports",
+            "billing": "[AR] Billing"
+          },
+          "eventLabels": {
+            "userCreated": "[AR] User Created",
+            "userUpdated": "[AR] User Updated",
+            "userDeleted": "[AR] User Deleted",
+            "organizationCreated": "[AR] Organization Created",
+            "organizationUpdated": "[AR] Organization Updated",
+            "agentRunCompleted": "[AR] Agent Run Completed",
+            "agentRunFailed": "[AR] Agent Run Failed",
+            "workflowCompleted": "[AR] Workflow Completed",
+            "workflowFailed": "[AR] Workflow Failed",
+            "reportGenerated": "[AR] Report Generated",
+            "subscriptionChanged": "[AR] Subscription Changed",
+            "subscriptionCancelled": "[AR] Subscription Cancelled"
+          },
+          "actions": {
+            "selectAll": "[AR] Select All",
+            "deselectAll": "[AR] Deselect All"
+          },
+          "dialog": {
+            "secretTitle": "[AR] Webhook Signing Secret",
+            "secretDescription": "[AR] Copy this secret now - it will not be shown again! Use this to verify webhook signatures.",
+            "copySecret": "[AR] Copy Secret",
+            "done": "[AR] Done"
+          },
+          "validation": {
+            "urlAndOrgRequired": "[AR] URL and organization are required",
+            "atLeastOneEvent": "[AR] Please select at least one event to subscribe to",
+            "invalidUrl": "[AR] Please enter a valid URL",
+            "invalidJsonHeaders": "[AR] Invalid JSON format for custom headers"
+          },
+          "toast": {
+            "createSuccess": "[AR] Webhook created successfully",
+            "createFailed": "[AR] Failed to create webhook",
+            "copied": "[AR] Copied to clipboard"
+          }
         }
       }
     },
@@ -14390,6 +15155,10 @@
       "defaultPlan": "احترافي",
       "requiresPlan": "تتطلب هذه الميزة خطة {plan} أو أعلى.",
       "upgradeButton": "خطة الترقية"
+    },
+    "usage": {
+      "limitReached": "[AR] You've reached your limit. Upgrade your plan to continue.",
+      "approachingLimit": "[AR] You're approaching your limit."
     }
   },
   "blog": {

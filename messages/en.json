@@ -5878,6 +5878,8 @@
       "filterByStatus": "Filter by status",
       "allStatuses": "All Statuses",
       "surveyName": "Survey Name",
+      "questionsLabel": "Questions",
+      "responsesLabel": "Responses",
       "questions": {
         "title": "Survey Questions",
         "description": "Browse and manage questions across all surveys",

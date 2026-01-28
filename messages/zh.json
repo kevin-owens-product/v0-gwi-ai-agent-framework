@@ -98,7 +98,16 @@
       "organizationComplianceAttestations": "组织合规证明",
       "complianceAudits": "该框架的合规性审核",
       "frameworkRequirements": "框架要求"
-    }
+    },
+    "enable": "[ZH] Enable",
+    "disable": "[ZH] Disable",
+    "notRequired": "[ZH] Not Required",
+    "system": "[ZH] System",
+    "noDescription": "[ZH] No description",
+    "unknown": "[ZH] Unknown",
+    "important": "[ZH] Important",
+    "preview": "[ZH] Preview",
+    "duration": "[ZH] Duration"
   },
   "auth": {
     "signIn": "登录",
@@ -3239,7 +3248,29 @@
         "exportFailed": "导出仪表板失败"
       },
       "detail": {
-        "title": "仪表板详细信息"
+        "title": "仪表板详细信息",
+        "chartTypes": {
+          "bar": "[ZH] Bar",
+          "line": "[ZH] Line",
+          "pie": "[ZH] Pie",
+          "donut": "[ZH] Donut",
+          "area": "[ZH] Area",
+          "scatter": "[ZH] Scatter",
+          "heatmap": "[ZH] Heatmap",
+          "treemap": "[ZH] Treemap",
+          "funnel": "[ZH] Funnel",
+          "radar": "[ZH] Radar",
+          "metric": "[ZH] Metric"
+        },
+        "export": {
+          "csvHeaders": {
+            "id": "[ZH] ID",
+            "name": "[ZH] Name",
+            "type": "[ZH] Type",
+            "category": "[ZH] Category",
+            "dataSource": "[ZH] Data Source"
+          }
+        }
       }
     },
     "crosstabs": {
@@ -5823,7 +5854,9 @@
           "deleteFailed": "删除回复失败",
           "markCompleteFailed": "无法标记为完成"
         }
-      }
+      },
+      "questionsLabel": "[ZH] Questions",
+      "responsesLabel": "[ZH] Responses"
     },
     "taxonomy": {
       "title": "分类法",
@@ -8234,6 +8267,55 @@
         "featureDeleted": "功能已删除",
         "featureDisabled": "功能禁用成功",
         "featureEnabled": "功能启用成功"
+      },
+      "new": {
+        "title": "[ZH] Create Entitlement Feature",
+        "description": "[ZH] Define a new feature that can be assigned to subscription plans",
+        "back": "[ZH] Back",
+        "creating": "[ZH] Creating...",
+        "createFeature": "[ZH] Create Feature",
+        "noPermission": "[ZH] You don't have permission to create entitlement features",
+        "backToFeatures": "[ZH] Back to Features",
+        "sections": {
+          "featureDetails": "[ZH] Feature Details",
+          "featureDetailsDescription": "[ZH] Basic information about the entitlement feature",
+          "categoryClassification": "[ZH] Category & Classification",
+          "categoryDescription": "[ZH] Organize the feature for easier management",
+          "valueConfiguration": "[ZH] Value Configuration",
+          "valueDescription": "[ZH] Configure the feature value type and default"
+        },
+        "fields": {
+          "displayName": "[ZH] Display Name",
+          "featureKey": "[ZH] Feature Key",
+          "description": "[ZH] Description",
+          "category": "[ZH] Category",
+          "sortOrder": "[ZH] Sort Order",
+          "valueType": "[ZH] Value Type",
+          "defaultValue": "[ZH] Default Value",
+          "active": "[ZH] Active"
+        },
+        "placeholders": {
+          "displayName": "[ZH] Advanced Analytics",
+          "featureKey": "[ZH] advanced_analytics",
+          "description": "[ZH] Describe what this feature enables for subscribers...",
+          "jsonDefault": "[ZH] {}"
+        },
+        "hints": {
+          "snakeCaseFormat": "[ZH] snake_case format: lowercase letters, numbers, underscores",
+          "sortOrderLower": "[ZH] Lower numbers appear first in lists",
+          "inactiveFeatures": "[ZH] Inactive features are not available for plan assignment"
+        },
+        "validation": {
+          "keyAndNameRequired": "[ZH] Key and name are required",
+          "keyFormatInvalid": "[ZH] Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)"
+        },
+        "toast": {
+          "createFailed": "[ZH] Failed to create feature"
+        },
+        "status": {
+          "enabled": "[ZH] Enabled",
+          "disabled": "[ZH] Disabled"
+        }
       }
     },
     "identity": {
@@ -8317,7 +8399,18 @@
           "providerUpdated": "SSO 提供商更新成功",
           "providerDeleted": "SSO 提供商删除成功",
           "connectionSuccess": "连接测试成功",
-          "connectionFailed": "连接测试失败"
+          "connectionFailed": "连接测试失败",
+          "loadFailed": "[ZH] Failed to load SSO configuration",
+          "updated": "[ZH] SSO configuration updated",
+          "updateFailed": "[ZH] Failed to update SSO configuration",
+          "allTestsPassed": "[ZH] All tests passed!",
+          "someTestsFailed": "[ZH] Some tests failed",
+          "testFailed": "[ZH] Failed to test SSO configuration",
+          "activated": "[ZH] SSO activated successfully",
+          "disabled": "[ZH] SSO disabled successfully",
+          "updateStatusFailed": "[ZH] Failed to update status",
+          "deleted": "[ZH] SSO configuration deleted successfully",
+          "deleteFailed": "[ZH] Failed to delete SSO configuration"
         },
         "confirmations": {
           "deleteTitle": "删除 SSO 提供商",
@@ -8334,6 +8427,89 @@
           "certificateRequired": "需要证书",
           "invalidUrl": "请输入有效的网址",
           "invalidCertificate": "证书格式无效"
+        },
+        "new": {
+          "title": "[ZH] Create SSO Configuration",
+          "description": "[ZH] Configure Single Sign-On for an organization",
+          "back": "[ZH] Back",
+          "creating": "[ZH] Creating...",
+          "createConfiguration": "[ZH] Create Configuration",
+          "noPermission": "[ZH] You don't have permission to create SSO configurations",
+          "backToSSO": "[ZH] Back to SSO Configurations",
+          "tabs": {
+            "basic": "[ZH] Basic Settings",
+            "provider": "[ZH] Provider Configuration",
+            "provisioning": "[ZH] User Provisioning"
+          },
+          "sections": {
+            "organizationProvider": "[ZH] Organization & Provider",
+            "organizationProviderDescription": "[ZH] Select the organization and SSO provider type",
+            "samlConfiguration": "[ZH] SAML Configuration",
+            "samlConfigurationDescription": "[ZH] Configure SAML 2.0 settings from your Identity Provider",
+            "oidcConfiguration": "[ZH] OIDC Configuration",
+            "oidcConfigurationDescription": "[ZH] Configure OpenID Connect settings",
+            "userProvisioning": "[ZH] User Provisioning Settings",
+            "userProvisioningDescription": "[ZH] Configure how users are provisioned through SSO"
+          },
+          "fields": {
+            "organization": "[ZH] Organization",
+            "ssoProvider": "[ZH] SSO Provider",
+            "displayName": "[ZH] Display Name",
+            "allowedEmailDomains": "[ZH] Allowed Email Domains",
+            "entityId": "[ZH] Entity ID / Issuer",
+            "ssoUrl": "[ZH] SSO URL (Login URL)",
+            "sloUrl": "[ZH] SLO URL (Logout URL)",
+            "certificate": "[ZH] X.509 Certificate",
+            "clientId": "[ZH] Client ID",
+            "clientSecret": "[ZH] Client Secret",
+            "discoveryUrl": "[ZH] Discovery URL",
+            "authorizationUrl": "[ZH] Authorization URL",
+            "tokenUrl": "[ZH] Token URL",
+            "userInfoUrl": "[ZH] User Info URL",
+            "defaultRole": "[ZH] Default Role",
+            "jitProvisioning": "[ZH] Just-in-Time Provisioning",
+            "autoDeactivate": "[ZH] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[ZH] Select an organization",
+            "searchOrganizations": "[ZH] Search organizations...",
+            "loading": "[ZH] Loading...",
+            "noOrganizationsFound": "[ZH] No organizations found",
+            "displayName": "[ZH] e.g., Acme Corp SSO",
+            "allowedDomains": "[ZH] acme.com, acme.org",
+            "entityId": "[ZH] https://idp.example.com/entity",
+            "ssoUrl": "[ZH] https://idp.example.com/sso",
+            "sloUrl": "[ZH] https://idp.example.com/slo",
+            "certificate": "[ZH] -----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+            "clientId": "[ZH] your-client-id",
+            "clientSecret": "[ZH] your-client-secret",
+            "discoveryUrl": "[ZH] https://idp.example.com/.well-known/openid-configuration",
+            "authorizationUrl": "[ZH] https://idp.example.com/authorize",
+            "tokenUrl": "[ZH] https://idp.example.com/token",
+            "userInfoUrl": "[ZH] https://idp.example.com/userinfo"
+          },
+          "hints": {
+            "displayName": "[ZH] A friendly name for this SSO configuration",
+            "allowedDomains": "[ZH] Comma-separated list of email domains allowed to use this SSO",
+            "certificate": "[ZH] Paste the public certificate from your Identity Provider",
+            "discoveryUrl": "[ZH] If provided, other URLs will be auto-discovered",
+            "manualUrlConfig": "[ZH] Manual URL Configuration (optional if discovery URL is provided)",
+            "defaultRole": "[ZH] Role assigned to users when they first sign in via SSO",
+            "jitProvisioning": "[ZH] Automatically create user accounts on first SSO login",
+            "autoDeactivate": "[ZH] Automatically deactivate users removed from Identity Provider"
+          },
+          "roles": {
+            "viewer": "[ZH] Viewer",
+            "member": "[ZH] Member",
+            "admin": "[ZH] Admin"
+          },
+          "validation": {
+            "organizationAndProviderRequired": "[ZH] Organization and provider are required"
+          },
+          "toast": {
+            "createSuccess": "[ZH] SSO configuration created successfully",
+            "createFailed": "[ZH] Failed to create SSO configuration"
+          }
         }
       },
       "domains": {
@@ -8491,7 +8667,17 @@
           "connectionUpdated": "SCIM 连接更新成功",
           "connectionDeleted": "SCIM 连接删除成功",
           "tokenRegenerated": "Bearer Token 重新生成成功",
-          "syncStarted": "同步启动成功"
+          "syncStarted": "同步启动成功",
+          "loadFailed": "[ZH] Failed to fetch SCIM integration",
+          "updated": "[ZH] SCIM integration updated",
+          "updateFailed": "[ZH] Failed to update SCIM integration",
+          "activated": "[ZH] SCIM integration activated successfully",
+          "paused": "[ZH] SCIM integration paused successfully",
+          "updateStatusFailed": "[ZH] Failed to update status",
+          "regenerateTokenFailed": "[ZH] Failed to regenerate token",
+          "deleted": "[ZH] SCIM integration deleted successfully",
+          "deleteFailed": "[ZH] Failed to delete SCIM integration",
+          "copied": "[ZH] Copied to clipboard"
         },
         "confirmations": {
           "deleteTitle": "删除 SCIM 连接",
@@ -8504,6 +8690,61 @@
           "connectionNameRequired": "连接名称为必填项",
           "baseUrlRequired": "基本 URL 为必填项",
           "invalidUrl": "请输入有效的网址"
+        },
+        "new": {
+          "title": "[ZH] Create SCIM Integration",
+          "description": "[ZH] Configure SCIM 2.0 user provisioning for an organization",
+          "back": "[ZH] Back",
+          "creating": "[ZH] Creating...",
+          "createIntegration": "[ZH] Create Integration",
+          "noPermission": "[ZH] You don't have permission to create SCIM integrations",
+          "backToSCIM": "[ZH] Back to SCIM Integrations",
+          "sections": {
+            "organization": "[ZH] Organization",
+            "organizationDescription": "[ZH] Select the organization to configure SCIM provisioning for",
+            "syncSettings": "[ZH] Sync Settings",
+            "syncSettingsDescription": "[ZH] Configure what data should be synchronized from your Identity Provider"
+          },
+          "fields": {
+            "organization": "[ZH] Organization",
+            "defaultRole": "[ZH] Default Role",
+            "syncUsers": "[ZH] Sync Users",
+            "syncGroups": "[ZH] Sync Groups",
+            "autoDeactivate": "[ZH] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[ZH] Select an organization",
+            "searchOrganizations": "[ZH] Search organizations...",
+            "loading": "[ZH] Loading...",
+            "noOrganizationsFound": "[ZH] No organizations found"
+          },
+          "hints": {
+            "defaultRole": "[ZH] Role assigned to users provisioned via SCIM",
+            "syncUsers": "[ZH] Provision and deprovision users automatically",
+            "syncGroups": "[ZH] Sync group memberships from Identity Provider",
+            "autoDeactivate": "[ZH] Automatically deactivate users when removed from IdP",
+            "important": "[ZH] After creating the integration, you will receive a bearer token and endpoint URL. The token will only be shown once, so make sure to save it securely."
+          },
+          "roles": {
+            "viewer": "[ZH] Viewer",
+            "member": "[ZH] Member",
+            "admin": "[ZH] Admin"
+          },
+          "dialog": {
+            "title": "[ZH] SCIM Integration Created",
+            "description": "[ZH] Save the bearer token below. It will not be shown again.",
+            "bearerToken": "[ZH] Bearer Token",
+            "scimEndpointUrl": "[ZH] SCIM Endpoint URL",
+            "copyToken": "[ZH] Copy Token",
+            "done": "[ZH] Done"
+          },
+          "validation": {
+            "organizationRequired": "[ZH] Organization is required"
+          },
+          "toast": {
+            "createSuccess": "[ZH] SCIM integration created successfully",
+            "createFailed": "[ZH] Failed to create SCIM integration"
+          }
         }
       },
       "devices": {
@@ -8568,7 +8809,53 @@
             "sessionDuration": "会话持续时间（小时）",
             "requireReauth": "需要重新认证",
             "requireReauthDescription": "会话持续时间后需要重新认证"
-          }
+          },
+          "nameRequired": "[ZH] Policy name is required",
+          "created": "[ZH] Created",
+          "updated": "[ZH] Policy updated successfully",
+          "deleted": "[ZH] Policy deleted successfully",
+          "enabled": "[ZH] Policy enabled successfully",
+          "disabled": "[ZH] Policy disabled successfully",
+          "updateStatusFailed": "[ZH] Failed to update status",
+          "notFound": "[ZH] Policy not found",
+          "createTitle": "[ZH] Create Device Policy",
+          "nameRequiredLabel": "[ZH] Policy Name *",
+          "descriptionLabel": "[ZH] Description",
+          "scopeLabel": "[ZH] Scope",
+          "priorityLabel": "[ZH] Priority (higher = first)",
+          "deviceRequirements": "[ZH] Device Requirements",
+          "enforcementActions": "[ZH] Enforcement Actions",
+          "notifyOnViolation": "[ZH] Notify on Violation",
+          "overview": "[ZH] Overview",
+          "requirements": "[ZH] Requirements",
+          "enforcement": "[ZH] Enforcement",
+          "status": "[ZH] Status",
+          "createdBy": "[ZH] Created By",
+          "lastUpdated": "[ZH] Last Updated",
+          "requireEncryption": "[ZH] Require Encryption",
+          "requirePasscode": "[ZH] Require Passcode",
+          "requireBiometric": "[ZH] Require Biometric",
+          "requireMdm": "[ZH] Require MDM",
+          "platformRestrictions": "[ZH] Platform Restrictions",
+          "allowedPlatforms": "[ZH] Allowed Platforms",
+          "allPlatforms": "[ZH] All platforms",
+          "blockedPlatforms": "[ZH] Blocked Platforms",
+          "blockOnViolation": "[ZH] Block on Violation",
+          "blockOnViolationDescription": "[ZH] Block access when device is non-compliant",
+          "wipeOnViolation": "[ZH] Wipe on Violation",
+          "wipeOnViolationDescription": "[ZH] Remote wipe device data on violation",
+          "notifyOnViolationDescription": "[ZH] Send notification when policy is violated",
+          "warningWipeEnabled": "[ZH] Warning: Wipe on Violation Enabled",
+          "warningWipeDescription": "[ZH] This policy will remotely wipe device data when violations occur. Use with extreme caution.",
+          "requirementsDescription": "[ZH] Requirements that devices must meet to be compliant",
+          "enforcementDescription": "[ZH] Actions taken when a device violates this policy",
+          "editTitle": "[ZH] Edit Policy",
+          "details": "[ZH] Policy Details",
+          "deleteTitle": "[ZH] Delete Policy",
+          "deleteDescription": "[ZH] Are you sure you want to delete this policy? This action cannot be undone.",
+          "createButton": "[ZH] Create Policy",
+          "namePlaceholder": "[ZH] e.g., Enterprise Device Requirements",
+          "descriptionPlaceholder": "[ZH] Describe what this policy enforces..."
         },
         "table": {
           "device": "设备",
@@ -10912,6 +11199,90 @@
         "CLIENT": "客户",
         "REGIONAL": "区域性",
         "PORTFOLIO_COMPANY": "投资组合公司"
+      },
+      "plans": {
+        "starter": "[ZH] Starter",
+        "professional": "[ZH] Professional",
+        "enterprise": "[ZH] Enterprise"
+      },
+      "new": {
+        "title": "[ZH] Create New Organization",
+        "description": "[ZH] Add a new tenant organization to the platform",
+        "back": "[ZH] Back",
+        "creating": "[ZH] Creating...",
+        "createOrganization": "[ZH] Create Organization",
+        "noPermission": "[ZH] You don't have permission to create organizations",
+        "backToTenants": "[ZH] Back to Tenants",
+        "sections": {
+          "organizationDetails": "[ZH] Organization Details",
+          "organizationDetailsDescription": "[ZH] Basic information about the organization",
+          "locationTimezone": "[ZH] Location & Timezone",
+          "locationTimezoneDescription": "[ZH] Regional settings for the organization",
+          "planSubscription": "[ZH] Plan & Subscription",
+          "planSubscriptionDescription": "[ZH] Subscription tier and billing settings",
+          "hierarchySettings": "[ZH] Hierarchy Settings",
+          "hierarchySettingsDescription": "[ZH] Configure organization hierarchy and parent relationships",
+          "ownerInformation": "[ZH] Owner Information (Optional)",
+          "ownerInformationDescription": "[ZH] Automatically create an owner user for this organization",
+          "branding": "[ZH] Branding (Optional)",
+          "brandingDescription": "[ZH] Custom branding settings for the organization"
+        },
+        "fields": {
+          "organizationName": "[ZH] Organization Name",
+          "slug": "[ZH] Slug (auto-generated if empty)",
+          "organizationType": "[ZH] Organization Type",
+          "industry": "[ZH] Industry",
+          "companySize": "[ZH] Company Size",
+          "domain": "[ZH] Domain",
+          "country": "[ZH] Country",
+          "timezone": "[ZH] Timezone",
+          "planTier": "[ZH] Plan Tier",
+          "parentOrganization": "[ZH] Parent Organization",
+          "allowChildOrgs": "[ZH] Allow Child Organizations",
+          "ownerEmail": "[ZH] Owner Email",
+          "ownerName": "[ZH] Owner Name",
+          "logoUrl": "[ZH] Logo URL",
+          "brandColor": "[ZH] Brand Color"
+        },
+        "placeholders": {
+          "organizationName": "[ZH] Acme Corporation",
+          "slug": "[ZH] acme-corporation",
+          "industry": "[ZH] Technology, Healthcare, etc.",
+          "selectSize": "[ZH] Select size",
+          "domain": "[ZH] acme.com",
+          "country": "[ZH] United States",
+          "timezone": "[ZH] UTC",
+          "noneRootOrganization": "[ZH] None (root organization)",
+          "ownerEmail": "[ZH] owner@example.com",
+          "ownerName": "[ZH] John Doe",
+          "logoUrl": "[ZH] https://example.com/logo.png",
+          "brandColor": "[ZH] #3B82F6"
+        },
+        "hints": {
+          "slug": "[ZH] URL-friendly identifier, lowercase with hyphens",
+          "parentOrganization": "[ZH] Select a parent to create this organization as a child in the hierarchy",
+          "allowChildOrgs": "[ZH] Enable hierarchy features and allow creating sub-organizations",
+          "ownerInformation": "[ZH] If provided, a user will be created (or existing user added) as the organization owner"
+        },
+        "companySizes": {
+          "solo": "[ZH] Solo (1)",
+          "small": "[ZH] Small (2-10)",
+          "medium": "[ZH] Medium (11-50)",
+          "large": "[ZH] Large (51-200)",
+          "enterprise": "[ZH] Enterprise (201-1000)",
+          "global": "[ZH] Global (1000+)"
+        },
+        "validation": {
+          "nameRequired": "[ZH] Organization name is required"
+        },
+        "toast": {
+          "createFailed": "[ZH] Failed to create organization"
+        }
+      },
+      "toast": {
+        "assignPlanFailed": "[ZH] Failed to assign plan",
+        "grantFeatureFailed": "[ZH] Failed to grant feature",
+        "revokeEntitlementFailed": "[ZH] Failed to revoke entitlement"
       }
     },
     "users": {
@@ -11034,7 +11405,32 @@
       "selectOrganizationOptional": "选择组织（可选）",
       "organizationLaterHint": "稍后可以将用户添加到组织中",
       "roleInOrganization": "在组织中的角色",
-      "roleHint": "角色决定用户可以执行哪些操作"
+      "roleHint": "角色决定用户可以执行哪些操作",
+      "bulkActions": {
+        "banReason": "[ZH] Bulk ban action"
+      },
+      "toast": {
+        "banFailed": "[ZH] Failed to ban user",
+        "userBanned": "[ZH] User banned successfully",
+        "liftBanFailed": "[ZH] Failed to lift ban",
+        "banLifted": "[ZH] Ban lifted successfully",
+        "deleteFailed": "[ZH] Failed to delete user",
+        "userDeleted": "[ZH] User deleted successfully",
+        "bulkBanFailed": "[ZH] Bulk ban failed",
+        "bulkBanSuccess": "[ZH] {count} users banned successfully",
+        "bulkUnbanFailed": "[ZH] Bulk unban failed",
+        "bulkUnbanSuccess": "[ZH] {count} users unbanned successfully",
+        "bulkDeleteFailed": "[ZH] Bulk delete failed",
+        "bulkDeleteSuccess": "[ZH] {count} users deleted successfully",
+        "bulkVerifyFailed": "[ZH] Bulk verify failed",
+        "bulkVerifySuccess": "[ZH] {count} users verified successfully",
+        "bulkResetPasswordFailed": "[ZH] Bulk reset password failed",
+        "bulkResetPasswordSuccess": "[ZH] {count} password reset emails sent",
+        "bulkRevokeSessionsFailed": "[ZH] Bulk revoke sessions failed",
+        "bulkRevokeSessionsSuccess": "[ZH] {count} sessions revoked successfully",
+        "createFailed": "[ZH] Failed to create user",
+        "userCreated": "[ZH] User created successfully"
+      }
     },
     "broadcast": {
       "title": "广播中心",
@@ -11476,7 +11872,23 @@
           "messages": {
             "frameworkUpdated": "框架更新成功"
           }
-        }
+        },
+        "createTitle": "[ZH] Create Compliance Framework",
+        "createDescription": "[ZH] Add a new compliance standard (SOC2, HIPAA, GDPR, etc.)",
+        "createButton": "[ZH] Create Framework",
+        "createFailed": "[ZH] Failed to create framework",
+        "details": "[ZH] Framework Details",
+        "detailsDescription": "[ZH] Define the compliance framework standards and requirements",
+        "nameRequired": "[ZH] Framework Name *",
+        "codeRequired": "[ZH] Code *",
+        "namePlaceholder": "[ZH] SOC 2 Type II",
+        "codePlaceholder": "[ZH] SOC2",
+        "codeHint": "[ZH] Short identifier code (e.g., SOC2, HIPAA, GDPR)",
+        "versionPlaceholder": "[ZH] 2023",
+        "versionHint": "[ZH] The version or year of the framework standard",
+        "descriptionPlaceholder": "[ZH] Service Organization Control 2 compliance framework for security, availability, processing integrity, confidentiality, and privacy...",
+        "activeStatus": "[ZH] Active Status",
+        "activeStatusDescription": "[ZH] Enable this framework for attestations and audits"
       },
       "frameworksOverview": {
         "title": "合规框架",
@@ -12828,6 +13240,16 @@
       },
       "validation": {
         "required": "名称和显示名称为必填项"
+      },
+      "colors": {
+        "purple": "[ZH] Purple",
+        "blue": "[ZH] Blue",
+        "green": "[ZH] Green",
+        "amber": "[ZH] Amber",
+        "red": "[ZH] Red",
+        "gray": "[ZH] Gray",
+        "pink": "[ZH] Pink",
+        "teal": "[ZH] Teal"
       }
     },
     "healthScores": {
@@ -13047,6 +13469,15 @@
           "createFailed": "创建事件失败",
           "updateFailed": "事件更新失败",
           "deleteFailed": "删除事件失败"
+        },
+        "toast": {
+          "loadFailed": "[ZH] Failed to load incident",
+          "statusUpdated": "[ZH] Status updated",
+          "updateStatusFailed": "[ZH] Failed to update status",
+          "updated": "[ZH] Incident updated",
+          "updateFailed": "[ZH] Failed to update incident",
+          "updatePosted": "[ZH] Update posted",
+          "addUpdateFailed": "[ZH] Failed to add update"
         }
       },
       "maintenance": {
@@ -13117,6 +13548,73 @@
           "windowStarted": "维护窗口已启动",
           "windowCompleted": "维护窗口已完成",
           "windowCancelled": "维护窗口已取消"
+        },
+        "toast": {
+          "loadFailed": "[ZH] Failed to load maintenance window",
+          "statusUpdated": "[ZH] Status updated",
+          "updateStatusFailed": "[ZH] Failed to update status",
+          "updated": "[ZH] Maintenance window updated",
+          "updateFailed": "[ZH] Failed to update maintenance window",
+          "deleted": "[ZH] Maintenance window deleted",
+          "deleteFailed": "[ZH] Failed to delete maintenance window"
+        },
+        "new": {
+          "title": "[ZH] Schedule Maintenance",
+          "description": "[ZH] Create a new scheduled maintenance window",
+          "back": "[ZH] Back",
+          "scheduling": "[ZH] Scheduling...",
+          "scheduleMaintenance": "[ZH] Schedule Maintenance",
+          "sections": {
+            "maintenanceDetails": "[ZH] Maintenance Details",
+            "maintenanceDetailsDescription": "[ZH] Basic information about the maintenance window",
+            "schedule": "[ZH] Schedule",
+            "scheduleDescription": "[ZH] Set the maintenance window timing",
+            "affectedServices": "[ZH] Affected Services",
+            "affectedServicesDescription": "[ZH] Select all services that will be affected",
+            "affectedRegions": "[ZH] Affected Regions",
+            "affectedRegionsDescription": "[ZH] Select the geographic regions impacted"
+          },
+          "fields": {
+            "title": "[ZH] Title",
+            "description": "[ZH] Description",
+            "type": "[ZH] Type",
+            "startTime": "[ZH] Start Time",
+            "endTime": "[ZH] End Time",
+            "notifyBefore": "[ZH] Notify Before (hours)"
+          },
+          "placeholders": {
+            "title": "[ZH] e.g., Database upgrade",
+            "description": "[ZH] Describe the maintenance work being performed...",
+            "duration": "[ZH] Duration: {duration}"
+          },
+          "typeDescriptions": {
+            "scheduled": "[ZH] Planned maintenance window",
+            "emergency": "[ZH] Urgent maintenance required",
+            "upgrade": "[ZH] System or component upgrade",
+            "migration": "[ZH] Data or service migration",
+            "securityPatch": "[ZH] Security-related updates"
+          },
+          "regions": {
+            "usEast": "[ZH] US East",
+            "usWest": "[ZH] US West",
+            "euWest": "[ZH] EU West",
+            "euCentral": "[ZH] EU Central",
+            "asiaPacific": "[ZH] Asia Pacific",
+            "global": "[ZH] Global"
+          },
+          "hints": {
+            "notifyBefore": "[ZH] Users will be notified {hours} hours before maintenance begins",
+            "selectServices": "[ZH] Click to select affected services",
+            "selectRegions": "[ZH] Click to select affected regions"
+          },
+          "validation": {
+            "titleStartEndRequired": "[ZH] Title, start time, and end time are required",
+            "endAfterStart": "[ZH] End time must be after start time"
+          },
+          "toast": {
+            "createSuccess": "[ZH] Maintenance window scheduled",
+            "createFailed": "[ZH] Failed to schedule maintenance"
+          }
         }
       },
       "releases": {
@@ -13194,6 +13692,72 @@
           "rolloutStarted": "已开始推出",
           "releaseCompleted": "发布完成",
           "releaseRolledBack": "发布回滚"
+        },
+        "toast": {
+          "loadFailed": "[ZH] Failed to load release",
+          "statusUpdated": "[ZH] Status updated",
+          "updateStatusFailed": "[ZH] Failed to update status",
+          "updateRolloutFailed": "[ZH] Failed to update rollout percentage",
+          "updated": "[ZH] Release updated",
+          "updateFailed": "[ZH] Failed to update release",
+          "deleted": "[ZH] Release deleted",
+          "deleteFailed": "[ZH] Failed to delete release"
+        },
+        "new": {
+          "title": "[ZH] Create New Release",
+          "description": "[ZH] Plan and schedule a new platform release",
+          "back": "[ZH] Back",
+          "creating": "[ZH] Creating...",
+          "createRelease": "[ZH] Create Release",
+          "sections": {
+            "releaseDetails": "[ZH] Release Details",
+            "releaseDetailsDescription": "[ZH] Basic information about this release",
+            "features": "[ZH] Features",
+            "featuresDescription": "[ZH] New features included in this release",
+            "bugFixes": "[ZH] Bug Fixes",
+            "bugFixesDescription": "[ZH] Bug fixes included in this release"
+          },
+          "fields": {
+            "version": "[ZH] Version",
+            "name": "[ZH] Name (optional)",
+            "description": "[ZH] Description",
+            "type": "[ZH] Type",
+            "rolloutStrategy": "[ZH] Rollout Strategy",
+            "plannedDate": "[ZH] Planned Date",
+            "changelogUrl": "[ZH] Changelog URL"
+          },
+          "placeholders": {
+            "version": "[ZH] e.g., 2.5.0",
+            "name": "[ZH] e.g., Phoenix",
+            "description": "[ZH] Describe the release...",
+            "changelogUrl": "[ZH] https://..."
+          },
+          "typeDescriptions": {
+            "major": "[ZH] Breaking changes, significant new features",
+            "minor": "[ZH] New features, backward compatible",
+            "patch": "[ZH] Bug fixes, minor improvements",
+            "hotfix": "[ZH] Critical bug fixes"
+          },
+          "strategyDescriptions": {
+            "bigBang": "[ZH] Deploy to all users at once",
+            "staged": "[ZH] Deploy in stages by percentage",
+            "canary": "[ZH] Deploy to small group first",
+            "blueGreen": "[ZH] Switch between environments",
+            "ring": "[ZH] Deploy by user rings"
+          },
+          "actions": {
+            "addFeature": "[ZH] Add a feature...",
+            "addBugFix": "[ZH] Add a bug fix...",
+            "noFeatures": "[ZH] No features added yet",
+            "noBugFixes": "[ZH] No bug fixes added yet"
+          },
+          "validation": {
+            "versionRequired": "[ZH] Version is required"
+          },
+          "toast": {
+            "createSuccess": "[ZH] Release created successfully",
+            "createFailed": "[ZH] Failed to create release"
+          }
         }
       },
       "capacity": {
@@ -13261,6 +13825,17 @@
           "updateFailed": "无法更新容量指标",
           "deleteFailed": "删除容量指标失败"
         }
+      },
+      "services": {
+        "apiGateway": "[ZH] API Gateway",
+        "authentication": "[ZH] Authentication",
+        "database": "[ZH] Database",
+        "fileStorage": "[ZH] File Storage",
+        "messaging": "[ZH] Messaging",
+        "search": "[ZH] Search",
+        "analytics": "[ZH] Analytics",
+        "payments": "[ZH] Payments",
+        "notifications": "[ZH] Notifications"
       }
     },
     "integrations": {
@@ -13477,7 +14052,9 @@
           "bulkUpdateFailed": "无法更新应用程序",
           "bulkDeleted": "已删除 {count} 个应用",
           "bulkDeleteFailed": "删除应用程序失败",
-          "updateStatusFailed": "无法更新应用状态"
+          "updateStatusFailed": "无法更新应用状态",
+          "updated": "[ZH] Integration app updated",
+          "loadFailed": "[ZH] Failed to load integration app"
         },
         "table": {
           "noReviews": "没有评论"
@@ -13485,6 +14062,108 @@
         "badges": {
           "official": "官方应用程序",
           "featured": "特色应用程序"
+        },
+        "tabs": {
+          "overview": "[ZH] Overview",
+          "installations": "[ZH] Installations ({count})",
+          "settings": "[ZH] Settings"
+        },
+        "overview": {
+          "status": "[ZH] Status",
+          "totalInstalls": "[ZH] Total Installs",
+          "rating": "[ZH] Rating",
+          "category": "[ZH] Category",
+          "noReviews": "[ZH] No reviews",
+          "appDetails": "[ZH] App Details",
+          "name": "[ZH] Name",
+          "slug": "[ZH] Slug",
+          "developer": "[ZH] Developer",
+          "published": "[ZH] Published",
+          "notPublished": "[ZH] Not published",
+          "created": "[ZH] Created",
+          "links": "[ZH] Links",
+          "linksDescription": "[ZH] External resources",
+          "description": "[ZH] Description",
+          "requiredScopes": "[ZH] Required Scopes",
+          "requiredScopesDescription": "[ZH] Permissions required by this integration"
+        },
+        "installations": {
+          "title": "[ZH] Installation History",
+          "description": "[ZH] Organizations using this app",
+          "status": "[ZH] Status"
+        },
+        "settings": {
+          "editTitle": "[ZH] Edit App Settings",
+          "editDescription": "[ZH] Update integration app configuration"
+        },
+        "new": {
+          "title": "[ZH] Add Integration App",
+          "description": "[ZH] Add a new integration app to the marketplace",
+          "back": "[ZH] Back",
+          "creating": "[ZH] Creating...",
+          "createApp": "[ZH] Create App",
+          "sections": {
+            "appDetails": "[ZH] App Details",
+            "appDetailsDescription": "[ZH] Basic information about the integration app",
+            "developerInformation": "[ZH] Developer Information",
+            "developerInformationDescription": "[ZH] Information about the app developer",
+            "assetsLinks": "[ZH] Assets & Links",
+            "assetsLinksDescription": "[ZH] App icon and related URLs",
+            "appStatus": "[ZH] App Status",
+            "appStatusDescription": "[ZH] Configure app visibility and badges"
+          },
+          "fields": {
+            "appName": "[ZH] App Name",
+            "shortDescription": "[ZH] Short Description",
+            "fullDescription": "[ZH] Full Description",
+            "category": "[ZH] Category",
+            "developerName": "[ZH] Developer Name",
+            "developerWebsite": "[ZH] Developer Website",
+            "supportEmail": "[ZH] Support Email",
+            "iconUrl": "[ZH] Icon URL",
+            "appWebsite": "[ZH] App Website",
+            "documentationUrl": "[ZH] Documentation URL",
+            "officialApp": "[ZH] Official App",
+            "featuredApp": "[ZH] Featured App"
+          },
+          "placeholders": {
+            "appName": "[ZH] My Integration",
+            "shortDescription": "[ZH] A brief description of the app",
+            "fullDescription": "[ZH] Detailed description of the integration...",
+            "developerName": "[ZH] Company or developer name",
+            "developerWebsite": "[ZH] https://developer.com",
+            "supportEmail": "[ZH] support@developer.com",
+            "iconUrl": "[ZH] https://example.com/icon.png",
+            "appWebsite": "[ZH] https://myapp.com",
+            "documentationUrl": "[ZH] https://docs.myapp.com"
+          },
+          "hints": {
+            "shortDescription": "[ZH] Displayed in app listings and search results",
+            "officialApp": "[ZH] Mark as an officially supported integration",
+            "featuredApp": "[ZH] Highlight this app in the marketplace",
+            "draftStatus": "[ZH] The app will be created with Draft status. You can publish it later from the app details page."
+          },
+          "categoryDescriptions": {
+            "productivity": "[ZH] Tools to improve workflow efficiency",
+            "communication": "[ZH] Messaging, chat, and collaboration",
+            "projectManagement": "[ZH] Task tracking and planning",
+            "crm": "[ZH] Customer relationship management",
+            "analytics": "[ZH] Data analysis and reporting",
+            "security": "[ZH] Security and compliance tools",
+            "developerTools": "[ZH] Development and DevOps",
+            "hr": "[ZH] Human resources management",
+            "finance": "[ZH] Financial management tools",
+            "marketing": "[ZH] Marketing automation",
+            "customerSupport": "[ZH] Help desk and support",
+            "other": "[ZH] Other integrations"
+          },
+          "validation": {
+            "nameAndDeveloperRequired": "[ZH] Name and developer are required"
+          },
+          "toast": {
+            "createSuccess": "[ZH] Integration app created successfully",
+            "createFailed": "[ZH] Failed to create app"
+          }
         }
       },
       "webhooks": {
@@ -13568,7 +14247,93 @@
           "testFailed": "测试失败：{错误}",
           "testError": "发送测试 webhook 失败",
           "deleted": "网络钩子已删除",
-          "deleteFailed": "删除网络钩子失败"
+          "deleteFailed": "删除网络钩子失败",
+          "loadFailed": "[ZH] Failed to load webhook",
+          "updated": "[ZH] Webhook updated",
+          "updateFailed": "[ZH] Failed to update webhook",
+          "testDelivered": "[ZH] Test webhook delivered successfully",
+          "unknownError": "[ZH] Unknown error",
+          "sendTestFailed": "[ZH] Failed to send test webhook"
+        },
+        "new": {
+          "title": "[ZH] Create Webhook",
+          "description": "[ZH] Create a new webhook endpoint to receive event notifications",
+          "back": "[ZH] Back",
+          "creating": "[ZH] Creating...",
+          "createWebhook": "[ZH] Create Webhook",
+          "sections": {
+            "endpointDetails": "[ZH] Endpoint Details",
+            "endpointDetailsDescription": "[ZH] Configure the webhook endpoint",
+            "settings": "[ZH] Settings",
+            "settingsDescription": "[ZH] Configure timeout and retry behavior",
+            "eventSubscriptions": "[ZH] Event Subscriptions",
+            "eventSubscriptionsDescription": "[ZH] Select the events this webhook should receive ({count} selected)"
+          },
+          "fields": {
+            "webhookName": "[ZH] Webhook Name",
+            "endpointUrl": "[ZH] Endpoint URL",
+            "description": "[ZH] Description",
+            "organization": "[ZH] Organization",
+            "timeout": "[ZH] Timeout (seconds)",
+            "retryCount": "[ZH] Retry Count",
+            "customHeaders": "[ZH] Custom Headers (JSON)"
+          },
+          "placeholders": {
+            "webhookName": "[ZH] My Webhook",
+            "endpointUrl": "[ZH] https://example.com/webhooks",
+            "description": "[ZH] What is this webhook used for?",
+            "selectOrganization": "[ZH] Select organization",
+            "loading": "[ZH] Loading...",
+            "customHeaders": "[ZH] {\n  \"X-Custom-Header\": \"value\"\n}"
+          },
+          "hints": {
+            "endpointUrl": "[ZH] Must be a valid HTTPS URL that can receive POST requests",
+            "customHeaders": "[ZH] Optional custom headers to include with webhook requests",
+            "selectEvents": "[ZH] Please select at least one event to subscribe to"
+          },
+          "events": {
+            "users": "[ZH] Users",
+            "organizations": "[ZH] Organizations",
+            "agents": "[ZH] Agents",
+            "workflows": "[ZH] Workflows",
+            "reports": "[ZH] Reports",
+            "billing": "[ZH] Billing"
+          },
+          "eventLabels": {
+            "userCreated": "[ZH] User Created",
+            "userUpdated": "[ZH] User Updated",
+            "userDeleted": "[ZH] User Deleted",
+            "organizationCreated": "[ZH] Organization Created",
+            "organizationUpdated": "[ZH] Organization Updated",
+            "agentRunCompleted": "[ZH] Agent Run Completed",
+            "agentRunFailed": "[ZH] Agent Run Failed",
+            "workflowCompleted": "[ZH] Workflow Completed",
+            "workflowFailed": "[ZH] Workflow Failed",
+            "reportGenerated": "[ZH] Report Generated",
+            "subscriptionChanged": "[ZH] Subscription Changed",
+            "subscriptionCancelled": "[ZH] Subscription Cancelled"
+          },
+          "actions": {
+            "selectAll": "[ZH] Select All",
+            "deselectAll": "[ZH] Deselect All"
+          },
+          "dialog": {
+            "secretTitle": "[ZH] Webhook Signing Secret",
+            "secretDescription": "[ZH] Copy this secret now - it will not be shown again! Use this to verify webhook signatures.",
+            "copySecret": "[ZH] Copy Secret",
+            "done": "[ZH] Done"
+          },
+          "validation": {
+            "urlAndOrgRequired": "[ZH] URL and organization are required",
+            "atLeastOneEvent": "[ZH] Please select at least one event to subscribe to",
+            "invalidUrl": "[ZH] Please enter a valid URL",
+            "invalidJsonHeaders": "[ZH] Invalid JSON format for custom headers"
+          },
+          "toast": {
+            "createSuccess": "[ZH] Webhook created successfully",
+            "createFailed": "[ZH] Failed to create webhook",
+            "copied": "[ZH] Copied to clipboard"
+          }
         }
       }
     },
@@ -14390,6 +15155,10 @@
       "defaultPlan": "专业的",
       "requiresPlan": "此功能需要 {plan} 计划或更高版本。",
       "upgradeButton": "升级计划"
+    },
+    "usage": {
+      "limitReached": "[ZH] You've reached your limit. Upgrade your plan to continue.",
+      "approachingLimit": "[ZH] You're approaching your limit."
     }
   },
   "blog": {

@@ -98,7 +98,16 @@
       "organizationComplianceAttestations": "Βεβαιώσεις συμμόρφωσης οργανισμού",
       "complianceAudits": "Έλεγχοι συμμόρφωσης για αυτό το πλαίσιο",
       "frameworkRequirements": "Απαιτήσεις Πλαισίου"
-    }
+    },
+    "enable": "[EL] Enable",
+    "disable": "[EL] Disable",
+    "notRequired": "[EL] Not Required",
+    "system": "[EL] System",
+    "noDescription": "[EL] No description",
+    "unknown": "[EL] Unknown",
+    "important": "[EL] Important",
+    "preview": "[EL] Preview",
+    "duration": "[EL] Duration"
   },
   "auth": {
     "signIn": "Συνδεθείτε",
@@ -3239,7 +3248,29 @@
         "exportFailed": "Απέτυχε η εξαγωγή του πίνακα ελέγχου"
       },
       "detail": {
-        "title": "Λεπτομέρειες πίνακα ελέγχου"
+        "title": "Λεπτομέρειες πίνακα ελέγχου",
+        "chartTypes": {
+          "bar": "[EL] Bar",
+          "line": "[EL] Line",
+          "pie": "[EL] Pie",
+          "donut": "[EL] Donut",
+          "area": "[EL] Area",
+          "scatter": "[EL] Scatter",
+          "heatmap": "[EL] Heatmap",
+          "treemap": "[EL] Treemap",
+          "funnel": "[EL] Funnel",
+          "radar": "[EL] Radar",
+          "metric": "[EL] Metric"
+        },
+        "export": {
+          "csvHeaders": {
+            "id": "[EL] ID",
+            "name": "[EL] Name",
+            "type": "[EL] Type",
+            "category": "[EL] Category",
+            "dataSource": "[EL] Data Source"
+          }
+        }
       }
     },
     "crosstabs": {
@@ -5838,7 +5869,9 @@
           "deleteFailed": "Η διαγραφή της απάντησης απέτυχε",
           "markCompleteFailed": "Αποτυχία επισήμανσης ως ολοκληρωμένης"
         }
-      }
+      },
+      "questionsLabel": "[EL] Questions",
+      "responsesLabel": "[EL] Responses"
     },
     "taxonomy": {
       "title": "Ταξονομία",
@@ -8472,7 +8505,101 @@
           "providerUpdated": "Ο πάροχος SSO ενημερώθηκε με επιτυχία",
           "providerDeleted": "Ο πάροχος SSO διαγράφηκε με επιτυχία",
           "connectionSuccess": "Επιτυχής δοκιμή σύνδεσης",
-          "connectionFailed": "Η δοκιμή σύνδεσης απέτυχε"
+          "connectionFailed": "Η δοκιμή σύνδεσης απέτυχε",
+          "loadFailed": "[EL] Failed to load SSO configuration",
+          "updated": "[EL] SSO configuration updated",
+          "updateFailed": "[EL] Failed to update SSO configuration",
+          "allTestsPassed": "[EL] All tests passed!",
+          "someTestsFailed": "[EL] Some tests failed",
+          "testFailed": "[EL] Failed to test SSO configuration",
+          "activated": "[EL] SSO activated successfully",
+          "disabled": "[EL] SSO disabled successfully",
+          "updateStatusFailed": "[EL] Failed to update status",
+          "deleted": "[EL] SSO configuration deleted successfully",
+          "deleteFailed": "[EL] Failed to delete SSO configuration"
+        },
+        "new": {
+          "title": "[EL] Create SSO Configuration",
+          "description": "[EL] Configure Single Sign-On for an organization",
+          "back": "[EL] Back",
+          "creating": "[EL] Creating...",
+          "createConfiguration": "[EL] Create Configuration",
+          "noPermission": "[EL] You don't have permission to create SSO configurations",
+          "backToSSO": "[EL] Back to SSO Configurations",
+          "tabs": {
+            "basic": "[EL] Basic Settings",
+            "provider": "[EL] Provider Configuration",
+            "provisioning": "[EL] User Provisioning"
+          },
+          "sections": {
+            "organizationProvider": "[EL] Organization & Provider",
+            "organizationProviderDescription": "[EL] Select the organization and SSO provider type",
+            "samlConfiguration": "[EL] SAML Configuration",
+            "samlConfigurationDescription": "[EL] Configure SAML 2.0 settings from your Identity Provider",
+            "oidcConfiguration": "[EL] OIDC Configuration",
+            "oidcConfigurationDescription": "[EL] Configure OpenID Connect settings",
+            "userProvisioning": "[EL] User Provisioning Settings",
+            "userProvisioningDescription": "[EL] Configure how users are provisioned through SSO"
+          },
+          "fields": {
+            "organization": "[EL] Organization",
+            "ssoProvider": "[EL] SSO Provider",
+            "displayName": "[EL] Display Name",
+            "allowedEmailDomains": "[EL] Allowed Email Domains",
+            "entityId": "[EL] Entity ID / Issuer",
+            "ssoUrl": "[EL] SSO URL (Login URL)",
+            "sloUrl": "[EL] SLO URL (Logout URL)",
+            "certificate": "[EL] X.509 Certificate",
+            "clientId": "[EL] Client ID",
+            "clientSecret": "[EL] Client Secret",
+            "discoveryUrl": "[EL] Discovery URL",
+            "authorizationUrl": "[EL] Authorization URL",
+            "tokenUrl": "[EL] Token URL",
+            "userInfoUrl": "[EL] User Info URL",
+            "defaultRole": "[EL] Default Role",
+            "jitProvisioning": "[EL] Just-in-Time Provisioning",
+            "autoDeactivate": "[EL] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[EL] Select an organization",
+            "searchOrganizations": "[EL] Search organizations...",
+            "loading": "[EL] Loading...",
+            "noOrganizationsFound": "[EL] No organizations found",
+            "displayName": "[EL] e.g., Acme Corp SSO",
+            "allowedDomains": "[EL] acme.com, acme.org",
+            "entityId": "[EL] https://idp.example.com/entity",
+            "ssoUrl": "[EL] https://idp.example.com/sso",
+            "sloUrl": "[EL] https://idp.example.com/slo",
+            "certificate": "[EL] -----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+            "clientId": "[EL] your-client-id",
+            "clientSecret": "[EL] your-client-secret",
+            "discoveryUrl": "[EL] https://idp.example.com/.well-known/openid-configuration",
+            "authorizationUrl": "[EL] https://idp.example.com/authorize",
+            "tokenUrl": "[EL] https://idp.example.com/token",
+            "userInfoUrl": "[EL] https://idp.example.com/userinfo"
+          },
+          "hints": {
+            "displayName": "[EL] A friendly name for this SSO configuration",
+            "allowedDomains": "[EL] Comma-separated list of email domains allowed to use this SSO",
+            "certificate": "[EL] Paste the public certificate from your Identity Provider",
+            "discoveryUrl": "[EL] If provided, other URLs will be auto-discovered",
+            "manualUrlConfig": "[EL] Manual URL Configuration (optional if discovery URL is provided)",
+            "defaultRole": "[EL] Role assigned to users when they first sign in via SSO",
+            "jitProvisioning": "[EL] Automatically create user accounts on first SSO login",
+            "autoDeactivate": "[EL] Automatically deactivate users removed from Identity Provider"
+          },
+          "roles": {
+            "viewer": "[EL] Viewer",
+            "member": "[EL] Member",
+            "admin": "[EL] Admin"
+          },
+          "validation": {
+            "organizationAndProviderRequired": "[EL] Organization and provider are required"
+          },
+          "toast": {
+            "createSuccess": "[EL] SSO configuration created successfully",
+            "createFailed": "[EL] Failed to create SSO configuration"
+          }
         }
       },
       "domains": {
@@ -8642,7 +8769,72 @@
           "connectionUpdated": "Η σύνδεση SCIM ενημερώθηκε με επιτυχία",
           "connectionDeleted": "Η σύνδεση SCIM διαγράφηκε με επιτυχία",
           "tokenRegenerated": "Το διακριτικό φορέα αναδημιουργήθηκε με επιτυχία",
-          "syncStarted": "Ο συγχρονισμός ξεκίνησε με επιτυχία"
+          "syncStarted": "Ο συγχρονισμός ξεκίνησε με επιτυχία",
+          "loadFailed": "[EL] Failed to fetch SCIM integration",
+          "updated": "[EL] SCIM integration updated",
+          "updateFailed": "[EL] Failed to update SCIM integration",
+          "activated": "[EL] SCIM integration activated successfully",
+          "paused": "[EL] SCIM integration paused successfully",
+          "updateStatusFailed": "[EL] Failed to update status",
+          "regenerateTokenFailed": "[EL] Failed to regenerate token",
+          "deleted": "[EL] SCIM integration deleted successfully",
+          "deleteFailed": "[EL] Failed to delete SCIM integration",
+          "copied": "[EL] Copied to clipboard"
+        },
+        "new": {
+          "title": "[EL] Create SCIM Integration",
+          "description": "[EL] Configure SCIM 2.0 user provisioning for an organization",
+          "back": "[EL] Back",
+          "creating": "[EL] Creating...",
+          "createIntegration": "[EL] Create Integration",
+          "noPermission": "[EL] You don't have permission to create SCIM integrations",
+          "backToSCIM": "[EL] Back to SCIM Integrations",
+          "sections": {
+            "organization": "[EL] Organization",
+            "organizationDescription": "[EL] Select the organization to configure SCIM provisioning for",
+            "syncSettings": "[EL] Sync Settings",
+            "syncSettingsDescription": "[EL] Configure what data should be synchronized from your Identity Provider"
+          },
+          "fields": {
+            "organization": "[EL] Organization",
+            "defaultRole": "[EL] Default Role",
+            "syncUsers": "[EL] Sync Users",
+            "syncGroups": "[EL] Sync Groups",
+            "autoDeactivate": "[EL] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[EL] Select an organization",
+            "searchOrganizations": "[EL] Search organizations...",
+            "loading": "[EL] Loading...",
+            "noOrganizationsFound": "[EL] No organizations found"
+          },
+          "hints": {
+            "defaultRole": "[EL] Role assigned to users provisioned via SCIM",
+            "syncUsers": "[EL] Provision and deprovision users automatically",
+            "syncGroups": "[EL] Sync group memberships from Identity Provider",
+            "autoDeactivate": "[EL] Automatically deactivate users when removed from IdP",
+            "important": "[EL] After creating the integration, you will receive a bearer token and endpoint URL. The token will only be shown once, so make sure to save it securely."
+          },
+          "roles": {
+            "viewer": "[EL] Viewer",
+            "member": "[EL] Member",
+            "admin": "[EL] Admin"
+          },
+          "dialog": {
+            "title": "[EL] SCIM Integration Created",
+            "description": "[EL] Save the bearer token below. It will not be shown again.",
+            "bearerToken": "[EL] Bearer Token",
+            "scimEndpointUrl": "[EL] SCIM Endpoint URL",
+            "copyToken": "[EL] Copy Token",
+            "done": "[EL] Done"
+          },
+          "validation": {
+            "organizationRequired": "[EL] Organization is required"
+          },
+          "toast": {
+            "createSuccess": "[EL] SCIM integration created successfully",
+            "createFailed": "[EL] Failed to create SCIM integration"
+          }
         }
       },
       "devices": {
@@ -8707,7 +8899,53 @@
             "sessionDuration": "Διάρκεια συνεδρίας (ώρες)",
             "requireReauth": "Απαιτείται εκ νέου έλεγχος ταυτότητας",
             "requireReauthDescription": "Απαιτείται εκ νέου έλεγχος ταυτότητας μετά τη διάρκεια της περιόδου σύνδεσης"
-          }
+          },
+          "nameRequired": "[EL] Policy name is required",
+          "created": "[EL] Created",
+          "updated": "[EL] Policy updated successfully",
+          "deleted": "[EL] Policy deleted successfully",
+          "enabled": "[EL] Policy enabled successfully",
+          "disabled": "[EL] Policy disabled successfully",
+          "updateStatusFailed": "[EL] Failed to update status",
+          "notFound": "[EL] Policy not found",
+          "createTitle": "[EL] Create Device Policy",
+          "nameRequiredLabel": "[EL] Policy Name *",
+          "descriptionLabel": "[EL] Description",
+          "scopeLabel": "[EL] Scope",
+          "priorityLabel": "[EL] Priority (higher = first)",
+          "deviceRequirements": "[EL] Device Requirements",
+          "enforcementActions": "[EL] Enforcement Actions",
+          "notifyOnViolation": "[EL] Notify on Violation",
+          "overview": "[EL] Overview",
+          "requirements": "[EL] Requirements",
+          "enforcement": "[EL] Enforcement",
+          "status": "[EL] Status",
+          "createdBy": "[EL] Created By",
+          "lastUpdated": "[EL] Last Updated",
+          "requireEncryption": "[EL] Require Encryption",
+          "requirePasscode": "[EL] Require Passcode",
+          "requireBiometric": "[EL] Require Biometric",
+          "requireMdm": "[EL] Require MDM",
+          "platformRestrictions": "[EL] Platform Restrictions",
+          "allowedPlatforms": "[EL] Allowed Platforms",
+          "allPlatforms": "[EL] All platforms",
+          "blockedPlatforms": "[EL] Blocked Platforms",
+          "blockOnViolation": "[EL] Block on Violation",
+          "blockOnViolationDescription": "[EL] Block access when device is non-compliant",
+          "wipeOnViolation": "[EL] Wipe on Violation",
+          "wipeOnViolationDescription": "[EL] Remote wipe device data on violation",
+          "notifyOnViolationDescription": "[EL] Send notification when policy is violated",
+          "warningWipeEnabled": "[EL] Warning: Wipe on Violation Enabled",
+          "warningWipeDescription": "[EL] This policy will remotely wipe device data when violations occur. Use with extreme caution.",
+          "requirementsDescription": "[EL] Requirements that devices must meet to be compliant",
+          "enforcementDescription": "[EL] Actions taken when a device violates this policy",
+          "editTitle": "[EL] Edit Policy",
+          "details": "[EL] Policy Details",
+          "deleteTitle": "[EL] Delete Policy",
+          "deleteDescription": "[EL] Are you sure you want to delete this policy? This action cannot be undone.",
+          "createButton": "[EL] Create Policy",
+          "namePlaceholder": "[EL] e.g., Enterprise Device Requirements",
+          "descriptionPlaceholder": "[EL] Describe what this policy enforces..."
         },
         "table": {
           "device": "Συσκευή",
@@ -8856,6 +9094,90 @@
         "CLIENT": "Πελάτης",
         "REGIONAL": "Περιφερειακός",
         "PORTFOLIO_COMPANY": "Εταιρεία Χαρτοφυλακίου"
+      },
+      "plans": {
+        "starter": "[EL] Starter",
+        "professional": "[EL] Professional",
+        "enterprise": "[EL] Enterprise"
+      },
+      "new": {
+        "title": "[EL] Create New Organization",
+        "description": "[EL] Add a new tenant organization to the platform",
+        "back": "[EL] Back",
+        "creating": "[EL] Creating...",
+        "createOrganization": "[EL] Create Organization",
+        "noPermission": "[EL] You don't have permission to create organizations",
+        "backToTenants": "[EL] Back to Tenants",
+        "sections": {
+          "organizationDetails": "[EL] Organization Details",
+          "organizationDetailsDescription": "[EL] Basic information about the organization",
+          "locationTimezone": "[EL] Location & Timezone",
+          "locationTimezoneDescription": "[EL] Regional settings for the organization",
+          "planSubscription": "[EL] Plan & Subscription",
+          "planSubscriptionDescription": "[EL] Subscription tier and billing settings",
+          "hierarchySettings": "[EL] Hierarchy Settings",
+          "hierarchySettingsDescription": "[EL] Configure organization hierarchy and parent relationships",
+          "ownerInformation": "[EL] Owner Information (Optional)",
+          "ownerInformationDescription": "[EL] Automatically create an owner user for this organization",
+          "branding": "[EL] Branding (Optional)",
+          "brandingDescription": "[EL] Custom branding settings for the organization"
+        },
+        "fields": {
+          "organizationName": "[EL] Organization Name",
+          "slug": "[EL] Slug (auto-generated if empty)",
+          "organizationType": "[EL] Organization Type",
+          "industry": "[EL] Industry",
+          "companySize": "[EL] Company Size",
+          "domain": "[EL] Domain",
+          "country": "[EL] Country",
+          "timezone": "[EL] Timezone",
+          "planTier": "[EL] Plan Tier",
+          "parentOrganization": "[EL] Parent Organization",
+          "allowChildOrgs": "[EL] Allow Child Organizations",
+          "ownerEmail": "[EL] Owner Email",
+          "ownerName": "[EL] Owner Name",
+          "logoUrl": "[EL] Logo URL",
+          "brandColor": "[EL] Brand Color"
+        },
+        "placeholders": {
+          "organizationName": "[EL] Acme Corporation",
+          "slug": "[EL] acme-corporation",
+          "industry": "[EL] Technology, Healthcare, etc.",
+          "selectSize": "[EL] Select size",
+          "domain": "[EL] acme.com",
+          "country": "[EL] United States",
+          "timezone": "[EL] UTC",
+          "noneRootOrganization": "[EL] None (root organization)",
+          "ownerEmail": "[EL] owner@example.com",
+          "ownerName": "[EL] John Doe",
+          "logoUrl": "[EL] https://example.com/logo.png",
+          "brandColor": "[EL] #3B82F6"
+        },
+        "hints": {
+          "slug": "[EL] URL-friendly identifier, lowercase with hyphens",
+          "parentOrganization": "[EL] Select a parent to create this organization as a child in the hierarchy",
+          "allowChildOrgs": "[EL] Enable hierarchy features and allow creating sub-organizations",
+          "ownerInformation": "[EL] If provided, a user will be created (or existing user added) as the organization owner"
+        },
+        "companySizes": {
+          "solo": "[EL] Solo (1)",
+          "small": "[EL] Small (2-10)",
+          "medium": "[EL] Medium (11-50)",
+          "large": "[EL] Large (51-200)",
+          "enterprise": "[EL] Enterprise (201-1000)",
+          "global": "[EL] Global (1000+)"
+        },
+        "validation": {
+          "nameRequired": "[EL] Organization name is required"
+        },
+        "toast": {
+          "createFailed": "[EL] Failed to create organization"
+        }
+      },
+      "toast": {
+        "assignPlanFailed": "[EL] Failed to assign plan",
+        "grantFeatureFailed": "[EL] Failed to grant feature",
+        "revokeEntitlementFailed": "[EL] Failed to revoke entitlement"
       }
     },
     "admins": {
@@ -9106,7 +9428,32 @@
       "selectOrganizationOptional": "Επιλέξτε οργανισμό (προαιρετικό)",
       "organizationLaterHint": "Ο χρήστης μπορεί να προστεθεί σε οργανισμούς αργότερα",
       "roleInOrganization": "Ρόλος στην Οργάνωση",
-      "roleHint": "Ο ρόλος καθορίζει ποιες ενέργειες μπορεί να εκτελέσει ο χρήστης"
+      "roleHint": "Ο ρόλος καθορίζει ποιες ενέργειες μπορεί να εκτελέσει ο χρήστης",
+      "bulkActions": {
+        "banReason": "[EL] Bulk ban action"
+      },
+      "toast": {
+        "banFailed": "[EL] Failed to ban user",
+        "userBanned": "[EL] User banned successfully",
+        "liftBanFailed": "[EL] Failed to lift ban",
+        "banLifted": "[EL] Ban lifted successfully",
+        "deleteFailed": "[EL] Failed to delete user",
+        "userDeleted": "[EL] User deleted successfully",
+        "bulkBanFailed": "[EL] Bulk ban failed",
+        "bulkBanSuccess": "[EL] {count} users banned successfully",
+        "bulkUnbanFailed": "[EL] Bulk unban failed",
+        "bulkUnbanSuccess": "[EL] {count} users unbanned successfully",
+        "bulkDeleteFailed": "[EL] Bulk delete failed",
+        "bulkDeleteSuccess": "[EL] {count} users deleted successfully",
+        "bulkVerifyFailed": "[EL] Bulk verify failed",
+        "bulkVerifySuccess": "[EL] {count} users verified successfully",
+        "bulkResetPasswordFailed": "[EL] Bulk reset password failed",
+        "bulkResetPasswordSuccess": "[EL] {count} password reset emails sent",
+        "bulkRevokeSessionsFailed": "[EL] Bulk revoke sessions failed",
+        "bulkRevokeSessionsSuccess": "[EL] {count} sessions revoked successfully",
+        "createFailed": "[EL] Failed to create user",
+        "userCreated": "[EL] User created successfully"
+      }
     },
     "audit": {
       "title": "Αρχείο καταγραφής ελέγχου πλατφόρμας",
@@ -9519,6 +9866,55 @@
         "featureDeleted": "Η δυνατότητα διαγράφηκε",
         "featureDisabled": "Η δυνατότητα απενεργοποιήθηκε με επιτυχία",
         "featureEnabled": "Η λειτουργία ενεργοποιήθηκε με επιτυχία"
+      },
+      "new": {
+        "title": "[EL] Create Entitlement Feature",
+        "description": "[EL] Define a new feature that can be assigned to subscription plans",
+        "back": "[EL] Back",
+        "creating": "[EL] Creating...",
+        "createFeature": "[EL] Create Feature",
+        "noPermission": "[EL] You don't have permission to create entitlement features",
+        "backToFeatures": "[EL] Back to Features",
+        "sections": {
+          "featureDetails": "[EL] Feature Details",
+          "featureDetailsDescription": "[EL] Basic information about the entitlement feature",
+          "categoryClassification": "[EL] Category & Classification",
+          "categoryDescription": "[EL] Organize the feature for easier management",
+          "valueConfiguration": "[EL] Value Configuration",
+          "valueDescription": "[EL] Configure the feature value type and default"
+        },
+        "fields": {
+          "displayName": "[EL] Display Name",
+          "featureKey": "[EL] Feature Key",
+          "description": "[EL] Description",
+          "category": "[EL] Category",
+          "sortOrder": "[EL] Sort Order",
+          "valueType": "[EL] Value Type",
+          "defaultValue": "[EL] Default Value",
+          "active": "[EL] Active"
+        },
+        "placeholders": {
+          "displayName": "[EL] Advanced Analytics",
+          "featureKey": "[EL] advanced_analytics",
+          "description": "[EL] Describe what this feature enables for subscribers...",
+          "jsonDefault": "[EL] {}"
+        },
+        "hints": {
+          "snakeCaseFormat": "[EL] snake_case format: lowercase letters, numbers, underscores",
+          "sortOrderLower": "[EL] Lower numbers appear first in lists",
+          "inactiveFeatures": "[EL] Inactive features are not available for plan assignment"
+        },
+        "validation": {
+          "keyAndNameRequired": "[EL] Key and name are required",
+          "keyFormatInvalid": "[EL] Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)"
+        },
+        "toast": {
+          "createFailed": "[EL] Failed to create feature"
+        },
+        "status": {
+          "enabled": "[EL] Enabled",
+          "disabled": "[EL] Disabled"
+        }
       }
     },
     "security": {
@@ -11569,7 +11965,23 @@
           "messages": {
             "frameworkUpdated": "Το πλαίσιο ενημερώθηκε με επιτυχία"
           }
-        }
+        },
+        "createTitle": "[EL] Create Compliance Framework",
+        "createDescription": "[EL] Add a new compliance standard (SOC2, HIPAA, GDPR, etc.)",
+        "createButton": "[EL] Create Framework",
+        "createFailed": "[EL] Failed to create framework",
+        "details": "[EL] Framework Details",
+        "detailsDescription": "[EL] Define the compliance framework standards and requirements",
+        "nameRequired": "[EL] Framework Name *",
+        "codeRequired": "[EL] Code *",
+        "namePlaceholder": "[EL] SOC 2 Type II",
+        "codePlaceholder": "[EL] SOC2",
+        "codeHint": "[EL] Short identifier code (e.g., SOC2, HIPAA, GDPR)",
+        "versionPlaceholder": "[EL] 2023",
+        "versionHint": "[EL] The version or year of the framework standard",
+        "descriptionPlaceholder": "[EL] Service Organization Control 2 compliance framework for security, availability, processing integrity, confidentiality, and privacy...",
+        "activeStatus": "[EL] Active Status",
+        "activeStatusDescription": "[EL] Enable this framework for attestations and audits"
       },
       "frameworksOverview": {
         "title": "Πλαίσια Συμμόρφωσης",
@@ -12921,6 +13333,16 @@
       },
       "validation": {
         "required": "Απαιτείται όνομα και εμφανιζόμενο όνομα"
+      },
+      "colors": {
+        "purple": "[EL] Purple",
+        "blue": "[EL] Blue",
+        "green": "[EL] Green",
+        "amber": "[EL] Amber",
+        "red": "[EL] Red",
+        "gray": "[EL] Gray",
+        "pink": "[EL] Pink",
+        "teal": "[EL] Teal"
       }
     },
     "healthScores": {
@@ -13140,6 +13562,15 @@
           "createFailed": "Αποτυχία δημιουργίας περιστατικού",
           "updateFailed": "Η ενημέρωση του περιστατικού απέτυχε",
           "deleteFailed": "Απέτυχε η διαγραφή του περιστατικού"
+        },
+        "toast": {
+          "loadFailed": "[EL] Failed to load incident",
+          "statusUpdated": "[EL] Status updated",
+          "updateStatusFailed": "[EL] Failed to update status",
+          "updated": "[EL] Incident updated",
+          "updateFailed": "[EL] Failed to update incident",
+          "updatePosted": "[EL] Update posted",
+          "addUpdateFailed": "[EL] Failed to add update"
         }
       },
       "maintenance": {
@@ -13210,6 +13641,73 @@
           "windowStarted": "Το παράθυρο συντήρησης ξεκίνησε",
           "windowCompleted": "Το παράθυρο συντήρησης ολοκληρώθηκε",
           "windowCancelled": "Το παράθυρο συντήρησης ακυρώθηκε"
+        },
+        "toast": {
+          "loadFailed": "[EL] Failed to load maintenance window",
+          "statusUpdated": "[EL] Status updated",
+          "updateStatusFailed": "[EL] Failed to update status",
+          "updated": "[EL] Maintenance window updated",
+          "updateFailed": "[EL] Failed to update maintenance window",
+          "deleted": "[EL] Maintenance window deleted",
+          "deleteFailed": "[EL] Failed to delete maintenance window"
+        },
+        "new": {
+          "title": "[EL] Schedule Maintenance",
+          "description": "[EL] Create a new scheduled maintenance window",
+          "back": "[EL] Back",
+          "scheduling": "[EL] Scheduling...",
+          "scheduleMaintenance": "[EL] Schedule Maintenance",
+          "sections": {
+            "maintenanceDetails": "[EL] Maintenance Details",
+            "maintenanceDetailsDescription": "[EL] Basic information about the maintenance window",
+            "schedule": "[EL] Schedule",
+            "scheduleDescription": "[EL] Set the maintenance window timing",
+            "affectedServices": "[EL] Affected Services",
+            "affectedServicesDescription": "[EL] Select all services that will be affected",
+            "affectedRegions": "[EL] Affected Regions",
+            "affectedRegionsDescription": "[EL] Select the geographic regions impacted"
+          },
+          "fields": {
+            "title": "[EL] Title",
+            "description": "[EL] Description",
+            "type": "[EL] Type",
+            "startTime": "[EL] Start Time",
+            "endTime": "[EL] End Time",
+            "notifyBefore": "[EL] Notify Before (hours)"
+          },
+          "placeholders": {
+            "title": "[EL] e.g., Database upgrade",
+            "description": "[EL] Describe the maintenance work being performed...",
+            "duration": "[EL] Duration: {duration}"
+          },
+          "typeDescriptions": {
+            "scheduled": "[EL] Planned maintenance window",
+            "emergency": "[EL] Urgent maintenance required",
+            "upgrade": "[EL] System or component upgrade",
+            "migration": "[EL] Data or service migration",
+            "securityPatch": "[EL] Security-related updates"
+          },
+          "regions": {
+            "usEast": "[EL] US East",
+            "usWest": "[EL] US West",
+            "euWest": "[EL] EU West",
+            "euCentral": "[EL] EU Central",
+            "asiaPacific": "[EL] Asia Pacific",
+            "global": "[EL] Global"
+          },
+          "hints": {
+            "notifyBefore": "[EL] Users will be notified {hours} hours before maintenance begins",
+            "selectServices": "[EL] Click to select affected services",
+            "selectRegions": "[EL] Click to select affected regions"
+          },
+          "validation": {
+            "titleStartEndRequired": "[EL] Title, start time, and end time are required",
+            "endAfterStart": "[EL] End time must be after start time"
+          },
+          "toast": {
+            "createSuccess": "[EL] Maintenance window scheduled",
+            "createFailed": "[EL] Failed to schedule maintenance"
+          }
         }
       },
       "releases": {
@@ -13287,6 +13785,72 @@
           "rolloutStarted": "Η διάθεση ξεκίνησε",
           "releaseCompleted": "Η έκδοση ολοκληρώθηκε",
           "releaseRolledBack": "Η απελευθέρωση επανήλθε"
+        },
+        "toast": {
+          "loadFailed": "[EL] Failed to load release",
+          "statusUpdated": "[EL] Status updated",
+          "updateStatusFailed": "[EL] Failed to update status",
+          "updateRolloutFailed": "[EL] Failed to update rollout percentage",
+          "updated": "[EL] Release updated",
+          "updateFailed": "[EL] Failed to update release",
+          "deleted": "[EL] Release deleted",
+          "deleteFailed": "[EL] Failed to delete release"
+        },
+        "new": {
+          "title": "[EL] Create New Release",
+          "description": "[EL] Plan and schedule a new platform release",
+          "back": "[EL] Back",
+          "creating": "[EL] Creating...",
+          "createRelease": "[EL] Create Release",
+          "sections": {
+            "releaseDetails": "[EL] Release Details",
+            "releaseDetailsDescription": "[EL] Basic information about this release",
+            "features": "[EL] Features",
+            "featuresDescription": "[EL] New features included in this release",
+            "bugFixes": "[EL] Bug Fixes",
+            "bugFixesDescription": "[EL] Bug fixes included in this release"
+          },
+          "fields": {
+            "version": "[EL] Version",
+            "name": "[EL] Name (optional)",
+            "description": "[EL] Description",
+            "type": "[EL] Type",
+            "rolloutStrategy": "[EL] Rollout Strategy",
+            "plannedDate": "[EL] Planned Date",
+            "changelogUrl": "[EL] Changelog URL"
+          },
+          "placeholders": {
+            "version": "[EL] e.g., 2.5.0",
+            "name": "[EL] e.g., Phoenix",
+            "description": "[EL] Describe the release...",
+            "changelogUrl": "[EL] https://..."
+          },
+          "typeDescriptions": {
+            "major": "[EL] Breaking changes, significant new features",
+            "minor": "[EL] New features, backward compatible",
+            "patch": "[EL] Bug fixes, minor improvements",
+            "hotfix": "[EL] Critical bug fixes"
+          },
+          "strategyDescriptions": {
+            "bigBang": "[EL] Deploy to all users at once",
+            "staged": "[EL] Deploy in stages by percentage",
+            "canary": "[EL] Deploy to small group first",
+            "blueGreen": "[EL] Switch between environments",
+            "ring": "[EL] Deploy by user rings"
+          },
+          "actions": {
+            "addFeature": "[EL] Add a feature...",
+            "addBugFix": "[EL] Add a bug fix...",
+            "noFeatures": "[EL] No features added yet",
+            "noBugFixes": "[EL] No bug fixes added yet"
+          },
+          "validation": {
+            "versionRequired": "[EL] Version is required"
+          },
+          "toast": {
+            "createSuccess": "[EL] Release created successfully",
+            "createFailed": "[EL] Failed to create release"
+          }
         }
       },
       "capacity": {
@@ -13354,6 +13918,17 @@
           "updateFailed": "Η ενημέρωση της μέτρησης χωρητικότητας απέτυχε",
           "deleteFailed": "Η διαγραφή της μέτρησης χωρητικότητας απέτυχε"
         }
+      },
+      "services": {
+        "apiGateway": "[EL] API Gateway",
+        "authentication": "[EL] Authentication",
+        "database": "[EL] Database",
+        "fileStorage": "[EL] File Storage",
+        "messaging": "[EL] Messaging",
+        "search": "[EL] Search",
+        "analytics": "[EL] Analytics",
+        "payments": "[EL] Payments",
+        "notifications": "[EL] Notifications"
       }
     },
     "integrations": {
@@ -13570,7 +14145,9 @@
           "bulkUpdateFailed": "Αποτυχία ενημέρωσης εφαρμογών",
           "bulkDeleted": "{count} εφαρμογές διαγράφηκαν",
           "bulkDeleteFailed": "Αποτυχία διαγραφής εφαρμογών",
-          "updateStatusFailed": "Η ενημέρωση της κατάστασης της εφαρμογής απέτυχε"
+          "updateStatusFailed": "Η ενημέρωση της κατάστασης της εφαρμογής απέτυχε",
+          "updated": "[EL] Integration app updated",
+          "loadFailed": "[EL] Failed to load integration app"
         },
         "table": {
           "noReviews": "Δεν υπάρχουν κριτικές"
@@ -13578,6 +14155,108 @@
         "badges": {
           "official": "Επίσημη εφαρμογή",
           "featured": "Επιλεγμένη εφαρμογή"
+        },
+        "tabs": {
+          "overview": "[EL] Overview",
+          "installations": "[EL] Installations ({count})",
+          "settings": "[EL] Settings"
+        },
+        "overview": {
+          "status": "[EL] Status",
+          "totalInstalls": "[EL] Total Installs",
+          "rating": "[EL] Rating",
+          "category": "[EL] Category",
+          "noReviews": "[EL] No reviews",
+          "appDetails": "[EL] App Details",
+          "name": "[EL] Name",
+          "slug": "[EL] Slug",
+          "developer": "[EL] Developer",
+          "published": "[EL] Published",
+          "notPublished": "[EL] Not published",
+          "created": "[EL] Created",
+          "links": "[EL] Links",
+          "linksDescription": "[EL] External resources",
+          "description": "[EL] Description",
+          "requiredScopes": "[EL] Required Scopes",
+          "requiredScopesDescription": "[EL] Permissions required by this integration"
+        },
+        "installations": {
+          "title": "[EL] Installation History",
+          "description": "[EL] Organizations using this app",
+          "status": "[EL] Status"
+        },
+        "settings": {
+          "editTitle": "[EL] Edit App Settings",
+          "editDescription": "[EL] Update integration app configuration"
+        },
+        "new": {
+          "title": "[EL] Add Integration App",
+          "description": "[EL] Add a new integration app to the marketplace",
+          "back": "[EL] Back",
+          "creating": "[EL] Creating...",
+          "createApp": "[EL] Create App",
+          "sections": {
+            "appDetails": "[EL] App Details",
+            "appDetailsDescription": "[EL] Basic information about the integration app",
+            "developerInformation": "[EL] Developer Information",
+            "developerInformationDescription": "[EL] Information about the app developer",
+            "assetsLinks": "[EL] Assets & Links",
+            "assetsLinksDescription": "[EL] App icon and related URLs",
+            "appStatus": "[EL] App Status",
+            "appStatusDescription": "[EL] Configure app visibility and badges"
+          },
+          "fields": {
+            "appName": "[EL] App Name",
+            "shortDescription": "[EL] Short Description",
+            "fullDescription": "[EL] Full Description",
+            "category": "[EL] Category",
+            "developerName": "[EL] Developer Name",
+            "developerWebsite": "[EL] Developer Website",
+            "supportEmail": "[EL] Support Email",
+            "iconUrl": "[EL] Icon URL",
+            "appWebsite": "[EL] App Website",
+            "documentationUrl": "[EL] Documentation URL",
+            "officialApp": "[EL] Official App",
+            "featuredApp": "[EL] Featured App"
+          },
+          "placeholders": {
+            "appName": "[EL] My Integration",
+            "shortDescription": "[EL] A brief description of the app",
+            "fullDescription": "[EL] Detailed description of the integration...",
+            "developerName": "[EL] Company or developer name",
+            "developerWebsite": "[EL] https://developer.com",
+            "supportEmail": "[EL] support@developer.com",
+            "iconUrl": "[EL] https://example.com/icon.png",
+            "appWebsite": "[EL] https://myapp.com",
+            "documentationUrl": "[EL] https://docs.myapp.com"
+          },
+          "hints": {
+            "shortDescription": "[EL] Displayed in app listings and search results",
+            "officialApp": "[EL] Mark as an officially supported integration",
+            "featuredApp": "[EL] Highlight this app in the marketplace",
+            "draftStatus": "[EL] The app will be created with Draft status. You can publish it later from the app details page."
+          },
+          "categoryDescriptions": {
+            "productivity": "[EL] Tools to improve workflow efficiency",
+            "communication": "[EL] Messaging, chat, and collaboration",
+            "projectManagement": "[EL] Task tracking and planning",
+            "crm": "[EL] Customer relationship management",
+            "analytics": "[EL] Data analysis and reporting",
+            "security": "[EL] Security and compliance tools",
+            "developerTools": "[EL] Development and DevOps",
+            "hr": "[EL] Human resources management",
+            "finance": "[EL] Financial management tools",
+            "marketing": "[EL] Marketing automation",
+            "customerSupport": "[EL] Help desk and support",
+            "other": "[EL] Other integrations"
+          },
+          "validation": {
+            "nameAndDeveloperRequired": "[EL] Name and developer are required"
+          },
+          "toast": {
+            "createSuccess": "[EL] Integration app created successfully",
+            "createFailed": "[EL] Failed to create app"
+          }
         }
       },
       "webhooks": {
@@ -13661,7 +14340,93 @@
           "testFailed": "Η δοκιμή απέτυχε: {error}",
           "testError": "Αποτυχία αποστολής δοκιμαστικού webhook",
           "deleted": "Το webhook διαγράφηκε",
-          "deleteFailed": "Αποτυχία διαγραφής webhook"
+          "deleteFailed": "Αποτυχία διαγραφής webhook",
+          "loadFailed": "[EL] Failed to load webhook",
+          "updated": "[EL] Webhook updated",
+          "updateFailed": "[EL] Failed to update webhook",
+          "testDelivered": "[EL] Test webhook delivered successfully",
+          "unknownError": "[EL] Unknown error",
+          "sendTestFailed": "[EL] Failed to send test webhook"
+        },
+        "new": {
+          "title": "[EL] Create Webhook",
+          "description": "[EL] Create a new webhook endpoint to receive event notifications",
+          "back": "[EL] Back",
+          "creating": "[EL] Creating...",
+          "createWebhook": "[EL] Create Webhook",
+          "sections": {
+            "endpointDetails": "[EL] Endpoint Details",
+            "endpointDetailsDescription": "[EL] Configure the webhook endpoint",
+            "settings": "[EL] Settings",
+            "settingsDescription": "[EL] Configure timeout and retry behavior",
+            "eventSubscriptions": "[EL] Event Subscriptions",
+            "eventSubscriptionsDescription": "[EL] Select the events this webhook should receive ({count} selected)"
+          },
+          "fields": {
+            "webhookName": "[EL] Webhook Name",
+            "endpointUrl": "[EL] Endpoint URL",
+            "description": "[EL] Description",
+            "organization": "[EL] Organization",
+            "timeout": "[EL] Timeout (seconds)",
+            "retryCount": "[EL] Retry Count",
+            "customHeaders": "[EL] Custom Headers (JSON)"
+          },
+          "placeholders": {
+            "webhookName": "[EL] My Webhook",
+            "endpointUrl": "[EL] https://example.com/webhooks",
+            "description": "[EL] What is this webhook used for?",
+            "selectOrganization": "[EL] Select organization",
+            "loading": "[EL] Loading...",
+            "customHeaders": "[EL] {\n  \"X-Custom-Header\": \"value\"\n}"
+          },
+          "hints": {
+            "endpointUrl": "[EL] Must be a valid HTTPS URL that can receive POST requests",
+            "customHeaders": "[EL] Optional custom headers to include with webhook requests",
+            "selectEvents": "[EL] Please select at least one event to subscribe to"
+          },
+          "events": {
+            "users": "[EL] Users",
+            "organizations": "[EL] Organizations",
+            "agents": "[EL] Agents",
+            "workflows": "[EL] Workflows",
+            "reports": "[EL] Reports",
+            "billing": "[EL] Billing"
+          },
+          "eventLabels": {
+            "userCreated": "[EL] User Created",
+            "userUpdated": "[EL] User Updated",
+            "userDeleted": "[EL] User Deleted",
+            "organizationCreated": "[EL] Organization Created",
+            "organizationUpdated": "[EL] Organization Updated",
+            "agentRunCompleted": "[EL] Agent Run Completed",
+            "agentRunFailed": "[EL] Agent Run Failed",
+            "workflowCompleted": "[EL] Workflow Completed",
+            "workflowFailed": "[EL] Workflow Failed",
+            "reportGenerated": "[EL] Report Generated",
+            "subscriptionChanged": "[EL] Subscription Changed",
+            "subscriptionCancelled": "[EL] Subscription Cancelled"
+          },
+          "actions": {
+            "selectAll": "[EL] Select All",
+            "deselectAll": "[EL] Deselect All"
+          },
+          "dialog": {
+            "secretTitle": "[EL] Webhook Signing Secret",
+            "secretDescription": "[EL] Copy this secret now - it will not be shown again! Use this to verify webhook signatures.",
+            "copySecret": "[EL] Copy Secret",
+            "done": "[EL] Done"
+          },
+          "validation": {
+            "urlAndOrgRequired": "[EL] URL and organization are required",
+            "atLeastOneEvent": "[EL] Please select at least one event to subscribe to",
+            "invalidUrl": "[EL] Please enter a valid URL",
+            "invalidJsonHeaders": "[EL] Invalid JSON format for custom headers"
+          },
+          "toast": {
+            "createSuccess": "[EL] Webhook created successfully",
+            "createFailed": "[EL] Failed to create webhook",
+            "copied": "[EL] Copied to clipboard"
+          }
         }
       }
     },
@@ -14390,6 +15155,10 @@
       "defaultPlan": "Επαγγελματίας",
       "requiresPlan": "Αυτή η λειτουργία απαιτεί το πρόγραμμα {plan} ή υψηλότερο.",
       "upgradeButton": "Σχέδιο αναβάθμισης"
+    },
+    "usage": {
+      "limitReached": "[EL] You've reached your limit. Upgrade your plan to continue.",
+      "approachingLimit": "[EL] You're approaching your limit."
     }
   },
   "blog": {

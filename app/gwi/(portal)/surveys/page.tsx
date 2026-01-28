@@ -148,8 +148,8 @@ async function SurveyList({
                 <TableRow>
                   <TableHead>{t('surveyName')}</TableHead>
                   <TableHead>{tCommon("status")}</TableHead>
-                  <TableHead className="text-center">{t('questions')}</TableHead>
-                  <TableHead className="text-center">{t('responses')}</TableHead>
+                  <TableHead className="text-center">{t('questionsLabel')}</TableHead>
+                  <TableHead className="text-center">{t('responsesLabel')}</TableHead>
                   <TableHead>{t('createdBy')}</TableHead>
                   <TableHead>{t('createdAt')}</TableHead>
                   <TableHead className="w-[50px]"></TableHead>

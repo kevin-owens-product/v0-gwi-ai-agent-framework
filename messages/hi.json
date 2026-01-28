@@ -98,7 +98,16 @@
       "organizationComplianceAttestations": "संगठन अनुपालन सत्यापन",
       "complianceAudits": "इस ढांचे के लिए अनुपालन लेखापरीक्षा",
       "frameworkRequirements": "ढाँचे की आवश्यकताएँ"
-    }
+    },
+    "enable": "[HI] Enable",
+    "disable": "[HI] Disable",
+    "notRequired": "[HI] Not Required",
+    "system": "[HI] System",
+    "noDescription": "[HI] No description",
+    "unknown": "[HI] Unknown",
+    "important": "[HI] Important",
+    "preview": "[HI] Preview",
+    "duration": "[HI] Duration"
   },
   "auth": {
     "signIn": "साइन इन करें",
@@ -3239,7 +3248,29 @@
         "exportFailed": "डैशबोर्ड निर्यात करने में विफल"
       },
       "detail": {
-        "title": "डैशबोर्ड विवरण"
+        "title": "डैशबोर्ड विवरण",
+        "chartTypes": {
+          "bar": "[HI] Bar",
+          "line": "[HI] Line",
+          "pie": "[HI] Pie",
+          "donut": "[HI] Donut",
+          "area": "[HI] Area",
+          "scatter": "[HI] Scatter",
+          "heatmap": "[HI] Heatmap",
+          "treemap": "[HI] Treemap",
+          "funnel": "[HI] Funnel",
+          "radar": "[HI] Radar",
+          "metric": "[HI] Metric"
+        },
+        "export": {
+          "csvHeaders": {
+            "id": "[HI] ID",
+            "name": "[HI] Name",
+            "type": "[HI] Type",
+            "category": "[HI] Category",
+            "dataSource": "[HI] Data Source"
+          }
+        }
       }
     },
     "crosstabs": {
@@ -5823,7 +5854,9 @@
           "deleteFailed": "प्रतिक्रिया हटाने में विफल",
           "markCompleteFailed": "पूर्ण के रूप में चिह्नित करने में विफल"
         }
-      }
+      },
+      "questionsLabel": "[HI] Questions",
+      "responsesLabel": "[HI] Responses"
     },
     "taxonomy": {
       "title": "वर्गीकरण",
@@ -8234,6 +8267,55 @@
         "featureDeleted": "सुविधा हटाई गई",
         "featureDisabled": "सुविधा सफलतापूर्वक अक्षम हुई",
         "featureEnabled": "सुविधा सफलतापूर्वक सक्षम हुई"
+      },
+      "new": {
+        "title": "[HI] Create Entitlement Feature",
+        "description": "[HI] Define a new feature that can be assigned to subscription plans",
+        "back": "[HI] Back",
+        "creating": "[HI] Creating...",
+        "createFeature": "[HI] Create Feature",
+        "noPermission": "[HI] You don't have permission to create entitlement features",
+        "backToFeatures": "[HI] Back to Features",
+        "sections": {
+          "featureDetails": "[HI] Feature Details",
+          "featureDetailsDescription": "[HI] Basic information about the entitlement feature",
+          "categoryClassification": "[HI] Category & Classification",
+          "categoryDescription": "[HI] Organize the feature for easier management",
+          "valueConfiguration": "[HI] Value Configuration",
+          "valueDescription": "[HI] Configure the feature value type and default"
+        },
+        "fields": {
+          "displayName": "[HI] Display Name",
+          "featureKey": "[HI] Feature Key",
+          "description": "[HI] Description",
+          "category": "[HI] Category",
+          "sortOrder": "[HI] Sort Order",
+          "valueType": "[HI] Value Type",
+          "defaultValue": "[HI] Default Value",
+          "active": "[HI] Active"
+        },
+        "placeholders": {
+          "displayName": "[HI] Advanced Analytics",
+          "featureKey": "[HI] advanced_analytics",
+          "description": "[HI] Describe what this feature enables for subscribers...",
+          "jsonDefault": "[HI] {}"
+        },
+        "hints": {
+          "snakeCaseFormat": "[HI] snake_case format: lowercase letters, numbers, underscores",
+          "sortOrderLower": "[HI] Lower numbers appear first in lists",
+          "inactiveFeatures": "[HI] Inactive features are not available for plan assignment"
+        },
+        "validation": {
+          "keyAndNameRequired": "[HI] Key and name are required",
+          "keyFormatInvalid": "[HI] Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)"
+        },
+        "toast": {
+          "createFailed": "[HI] Failed to create feature"
+        },
+        "status": {
+          "enabled": "[HI] Enabled",
+          "disabled": "[HI] Disabled"
+        }
       }
     },
     "identity": {
@@ -8267,7 +8349,18 @@
           "providerUpdated": "SSO प्रदाता सफलतापूर्वक अपडेट हुआ",
           "providerDeleted": "SSO प्रदाता सफलतापूर्वक हटाया गया",
           "connectionSuccess": "कनेक्शन परीक्षण सफल",
-          "connectionFailed": "कनेक्शन परीक्षण विफल"
+          "connectionFailed": "कनेक्शन परीक्षण विफल",
+          "loadFailed": "[HI] Failed to load SSO configuration",
+          "updated": "[HI] SSO configuration updated",
+          "updateFailed": "[HI] Failed to update SSO configuration",
+          "allTestsPassed": "[HI] All tests passed!",
+          "someTestsFailed": "[HI] Some tests failed",
+          "testFailed": "[HI] Failed to test SSO configuration",
+          "activated": "[HI] SSO activated successfully",
+          "disabled": "[HI] SSO disabled successfully",
+          "updateStatusFailed": "[HI] Failed to update status",
+          "deleted": "[HI] SSO configuration deleted successfully",
+          "deleteFailed": "[HI] Failed to delete SSO configuration"
         },
         "form": {
           "organization": "संगठन",
@@ -8334,6 +8427,89 @@
           "certificateRequired": "प्रमाणपत्र आवश्यक है",
           "invalidUrl": "क्रुपया मान्य यूआरएल दर्ज करें",
           "invalidCertificate": "अमान्य प्रमाणपत्र प्रारूप"
+        },
+        "new": {
+          "title": "[HI] Create SSO Configuration",
+          "description": "[HI] Configure Single Sign-On for an organization",
+          "back": "[HI] Back",
+          "creating": "[HI] Creating...",
+          "createConfiguration": "[HI] Create Configuration",
+          "noPermission": "[HI] You don't have permission to create SSO configurations",
+          "backToSSO": "[HI] Back to SSO Configurations",
+          "tabs": {
+            "basic": "[HI] Basic Settings",
+            "provider": "[HI] Provider Configuration",
+            "provisioning": "[HI] User Provisioning"
+          },
+          "sections": {
+            "organizationProvider": "[HI] Organization & Provider",
+            "organizationProviderDescription": "[HI] Select the organization and SSO provider type",
+            "samlConfiguration": "[HI] SAML Configuration",
+            "samlConfigurationDescription": "[HI] Configure SAML 2.0 settings from your Identity Provider",
+            "oidcConfiguration": "[HI] OIDC Configuration",
+            "oidcConfigurationDescription": "[HI] Configure OpenID Connect settings",
+            "userProvisioning": "[HI] User Provisioning Settings",
+            "userProvisioningDescription": "[HI] Configure how users are provisioned through SSO"
+          },
+          "fields": {
+            "organization": "[HI] Organization",
+            "ssoProvider": "[HI] SSO Provider",
+            "displayName": "[HI] Display Name",
+            "allowedEmailDomains": "[HI] Allowed Email Domains",
+            "entityId": "[HI] Entity ID / Issuer",
+            "ssoUrl": "[HI] SSO URL (Login URL)",
+            "sloUrl": "[HI] SLO URL (Logout URL)",
+            "certificate": "[HI] X.509 Certificate",
+            "clientId": "[HI] Client ID",
+            "clientSecret": "[HI] Client Secret",
+            "discoveryUrl": "[HI] Discovery URL",
+            "authorizationUrl": "[HI] Authorization URL",
+            "tokenUrl": "[HI] Token URL",
+            "userInfoUrl": "[HI] User Info URL",
+            "defaultRole": "[HI] Default Role",
+            "jitProvisioning": "[HI] Just-in-Time Provisioning",
+            "autoDeactivate": "[HI] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[HI] Select an organization",
+            "searchOrganizations": "[HI] Search organizations...",
+            "loading": "[HI] Loading...",
+            "noOrganizationsFound": "[HI] No organizations found",
+            "displayName": "[HI] e.g., Acme Corp SSO",
+            "allowedDomains": "[HI] acme.com, acme.org",
+            "entityId": "[HI] https://idp.example.com/entity",
+            "ssoUrl": "[HI] https://idp.example.com/sso",
+            "sloUrl": "[HI] https://idp.example.com/slo",
+            "certificate": "[HI] -----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+            "clientId": "[HI] your-client-id",
+            "clientSecret": "[HI] your-client-secret",
+            "discoveryUrl": "[HI] https://idp.example.com/.well-known/openid-configuration",
+            "authorizationUrl": "[HI] https://idp.example.com/authorize",
+            "tokenUrl": "[HI] https://idp.example.com/token",
+            "userInfoUrl": "[HI] https://idp.example.com/userinfo"
+          },
+          "hints": {
+            "displayName": "[HI] A friendly name for this SSO configuration",
+            "allowedDomains": "[HI] Comma-separated list of email domains allowed to use this SSO",
+            "certificate": "[HI] Paste the public certificate from your Identity Provider",
+            "discoveryUrl": "[HI] If provided, other URLs will be auto-discovered",
+            "manualUrlConfig": "[HI] Manual URL Configuration (optional if discovery URL is provided)",
+            "defaultRole": "[HI] Role assigned to users when they first sign in via SSO",
+            "jitProvisioning": "[HI] Automatically create user accounts on first SSO login",
+            "autoDeactivate": "[HI] Automatically deactivate users removed from Identity Provider"
+          },
+          "roles": {
+            "viewer": "[HI] Viewer",
+            "member": "[HI] Member",
+            "admin": "[HI] Admin"
+          },
+          "validation": {
+            "organizationAndProviderRequired": "[HI] Organization and provider are required"
+          },
+          "toast": {
+            "createSuccess": "[HI] SSO configuration created successfully",
+            "createFailed": "[HI] Failed to create SSO configuration"
+          }
         }
       },
       "domains": {
@@ -8434,7 +8610,17 @@
           "connectionUpdated": "SCIM कनेक्शन सफलतापूर्वक अपडेट हुआ",
           "syncStarted": "सिंक सफलतापूर्वक शुरू हुआ",
           "connectionDeleted": "SCIM कनेक्शन सफलतापूर्वक हटा दिया गया",
-          "tokenRegenerated": "बियरर टोकन सफलतापूर्वक पुनर्जीवित हो गया"
+          "tokenRegenerated": "बियरर टोकन सफलतापूर्वक पुनर्जीवित हो गया",
+          "loadFailed": "[HI] Failed to fetch SCIM integration",
+          "updated": "[HI] SCIM integration updated",
+          "updateFailed": "[HI] Failed to update SCIM integration",
+          "activated": "[HI] SCIM integration activated successfully",
+          "paused": "[HI] SCIM integration paused successfully",
+          "updateStatusFailed": "[HI] Failed to update status",
+          "regenerateTokenFailed": "[HI] Failed to regenerate token",
+          "deleted": "[HI] SCIM integration deleted successfully",
+          "deleteFailed": "[HI] Failed to delete SCIM integration",
+          "copied": "[HI] Copied to clipboard"
         },
         "editConnection": "कनेक्शन संपादित करें",
         "deleteConnection": "कनेक्शन हटाएँ",
@@ -8504,6 +8690,61 @@
           "connectionNameRequired": "कनेक्शन नाम आवश्यक है",
           "baseUrlRequired": "बेस यूआरएल आवश्यक है",
           "invalidUrl": "क्रुपया मान्य यूआरएल दर्ज करें"
+        },
+        "new": {
+          "title": "[HI] Create SCIM Integration",
+          "description": "[HI] Configure SCIM 2.0 user provisioning for an organization",
+          "back": "[HI] Back",
+          "creating": "[HI] Creating...",
+          "createIntegration": "[HI] Create Integration",
+          "noPermission": "[HI] You don't have permission to create SCIM integrations",
+          "backToSCIM": "[HI] Back to SCIM Integrations",
+          "sections": {
+            "organization": "[HI] Organization",
+            "organizationDescription": "[HI] Select the organization to configure SCIM provisioning for",
+            "syncSettings": "[HI] Sync Settings",
+            "syncSettingsDescription": "[HI] Configure what data should be synchronized from your Identity Provider"
+          },
+          "fields": {
+            "organization": "[HI] Organization",
+            "defaultRole": "[HI] Default Role",
+            "syncUsers": "[HI] Sync Users",
+            "syncGroups": "[HI] Sync Groups",
+            "autoDeactivate": "[HI] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[HI] Select an organization",
+            "searchOrganizations": "[HI] Search organizations...",
+            "loading": "[HI] Loading...",
+            "noOrganizationsFound": "[HI] No organizations found"
+          },
+          "hints": {
+            "defaultRole": "[HI] Role assigned to users provisioned via SCIM",
+            "syncUsers": "[HI] Provision and deprovision users automatically",
+            "syncGroups": "[HI] Sync group memberships from Identity Provider",
+            "autoDeactivate": "[HI] Automatically deactivate users when removed from IdP",
+            "important": "[HI] After creating the integration, you will receive a bearer token and endpoint URL. The token will only be shown once, so make sure to save it securely."
+          },
+          "roles": {
+            "viewer": "[HI] Viewer",
+            "member": "[HI] Member",
+            "admin": "[HI] Admin"
+          },
+          "dialog": {
+            "title": "[HI] SCIM Integration Created",
+            "description": "[HI] Save the bearer token below. It will not be shown again.",
+            "bearerToken": "[HI] Bearer Token",
+            "scimEndpointUrl": "[HI] SCIM Endpoint URL",
+            "copyToken": "[HI] Copy Token",
+            "done": "[HI] Done"
+          },
+          "validation": {
+            "organizationRequired": "[HI] Organization is required"
+          },
+          "toast": {
+            "createSuccess": "[HI] SCIM integration created successfully",
+            "createFailed": "[HI] Failed to create SCIM integration"
+          }
         }
       },
       "devices": {
@@ -8576,7 +8817,53 @@
             "sessionDuration": "सत्र अवधि (घंटे)",
             "requireReauth": "पुन:प्रमाणीकरण की आवश्यकता है",
             "requireReauthDescription": "सत्र अवधि के बाद पुनः प्रमाणीकरण की आवश्यकता है"
-          }
+          },
+          "nameRequired": "[HI] Policy name is required",
+          "created": "[HI] Created",
+          "updated": "[HI] Policy updated successfully",
+          "deleted": "[HI] Policy deleted successfully",
+          "enabled": "[HI] Policy enabled successfully",
+          "disabled": "[HI] Policy disabled successfully",
+          "updateStatusFailed": "[HI] Failed to update status",
+          "notFound": "[HI] Policy not found",
+          "createTitle": "[HI] Create Device Policy",
+          "nameRequiredLabel": "[HI] Policy Name *",
+          "descriptionLabel": "[HI] Description",
+          "scopeLabel": "[HI] Scope",
+          "priorityLabel": "[HI] Priority (higher = first)",
+          "deviceRequirements": "[HI] Device Requirements",
+          "enforcementActions": "[HI] Enforcement Actions",
+          "notifyOnViolation": "[HI] Notify on Violation",
+          "overview": "[HI] Overview",
+          "requirements": "[HI] Requirements",
+          "enforcement": "[HI] Enforcement",
+          "status": "[HI] Status",
+          "createdBy": "[HI] Created By",
+          "lastUpdated": "[HI] Last Updated",
+          "requireEncryption": "[HI] Require Encryption",
+          "requirePasscode": "[HI] Require Passcode",
+          "requireBiometric": "[HI] Require Biometric",
+          "requireMdm": "[HI] Require MDM",
+          "platformRestrictions": "[HI] Platform Restrictions",
+          "allowedPlatforms": "[HI] Allowed Platforms",
+          "allPlatforms": "[HI] All platforms",
+          "blockedPlatforms": "[HI] Blocked Platforms",
+          "blockOnViolation": "[HI] Block on Violation",
+          "blockOnViolationDescription": "[HI] Block access when device is non-compliant",
+          "wipeOnViolation": "[HI] Wipe on Violation",
+          "wipeOnViolationDescription": "[HI] Remote wipe device data on violation",
+          "notifyOnViolationDescription": "[HI] Send notification when policy is violated",
+          "warningWipeEnabled": "[HI] Warning: Wipe on Violation Enabled",
+          "warningWipeDescription": "[HI] This policy will remotely wipe device data when violations occur. Use with extreme caution.",
+          "requirementsDescription": "[HI] Requirements that devices must meet to be compliant",
+          "enforcementDescription": "[HI] Actions taken when a device violates this policy",
+          "editTitle": "[HI] Edit Policy",
+          "details": "[HI] Policy Details",
+          "deleteTitle": "[HI] Delete Policy",
+          "deleteDescription": "[HI] Are you sure you want to delete this policy? This action cannot be undone.",
+          "createButton": "[HI] Create Policy",
+          "namePlaceholder": "[HI] e.g., Enterprise Device Requirements",
+          "descriptionPlaceholder": "[HI] Describe what this policy enforces..."
         },
         "table": {
           "device": "उपकरण",
@@ -10912,6 +11199,90 @@
         "CLIENT": "ग्राहक",
         "REGIONAL": "क्षेत्रीय",
         "PORTFOLIO_COMPANY": "पोर्टफोलियो कंपनी"
+      },
+      "plans": {
+        "starter": "[HI] Starter",
+        "professional": "[HI] Professional",
+        "enterprise": "[HI] Enterprise"
+      },
+      "new": {
+        "title": "[HI] Create New Organization",
+        "description": "[HI] Add a new tenant organization to the platform",
+        "back": "[HI] Back",
+        "creating": "[HI] Creating...",
+        "createOrganization": "[HI] Create Organization",
+        "noPermission": "[HI] You don't have permission to create organizations",
+        "backToTenants": "[HI] Back to Tenants",
+        "sections": {
+          "organizationDetails": "[HI] Organization Details",
+          "organizationDetailsDescription": "[HI] Basic information about the organization",
+          "locationTimezone": "[HI] Location & Timezone",
+          "locationTimezoneDescription": "[HI] Regional settings for the organization",
+          "planSubscription": "[HI] Plan & Subscription",
+          "planSubscriptionDescription": "[HI] Subscription tier and billing settings",
+          "hierarchySettings": "[HI] Hierarchy Settings",
+          "hierarchySettingsDescription": "[HI] Configure organization hierarchy and parent relationships",
+          "ownerInformation": "[HI] Owner Information (Optional)",
+          "ownerInformationDescription": "[HI] Automatically create an owner user for this organization",
+          "branding": "[HI] Branding (Optional)",
+          "brandingDescription": "[HI] Custom branding settings for the organization"
+        },
+        "fields": {
+          "organizationName": "[HI] Organization Name",
+          "slug": "[HI] Slug (auto-generated if empty)",
+          "organizationType": "[HI] Organization Type",
+          "industry": "[HI] Industry",
+          "companySize": "[HI] Company Size",
+          "domain": "[HI] Domain",
+          "country": "[HI] Country",
+          "timezone": "[HI] Timezone",
+          "planTier": "[HI] Plan Tier",
+          "parentOrganization": "[HI] Parent Organization",
+          "allowChildOrgs": "[HI] Allow Child Organizations",
+          "ownerEmail": "[HI] Owner Email",
+          "ownerName": "[HI] Owner Name",
+          "logoUrl": "[HI] Logo URL",
+          "brandColor": "[HI] Brand Color"
+        },
+        "placeholders": {
+          "organizationName": "[HI] Acme Corporation",
+          "slug": "[HI] acme-corporation",
+          "industry": "[HI] Technology, Healthcare, etc.",
+          "selectSize": "[HI] Select size",
+          "domain": "[HI] acme.com",
+          "country": "[HI] United States",
+          "timezone": "[HI] UTC",
+          "noneRootOrganization": "[HI] None (root organization)",
+          "ownerEmail": "[HI] owner@example.com",
+          "ownerName": "[HI] John Doe",
+          "logoUrl": "[HI] https://example.com/logo.png",
+          "brandColor": "[HI] #3B82F6"
+        },
+        "hints": {
+          "slug": "[HI] URL-friendly identifier, lowercase with hyphens",
+          "parentOrganization": "[HI] Select a parent to create this organization as a child in the hierarchy",
+          "allowChildOrgs": "[HI] Enable hierarchy features and allow creating sub-organizations",
+          "ownerInformation": "[HI] If provided, a user will be created (or existing user added) as the organization owner"
+        },
+        "companySizes": {
+          "solo": "[HI] Solo (1)",
+          "small": "[HI] Small (2-10)",
+          "medium": "[HI] Medium (11-50)",
+          "large": "[HI] Large (51-200)",
+          "enterprise": "[HI] Enterprise (201-1000)",
+          "global": "[HI] Global (1000+)"
+        },
+        "validation": {
+          "nameRequired": "[HI] Organization name is required"
+        },
+        "toast": {
+          "createFailed": "[HI] Failed to create organization"
+        }
+      },
+      "toast": {
+        "assignPlanFailed": "[HI] Failed to assign plan",
+        "grantFeatureFailed": "[HI] Failed to grant feature",
+        "revokeEntitlementFailed": "[HI] Failed to revoke entitlement"
       }
     },
     "users": {
@@ -11034,7 +11405,32 @@
       "selectOrganizationOptional": "संगठन चुनें (वैकल्पिक)",
       "organizationLaterHint": "उपयोगकर्ता को बाद में संगठनों में जोड़ा जा सकता है",
       "roleInOrganization": "संगठन में भूमिका",
-      "roleHint": "भूमिका यह निर्धारित करती है कि उपयोगकर्ता कौन से कार्य कर सकता है"
+      "roleHint": "भूमिका यह निर्धारित करती है कि उपयोगकर्ता कौन से कार्य कर सकता है",
+      "bulkActions": {
+        "banReason": "[HI] Bulk ban action"
+      },
+      "toast": {
+        "banFailed": "[HI] Failed to ban user",
+        "userBanned": "[HI] User banned successfully",
+        "liftBanFailed": "[HI] Failed to lift ban",
+        "banLifted": "[HI] Ban lifted successfully",
+        "deleteFailed": "[HI] Failed to delete user",
+        "userDeleted": "[HI] User deleted successfully",
+        "bulkBanFailed": "[HI] Bulk ban failed",
+        "bulkBanSuccess": "[HI] {count} users banned successfully",
+        "bulkUnbanFailed": "[HI] Bulk unban failed",
+        "bulkUnbanSuccess": "[HI] {count} users unbanned successfully",
+        "bulkDeleteFailed": "[HI] Bulk delete failed",
+        "bulkDeleteSuccess": "[HI] {count} users deleted successfully",
+        "bulkVerifyFailed": "[HI] Bulk verify failed",
+        "bulkVerifySuccess": "[HI] {count} users verified successfully",
+        "bulkResetPasswordFailed": "[HI] Bulk reset password failed",
+        "bulkResetPasswordSuccess": "[HI] {count} password reset emails sent",
+        "bulkRevokeSessionsFailed": "[HI] Bulk revoke sessions failed",
+        "bulkRevokeSessionsSuccess": "[HI] {count} sessions revoked successfully",
+        "createFailed": "[HI] Failed to create user",
+        "userCreated": "[HI] User created successfully"
+      }
     },
     "broadcast": {
       "title": "प्रसारण केंद्र",
@@ -11476,7 +11872,23 @@
           "messages": {
             "frameworkUpdated": "फ़्रेमवर्क सफलतापूर्वक अपडेट किया गया"
           }
-        }
+        },
+        "createTitle": "[HI] Create Compliance Framework",
+        "createDescription": "[HI] Add a new compliance standard (SOC2, HIPAA, GDPR, etc.)",
+        "createButton": "[HI] Create Framework",
+        "createFailed": "[HI] Failed to create framework",
+        "details": "[HI] Framework Details",
+        "detailsDescription": "[HI] Define the compliance framework standards and requirements",
+        "nameRequired": "[HI] Framework Name *",
+        "codeRequired": "[HI] Code *",
+        "namePlaceholder": "[HI] SOC 2 Type II",
+        "codePlaceholder": "[HI] SOC2",
+        "codeHint": "[HI] Short identifier code (e.g., SOC2, HIPAA, GDPR)",
+        "versionPlaceholder": "[HI] 2023",
+        "versionHint": "[HI] The version or year of the framework standard",
+        "descriptionPlaceholder": "[HI] Service Organization Control 2 compliance framework for security, availability, processing integrity, confidentiality, and privacy...",
+        "activeStatus": "[HI] Active Status",
+        "activeStatusDescription": "[HI] Enable this framework for attestations and audits"
       },
       "frameworksOverview": {
         "title": "अनुपालन ढाँचे",
@@ -12828,6 +13240,16 @@
       },
       "validation": {
         "required": "नाम और प्रदर्शन नाम आवश्यक है"
+      },
+      "colors": {
+        "purple": "[HI] Purple",
+        "blue": "[HI] Blue",
+        "green": "[HI] Green",
+        "amber": "[HI] Amber",
+        "red": "[HI] Red",
+        "gray": "[HI] Gray",
+        "pink": "[HI] Pink",
+        "teal": "[HI] Teal"
       }
     },
     "healthScores": {
@@ -13047,6 +13469,15 @@
           "createFailed": "घटना बनाने में विफल",
           "updateFailed": "घटना अद्यतन करने में विफल",
           "deleteFailed": "घटना को हटाने में विफल"
+        },
+        "toast": {
+          "loadFailed": "[HI] Failed to load incident",
+          "statusUpdated": "[HI] Status updated",
+          "updateStatusFailed": "[HI] Failed to update status",
+          "updated": "[HI] Incident updated",
+          "updateFailed": "[HI] Failed to update incident",
+          "updatePosted": "[HI] Update posted",
+          "addUpdateFailed": "[HI] Failed to add update"
         }
       },
       "maintenance": {
@@ -13117,6 +13548,73 @@
           "windowStarted": "रखरखाव विंडो प्रारंभ हो गई",
           "windowCompleted": "रखरखाव विंडो पूरी हो गई",
           "windowCancelled": "रखरखाव विंडो रद्द कर दी गई"
+        },
+        "toast": {
+          "loadFailed": "[HI] Failed to load maintenance window",
+          "statusUpdated": "[HI] Status updated",
+          "updateStatusFailed": "[HI] Failed to update status",
+          "updated": "[HI] Maintenance window updated",
+          "updateFailed": "[HI] Failed to update maintenance window",
+          "deleted": "[HI] Maintenance window deleted",
+          "deleteFailed": "[HI] Failed to delete maintenance window"
+        },
+        "new": {
+          "title": "[HI] Schedule Maintenance",
+          "description": "[HI] Create a new scheduled maintenance window",
+          "back": "[HI] Back",
+          "scheduling": "[HI] Scheduling...",
+          "scheduleMaintenance": "[HI] Schedule Maintenance",
+          "sections": {
+            "maintenanceDetails": "[HI] Maintenance Details",
+            "maintenanceDetailsDescription": "[HI] Basic information about the maintenance window",
+            "schedule": "[HI] Schedule",
+            "scheduleDescription": "[HI] Set the maintenance window timing",
+            "affectedServices": "[HI] Affected Services",
+            "affectedServicesDescription": "[HI] Select all services that will be affected",
+            "affectedRegions": "[HI] Affected Regions",
+            "affectedRegionsDescription": "[HI] Select the geographic regions impacted"
+          },
+          "fields": {
+            "title": "[HI] Title",
+            "description": "[HI] Description",
+            "type": "[HI] Type",
+            "startTime": "[HI] Start Time",
+            "endTime": "[HI] End Time",
+            "notifyBefore": "[HI] Notify Before (hours)"
+          },
+          "placeholders": {
+            "title": "[HI] e.g., Database upgrade",
+            "description": "[HI] Describe the maintenance work being performed...",
+            "duration": "[HI] Duration: {duration}"
+          },
+          "typeDescriptions": {
+            "scheduled": "[HI] Planned maintenance window",
+            "emergency": "[HI] Urgent maintenance required",
+            "upgrade": "[HI] System or component upgrade",
+            "migration": "[HI] Data or service migration",
+            "securityPatch": "[HI] Security-related updates"
+          },
+          "regions": {
+            "usEast": "[HI] US East",
+            "usWest": "[HI] US West",
+            "euWest": "[HI] EU West",
+            "euCentral": "[HI] EU Central",
+            "asiaPacific": "[HI] Asia Pacific",
+            "global": "[HI] Global"
+          },
+          "hints": {
+            "notifyBefore": "[HI] Users will be notified {hours} hours before maintenance begins",
+            "selectServices": "[HI] Click to select affected services",
+            "selectRegions": "[HI] Click to select affected regions"
+          },
+          "validation": {
+            "titleStartEndRequired": "[HI] Title, start time, and end time are required",
+            "endAfterStart": "[HI] End time must be after start time"
+          },
+          "toast": {
+            "createSuccess": "[HI] Maintenance window scheduled",
+            "createFailed": "[HI] Failed to schedule maintenance"
+          }
         }
       },
       "releases": {
@@ -13194,6 +13692,72 @@
           "rolloutStarted": "रोलआउट प्रारंभ हुआ",
           "releaseCompleted": "रिलीज़ पूरी हुई",
           "releaseRolledBack": "रिलीज़ वापस ले ली गई"
+        },
+        "toast": {
+          "loadFailed": "[HI] Failed to load release",
+          "statusUpdated": "[HI] Status updated",
+          "updateStatusFailed": "[HI] Failed to update status",
+          "updateRolloutFailed": "[HI] Failed to update rollout percentage",
+          "updated": "[HI] Release updated",
+          "updateFailed": "[HI] Failed to update release",
+          "deleted": "[HI] Release deleted",
+          "deleteFailed": "[HI] Failed to delete release"
+        },
+        "new": {
+          "title": "[HI] Create New Release",
+          "description": "[HI] Plan and schedule a new platform release",
+          "back": "[HI] Back",
+          "creating": "[HI] Creating...",
+          "createRelease": "[HI] Create Release",
+          "sections": {
+            "releaseDetails": "[HI] Release Details",
+            "releaseDetailsDescription": "[HI] Basic information about this release",
+            "features": "[HI] Features",
+            "featuresDescription": "[HI] New features included in this release",
+            "bugFixes": "[HI] Bug Fixes",
+            "bugFixesDescription": "[HI] Bug fixes included in this release"
+          },
+          "fields": {
+            "version": "[HI] Version",
+            "name": "[HI] Name (optional)",
+            "description": "[HI] Description",
+            "type": "[HI] Type",
+            "rolloutStrategy": "[HI] Rollout Strategy",
+            "plannedDate": "[HI] Planned Date",
+            "changelogUrl": "[HI] Changelog URL"
+          },
+          "placeholders": {
+            "version": "[HI] e.g., 2.5.0",
+            "name": "[HI] e.g., Phoenix",
+            "description": "[HI] Describe the release...",
+            "changelogUrl": "[HI] https://..."
+          },
+          "typeDescriptions": {
+            "major": "[HI] Breaking changes, significant new features",
+            "minor": "[HI] New features, backward compatible",
+            "patch": "[HI] Bug fixes, minor improvements",
+            "hotfix": "[HI] Critical bug fixes"
+          },
+          "strategyDescriptions": {
+            "bigBang": "[HI] Deploy to all users at once",
+            "staged": "[HI] Deploy in stages by percentage",
+            "canary": "[HI] Deploy to small group first",
+            "blueGreen": "[HI] Switch between environments",
+            "ring": "[HI] Deploy by user rings"
+          },
+          "actions": {
+            "addFeature": "[HI] Add a feature...",
+            "addBugFix": "[HI] Add a bug fix...",
+            "noFeatures": "[HI] No features added yet",
+            "noBugFixes": "[HI] No bug fixes added yet"
+          },
+          "validation": {
+            "versionRequired": "[HI] Version is required"
+          },
+          "toast": {
+            "createSuccess": "[HI] Release created successfully",
+            "createFailed": "[HI] Failed to create release"
+          }
         }
       },
       "capacity": {
@@ -13261,6 +13825,17 @@
           "updateFailed": "क्षमता मीट्रिक अद्यतन करने में विफल",
           "deleteFailed": "क्षमता मीट्रिक हटाने में विफल"
         }
+      },
+      "services": {
+        "apiGateway": "[HI] API Gateway",
+        "authentication": "[HI] Authentication",
+        "database": "[HI] Database",
+        "fileStorage": "[HI] File Storage",
+        "messaging": "[HI] Messaging",
+        "search": "[HI] Search",
+        "analytics": "[HI] Analytics",
+        "payments": "[HI] Payments",
+        "notifications": "[HI] Notifications"
       }
     },
     "integrations": {
@@ -13477,7 +14052,9 @@
           "bulkUpdateFailed": "ऐप्स अपडेट करने में विफल",
           "bulkDeleted": "{गिनती} ऐप्स हटा दिए गए",
           "bulkDeleteFailed": "ऐप्स हटाने में विफल",
-          "updateStatusFailed": "ऐप स्थिति अपडेट करने में विफल"
+          "updateStatusFailed": "ऐप स्थिति अपडेट करने में विफल",
+          "updated": "[HI] Integration app updated",
+          "loadFailed": "[HI] Failed to load integration app"
         },
         "table": {
           "noReviews": "कोई समीक्षा नहीं"
@@ -13485,6 +14062,108 @@
         "badges": {
           "official": "आधिकारिक ऐप",
           "featured": "फ़ीचर्ड ऐप"
+        },
+        "tabs": {
+          "overview": "[HI] Overview",
+          "installations": "[HI] Installations ({count})",
+          "settings": "[HI] Settings"
+        },
+        "overview": {
+          "status": "[HI] Status",
+          "totalInstalls": "[HI] Total Installs",
+          "rating": "[HI] Rating",
+          "category": "[HI] Category",
+          "noReviews": "[HI] No reviews",
+          "appDetails": "[HI] App Details",
+          "name": "[HI] Name",
+          "slug": "[HI] Slug",
+          "developer": "[HI] Developer",
+          "published": "[HI] Published",
+          "notPublished": "[HI] Not published",
+          "created": "[HI] Created",
+          "links": "[HI] Links",
+          "linksDescription": "[HI] External resources",
+          "description": "[HI] Description",
+          "requiredScopes": "[HI] Required Scopes",
+          "requiredScopesDescription": "[HI] Permissions required by this integration"
+        },
+        "installations": {
+          "title": "[HI] Installation History",
+          "description": "[HI] Organizations using this app",
+          "status": "[HI] Status"
+        },
+        "settings": {
+          "editTitle": "[HI] Edit App Settings",
+          "editDescription": "[HI] Update integration app configuration"
+        },
+        "new": {
+          "title": "[HI] Add Integration App",
+          "description": "[HI] Add a new integration app to the marketplace",
+          "back": "[HI] Back",
+          "creating": "[HI] Creating...",
+          "createApp": "[HI] Create App",
+          "sections": {
+            "appDetails": "[HI] App Details",
+            "appDetailsDescription": "[HI] Basic information about the integration app",
+            "developerInformation": "[HI] Developer Information",
+            "developerInformationDescription": "[HI] Information about the app developer",
+            "assetsLinks": "[HI] Assets & Links",
+            "assetsLinksDescription": "[HI] App icon and related URLs",
+            "appStatus": "[HI] App Status",
+            "appStatusDescription": "[HI] Configure app visibility and badges"
+          },
+          "fields": {
+            "appName": "[HI] App Name",
+            "shortDescription": "[HI] Short Description",
+            "fullDescription": "[HI] Full Description",
+            "category": "[HI] Category",
+            "developerName": "[HI] Developer Name",
+            "developerWebsite": "[HI] Developer Website",
+            "supportEmail": "[HI] Support Email",
+            "iconUrl": "[HI] Icon URL",
+            "appWebsite": "[HI] App Website",
+            "documentationUrl": "[HI] Documentation URL",
+            "officialApp": "[HI] Official App",
+            "featuredApp": "[HI] Featured App"
+          },
+          "placeholders": {
+            "appName": "[HI] My Integration",
+            "shortDescription": "[HI] A brief description of the app",
+            "fullDescription": "[HI] Detailed description of the integration...",
+            "developerName": "[HI] Company or developer name",
+            "developerWebsite": "[HI] https://developer.com",
+            "supportEmail": "[HI] support@developer.com",
+            "iconUrl": "[HI] https://example.com/icon.png",
+            "appWebsite": "[HI] https://myapp.com",
+            "documentationUrl": "[HI] https://docs.myapp.com"
+          },
+          "hints": {
+            "shortDescription": "[HI] Displayed in app listings and search results",
+            "officialApp": "[HI] Mark as an officially supported integration",
+            "featuredApp": "[HI] Highlight this app in the marketplace",
+            "draftStatus": "[HI] The app will be created with Draft status. You can publish it later from the app details page."
+          },
+          "categoryDescriptions": {
+            "productivity": "[HI] Tools to improve workflow efficiency",
+            "communication": "[HI] Messaging, chat, and collaboration",
+            "projectManagement": "[HI] Task tracking and planning",
+            "crm": "[HI] Customer relationship management",
+            "analytics": "[HI] Data analysis and reporting",
+            "security": "[HI] Security and compliance tools",
+            "developerTools": "[HI] Development and DevOps",
+            "hr": "[HI] Human resources management",
+            "finance": "[HI] Financial management tools",
+            "marketing": "[HI] Marketing automation",
+            "customerSupport": "[HI] Help desk and support",
+            "other": "[HI] Other integrations"
+          },
+          "validation": {
+            "nameAndDeveloperRequired": "[HI] Name and developer are required"
+          },
+          "toast": {
+            "createSuccess": "[HI] Integration app created successfully",
+            "createFailed": "[HI] Failed to create app"
+          }
         }
       },
       "webhooks": {
@@ -13568,7 +14247,93 @@
           "testFailed": "परीक्षण विफल: {त्रुटि}",
           "testError": "परीक्षण वेबहुक भेजने में विफल",
           "deleted": "वेबहुक हटा दिया गया",
-          "deleteFailed": "वेबहुक हटाने में विफल"
+          "deleteFailed": "वेबहुक हटाने में विफल",
+          "loadFailed": "[HI] Failed to load webhook",
+          "updated": "[HI] Webhook updated",
+          "updateFailed": "[HI] Failed to update webhook",
+          "testDelivered": "[HI] Test webhook delivered successfully",
+          "unknownError": "[HI] Unknown error",
+          "sendTestFailed": "[HI] Failed to send test webhook"
+        },
+        "new": {
+          "title": "[HI] Create Webhook",
+          "description": "[HI] Create a new webhook endpoint to receive event notifications",
+          "back": "[HI] Back",
+          "creating": "[HI] Creating...",
+          "createWebhook": "[HI] Create Webhook",
+          "sections": {
+            "endpointDetails": "[HI] Endpoint Details",
+            "endpointDetailsDescription": "[HI] Configure the webhook endpoint",
+            "settings": "[HI] Settings",
+            "settingsDescription": "[HI] Configure timeout and retry behavior",
+            "eventSubscriptions": "[HI] Event Subscriptions",
+            "eventSubscriptionsDescription": "[HI] Select the events this webhook should receive ({count} selected)"
+          },
+          "fields": {
+            "webhookName": "[HI] Webhook Name",
+            "endpointUrl": "[HI] Endpoint URL",
+            "description": "[HI] Description",
+            "organization": "[HI] Organization",
+            "timeout": "[HI] Timeout (seconds)",
+            "retryCount": "[HI] Retry Count",
+            "customHeaders": "[HI] Custom Headers (JSON)"
+          },
+          "placeholders": {
+            "webhookName": "[HI] My Webhook",
+            "endpointUrl": "[HI] https://example.com/webhooks",
+            "description": "[HI] What is this webhook used for?",
+            "selectOrganization": "[HI] Select organization",
+            "loading": "[HI] Loading...",
+            "customHeaders": "[HI] {\n  \"X-Custom-Header\": \"value\"\n}"
+          },
+          "hints": {
+            "endpointUrl": "[HI] Must be a valid HTTPS URL that can receive POST requests",
+            "customHeaders": "[HI] Optional custom headers to include with webhook requests",
+            "selectEvents": "[HI] Please select at least one event to subscribe to"
+          },
+          "events": {
+            "users": "[HI] Users",
+            "organizations": "[HI] Organizations",
+            "agents": "[HI] Agents",
+            "workflows": "[HI] Workflows",
+            "reports": "[HI] Reports",
+            "billing": "[HI] Billing"
+          },
+          "eventLabels": {
+            "userCreated": "[HI] User Created",
+            "userUpdated": "[HI] User Updated",
+            "userDeleted": "[HI] User Deleted",
+            "organizationCreated": "[HI] Organization Created",
+            "organizationUpdated": "[HI] Organization Updated",
+            "agentRunCompleted": "[HI] Agent Run Completed",
+            "agentRunFailed": "[HI] Agent Run Failed",
+            "workflowCompleted": "[HI] Workflow Completed",
+            "workflowFailed": "[HI] Workflow Failed",
+            "reportGenerated": "[HI] Report Generated",
+            "subscriptionChanged": "[HI] Subscription Changed",
+            "subscriptionCancelled": "[HI] Subscription Cancelled"
+          },
+          "actions": {
+            "selectAll": "[HI] Select All",
+            "deselectAll": "[HI] Deselect All"
+          },
+          "dialog": {
+            "secretTitle": "[HI] Webhook Signing Secret",
+            "secretDescription": "[HI] Copy this secret now - it will not be shown again! Use this to verify webhook signatures.",
+            "copySecret": "[HI] Copy Secret",
+            "done": "[HI] Done"
+          },
+          "validation": {
+            "urlAndOrgRequired": "[HI] URL and organization are required",
+            "atLeastOneEvent": "[HI] Please select at least one event to subscribe to",
+            "invalidUrl": "[HI] Please enter a valid URL",
+            "invalidJsonHeaders": "[HI] Invalid JSON format for custom headers"
+          },
+          "toast": {
+            "createSuccess": "[HI] Webhook created successfully",
+            "createFailed": "[HI] Failed to create webhook",
+            "copied": "[HI] Copied to clipboard"
+          }
         }
       }
     },
@@ -14390,6 +15155,10 @@
       "defaultPlan": "पेशेवर",
       "requiresPlan": "इस सुविधा के लिए {योजना} योजना या उच्चतर की आवश्यकता होती है।",
       "upgradeButton": "उन्नयन योजना"
+    },
+    "usage": {
+      "limitReached": "[HI] You've reached your limit. Upgrade your plan to continue.",
+      "approachingLimit": "[HI] You're approaching your limit."
     }
   },
   "blog": {

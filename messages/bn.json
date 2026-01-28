@@ -98,7 +98,16 @@
       "organizationComplianceAttestations": "সংস্থার সম্মতি প্রত্যয়ন",
       "complianceAudits": "এই কাঠামোর জন্য কমপ্লায়েন্স অডিট",
       "frameworkRequirements": "ফ্রেমওয়ার্ক প্রয়োজনীয়তা"
-    }
+    },
+    "enable": "[BN] Enable",
+    "disable": "[BN] Disable",
+    "notRequired": "[BN] Not Required",
+    "system": "[BN] System",
+    "noDescription": "[BN] No description",
+    "unknown": "[BN] Unknown",
+    "important": "[BN] Important",
+    "preview": "[BN] Preview",
+    "duration": "[BN] Duration"
   },
   "auth": {
     "signIn": "সাইন ইন করুন",
@@ -3239,7 +3248,29 @@
         "exportFailed": "ড্যাশবোর্ড রপ্তানি করতে ব্যর্থ হয়েছে৷"
       },
       "detail": {
-        "title": "ড্যাশবোর্ডের বিবরণ"
+        "title": "ড্যাশবোর্ডের বিবরণ",
+        "chartTypes": {
+          "bar": "[BN] Bar",
+          "line": "[BN] Line",
+          "pie": "[BN] Pie",
+          "donut": "[BN] Donut",
+          "area": "[BN] Area",
+          "scatter": "[BN] Scatter",
+          "heatmap": "[BN] Heatmap",
+          "treemap": "[BN] Treemap",
+          "funnel": "[BN] Funnel",
+          "radar": "[BN] Radar",
+          "metric": "[BN] Metric"
+        },
+        "export": {
+          "csvHeaders": {
+            "id": "[BN] ID",
+            "name": "[BN] Name",
+            "type": "[BN] Type",
+            "category": "[BN] Category",
+            "dataSource": "[BN] Data Source"
+          }
+        }
       }
     },
     "crosstabs": {
@@ -5823,7 +5854,9 @@
           "deleteFailed": "প্রতিক্রিয়া মুছে ফেলতে ব্যর্থ হয়েছে৷",
           "markCompleteFailed": "সম্পূর্ণ হিসেবে চিহ্নিত করতে ব্যর্থ হয়েছে৷"
         }
-      }
+      },
+      "questionsLabel": "[BN] Questions",
+      "responsesLabel": "[BN] Responses"
     },
     "taxonomy": {
       "title": "ট্যাক্সোনমি",
@@ -8234,6 +8267,55 @@
         "featureDeleted": "বৈশিষ্ট্য মুছে ফেলা হয়েছে",
         "featureEnabled": "বৈশিষ্ট্য সফলভাবে সক্রিয় হয়েছে",
         "featureDisabled": "বৈশিষ্ট্য সফলভাবে অক্ষম করা হয়েছে৷"
+      },
+      "new": {
+        "title": "[BN] Create Entitlement Feature",
+        "description": "[BN] Define a new feature that can be assigned to subscription plans",
+        "back": "[BN] Back",
+        "creating": "[BN] Creating...",
+        "createFeature": "[BN] Create Feature",
+        "noPermission": "[BN] You don't have permission to create entitlement features",
+        "backToFeatures": "[BN] Back to Features",
+        "sections": {
+          "featureDetails": "[BN] Feature Details",
+          "featureDetailsDescription": "[BN] Basic information about the entitlement feature",
+          "categoryClassification": "[BN] Category & Classification",
+          "categoryDescription": "[BN] Organize the feature for easier management",
+          "valueConfiguration": "[BN] Value Configuration",
+          "valueDescription": "[BN] Configure the feature value type and default"
+        },
+        "fields": {
+          "displayName": "[BN] Display Name",
+          "featureKey": "[BN] Feature Key",
+          "description": "[BN] Description",
+          "category": "[BN] Category",
+          "sortOrder": "[BN] Sort Order",
+          "valueType": "[BN] Value Type",
+          "defaultValue": "[BN] Default Value",
+          "active": "[BN] Active"
+        },
+        "placeholders": {
+          "displayName": "[BN] Advanced Analytics",
+          "featureKey": "[BN] advanced_analytics",
+          "description": "[BN] Describe what this feature enables for subscribers...",
+          "jsonDefault": "[BN] {}"
+        },
+        "hints": {
+          "snakeCaseFormat": "[BN] snake_case format: lowercase letters, numbers, underscores",
+          "sortOrderLower": "[BN] Lower numbers appear first in lists",
+          "inactiveFeatures": "[BN] Inactive features are not available for plan assignment"
+        },
+        "validation": {
+          "keyAndNameRequired": "[BN] Key and name are required",
+          "keyFormatInvalid": "[BN] Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)"
+        },
+        "toast": {
+          "createFailed": "[BN] Failed to create feature"
+        },
+        "status": {
+          "enabled": "[BN] Enabled",
+          "disabled": "[BN] Disabled"
+        }
       }
     },
     "identity": {
@@ -8262,7 +8344,18 @@
           "providerUpdated": "SSO প্রদানকারী সফলভাবে আপডেট হয়েছে",
           "connectionSuccess": "সংযোগ পরীক্ষা সফল",
           "providerDeleted": "SSO প্রদানকারী সফলভাবে মুছে ফেলা হয়েছে৷",
-          "connectionFailed": "সংযোগ পরীক্ষা ব্যর্থ হয়েছে"
+          "connectionFailed": "সংযোগ পরীক্ষা ব্যর্থ হয়েছে",
+          "loadFailed": "[BN] Failed to load SSO configuration",
+          "updated": "[BN] SSO configuration updated",
+          "updateFailed": "[BN] Failed to update SSO configuration",
+          "allTestsPassed": "[BN] All tests passed!",
+          "someTestsFailed": "[BN] Some tests failed",
+          "testFailed": "[BN] Failed to test SSO configuration",
+          "activated": "[BN] SSO activated successfully",
+          "disabled": "[BN] SSO disabled successfully",
+          "updateStatusFailed": "[BN] Failed to update status",
+          "deleted": "[BN] SSO configuration deleted successfully",
+          "deleteFailed": "[BN] Failed to delete SSO configuration"
         },
         "filterByProvider": "প্রদানকারী দ্বারা ফিল্টার",
         "filterByStatus": "স্থিতি দ্বারা ফিল্টার করুন",
@@ -8334,6 +8427,89 @@
           "certificateRequired": "সার্টিফিকেট প্রয়োজন",
           "invalidUrl": "একটি বৈধ URL লিখুন",
           "invalidCertificate": "অবৈধ শংসাপত্র বিন্যাস"
+        },
+        "new": {
+          "title": "[BN] Create SSO Configuration",
+          "description": "[BN] Configure Single Sign-On for an organization",
+          "back": "[BN] Back",
+          "creating": "[BN] Creating...",
+          "createConfiguration": "[BN] Create Configuration",
+          "noPermission": "[BN] You don't have permission to create SSO configurations",
+          "backToSSO": "[BN] Back to SSO Configurations",
+          "tabs": {
+            "basic": "[BN] Basic Settings",
+            "provider": "[BN] Provider Configuration",
+            "provisioning": "[BN] User Provisioning"
+          },
+          "sections": {
+            "organizationProvider": "[BN] Organization & Provider",
+            "organizationProviderDescription": "[BN] Select the organization and SSO provider type",
+            "samlConfiguration": "[BN] SAML Configuration",
+            "samlConfigurationDescription": "[BN] Configure SAML 2.0 settings from your Identity Provider",
+            "oidcConfiguration": "[BN] OIDC Configuration",
+            "oidcConfigurationDescription": "[BN] Configure OpenID Connect settings",
+            "userProvisioning": "[BN] User Provisioning Settings",
+            "userProvisioningDescription": "[BN] Configure how users are provisioned through SSO"
+          },
+          "fields": {
+            "organization": "[BN] Organization",
+            "ssoProvider": "[BN] SSO Provider",
+            "displayName": "[BN] Display Name",
+            "allowedEmailDomains": "[BN] Allowed Email Domains",
+            "entityId": "[BN] Entity ID / Issuer",
+            "ssoUrl": "[BN] SSO URL (Login URL)",
+            "sloUrl": "[BN] SLO URL (Logout URL)",
+            "certificate": "[BN] X.509 Certificate",
+            "clientId": "[BN] Client ID",
+            "clientSecret": "[BN] Client Secret",
+            "discoveryUrl": "[BN] Discovery URL",
+            "authorizationUrl": "[BN] Authorization URL",
+            "tokenUrl": "[BN] Token URL",
+            "userInfoUrl": "[BN] User Info URL",
+            "defaultRole": "[BN] Default Role",
+            "jitProvisioning": "[BN] Just-in-Time Provisioning",
+            "autoDeactivate": "[BN] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[BN] Select an organization",
+            "searchOrganizations": "[BN] Search organizations...",
+            "loading": "[BN] Loading...",
+            "noOrganizationsFound": "[BN] No organizations found",
+            "displayName": "[BN] e.g., Acme Corp SSO",
+            "allowedDomains": "[BN] acme.com, acme.org",
+            "entityId": "[BN] https://idp.example.com/entity",
+            "ssoUrl": "[BN] https://idp.example.com/sso",
+            "sloUrl": "[BN] https://idp.example.com/slo",
+            "certificate": "[BN] -----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+            "clientId": "[BN] your-client-id",
+            "clientSecret": "[BN] your-client-secret",
+            "discoveryUrl": "[BN] https://idp.example.com/.well-known/openid-configuration",
+            "authorizationUrl": "[BN] https://idp.example.com/authorize",
+            "tokenUrl": "[BN] https://idp.example.com/token",
+            "userInfoUrl": "[BN] https://idp.example.com/userinfo"
+          },
+          "hints": {
+            "displayName": "[BN] A friendly name for this SSO configuration",
+            "allowedDomains": "[BN] Comma-separated list of email domains allowed to use this SSO",
+            "certificate": "[BN] Paste the public certificate from your Identity Provider",
+            "discoveryUrl": "[BN] If provided, other URLs will be auto-discovered",
+            "manualUrlConfig": "[BN] Manual URL Configuration (optional if discovery URL is provided)",
+            "defaultRole": "[BN] Role assigned to users when they first sign in via SSO",
+            "jitProvisioning": "[BN] Automatically create user accounts on first SSO login",
+            "autoDeactivate": "[BN] Automatically deactivate users removed from Identity Provider"
+          },
+          "roles": {
+            "viewer": "[BN] Viewer",
+            "member": "[BN] Member",
+            "admin": "[BN] Admin"
+          },
+          "validation": {
+            "organizationAndProviderRequired": "[BN] Organization and provider are required"
+          },
+          "toast": {
+            "createSuccess": "[BN] SSO configuration created successfully",
+            "createFailed": "[BN] Failed to create SSO configuration"
+          }
         }
       },
       "domains": {
@@ -8432,7 +8608,17 @@
           "syncStarted": "সিঙ্ক সফলভাবে শুরু হয়েছে",
           "connectionUpdated": "SCIM সংযোগ সফলভাবে আপডেট হয়েছে৷",
           "connectionDeleted": "SCIM সংযোগ সফলভাবে মুছে ফেলা হয়েছে৷",
-          "tokenRegenerated": "বিয়ারার টোকেন সফলভাবে পুনরুত্থিত হয়েছে৷"
+          "tokenRegenerated": "বিয়ারার টোকেন সফলভাবে পুনরুত্থিত হয়েছে৷",
+          "loadFailed": "[BN] Failed to fetch SCIM integration",
+          "updated": "[BN] SCIM integration updated",
+          "updateFailed": "[BN] Failed to update SCIM integration",
+          "activated": "[BN] SCIM integration activated successfully",
+          "paused": "[BN] SCIM integration paused successfully",
+          "updateStatusFailed": "[BN] Failed to update status",
+          "regenerateTokenFailed": "[BN] Failed to regenerate token",
+          "deleted": "[BN] SCIM integration deleted successfully",
+          "deleteFailed": "[BN] Failed to delete SCIM integration",
+          "copied": "[BN] Copied to clipboard"
         },
         "editConnection": "সংযোগ সম্পাদনা করুন",
         "deleteConnection": "সংযোগ মুছুন",
@@ -8504,6 +8690,61 @@
           "connectionNameRequired": "সংযোগের নাম প্রয়োজন",
           "baseUrlRequired": "বেস URL প্রয়োজন",
           "invalidUrl": "একটি বৈধ URL লিখুন"
+        },
+        "new": {
+          "title": "[BN] Create SCIM Integration",
+          "description": "[BN] Configure SCIM 2.0 user provisioning for an organization",
+          "back": "[BN] Back",
+          "creating": "[BN] Creating...",
+          "createIntegration": "[BN] Create Integration",
+          "noPermission": "[BN] You don't have permission to create SCIM integrations",
+          "backToSCIM": "[BN] Back to SCIM Integrations",
+          "sections": {
+            "organization": "[BN] Organization",
+            "organizationDescription": "[BN] Select the organization to configure SCIM provisioning for",
+            "syncSettings": "[BN] Sync Settings",
+            "syncSettingsDescription": "[BN] Configure what data should be synchronized from your Identity Provider"
+          },
+          "fields": {
+            "organization": "[BN] Organization",
+            "defaultRole": "[BN] Default Role",
+            "syncUsers": "[BN] Sync Users",
+            "syncGroups": "[BN] Sync Groups",
+            "autoDeactivate": "[BN] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[BN] Select an organization",
+            "searchOrganizations": "[BN] Search organizations...",
+            "loading": "[BN] Loading...",
+            "noOrganizationsFound": "[BN] No organizations found"
+          },
+          "hints": {
+            "defaultRole": "[BN] Role assigned to users provisioned via SCIM",
+            "syncUsers": "[BN] Provision and deprovision users automatically",
+            "syncGroups": "[BN] Sync group memberships from Identity Provider",
+            "autoDeactivate": "[BN] Automatically deactivate users when removed from IdP",
+            "important": "[BN] After creating the integration, you will receive a bearer token and endpoint URL. The token will only be shown once, so make sure to save it securely."
+          },
+          "roles": {
+            "viewer": "[BN] Viewer",
+            "member": "[BN] Member",
+            "admin": "[BN] Admin"
+          },
+          "dialog": {
+            "title": "[BN] SCIM Integration Created",
+            "description": "[BN] Save the bearer token below. It will not be shown again.",
+            "bearerToken": "[BN] Bearer Token",
+            "scimEndpointUrl": "[BN] SCIM Endpoint URL",
+            "copyToken": "[BN] Copy Token",
+            "done": "[BN] Done"
+          },
+          "validation": {
+            "organizationRequired": "[BN] Organization is required"
+          },
+          "toast": {
+            "createSuccess": "[BN] SCIM integration created successfully",
+            "createFailed": "[BN] Failed to create SCIM integration"
+          }
         }
       },
       "devices": {
@@ -8576,7 +8817,53 @@
             "sessionDuration": "সেশনের সময়কাল (ঘন্টা)",
             "requireReauth": "পুনরায় প্রমাণীকরণ প্রয়োজন",
             "requireReauthDescription": "সেশনের সময়কালের পরে পুনরায় প্রমাণীকরণের প্রয়োজন"
-          }
+          },
+          "nameRequired": "[BN] Policy name is required",
+          "created": "[BN] Created",
+          "updated": "[BN] Policy updated successfully",
+          "deleted": "[BN] Policy deleted successfully",
+          "enabled": "[BN] Policy enabled successfully",
+          "disabled": "[BN] Policy disabled successfully",
+          "updateStatusFailed": "[BN] Failed to update status",
+          "notFound": "[BN] Policy not found",
+          "createTitle": "[BN] Create Device Policy",
+          "nameRequiredLabel": "[BN] Policy Name *",
+          "descriptionLabel": "[BN] Description",
+          "scopeLabel": "[BN] Scope",
+          "priorityLabel": "[BN] Priority (higher = first)",
+          "deviceRequirements": "[BN] Device Requirements",
+          "enforcementActions": "[BN] Enforcement Actions",
+          "notifyOnViolation": "[BN] Notify on Violation",
+          "overview": "[BN] Overview",
+          "requirements": "[BN] Requirements",
+          "enforcement": "[BN] Enforcement",
+          "status": "[BN] Status",
+          "createdBy": "[BN] Created By",
+          "lastUpdated": "[BN] Last Updated",
+          "requireEncryption": "[BN] Require Encryption",
+          "requirePasscode": "[BN] Require Passcode",
+          "requireBiometric": "[BN] Require Biometric",
+          "requireMdm": "[BN] Require MDM",
+          "platformRestrictions": "[BN] Platform Restrictions",
+          "allowedPlatforms": "[BN] Allowed Platforms",
+          "allPlatforms": "[BN] All platforms",
+          "blockedPlatforms": "[BN] Blocked Platforms",
+          "blockOnViolation": "[BN] Block on Violation",
+          "blockOnViolationDescription": "[BN] Block access when device is non-compliant",
+          "wipeOnViolation": "[BN] Wipe on Violation",
+          "wipeOnViolationDescription": "[BN] Remote wipe device data on violation",
+          "notifyOnViolationDescription": "[BN] Send notification when policy is violated",
+          "warningWipeEnabled": "[BN] Warning: Wipe on Violation Enabled",
+          "warningWipeDescription": "[BN] This policy will remotely wipe device data when violations occur. Use with extreme caution.",
+          "requirementsDescription": "[BN] Requirements that devices must meet to be compliant",
+          "enforcementDescription": "[BN] Actions taken when a device violates this policy",
+          "editTitle": "[BN] Edit Policy",
+          "details": "[BN] Policy Details",
+          "deleteTitle": "[BN] Delete Policy",
+          "deleteDescription": "[BN] Are you sure you want to delete this policy? This action cannot be undone.",
+          "createButton": "[BN] Create Policy",
+          "namePlaceholder": "[BN] e.g., Enterprise Device Requirements",
+          "descriptionPlaceholder": "[BN] Describe what this policy enforces..."
         },
         "table": {
           "device": "ডিভাইস",
@@ -10912,6 +11199,90 @@
         "CLIENT": "ক্লায়েন্ট",
         "REGIONAL": "আঞ্চলিক",
         "PORTFOLIO_COMPANY": "পোর্টফোলিও কোম্পানি"
+      },
+      "plans": {
+        "starter": "[BN] Starter",
+        "professional": "[BN] Professional",
+        "enterprise": "[BN] Enterprise"
+      },
+      "new": {
+        "title": "[BN] Create New Organization",
+        "description": "[BN] Add a new tenant organization to the platform",
+        "back": "[BN] Back",
+        "creating": "[BN] Creating...",
+        "createOrganization": "[BN] Create Organization",
+        "noPermission": "[BN] You don't have permission to create organizations",
+        "backToTenants": "[BN] Back to Tenants",
+        "sections": {
+          "organizationDetails": "[BN] Organization Details",
+          "organizationDetailsDescription": "[BN] Basic information about the organization",
+          "locationTimezone": "[BN] Location & Timezone",
+          "locationTimezoneDescription": "[BN] Regional settings for the organization",
+          "planSubscription": "[BN] Plan & Subscription",
+          "planSubscriptionDescription": "[BN] Subscription tier and billing settings",
+          "hierarchySettings": "[BN] Hierarchy Settings",
+          "hierarchySettingsDescription": "[BN] Configure organization hierarchy and parent relationships",
+          "ownerInformation": "[BN] Owner Information (Optional)",
+          "ownerInformationDescription": "[BN] Automatically create an owner user for this organization",
+          "branding": "[BN] Branding (Optional)",
+          "brandingDescription": "[BN] Custom branding settings for the organization"
+        },
+        "fields": {
+          "organizationName": "[BN] Organization Name",
+          "slug": "[BN] Slug (auto-generated if empty)",
+          "organizationType": "[BN] Organization Type",
+          "industry": "[BN] Industry",
+          "companySize": "[BN] Company Size",
+          "domain": "[BN] Domain",
+          "country": "[BN] Country",
+          "timezone": "[BN] Timezone",
+          "planTier": "[BN] Plan Tier",
+          "parentOrganization": "[BN] Parent Organization",
+          "allowChildOrgs": "[BN] Allow Child Organizations",
+          "ownerEmail": "[BN] Owner Email",
+          "ownerName": "[BN] Owner Name",
+          "logoUrl": "[BN] Logo URL",
+          "brandColor": "[BN] Brand Color"
+        },
+        "placeholders": {
+          "organizationName": "[BN] Acme Corporation",
+          "slug": "[BN] acme-corporation",
+          "industry": "[BN] Technology, Healthcare, etc.",
+          "selectSize": "[BN] Select size",
+          "domain": "[BN] acme.com",
+          "country": "[BN] United States",
+          "timezone": "[BN] UTC",
+          "noneRootOrganization": "[BN] None (root organization)",
+          "ownerEmail": "[BN] owner@example.com",
+          "ownerName": "[BN] John Doe",
+          "logoUrl": "[BN] https://example.com/logo.png",
+          "brandColor": "[BN] #3B82F6"
+        },
+        "hints": {
+          "slug": "[BN] URL-friendly identifier, lowercase with hyphens",
+          "parentOrganization": "[BN] Select a parent to create this organization as a child in the hierarchy",
+          "allowChildOrgs": "[BN] Enable hierarchy features and allow creating sub-organizations",
+          "ownerInformation": "[BN] If provided, a user will be created (or existing user added) as the organization owner"
+        },
+        "companySizes": {
+          "solo": "[BN] Solo (1)",
+          "small": "[BN] Small (2-10)",
+          "medium": "[BN] Medium (11-50)",
+          "large": "[BN] Large (51-200)",
+          "enterprise": "[BN] Enterprise (201-1000)",
+          "global": "[BN] Global (1000+)"
+        },
+        "validation": {
+          "nameRequired": "[BN] Organization name is required"
+        },
+        "toast": {
+          "createFailed": "[BN] Failed to create organization"
+        }
+      },
+      "toast": {
+        "assignPlanFailed": "[BN] Failed to assign plan",
+        "grantFeatureFailed": "[BN] Failed to grant feature",
+        "revokeEntitlementFailed": "[BN] Failed to revoke entitlement"
       }
     },
     "users": {
@@ -11034,7 +11405,32 @@
       "selectOrganizationOptional": "প্রতিষ্ঠান নির্বাচন করুন (ঐচ্ছিক)",
       "organizationLaterHint": "ব্যবহারকারী পরে প্রতিষ্ঠানে যোগ করা যাবে",
       "roleInOrganization": "সংগঠনে ভূমিকা",
-      "roleHint": "ভূমিকা নির্ধারণ করে ব্যবহারকারী কী কী কাজ করতে পারে"
+      "roleHint": "ভূমিকা নির্ধারণ করে ব্যবহারকারী কী কী কাজ করতে পারে",
+      "bulkActions": {
+        "banReason": "[BN] Bulk ban action"
+      },
+      "toast": {
+        "banFailed": "[BN] Failed to ban user",
+        "userBanned": "[BN] User banned successfully",
+        "liftBanFailed": "[BN] Failed to lift ban",
+        "banLifted": "[BN] Ban lifted successfully",
+        "deleteFailed": "[BN] Failed to delete user",
+        "userDeleted": "[BN] User deleted successfully",
+        "bulkBanFailed": "[BN] Bulk ban failed",
+        "bulkBanSuccess": "[BN] {count} users banned successfully",
+        "bulkUnbanFailed": "[BN] Bulk unban failed",
+        "bulkUnbanSuccess": "[BN] {count} users unbanned successfully",
+        "bulkDeleteFailed": "[BN] Bulk delete failed",
+        "bulkDeleteSuccess": "[BN] {count} users deleted successfully",
+        "bulkVerifyFailed": "[BN] Bulk verify failed",
+        "bulkVerifySuccess": "[BN] {count} users verified successfully",
+        "bulkResetPasswordFailed": "[BN] Bulk reset password failed",
+        "bulkResetPasswordSuccess": "[BN] {count} password reset emails sent",
+        "bulkRevokeSessionsFailed": "[BN] Bulk revoke sessions failed",
+        "bulkRevokeSessionsSuccess": "[BN] {count} sessions revoked successfully",
+        "createFailed": "[BN] Failed to create user",
+        "userCreated": "[BN] User created successfully"
+      }
     },
     "broadcast": {
       "title": "সম্প্রচার কেন্দ্র",
@@ -11476,7 +11872,23 @@
           "messages": {
             "frameworkUpdated": "ফ্রেমওয়ার্ক সফলভাবে আপডেট করা হয়েছে"
           }
-        }
+        },
+        "createTitle": "[BN] Create Compliance Framework",
+        "createDescription": "[BN] Add a new compliance standard (SOC2, HIPAA, GDPR, etc.)",
+        "createButton": "[BN] Create Framework",
+        "createFailed": "[BN] Failed to create framework",
+        "details": "[BN] Framework Details",
+        "detailsDescription": "[BN] Define the compliance framework standards and requirements",
+        "nameRequired": "[BN] Framework Name *",
+        "codeRequired": "[BN] Code *",
+        "namePlaceholder": "[BN] SOC 2 Type II",
+        "codePlaceholder": "[BN] SOC2",
+        "codeHint": "[BN] Short identifier code (e.g., SOC2, HIPAA, GDPR)",
+        "versionPlaceholder": "[BN] 2023",
+        "versionHint": "[BN] The version or year of the framework standard",
+        "descriptionPlaceholder": "[BN] Service Organization Control 2 compliance framework for security, availability, processing integrity, confidentiality, and privacy...",
+        "activeStatus": "[BN] Active Status",
+        "activeStatusDescription": "[BN] Enable this framework for attestations and audits"
       },
       "frameworksOverview": {
         "title": "কমপ্লায়েন্স ফ্রেমওয়ার্ক",
@@ -12828,6 +13240,16 @@
       },
       "validation": {
         "required": "নাম এবং প্রদর্শন নাম প্রয়োজন"
+      },
+      "colors": {
+        "purple": "[BN] Purple",
+        "blue": "[BN] Blue",
+        "green": "[BN] Green",
+        "amber": "[BN] Amber",
+        "red": "[BN] Red",
+        "gray": "[BN] Gray",
+        "pink": "[BN] Pink",
+        "teal": "[BN] Teal"
       }
     },
     "healthScores": {
@@ -13047,6 +13469,15 @@
           "createFailed": "ঘটনা ঘটাতে ব্যর্থ হয়েছে",
           "updateFailed": "ঘটনা আপডেট করতে ব্যর্থ হয়েছে",
           "deleteFailed": "ঘটনা মুছে ফেলতে ব্যর্থ"
+        },
+        "toast": {
+          "loadFailed": "[BN] Failed to load incident",
+          "statusUpdated": "[BN] Status updated",
+          "updateStatusFailed": "[BN] Failed to update status",
+          "updated": "[BN] Incident updated",
+          "updateFailed": "[BN] Failed to update incident",
+          "updatePosted": "[BN] Update posted",
+          "addUpdateFailed": "[BN] Failed to add update"
         }
       },
       "maintenance": {
@@ -13117,6 +13548,73 @@
           "windowStarted": "রক্ষণাবেক্ষণ উইন্ডো শুরু হয়েছে",
           "windowCompleted": "রক্ষণাবেক্ষণ উইন্ডো সম্পন্ন হয়েছে",
           "windowCancelled": "রক্ষণাবেক্ষণ উইন্ডো বাতিল করা হয়েছে৷"
+        },
+        "toast": {
+          "loadFailed": "[BN] Failed to load maintenance window",
+          "statusUpdated": "[BN] Status updated",
+          "updateStatusFailed": "[BN] Failed to update status",
+          "updated": "[BN] Maintenance window updated",
+          "updateFailed": "[BN] Failed to update maintenance window",
+          "deleted": "[BN] Maintenance window deleted",
+          "deleteFailed": "[BN] Failed to delete maintenance window"
+        },
+        "new": {
+          "title": "[BN] Schedule Maintenance",
+          "description": "[BN] Create a new scheduled maintenance window",
+          "back": "[BN] Back",
+          "scheduling": "[BN] Scheduling...",
+          "scheduleMaintenance": "[BN] Schedule Maintenance",
+          "sections": {
+            "maintenanceDetails": "[BN] Maintenance Details",
+            "maintenanceDetailsDescription": "[BN] Basic information about the maintenance window",
+            "schedule": "[BN] Schedule",
+            "scheduleDescription": "[BN] Set the maintenance window timing",
+            "affectedServices": "[BN] Affected Services",
+            "affectedServicesDescription": "[BN] Select all services that will be affected",
+            "affectedRegions": "[BN] Affected Regions",
+            "affectedRegionsDescription": "[BN] Select the geographic regions impacted"
+          },
+          "fields": {
+            "title": "[BN] Title",
+            "description": "[BN] Description",
+            "type": "[BN] Type",
+            "startTime": "[BN] Start Time",
+            "endTime": "[BN] End Time",
+            "notifyBefore": "[BN] Notify Before (hours)"
+          },
+          "placeholders": {
+            "title": "[BN] e.g., Database upgrade",
+            "description": "[BN] Describe the maintenance work being performed...",
+            "duration": "[BN] Duration: {duration}"
+          },
+          "typeDescriptions": {
+            "scheduled": "[BN] Planned maintenance window",
+            "emergency": "[BN] Urgent maintenance required",
+            "upgrade": "[BN] System or component upgrade",
+            "migration": "[BN] Data or service migration",
+            "securityPatch": "[BN] Security-related updates"
+          },
+          "regions": {
+            "usEast": "[BN] US East",
+            "usWest": "[BN] US West",
+            "euWest": "[BN] EU West",
+            "euCentral": "[BN] EU Central",
+            "asiaPacific": "[BN] Asia Pacific",
+            "global": "[BN] Global"
+          },
+          "hints": {
+            "notifyBefore": "[BN] Users will be notified {hours} hours before maintenance begins",
+            "selectServices": "[BN] Click to select affected services",
+            "selectRegions": "[BN] Click to select affected regions"
+          },
+          "validation": {
+            "titleStartEndRequired": "[BN] Title, start time, and end time are required",
+            "endAfterStart": "[BN] End time must be after start time"
+          },
+          "toast": {
+            "createSuccess": "[BN] Maintenance window scheduled",
+            "createFailed": "[BN] Failed to schedule maintenance"
+          }
         }
       },
       "releases": {
@@ -13194,6 +13692,72 @@
           "rolloutStarted": "রোলআউট শুরু হয়েছে",
           "releaseCompleted": "রিলিজ সম্পন্ন হয়েছে",
           "releaseRolledBack": "রিলিজ ফিরে পাকানো"
+        },
+        "toast": {
+          "loadFailed": "[BN] Failed to load release",
+          "statusUpdated": "[BN] Status updated",
+          "updateStatusFailed": "[BN] Failed to update status",
+          "updateRolloutFailed": "[BN] Failed to update rollout percentage",
+          "updated": "[BN] Release updated",
+          "updateFailed": "[BN] Failed to update release",
+          "deleted": "[BN] Release deleted",
+          "deleteFailed": "[BN] Failed to delete release"
+        },
+        "new": {
+          "title": "[BN] Create New Release",
+          "description": "[BN] Plan and schedule a new platform release",
+          "back": "[BN] Back",
+          "creating": "[BN] Creating...",
+          "createRelease": "[BN] Create Release",
+          "sections": {
+            "releaseDetails": "[BN] Release Details",
+            "releaseDetailsDescription": "[BN] Basic information about this release",
+            "features": "[BN] Features",
+            "featuresDescription": "[BN] New features included in this release",
+            "bugFixes": "[BN] Bug Fixes",
+            "bugFixesDescription": "[BN] Bug fixes included in this release"
+          },
+          "fields": {
+            "version": "[BN] Version",
+            "name": "[BN] Name (optional)",
+            "description": "[BN] Description",
+            "type": "[BN] Type",
+            "rolloutStrategy": "[BN] Rollout Strategy",
+            "plannedDate": "[BN] Planned Date",
+            "changelogUrl": "[BN] Changelog URL"
+          },
+          "placeholders": {
+            "version": "[BN] e.g., 2.5.0",
+            "name": "[BN] e.g., Phoenix",
+            "description": "[BN] Describe the release...",
+            "changelogUrl": "[BN] https://..."
+          },
+          "typeDescriptions": {
+            "major": "[BN] Breaking changes, significant new features",
+            "minor": "[BN] New features, backward compatible",
+            "patch": "[BN] Bug fixes, minor improvements",
+            "hotfix": "[BN] Critical bug fixes"
+          },
+          "strategyDescriptions": {
+            "bigBang": "[BN] Deploy to all users at once",
+            "staged": "[BN] Deploy in stages by percentage",
+            "canary": "[BN] Deploy to small group first",
+            "blueGreen": "[BN] Switch between environments",
+            "ring": "[BN] Deploy by user rings"
+          },
+          "actions": {
+            "addFeature": "[BN] Add a feature...",
+            "addBugFix": "[BN] Add a bug fix...",
+            "noFeatures": "[BN] No features added yet",
+            "noBugFixes": "[BN] No bug fixes added yet"
+          },
+          "validation": {
+            "versionRequired": "[BN] Version is required"
+          },
+          "toast": {
+            "createSuccess": "[BN] Release created successfully",
+            "createFailed": "[BN] Failed to create release"
+          }
         }
       },
       "capacity": {
@@ -13261,6 +13825,17 @@
           "updateFailed": "ক্ষমতা মেট্রিক আপডেট করতে ব্যর্থ হয়েছে",
           "deleteFailed": "ক্ষমতা মেট্রিক মুছে ফেলতে ব্যর্থ হয়েছে"
         }
+      },
+      "services": {
+        "apiGateway": "[BN] API Gateway",
+        "authentication": "[BN] Authentication",
+        "database": "[BN] Database",
+        "fileStorage": "[BN] File Storage",
+        "messaging": "[BN] Messaging",
+        "search": "[BN] Search",
+        "analytics": "[BN] Analytics",
+        "payments": "[BN] Payments",
+        "notifications": "[BN] Notifications"
       }
     },
     "integrations": {
@@ -13477,7 +14052,9 @@
           "bulkUpdateFailed": "অ্যাপ আপডেট করতে ব্যর্থ হয়েছে",
           "bulkDeleted": "{count}টি অ্যাপ মুছে ফেলা হয়েছে",
           "bulkDeleteFailed": "অ্যাপগুলি মুছতে ব্যর্থ হয়েছে৷",
-          "updateStatusFailed": "অ্যাপের স্থিতি আপডেট করতে ব্যর্থ হয়েছে৷"
+          "updateStatusFailed": "অ্যাপের স্থিতি আপডেট করতে ব্যর্থ হয়েছে৷",
+          "updated": "[BN] Integration app updated",
+          "loadFailed": "[BN] Failed to load integration app"
         },
         "table": {
           "noReviews": "কোন পর্যালোচনা নেই"
@@ -13485,6 +14062,108 @@
         "badges": {
           "official": "অফিসিয়াল অ্যাপ",
           "featured": "বৈশিষ্ট্যযুক্ত অ্যাপ"
+        },
+        "tabs": {
+          "overview": "[BN] Overview",
+          "installations": "[BN] Installations ({count})",
+          "settings": "[BN] Settings"
+        },
+        "overview": {
+          "status": "[BN] Status",
+          "totalInstalls": "[BN] Total Installs",
+          "rating": "[BN] Rating",
+          "category": "[BN] Category",
+          "noReviews": "[BN] No reviews",
+          "appDetails": "[BN] App Details",
+          "name": "[BN] Name",
+          "slug": "[BN] Slug",
+          "developer": "[BN] Developer",
+          "published": "[BN] Published",
+          "notPublished": "[BN] Not published",
+          "created": "[BN] Created",
+          "links": "[BN] Links",
+          "linksDescription": "[BN] External resources",
+          "description": "[BN] Description",
+          "requiredScopes": "[BN] Required Scopes",
+          "requiredScopesDescription": "[BN] Permissions required by this integration"
+        },
+        "installations": {
+          "title": "[BN] Installation History",
+          "description": "[BN] Organizations using this app",
+          "status": "[BN] Status"
+        },
+        "settings": {
+          "editTitle": "[BN] Edit App Settings",
+          "editDescription": "[BN] Update integration app configuration"
+        },
+        "new": {
+          "title": "[BN] Add Integration App",
+          "description": "[BN] Add a new integration app to the marketplace",
+          "back": "[BN] Back",
+          "creating": "[BN] Creating...",
+          "createApp": "[BN] Create App",
+          "sections": {
+            "appDetails": "[BN] App Details",
+            "appDetailsDescription": "[BN] Basic information about the integration app",
+            "developerInformation": "[BN] Developer Information",
+            "developerInformationDescription": "[BN] Information about the app developer",
+            "assetsLinks": "[BN] Assets & Links",
+            "assetsLinksDescription": "[BN] App icon and related URLs",
+            "appStatus": "[BN] App Status",
+            "appStatusDescription": "[BN] Configure app visibility and badges"
+          },
+          "fields": {
+            "appName": "[BN] App Name",
+            "shortDescription": "[BN] Short Description",
+            "fullDescription": "[BN] Full Description",
+            "category": "[BN] Category",
+            "developerName": "[BN] Developer Name",
+            "developerWebsite": "[BN] Developer Website",
+            "supportEmail": "[BN] Support Email",
+            "iconUrl": "[BN] Icon URL",
+            "appWebsite": "[BN] App Website",
+            "documentationUrl": "[BN] Documentation URL",
+            "officialApp": "[BN] Official App",
+            "featuredApp": "[BN] Featured App"
+          },
+          "placeholders": {
+            "appName": "[BN] My Integration",
+            "shortDescription": "[BN] A brief description of the app",
+            "fullDescription": "[BN] Detailed description of the integration...",
+            "developerName": "[BN] Company or developer name",
+            "developerWebsite": "[BN] https://developer.com",
+            "supportEmail": "[BN] support@developer.com",
+            "iconUrl": "[BN] https://example.com/icon.png",
+            "appWebsite": "[BN] https://myapp.com",
+            "documentationUrl": "[BN] https://docs.myapp.com"
+          },
+          "hints": {
+            "shortDescription": "[BN] Displayed in app listings and search results",
+            "officialApp": "[BN] Mark as an officially supported integration",
+            "featuredApp": "[BN] Highlight this app in the marketplace",
+            "draftStatus": "[BN] The app will be created with Draft status. You can publish it later from the app details page."
+          },
+          "categoryDescriptions": {
+            "productivity": "[BN] Tools to improve workflow efficiency",
+            "communication": "[BN] Messaging, chat, and collaboration",
+            "projectManagement": "[BN] Task tracking and planning",
+            "crm": "[BN] Customer relationship management",
+            "analytics": "[BN] Data analysis and reporting",
+            "security": "[BN] Security and compliance tools",
+            "developerTools": "[BN] Development and DevOps",
+            "hr": "[BN] Human resources management",
+            "finance": "[BN] Financial management tools",
+            "marketing": "[BN] Marketing automation",
+            "customerSupport": "[BN] Help desk and support",
+            "other": "[BN] Other integrations"
+          },
+          "validation": {
+            "nameAndDeveloperRequired": "[BN] Name and developer are required"
+          },
+          "toast": {
+            "createSuccess": "[BN] Integration app created successfully",
+            "createFailed": "[BN] Failed to create app"
+          }
         }
       },
       "webhooks": {
@@ -13568,7 +14247,93 @@
           "testFailed": "পরীক্ষা ব্যর্থ হয়েছে: {error}",
           "testError": "পরীক্ষার ওয়েবহুক পাঠাতে ব্যর্থ হয়েছে৷",
           "deleted": "ওয়েবহুক মুছে ফেলা হয়েছে",
-          "deleteFailed": "ওয়েবহুক মুছে ফেলতে ব্যর্থ হয়েছে৷"
+          "deleteFailed": "ওয়েবহুক মুছে ফেলতে ব্যর্থ হয়েছে৷",
+          "loadFailed": "[BN] Failed to load webhook",
+          "updated": "[BN] Webhook updated",
+          "updateFailed": "[BN] Failed to update webhook",
+          "testDelivered": "[BN] Test webhook delivered successfully",
+          "unknownError": "[BN] Unknown error",
+          "sendTestFailed": "[BN] Failed to send test webhook"
+        },
+        "new": {
+          "title": "[BN] Create Webhook",
+          "description": "[BN] Create a new webhook endpoint to receive event notifications",
+          "back": "[BN] Back",
+          "creating": "[BN] Creating...",
+          "createWebhook": "[BN] Create Webhook",
+          "sections": {
+            "endpointDetails": "[BN] Endpoint Details",
+            "endpointDetailsDescription": "[BN] Configure the webhook endpoint",
+            "settings": "[BN] Settings",
+            "settingsDescription": "[BN] Configure timeout and retry behavior",
+            "eventSubscriptions": "[BN] Event Subscriptions",
+            "eventSubscriptionsDescription": "[BN] Select the events this webhook should receive ({count} selected)"
+          },
+          "fields": {
+            "webhookName": "[BN] Webhook Name",
+            "endpointUrl": "[BN] Endpoint URL",
+            "description": "[BN] Description",
+            "organization": "[BN] Organization",
+            "timeout": "[BN] Timeout (seconds)",
+            "retryCount": "[BN] Retry Count",
+            "customHeaders": "[BN] Custom Headers (JSON)"
+          },
+          "placeholders": {
+            "webhookName": "[BN] My Webhook",
+            "endpointUrl": "[BN] https://example.com/webhooks",
+            "description": "[BN] What is this webhook used for?",
+            "selectOrganization": "[BN] Select organization",
+            "loading": "[BN] Loading...",
+            "customHeaders": "[BN] {\n  \"X-Custom-Header\": \"value\"\n}"
+          },
+          "hints": {
+            "endpointUrl": "[BN] Must be a valid HTTPS URL that can receive POST requests",
+            "customHeaders": "[BN] Optional custom headers to include with webhook requests",
+            "selectEvents": "[BN] Please select at least one event to subscribe to"
+          },
+          "events": {
+            "users": "[BN] Users",
+            "organizations": "[BN] Organizations",
+            "agents": "[BN] Agents",
+            "workflows": "[BN] Workflows",
+            "reports": "[BN] Reports",
+            "billing": "[BN] Billing"
+          },
+          "eventLabels": {
+            "userCreated": "[BN] User Created",
+            "userUpdated": "[BN] User Updated",
+            "userDeleted": "[BN] User Deleted",
+            "organizationCreated": "[BN] Organization Created",
+            "organizationUpdated": "[BN] Organization Updated",
+            "agentRunCompleted": "[BN] Agent Run Completed",
+            "agentRunFailed": "[BN] Agent Run Failed",
+            "workflowCompleted": "[BN] Workflow Completed",
+            "workflowFailed": "[BN] Workflow Failed",
+            "reportGenerated": "[BN] Report Generated",
+            "subscriptionChanged": "[BN] Subscription Changed",
+            "subscriptionCancelled": "[BN] Subscription Cancelled"
+          },
+          "actions": {
+            "selectAll": "[BN] Select All",
+            "deselectAll": "[BN] Deselect All"
+          },
+          "dialog": {
+            "secretTitle": "[BN] Webhook Signing Secret",
+            "secretDescription": "[BN] Copy this secret now - it will not be shown again! Use this to verify webhook signatures.",
+            "copySecret": "[BN] Copy Secret",
+            "done": "[BN] Done"
+          },
+          "validation": {
+            "urlAndOrgRequired": "[BN] URL and organization are required",
+            "atLeastOneEvent": "[BN] Please select at least one event to subscribe to",
+            "invalidUrl": "[BN] Please enter a valid URL",
+            "invalidJsonHeaders": "[BN] Invalid JSON format for custom headers"
+          },
+          "toast": {
+            "createSuccess": "[BN] Webhook created successfully",
+            "createFailed": "[BN] Failed to create webhook",
+            "copied": "[BN] Copied to clipboard"
+          }
         }
       }
     },
@@ -14390,6 +15155,10 @@
       "defaultPlan": "প্রফেশনাল",
       "requiresPlan": "এই বৈশিষ্ট্যটির জন্য {plan} পরিকল্পনা বা উচ্চতর প্রয়োজন৷",
       "upgradeButton": "আপগ্রেড পরিকল্পনা"
+    },
+    "usage": {
+      "limitReached": "[BN] You've reached your limit. Upgrade your plan to continue.",
+      "approachingLimit": "[BN] You're approaching your limit."
     }
   },
   "blog": {

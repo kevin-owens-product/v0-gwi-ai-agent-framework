@@ -5859,7 +5859,9 @@
           "deleteFailed": "No se pudo eliminar la respuesta",
           "markCompleteFailed": "No se pudo marcar como completa"
         }
-      }
+      },
+      "questionsLabel": "[ES] Questions",
+      "responsesLabel": "[ES] Responses"
     },
     "taxonomy": {
       "title": "Taxonomía",
