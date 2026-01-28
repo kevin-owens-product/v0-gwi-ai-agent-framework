@@ -290,10 +290,18 @@ async function main() {
   }
   phases.push('standalone');
 
-  // Phase 6: Database seeding (SKIPPED in production to save memory)
+  // Phase 6: Database seeding (use seed-if-empty in production to avoid overwriting data)
   console.log('\n--- PHASE 6: Database Seeding ---');
-  if (process.env.SKIP_SEED !== 'true' && process.env.NODE_ENV !== 'production') {
-    // Use minimal seed for memory-constrained environments
+  if (process.env.SKIP_SEED === 'true') {
+    console.log('==> Skipping database seed (SKIP_SEED=true)');
+  } else if (process.env.NODE_ENV === 'production') {
+    // In production, only seed if database is empty (preserves existing data)
+    console.log('==> Running seed-if-empty (production mode - preserves existing data)');
+    if (!runPhase('npm run db:seed-if-empty', 'Seeding database (if empty)')) {
+      console.log('    Warning: Seed-if-empty had issues, continuing...');
+    }
+  } else {
+    // Use minimal seed for memory-constrained environments in non-production
     if (process.env.MEMORY_CONSTRAINED === 'true' || process.env.USE_MINIMAL_SEED === 'true') {
       console.log('==> Running minimal seed (memory-constrained mode)');
       if (!runPhase('npm run db:seed:minimal', 'Seeding database (minimal)')) {
@@ -303,10 +311,6 @@ async function main() {
     } else {
       runPhase('npm run db:seed', 'Seeding database');
     }
-  } else {
-    console.log('==> Skipping database seed (production build)');
-    console.log('    To seed manually: npm run db:seed');
-    console.log('    To seed if empty: npm run db:seed-if-empty');
   }
   phases.push('seed-skip');
 

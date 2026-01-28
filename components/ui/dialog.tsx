@@ -56,6 +56,15 @@ function DialogContent({
   showCloseButton?: boolean
 }) {
   const tDialog = useTranslations('ui.dialog')
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <DialogPortal data-slot="dialog-portal">
