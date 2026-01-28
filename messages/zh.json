@@ -29,7 +29,10 @@
     "noResults": "未找到结果",
     "required": "必填",
     "optional": "可选",
-    "actions": "操作",
+    "actions": {
+      "refresh": "[ZH] [TODO: Translate common.actions.refresh]",
+      "export": "[ZH] [TODO: Translate common.actions.export]"
+    },
     "status": "状态",
     "name": "名称",
     "description": "描述",
@@ -114,7 +117,45 @@
     "questionText": "[ZH] [TODO: Translate common.questionText]",
     "enterQuestionText": "[ZH] [TODO: Translate common.enterQuestionText]",
     "view": "[ZH] [TODO: Translate common.view]",
-    "deleting": "[ZH] [TODO: Translate common.deleting]"
+    "deleting": "[ZH] [TODO: Translate common.deleting]",
+    "currentOrgId": "[ZH] [TODO: Translate common.currentOrgId]",
+    "na": "[ZH] [TODO: Translate common.na]",
+    "remove": "[ZH] [TODO: Translate common.remove]",
+    "recommendations": "[ZH] [TODO: Translate common.recommendations]",
+    "noData": "[ZH] [TODO: Translate common.noData]",
+    "incidents": "[ZH] [TODO: Translate common.incidents]",
+    "incident": "[ZH] [TODO: Translate common.incident]",
+    "release": "[ZH] [TODO: Translate common.release]",
+    "total": "[ZH] [TODO: Translate common.total]",
+    "download": "[ZH] [TODO: Translate common.download]",
+    "unit": "[ZH] [TODO: Translate common.unit]",
+    "recorded": "[ZH] [TODO: Translate common.recorded]",
+    "copied": "[ZH] [TODO: Translate common.copied]",
+    "unnamed": "[ZH] [TODO: Translate common.unnamed]",
+    "failures": "[ZH] [TODO: Translate common.failures]",
+    "never": "[ZH] [TODO: Translate common.never]",
+    "copy": "[ZH] [TODO: Translate common.copy]",
+    "periodOptions": {
+      "daily": "[ZH] [TODO: Translate common.periodOptions.daily]",
+      "weekly": "[ZH] [TODO: Translate common.periodOptions.weekly]",
+      "monthly": "[ZH] [TODO: Translate common.periodOptions.monthly]",
+      "quarterly": "[ZH] [TODO: Translate common.periodOptions.quarterly]",
+      "yearly": "[ZH] [TODO: Translate common.periodOptions.yearly]"
+    },
+    "types": {
+      "usage": "[ZH] [TODO: Translate common.types.usage]",
+      "revenue": "[ZH] [TODO: Translate common.types.revenue]",
+      "security": "[ZH] [TODO: Translate common.types.security]",
+      "compliance": "[ZH] [TODO: Translate common.types.compliance]",
+      "userActivity": "[ZH] [TODO: Translate common.types.userActivity]",
+      "customSql": "[ZH] [TODO: Translate common.types.customSql]"
+    },
+    "schedules": {
+      "daily": "[ZH] [TODO: Translate common.schedules.daily]",
+      "weekly": "[ZH] [TODO: Translate common.schedules.weekly]",
+      "monthly": "[ZH] [TODO: Translate common.schedules.monthly]",
+      "onDemand": "[ZH] [TODO: Translate common.schedules.onDemand]"
+    }
   },
   "auth": {
     "signIn": "登录",
@@ -423,7 +464,8 @@
         "organizationName": "输入组织名称",
         "organizationSlug": "组织-slug",
         "orgDescription": "描述一下您的组织..."
-      }
+      },
+      " ": "[ZH] [TODO: Translate settings.general. ]"
     },
     "apiKeys": {
       "title": "API 密钥",
@@ -475,6 +517,9 @@
         "loadFailed": "加载 API 密钥失败",
         "createFailed": "创建 API 密钥失败",
         "deleteFailed": "删除 API 密钥失败"
+      },
+      "success": {
+        "copied": "[ZH] [TODO: Translate settings.apiKeys.success.copied]"
       }
     },
     "help": {
@@ -544,7 +589,8 @@
         "bio": "告诉我们你自己...",
         "phone": "+1 (555) 000-0000",
         "location": "城市、州"
-      }
+      },
+      " ": "[ZH] [TODO: Translate settings.profile. ]"
     },
     "team": {
       "title": "团队管理",
@@ -634,7 +680,8 @@
         "memberRemoveFailed": "删除会员失败",
         "invitationRevoked": "邀请已被撤销",
         "revokeFailed": "撤销邀请失败"
-      }
+      },
+      " ": "[ZH] [TODO: Translate settings.team. ]"
     },
     "billing": {
       "title": "计费和订阅",
@@ -738,7 +785,8 @@
         },
         "toast": {
           "checkoutFailed": "无法开始结账"
-        }
+        },
+        "canceled": "[ZH] [TODO: Translate settings.billing.upgrade.canceled]"
       }
     },
     "auditLog": {
@@ -2177,7 +2225,45 @@
       "confidence": "{percent}% 置信度",
       "title": "见解",
       "detail": {
-        "title": "洞察详情"
+        "title": "洞察详情",
+        "backToInsights": "[ZH] [TODO: Translate dashboard.insights.detail.backToInsights]",
+        "notFound": {
+          "title": "[ZH] [TODO: Translate dashboard.insights.detail.notFound.title]",
+          "description": "[ZH] [TODO: Translate dashboard.insights.detail.notFound.description]"
+        },
+        "viewAllInsights": "[ZH] [TODO: Translate dashboard.insights.detail.viewAllInsights]",
+        "actions": {
+          "copied": "[ZH] [TODO: Translate dashboard.insights.detail.actions.copied]",
+          "copy": "[ZH] [TODO: Translate dashboard.insights.detail.actions.copy]",
+          "share": "[ZH] [TODO: Translate dashboard.insights.detail.actions.share]",
+          "export": "[ZH] [TODO: Translate dashboard.insights.detail.actions.export]"
+        },
+        "detailsTitle": "[ZH] [TODO: Translate dashboard.insights.detail.detailsTitle]",
+        "detailsDescription": "[ZH] [TODO: Translate dashboard.insights.detail.detailsDescription]",
+        "exploreMore": {
+          "title": "[ZH] [TODO: Translate dashboard.insights.detail.exploreMore.title]",
+          "description": "[ZH] [TODO: Translate dashboard.insights.detail.exploreMore.description]",
+          "openPlayground": "[ZH] [TODO: Translate dashboard.insights.detail.exploreMore.openPlayground]"
+        }
+      },
+      "description": "[ZH] [TODO: Translate dashboard.insights.description]",
+      "searchPlaceholder": "[ZH] [TODO: Translate dashboard.insights.searchPlaceholder]",
+      "filterByType": "[ZH] [TODO: Translate dashboard.insights.filterByType]",
+      "types": {
+        "all": "[ZH] [TODO: Translate dashboard.insights.types.all]",
+        "audience": "[ZH] [TODO: Translate dashboard.insights.types.audience]",
+        "trend": "[ZH] [TODO: Translate dashboard.insights.types.trend]",
+        "competitive": "[ZH] [TODO: Translate dashboard.insights.types.competitive]",
+        "analysis": "[ZH] [TODO: Translate dashboard.insights.types.analysis]"
+      },
+      "loading": "[ZH] [TODO: Translate dashboard.insights.loading]",
+      "empty": {
+        "title": "[ZH] [TODO: Translate dashboard.insights.empty.title]",
+        "description": "[ZH] [TODO: Translate dashboard.insights.empty.description]",
+        "goToPlayground": "[ZH] [TODO: Translate dashboard.insights.empty.goToPlayground]"
+      },
+      "badges": {
+        "new": "[ZH] [TODO: Translate dashboard.insights.badges.new]"
       }
     },
     "sidebar": {
@@ -2480,8 +2566,15 @@
           "templates": "模板",
           "scheduled": "预定",
           "sharedWithMe": "与我分享"
-        }
-      }
+        },
+        "canView": "[ZH] [TODO: Translate dashboard.reports.page.canView]",
+        "canEdit": "[ZH] [TODO: Translate dashboard.reports.page.canEdit]",
+        "canComment": "[ZH] [TODO: Translate dashboard.reports.page.canComment]"
+      },
+      "recentReports": "[ZH] [TODO: Translate dashboard.reports.recentReports]",
+      "viewAll": "[ZH] [TODO: Translate dashboard.reports.viewAll]",
+      "noReportsYet": "[ZH] [TODO: Translate dashboard.reports.noReportsYet]",
+      "createReport": "[ZH] [TODO: Translate dashboard.reports.createReport]"
     },
     "projects": {
       "activeProjects": "活跃项目",
@@ -2643,7 +2736,8 @@
       "integrations": "集成",
       "connectedServices": "已连接的服务",
       "items": "{count} 个项目",
-      "title": "平台"
+      "title": "平台",
+      " ": "[ZH] [TODO: Translate dashboard.platform. ]"
     },
     "settings": {
       "title": "常规设置",
@@ -2920,7 +3014,12 @@
         "compareAudiences": "对比受众",
         "compareDescription": "比较受众之间的人口统计和行为属性。",
         "used": "使用于 {time}",
-        "marketsCount": "{count} 个市场"
+        "marketsCount": "{count} 个市场",
+        "emptyState": {
+          "title": "[ZH] [TODO: Translate dashboard.pages.audiences.emptyState.title]",
+          "description": "[ZH] [TODO: Translate dashboard.pages.audiences.emptyState.description]",
+          "action": "[ZH] [TODO: Translate dashboard.pages.audiences.emptyState.action]"
+        }
       },
       "projects": {
         "title": "项目",
@@ -2993,8 +3092,11 @@
             "addMember": "添加会员",
             "remove": "消除"
           },
-          "title": "项目详情"
-        }
+          "title": "项目详情",
+          "-": "[ZH] [TODO: Translate dashboard.pages.projects.detail.-]",
+          "T": "[ZH] [TODO: Translate dashboard.pages.projects.detail.T]"
+        },
+        "T": "[ZH] [TODO: Translate dashboard.pages.projects.T]"
       }
     },
     "audiences": {
@@ -3115,7 +3217,19 @@
           "asJson": "导出为 JSON",
           "asCsv": "导出为 CSV",
           "asPdf": "导出为 PDF",
-          "toPowerPoint": "导出到 PowerPoint"
+          "toPowerPoint": "导出到 PowerPoint",
+          "csvHeaders": {
+            "attribute": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.attribute]",
+            "value": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.value]",
+            "behavior": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.behavior]",
+            "interest": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.interest]",
+            "audience": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.audience]",
+            "description": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.description]",
+            "size": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.size]",
+            "markets": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.markets]",
+            "behaviors": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.behaviors]",
+            "interests": "[ZH] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.interests]"
+          }
         },
         "overview": {
           "demographics": "人口统计",
@@ -3176,7 +3290,26 @@
           "cancel": "取消",
           "delete": "删除"
         },
-        "title": "观众详情"
+        "title": "观众详情",
+        "demographics": {
+          "ageRange": "[ZH] [TODO: Translate dashboard.audiences.detail.demographics.ageRange]",
+          "income": "[ZH] [TODO: Translate dashboard.audiences.detail.demographics.income]",
+          "lifestyle": "[ZH] [TODO: Translate dashboard.audiences.detail.demographics.lifestyle]",
+          "values": "[ZH] [TODO: Translate dashboard.audiences.detail.demographics.values]"
+        },
+        "_": "[ZH] [TODO: Translate dashboard.audiences.detail._]",
+        "common": {
+          "unknown": "[ZH] [TODO: Translate dashboard.audiences.detail.common.unknown]",
+          "relativeTime": {
+            "justNow": "[ZH] [TODO: Translate dashboard.audiences.detail.common.relativeTime.justNow]"
+          }
+        },
+        "T": "[ZH] [TODO: Translate dashboard.audiences.detail.T]",
+        "a": "[ZH] [TODO: Translate dashboard.audiences.detail.a]",
+        "json": "[ZH] [TODO: Translate dashboard.audiences.detail.json]",
+        "csv": "[ZH] [TODO: Translate dashboard.audiences.detail.csv]",
+        "pdf": "[ZH] [TODO: Translate dashboard.audiences.detail.pdf]",
+        "pptx": "[ZH] [TODO: Translate dashboard.audiences.detail.pptx]"
       }
     },
     "dashboards": {
@@ -3244,7 +3377,40 @@
       "title": "仪表板",
       "new": {
         "title": "创建仪表板",
-        "description": "使用图表和小部件构建自定义仪表板"
+        "description": "使用图表和小部件构建自定义仪表板",
+        "validation": {
+          "enterName": "[ZH] [TODO: Translate dashboard.dashboards.new.validation.enterName]",
+          "selectChart": "[ZH] [TODO: Translate dashboard.dashboards.new.validation.selectChart]"
+        },
+        "errors": {
+          "createFailed": "[ZH] [TODO: Translate dashboard.dashboards.new.errors.createFailed]",
+          "createFailedRetry": "[ZH] [TODO: Translate dashboard.dashboards.new.errors.createFailedRetry]"
+        },
+        "form": {
+          "dashboardName": "[ZH] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
+          "dashboardNamePlaceholder": "[ZH] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
+          "descriptionLabel": "[ZH] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionPlaceholder": "[ZH] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
+          "publicDashboard": "[ZH] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
+          "publicDescription": "[ZH] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
+          "addCharts": "[ZH] [TODO: Translate dashboard.dashboards.new.form.addCharts]",
+          "added": "[ZH] [TODO: Translate dashboard.dashboards.new.form.added]",
+          "createNewChart": "[ZH] [TODO: Translate dashboard.dashboards.new.form.createNewChart]"
+        },
+        "preview": {
+          "title": "[ZH] [TODO: Translate dashboard.dashboards.new.preview.title]",
+          "name": "[ZH] [TODO: Translate dashboard.dashboards.new.preview.name]",
+          "untitledDashboard": "[ZH] [TODO: Translate dashboard.dashboards.new.preview.untitledDashboard]",
+          "noChartsSelected": "[ZH] [TODO: Translate dashboard.dashboards.new.preview.noChartsSelected]",
+          "visibility": "[ZH] [TODO: Translate dashboard.dashboards.new.preview.visibility]",
+          "public": "[ZH] [TODO: Translate dashboard.dashboards.new.preview.public]",
+          "private": "[ZH] [TODO: Translate dashboard.dashboards.new.preview.private]"
+        },
+        "buttons": {
+          "creating": "[ZH] [TODO: Translate dashboard.dashboards.new.buttons.creating]",
+          "createDashboard": "[ZH] [TODO: Translate dashboard.dashboards.new.buttons.createDashboard]",
+          "cancel": "[ZH] [TODO: Translate dashboard.dashboards.new.buttons.cancel]"
+        }
       },
       "builder": {
         "title": "仪表板生成器",
@@ -3252,7 +3418,12 @@
         "editTitle": "编辑仪表板",
         "initialName": "我的仪表板",
         "initialDescription": "自定义仪表板",
-        "exportFailed": "导出仪表板失败"
+        "exportFailed": "导出仪表板失败",
+        "id": "[ZH] [TODO: Translate dashboard.dashboards.builder.id]",
+        "saveSuccess": "[ZH] [TODO: Translate dashboard.dashboards.builder.saveSuccess]",
+        "saveFailed": "[ZH] [TODO: Translate dashboard.dashboards.builder.saveFailed]",
+        "a": "[ZH] [TODO: Translate dashboard.dashboards.builder.a]",
+        "T": "[ZH] [TODO: Translate dashboard.dashboards.builder.T]"
       },
       "detail": {
         "title": "仪表板详细信息",
@@ -3277,7 +3448,184 @@
             "category": "[ZH] Category",
             "dataSource": "[ZH] Data Source"
           }
+        },
+        "@": "[ZH] [TODO: Translate dashboard.dashboards.detail.@]",
+        "notFound": {
+          "title": "[ZH] [TODO: Translate dashboard.dashboards.detail.notFound.title]",
+          "description": "[ZH] [TODO: Translate dashboard.dashboards.detail.notFound.description]",
+          "message": "[ZH] [TODO: Translate dashboard.dashboards.detail.notFound.message]",
+          "backButton": "[ZH] [TODO: Translate dashboard.dashboards.detail.notFound.backButton]"
+        },
+        "a": "[ZH] [TODO: Translate dashboard.dashboards.detail.a]",
+        "T": "[ZH] [TODO: Translate dashboard.dashboards.detail.T]",
+        "favorites": {
+          "removeFromFavorites": "[ZH] [TODO: Translate dashboard.dashboards.detail.favorites.removeFromFavorites]",
+          "addToFavorites": "[ZH] [TODO: Translate dashboard.dashboards.detail.favorites.addToFavorites]"
+        },
+        "visibility": {
+          "public": "[ZH] [TODO: Translate dashboard.dashboards.detail.visibility.public]",
+          "private": "[ZH] [TODO: Translate dashboard.dashboards.detail.visibility.private]"
+        },
+        "tags": {
+          "addTag": "[ZH] [TODO: Translate dashboard.dashboards.detail.tags.addTag]",
+          "manageTags": "[ZH] [TODO: Translate dashboard.dashboards.detail.tags.manageTags]",
+          "manageTagsDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.tags.manageTagsDescription]",
+          "addNewTag": "[ZH] [TODO: Translate dashboard.dashboards.detail.tags.addNewTag]",
+          "noTagsAdded": "[ZH] [TODO: Translate dashboard.dashboards.detail.tags.noTagsAdded]",
+          "done": "[ZH] [TODO: Translate dashboard.dashboards.detail.tags.done]"
+        },
+        "autoRefresh": {
+          "on": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
+          "off": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
+          "label": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "interval": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
+          "every1Min": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
+          "every5Min": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
+          "every15Min": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every15Min]",
+          "every30Min": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every30Min]",
+          "everyHour": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.everyHour]",
+          "refreshNow": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.refreshNow]"
+        },
+        "filters": {
+          "title": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.title]",
+          "filterCharts": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.filterCharts]",
+          "clearAll": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.clearAll]",
+          "filterDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.filterDescription]",
+          "searchCharts": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.searchCharts]",
+          "searchPlaceholder": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.searchPlaceholder]",
+          "chartTypes": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.chartTypes]",
+          "clear": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.clear]",
+          "categories": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.categories]",
+          "dataSources": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.dataSources]",
+          "activeFilters": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.activeFilters]",
+          "clearAllFilters": "[ZH] [TODO: Translate dashboard.dashboards.detail.filters.clearAllFilters]"
+        },
+        "actions": {
+          "addChart": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.addChart]",
+          "share": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.share]",
+          "export": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.export]",
+          "edit": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.edit]",
+          "duplicate": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.duplicate]",
+          "copied": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.copied]",
+          "copyLink": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.copyLink]",
+          "manageAlerts": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.manageAlerts]",
+          "delete": "[ZH] [TODO: Translate dashboard.dashboards.detail.actions.delete]"
+        },
+        "meta": {
+          "searchCharts": "[ZH] [TODO: Translate dashboard.dashboards.detail.meta.searchCharts]"
+        },
+        "tabs": {
+          "analytics": "[ZH] [TODO: Translate dashboard.dashboards.detail.tabs.analytics]",
+          "comments": "[ZH] [TODO: Translate dashboard.dashboards.detail.tabs.comments]",
+          "activity": "[ZH] [TODO: Translate dashboard.dashboards.detail.tabs.activity]",
+          "history": "[ZH] [TODO: Translate dashboard.dashboards.detail.tabs.history]",
+          "settings": "[ZH] [TODO: Translate dashboard.dashboards.detail.tabs.settings]"
+        },
+        "chartActions": {
+          "minimize": "[ZH] [TODO: Translate dashboard.dashboards.detail.chartActions.minimize]",
+          "expand": "[ZH] [TODO: Translate dashboard.dashboards.detail.chartActions.expand]",
+          "refreshData": "[ZH] [TODO: Translate dashboard.dashboards.detail.chartActions.refreshData]",
+          "exportChart": "[ZH] [TODO: Translate dashboard.dashboards.detail.chartActions.exportChart]",
+          "openInEditor": "[ZH] [TODO: Translate dashboard.dashboards.detail.chartActions.openInEditor]",
+          "removeFromDashboard": "[ZH] [TODO: Translate dashboard.dashboards.detail.chartActions.removeFromDashboard]"
+        },
+        "emptyState": {
+          "noChartsMatch": "[ZH] [TODO: Translate dashboard.dashboards.detail.emptyState.noChartsMatch]",
+          "adjustFilters": "[ZH] [TODO: Translate dashboard.dashboards.detail.emptyState.adjustFilters]",
+          "clearFilters": "[ZH] [TODO: Translate dashboard.dashboards.detail.emptyState.clearFilters]"
+        },
+        "insights": {
+          "title": "[ZH] [TODO: Translate dashboard.dashboards.detail.insights.title]",
+          "chartDistribution": "[ZH] [TODO: Translate dashboard.dashboards.detail.insights.chartDistribution]",
+          "dataSourcesTitle": "[ZH] [TODO: Translate dashboard.dashboards.detail.insights.dataSourcesTitle]",
+          "currentView": "[ZH] [TODO: Translate dashboard.dashboards.detail.insights.currentView]"
+        },
+        "analytics": {
+          "totalViews": "[ZH] [TODO: Translate dashboard.dashboards.detail.analytics.totalViews]",
+          "uniqueViewers": "[ZH] [TODO: Translate dashboard.dashboards.detail.analytics.uniqueViewers]",
+          "avgTimeOnPage": "[ZH] [TODO: Translate dashboard.dashboards.detail.analytics.avgTimeOnPage]",
+          "exports": "[ZH] [TODO: Translate dashboard.dashboards.detail.analytics.exports]",
+          "viewsOverTime": "[ZH] [TODO: Translate dashboard.dashboards.detail.analytics.viewsOverTime]",
+          "viewsChartComingSoon": "[ZH] [TODO: Translate dashboard.dashboards.detail.analytics.viewsChartComingSoon]",
+          "mostViewedCharts": "[ZH] [TODO: Translate dashboard.dashboards.detail.analytics.mostViewedCharts]"
+        },
+        "activityTab": {
+          "recentActivity": "[ZH] [TODO: Translate dashboard.dashboards.detail.activityTab.recentActivity]"
+        },
+        " ": "[ZH] [TODO: Translate dashboard.dashboards.detail. ]",
+        "settingsTab": {
+          "generalSettings": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.generalSettings]",
+          "publicDashboard": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.publicDashboard]",
+          "publicDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.publicDescription]",
+          "allowComments": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.allowComments]",
+          "allowCommentsDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.allowCommentsDescription]",
+          "showInSearch": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.showInSearch]",
+          "showInSearchDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.showInSearchDescription]",
+          "alertsNotifications": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.alertsNotifications]",
+          "addAlert": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.addAlert]",
+          "collaborators": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.collaborators]",
+          "inviteCollaborator": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.inviteCollaborator]",
+          "relatedDashboards": "[ZH] [TODO: Translate dashboard.dashboards.detail.settingsTab.relatedDashboards]"
+        },
+        "share": {
+          "title": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.title]",
+          "description": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.description]",
+          "enterEmail": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.enterEmail]",
+          "viewer": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.viewer]",
+          "editor": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.editor]",
+          "admin": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.admin]",
+          "peopleWithAccess": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.peopleWithAccess]",
+          "linkSharing": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.linkSharing]",
+          "publicAccess": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.publicAccess]",
+          "publicAccessDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.share.publicAccessDescription]"
+        },
+        "exportDialog": {
+          "title": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.title]",
+          "description": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.description]",
+          "json": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.json]",
+          "jsonDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.jsonDescription]",
+          "csv": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.csv]",
+          "csvDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.csvDescription]",
+          "pdfHtml": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.pdfHtml]",
+          "pdfHtmlDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.pdfHtmlDescription]",
+          "pngImage": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.pngImage]",
+          "pngImageDescription": "[ZH] [TODO: Translate dashboard.dashboards.detail.exportDialog.pngImageDescription]"
+        },
+        "json": "[ZH] [TODO: Translate dashboard.dashboards.detail.json]",
+        "csv": "[ZH] [TODO: Translate dashboard.dashboards.detail.csv]",
+        "pdf": "[ZH] [TODO: Translate dashboard.dashboards.detail.pdf]",
+        "png": "[ZH] [TODO: Translate dashboard.dashboards.detail.png]",
+        "alerts": {
+          "title": "[ZH] [TODO: Translate dashboard.dashboards.detail.alerts.title]",
+          "description": "[ZH] [TODO: Translate dashboard.dashboards.detail.alerts.description]",
+          "createNewAlert": "[ZH] [TODO: Translate dashboard.dashboards.detail.alerts.createNewAlert]",
+          "alertName": "[ZH] [TODO: Translate dashboard.dashboards.detail.alerts.alertName]",
+          "alertCondition": "[ZH] [TODO: Translate dashboard.dashboards.detail.alerts.alertCondition]",
+          "addAlertButton": "[ZH] [TODO: Translate dashboard.dashboards.detail.alerts.addAlertButton]",
+          "activeAlerts": "[ZH] [TODO: Translate dashboard.dashboards.detail.alerts.activeAlerts]"
+        },
+        "delete": {
+          "title": "[ZH] [TODO: Translate dashboard.dashboards.detail.delete.title]",
+          "cancel": "[ZH] [TODO: Translate dashboard.dashboards.detail.delete.cancel]",
+          "delete": "[ZH] [TODO: Translate dashboard.dashboards.detail.delete.delete]"
         }
+      },
+      "description": "[ZH] [TODO: Translate dashboard.dashboards.description]",
+      "newDashboard": "[ZH] [TODO: Translate dashboard.dashboards.newDashboard]",
+      "stats": {
+        "totalDashboards": "[ZH] [TODO: Translate dashboard.dashboards.stats.totalDashboards]",
+        "totalViews": "[ZH] [TODO: Translate dashboard.dashboards.stats.totalViews]",
+        "shared": "[ZH] [TODO: Translate dashboard.dashboards.stats.shared]",
+        "exports": "[ZH] [TODO: Translate dashboard.dashboards.stats.exports]"
+      },
+      "tabs": {
+        "allDashboards": "[ZH] [TODO: Translate dashboard.dashboards.tabs.allDashboards]",
+        "recent": "[ZH] [TODO: Translate dashboard.dashboards.tabs.recent]",
+        "favorites": "[ZH] [TODO: Translate dashboard.dashboards.tabs.favorites]"
+      },
+      "grid": {
+        "noDashboardsYet": "[ZH] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
+        "createFirstDashboard": "[ZH] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
       }
     },
     "crosstabs": {
@@ -3444,7 +3792,205 @@
           "custom": "自定义权重"
         }
       },
-      "title": "交叉表"
+      "title": "交叉表",
+      "analysis": {
+        "toast": {
+          "fieldUpdated": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.toast.fieldUpdated]",
+          "fieldDeleted": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.toast.fieldDeleted]",
+          "filtersApplied": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.toast.filtersApplied]",
+          "chartSaved": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.toast.chartSaved]"
+        },
+        "categories": {
+          "calculated": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.categories.calculated]"
+        },
+        "title": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.title]",
+        "more": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.more]",
+        "actions": {
+          "share": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.actions.share]",
+          "generateInsights": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.actions.generateInsights]"
+        },
+        "tabs": {
+          "dataGrid": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.tabs.dataGrid]",
+          "calculatedFields": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.tabs.calculatedFields]",
+          "filters": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.tabs.filters]",
+          "visualize": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.tabs.visualize]"
+        },
+        "grid": {
+          "description": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.grid.description]"
+        },
+        "visualize": {
+          "chartTitle": "[ZH] [TODO: Translate dashboard.crosstabs.analysis.visualize.chartTitle]"
+        },
+        " - ": "[ZH] [TODO: Translate dashboard.crosstabs.analysis. - ]"
+      },
+      "new": {
+        "errors": {
+          "nameRequired": "[ZH] [TODO: Translate dashboard.crosstabs.new.errors.nameRequired]",
+          "audienceRequired": "[ZH] [TODO: Translate dashboard.crosstabs.new.errors.audienceRequired]",
+          "metricRequired": "[ZH] [TODO: Translate dashboard.crosstabs.new.errors.metricRequired]",
+          "createFailed": "[ZH] [TODO: Translate dashboard.crosstabs.new.errors.createFailed]",
+          "createFailedRetry": "[ZH] [TODO: Translate dashboard.crosstabs.new.errors.createFailedRetry]"
+        },
+        "title": "[ZH] [TODO: Translate dashboard.crosstabs.new.title]",
+        "description": "[ZH] [TODO: Translate dashboard.crosstabs.new.description]",
+        "form": {
+          "crosstabName": "[ZH] [TODO: Translate dashboard.crosstabs.new.form.crosstabName]",
+          "namePlaceholder": "[ZH] [TODO: Translate dashboard.crosstabs.new.form.namePlaceholder]",
+          "selectAudiences": "[ZH] [TODO: Translate dashboard.crosstabs.new.form.selectAudiences]",
+          "selectMetrics": "[ZH] [TODO: Translate dashboard.crosstabs.new.form.selectMetrics]"
+        },
+        "summary": {
+          "title": "[ZH] [TODO: Translate dashboard.crosstabs.new.summary.title]"
+        },
+        "actions": {
+          "generating": "[ZH] [TODO: Translate dashboard.crosstabs.new.actions.generating]",
+          "generate": "[ZH] [TODO: Translate dashboard.crosstabs.new.actions.generate]",
+          "cancel": "[ZH] [TODO: Translate dashboard.crosstabs.new.actions.cancel]"
+        }
+      },
+      "detail": {
+        "_": "[ZH] [TODO: Translate dashboard.crosstabs.detail._]",
+        "notFound": {
+          "title": "[ZH] [TODO: Translate dashboard.crosstabs.detail.notFound.title]",
+          "subtitle": "[ZH] [TODO: Translate dashboard.crosstabs.detail.notFound.subtitle]",
+          "heading": "[ZH] [TODO: Translate dashboard.crosstabs.detail.notFound.heading]",
+          "description": "[ZH] [TODO: Translate dashboard.crosstabs.detail.notFound.description]",
+          "backButton": "[ZH] [TODO: Translate dashboard.crosstabs.detail.notFound.backButton]"
+        },
+        "T": "[ZH] [TODO: Translate dashboard.crosstabs.detail.T]",
+        "a": "[ZH] [TODO: Translate dashboard.crosstabs.detail.a]",
+        "actions": {
+          "removeFromFavorites": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.removeFromFavorites]",
+          "addToFavorites": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.addToFavorites]",
+          "pauseAutoRefresh": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.pauseAutoRefresh]",
+          "enableAutoRefresh": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.enableAutoRefresh]",
+          "exitFullscreen": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.exitFullscreen]",
+          "enterFullscreen": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.enterFullscreen]",
+          "selectAll": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.selectAll]",
+          "clear": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.clear]",
+          "visualize": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.visualize]",
+          "share": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.share]",
+          "edit": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.edit]",
+          "duplicate": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.duplicate]",
+          "addToDashboard": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.addToDashboard]",
+          "copied": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.copied]",
+          "copyLink": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.copyLink]",
+          "delete": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.delete]",
+          "cancel": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.cancel]",
+          "schedule": "[ZH] [TODO: Translate dashboard.crosstabs.detail.actions.schedule]"
+        },
+        "filters": {
+          "title": "[ZH] [TODO: Translate dashboard.crosstabs.detail.filters.title]",
+          "clearAll": "[ZH] [TODO: Translate dashboard.crosstabs.detail.filters.clearAll]",
+          "description": "[ZH] [TODO: Translate dashboard.crosstabs.detail.filters.description]",
+          "quickFilters": "[ZH] [TODO: Translate dashboard.crosstabs.detail.filters.quickFilters]",
+          "category": "[ZH] [TODO: Translate dashboard.crosstabs.detail.filters.category]",
+          "allCategories": "[ZH] [TODO: Translate dashboard.crosstabs.detail.filters.allCategories]",
+          "activeFilters": "[ZH] [TODO: Translate dashboard.crosstabs.detail.filters.activeFilters]"
+        },
+        "tabs": {
+          "filters": "[ZH] [TODO: Translate dashboard.crosstabs.detail.tabs.filters]",
+          "audiences": "[ZH] [TODO: Translate dashboard.crosstabs.detail.tabs.audiences]",
+          "metrics": "[ZH] [TODO: Translate dashboard.crosstabs.detail.tabs.metrics]"
+        },
+        "audiences": {
+          "selectAudiences": "[ZH] [TODO: Translate dashboard.crosstabs.detail.audiences.selectAudiences]"
+        },
+        "metrics": {
+          "selectMetrics": "[ZH] [TODO: Translate dashboard.crosstabs.detail.metrics.selectMetrics]"
+        },
+        "json": "[ZH] [TODO: Translate dashboard.crosstabs.detail.json]",
+        "export": {
+          "asJson": "[ZH] [TODO: Translate dashboard.crosstabs.detail.export.asJson]",
+          "asCsv": "[ZH] [TODO: Translate dashboard.crosstabs.detail.export.asCsv]",
+          "asHtml": "[ZH] [TODO: Translate dashboard.crosstabs.detail.export.asHtml]",
+          "asPdf": "[ZH] [TODO: Translate dashboard.crosstabs.detail.export.asPdf]",
+          "asExcel": "[ZH] [TODO: Translate dashboard.crosstabs.detail.export.asExcel]",
+          "asPowerPoint": "[ZH] [TODO: Translate dashboard.crosstabs.detail.export.asPowerPoint]"
+        },
+        "csv": "[ZH] [TODO: Translate dashboard.crosstabs.detail.csv]",
+        "html": "[ZH] [TODO: Translate dashboard.crosstabs.detail.html]",
+        "pdf": "[ZH] [TODO: Translate dashboard.crosstabs.detail.pdf]",
+        "excel": "[ZH] [TODO: Translate dashboard.crosstabs.detail.excel]",
+        "pptx": "[ZH] [TODO: Translate dashboard.crosstabs.detail.pptx]",
+        "deleteDialog": {
+          "title": "[ZH] [TODO: Translate dashboard.crosstabs.detail.deleteDialog.title]"
+        },
+        "mainTabs": {
+          "data": "[ZH] [TODO: Translate dashboard.crosstabs.detail.mainTabs.data]",
+          "activity": "[ZH] [TODO: Translate dashboard.crosstabs.detail.mainTabs.activity]",
+          "comments": "[ZH] [TODO: Translate dashboard.crosstabs.detail.mainTabs.comments]",
+          "history": "[ZH] [TODO: Translate dashboard.crosstabs.detail.mainTabs.history]"
+        },
+        "insights": {
+          "title": "[ZH] [TODO: Translate dashboard.crosstabs.detail.insights.title]",
+          "topPerformer": "[ZH] [TODO: Translate dashboard.crosstabs.detail.insights.topPerformer]",
+          "noData": "[ZH] [TODO: Translate dashboard.crosstabs.detail.insights.noData]",
+          "biggestGap": "[ZH] [TODO: Translate dashboard.crosstabs.detail.insights.biggestGap]",
+          "biggestGapDesc": "[ZH] [TODO: Translate dashboard.crosstabs.detail.insights.biggestGapDesc]",
+          "trending": "[ZH] [TODO: Translate dashboard.crosstabs.detail.insights.trending]",
+          "noFilters": "[ZH] [TODO: Translate dashboard.crosstabs.detail.insights.noFilters]"
+        },
+        "activity": {
+          "title": "[ZH] [TODO: Translate dashboard.crosstabs.detail.activity.title]",
+          "description": "[ZH] [TODO: Translate dashboard.crosstabs.detail.activity.description]"
+        },
+        "shareDialog": {
+          "title": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
+          "description": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
+          "emailLabel": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailPlaceholder": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
+          "role": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
+          "roles": {
+            "viewer": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.viewer]",
+            "editor": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.editor]",
+            "admin": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.admin]"
+          },
+          "shareLink": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.shareLink]"
+        },
+        "scheduleDialog": {
+          "title": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.title]",
+          "description": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.description]",
+          "recipients": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.recipients]",
+          "recipientsPlaceholder": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.recipientsPlaceholder]",
+          "frequency": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequency]",
+          "frequencies": {
+            "daily": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.daily]",
+            "weekly": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.weekly]",
+            "monthly": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.monthly]"
+          },
+          "format": "[ZH] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.format]"
+        }
+      },
+      "justNow": "[ZH] [TODO: Translate dashboard.crosstabs.justNow]",
+      "description": "[ZH] [TODO: Translate dashboard.crosstabs.description]",
+      "newCrosstab": "[ZH] [TODO: Translate dashboard.crosstabs.newCrosstab]",
+      "stats": {
+        "totalCrosstabs": "[ZH] [TODO: Translate dashboard.crosstabs.stats.totalCrosstabs]",
+        "views": "[ZH] [TODO: Translate dashboard.crosstabs.stats.views]",
+        "exports": "[ZH] [TODO: Translate dashboard.crosstabs.stats.exports]",
+        "usedToday": "[ZH] [TODO: Translate dashboard.crosstabs.stats.usedToday]"
+      },
+      "tabs": {
+        "all": "[ZH] [TODO: Translate dashboard.crosstabs.tabs.all]",
+        "recent": "[ZH] [TODO: Translate dashboard.crosstabs.tabs.recent]",
+        "templates": "[ZH] [TODO: Translate dashboard.crosstabs.tabs.templates]"
+      },
+      "empty": {
+        "title": "[ZH] [TODO: Translate dashboard.crosstabs.empty.title]",
+        "description": "[ZH] [TODO: Translate dashboard.crosstabs.empty.description]"
+      },
+      "badges": {
+        "featured": "[ZH] [TODO: Translate dashboard.crosstabs.badges.featured]",
+        "liveData": "[ZH] [TODO: Translate dashboard.crosstabs.badges.liveData]"
+      },
+      "labels": {
+        "audienceSegments": "[ZH] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
+        "metrics": "[ZH] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+      },
+      "actions": {
+        "openAnalysis": "[ZH] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      }
     },
     "charts": {
       "pageTracker": "图表列表",
@@ -3504,6 +4050,38 @@
           "save": "创建图表",
           "saving": "创造...",
           "cancel": "取消"
+        },
+        "errors": {
+          "nameRequired": "[ZH] [TODO: Translate dashboard.charts.new.errors.nameRequired]",
+          "createFailed": "[ZH] [TODO: Translate dashboard.charts.new.errors.createFailed]",
+          "createFailedRetry": "[ZH] [TODO: Translate dashboard.charts.new.errors.createFailedRetry]"
+        },
+        "chartTypes": {
+          "bar": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.bar]",
+          "line": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.line]",
+          "area": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.area]",
+          "pie": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.pie]",
+          "donut": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.donut]",
+          "radar": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.radar]",
+          "scatter": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.scatter]",
+          "funnel": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.funnel]",
+          "treemap": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.treemap]",
+          "heatmap": "[ZH] [TODO: Translate dashboard.charts.new.chartTypes.heatmap]"
+        },
+        "audiences": {
+          "ecoMillennials": "[ZH] [TODO: Translate dashboard.charts.new.audiences.ecoMillennials]",
+          "techAdopters": "[ZH] [TODO: Translate dashboard.charts.new.audiences.techAdopters]",
+          "genZCreators": "[ZH] [TODO: Translate dashboard.charts.new.audiences.genZCreators]"
+        },
+        "dataSources": {
+          "socialUsage": "[ZH] [TODO: Translate dashboard.charts.new.dataSources.socialUsage]",
+          "purchaseIntent": "[ZH] [TODO: Translate dashboard.charts.new.dataSources.purchaseIntent]",
+          "brandAwareness": "[ZH] [TODO: Translate dashboard.charts.new.dataSources.brandAwareness]"
+        },
+        "timePeriods": {
+          "last12Months": "[ZH] [TODO: Translate dashboard.charts.new.timePeriods.last12Months]",
+          "last6Months": "[ZH] [TODO: Translate dashboard.charts.new.timePeriods.last6Months]",
+          "last3Months": "[ZH] [TODO: Translate dashboard.charts.new.timePeriods.last3Months]"
         }
       },
       "detail": {
@@ -3580,7 +4158,14 @@
         "annotations": {
           "addPlaceholder": "添加关于此图表的注释、观察结果或问题..."
         },
-        "title": "图表详情"
+        "title": "图表详情",
+        "a": "[ZH] [TODO: Translate dashboard.charts.detail.a]",
+        "T": "[ZH] [TODO: Translate dashboard.charts.detail.T]",
+        "png": "[ZH] [TODO: Translate dashboard.charts.detail.png]",
+        "csv": "[ZH] [TODO: Translate dashboard.charts.detail.csv]",
+        "json": "[ZH] [TODO: Translate dashboard.charts.detail.json]",
+        "pdf": "[ZH] [TODO: Translate dashboard.charts.detail.pdf]",
+        "pptx": "[ZH] [TODO: Translate dashboard.charts.detail.pptx]"
       },
       "templateGallery": {
         "title": "图表模板",
@@ -3880,7 +4465,12 @@
           "description": "您确定要删除“{name}”吗？ 此操作无法撤消。",
           "cancel": "取消",
           "delete": "删除"
-        }
+        },
+        "T": "[ZH] [TODO: Translate dashboard.brandTracking.detail.T]",
+        "a": "[ZH] [TODO: Translate dashboard.brandTracking.detail.a]",
+        "json": "[ZH] [TODO: Translate dashboard.brandTracking.detail.json]",
+        "csv": "[ZH] [TODO: Translate dashboard.brandTracking.detail.csv]",
+        "pdf": "[ZH] [TODO: Translate dashboard.brandTracking.detail.pdf]"
       }
     },
     "organizationSwitcher": {
@@ -4679,7 +5269,39 @@
     },
     "changes": {
       "title": "变更跟踪",
-      "description": "跟踪并监控数据随时间的变化"
+      "description": "跟踪并监控数据随时间的变化",
+      "tabs": {
+        "timeline": "[ZH] [TODO: Translate dashboard.changes.tabs.timeline]",
+        "compare": "[ZH] [TODO: Translate dashboard.changes.tabs.compare]",
+        "evolution": "[ZH] [TODO: Translate dashboard.changes.tabs.evolution]",
+        "alerts": "[ZH] [TODO: Translate dashboard.changes.tabs.alerts]"
+      },
+      "compare": {
+        "title": "[ZH] [TODO: Translate dashboard.changes.compare.title]",
+        "description": "[ZH] [TODO: Translate dashboard.changes.compare.description]",
+        "compareVersions": "[ZH] [TODO: Translate dashboard.changes.compare.compareVersions]"
+      },
+      "evolution": {
+        "title": "[ZH] [TODO: Translate dashboard.changes.evolution.title]",
+        "description": "[ZH] [TODO: Translate dashboard.changes.evolution.description]",
+        "viewEvolution": "[ZH] [TODO: Translate dashboard.changes.evolution.viewEvolution]"
+      },
+      "compareDialog": {
+        "entity": "[ZH] [TODO: Translate dashboard.changes.compareDialog.entity]"
+      },
+      "evolutionDialog": {
+        "selectTitle": "[ZH] [TODO: Translate dashboard.changes.evolutionDialog.selectTitle]",
+        "enterIdPlaceholder": "[ZH] [TODO: Translate dashboard.changes.evolutionDialog.enterIdPlaceholder]"
+      },
+      "alerts": {
+        "loading": "[ZH] [TODO: Translate dashboard.changes.alerts.loading]",
+        "noAlerts": "[ZH] [TODO: Translate dashboard.changes.alerts.noAlerts]",
+        "noAlertsDescription": "[ZH] [TODO: Translate dashboard.changes.alerts.noAlertsDescription]",
+        "title": "[ZH] [TODO: Translate dashboard.changes.alerts.title]",
+        "markAllRead": "[ZH] [TODO: Translate dashboard.changes.alerts.markAllRead]",
+        "markRead": "[ZH] [TODO: Translate dashboard.changes.alerts.markRead]",
+        "dismiss": "[ZH] [TODO: Translate dashboard.changes.alerts.dismiss]"
+      }
     },
     "inbox": {
       "title": "收件箱代理",
@@ -4767,7 +5389,8 @@
         "autoRespondHelp": "自动向请求者发送回复",
         "requireApproval": "需要批准",
         "requireApprovalHelp": "发送前查看回复"
-      }
+      },
+      " ": "[ZH] [TODO: Translate dashboard.inbox. ]"
     }
   },
   "audiences": {
@@ -6240,7 +6863,29 @@
       "newPipeline": "新建管道",
       "searchPlaceholder": "搜索管道...",
       "allRuns": "所有运行",
-      "schedules": "计划",
+      "schedules": {
+        " ": "[ZH] [TODO: Translate gwi.pipelines.schedules. ]",
+        "title": "[ZH] [TODO: Translate gwi.pipelines.schedules.title]",
+        "description": "[ZH] [TODO: Translate gwi.pipelines.schedules.description]",
+        "newSchedule": "[ZH] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
+        "totalSchedules": "[ZH] [TODO: Translate gwi.pipelines.schedules.totalSchedules]",
+        "activeSchedules": "[ZH] [TODO: Translate gwi.pipelines.schedules.activeSchedules]",
+        "pausedSchedules": "[ZH] [TODO: Translate gwi.pipelines.schedules.pausedSchedules]",
+        "scheduledPipelines": "[ZH] [TODO: Translate gwi.pipelines.schedules.scheduledPipelines]",
+        "scheduledPipelinesDescription": "[ZH] [TODO: Translate gwi.pipelines.schedules.scheduledPipelinesDescription]",
+        "pipeline": "[ZH] [TODO: Translate gwi.pipelines.schedules.pipeline]",
+        "schedule": "[ZH] [TODO: Translate gwi.pipelines.schedules.schedule]",
+        "lastRun": "[ZH] [TODO: Translate gwi.pipelines.schedules.lastRun]",
+        "nextRun": "[ZH] [TODO: Translate gwi.pipelines.schedules.nextRun]",
+        "never": "[ZH] [TODO: Translate gwi.pipelines.schedules.never]",
+        "calculatedAtRuntime": "[ZH] [TODO: Translate gwi.pipelines.schedules.calculatedAtRuntime]",
+        "runNow": "[ZH] [TODO: Translate gwi.pipelines.schedules.runNow]",
+        "editSchedule": "[ZH] [TODO: Translate gwi.pipelines.schedules.editSchedule]",
+        "noScheduledPipelines": "[ZH] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
+        "noScheduledPipelinesDescription": "[ZH] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
+        "createScheduledPipeline": "[ZH] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
+        "loading": "[ZH] [TODO: Translate gwi.pipelines.schedules.loading]"
+      },
       "validationRules": "验证规则",
       "pipeline": "管道",
       "type": "类型",
@@ -8901,8 +9546,10 @@
           "toast": {
             "createSuccess": "[ZH] SSO configuration created successfully",
             "createFailed": "[ZH] Failed to create SSO configuration"
-          }
-        }
+          },
+          ",": "[ZH] [TODO: Translate admin.identity.sso.new.,]"
+        },
+        ",": "[ZH] [TODO: Translate admin.identity.sso.,]"
       },
       "domains": {
         "title": "域名管理",
@@ -8941,7 +9588,12 @@
           "isPrimary": "主域名",
           "isPrimaryDescription": "设置为此组织的主域名",
           "autoJoin": "自动加入",
-          "autoJoinDescription": "自动将使用此域名的用户添加到组织"
+          "autoJoinDescription": "自动将使用此域名的用户添加到组织",
+          "domainHint": "[ZH] [TODO: Translate admin.identity.domains.form.domainHint]",
+          "searchOrganizations": "[ZH] [TODO: Translate admin.identity.domains.form.searchOrganizations]",
+          "noOrganizationsFound": "[ZH] [TODO: Translate admin.identity.domains.form.noOrganizationsFound]",
+          "ssoEnforced": "[ZH] [TODO: Translate admin.identity.domains.form.ssoEnforced]",
+          "ssoEnforcedDescription": "[ZH] [TODO: Translate admin.identity.domains.form.ssoEnforcedDescription]"
         },
         "verification": {
           "title": "域名验证",
@@ -8956,7 +9608,28 @@
           "checkVerification": "检查验证",
           "verificationPending": "验证待处理。DNS 更改可能需要最多 48 小时才能生效。",
           "verificationSuccess": "域名验证成功",
-          "verificationFailed": "验证失败。请检查您的 DNS 设置。"
+          "verificationFailed": "验证失败。请检查您的 DNS 设置。",
+          "dns_txt": {
+            "instructions": "[ZH] [TODO: Translate admin.identity.domains.verification.dns_txt.instructions]"
+          },
+          "host": "[ZH] [TODO: Translate admin.identity.domains.verification.host]",
+          "value": "[ZH] [TODO: Translate admin.identity.domains.verification.value]",
+          "dns_cname": {
+            "instructions": "[ZH] [TODO: Translate admin.identity.domains.verification.dns_cname.instructions]"
+          },
+          "pointsTo": "[ZH] [TODO: Translate admin.identity.domains.verification.pointsTo]",
+          "meta_tag": {
+            "instructions": "[ZH] [TODO: Translate admin.identity.domains.verification.meta_tag.instructions]"
+          },
+          "file_upload": {
+            "instructions": "[ZH] [TODO: Translate admin.identity.domains.verification.file_upload.instructions]"
+          },
+          "contents": "[ZH] [TODO: Translate admin.identity.domains.verification.contents]",
+          "afterConfiguring": "[ZH] [TODO: Translate admin.identity.domains.verification.afterConfiguring]",
+          "alreadyVerified": "[ZH] [TODO: Translate admin.identity.domains.verification.alreadyVerified]",
+          "lastAttempt": "[ZH] [TODO: Translate admin.identity.domains.verification.lastAttempt]",
+          "time": "[ZH] [TODO: Translate admin.identity.domains.verification.time]",
+          "result": "[ZH] [TODO: Translate admin.identity.domains.verification.result]"
         },
         "table": {
           "domain": "域名",
@@ -8985,6 +9658,72 @@
           "domainRequired": "域名为必填项",
           "domainFormat": "请输入有效的域名格式",
           "domainExists": "该域名已被注册"
+        },
+        "errors": {
+          "domainAndOrgRequired": "[ZH] [TODO: Translate admin.identity.domains.errors.domainAndOrgRequired]",
+          "invalidDomain": "[ZH] [TODO: Translate admin.identity.domains.errors.invalidDomain]",
+          "addFailed": "[ZH] [TODO: Translate admin.identity.domains.errors.addFailed]",
+          "noPermission": "[ZH] [TODO: Translate admin.identity.domains.errors.noPermission]",
+          "fetchFailed": "[ZH] [TODO: Translate admin.identity.domains.errors.fetchFailed]",
+          "updateFailed": "[ZH] [TODO: Translate admin.identity.domains.errors.updateFailed]",
+          "verificationFailed": "[ZH] [TODO: Translate admin.identity.domains.errors.verificationFailed]",
+          "deleteFailed": "[ZH] [TODO: Translate admin.identity.domains.errors.deleteFailed]"
+        },
+        "messages": {
+          "domainAdded": "[ZH] [TODO: Translate admin.identity.domains.messages.domainAdded]",
+          "settingsUpdated": "[ZH] [TODO: Translate admin.identity.domains.messages.settingsUpdated]",
+          "domainVerified": "[ZH] [TODO: Translate admin.identity.domains.messages.domainVerified]",
+          "domainDeleted": "[ZH] [TODO: Translate admin.identity.domains.messages.domainDeleted]",
+          "copiedToClipboard": "[ZH] [TODO: Translate admin.identity.domains.messages.copiedToClipboard]"
+        },
+        "backToDomains": "[ZH] [TODO: Translate admin.identity.domains.backToDomains]",
+        "new": {
+          "title": "[ZH] [TODO: Translate admin.identity.domains.new.title]",
+          "description": "[ZH] [TODO: Translate admin.identity.domains.new.description]",
+          "adding": "[ZH] [TODO: Translate admin.identity.domains.new.adding]",
+          "addDomain": "[ZH] [TODO: Translate admin.identity.domains.new.addDomain]",
+          "domainDetails": "[ZH] [TODO: Translate admin.identity.domains.new.domainDetails]",
+          "domainDetailsDescription": "[ZH] [TODO: Translate admin.identity.domains.new.domainDetailsDescription]",
+          "domainSettings": "[ZH] [TODO: Translate admin.identity.domains.new.domainSettings]",
+          "domainSettingsDescription": "[ZH] [TODO: Translate admin.identity.domains.new.domainSettingsDescription]",
+          "verificationRequired": "[ZH] [TODO: Translate admin.identity.domains.new.verificationRequired]"
+        },
+        "domainNotFound": "[ZH] [TODO: Translate admin.identity.domains.domainNotFound]",
+        "actions": {
+          "verifyNow": "[ZH] [TODO: Translate admin.identity.domains.actions.verifyNow]",
+          "viewSsoConfig": "[ZH] [TODO: Translate admin.identity.domains.actions.viewSsoConfig]"
+        },
+        "dialogs": {
+          "deleteTitle": "[ZH] [TODO: Translate admin.identity.domains.dialogs.deleteTitle]",
+          "deleteDescription": "[ZH] [TODO: Translate admin.identity.domains.dialogs.deleteDescription]"
+        },
+        "tabs": {
+          "overview": "[ZH] [TODO: Translate admin.identity.domains.tabs.overview]",
+          "verification": "[ZH] [TODO: Translate admin.identity.domains.tabs.verification]",
+          "settings": "[ZH] [TODO: Translate admin.identity.domains.tabs.settings]"
+        },
+        "detail": {
+          "autoJoin": "[ZH] [TODO: Translate admin.identity.domains.detail.autoJoin]",
+          "ssoEnforced": "[ZH] [TODO: Translate admin.identity.domains.detail.ssoEnforced]",
+          "enforced": "[ZH] [TODO: Translate admin.identity.domains.detail.enforced]",
+          "optional": "[ZH] [TODO: Translate admin.identity.domains.detail.optional]",
+          "domainDetails": "[ZH] [TODO: Translate admin.identity.domains.detail.domainDetails]",
+          "domain": "[ZH] [TODO: Translate admin.identity.domains.detail.domain]",
+          "organization": "[ZH] [TODO: Translate admin.identity.domains.detail.organization]",
+          "verificationMethod": "[ZH] [TODO: Translate admin.identity.domains.detail.verificationMethod]",
+          "verifiedAt": "[ZH] [TODO: Translate admin.identity.domains.detail.verifiedAt]",
+          "notVerified": "[ZH] [TODO: Translate admin.identity.domains.detail.notVerified]",
+          "created": "[ZH] [TODO: Translate admin.identity.domains.detail.created]",
+          "expires": "[ZH] [TODO: Translate admin.identity.domains.detail.expires]",
+          "linkedSsoConfig": "[ZH] [TODO: Translate admin.identity.domains.detail.linkedSsoConfig]",
+          "ssoConfigured": "[ZH] [TODO: Translate admin.identity.domains.detail.ssoConfigured]",
+          "provider": "[ZH] [TODO: Translate admin.identity.domains.detail.provider]"
+        },
+        "settings": {
+          "title": "[ZH] [TODO: Translate admin.identity.domains.settings.title]",
+          "ssoRequired": "[ZH] [TODO: Translate admin.identity.domains.settings.ssoRequired]",
+          "autoAddUsers": "[ZH] [TODO: Translate admin.identity.domains.settings.autoAddUsers]",
+          "requireSso": "[ZH] [TODO: Translate admin.identity.domains.settings.requireSso]"
         }
       },
       "scim": {
@@ -9262,7 +10001,11 @@
           "block": "阻止设备",
           "revoke": "撤销信任",
           "approveSelected": "批准所选",
-          "blockSelected": "阻止所选"
+          "blockSelected": "阻止所选",
+          "viewUserProfile": "[ZH] [TODO: Translate admin.identity.devices.actions.viewUserProfile]",
+          "trustDevice": "[ZH] [TODO: Translate admin.identity.devices.actions.trustDevice]",
+          "revokeTrust": "[ZH] [TODO: Translate admin.identity.devices.actions.revokeTrust]",
+          "deleteDevice": "[ZH] [TODO: Translate admin.identity.devices.actions.deleteDevice]"
         },
         "toast": {
           "deviceTrusted": "设备信任成功",
@@ -9284,6 +10027,81 @@
           "organizationRequired": "需要组织",
           "policyNameRequired": "策略名称为必填项",
           "atLeastOnePlatform": "至少选择一个平台"
+        },
+        "errors": {
+          "fetchFailed": "[ZH] [TODO: Translate admin.identity.devices.errors.fetchFailed]",
+          "updateFailed": "[ZH] [TODO: Translate admin.identity.devices.errors.updateFailed]",
+          "trustFailed": "[ZH] [TODO: Translate admin.identity.devices.errors.trustFailed]",
+          "revokeFailed": "[ZH] [TODO: Translate admin.identity.devices.errors.revokeFailed]",
+          "deleteFailed": "[ZH] [TODO: Translate admin.identity.devices.errors.deleteFailed]"
+        },
+        "messages": {
+          "deviceUpdated": "[ZH] [TODO: Translate admin.identity.devices.messages.deviceUpdated]",
+          "deviceTrusted": "[ZH] [TODO: Translate admin.identity.devices.messages.deviceTrusted]",
+          "trustRevoked": "[ZH] [TODO: Translate admin.identity.devices.messages.trustRevoked]",
+          "deviceDeleted": "[ZH] [TODO: Translate admin.identity.devices.messages.deviceDeleted]"
+        },
+        "deviceNotFound": "[ZH] [TODO: Translate admin.identity.devices.deviceNotFound]",
+        "compliance": {
+          "compliant": "[ZH] [TODO: Translate admin.identity.devices.compliance.compliant]",
+          "nonCompliant": "[ZH] [TODO: Translate admin.identity.devices.compliance.nonCompliant]",
+          "nonCompliantTitle": "[ZH] [TODO: Translate admin.identity.devices.compliance.nonCompliantTitle]",
+          "nonCompliantDescription": "[ZH] [TODO: Translate admin.identity.devices.compliance.nonCompliantDescription]",
+          "title": "[ZH] [TODO: Translate admin.identity.devices.compliance.title]",
+          "description": "[ZH] [TODO: Translate admin.identity.devices.compliance.description]",
+          "overallCompliance": "[ZH] [TODO: Translate admin.identity.devices.compliance.overallCompliance]",
+          "meetsRequirements": "[ZH] [TODO: Translate admin.identity.devices.compliance.meetsRequirements]",
+          "doesNotMeetRequirements": "[ZH] [TODO: Translate admin.identity.devices.compliance.doesNotMeetRequirements]",
+          "complianceChecks": "[ZH] [TODO: Translate admin.identity.devices.compliance.complianceChecks]"
+        },
+        "tabs": {
+          "overview": "[ZH] [TODO: Translate admin.identity.devices.tabs.overview]",
+          "security": "[ZH] [TODO: Translate admin.identity.devices.tabs.security]",
+          "activity": "[ZH] [TODO: Translate admin.identity.devices.tabs.activity]"
+        },
+        "detail": {
+          "deviceDetails": "[ZH] [TODO: Translate admin.identity.devices.detail.deviceDetails]",
+          "deviceId": "[ZH] [TODO: Translate admin.identity.devices.detail.deviceId]",
+          "type": "[ZH] [TODO: Translate admin.identity.devices.detail.type]",
+          "platform": "[ZH] [TODO: Translate admin.identity.devices.detail.platform]",
+          "osVersion": "[ZH] [TODO: Translate admin.identity.devices.detail.osVersion]",
+          "model": "[ZH] [TODO: Translate admin.identity.devices.detail.model]",
+          "manufacturer": "[ZH] [TODO: Translate admin.identity.devices.detail.manufacturer]",
+          "mdmManaged": "[ZH] [TODO: Translate admin.identity.devices.detail.mdmManaged]",
+          "userInformation": "[ZH] [TODO: Translate admin.identity.devices.detail.userInformation]",
+          "noName": "[ZH] [TODO: Translate admin.identity.devices.detail.noName]",
+          "organizations": "[ZH] [TODO: Translate admin.identity.devices.detail.organizations]",
+          "lastActivity": "[ZH] [TODO: Translate admin.identity.devices.detail.lastActivity]",
+          "lastActive": "[ZH] [TODO: Translate admin.identity.devices.detail.lastActive]",
+          "lastIp": "[ZH] [TODO: Translate admin.identity.devices.detail.lastIp]",
+          "lastLocation": "[ZH] [TODO: Translate admin.identity.devices.detail.lastLocation]"
+        },
+        "form": {
+          "deviceName": "[ZH] [TODO: Translate admin.identity.devices.form.deviceName]",
+          "deviceNamePlaceholder": "[ZH] [TODO: Translate admin.identity.devices.form.deviceNamePlaceholder]",
+          "markAsCompliant": "[ZH] [TODO: Translate admin.identity.devices.form.markAsCompliant]",
+          "markAsCompliantDescription": "[ZH] [TODO: Translate admin.identity.devices.form.markAsCompliantDescription]",
+          "mdmManaged": "[ZH] [TODO: Translate admin.identity.devices.form.mdmManaged]",
+          "mdmManagedDescription": "[ZH] [TODO: Translate admin.identity.devices.form.mdmManagedDescription]"
+        },
+        "unknown": "[ZH] [TODO: Translate admin.identity.devices.unknown]",
+        "never": "[ZH] [TODO: Translate admin.identity.devices.never]",
+        "security": {
+          "trustManagement": "[ZH] [TODO: Translate admin.identity.devices.security.trustManagement]",
+          "trustManagementDescription": "[ZH] [TODO: Translate admin.identity.devices.security.trustManagementDescription]",
+          "trustStatus": "[ZH] [TODO: Translate admin.identity.devices.security.trustStatus]"
+        },
+        "activity": {
+          "title": "[ZH] [TODO: Translate admin.identity.devices.activity.title]",
+          "description": "[ZH] [TODO: Translate admin.identity.devices.activity.description]",
+          "action": "[ZH] [TODO: Translate admin.identity.devices.activity.action]",
+          "details": "[ZH] [TODO: Translate admin.identity.devices.activity.details]",
+          "date": "[ZH] [TODO: Translate admin.identity.devices.activity.date]",
+          "noLogs": "[ZH] [TODO: Translate admin.identity.devices.activity.noLogs]"
+        },
+        "dialogs": {
+          "deleteDevice": "[ZH] [TODO: Translate admin.identity.devices.dialogs.deleteDevice]",
+          "deleteDeviceDescription": "[ZH] [TODO: Translate admin.identity.devices.dialogs.deleteDeviceDescription]"
         }
       },
       "title": "身份管理",
@@ -9481,7 +10299,8 @@
           "messages": {
             "createSuccess": "威胁事件创建成功"
           }
-        }
+        },
+        ",": "[ZH] [TODO: Translate admin.security.threats.,]"
       },
       "policies": {
         "title": "安全策略",
@@ -9656,7 +10475,42 @@
       },
       "title": "安全中心",
       "description": "监控和管理平台安全",
-      "sessions": "会议",
+      "sessions": {
+        "toast": {
+          "fetchFailed": "[ZH] [TODO: Translate admin.security.sessions.toast.fetchFailed]",
+          "refreshed": "[ZH] [TODO: Translate admin.security.sessions.toast.refreshed]",
+          "terminated": "[ZH] [TODO: Translate admin.security.sessions.toast.terminated]",
+          "terminateFailed": "[ZH] [TODO: Translate admin.security.sessions.toast.terminateFailed]",
+          "bulkTerminateFailed": "[ZH] [TODO: Translate admin.security.sessions.toast.bulkTerminateFailed]"
+        },
+        "unknown": "[ZH] [TODO: Translate admin.security.sessions.unknown]",
+        "device": {
+          "desktop": "[ZH] [TODO: Translate admin.security.sessions.device.desktop]",
+          "mobile": "[ZH] [TODO: Translate admin.security.sessions.device.mobile]",
+          "tablet": "[ZH] [TODO: Translate admin.security.sessions.device.tablet]"
+        },
+        "expired": "[ZH] [TODO: Translate admin.security.sessions.expired]",
+        " ": "[ZH] [TODO: Translate admin.security.sessions. ]",
+        "table": {
+          "user": "[ZH] [TODO: Translate admin.security.sessions.table.user]",
+          "session": "[ZH] [TODO: Translate admin.security.sessions.table.session]",
+          "ipAddress": "[ZH] [TODO: Translate admin.security.sessions.table.ipAddress]",
+          "device": "[ZH] [TODO: Translate admin.security.sessions.table.device]",
+          "status": "[ZH] [TODO: Translate admin.security.sessions.table.status]",
+          "expires": "[ZH] [TODO: Translate admin.security.sessions.table.expires]"
+        },
+        "unknownUser": "[ZH] [TODO: Translate admin.security.sessions.unknownUser]",
+        "tooltip": {
+          "browser": "[ZH] [TODO: Translate admin.security.sessions.tooltip.browser]",
+          "os": "[ZH] [TODO: Translate admin.security.sessions.tooltip.os]",
+          "device": "[ZH] [TODO: Translate admin.security.sessions.tooltip.device]"
+        },
+        "status": {
+          "active": "[ZH] [TODO: Translate admin.security.sessions.status.active]",
+          "expired": "[ZH] [TODO: Translate admin.security.sessions.status.expired]"
+        },
+        "expires": "[ZH] [TODO: Translate admin.security.sessions.expires]"
+      },
       "loading": "加载中...",
       "platformSecurityScore": "平台安全评分",
       "authenticationOverview": "身份验证概述",
@@ -9886,7 +10740,11 @@
           "ENFORCE": "执行",
           "MONITOR": "监视器",
           "DISABLED": "残疾人"
-        }
+        },
+        "violationType": "[ZH] [TODO: Translate admin.security.violations.violationType]",
+        "severity": "[ZH] [TODO: Translate admin.security.violations.severity]",
+        "status": "[ZH] [TODO: Translate admin.security.violations.status]",
+        "createdAt": "[ZH] [TODO: Translate admin.security.violations.createdAt]"
       },
       "ipBlocklist": {
         "title": "IP 阻止列表",
@@ -10045,7 +10903,10 @@
           "lastUpdated": "最后更新",
           "createdBy": "创建者"
         },
-        "addToBlocklist": "添加到阻止列表"
+        "addToBlocklist": "添加到阻止列表",
+        "": {
+          "": "[ZH] [TODO: Translate admin.security.ipBlocklist..]"
+        }
       }
     },
     "scim": {
@@ -10401,7 +11262,8 @@
         "auditLog": "审核日志",
         "admins": "管理员",
         "settings": "设置"
-      }
+      },
+      " ": "[ZH] [TODO: Translate admin.navigation. ]"
     },
     "plans": {
       "title": "计划",
@@ -10836,7 +11698,8 @@
         "customRange": "定制范围",
         "startDate": "开始日期",
         "endDate": "结束日期",
-        "clear": "清除"
+        "clear": "清除",
+        "T": "[ZH] [TODO: Translate admin.activity.filters.T]"
       },
       "recentActivity": "最近的活动",
       "activitiesFound": "找到 {count} 项活动",
@@ -10871,8 +11734,13 @@
         "adminProductivity": "管理生产力",
         "unknownAdmin": "未知管理员",
         "unknownRole": "未知角色",
-        "noActivityData": "没有可用的管理活动数据"
-      }
+        "noActivityData": "没有可用的管理活动数据",
+        "T": "[ZH] [TODO: Translate admin.activity.stats.T]",
+        " ": "[ZH] [TODO: Translate admin.activity.stats. ]"
+      },
+      "a": "[ZH] [TODO: Translate admin.activity.a]",
+      "T": "[ZH] [TODO: Translate admin.activity.T]",
+      " ": "[ZH] [TODO: Translate admin.activity. ]"
     },
     "sso": {
       "title": "单点登录配置",
@@ -11020,12 +11888,17 @@
         "allTypes": "所有类型",
         "allStatus": "所有状态",
         "trustStatus": "信托状态",
-        "compliance": "遵守"
+        "compliance": "遵守",
+        "allPlatforms": "[ZH] [TODO: Translate admin.devices.filters.allPlatforms]"
       },
       "actions": {
         "revokeTrust": "撤销信任",
         "approveTrust": "批准信任",
-        "deleteDevices": "删除设备"
+        "deleteDevices": "删除设备",
+        "trustDevice": "[ZH] [TODO: Translate admin.devices.actions.trustDevice]",
+        "blockDevice": "[ZH] [TODO: Translate admin.devices.actions.blockDevice]",
+        "bulkRevokeTrust": "[ZH] [TODO: Translate admin.devices.actions.bulkRevokeTrust]",
+        "bulkBlockDevices": "[ZH] [TODO: Translate admin.devices.actions.bulkBlockDevices]"
       },
       "dialogs": {
         "revokeMultiple": "撤销对多个设备的信任",
@@ -11035,7 +11908,9 @@
         "deleteTitle": "删除设备",
         "deleteDescription": "您确定要删除 {deviceName} 吗？ 此操作无法撤消。",
         "revokeTitle": "撤销设备信任",
-        "revokeDescription": "您确定要撤销对此设备的信任吗？ 该设备需要重新获得批准才能重新获得访问权限。"
+        "revokeDescription": "您确定要撤销对此设备的信任吗？ 该设备需要重新获得批准才能重新获得访问权限。",
+        "blockMultiple": "[ZH] [TODO: Translate admin.devices.dialogs.blockMultiple]",
+        "blockMultipleDescription": "[ZH] [TODO: Translate admin.devices.dialogs.blockMultipleDescription]"
       },
       "errors": {
         "fetchFailed": "获取设备失败",
@@ -11043,14 +11918,17 @@
         "revokeFailed": "无法撤销设备信任",
         "bulkRevokeFailed": "撤销某些设备失败",
         "deleteFailed": "删除设备失败",
-        "bulkDeleteFailed": "删除设备失败"
+        "bulkDeleteFailed": "删除设备失败",
+        "blockFailed": "[ZH] [TODO: Translate admin.devices.errors.blockFailed]",
+        "bulkBlockFailed": "[ZH] [TODO: Translate admin.devices.errors.bulkBlockFailed]"
       },
       "messages": {
         "deviceTrusted": "设备信任成功",
         "trustRevoked": "设备信任已撤销",
         "bulkRevoked": "{count} 台设备已成功撤销",
         "deviceDeleted": "设备删除成功",
-        "bulkDeleted": "已删除 {count} 台设备"
+        "bulkDeleted": "已删除 {count} 台设备",
+        "deviceBlocked": "[ZH] [TODO: Translate admin.devices.messages.deviceBlocked]"
       },
       "managePolicies": "管理政策",
       "registerDevice": "注册设备",
@@ -11229,7 +12107,20 @@
           "deviceTrusted": "设备信任成功",
           "trustRevoked": "信任撤销成功",
           "deviceDeleted": "设备删除成功"
-        }
+        },
+        "revokedByAdmin": "[ZH] [TODO: Translate admin.devices.detail.revokedByAdmin]",
+        "trustStatuses": {
+          "trusted": "[ZH] [TODO: Translate admin.devices.detail.trustStatuses.trusted]",
+          "pending": "[ZH] [TODO: Translate admin.devices.detail.trustStatuses.pending]",
+          "blocked": "[ZH] [TODO: Translate admin.devices.detail.trustStatuses.blocked]",
+          "revoked": "[ZH] [TODO: Translate admin.devices.detail.trustStatuses.revoked]"
+        },
+        "complianceStatuses": {
+          "compliant": "[ZH] [TODO: Translate admin.devices.detail.complianceStatuses.compliant]",
+          "nonCompliant": "[ZH] [TODO: Translate admin.devices.detail.complianceStatuses.nonCompliant]"
+        },
+        "never": "[ZH] [TODO: Translate admin.devices.detail.never]",
+        "unknown": "[ZH] [TODO: Translate admin.devices.detail.unknown]"
       },
       "policies": {
         "title": "设备策略",
@@ -11381,10 +12272,82 @@
             "policyDeleted": "策略删除成功",
             "policyEnabled": "策略启用成功",
             "policyDisabled": "策略已成功禁用"
+          },
+          "admin": {
+            "devices": {
+              "policies": {
+                "nameRequired": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.nameRequired]",
+                "created": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.created]",
+                "updated": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.updated]",
+                "disabled": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.disabled]",
+                "enabled": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.enabled]",
+                "updateStatusFailed": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.updateStatusFailed]",
+                "deleted": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleted]",
+                "notFound": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.notFound]",
+                "createTitle": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.createTitle]",
+                "title": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.title]",
+                "deleteTitle": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleteTitle]",
+                "deleteDescription": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleteDescription]",
+                "details": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.details]",
+                "editTitle": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.editTitle]",
+                "nameRequiredLabel": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.nameRequiredLabel]",
+                "namePlaceholder": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.namePlaceholder]",
+                "descriptionLabel": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.descriptionLabel]",
+                "descriptionPlaceholder": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.descriptionPlaceholder]",
+                "scopeLabel": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.scopeLabel]",
+                "priorityLabel": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.priorityLabel]",
+                "deviceRequirements": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.deviceRequirements]",
+                "requireEncryption": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireEncryption]",
+                "requirePasscode": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirePasscode]",
+                "requireBiometric": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireBiometric]",
+                "requireMdm": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireMdm]",
+                "enforcementActions": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcementActions]",
+                "blockOnViolation": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockOnViolation]",
+                "wipeOnViolation": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.wipeOnViolation]",
+                "notifyOnViolation": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.notifyOnViolation]",
+                "createButton": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.createButton]",
+                "overview": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.overview]",
+                "requirements": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirements]",
+                "enforcement": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcement]",
+                "status": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.status]",
+                "createdBy": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.createdBy]",
+                "lastUpdated": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.lastUpdated]",
+                "requirementsDescription": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirementsDescription]",
+                "platformRestrictions": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.platformRestrictions]",
+                "allowedPlatforms": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.allowedPlatforms]",
+                "allPlatforms": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.allPlatforms]",
+                "blockedPlatforms": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockedPlatforms]",
+                "enforcementDescription": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcementDescription]",
+                "blockOnViolationDescription": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockOnViolationDescription]",
+                "wipeOnViolationDescription": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.wipeOnViolationDescription]",
+                "notifyOnViolationDescription": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.notifyOnViolationDescription]",
+                "warningWipeEnabled": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.warningWipeEnabled]",
+                "warningWipeDescription": "[ZH] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.warningWipeDescription]"
+              }
+            }
+          },
+          "common": {
+            "back": "[ZH] [TODO: Translate admin.devices.policies.detail.common.back]",
+            "active": "[ZH] [TODO: Translate admin.devices.policies.detail.common.active]",
+            "inactive": "[ZH] [TODO: Translate admin.devices.policies.detail.common.inactive]",
+            "disable": "[ZH] [TODO: Translate admin.devices.policies.detail.common.disable]",
+            "enable": "[ZH] [TODO: Translate admin.devices.policies.detail.common.enable]",
+            "delete": "[ZH] [TODO: Translate admin.devices.policies.detail.common.delete]",
+            "cancel": "[ZH] [TODO: Translate admin.devices.policies.detail.common.cancel]",
+            "creating": "[ZH] [TODO: Translate admin.devices.policies.detail.common.creating]",
+            "name": "[ZH] [TODO: Translate admin.devices.policies.detail.common.name]",
+            "noDescription": "[ZH] [TODO: Translate admin.devices.policies.detail.common.noDescription]",
+            "system": "[ZH] [TODO: Translate admin.devices.policies.detail.common.system]",
+            "required": "[ZH] [TODO: Translate admin.devices.policies.detail.common.required]",
+            "notRequired": "[ZH] [TODO: Translate admin.devices.policies.detail.common.notRequired]",
+            "enabled": "[ZH] [TODO: Translate admin.devices.policies.detail.common.enabled]",
+            "disabled": "[ZH] [TODO: Translate admin.devices.policies.detail.common.disabled]"
           }
         }
       },
-      "noDevicesFound": "未找到设备"
+      "noDevicesFound": "未找到设备",
+      "unknownModel": "[ZH] [TODO: Translate admin.devices.unknownModel]",
+      "noDevices": "[ZH] [TODO: Translate admin.devices.noDevices]"
     },
     "securityPolicies": {
       "title": "安全政策",
@@ -11675,7 +12638,8 @@
         "assignPlanFailed": "[ZH] Failed to assign plan",
         "grantFeatureFailed": "[ZH] Failed to grant feature",
         "revokeEntitlementFailed": "[ZH] Failed to revoke entitlement"
-      }
+      },
+      " ": "[ZH] [TODO: Translate admin.tenants. ]"
     },
     "users": {
       "title": "用户管理",
@@ -11822,7 +12786,9 @@
         "bulkRevokeSessionsSuccess": "[ZH] {count} sessions revoked successfully",
         "createFailed": "[ZH] Failed to create user",
         "userCreated": "[ZH] User created successfully"
-      }
+      },
+      " ": "[ZH] [TODO: Translate admin.users. ]",
+      "ipAddress": "[ZH] [TODO: Translate admin.users.ipAddress]"
     },
     "broadcast": {
       "title": "广播中心",
@@ -11936,7 +12902,9 @@
         "delivered": "已交付 {count} 个",
         "opened": "打开了 {count} 个 ({percent}%)",
         "recipients": "{count} 个收件人",
-        "scheduledFor": "预定"
+        "scheduledFor": "预定",
+        "title": "[ZH] [TODO: Translate admin.broadcast.delivery.title]",
+        "description": "[ZH] [TODO: Translate admin.broadcast.delivery.description]"
       },
       "deliveryStats": {
         "funnel": "交付漏斗",
@@ -12075,7 +13043,12 @@
         "bulkDeleteSuccess": "已成功删除 {count} 条消息",
         "bulkDeletePartialFailed": "删除 {count} 条消息失败",
         "bulkDeleteFailed": "删除消息失败"
-      }
+      },
+      "\\n": "[ZH] [TODO: Translate admin.broadcast.\\n]",
+      "T": "[ZH] [TODO: Translate admin.broadcast.T]",
+      "schedule": "[ZH] [TODO: Translate admin.broadcast.schedule]",
+      "search": "[ZH] [TODO: Translate admin.broadcast.search]",
+      "type": "[ZH] [TODO: Translate admin.broadcast.type]"
     },
     "compliance": {
       "title": "合规中心",
@@ -12463,8 +13436,10 @@
           },
           "errors": {
             "createFailed": "无法创建合法保留"
-          }
-        }
+          },
+          "T": "[ZH] [TODO: Translate admin.compliance.legalHolds.new.T]"
+        },
+        "T": "[ZH] [TODO: Translate admin.compliance.legalHolds.T]"
       },
       "retentionPolicies": {
         "title": "数据保留政策",
@@ -12718,13 +13693,25 @@
         "dialog": {
           "scheduleTitle": "安排审核",
           "scheduleDescription": "安排新的合规审核",
-          "selectFramework": "选择框架"
+          "selectFramework": "选择框架",
+          "auditorPlaceholder": "[ZH] [TODO: Translate admin.compliance.audits.dialog.auditorPlaceholder]",
+          "scheduling": "[ZH] [TODO: Translate admin.compliance.audits.dialog.scheduling]"
         },
         "fields": {
           "framework": "框架",
           "type": "类型",
           "scheduledDate": "预定日期",
-          "auditor": "审计员"
+          "auditor": "审计员",
+          "organizationOptional": "[ZH] [TODO: Translate admin.compliance.audits.fields.organizationOptional]",
+          "auditType": "[ZH] [TODO: Translate admin.compliance.audits.fields.auditType]",
+          "notes": "[ZH] [TODO: Translate admin.compliance.audits.fields.notes]",
+          "status": "[ZH] [TODO: Translate admin.compliance.audits.fields.status]",
+          "scorePercent": "[ZH] [TODO: Translate admin.compliance.audits.fields.scorePercent]",
+          "reportUrl": "[ZH] [TODO: Translate admin.compliance.audits.fields.reportUrl]",
+          "score": "[ZH] [TODO: Translate admin.compliance.audits.fields.score]",
+          "scheduled": "[ZH] [TODO: Translate admin.compliance.audits.fields.scheduled]",
+          "started": "[ZH] [TODO: Translate admin.compliance.audits.fields.started]",
+          "completed": "[ZH] [TODO: Translate admin.compliance.audits.fields.completed]"
         },
         "errors": {
           "scheduleFailed": "未能安排审核",
@@ -12732,7 +13719,38 @@
           "startFailed": "启动审核失败",
           "cancelFailed": "取消审核失败",
           "fetchFailed": "无法获取审核",
-          "updateFailed": "更新审核失败"
+          "updateFailed": "更新审核失败",
+          "frameworkAndDateRequired": "[ZH] [TODO: Translate admin.compliance.audits.errors.frameworkAndDateRequired]"
+        },
+        "new": {
+          "title": "[ZH] [TODO: Translate admin.compliance.audits.new.title]",
+          "description": "[ZH] [TODO: Translate admin.compliance.audits.new.description]",
+          "scheduling": "[ZH] [TODO: Translate admin.compliance.audits.new.scheduling]",
+          "auditDetails": "[ZH] [TODO: Translate admin.compliance.audits.new.auditDetails]",
+          "configureAudit": "[ZH] [TODO: Translate admin.compliance.audits.new.configureAudit]",
+          "platformWideAudit": "[ZH] [TODO: Translate admin.compliance.audits.new.platformWideAudit]",
+          "leaveEmptyForPlatformWide": "[ZH] [TODO: Translate admin.compliance.audits.new.leaveEmptyForPlatformWide]",
+          "notesPlaceholder": "[ZH] [TODO: Translate admin.compliance.audits.new.notesPlaceholder]"
+        },
+        "notFound": "[ZH] [TODO: Translate admin.compliance.audits.notFound]",
+        "detail": {
+          "auditScore": "[ZH] [TODO: Translate admin.compliance.audits.detail.auditScore]",
+          "viewReport": "[ZH] [TODO: Translate admin.compliance.audits.detail.viewReport]",
+          "auditDetails": "[ZH] [TODO: Translate admin.compliance.audits.detail.auditDetails]",
+          "framework": "[ZH] [TODO: Translate admin.compliance.audits.detail.framework]",
+          "organization": "[ZH] [TODO: Translate admin.compliance.audits.detail.organization]",
+          "scope": "[ZH] [TODO: Translate admin.compliance.audits.detail.scope]",
+          "platformWideAudit": "[ZH] [TODO: Translate admin.compliance.audits.detail.platformWideAudit]",
+          "auditFindings": "[ZH] [TODO: Translate admin.compliance.audits.detail.auditFindings]",
+          "auditFindingsDescription": "[ZH] [TODO: Translate admin.compliance.audits.detail.auditFindingsDescription]",
+          "noFindings": "[ZH] [TODO: Translate admin.compliance.audits.detail.noFindings]",
+          "recommendations": "[ZH] [TODO: Translate admin.compliance.audits.detail.recommendations]",
+          "recommendationsDescription": "[ZH] [TODO: Translate admin.compliance.audits.detail.recommendationsDescription]",
+          "noRecommendations": "[ZH] [TODO: Translate admin.compliance.audits.detail.noRecommendations]"
+        },
+        "tabs": {
+          "findings": "[ZH] [TODO: Translate admin.compliance.audits.tabs.findings]",
+          "recommendations": "[ZH] [TODO: Translate admin.compliance.audits.tabs.recommendations]"
         }
       },
       "attestations": {
@@ -12785,8 +13803,55 @@
         "errors": {
           "deleteFailed": "删除证明失败",
           "updateFailed": "更新认证失败",
-          "fetchFailed": "获取证明失败"
-        }
+          "fetchFailed": "获取证明失败",
+          "frameworkAndOrgRequired": "[ZH] [TODO: Translate admin.compliance.attestations.errors.frameworkAndOrgRequired]",
+          "createFailed": "[ZH] [TODO: Translate admin.compliance.attestations.errors.createFailed]"
+        },
+        "new": {
+          "title": "[ZH] [TODO: Translate admin.compliance.attestations.new.title]",
+          "description": "[ZH] [TODO: Translate admin.compliance.attestations.new.description]",
+          "createAttestation": "[ZH] [TODO: Translate admin.compliance.attestations.new.createAttestation]",
+          "attestationDetails": "[ZH] [TODO: Translate admin.compliance.attestations.new.attestationDetails]",
+          "configureAttestation": "[ZH] [TODO: Translate admin.compliance.attestations.new.configureAttestation]",
+          "selectOrganization": "[ZH] [TODO: Translate admin.compliance.attestations.new.selectOrganization]",
+          "selectFramework": "[ZH] [TODO: Translate admin.compliance.attestations.new.selectFramework]",
+          "expirationDateHint": "[ZH] [TODO: Translate admin.compliance.attestations.new.expirationDateHint]",
+          "attestedByPlaceholder": "[ZH] [TODO: Translate admin.compliance.attestations.new.attestedByPlaceholder]"
+        },
+        "fields": {
+          "organization": "[ZH] [TODO: Translate admin.compliance.attestations.fields.organization]",
+          "framework": "[ZH] [TODO: Translate admin.compliance.attestations.fields.framework]",
+          "initialStatus": "[ZH] [TODO: Translate admin.compliance.attestations.fields.initialStatus]",
+          "validUntilOptional": "[ZH] [TODO: Translate admin.compliance.attestations.fields.validUntilOptional]",
+          "attestedByOptional": "[ZH] [TODO: Translate admin.compliance.attestations.fields.attestedByOptional]",
+          "status": "[ZH] [TODO: Translate admin.compliance.attestations.fields.status]",
+          "scorePercent": "[ZH] [TODO: Translate admin.compliance.attestations.fields.scorePercent]",
+          "notes": "[ZH] [TODO: Translate admin.compliance.attestations.fields.notes]",
+          "score": "[ZH] [TODO: Translate admin.compliance.attestations.fields.score]",
+          "attestedBy": "[ZH] [TODO: Translate admin.compliance.attestations.fields.attestedBy]",
+          "attestedDate": "[ZH] [TODO: Translate admin.compliance.attestations.fields.attestedDate]",
+          "validUntil": "[ZH] [TODO: Translate admin.compliance.attestations.fields.validUntil]"
+        },
+        "notFound": "[ZH] [TODO: Translate admin.compliance.attestations.notFound]",
+        "unknownOrganization": "[ZH] [TODO: Translate admin.compliance.attestations.unknownOrganization]",
+        "detail": {
+          "complianceScore": "[ZH] [TODO: Translate admin.compliance.attestations.detail.complianceScore]",
+          "attestationDetails": "[ZH] [TODO: Translate admin.compliance.attestations.detail.attestationDetails]",
+          "organization": "[ZH] [TODO: Translate admin.compliance.attestations.detail.organization]",
+          "framework": "[ZH] [TODO: Translate admin.compliance.attestations.detail.framework]",
+          "complianceFindings": "[ZH] [TODO: Translate admin.compliance.attestations.detail.complianceFindings]",
+          "complianceFindingsDescription": "[ZH] [TODO: Translate admin.compliance.attestations.detail.complianceFindingsDescription]",
+          "noFindings": "[ZH] [TODO: Translate admin.compliance.attestations.detail.noFindings]",
+          "evidenceDocuments": "[ZH] [TODO: Translate admin.compliance.attestations.detail.evidenceDocuments]",
+          "evidenceDocumentsDescription": "[ZH] [TODO: Translate admin.compliance.attestations.detail.evidenceDocumentsDescription]",
+          "uploaded": "[ZH] [TODO: Translate admin.compliance.attestations.detail.uploaded]",
+          "noEvidence": "[ZH] [TODO: Translate admin.compliance.attestations.detail.noEvidence]"
+        },
+        "tabs": {
+          "findings": "[ZH] [TODO: Translate admin.compliance.attestations.tabs.findings]",
+          "evidence": "[ZH] [TODO: Translate admin.compliance.attestations.tabs.evidence]"
+        },
+        "unknown": "[ZH] [TODO: Translate admin.compliance.attestations.unknown]"
       },
       "dataExports": {
         "title": "数据导出",
@@ -12850,7 +13915,12 @@
         },
         "fields": {
           "exportType": "出口类型",
-          "format": "格式"
+          "format": "格式",
+          "user": "[ZH] [TODO: Translate admin.compliance.dataExports.fields.user]",
+          "organization": "[ZH] [TODO: Translate admin.compliance.dataExports.fields.organization]",
+          "legalHold": "[ZH] [TODO: Translate admin.compliance.dataExports.fields.legalHold]",
+          "status": "[ZH] [TODO: Translate admin.compliance.dataExports.fields.status]",
+          "type": "[ZH] [TODO: Translate admin.compliance.dataExports.fields.type]"
         },
         "formats": {
           "json": "JSON",
@@ -12862,8 +13932,81 @@
           "deleteFailed": "删除数据导出失败",
           "retryFailed": "重试数据导出失败",
           "fetchFailed": "获取数据导出失败",
-          "updateFailed": "更新数据导出失败"
+          "updateFailed": "更新数据导出失败",
+          "typeRequired": "[ZH] [TODO: Translate admin.compliance.dataExports.errors.typeRequired]",
+          "userRequired": "[ZH] [TODO: Translate admin.compliance.dataExports.errors.userRequired]",
+          "orgRequired": "[ZH] [TODO: Translate admin.compliance.dataExports.errors.orgRequired]",
+          "legalHoldRequired": "[ZH] [TODO: Translate admin.compliance.dataExports.errors.legalHoldRequired]"
+        },
+        "new": {
+          "types": {
+            "userData": "[ZH] [TODO: Translate admin.compliance.dataExports.new.types.userData]",
+            "orgData": "[ZH] [TODO: Translate admin.compliance.dataExports.new.types.orgData]",
+            "gdprExport": "[ZH] [TODO: Translate admin.compliance.dataExports.new.types.gdprExport]",
+            "legalHold": "[ZH] [TODO: Translate admin.compliance.dataExports.new.types.legalHold]",
+            "backup": "[ZH] [TODO: Translate admin.compliance.dataExports.new.types.backup]"
+          },
+          "title": "[ZH] [TODO: Translate admin.compliance.dataExports.new.title]",
+          "description": "[ZH] [TODO: Translate admin.compliance.dataExports.new.description]",
+          "exportConfiguration": "[ZH] [TODO: Translate admin.compliance.dataExports.new.exportConfiguration]",
+          "configureDescription": "[ZH] [TODO: Translate admin.compliance.dataExports.new.configureDescription]",
+          "optional": "[ZH] [TODO: Translate admin.compliance.dataExports.new.optional]",
+          "selectUser": "[ZH] [TODO: Translate admin.compliance.dataExports.new.selectUser]",
+          "noSpecificUser": "[ZH] [TODO: Translate admin.compliance.dataExports.new.noSpecificUser]",
+          "selectOrganization": "[ZH] [TODO: Translate admin.compliance.dataExports.new.selectOrganization]",
+          "selectLegalHold": "[ZH] [TODO: Translate admin.compliance.dataExports.new.selectLegalHold]",
+          "note": "[ZH] [TODO: Translate admin.compliance.dataExports.new.note]",
+          "noteDescription": "[ZH] [TODO: Translate admin.compliance.dataExports.new.noteDescription]"
+        },
+        "notFound": "[ZH] [TODO: Translate admin.compliance.dataExports.notFound]",
+        "detail": {
+          "title": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.title]",
+          "exportFailed": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.exportFailed]",
+          "exportExpired": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.exportExpired]",
+          "fileSize": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.fileSize]",
+          "exportDetails": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.exportDetails]",
+          "requested": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.requested]",
+          "started": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.started]",
+          "completed": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.completed]",
+          "expires": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.expires]",
+          "requestedBy": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.requestedBy]",
+          "unknownRequester": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.unknownRequester]",
+          "subjectUser": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.subjectUser]",
+          "subjectOrganization": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.subjectOrganization]",
+          "legalHold": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.legalHold]",
+          "exportSubject": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.exportSubject]",
+          "holdName": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.holdName]",
+          "caseNumber": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.caseNumber]",
+          "noSpecificSubject": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.noSpecificSubject]",
+          "exportScope": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.exportScope]",
+          "exportScopeDescription": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.exportScopeDescription]",
+          "noScopeConfiguration": "[ZH] [TODO: Translate admin.compliance.dataExports.detail.noScopeConfiguration]"
+        },
+        "tabs": {
+          "scope": "[ZH] [TODO: Translate admin.compliance.dataExports.tabs.scope]"
         }
+      },
+      "severity": {
+        "critical": "[ZH] [TODO: Translate admin.compliance.severity.critical]",
+        "high": "[ZH] [TODO: Translate admin.compliance.severity.high]",
+        "medium": "[ZH] [TODO: Translate admin.compliance.severity.medium]",
+        "low": "[ZH] [TODO: Translate admin.compliance.severity.low]"
+      },
+      "tabs": {
+        "overview": "[ZH] [TODO: Translate admin.compliance.tabs.overview]"
+      },
+      "fields": {
+        "name": "[ZH] [TODO: Translate admin.compliance.fields.name]",
+        "slug": "[ZH] [TODO: Translate admin.compliance.fields.slug]",
+        "code": "[ZH] [TODO: Translate admin.compliance.fields.code]",
+        "version": "[ZH] [TODO: Translate admin.compliance.fields.version]",
+        "email": "[ZH] [TODO: Translate admin.compliance.fields.email]"
+      },
+      "priority": {
+        "critical": "[ZH] [TODO: Translate admin.compliance.priority.critical]",
+        "high": "[ZH] [TODO: Translate admin.compliance.priority.high]",
+        "medium": "[ZH] [TODO: Translate admin.compliance.priority.medium]",
+        "low": "[ZH] [TODO: Translate admin.compliance.priority.low]"
       }
     },
     "analytics": {
@@ -12985,7 +14128,8 @@
           "lowerBound": "下界",
           "upperBound": "上限",
           "confidenceLabel": "信心"
-        }
+        },
+        "a": "[ZH] [TODO: Translate admin.analytics.revenue.a]"
       },
       "features": {
         "title": "功能使用分析",
@@ -13027,7 +14171,8 @@
         "errors": {
           "fetchFailed": "无法获取功能使用数据",
           "unknown": "发生未知错误"
-        }
+        },
+        "T": "[ZH] [TODO: Translate admin.analytics.features.T]"
       },
       "reports": {
         "title": "定制报告",
@@ -13371,6 +14516,237 @@
             "triggeredBy": "触发者"
           }
         }
+      },
+      "featureAdoption": {
+        "title": "[ZH] [TODO: Translate admin.analytics.featureAdoption.title]",
+        "description": "[ZH] [TODO: Translate admin.analytics.featureAdoption.description]",
+        "noData": "[ZH] [TODO: Translate admin.analytics.featureAdoption.noData]"
+      },
+      "featureHeatmap": {
+        "title": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.title]",
+        "description": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.description]",
+        "noData": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.noData]",
+        "table": {
+          "feature": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.table.feature]"
+        },
+        "legend": {
+          "usageIntensity": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.legend.usageIntensity]",
+          "none": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.legend.none]",
+          "low": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.legend.low]",
+          "medium": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.legend.medium]",
+          "high": "[ZH] [TODO: Translate admin.analytics.featureHeatmap.legend.high]"
+        }
+      },
+      "adoptionTrend": {
+        "title": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.title]",
+        "description": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.description]",
+        "filterByCategory": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.filterByCategory]",
+        "allCategories": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.allCategories]",
+        "features": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.features]",
+        "clear": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.clear]",
+        "selectAll": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.selectAll]",
+        "selectFeaturesPrompt": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.selectFeaturesPrompt]",
+        "noData": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.noData]",
+        "adoption": "[ZH] [TODO: Translate admin.analytics.adoptionTrend.adoption]"
+      },
+      "activityChart": {
+        " ": "[ZH] [TODO: Translate admin.analytics.activityChart. ]",
+        "title": "[ZH] [TODO: Translate admin.analytics.activityChart.title]",
+        "description": "[ZH] [TODO: Translate admin.analytics.activityChart.description]",
+        "tabs": {
+          "dailyTrend": "[ZH] [TODO: Translate admin.analytics.activityChart.tabs.dailyTrend]",
+          "daily": "[ZH] [TODO: Translate admin.analytics.activityChart.tabs.daily]",
+          "hourly": "[ZH] [TODO: Translate admin.analytics.activityChart.tabs.hourly]",
+          "hours": "[ZH] [TODO: Translate admin.analytics.activityChart.tabs.hours]",
+          "topActions": "[ZH] [TODO: Translate admin.analytics.activityChart.tabs.topActions]",
+          "actions": "[ZH] [TODO: Translate admin.analytics.activityChart.tabs.actions]",
+          "status": "[ZH] [TODO: Translate admin.analytics.activityChart.tabs.status]"
+        },
+        "sections": {
+          "dailyActivity": "[ZH] [TODO: Translate admin.analytics.activityChart.sections.dailyActivity]",
+          "activityByHour": "[ZH] [TODO: Translate admin.analytics.activityChart.sections.activityByHour]",
+          "topActions": "[ZH] [TODO: Translate admin.analytics.activityChart.sections.topActions]",
+          "byResourceType": "[ZH] [TODO: Translate admin.analytics.activityChart.sections.byResourceType]",
+          "statusBreakdown": "[ZH] [TODO: Translate admin.analytics.activityChart.sections.statusBreakdown]"
+        },
+        "status": {
+          "successful": "[ZH] [TODO: Translate admin.analytics.activityChart.status.successful]",
+          "failed": "[ZH] [TODO: Translate admin.analytics.activityChart.status.failed]",
+          "pending": "[ZH] [TODO: Translate admin.analytics.activityChart.status.pending]"
+        }
+      },
+      "healthTrend": {
+        "title": "[ZH] [TODO: Translate admin.analytics.healthTrend.title]",
+        "description": "[ZH] [TODO: Translate admin.analytics.healthTrend.description]",
+        "noData": "[ZH] [TODO: Translate admin.analytics.healthTrend.noData]",
+        "tabs": {
+          "overall": "[ZH] [TODO: Translate admin.analytics.healthTrend.tabs.overall]",
+          "breakdown": "[ZH] [TODO: Translate admin.analytics.healthTrend.tabs.breakdown]"
+        },
+        "legend": {
+          "overallScore": "[ZH] [TODO: Translate admin.analytics.healthTrend.legend.overallScore]",
+          "usage": "[ZH] [TODO: Translate admin.analytics.healthTrend.legend.usage]",
+          "engagement": "[ZH] [TODO: Translate admin.analytics.healthTrend.legend.engagement]",
+          "support": "[ZH] [TODO: Translate admin.analytics.healthTrend.legend.support]",
+          "payment": "[ZH] [TODO: Translate admin.analytics.healthTrend.legend.payment]",
+          "growth": "[ZH] [TODO: Translate admin.analytics.healthTrend.legend.growth]",
+          "score": "[ZH] [TODO: Translate admin.analytics.healthTrend.legend.score]"
+        }
+      },
+      "churnRisk": {
+        "low": "[ZH] [TODO: Translate admin.analytics.churnRisk.low]",
+        "medium": "[ZH] [TODO: Translate admin.analytics.churnRisk.medium]",
+        "high": "[ZH] [TODO: Translate admin.analytics.churnRisk.high]",
+        "critical": "[ZH] [TODO: Translate admin.analytics.churnRisk.critical]"
+      },
+      "npsDistribution": {
+        "title": "[ZH] [TODO: Translate admin.analytics.npsDistribution.title]",
+        "legend": {
+          "detractors": "[ZH] [TODO: Translate admin.analytics.npsDistribution.legend.detractors]",
+          "passives": "[ZH] [TODO: Translate admin.analytics.npsDistribution.legend.passives]",
+          "promoters": "[ZH] [TODO: Translate admin.analytics.npsDistribution.legend.promoters]"
+        }
+      },
+      "npsGauge": {
+        "labels": {
+          "noData": "[ZH] [TODO: Translate admin.analytics.npsGauge.labels.noData]",
+          "needsImprovement": "[ZH] [TODO: Translate admin.analytics.npsGauge.labels.needsImprovement]",
+          "excellent": "[ZH] [TODO: Translate admin.analytics.npsGauge.labels.excellent]",
+          "great": "[ZH] [TODO: Translate admin.analytics.npsGauge.labels.great]",
+          "good": "[ZH] [TODO: Translate admin.analytics.npsGauge.labels.good]",
+          "okay": "[ZH] [TODO: Translate admin.analytics.npsGauge.labels.okay]"
+        },
+        "title": "[ZH] [TODO: Translate admin.analytics.npsGauge.title]",
+        "categories": {
+          "promoters": "[ZH] [TODO: Translate admin.analytics.npsGauge.categories.promoters]",
+          "passives": "[ZH] [TODO: Translate admin.analytics.npsGauge.categories.passives]",
+          "detractors": "[ZH] [TODO: Translate admin.analytics.npsGauge.categories.detractors]"
+        }
+      },
+      "cohortAnalysis": {
+        "title": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.title]",
+        "description": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.description]",
+        "avgLogoRetention": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.avgLogoRetention]",
+        "avgRevenueRetention": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.avgRevenueRetention]",
+        "table": {
+          "cohort": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.table.cohort]",
+          "initial": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.table.initial]",
+          "current": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.table.current]",
+          "initialMrr": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.table.initialMrr]",
+          "currentMrr": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.table.currentMrr]",
+          "logoRetention": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.table.logoRetention]",
+          "revenueRetention": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.table.revenueRetention]",
+          "months": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.table.months]"
+        },
+        "retentionHeatmap": "[ZH] [TODO: Translate admin.analytics.cohortAnalysis.retentionHeatmap]"
+      },
+      "revenueCards": {
+        "mrr": {
+          "title": "[ZH] [TODO: Translate admin.analytics.revenueCards.mrr.title]",
+          "description": "[ZH] [TODO: Translate admin.analytics.revenueCards.mrr.description]"
+        },
+        "arr": {
+          "title": "[ZH] [TODO: Translate admin.analytics.revenueCards.arr.title]",
+          "description": "[ZH] [TODO: Translate admin.analytics.revenueCards.arr.description]"
+        },
+        "totalCustomers": {
+          "title": "[ZH] [TODO: Translate admin.analytics.revenueCards.totalCustomers.title]",
+          "description": "[ZH] [TODO: Translate admin.analytics.revenueCards.totalCustomers.description]"
+        },
+        "arpu": {
+          "title": "[ZH] [TODO: Translate admin.analytics.revenueCards.arpu.title]",
+          "description": "[ZH] [TODO: Translate admin.analytics.revenueCards.arpu.description]"
+        },
+        "ltv": {
+          "title": "[ZH] [TODO: Translate admin.analytics.revenueCards.ltv.title]",
+          "description": "[ZH] [TODO: Translate admin.analytics.revenueCards.ltv.description]"
+        },
+        "churnRate": {
+          "title": "[ZH] [TODO: Translate admin.analytics.revenueCards.churnRate.title]",
+          "description": "[ZH] [TODO: Translate admin.analytics.revenueCards.churnRate.description]"
+        },
+        "nrr": {
+          "title": "[ZH] [TODO: Translate admin.analytics.revenueCards.nrr.title]",
+          "description": "[ZH] [TODO: Translate admin.analytics.revenueCards.nrr.description]"
+        },
+        "mrrGrowth": {
+          "title": "[ZH] [TODO: Translate admin.analytics.revenueCards.mrrGrowth.title]",
+          "description": "[ZH] [TODO: Translate admin.analytics.revenueCards.mrrGrowth.description]"
+        },
+        "vsLastPeriod": "[ZH] [TODO: Translate admin.analytics.revenueCards.vsLastPeriod]"
+      },
+      "revenueByPlan": {
+        "title": "[ZH] [TODO: Translate admin.analytics.revenueByPlan.title]",
+        "loading": "[ZH] [TODO: Translate admin.analytics.revenueByPlan.loading]",
+        "description": "[ZH] [TODO: Translate admin.analytics.revenueByPlan.description]",
+        "noData": "[ZH] [TODO: Translate admin.analytics.revenueByPlan.noData]",
+        "totalMrr": "[ZH] [TODO: Translate admin.analytics.revenueByPlan.totalMrr]",
+        "arpuByPlan": "[ZH] [TODO: Translate admin.analytics.revenueByPlan.arpuByPlan]"
+      },
+      "churnAnalysis": {
+        "status": {
+          "excellent": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.status.excellent]",
+          "good": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.status.good]",
+          "moderate": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.status.moderate]",
+          "high": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.status.high]"
+        },
+        "title": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.title]",
+        "loading": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.loading]",
+        "description": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.description]",
+        "trend": {
+          "improving": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.trend.improving]",
+          "worsening": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.trend.worsening]",
+          "stable": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.trend.stable]"
+        },
+        "metrics": {
+          "customerChurn": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.metrics.customerChurn]",
+          "lastPeriod": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.metrics.lastPeriod]",
+          "revenueChurn": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.metrics.revenueChurn]",
+          "monthlyMrrChurn": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.metrics.monthlyMrrChurn]",
+          "nrr": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.metrics.nrr]",
+          "growingFromExisting": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.metrics.growingFromExisting]",
+          "netContraction": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.metrics.netContraction]"
+        },
+        "churnTrend": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.churnTrend]",
+        "tooltip": {
+          "customer": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.tooltip.customer]",
+          "revenue": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.tooltip.revenue]",
+          "lostRevenue": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.tooltip.lostRevenue]"
+        },
+        "legend": {
+          "customerChurn": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.legend.customerChurn]",
+          "revenueChurn": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.legend.revenueChurn]"
+        },
+        "benchmarks": {
+          "title": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.title]",
+          "yourCustomerChurn": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.yourCustomerChurn]",
+          "excellentTooltip": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.excellentTooltip]",
+          "averageTooltip": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.averageTooltip]",
+          "highTooltip": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.highTooltip]",
+          "excellent": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.excellent]",
+          "average": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.average]",
+          "high": "[ZH] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.high]"
+        }
+      },
+      "mrrTrend": {
+        "title": "[ZH] [TODO: Translate admin.analytics.mrrTrend.title]",
+        "loading": "[ZH] [TODO: Translate admin.analytics.mrrTrend.loading]",
+        "description": "[ZH] [TODO: Translate admin.analytics.mrrTrend.description]",
+        "noData": "[ZH] [TODO: Translate admin.analytics.mrrTrend.noData]",
+        "stable": "[ZH] [TODO: Translate admin.analytics.mrrTrend.stable]",
+        "tooltip": {
+          "mrr": "[ZH] [TODO: Translate admin.analytics.mrrTrend.tooltip.mrr]",
+          "new": "[ZH] [TODO: Translate admin.analytics.mrrTrend.tooltip.new]",
+          "expansion": "[ZH] [TODO: Translate admin.analytics.mrrTrend.tooltip.expansion]",
+          "contraction": "[ZH] [TODO: Translate admin.analytics.mrrTrend.tooltip.contraction]",
+          "churn": "[ZH] [TODO: Translate admin.analytics.mrrTrend.tooltip.churn]",
+          "netNew": "[ZH] [TODO: Translate admin.analytics.mrrTrend.tooltip.netNew]"
+        },
+        "legend": {
+          "existingMrr": "[ZH] [TODO: Translate admin.analytics.mrrTrend.legend.existingMrr]",
+          "expansion": "[ZH] [TODO: Translate admin.analytics.mrrTrend.legend.expansion]",
+          "new": "[ZH] [TODO: Translate admin.analytics.mrrTrend.legend.new]"
+        }
       }
     },
     "bulk": {
@@ -13509,7 +14885,51 @@
       },
       "system": "系统",
       "noTemplatesFound": "没有找到模板",
-      "versions": "{count} 个版本"
+      "versions": "{count} 个版本",
+      "detail": {
+        "templateNotFound": "[ZH] [TODO: Translate admin.emailTemplates.detail.templateNotFound]",
+        "sendTest": "[ZH] [TODO: Translate admin.emailTemplates.detail.sendTest]",
+        "sendTestEmail": "[ZH] [TODO: Translate admin.emailTemplates.detail.sendTestEmail]",
+        "sendTestDescription": "[ZH] [TODO: Translate admin.emailTemplates.detail.sendTestDescription]",
+        "recipientEmail": "[ZH] [TODO: Translate admin.emailTemplates.detail.recipientEmail]",
+        "testData": "[ZH] [TODO: Translate admin.emailTemplates.detail.testData]",
+        "sending": "[ZH] [TODO: Translate admin.emailTemplates.detail.sending]",
+        "deleteTemplate": "[ZH] [TODO: Translate admin.emailTemplates.detail.deleteTemplate]",
+        "deleteConfirmation": "[ZH] [TODO: Translate admin.emailTemplates.detail.deleteConfirmation]",
+        "tabs": {
+          "editor": "[ZH] [TODO: Translate admin.emailTemplates.detail.tabs.editor]",
+          "preview": "[ZH] [TODO: Translate admin.emailTemplates.detail.tabs.preview]",
+          "variables": "[ZH] [TODO: Translate admin.emailTemplates.detail.tabs.variables]",
+          "history": "[ZH] [TODO: Translate admin.emailTemplates.detail.tabs.history]"
+        },
+        "templateContent": "[ZH] [TODO: Translate admin.emailTemplates.detail.templateContent]",
+        "changeNote": "[ZH] [TODO: Translate admin.emailTemplates.detail.changeNote]",
+        "changeNotePlaceholder": "[ZH] [TODO: Translate admin.emailTemplates.detail.changeNotePlaceholder]",
+        "templateVariables": "[ZH] [TODO: Translate admin.emailTemplates.detail.templateVariables]",
+        "variablesDescription": "[ZH] [TODO: Translate admin.emailTemplates.detail.variablesDescription]",
+        "variableName": "[ZH] [TODO: Translate admin.emailTemplates.detail.variableName]",
+        "defaultValue": "[ZH] [TODO: Translate admin.emailTemplates.detail.defaultValue]"
+      },
+      "form": {
+        "templateName": "[ZH] [TODO: Translate admin.emailTemplates.form.templateName]",
+        "category": "[ZH] [TODO: Translate admin.emailTemplates.form.category]",
+        "subjectLine": "[ZH] [TODO: Translate admin.emailTemplates.form.subjectLine]",
+        "plainTextContent": "[ZH] [TODO: Translate admin.emailTemplates.form.plainTextContent]",
+        "plainTextPlaceholder": "[ZH] [TODO: Translate admin.emailTemplates.form.plainTextPlaceholder]",
+        "activeDescription": "[ZH] [TODO: Translate admin.emailTemplates.form.activeDescription]",
+        "templateNamePlaceholder": "[ZH] [TODO: Translate admin.emailTemplates.form.templateNamePlaceholder]",
+        "slug": "[ZH] [TODO: Translate admin.emailTemplates.form.slug]",
+        "slugPlaceholder": "[ZH] [TODO: Translate admin.emailTemplates.form.slugPlaceholder]",
+        "slugDescription": "[ZH] [TODO: Translate admin.emailTemplates.form.slugDescription]",
+        "subjectLinePlaceholder": "[ZH] [TODO: Translate admin.emailTemplates.form.subjectLinePlaceholder]",
+        "descriptionPlaceholder": "[ZH] [TODO: Translate admin.emailTemplates.form.descriptionPlaceholder]",
+        "htmlContent": "[ZH] [TODO: Translate admin.emailTemplates.form.htmlContent]",
+        "htmlContentPlaceholder": "[ZH] [TODO: Translate admin.emailTemplates.form.htmlContentPlaceholder]",
+        "variableHint": "[ZH] [TODO: Translate admin.emailTemplates.form.variableHint]"
+      },
+      "left": "[ZH] [TODO: Translate admin.emailTemplates.left]",
+      "center": "[ZH] [TODO: Translate admin.emailTemplates.center]",
+      "right": "[ZH] [TODO: Translate admin.emailTemplates.right]"
     },
     "permissions": {
       "matrix": {
@@ -13789,7 +15209,12 @@
         "manageIncidents": "管理事件",
         "scheduleMaintenance": "安排维护",
         "viewReleases": "查看版本",
-        "viewCapacity": "查看容量"
+        "viewCapacity": "查看容量",
+        "allSystemsOperational": "[ZH] [TODO: Translate admin.operations.overview.allSystemsOperational]",
+        "criticalIncidentsActive": "[ZH] [TODO: Translate admin.operations.overview.criticalIncidentsActive]",
+        "someSystemsAffected": "[ZH] [TODO: Translate admin.operations.overview.someSystemsAffected]",
+        "noActiveIncidents": "[ZH] [TODO: Translate admin.operations.overview.noActiveIncidents]",
+        "thirtyDayUptime": "[ZH] [TODO: Translate admin.operations.overview.thirtyDayUptime]"
       },
       "severity": {
         "critical": "批判的",
@@ -13836,18 +15261,26 @@
         "actions": {
           "viewDetails": "查看详情",
           "updateStatus": "更新状态",
-          "addUpdate": "添加更新"
+          "addUpdate": "添加更新",
+          "changeStatus": "[ZH] [TODO: Translate admin.operations.incidents.actions.changeStatus]"
         },
         "bulk": {
           "resolveSelected": "解决选定的问题",
           "resolveTitle": "解决事件",
-          "resolveConfirm": "您确定要解决选定的事件吗？"
+          "resolveConfirm": "您确定要解决选定的事件吗？",
+          "markResolved": "[ZH] [TODO: Translate admin.operations.incidents.bulk.markResolved]",
+          "confirmResolveTitle": "[ZH] [TODO: Translate admin.operations.incidents.bulk.confirmResolveTitle]",
+          "confirmResolveDescription": "[ZH] [TODO: Translate admin.operations.incidents.bulk.confirmResolveDescription]",
+          "markMonitoring": "[ZH] [TODO: Translate admin.operations.incidents.bulk.markMonitoring]",
+          "markInvestigating": "[ZH] [TODO: Translate admin.operations.incidents.bulk.markInvestigating]"
         },
         "dialog": {
           "createTitle": "创建事件",
           "createDescription": "报告新的系统事件",
           "updateTitle": "添加更新",
-          "updateDescription": "添加对此事件的更新"
+          "updateDescription": "添加对此事件的更新",
+          "title": "[ZH] [TODO: Translate admin.operations.incidents.dialog.title]",
+          "description": "[ZH] [TODO: Translate admin.operations.incidents.dialog.description]"
         },
         "fields": {
           "title": "标题",
@@ -13869,8 +15302,91 @@
           "updated": "[ZH] Incident updated",
           "updateFailed": "[ZH] Failed to update incident",
           "updatePosted": "[ZH] Update posted",
-          "addUpdateFailed": "[ZH] Failed to add update"
-        }
+          "addUpdateFailed": "[ZH] Failed to add update",
+          "incidentCreated": "[ZH] [TODO: Translate admin.operations.incidents.toast.incidentCreated]",
+          "createFailed": "[ZH] [TODO: Translate admin.operations.incidents.toast.createFailed]",
+          "updateAdded": "[ZH] [TODO: Translate admin.operations.incidents.toast.updateAdded]",
+          "bulkUpdateFailed": "[ZH] [TODO: Translate admin.operations.incidents.toast.bulkUpdateFailed]"
+        },
+        "severityDescriptions": {
+          "minor": "[ZH] [TODO: Translate admin.operations.incidents.severityDescriptions.minor]",
+          "moderate": "[ZH] [TODO: Translate admin.operations.incidents.severityDescriptions.moderate]",
+          "major": "[ZH] [TODO: Translate admin.operations.incidents.severityDescriptions.major]",
+          "critical": "[ZH] [TODO: Translate admin.operations.incidents.severityDescriptions.critical]"
+        },
+        "typeDescriptions": {
+          "outage": "[ZH] [TODO: Translate admin.operations.incidents.typeDescriptions.outage]",
+          "degradation": "[ZH] [TODO: Translate admin.operations.incidents.typeDescriptions.degradation]",
+          "security": "[ZH] [TODO: Translate admin.operations.incidents.typeDescriptions.security]",
+          "dataIssue": "[ZH] [TODO: Translate admin.operations.incidents.typeDescriptions.dataIssue]",
+          "thirdParty": "[ZH] [TODO: Translate admin.operations.incidents.typeDescriptions.thirdParty]",
+          "capacity": "[ZH] [TODO: Translate admin.operations.incidents.typeDescriptions.capacity]",
+          "network": "[ZH] [TODO: Translate admin.operations.incidents.typeDescriptions.network]",
+          "database": "[ZH] [TODO: Translate admin.operations.incidents.typeDescriptions.database]"
+        },
+        "validation": {
+          "titleDescriptionRequired": "[ZH] [TODO: Translate admin.operations.incidents.validation.titleDescriptionRequired]"
+        },
+        "new": {
+          "title": "[ZH] [TODO: Translate admin.operations.incidents.new.title]",
+          "description": "[ZH] [TODO: Translate admin.operations.incidents.new.description]",
+          "reporting": "[ZH] [TODO: Translate admin.operations.incidents.new.reporting]",
+          "warningTitle": "[ZH] [TODO: Translate admin.operations.incidents.new.warningTitle]",
+          "warningDescription": "[ZH] [TODO: Translate admin.operations.incidents.new.warningDescription]",
+          "incidentDetails": "[ZH] [TODO: Translate admin.operations.incidents.new.incidentDetails]",
+          "incidentDetailsDescription": "[ZH] [TODO: Translate admin.operations.incidents.new.incidentDetailsDescription]",
+          "classification": "[ZH] [TODO: Translate admin.operations.incidents.new.classification]",
+          "classificationDescription": "[ZH] [TODO: Translate admin.operations.incidents.new.classificationDescription]",
+          "selectAffectedServices": "[ZH] [TODO: Translate admin.operations.incidents.new.selectAffectedServices]",
+          "clickToSelectServices": "[ZH] [TODO: Translate admin.operations.incidents.new.clickToSelectServices]"
+        },
+        "reportIncident": "[ZH] [TODO: Translate admin.operations.incidents.reportIncident]",
+        "form": {
+          "incidentTitle": "[ZH] [TODO: Translate admin.operations.incidents.form.incidentTitle]",
+          "titlePlaceholder": "[ZH] [TODO: Translate admin.operations.incidents.form.titlePlaceholder]",
+          "description": "[ZH] [TODO: Translate admin.operations.incidents.form.description]",
+          "descriptionPlaceholder": "[ZH] [TODO: Translate admin.operations.incidents.form.descriptionPlaceholder]",
+          "businessImpact": "[ZH] [TODO: Translate admin.operations.incidents.form.businessImpact]",
+          "impactPlaceholder": "[ZH] [TODO: Translate admin.operations.incidents.form.impactPlaceholder]",
+          "severity": "[ZH] [TODO: Translate admin.operations.incidents.form.severity]",
+          "incidentType": "[ZH] [TODO: Translate admin.operations.incidents.form.incidentType]",
+          "affectedServices": "[ZH] [TODO: Translate admin.operations.incidents.form.affectedServices]",
+          "type": "[ZH] [TODO: Translate admin.operations.incidents.form.type]"
+        },
+        "table": {
+          "incident": "[ZH] [TODO: Translate admin.operations.incidents.table.incident]",
+          "started": "[ZH] [TODO: Translate admin.operations.incidents.table.started]",
+          "severity": "[ZH] [TODO: Translate admin.operations.incidents.table.severity]",
+          "status": "[ZH] [TODO: Translate admin.operations.incidents.table.status]",
+          "type": "[ZH] [TODO: Translate admin.operations.incidents.table.type]",
+          "affectedServices": "[ZH] [TODO: Translate admin.operations.incidents.table.affectedServices]",
+          "duration": "[ZH] [TODO: Translate admin.operations.incidents.table.duration]",
+          "min": "[ZH] [TODO: Translate admin.operations.incidents.table.min]",
+          "ongoing": "[ZH] [TODO: Translate admin.operations.incidents.table.ongoing]"
+        },
+        "detail": {
+          "description": "[ZH] [TODO: Translate admin.operations.incidents.detail.description]",
+          "affectedServices": "[ZH] [TODO: Translate admin.operations.incidents.detail.affectedServices]",
+          "updateStatus": "[ZH] [TODO: Translate admin.operations.incidents.detail.updateStatus]",
+          "timeline": "[ZH] [TODO: Translate admin.operations.incidents.detail.timeline]",
+          "addUpdate": "[ZH] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
+          "updatePlaceholder": "[ZH] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
+          "postUpdate": "[ZH] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+        },
+        "stats": {
+          "totalIncidents": "[ZH] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
+          "active": "[ZH] [TODO: Translate admin.operations.incidents.stats.active]",
+          "resolved": "[ZH] [TODO: Translate admin.operations.incidents.stats.resolved]",
+          "inPostmortem": "[ZH] [TODO: Translate admin.operations.incidents.stats.inPostmortem]"
+        },
+        "searchPlaceholder": "[ZH] [TODO: Translate admin.operations.incidents.searchPlaceholder]",
+        "filter": {
+          "status": "[ZH] [TODO: Translate admin.operations.incidents.filter.status]",
+          "allStatus": "[ZH] [TODO: Translate admin.operations.incidents.filter.allStatus]",
+          "severity": "[ZH] [TODO: Translate admin.operations.incidents.filter.severity]",
+          "allSeverity": "[ZH] [TODO: Translate admin.operations.incidents.filter.allSeverity]"
+        },
+        "emptyMessage": "[ZH] [TODO: Translate admin.operations.incidents.emptyMessage]"
       },
       "maintenance": {
         "title": "维护窗口",
@@ -14228,6 +15744,44 @@
         "analytics": "[ZH] Analytics",
         "payments": "[ZH] Payments",
         "notifications": "[ZH] Notifications"
+      },
+      "stats": {
+        "activeIncidents": "[ZH] [TODO: Translate admin.operations.stats.activeIncidents]",
+        "viewIncidents": "[ZH] [TODO: Translate admin.operations.stats.viewIncidents]",
+        "scheduledMaintenance": "[ZH] [TODO: Translate admin.operations.stats.scheduledMaintenance]",
+        "upcomingWindows": "[ZH] [TODO: Translate admin.operations.stats.upcomingWindows]",
+        "viewSchedule": "[ZH] [TODO: Translate admin.operations.stats.viewSchedule]",
+        "activeReleases": "[ZH] [TODO: Translate admin.operations.stats.activeReleases]",
+        "rollingOut": "[ZH] [TODO: Translate admin.operations.stats.rollingOut]",
+        "manageReleases": "[ZH] [TODO: Translate admin.operations.stats.manageReleases]",
+        "systemHealth": "[ZH] [TODO: Translate admin.operations.stats.systemHealth]",
+        "overallHealthScore": "[ZH] [TODO: Translate admin.operations.stats.overallHealthScore]",
+        "viewCapacity": "[ZH] [TODO: Translate admin.operations.stats.viewCapacity]"
+      },
+      "resources": {
+        "title": "[ZH] [TODO: Translate admin.operations.resources.title]",
+        "description": "[ZH] [TODO: Translate admin.operations.resources.description]",
+        "cpuUsage": "[ZH] [TODO: Translate admin.operations.resources.cpuUsage]",
+        "memoryUsage": "[ZH] [TODO: Translate admin.operations.resources.memoryUsage]",
+        "storageUsage": "[ZH] [TODO: Translate admin.operations.resources.storageUsage]",
+        "apiLatency": "[ZH] [TODO: Translate admin.operations.resources.apiLatency]",
+        "activeConnections": "[ZH] [TODO: Translate admin.operations.resources.activeConnections]"
+      },
+      "recentIncidents": {
+        "title": "[ZH] [TODO: Translate admin.operations.recentIncidents.title]",
+        "description": "[ZH] [TODO: Translate admin.operations.recentIncidents.description]",
+        "noIncidents": "[ZH] [TODO: Translate admin.operations.recentIncidents.noIncidents]",
+        "viewAll": "[ZH] [TODO: Translate admin.operations.recentIncidents.viewAll]"
+      },
+      "quickActions": {
+        "incidents": "[ZH] [TODO: Translate admin.operations.quickActions.incidents]",
+        "incidentsDescription": "[ZH] [TODO: Translate admin.operations.quickActions.incidentsDescription]",
+        "maintenance": "[ZH] [TODO: Translate admin.operations.quickActions.maintenance]",
+        "maintenanceDescription": "[ZH] [TODO: Translate admin.operations.quickActions.maintenanceDescription]",
+        "releases": "[ZH] [TODO: Translate admin.operations.quickActions.releases]",
+        "releasesDescription": "[ZH] [TODO: Translate admin.operations.quickActions.releasesDescription]",
+        "capacity": "[ZH] [TODO: Translate admin.operations.quickActions.capacity]",
+        "capacityDescription": "[ZH] [TODO: Translate admin.operations.quickActions.capacityDescription]"
       }
     },
     "integrations": {
@@ -14267,7 +15821,9 @@
           "activate": "激活",
           "suspend": "暂停",
           "revoke": "撤销",
-          "regenerateSecret": "重生秘密"
+          "regenerateSecret": "重生秘密",
+          "rotateSecret": "[ZH] [TODO: Translate admin.integrations.apiClients.actions.rotateSecret]",
+          "revokeClient": "[ZH] [TODO: Translate admin.integrations.apiClients.actions.revokeClient]"
         },
         "bulk": {
           "revokeSelected": "撤销所选内容",
@@ -14304,7 +15860,13 @@
           "editComingSoon": "编辑功能即将推出",
           "rotateSecretComingSoon": "秘密轮换即将推出",
           "copied": "已复制到剪贴板",
-          "bulkRevokeFailed": "撤销客户失败"
+          "bulkRevokeFailed": "撤销客户失败",
+          "clientCreatedSuccess": "[ZH] [TODO: Translate admin.integrations.apiClients.toast.clientCreatedSuccess]",
+          "loadFailed": "[ZH] [TODO: Translate admin.integrations.apiClients.toast.loadFailed]",
+          "updated": "[ZH] [TODO: Translate admin.integrations.apiClients.toast.updated]",
+          "updateFailed": "[ZH] [TODO: Translate admin.integrations.apiClients.toast.updateFailed]",
+          "secretRotated": "[ZH] [TODO: Translate admin.integrations.apiClients.toast.secretRotated]",
+          "rotateSecretFailed": "[ZH] [TODO: Translate admin.integrations.apiClients.toast.rotateSecretFailed]"
         },
         "createButton": "创建客户端",
         "createDialog": {
@@ -14322,7 +15884,12 @@
           "redirectUris": "重定向 URI",
           "redirectUrisPlaceholder": "每行一个",
           "allowedScopes": "允许的范围",
-          "allowedScopesPlaceholder": "逗号分隔的范围"
+          "allowedScopesPlaceholder": "逗号分隔的范围",
+          "clientNameRequired": "[ZH] [TODO: Translate admin.integrations.apiClients.form.clientNameRequired]",
+          "organizationRequired": "[ZH] [TODO: Translate admin.integrations.apiClients.form.organizationRequired]",
+          "selectOrganization": "[ZH] [TODO: Translate admin.integrations.apiClients.form.selectOrganization]",
+          "redirectUrisPlaceholderMultiline": "[ZH] [TODO: Translate admin.integrations.apiClients.form.redirectUrisPlaceholderMultiline]",
+          "redirectUrisHelp": "[ZH] [TODO: Translate admin.integrations.apiClients.form.redirectUrisHelp]"
         },
         "stats": {
           "totalClients": "客户总数",
@@ -14331,17 +15898,118 @@
           "suspended": "暂停"
         },
         "table": {
-          "noClientsFound": "未找到 API 客户端"
+          "noClientsFound": "未找到 API 客户端",
+          "clientId": "[ZH] [TODO: Translate admin.integrations.apiClients.table.clientId]",
+          "never": "[ZH] [TODO: Translate admin.integrations.apiClients.table.never]",
+          "client": "[ZH] [TODO: Translate admin.integrations.apiClients.table.client]",
+          "organization": "[ZH] [TODO: Translate admin.integrations.apiClients.table.organization]",
+          "type": "[ZH] [TODO: Translate admin.integrations.apiClients.table.type]",
+          "status": "[ZH] [TODO: Translate admin.integrations.apiClients.table.status]",
+          "usage": "[ZH] [TODO: Translate admin.integrations.apiClients.table.usage]",
+          "lastUsed": "[ZH] [TODO: Translate admin.integrations.apiClients.table.lastUsed]"
         },
         "secretDialog": {
           "title": "客户秘密",
           "description": "安全地保存这个秘密。 你将无法再看到它。",
-          "copySecret": "复制秘密"
+          "copySecret": "复制秘密",
+          "done": "[ZH] [TODO: Translate admin.integrations.apiClients.secretDialog.done]",
+          "newTitle": "[ZH] [TODO: Translate admin.integrations.apiClients.secretDialog.newTitle]"
         },
         "bulkActions": {
           "revokeSelected": "撤销所选内容",
           "revokeConfirmTitle": "撤销 API 客户端",
           "revokeConfirmDescription": "您确定要撤销选定的 API 客户端吗？ 此操作无法撤消。"
+        },
+        "clientTypeDescriptions": {
+          "confidential": "[ZH] [TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.confidential]",
+          "public": "[ZH] [TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.public]",
+          "service": "[ZH] [TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.service]"
+        },
+        "scopes": {
+          "read": "[ZH] [TODO: Translate admin.integrations.apiClients.scopes.read]",
+          "write": "[ZH] [TODO: Translate admin.integrations.apiClients.scopes.write]",
+          "delete": "[ZH] [TODO: Translate admin.integrations.apiClients.scopes.delete]",
+          "admin": "[ZH] [TODO: Translate admin.integrations.apiClients.scopes.admin]"
+        },
+        "scopeDescriptions": {
+          "read": "[ZH] [TODO: Translate admin.integrations.apiClients.scopeDescriptions.read]",
+          "write": "[ZH] [TODO: Translate admin.integrations.apiClients.scopeDescriptions.write]",
+          "delete": "[ZH] [TODO: Translate admin.integrations.apiClients.scopeDescriptions.delete]",
+          "admin": "[ZH] [TODO: Translate admin.integrations.apiClients.scopeDescriptions.admin]"
+        },
+        "validation": {
+          "nameAndOrgRequired": "[ZH] [TODO: Translate admin.integrations.apiClients.validation.nameAndOrgRequired]"
+        },
+        "\\n": "[ZH] [TODO: Translate admin.integrations.apiClients.\\n]",
+        "new": {
+          "title": "[ZH] [TODO: Translate admin.integrations.apiClients.new.title]",
+          "description": "[ZH] [TODO: Translate admin.integrations.apiClients.new.description]",
+          "clientDetailsDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.new.clientDetailsDescription]",
+          "rateLimitsDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.new.rateLimitsDescription]",
+          "permissions": "[ZH] [TODO: Translate admin.integrations.apiClients.new.permissions]",
+          "permissionsDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.new.permissionsDescription]"
+        },
+        "detail": {
+          "clientDetails": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.clientDetails]",
+          "allowedScopes": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.allowedScopes]",
+          "notFound": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.notFound]",
+          "revokedBanner": {
+            "title": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.revokedBanner.title]",
+            "description": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.revokedBanner.description]"
+          },
+          "totalRequests": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.totalRequests]",
+          "rateLimit": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.rateLimit]",
+          "noDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.noDescription]",
+          "created": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.created]",
+          "lastUsed": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.lastUsed]",
+          "organization": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.organization]",
+          "organizationDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.organizationDescription]",
+          "viewOrganization": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.viewOrganization]",
+          "organizationNotFound": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.organizationNotFound]",
+          "scopesPermissions": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.scopesPermissions]",
+          "scopesPermissionsDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.scopesPermissionsDescription]",
+          "noScopes": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.noScopes]",
+          "allowedGrants": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.allowedGrants]",
+          "redirectUris": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.redirectUris]",
+          "noRedirectUris": "[ZH] [TODO: Translate admin.integrations.apiClients.detail.noRedirectUris]"
+        },
+        "usage": {
+          "rateLimits": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.rateLimits]",
+          "totalRequests": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.totalRequests]",
+          "allTime": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.allTime]",
+          "requestsPerMinute": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.requestsPerMinute]",
+          "noActivity": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.noActivity]",
+          "rateLimitsDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.rateLimitsDescription]",
+          "perMinute": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.perMinute]",
+          "perMinuteDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.perMinuteDescription]",
+          "dailyLimit": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.dailyLimit]",
+          "dailyLimitDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.dailyLimitDescription]",
+          "unlimited": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.unlimited]",
+          "monthlyLimit": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.monthlyLimit]",
+          "monthlyLimitDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.usage.monthlyLimitDescription]"
+        },
+        "settings": {
+          "dailyLimit": "[ZH] [TODO: Translate admin.integrations.apiClients.settings.dailyLimit]",
+          "noLimit": "[ZH] [TODO: Translate admin.integrations.apiClients.settings.noLimit]",
+          "monthlyLimit": "[ZH] [TODO: Translate admin.integrations.apiClients.settings.monthlyLimit]",
+          "editTitle": "[ZH] [TODO: Translate admin.integrations.apiClients.settings.editTitle]",
+          "editDescription": "[ZH] [TODO: Translate admin.integrations.apiClients.settings.editDescription]",
+          "rateLimitPerMin": "[ZH] [TODO: Translate admin.integrations.apiClients.settings.rateLimitPerMin]",
+          "editSettings": "[ZH] [TODO: Translate admin.integrations.apiClients.settings.editSettings]"
+        },
+        ",": "[ZH] [TODO: Translate admin.integrations.apiClients.,]",
+        "rotateDialog": {
+          "title": "[ZH] [TODO: Translate admin.integrations.apiClients.rotateDialog.title]",
+          "description": "[ZH] [TODO: Translate admin.integrations.apiClients.rotateDialog.description]"
+        },
+        "revokeDialog": {
+          "title": "[ZH] [TODO: Translate admin.integrations.apiClients.revokeDialog.title]",
+          "description": "[ZH] [TODO: Translate admin.integrations.apiClients.revokeDialog.description]"
+        },
+        "tabs": {
+          "overview": "[ZH] [TODO: Translate admin.integrations.apiClients.tabs.overview]",
+          "settings": "[ZH] [TODO: Translate admin.integrations.apiClients.tabs.settings]",
+          "usageStats": "[ZH] [TODO: Translate admin.integrations.apiClients.tabs.usageStats]"
         }
       },
       "apps": {
@@ -14384,7 +16052,8 @@
           "status": "地位",
           "category": "类别",
           "allStatus": "所有状态",
-          "allCategories": "所有类别"
+          "allCategories": "所有类别",
+          "searchPlaceholder": "[ZH] [TODO: Translate admin.integrations.apps.filters.searchPlaceholder]"
         },
         "actions": {
           "viewDetails": "查看详情",
@@ -14449,7 +16118,14 @@
           "loadFailed": "[ZH] Failed to load integration app"
         },
         "table": {
-          "noReviews": "没有评论"
+          "noReviews": "没有评论",
+          "app": "[ZH] [TODO: Translate admin.integrations.apps.table.app]",
+          "category": "[ZH] [TODO: Translate admin.integrations.apps.table.category]",
+          "developer": "[ZH] [TODO: Translate admin.integrations.apps.table.developer]",
+          "status": "[ZH] [TODO: Translate admin.integrations.apps.table.status]",
+          "installs": "[ZH] [TODO: Translate admin.integrations.apps.table.installs]",
+          "rating": "[ZH] [TODO: Translate admin.integrations.apps.table.rating]",
+          "noAppsFound": "[ZH] [TODO: Translate admin.integrations.apps.table.noAppsFound]"
         },
         "badges": {
           "official": "官方应用程序",
@@ -14556,6 +16232,51 @@
             "createSuccess": "[ZH] Integration app created successfully",
             "createFailed": "[ZH] Failed to create app"
           }
+        },
+        "bulkActions": {
+          "approveSelected": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.approveSelected]",
+          "approveConfirmTitle": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.approveConfirmTitle]",
+          "approveConfirmDescription": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.approveConfirmDescription]",
+          "publishSelected": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.publishSelected]",
+          "publishConfirmTitle": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.publishConfirmTitle]",
+          "publishConfirmDescription": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.publishConfirmDescription]",
+          "deprecateSelected": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.deprecateSelected]",
+          "deprecateConfirmTitle": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.deprecateConfirmTitle]",
+          "deprecateConfirmDescription": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.deprecateConfirmDescription]",
+          "deleteSelected": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.deleteSelected]",
+          "deleteConfirmTitle": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.deleteConfirmTitle]",
+          "deleteConfirmDescription": "[ZH] [TODO: Translate admin.integrations.apps.bulkActions.deleteConfirmDescription]"
+        },
+        "createButton": "[ZH] [TODO: Translate admin.integrations.apps.createButton]",
+        "createDialog": {
+          "title": "[ZH] [TODO: Translate admin.integrations.apps.createDialog.title]",
+          "description": "[ZH] [TODO: Translate admin.integrations.apps.createDialog.description]"
+        },
+        "form": {
+          "appNameRequired": "[ZH] [TODO: Translate admin.integrations.apps.form.appNameRequired]",
+          "appNamePlaceholder": "[ZH] [TODO: Translate admin.integrations.apps.form.appNamePlaceholder]",
+          "categoryRequired": "[ZH] [TODO: Translate admin.integrations.apps.form.categoryRequired]",
+          "shortDescription": "[ZH] [TODO: Translate admin.integrations.apps.form.shortDescription]",
+          "shortDescriptionPlaceholder": "[ZH] [TODO: Translate admin.integrations.apps.form.shortDescriptionPlaceholder]",
+          "fullDescription": "[ZH] [TODO: Translate admin.integrations.apps.form.fullDescription]",
+          "fullDescriptionPlaceholder": "[ZH] [TODO: Translate admin.integrations.apps.form.fullDescriptionPlaceholder]",
+          "developerRequired": "[ZH] [TODO: Translate admin.integrations.apps.form.developerRequired]",
+          "developerPlaceholder": "[ZH] [TODO: Translate admin.integrations.apps.form.developerPlaceholder]",
+          "developerUrl": "[ZH] [TODO: Translate admin.integrations.apps.form.developerUrl]",
+          "developerUrlPlaceholder": "[ZH] [TODO: Translate admin.integrations.apps.form.developerUrlPlaceholder]",
+          "iconUrl": "[ZH] [TODO: Translate admin.integrations.apps.form.iconUrl]",
+          "iconUrlPlaceholder": "[ZH] [TODO: Translate admin.integrations.apps.form.iconUrlPlaceholder]",
+          "officialApp": "[ZH] [TODO: Translate admin.integrations.apps.form.officialApp]",
+          "featuredApp": "[ZH] [TODO: Translate admin.integrations.apps.form.featuredApp]"
+        },
+        "stats": {
+          "totalApps": "[ZH] [TODO: Translate admin.integrations.apps.stats.totalApps]",
+          "published": "[ZH] [TODO: Translate admin.integrations.apps.stats.published]",
+          "totalInstalls": "[ZH] [TODO: Translate admin.integrations.apps.stats.totalInstalls]",
+          "featured": "[ZH] [TODO: Translate admin.integrations.apps.stats.featured]"
+        },
+        "deleteDialog": {
+          "title": "[ZH] [TODO: Translate admin.integrations.apps.deleteDialog.title]"
         }
       },
       "webhooks": {
@@ -14726,6 +16447,9 @@
             "createFailed": "[ZH] Failed to create webhook",
             "copied": "[ZH] Copied to clipboard"
           }
+        },
+        "": {
+          "": "[ZH] [TODO: Translate admin.integrations.webhooks..]"
         }
       }
     },
@@ -15088,13 +16812,18 @@
         "enabledDescription": "启用此功能标志",
         "rolloutPercentage": "推出百分比",
         "allowedPlans": "允许的计划",
-        "allowAllPlans": "不选中以允许所有计划"
+        "allowAllPlans": "不选中以允许所有计划",
+        "displayName": "[ZH] [TODO: Translate admin.features.form.displayName]"
       },
       "types": {
         "boolean": "布尔值",
         "string": "细绳",
         "number": "数字",
-        "json": "JSON"
+        "json": "JSON",
+        "booleanDescription": "[ZH] [TODO: Translate admin.features.types.booleanDescription]",
+        "stringDescription": "[ZH] [TODO: Translate admin.features.types.stringDescription]",
+        "numberDescription": "[ZH] [TODO: Translate admin.features.types.numberDescription]",
+        "jsonDescription": "[ZH] [TODO: Translate admin.features.types.jsonDescription]"
       },
       "plans": {
         "STARTER": "起动机",
@@ -15105,7 +16834,38 @@
       "saving": "保存...",
       "updateFlag": "更新标志",
       "createFlag": "创建标志",
-      "empty": "未找到功能标志"
+      "empty": "未找到功能标志",
+      "validation": {
+        "keyRequired": "[ZH] [TODO: Translate admin.features.validation.keyRequired]",
+        "keyFormat": "[ZH] [TODO: Translate admin.features.validation.keyFormat]"
+      },
+      "new": {
+        "noPermission": "[ZH] [TODO: Translate admin.features.new.noPermission]",
+        "backToFeatures": "[ZH] [TODO: Translate admin.features.new.backToFeatures]",
+        "back": "[ZH] [TODO: Translate admin.features.new.back]",
+        "title": "[ZH] [TODO: Translate admin.features.new.title]",
+        "subtitle": "[ZH] [TODO: Translate admin.features.new.subtitle]"
+      },
+      "creating": "[ZH] [TODO: Translate admin.features.creating]",
+      "flagDetails": {
+        "title": "[ZH] [TODO: Translate admin.features.flagDetails.title]",
+        "description": "[ZH] [TODO: Translate admin.features.flagDetails.description]",
+        "keyHint": "[ZH] [TODO: Translate admin.features.flagDetails.keyHint]"
+      },
+      "rolloutConfig": {
+        "title": "[ZH] [TODO: Translate admin.features.rolloutConfig.title]",
+        "description": "[ZH] [TODO: Translate admin.features.rolloutConfig.description]",
+        "enabled": "[ZH] [TODO: Translate admin.features.rolloutConfig.enabled]",
+        "enabledDescription": "[ZH] [TODO: Translate admin.features.rolloutConfig.enabledDescription]",
+        "rolloutPercentage": "[ZH] [TODO: Translate admin.features.rolloutConfig.rolloutPercentage]",
+        "rolloutDescription": "[ZH] [TODO: Translate admin.features.rolloutConfig.rolloutDescription]"
+      },
+      "planRestrictions": {
+        "title": "[ZH] [TODO: Translate admin.features.planRestrictions.title]",
+        "description": "[ZH] [TODO: Translate admin.features.planRestrictions.description]",
+        "allowedPlans": "[ZH] [TODO: Translate admin.features.planRestrictions.allowedPlans]",
+        "allowAllDescription": "[ZH] [TODO: Translate admin.features.planRestrictions.allowAllDescription]"
+      }
     }
   },
   "ui": {
@@ -15238,7 +16998,14 @@
       "sortAscending": "升序排列",
       "sortDescending": "降序排列",
       "selectAll": "全选",
-      "deselectAll": "取消全选"
+      "deselectAll": "取消全选",
+      "featureName": "[ZH] [TODO: Translate ui.table.featureName]",
+      "totalEvents": "[ZH] [TODO: Translate ui.table.totalEvents]",
+      "activeUsers": "[ZH] [TODO: Translate ui.table.activeUsers]",
+      "adoptionRate": "[ZH] [TODO: Translate ui.table.adoptionRate]",
+      "retentionRate": "[ZH] [TODO: Translate ui.table.retentionRate]",
+      "deleteConfirm": "[ZH] [TODO: Translate ui.table.deleteConfirm]",
+      "areYouSure": "[ZH] [TODO: Translate ui.table.areYouSure]"
     },
     "languageSwitcher": {
       "switchLanguage": "切换语言"
@@ -15381,6 +17148,9 @@
         "loginAlertsDesc": "收到新设备登录的通知",
         "systemMaintenance": "系统维护",
         "systemMaintenanceDesc": "计划停机和更新"
+      },
+      "success": {
+        "saved": "[ZH] [TODO: Translate notifications.settings.success.saved]"
       }
     },
     "admin": {
@@ -15432,7 +17202,22 @@
       },
       "empty": "暂无创建的通知",
       "confirmDelete": "删除通知",
-      "confirmDeleteDescription": "您确定要删除「{title}」吗？此操作无法撤销。"
+      "confirmDeleteDescription": "您确定要删除「{title}」吗？此操作无法撤销。",
+      "error": {
+        "loadFailed": "[ZH] [TODO: Translate notifications.admin.error.loadFailed]",
+        "updateFailed": "[ZH] [TODO: Translate notifications.admin.error.updateFailed]",
+        "createFailed": "[ZH] [TODO: Translate notifications.admin.error.createFailed]",
+        "saveFailed": "[ZH] [TODO: Translate notifications.admin.error.saveFailed]",
+        "deleteFailed": "[ZH] [TODO: Translate notifications.admin.error.deleteFailed]"
+      },
+      "success": {
+        "updated": "[ZH] [TODO: Translate notifications.admin.success.updated]",
+        "created": "[ZH] [TODO: Translate notifications.admin.success.created]",
+        "deleted": "[ZH] [TODO: Translate notifications.admin.success.deleted]"
+      },
+      "loading": {
+        "saving": "[ZH] [TODO: Translate notifications.admin.loading.saving]"
+      }
     }
   },
   "feedback": {

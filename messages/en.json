@@ -32,7 +32,10 @@
     "noResults": "No results found",
     "required": "Required",
     "optional": "Optional",
-    "actions": "Actions",
+    "actions": {
+      "refresh": "[TODO: Translate common.actions.refresh]",
+      "export": "[TODO: Translate common.actions.export]"
+    },
     "status": "Status",
     "name": "Name",
     "description": "Description",
@@ -114,7 +117,45 @@
     "questionText": "[TODO: Translate common.questionText]",
     "enterQuestionText": "[TODO: Translate common.enterQuestionText]",
     "view": "[TODO: Translate common.view]",
-    "deleting": "[TODO: Translate common.deleting]"
+    "deleting": "[TODO: Translate common.deleting]",
+    "currentOrgId": "[TODO: Translate common.currentOrgId]",
+    "na": "[TODO: Translate common.na]",
+    "remove": "[TODO: Translate common.remove]",
+    "recommendations": "[TODO: Translate common.recommendations]",
+    "noData": "[TODO: Translate common.noData]",
+    "incidents": "[TODO: Translate common.incidents]",
+    "incident": "[TODO: Translate common.incident]",
+    "release": "[TODO: Translate common.release]",
+    "total": "[TODO: Translate common.total]",
+    "download": "[TODO: Translate common.download]",
+    "unit": "[TODO: Translate common.unit]",
+    "recorded": "[TODO: Translate common.recorded]",
+    "copied": "[TODO: Translate common.copied]",
+    "unnamed": "[TODO: Translate common.unnamed]",
+    "failures": "[TODO: Translate common.failures]",
+    "never": "[TODO: Translate common.never]",
+    "copy": "[TODO: Translate common.copy]",
+    "periodOptions": {
+      "daily": "[TODO: Translate common.periodOptions.daily]",
+      "weekly": "[TODO: Translate common.periodOptions.weekly]",
+      "monthly": "[TODO: Translate common.periodOptions.monthly]",
+      "quarterly": "[TODO: Translate common.periodOptions.quarterly]",
+      "yearly": "[TODO: Translate common.periodOptions.yearly]"
+    },
+    "types": {
+      "usage": "[TODO: Translate common.types.usage]",
+      "revenue": "[TODO: Translate common.types.revenue]",
+      "security": "[TODO: Translate common.types.security]",
+      "compliance": "[TODO: Translate common.types.compliance]",
+      "userActivity": "[TODO: Translate common.types.userActivity]",
+      "customSql": "[TODO: Translate common.types.customSql]"
+    },
+    "schedules": {
+      "daily": "[TODO: Translate common.schedules.daily]",
+      "weekly": "[TODO: Translate common.schedules.weekly]",
+      "monthly": "[TODO: Translate common.schedules.monthly]",
+      "onDemand": "[TODO: Translate common.schedules.onDemand]"
+    }
   },
   "alerts": {
     "statuses": {
@@ -679,7 +720,8 @@
         "organizationName": "Enter organization name",
         "organizationSlug": "organization-slug",
         "orgDescription": "Describe your organization..."
-      }
+      },
+      " ": "[TODO: Translate settings.general. ]"
     },
     "sidebar": {
       "title": "Settings",
@@ -780,6 +822,9 @@
         "loadFailed": "Failed to load API keys",
         "createFailed": "Failed to create API key",
         "deleteFailed": "Failed to delete API key"
+      },
+      "success": {
+        "copied": "[TODO: Translate settings.apiKeys.success.copied]"
       }
     },
     "help": {
@@ -849,7 +894,8 @@
       "phoneNumber": "Phone Number",
       "location": "Location",
       "saving": "Saving...",
-      "saveChanges": "Save Changes"
+      "saveChanges": "Save Changes",
+      " ": "[TODO: Translate settings.profile. ]"
     },
     "team": {
       "title": "Team Management",
@@ -939,7 +985,8 @@
         "memberRemoveFailed": "Failed to remove member",
         "invitationRevoked": "Invitation revoked",
         "revokeFailed": "Failed to revoke invitation"
-      }
+      },
+      " ": "[TODO: Translate settings.team. ]"
     },
     "billing": {
       "title": "Billing & Subscription",
@@ -1043,7 +1090,8 @@
         },
         "toast": {
           "checkoutFailed": "Failed to start checkout"
-        }
+        },
+        "canceled": "[TODO: Translate settings.billing.upgrade.canceled]"
       }
     },
     "auditLog": {
@@ -2475,7 +2523,45 @@
       "confidence": "{percent}% confidence",
       "title": "Insights",
       "detail": {
-        "title": "Insight Details"
+        "title": "Insight Details",
+        "backToInsights": "[TODO: Translate dashboard.insights.detail.backToInsights]",
+        "notFound": {
+          "title": "[TODO: Translate dashboard.insights.detail.notFound.title]",
+          "description": "[TODO: Translate dashboard.insights.detail.notFound.description]"
+        },
+        "viewAllInsights": "[TODO: Translate dashboard.insights.detail.viewAllInsights]",
+        "actions": {
+          "copied": "[TODO: Translate dashboard.insights.detail.actions.copied]",
+          "copy": "[TODO: Translate dashboard.insights.detail.actions.copy]",
+          "share": "[TODO: Translate dashboard.insights.detail.actions.share]",
+          "export": "[TODO: Translate dashboard.insights.detail.actions.export]"
+        },
+        "detailsTitle": "[TODO: Translate dashboard.insights.detail.detailsTitle]",
+        "detailsDescription": "[TODO: Translate dashboard.insights.detail.detailsDescription]",
+        "exploreMore": {
+          "title": "[TODO: Translate dashboard.insights.detail.exploreMore.title]",
+          "description": "[TODO: Translate dashboard.insights.detail.exploreMore.description]",
+          "openPlayground": "[TODO: Translate dashboard.insights.detail.exploreMore.openPlayground]"
+        }
+      },
+      "description": "[TODO: Translate dashboard.insights.description]",
+      "searchPlaceholder": "[TODO: Translate dashboard.insights.searchPlaceholder]",
+      "filterByType": "[TODO: Translate dashboard.insights.filterByType]",
+      "types": {
+        "all": "[TODO: Translate dashboard.insights.types.all]",
+        "audience": "[TODO: Translate dashboard.insights.types.audience]",
+        "trend": "[TODO: Translate dashboard.insights.types.trend]",
+        "competitive": "[TODO: Translate dashboard.insights.types.competitive]",
+        "analysis": "[TODO: Translate dashboard.insights.types.analysis]"
+      },
+      "loading": "[TODO: Translate dashboard.insights.loading]",
+      "empty": {
+        "title": "[TODO: Translate dashboard.insights.empty.title]",
+        "description": "[TODO: Translate dashboard.insights.empty.description]",
+        "goToPlayground": "[TODO: Translate dashboard.insights.empty.goToPlayground]"
+      },
+      "badges": {
+        "new": "[TODO: Translate dashboard.insights.badges.new]"
       }
     },
     "solutionAgents": {
@@ -2788,8 +2874,15 @@
           "templates": "Templates",
           "scheduled": "Scheduled",
           "sharedWithMe": "Shared with Me"
-        }
-      }
+        },
+        "canView": "[TODO: Translate dashboard.reports.page.canView]",
+        "canEdit": "[TODO: Translate dashboard.reports.page.canEdit]",
+        "canComment": "[TODO: Translate dashboard.reports.page.canComment]"
+      },
+      "recentReports": "[TODO: Translate dashboard.reports.recentReports]",
+      "viewAll": "[TODO: Translate dashboard.reports.viewAll]",
+      "noReportsYet": "[TODO: Translate dashboard.reports.noReportsYet]",
+      "createReport": "[TODO: Translate dashboard.reports.createReport]"
     },
     "dashboards": {
       "edit": {
@@ -2856,7 +2949,40 @@
       "title": "Dashboards",
       "new": {
         "title": "Create Dashboard",
-        "description": "Build a custom dashboard with charts and widgets"
+        "description": "Build a custom dashboard with charts and widgets",
+        "validation": {
+          "enterName": "[TODO: Translate dashboard.dashboards.new.validation.enterName]",
+          "selectChart": "[TODO: Translate dashboard.dashboards.new.validation.selectChart]"
+        },
+        "errors": {
+          "createFailed": "[TODO: Translate dashboard.dashboards.new.errors.createFailed]",
+          "createFailedRetry": "[TODO: Translate dashboard.dashboards.new.errors.createFailedRetry]"
+        },
+        "form": {
+          "dashboardName": "[TODO: Translate dashboard.dashboards.new.form.dashboardName]",
+          "dashboardNamePlaceholder": "[TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
+          "descriptionLabel": "[TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionPlaceholder": "[TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
+          "publicDashboard": "[TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
+          "publicDescription": "[TODO: Translate dashboard.dashboards.new.form.publicDescription]",
+          "addCharts": "[TODO: Translate dashboard.dashboards.new.form.addCharts]",
+          "added": "[TODO: Translate dashboard.dashboards.new.form.added]",
+          "createNewChart": "[TODO: Translate dashboard.dashboards.new.form.createNewChart]"
+        },
+        "preview": {
+          "title": "[TODO: Translate dashboard.dashboards.new.preview.title]",
+          "name": "[TODO: Translate dashboard.dashboards.new.preview.name]",
+          "untitledDashboard": "[TODO: Translate dashboard.dashboards.new.preview.untitledDashboard]",
+          "noChartsSelected": "[TODO: Translate dashboard.dashboards.new.preview.noChartsSelected]",
+          "visibility": "[TODO: Translate dashboard.dashboards.new.preview.visibility]",
+          "public": "[TODO: Translate dashboard.dashboards.new.preview.public]",
+          "private": "[TODO: Translate dashboard.dashboards.new.preview.private]"
+        },
+        "buttons": {
+          "creating": "[TODO: Translate dashboard.dashboards.new.buttons.creating]",
+          "createDashboard": "[TODO: Translate dashboard.dashboards.new.buttons.createDashboard]",
+          "cancel": "[TODO: Translate dashboard.dashboards.new.buttons.cancel]"
+        }
       },
       "builder": {
         "title": "Dashboard Builder",
@@ -2864,7 +2990,12 @@
         "editTitle": "Edit Dashboard",
         "initialName": "My Dashboard",
         "initialDescription": "A custom dashboard",
-        "exportFailed": "Failed to export dashboard"
+        "exportFailed": "Failed to export dashboard",
+        "id": "[TODO: Translate dashboard.dashboards.builder.id]",
+        "saveSuccess": "[TODO: Translate dashboard.dashboards.builder.saveSuccess]",
+        "saveFailed": "[TODO: Translate dashboard.dashboards.builder.saveFailed]",
+        "a": "[TODO: Translate dashboard.dashboards.builder.a]",
+        "T": "[TODO: Translate dashboard.dashboards.builder.T]"
       },
       "detail": {
         "title": "Dashboard Details",
@@ -2889,7 +3020,184 @@
             "category": "Category",
             "dataSource": "Data Source"
           }
+        },
+        "@": "[TODO: Translate dashboard.dashboards.detail.@]",
+        "notFound": {
+          "title": "[TODO: Translate dashboard.dashboards.detail.notFound.title]",
+          "description": "[TODO: Translate dashboard.dashboards.detail.notFound.description]",
+          "message": "[TODO: Translate dashboard.dashboards.detail.notFound.message]",
+          "backButton": "[TODO: Translate dashboard.dashboards.detail.notFound.backButton]"
+        },
+        "a": "[TODO: Translate dashboard.dashboards.detail.a]",
+        "T": "[TODO: Translate dashboard.dashboards.detail.T]",
+        "favorites": {
+          "removeFromFavorites": "[TODO: Translate dashboard.dashboards.detail.favorites.removeFromFavorites]",
+          "addToFavorites": "[TODO: Translate dashboard.dashboards.detail.favorites.addToFavorites]"
+        },
+        "visibility": {
+          "public": "[TODO: Translate dashboard.dashboards.detail.visibility.public]",
+          "private": "[TODO: Translate dashboard.dashboards.detail.visibility.private]"
+        },
+        "tags": {
+          "addTag": "[TODO: Translate dashboard.dashboards.detail.tags.addTag]",
+          "manageTags": "[TODO: Translate dashboard.dashboards.detail.tags.manageTags]",
+          "manageTagsDescription": "[TODO: Translate dashboard.dashboards.detail.tags.manageTagsDescription]",
+          "addNewTag": "[TODO: Translate dashboard.dashboards.detail.tags.addNewTag]",
+          "noTagsAdded": "[TODO: Translate dashboard.dashboards.detail.tags.noTagsAdded]",
+          "done": "[TODO: Translate dashboard.dashboards.detail.tags.done]"
+        },
+        "autoRefresh": {
+          "on": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
+          "off": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
+          "label": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "interval": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
+          "every1Min": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
+          "every5Min": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
+          "every15Min": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.every15Min]",
+          "every30Min": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.every30Min]",
+          "everyHour": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.everyHour]",
+          "refreshNow": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.refreshNow]"
+        },
+        "filters": {
+          "title": "[TODO: Translate dashboard.dashboards.detail.filters.title]",
+          "filterCharts": "[TODO: Translate dashboard.dashboards.detail.filters.filterCharts]",
+          "clearAll": "[TODO: Translate dashboard.dashboards.detail.filters.clearAll]",
+          "filterDescription": "[TODO: Translate dashboard.dashboards.detail.filters.filterDescription]",
+          "searchCharts": "[TODO: Translate dashboard.dashboards.detail.filters.searchCharts]",
+          "searchPlaceholder": "[TODO: Translate dashboard.dashboards.detail.filters.searchPlaceholder]",
+          "chartTypes": "[TODO: Translate dashboard.dashboards.detail.filters.chartTypes]",
+          "clear": "[TODO: Translate dashboard.dashboards.detail.filters.clear]",
+          "categories": "[TODO: Translate dashboard.dashboards.detail.filters.categories]",
+          "dataSources": "[TODO: Translate dashboard.dashboards.detail.filters.dataSources]",
+          "activeFilters": "[TODO: Translate dashboard.dashboards.detail.filters.activeFilters]",
+          "clearAllFilters": "[TODO: Translate dashboard.dashboards.detail.filters.clearAllFilters]"
+        },
+        "actions": {
+          "addChart": "[TODO: Translate dashboard.dashboards.detail.actions.addChart]",
+          "share": "[TODO: Translate dashboard.dashboards.detail.actions.share]",
+          "export": "[TODO: Translate dashboard.dashboards.detail.actions.export]",
+          "edit": "[TODO: Translate dashboard.dashboards.detail.actions.edit]",
+          "duplicate": "[TODO: Translate dashboard.dashboards.detail.actions.duplicate]",
+          "copied": "[TODO: Translate dashboard.dashboards.detail.actions.copied]",
+          "copyLink": "[TODO: Translate dashboard.dashboards.detail.actions.copyLink]",
+          "manageAlerts": "[TODO: Translate dashboard.dashboards.detail.actions.manageAlerts]",
+          "delete": "[TODO: Translate dashboard.dashboards.detail.actions.delete]"
+        },
+        "meta": {
+          "searchCharts": "[TODO: Translate dashboard.dashboards.detail.meta.searchCharts]"
+        },
+        "tabs": {
+          "analytics": "[TODO: Translate dashboard.dashboards.detail.tabs.analytics]",
+          "comments": "[TODO: Translate dashboard.dashboards.detail.tabs.comments]",
+          "activity": "[TODO: Translate dashboard.dashboards.detail.tabs.activity]",
+          "history": "[TODO: Translate dashboard.dashboards.detail.tabs.history]",
+          "settings": "[TODO: Translate dashboard.dashboards.detail.tabs.settings]"
+        },
+        "chartActions": {
+          "minimize": "[TODO: Translate dashboard.dashboards.detail.chartActions.minimize]",
+          "expand": "[TODO: Translate dashboard.dashboards.detail.chartActions.expand]",
+          "refreshData": "[TODO: Translate dashboard.dashboards.detail.chartActions.refreshData]",
+          "exportChart": "[TODO: Translate dashboard.dashboards.detail.chartActions.exportChart]",
+          "openInEditor": "[TODO: Translate dashboard.dashboards.detail.chartActions.openInEditor]",
+          "removeFromDashboard": "[TODO: Translate dashboard.dashboards.detail.chartActions.removeFromDashboard]"
+        },
+        "emptyState": {
+          "noChartsMatch": "[TODO: Translate dashboard.dashboards.detail.emptyState.noChartsMatch]",
+          "adjustFilters": "[TODO: Translate dashboard.dashboards.detail.emptyState.adjustFilters]",
+          "clearFilters": "[TODO: Translate dashboard.dashboards.detail.emptyState.clearFilters]"
+        },
+        "insights": {
+          "title": "[TODO: Translate dashboard.dashboards.detail.insights.title]",
+          "chartDistribution": "[TODO: Translate dashboard.dashboards.detail.insights.chartDistribution]",
+          "dataSourcesTitle": "[TODO: Translate dashboard.dashboards.detail.insights.dataSourcesTitle]",
+          "currentView": "[TODO: Translate dashboard.dashboards.detail.insights.currentView]"
+        },
+        "analytics": {
+          "totalViews": "[TODO: Translate dashboard.dashboards.detail.analytics.totalViews]",
+          "uniqueViewers": "[TODO: Translate dashboard.dashboards.detail.analytics.uniqueViewers]",
+          "avgTimeOnPage": "[TODO: Translate dashboard.dashboards.detail.analytics.avgTimeOnPage]",
+          "exports": "[TODO: Translate dashboard.dashboards.detail.analytics.exports]",
+          "viewsOverTime": "[TODO: Translate dashboard.dashboards.detail.analytics.viewsOverTime]",
+          "viewsChartComingSoon": "[TODO: Translate dashboard.dashboards.detail.analytics.viewsChartComingSoon]",
+          "mostViewedCharts": "[TODO: Translate dashboard.dashboards.detail.analytics.mostViewedCharts]"
+        },
+        "activityTab": {
+          "recentActivity": "[TODO: Translate dashboard.dashboards.detail.activityTab.recentActivity]"
+        },
+        " ": "[TODO: Translate dashboard.dashboards.detail. ]",
+        "settingsTab": {
+          "generalSettings": "[TODO: Translate dashboard.dashboards.detail.settingsTab.generalSettings]",
+          "publicDashboard": "[TODO: Translate dashboard.dashboards.detail.settingsTab.publicDashboard]",
+          "publicDescription": "[TODO: Translate dashboard.dashboards.detail.settingsTab.publicDescription]",
+          "allowComments": "[TODO: Translate dashboard.dashboards.detail.settingsTab.allowComments]",
+          "allowCommentsDescription": "[TODO: Translate dashboard.dashboards.detail.settingsTab.allowCommentsDescription]",
+          "showInSearch": "[TODO: Translate dashboard.dashboards.detail.settingsTab.showInSearch]",
+          "showInSearchDescription": "[TODO: Translate dashboard.dashboards.detail.settingsTab.showInSearchDescription]",
+          "alertsNotifications": "[TODO: Translate dashboard.dashboards.detail.settingsTab.alertsNotifications]",
+          "addAlert": "[TODO: Translate dashboard.dashboards.detail.settingsTab.addAlert]",
+          "collaborators": "[TODO: Translate dashboard.dashboards.detail.settingsTab.collaborators]",
+          "inviteCollaborator": "[TODO: Translate dashboard.dashboards.detail.settingsTab.inviteCollaborator]",
+          "relatedDashboards": "[TODO: Translate dashboard.dashboards.detail.settingsTab.relatedDashboards]"
+        },
+        "share": {
+          "title": "[TODO: Translate dashboard.dashboards.detail.share.title]",
+          "description": "[TODO: Translate dashboard.dashboards.detail.share.description]",
+          "enterEmail": "[TODO: Translate dashboard.dashboards.detail.share.enterEmail]",
+          "viewer": "[TODO: Translate dashboard.dashboards.detail.share.viewer]",
+          "editor": "[TODO: Translate dashboard.dashboards.detail.share.editor]",
+          "admin": "[TODO: Translate dashboard.dashboards.detail.share.admin]",
+          "peopleWithAccess": "[TODO: Translate dashboard.dashboards.detail.share.peopleWithAccess]",
+          "linkSharing": "[TODO: Translate dashboard.dashboards.detail.share.linkSharing]",
+          "publicAccess": "[TODO: Translate dashboard.dashboards.detail.share.publicAccess]",
+          "publicAccessDescription": "[TODO: Translate dashboard.dashboards.detail.share.publicAccessDescription]"
+        },
+        "exportDialog": {
+          "title": "[TODO: Translate dashboard.dashboards.detail.exportDialog.title]",
+          "description": "[TODO: Translate dashboard.dashboards.detail.exportDialog.description]",
+          "json": "[TODO: Translate dashboard.dashboards.detail.exportDialog.json]",
+          "jsonDescription": "[TODO: Translate dashboard.dashboards.detail.exportDialog.jsonDescription]",
+          "csv": "[TODO: Translate dashboard.dashboards.detail.exportDialog.csv]",
+          "csvDescription": "[TODO: Translate dashboard.dashboards.detail.exportDialog.csvDescription]",
+          "pdfHtml": "[TODO: Translate dashboard.dashboards.detail.exportDialog.pdfHtml]",
+          "pdfHtmlDescription": "[TODO: Translate dashboard.dashboards.detail.exportDialog.pdfHtmlDescription]",
+          "pngImage": "[TODO: Translate dashboard.dashboards.detail.exportDialog.pngImage]",
+          "pngImageDescription": "[TODO: Translate dashboard.dashboards.detail.exportDialog.pngImageDescription]"
+        },
+        "json": "[TODO: Translate dashboard.dashboards.detail.json]",
+        "csv": "[TODO: Translate dashboard.dashboards.detail.csv]",
+        "pdf": "[TODO: Translate dashboard.dashboards.detail.pdf]",
+        "png": "[TODO: Translate dashboard.dashboards.detail.png]",
+        "alerts": {
+          "title": "[TODO: Translate dashboard.dashboards.detail.alerts.title]",
+          "description": "[TODO: Translate dashboard.dashboards.detail.alerts.description]",
+          "createNewAlert": "[TODO: Translate dashboard.dashboards.detail.alerts.createNewAlert]",
+          "alertName": "[TODO: Translate dashboard.dashboards.detail.alerts.alertName]",
+          "alertCondition": "[TODO: Translate dashboard.dashboards.detail.alerts.alertCondition]",
+          "addAlertButton": "[TODO: Translate dashboard.dashboards.detail.alerts.addAlertButton]",
+          "activeAlerts": "[TODO: Translate dashboard.dashboards.detail.alerts.activeAlerts]"
+        },
+        "delete": {
+          "title": "[TODO: Translate dashboard.dashboards.detail.delete.title]",
+          "cancel": "[TODO: Translate dashboard.dashboards.detail.delete.cancel]",
+          "delete": "[TODO: Translate dashboard.dashboards.detail.delete.delete]"
         }
+      },
+      "description": "[TODO: Translate dashboard.dashboards.description]",
+      "newDashboard": "[TODO: Translate dashboard.dashboards.newDashboard]",
+      "stats": {
+        "totalDashboards": "[TODO: Translate dashboard.dashboards.stats.totalDashboards]",
+        "totalViews": "[TODO: Translate dashboard.dashboards.stats.totalViews]",
+        "shared": "[TODO: Translate dashboard.dashboards.stats.shared]",
+        "exports": "[TODO: Translate dashboard.dashboards.stats.exports]"
+      },
+      "tabs": {
+        "allDashboards": "[TODO: Translate dashboard.dashboards.tabs.allDashboards]",
+        "recent": "[TODO: Translate dashboard.dashboards.tabs.recent]",
+        "favorites": "[TODO: Translate dashboard.dashboards.tabs.favorites]"
+      },
+      "grid": {
+        "noDashboardsYet": "[TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
+        "createFirstDashboard": "[TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
       }
     },
     "projects": {
@@ -3071,7 +3379,8 @@
       "integrations": "Integrations",
       "connectedServices": "Connected services",
       "items": "{count} items",
-      "title": "Platform"
+      "title": "Platform",
+      " ": "[TODO: Translate dashboard.platform. ]"
     },
     "settings": {
       "title": "General Settings",
@@ -3348,7 +3657,12 @@
         "compareAudiences": "Compare Audiences",
         "compareDescription": "Compare demographic and behavioral attributes between audiences.",
         "used": "Used {time}",
-        "marketsCount": "{count} markets"
+        "marketsCount": "{count} markets",
+        "emptyState": {
+          "title": "[TODO: Translate dashboard.pages.audiences.emptyState.title]",
+          "description": "[TODO: Translate dashboard.pages.audiences.emptyState.description]",
+          "action": "[TODO: Translate dashboard.pages.audiences.emptyState.action]"
+        }
       },
       "projects": {
         "title": "Projects",
@@ -3421,8 +3735,11 @@
             "addMember": "Add Member",
             "remove": "Remove"
           },
-          "title": "Project Details"
-        }
+          "title": "Project Details",
+          "-": "[TODO: Translate dashboard.pages.projects.detail.-]",
+          "T": "[TODO: Translate dashboard.pages.projects.detail.T]"
+        },
+        "T": "[TODO: Translate dashboard.pages.projects.T]"
       }
     },
     "audiences": {
@@ -3543,7 +3860,19 @@
           "asJson": "Export as JSON",
           "asCsv": "Export as CSV",
           "asPdf": "Export as PDF",
-          "toPowerPoint": "Export to PowerPoint"
+          "toPowerPoint": "Export to PowerPoint",
+          "csvHeaders": {
+            "attribute": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.attribute]",
+            "value": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.value]",
+            "behavior": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.behavior]",
+            "interest": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.interest]",
+            "audience": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.audience]",
+            "description": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.description]",
+            "size": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.size]",
+            "markets": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.markets]",
+            "behaviors": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.behaviors]",
+            "interests": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.interests]"
+          }
         },
         "overview": {
           "demographics": "Demographics",
@@ -3604,7 +3933,26 @@
           "cancel": "Cancel",
           "delete": "Delete"
         },
-        "title": "Audience Details"
+        "title": "Audience Details",
+        "demographics": {
+          "ageRange": "[TODO: Translate dashboard.audiences.detail.demographics.ageRange]",
+          "income": "[TODO: Translate dashboard.audiences.detail.demographics.income]",
+          "lifestyle": "[TODO: Translate dashboard.audiences.detail.demographics.lifestyle]",
+          "values": "[TODO: Translate dashboard.audiences.detail.demographics.values]"
+        },
+        "_": "[TODO: Translate dashboard.audiences.detail._]",
+        "common": {
+          "unknown": "[TODO: Translate dashboard.audiences.detail.common.unknown]",
+          "relativeTime": {
+            "justNow": "[TODO: Translate dashboard.audiences.detail.common.relativeTime.justNow]"
+          }
+        },
+        "T": "[TODO: Translate dashboard.audiences.detail.T]",
+        "a": "[TODO: Translate dashboard.audiences.detail.a]",
+        "json": "[TODO: Translate dashboard.audiences.detail.json]",
+        "csv": "[TODO: Translate dashboard.audiences.detail.csv]",
+        "pdf": "[TODO: Translate dashboard.audiences.detail.pdf]",
+        "pptx": "[TODO: Translate dashboard.audiences.detail.pptx]"
       }
     },
     "agents": {
@@ -3895,7 +4243,205 @@
           "custom": "Custom Weighting"
         }
       },
-      "title": "Crosstabs"
+      "title": "Crosstabs",
+      "analysis": {
+        "toast": {
+          "fieldUpdated": "[TODO: Translate dashboard.crosstabs.analysis.toast.fieldUpdated]",
+          "fieldDeleted": "[TODO: Translate dashboard.crosstabs.analysis.toast.fieldDeleted]",
+          "filtersApplied": "[TODO: Translate dashboard.crosstabs.analysis.toast.filtersApplied]",
+          "chartSaved": "[TODO: Translate dashboard.crosstabs.analysis.toast.chartSaved]"
+        },
+        "categories": {
+          "calculated": "[TODO: Translate dashboard.crosstabs.analysis.categories.calculated]"
+        },
+        "title": "[TODO: Translate dashboard.crosstabs.analysis.title]",
+        "more": "[TODO: Translate dashboard.crosstabs.analysis.more]",
+        "actions": {
+          "share": "[TODO: Translate dashboard.crosstabs.analysis.actions.share]",
+          "generateInsights": "[TODO: Translate dashboard.crosstabs.analysis.actions.generateInsights]"
+        },
+        "tabs": {
+          "dataGrid": "[TODO: Translate dashboard.crosstabs.analysis.tabs.dataGrid]",
+          "calculatedFields": "[TODO: Translate dashboard.crosstabs.analysis.tabs.calculatedFields]",
+          "filters": "[TODO: Translate dashboard.crosstabs.analysis.tabs.filters]",
+          "visualize": "[TODO: Translate dashboard.crosstabs.analysis.tabs.visualize]"
+        },
+        "grid": {
+          "description": "[TODO: Translate dashboard.crosstabs.analysis.grid.description]"
+        },
+        "visualize": {
+          "chartTitle": "[TODO: Translate dashboard.crosstabs.analysis.visualize.chartTitle]"
+        },
+        " - ": "[TODO: Translate dashboard.crosstabs.analysis. - ]"
+      },
+      "new": {
+        "errors": {
+          "nameRequired": "[TODO: Translate dashboard.crosstabs.new.errors.nameRequired]",
+          "audienceRequired": "[TODO: Translate dashboard.crosstabs.new.errors.audienceRequired]",
+          "metricRequired": "[TODO: Translate dashboard.crosstabs.new.errors.metricRequired]",
+          "createFailed": "[TODO: Translate dashboard.crosstabs.new.errors.createFailed]",
+          "createFailedRetry": "[TODO: Translate dashboard.crosstabs.new.errors.createFailedRetry]"
+        },
+        "title": "[TODO: Translate dashboard.crosstabs.new.title]",
+        "description": "[TODO: Translate dashboard.crosstabs.new.description]",
+        "form": {
+          "crosstabName": "[TODO: Translate dashboard.crosstabs.new.form.crosstabName]",
+          "namePlaceholder": "[TODO: Translate dashboard.crosstabs.new.form.namePlaceholder]",
+          "selectAudiences": "[TODO: Translate dashboard.crosstabs.new.form.selectAudiences]",
+          "selectMetrics": "[TODO: Translate dashboard.crosstabs.new.form.selectMetrics]"
+        },
+        "summary": {
+          "title": "[TODO: Translate dashboard.crosstabs.new.summary.title]"
+        },
+        "actions": {
+          "generating": "[TODO: Translate dashboard.crosstabs.new.actions.generating]",
+          "generate": "[TODO: Translate dashboard.crosstabs.new.actions.generate]",
+          "cancel": "[TODO: Translate dashboard.crosstabs.new.actions.cancel]"
+        }
+      },
+      "detail": {
+        "_": "[TODO: Translate dashboard.crosstabs.detail._]",
+        "notFound": {
+          "title": "[TODO: Translate dashboard.crosstabs.detail.notFound.title]",
+          "subtitle": "[TODO: Translate dashboard.crosstabs.detail.notFound.subtitle]",
+          "heading": "[TODO: Translate dashboard.crosstabs.detail.notFound.heading]",
+          "description": "[TODO: Translate dashboard.crosstabs.detail.notFound.description]",
+          "backButton": "[TODO: Translate dashboard.crosstabs.detail.notFound.backButton]"
+        },
+        "T": "[TODO: Translate dashboard.crosstabs.detail.T]",
+        "a": "[TODO: Translate dashboard.crosstabs.detail.a]",
+        "actions": {
+          "removeFromFavorites": "[TODO: Translate dashboard.crosstabs.detail.actions.removeFromFavorites]",
+          "addToFavorites": "[TODO: Translate dashboard.crosstabs.detail.actions.addToFavorites]",
+          "pauseAutoRefresh": "[TODO: Translate dashboard.crosstabs.detail.actions.pauseAutoRefresh]",
+          "enableAutoRefresh": "[TODO: Translate dashboard.crosstabs.detail.actions.enableAutoRefresh]",
+          "exitFullscreen": "[TODO: Translate dashboard.crosstabs.detail.actions.exitFullscreen]",
+          "enterFullscreen": "[TODO: Translate dashboard.crosstabs.detail.actions.enterFullscreen]",
+          "selectAll": "[TODO: Translate dashboard.crosstabs.detail.actions.selectAll]",
+          "clear": "[TODO: Translate dashboard.crosstabs.detail.actions.clear]",
+          "visualize": "[TODO: Translate dashboard.crosstabs.detail.actions.visualize]",
+          "share": "[TODO: Translate dashboard.crosstabs.detail.actions.share]",
+          "edit": "[TODO: Translate dashboard.crosstabs.detail.actions.edit]",
+          "duplicate": "[TODO: Translate dashboard.crosstabs.detail.actions.duplicate]",
+          "addToDashboard": "[TODO: Translate dashboard.crosstabs.detail.actions.addToDashboard]",
+          "copied": "[TODO: Translate dashboard.crosstabs.detail.actions.copied]",
+          "copyLink": "[TODO: Translate dashboard.crosstabs.detail.actions.copyLink]",
+          "delete": "[TODO: Translate dashboard.crosstabs.detail.actions.delete]",
+          "cancel": "[TODO: Translate dashboard.crosstabs.detail.actions.cancel]",
+          "schedule": "[TODO: Translate dashboard.crosstabs.detail.actions.schedule]"
+        },
+        "filters": {
+          "title": "[TODO: Translate dashboard.crosstabs.detail.filters.title]",
+          "clearAll": "[TODO: Translate dashboard.crosstabs.detail.filters.clearAll]",
+          "description": "[TODO: Translate dashboard.crosstabs.detail.filters.description]",
+          "quickFilters": "[TODO: Translate dashboard.crosstabs.detail.filters.quickFilters]",
+          "category": "[TODO: Translate dashboard.crosstabs.detail.filters.category]",
+          "allCategories": "[TODO: Translate dashboard.crosstabs.detail.filters.allCategories]",
+          "activeFilters": "[TODO: Translate dashboard.crosstabs.detail.filters.activeFilters]"
+        },
+        "tabs": {
+          "filters": "[TODO: Translate dashboard.crosstabs.detail.tabs.filters]",
+          "audiences": "[TODO: Translate dashboard.crosstabs.detail.tabs.audiences]",
+          "metrics": "[TODO: Translate dashboard.crosstabs.detail.tabs.metrics]"
+        },
+        "audiences": {
+          "selectAudiences": "[TODO: Translate dashboard.crosstabs.detail.audiences.selectAudiences]"
+        },
+        "metrics": {
+          "selectMetrics": "[TODO: Translate dashboard.crosstabs.detail.metrics.selectMetrics]"
+        },
+        "json": "[TODO: Translate dashboard.crosstabs.detail.json]",
+        "export": {
+          "asJson": "[TODO: Translate dashboard.crosstabs.detail.export.asJson]",
+          "asCsv": "[TODO: Translate dashboard.crosstabs.detail.export.asCsv]",
+          "asHtml": "[TODO: Translate dashboard.crosstabs.detail.export.asHtml]",
+          "asPdf": "[TODO: Translate dashboard.crosstabs.detail.export.asPdf]",
+          "asExcel": "[TODO: Translate dashboard.crosstabs.detail.export.asExcel]",
+          "asPowerPoint": "[TODO: Translate dashboard.crosstabs.detail.export.asPowerPoint]"
+        },
+        "csv": "[TODO: Translate dashboard.crosstabs.detail.csv]",
+        "html": "[TODO: Translate dashboard.crosstabs.detail.html]",
+        "pdf": "[TODO: Translate dashboard.crosstabs.detail.pdf]",
+        "excel": "[TODO: Translate dashboard.crosstabs.detail.excel]",
+        "pptx": "[TODO: Translate dashboard.crosstabs.detail.pptx]",
+        "deleteDialog": {
+          "title": "[TODO: Translate dashboard.crosstabs.detail.deleteDialog.title]"
+        },
+        "mainTabs": {
+          "data": "[TODO: Translate dashboard.crosstabs.detail.mainTabs.data]",
+          "activity": "[TODO: Translate dashboard.crosstabs.detail.mainTabs.activity]",
+          "comments": "[TODO: Translate dashboard.crosstabs.detail.mainTabs.comments]",
+          "history": "[TODO: Translate dashboard.crosstabs.detail.mainTabs.history]"
+        },
+        "insights": {
+          "title": "[TODO: Translate dashboard.crosstabs.detail.insights.title]",
+          "topPerformer": "[TODO: Translate dashboard.crosstabs.detail.insights.topPerformer]",
+          "noData": "[TODO: Translate dashboard.crosstabs.detail.insights.noData]",
+          "biggestGap": "[TODO: Translate dashboard.crosstabs.detail.insights.biggestGap]",
+          "biggestGapDesc": "[TODO: Translate dashboard.crosstabs.detail.insights.biggestGapDesc]",
+          "trending": "[TODO: Translate dashboard.crosstabs.detail.insights.trending]",
+          "noFilters": "[TODO: Translate dashboard.crosstabs.detail.insights.noFilters]"
+        },
+        "activity": {
+          "title": "[TODO: Translate dashboard.crosstabs.detail.activity.title]",
+          "description": "[TODO: Translate dashboard.crosstabs.detail.activity.description]"
+        },
+        "shareDialog": {
+          "title": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
+          "description": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
+          "emailLabel": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailPlaceholder": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
+          "role": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
+          "roles": {
+            "viewer": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.viewer]",
+            "editor": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.editor]",
+            "admin": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.admin]"
+          },
+          "shareLink": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.shareLink]"
+        },
+        "scheduleDialog": {
+          "title": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.title]",
+          "description": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.description]",
+          "recipients": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.recipients]",
+          "recipientsPlaceholder": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.recipientsPlaceholder]",
+          "frequency": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequency]",
+          "frequencies": {
+            "daily": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.daily]",
+            "weekly": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.weekly]",
+            "monthly": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.monthly]"
+          },
+          "format": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.format]"
+        }
+      },
+      "justNow": "[TODO: Translate dashboard.crosstabs.justNow]",
+      "description": "[TODO: Translate dashboard.crosstabs.description]",
+      "newCrosstab": "[TODO: Translate dashboard.crosstabs.newCrosstab]",
+      "stats": {
+        "totalCrosstabs": "[TODO: Translate dashboard.crosstabs.stats.totalCrosstabs]",
+        "views": "[TODO: Translate dashboard.crosstabs.stats.views]",
+        "exports": "[TODO: Translate dashboard.crosstabs.stats.exports]",
+        "usedToday": "[TODO: Translate dashboard.crosstabs.stats.usedToday]"
+      },
+      "tabs": {
+        "all": "[TODO: Translate dashboard.crosstabs.tabs.all]",
+        "recent": "[TODO: Translate dashboard.crosstabs.tabs.recent]",
+        "templates": "[TODO: Translate dashboard.crosstabs.tabs.templates]"
+      },
+      "empty": {
+        "title": "[TODO: Translate dashboard.crosstabs.empty.title]",
+        "description": "[TODO: Translate dashboard.crosstabs.empty.description]"
+      },
+      "badges": {
+        "featured": "[TODO: Translate dashboard.crosstabs.badges.featured]",
+        "liveData": "[TODO: Translate dashboard.crosstabs.badges.liveData]"
+      },
+      "labels": {
+        "audienceSegments": "[TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
+        "metrics": "[TODO: Translate dashboard.crosstabs.labels.metrics]"
+      },
+      "actions": {
+        "openAnalysis": "[TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      }
     },
     "charts": {
       "pageTracker": "Charts List",
@@ -3955,6 +4501,38 @@
           "save": "Create Chart",
           "saving": "Creating...",
           "cancel": "Cancel"
+        },
+        "errors": {
+          "nameRequired": "[TODO: Translate dashboard.charts.new.errors.nameRequired]",
+          "createFailed": "[TODO: Translate dashboard.charts.new.errors.createFailed]",
+          "createFailedRetry": "[TODO: Translate dashboard.charts.new.errors.createFailedRetry]"
+        },
+        "chartTypes": {
+          "bar": "[TODO: Translate dashboard.charts.new.chartTypes.bar]",
+          "line": "[TODO: Translate dashboard.charts.new.chartTypes.line]",
+          "area": "[TODO: Translate dashboard.charts.new.chartTypes.area]",
+          "pie": "[TODO: Translate dashboard.charts.new.chartTypes.pie]",
+          "donut": "[TODO: Translate dashboard.charts.new.chartTypes.donut]",
+          "radar": "[TODO: Translate dashboard.charts.new.chartTypes.radar]",
+          "scatter": "[TODO: Translate dashboard.charts.new.chartTypes.scatter]",
+          "funnel": "[TODO: Translate dashboard.charts.new.chartTypes.funnel]",
+          "treemap": "[TODO: Translate dashboard.charts.new.chartTypes.treemap]",
+          "heatmap": "[TODO: Translate dashboard.charts.new.chartTypes.heatmap]"
+        },
+        "audiences": {
+          "ecoMillennials": "[TODO: Translate dashboard.charts.new.audiences.ecoMillennials]",
+          "techAdopters": "[TODO: Translate dashboard.charts.new.audiences.techAdopters]",
+          "genZCreators": "[TODO: Translate dashboard.charts.new.audiences.genZCreators]"
+        },
+        "dataSources": {
+          "socialUsage": "[TODO: Translate dashboard.charts.new.dataSources.socialUsage]",
+          "purchaseIntent": "[TODO: Translate dashboard.charts.new.dataSources.purchaseIntent]",
+          "brandAwareness": "[TODO: Translate dashboard.charts.new.dataSources.brandAwareness]"
+        },
+        "timePeriods": {
+          "last12Months": "[TODO: Translate dashboard.charts.new.timePeriods.last12Months]",
+          "last6Months": "[TODO: Translate dashboard.charts.new.timePeriods.last6Months]",
+          "last3Months": "[TODO: Translate dashboard.charts.new.timePeriods.last3Months]"
         }
       },
       "detail": {
@@ -4031,7 +4609,14 @@
           "cancel": "Cancel",
           "delete": "Delete"
         },
-        "title": "Chart Details"
+        "title": "Chart Details",
+        "a": "[TODO: Translate dashboard.charts.detail.a]",
+        "T": "[TODO: Translate dashboard.charts.detail.T]",
+        "png": "[TODO: Translate dashboard.charts.detail.png]",
+        "csv": "[TODO: Translate dashboard.charts.detail.csv]",
+        "json": "[TODO: Translate dashboard.charts.detail.json]",
+        "pdf": "[TODO: Translate dashboard.charts.detail.pdf]",
+        "pptx": "[TODO: Translate dashboard.charts.detail.pptx]"
       },
       "templateGallery": {
         "title": "Chart Templates",
@@ -4331,7 +4916,12 @@
           "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone and all snapshots will be lost.",
           "cancel": "Cancel",
           "delete": "Delete"
-        }
+        },
+        "T": "[TODO: Translate dashboard.brandTracking.detail.T]",
+        "a": "[TODO: Translate dashboard.brandTracking.detail.a]",
+        "json": "[TODO: Translate dashboard.brandTracking.detail.json]",
+        "csv": "[TODO: Translate dashboard.brandTracking.detail.csv]",
+        "pdf": "[TODO: Translate dashboard.brandTracking.detail.pdf]"
       }
     },
     "analytics": {
@@ -4969,7 +5559,39 @@
     },
     "changes": {
       "title": "Change Tracking",
-      "description": "Track and monitor data changes over time"
+      "description": "Track and monitor data changes over time",
+      "tabs": {
+        "timeline": "[TODO: Translate dashboard.changes.tabs.timeline]",
+        "compare": "[TODO: Translate dashboard.changes.tabs.compare]",
+        "evolution": "[TODO: Translate dashboard.changes.tabs.evolution]",
+        "alerts": "[TODO: Translate dashboard.changes.tabs.alerts]"
+      },
+      "compare": {
+        "title": "[TODO: Translate dashboard.changes.compare.title]",
+        "description": "[TODO: Translate dashboard.changes.compare.description]",
+        "compareVersions": "[TODO: Translate dashboard.changes.compare.compareVersions]"
+      },
+      "evolution": {
+        "title": "[TODO: Translate dashboard.changes.evolution.title]",
+        "description": "[TODO: Translate dashboard.changes.evolution.description]",
+        "viewEvolution": "[TODO: Translate dashboard.changes.evolution.viewEvolution]"
+      },
+      "compareDialog": {
+        "entity": "[TODO: Translate dashboard.changes.compareDialog.entity]"
+      },
+      "evolutionDialog": {
+        "selectTitle": "[TODO: Translate dashboard.changes.evolutionDialog.selectTitle]",
+        "enterIdPlaceholder": "[TODO: Translate dashboard.changes.evolutionDialog.enterIdPlaceholder]"
+      },
+      "alerts": {
+        "loading": "[TODO: Translate dashboard.changes.alerts.loading]",
+        "noAlerts": "[TODO: Translate dashboard.changes.alerts.noAlerts]",
+        "noAlertsDescription": "[TODO: Translate dashboard.changes.alerts.noAlertsDescription]",
+        "title": "[TODO: Translate dashboard.changes.alerts.title]",
+        "markAllRead": "[TODO: Translate dashboard.changes.alerts.markAllRead]",
+        "markRead": "[TODO: Translate dashboard.changes.alerts.markRead]",
+        "dismiss": "[TODO: Translate dashboard.changes.alerts.dismiss]"
+      }
     },
     "inbox": {
       "title": "Inbox Agents",
@@ -5057,7 +5679,8 @@
         "autoRespondHelp": "Automatically send responses to requesters",
         "requireApproval": "Require Approval",
         "requireApprovalHelp": "Review responses before sending"
-      }
+      },
+      " ": "[TODO: Translate dashboard.inbox. ]"
     }
   },
   "audiences": {
@@ -6670,7 +7293,29 @@
       "createDescription": "Set up a new data processing pipeline",
       "loading": "Loading pipelines...",
       "newPipeline": "New Pipeline",
-      "schedules": "Schedules",
+      "schedules": {
+        " ": "[TODO: Translate gwi.pipelines.schedules. ]",
+        "title": "[TODO: Translate gwi.pipelines.schedules.title]",
+        "description": "[TODO: Translate gwi.pipelines.schedules.description]",
+        "newSchedule": "[TODO: Translate gwi.pipelines.schedules.newSchedule]",
+        "totalSchedules": "[TODO: Translate gwi.pipelines.schedules.totalSchedules]",
+        "activeSchedules": "[TODO: Translate gwi.pipelines.schedules.activeSchedules]",
+        "pausedSchedules": "[TODO: Translate gwi.pipelines.schedules.pausedSchedules]",
+        "scheduledPipelines": "[TODO: Translate gwi.pipelines.schedules.scheduledPipelines]",
+        "scheduledPipelinesDescription": "[TODO: Translate gwi.pipelines.schedules.scheduledPipelinesDescription]",
+        "pipeline": "[TODO: Translate gwi.pipelines.schedules.pipeline]",
+        "schedule": "[TODO: Translate gwi.pipelines.schedules.schedule]",
+        "lastRun": "[TODO: Translate gwi.pipelines.schedules.lastRun]",
+        "nextRun": "[TODO: Translate gwi.pipelines.schedules.nextRun]",
+        "never": "[TODO: Translate gwi.pipelines.schedules.never]",
+        "calculatedAtRuntime": "[TODO: Translate gwi.pipelines.schedules.calculatedAtRuntime]",
+        "runNow": "[TODO: Translate gwi.pipelines.schedules.runNow]",
+        "editSchedule": "[TODO: Translate gwi.pipelines.schedules.editSchedule]",
+        "noScheduledPipelines": "[TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
+        "noScheduledPipelinesDescription": "[TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
+        "createScheduledPipeline": "[TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
+        "loading": "[TODO: Translate gwi.pipelines.schedules.loading]"
+      },
       "validationPage": {
         "title": "Validation Rules",
         "description": "Configure data validation rules for pipelines",
@@ -9207,7 +9852,8 @@
         "auditLog": "Audit Log",
         "admins": "Admins",
         "settings": "Settings"
-      }
+      },
+      " ": "[TODO: Translate admin.navigation. ]"
     },
     "broadcast": {
       "title": "Broadcast Center",
@@ -9321,7 +9967,9 @@
         "delivered": "{count} delivered",
         "opened": "{count} opened ({percent}%)",
         "recipients": "{count} recipients",
-        "scheduledFor": "Scheduled"
+        "scheduledFor": "Scheduled",
+        "title": "[TODO: Translate admin.broadcast.delivery.title]",
+        "description": "[TODO: Translate admin.broadcast.delivery.description]"
       },
       "deliveryStats": {
         "funnel": "Delivery Funnel",
@@ -9460,7 +10108,12 @@
         "bulkDeleteSuccess": "Successfully deleted {count} message(s)",
         "bulkDeletePartialFailed": "Failed to delete {count} message(s)",
         "bulkDeleteFailed": "Failed to delete messages"
-      }
+      },
+      "\\n": "[TODO: Translate admin.broadcast.\\n]",
+      "T": "[TODO: Translate admin.broadcast.T]",
+      "schedule": "[TODO: Translate admin.broadcast.schedule]",
+      "search": "[TODO: Translate admin.broadcast.search]",
+      "type": "[TODO: Translate admin.broadcast.type]"
     },
     "emailTemplates": {
       "editor": {
@@ -9567,7 +10220,51 @@
       },
       "system": "System",
       "noTemplatesFound": "No templates found",
-      "versions": "{count} versions"
+      "versions": "{count} versions",
+      "detail": {
+        "templateNotFound": "[TODO: Translate admin.emailTemplates.detail.templateNotFound]",
+        "sendTest": "[TODO: Translate admin.emailTemplates.detail.sendTest]",
+        "sendTestEmail": "[TODO: Translate admin.emailTemplates.detail.sendTestEmail]",
+        "sendTestDescription": "[TODO: Translate admin.emailTemplates.detail.sendTestDescription]",
+        "recipientEmail": "[TODO: Translate admin.emailTemplates.detail.recipientEmail]",
+        "testData": "[TODO: Translate admin.emailTemplates.detail.testData]",
+        "sending": "[TODO: Translate admin.emailTemplates.detail.sending]",
+        "deleteTemplate": "[TODO: Translate admin.emailTemplates.detail.deleteTemplate]",
+        "deleteConfirmation": "[TODO: Translate admin.emailTemplates.detail.deleteConfirmation]",
+        "tabs": {
+          "editor": "[TODO: Translate admin.emailTemplates.detail.tabs.editor]",
+          "preview": "[TODO: Translate admin.emailTemplates.detail.tabs.preview]",
+          "variables": "[TODO: Translate admin.emailTemplates.detail.tabs.variables]",
+          "history": "[TODO: Translate admin.emailTemplates.detail.tabs.history]"
+        },
+        "templateContent": "[TODO: Translate admin.emailTemplates.detail.templateContent]",
+        "changeNote": "[TODO: Translate admin.emailTemplates.detail.changeNote]",
+        "changeNotePlaceholder": "[TODO: Translate admin.emailTemplates.detail.changeNotePlaceholder]",
+        "templateVariables": "[TODO: Translate admin.emailTemplates.detail.templateVariables]",
+        "variablesDescription": "[TODO: Translate admin.emailTemplates.detail.variablesDescription]",
+        "variableName": "[TODO: Translate admin.emailTemplates.detail.variableName]",
+        "defaultValue": "[TODO: Translate admin.emailTemplates.detail.defaultValue]"
+      },
+      "form": {
+        "templateName": "[TODO: Translate admin.emailTemplates.form.templateName]",
+        "category": "[TODO: Translate admin.emailTemplates.form.category]",
+        "subjectLine": "[TODO: Translate admin.emailTemplates.form.subjectLine]",
+        "plainTextContent": "[TODO: Translate admin.emailTemplates.form.plainTextContent]",
+        "plainTextPlaceholder": "[TODO: Translate admin.emailTemplates.form.plainTextPlaceholder]",
+        "activeDescription": "[TODO: Translate admin.emailTemplates.form.activeDescription]",
+        "templateNamePlaceholder": "[TODO: Translate admin.emailTemplates.form.templateNamePlaceholder]",
+        "slug": "[TODO: Translate admin.emailTemplates.form.slug]",
+        "slugPlaceholder": "[TODO: Translate admin.emailTemplates.form.slugPlaceholder]",
+        "slugDescription": "[TODO: Translate admin.emailTemplates.form.slugDescription]",
+        "subjectLinePlaceholder": "[TODO: Translate admin.emailTemplates.form.subjectLinePlaceholder]",
+        "descriptionPlaceholder": "[TODO: Translate admin.emailTemplates.form.descriptionPlaceholder]",
+        "htmlContent": "[TODO: Translate admin.emailTemplates.form.htmlContent]",
+        "htmlContentPlaceholder": "[TODO: Translate admin.emailTemplates.form.htmlContentPlaceholder]",
+        "variableHint": "[TODO: Translate admin.emailTemplates.form.variableHint]"
+      },
+      "left": "[TODO: Translate admin.emailTemplates.left]",
+      "center": "[TODO: Translate admin.emailTemplates.center]",
+      "right": "[TODO: Translate admin.emailTemplates.right]"
     },
     "plans": {
       "title": "Plans & Pricing",
@@ -9801,8 +10498,10 @@
           "toast": {
             "createSuccess": "SSO configuration created successfully",
             "createFailed": "Failed to create SSO configuration"
-          }
-        }
+          },
+          ",": "[TODO: Translate admin.identity.sso.new.,]"
+        },
+        ",": "[TODO: Translate admin.identity.sso.,]"
       },
       "domains": {
         "title": "Domain Management",
@@ -9841,7 +10540,12 @@
           "isPrimary": "Primary Domain",
           "isPrimaryDescription": "Set as the primary domain for this organization",
           "autoJoin": "Auto-Join",
-          "autoJoinDescription": "Automatically add users with this domain to the organization"
+          "autoJoinDescription": "Automatically add users with this domain to the organization",
+          "domainHint": "[TODO: Translate admin.identity.domains.form.domainHint]",
+          "searchOrganizations": "[TODO: Translate admin.identity.domains.form.searchOrganizations]",
+          "noOrganizationsFound": "[TODO: Translate admin.identity.domains.form.noOrganizationsFound]",
+          "ssoEnforced": "[TODO: Translate admin.identity.domains.form.ssoEnforced]",
+          "ssoEnforcedDescription": "[TODO: Translate admin.identity.domains.form.ssoEnforcedDescription]"
         },
         "verification": {
           "title": "Domain Verification",
@@ -9856,7 +10560,28 @@
           "checkVerification": "Check Verification",
           "verificationPending": "Verification pending. DNS changes may take up to 48 hours to propagate.",
           "verificationSuccess": "Domain verified successfully",
-          "verificationFailed": "Verification failed. Please check your DNS settings."
+          "verificationFailed": "Verification failed. Please check your DNS settings.",
+          "dns_txt": {
+            "instructions": "[TODO: Translate admin.identity.domains.verification.dns_txt.instructions]"
+          },
+          "host": "[TODO: Translate admin.identity.domains.verification.host]",
+          "value": "[TODO: Translate admin.identity.domains.verification.value]",
+          "dns_cname": {
+            "instructions": "[TODO: Translate admin.identity.domains.verification.dns_cname.instructions]"
+          },
+          "pointsTo": "[TODO: Translate admin.identity.domains.verification.pointsTo]",
+          "meta_tag": {
+            "instructions": "[TODO: Translate admin.identity.domains.verification.meta_tag.instructions]"
+          },
+          "file_upload": {
+            "instructions": "[TODO: Translate admin.identity.domains.verification.file_upload.instructions]"
+          },
+          "contents": "[TODO: Translate admin.identity.domains.verification.contents]",
+          "afterConfiguring": "[TODO: Translate admin.identity.domains.verification.afterConfiguring]",
+          "alreadyVerified": "[TODO: Translate admin.identity.domains.verification.alreadyVerified]",
+          "lastAttempt": "[TODO: Translate admin.identity.domains.verification.lastAttempt]",
+          "time": "[TODO: Translate admin.identity.domains.verification.time]",
+          "result": "[TODO: Translate admin.identity.domains.verification.result]"
         },
         "table": {
           "domain": "Domain",
@@ -9885,6 +10610,72 @@
           "domainDeleted": "Domain deleted successfully",
           "domainVerified": "Domain verified successfully",
           "verificationFailed": "Domain verification failed"
+        },
+        "errors": {
+          "domainAndOrgRequired": "[TODO: Translate admin.identity.domains.errors.domainAndOrgRequired]",
+          "invalidDomain": "[TODO: Translate admin.identity.domains.errors.invalidDomain]",
+          "addFailed": "[TODO: Translate admin.identity.domains.errors.addFailed]",
+          "noPermission": "[TODO: Translate admin.identity.domains.errors.noPermission]",
+          "fetchFailed": "[TODO: Translate admin.identity.domains.errors.fetchFailed]",
+          "updateFailed": "[TODO: Translate admin.identity.domains.errors.updateFailed]",
+          "verificationFailed": "[TODO: Translate admin.identity.domains.errors.verificationFailed]",
+          "deleteFailed": "[TODO: Translate admin.identity.domains.errors.deleteFailed]"
+        },
+        "messages": {
+          "domainAdded": "[TODO: Translate admin.identity.domains.messages.domainAdded]",
+          "settingsUpdated": "[TODO: Translate admin.identity.domains.messages.settingsUpdated]",
+          "domainVerified": "[TODO: Translate admin.identity.domains.messages.domainVerified]",
+          "domainDeleted": "[TODO: Translate admin.identity.domains.messages.domainDeleted]",
+          "copiedToClipboard": "[TODO: Translate admin.identity.domains.messages.copiedToClipboard]"
+        },
+        "backToDomains": "[TODO: Translate admin.identity.domains.backToDomains]",
+        "new": {
+          "title": "[TODO: Translate admin.identity.domains.new.title]",
+          "description": "[TODO: Translate admin.identity.domains.new.description]",
+          "adding": "[TODO: Translate admin.identity.domains.new.adding]",
+          "addDomain": "[TODO: Translate admin.identity.domains.new.addDomain]",
+          "domainDetails": "[TODO: Translate admin.identity.domains.new.domainDetails]",
+          "domainDetailsDescription": "[TODO: Translate admin.identity.domains.new.domainDetailsDescription]",
+          "domainSettings": "[TODO: Translate admin.identity.domains.new.domainSettings]",
+          "domainSettingsDescription": "[TODO: Translate admin.identity.domains.new.domainSettingsDescription]",
+          "verificationRequired": "[TODO: Translate admin.identity.domains.new.verificationRequired]"
+        },
+        "domainNotFound": "[TODO: Translate admin.identity.domains.domainNotFound]",
+        "actions": {
+          "verifyNow": "[TODO: Translate admin.identity.domains.actions.verifyNow]",
+          "viewSsoConfig": "[TODO: Translate admin.identity.domains.actions.viewSsoConfig]"
+        },
+        "dialogs": {
+          "deleteTitle": "[TODO: Translate admin.identity.domains.dialogs.deleteTitle]",
+          "deleteDescription": "[TODO: Translate admin.identity.domains.dialogs.deleteDescription]"
+        },
+        "tabs": {
+          "overview": "[TODO: Translate admin.identity.domains.tabs.overview]",
+          "verification": "[TODO: Translate admin.identity.domains.tabs.verification]",
+          "settings": "[TODO: Translate admin.identity.domains.tabs.settings]"
+        },
+        "detail": {
+          "autoJoin": "[TODO: Translate admin.identity.domains.detail.autoJoin]",
+          "ssoEnforced": "[TODO: Translate admin.identity.domains.detail.ssoEnforced]",
+          "enforced": "[TODO: Translate admin.identity.domains.detail.enforced]",
+          "optional": "[TODO: Translate admin.identity.domains.detail.optional]",
+          "domainDetails": "[TODO: Translate admin.identity.domains.detail.domainDetails]",
+          "domain": "[TODO: Translate admin.identity.domains.detail.domain]",
+          "organization": "[TODO: Translate admin.identity.domains.detail.organization]",
+          "verificationMethod": "[TODO: Translate admin.identity.domains.detail.verificationMethod]",
+          "verifiedAt": "[TODO: Translate admin.identity.domains.detail.verifiedAt]",
+          "notVerified": "[TODO: Translate admin.identity.domains.detail.notVerified]",
+          "created": "[TODO: Translate admin.identity.domains.detail.created]",
+          "expires": "[TODO: Translate admin.identity.domains.detail.expires]",
+          "linkedSsoConfig": "[TODO: Translate admin.identity.domains.detail.linkedSsoConfig]",
+          "ssoConfigured": "[TODO: Translate admin.identity.domains.detail.ssoConfigured]",
+          "provider": "[TODO: Translate admin.identity.domains.detail.provider]"
+        },
+        "settings": {
+          "title": "[TODO: Translate admin.identity.domains.settings.title]",
+          "ssoRequired": "[TODO: Translate admin.identity.domains.settings.ssoRequired]",
+          "autoAddUsers": "[TODO: Translate admin.identity.domains.settings.autoAddUsers]",
+          "requireSso": "[TODO: Translate admin.identity.domains.settings.requireSso]"
         }
       },
       "scim": {
@@ -10145,7 +10936,11 @@
           "block": "Block Device",
           "revoke": "Revoke Trust",
           "approveSelected": "Approve Selected",
-          "blockSelected": "Block Selected"
+          "blockSelected": "Block Selected",
+          "viewUserProfile": "[TODO: Translate admin.identity.devices.actions.viewUserProfile]",
+          "trustDevice": "[TODO: Translate admin.identity.devices.actions.trustDevice]",
+          "revokeTrust": "[TODO: Translate admin.identity.devices.actions.revokeTrust]",
+          "deleteDevice": "[TODO: Translate admin.identity.devices.actions.deleteDevice]"
         },
         "confirmations": {
           "trustTitle": "Trust Device",
@@ -10167,6 +10962,81 @@
           "policyCreated": "Device policy created successfully",
           "policyUpdated": "Device policy updated successfully",
           "policyDeleted": "Device policy deleted successfully"
+        },
+        "errors": {
+          "fetchFailed": "[TODO: Translate admin.identity.devices.errors.fetchFailed]",
+          "updateFailed": "[TODO: Translate admin.identity.devices.errors.updateFailed]",
+          "trustFailed": "[TODO: Translate admin.identity.devices.errors.trustFailed]",
+          "revokeFailed": "[TODO: Translate admin.identity.devices.errors.revokeFailed]",
+          "deleteFailed": "[TODO: Translate admin.identity.devices.errors.deleteFailed]"
+        },
+        "messages": {
+          "deviceUpdated": "[TODO: Translate admin.identity.devices.messages.deviceUpdated]",
+          "deviceTrusted": "[TODO: Translate admin.identity.devices.messages.deviceTrusted]",
+          "trustRevoked": "[TODO: Translate admin.identity.devices.messages.trustRevoked]",
+          "deviceDeleted": "[TODO: Translate admin.identity.devices.messages.deviceDeleted]"
+        },
+        "deviceNotFound": "[TODO: Translate admin.identity.devices.deviceNotFound]",
+        "compliance": {
+          "compliant": "[TODO: Translate admin.identity.devices.compliance.compliant]",
+          "nonCompliant": "[TODO: Translate admin.identity.devices.compliance.nonCompliant]",
+          "nonCompliantTitle": "[TODO: Translate admin.identity.devices.compliance.nonCompliantTitle]",
+          "nonCompliantDescription": "[TODO: Translate admin.identity.devices.compliance.nonCompliantDescription]",
+          "title": "[TODO: Translate admin.identity.devices.compliance.title]",
+          "description": "[TODO: Translate admin.identity.devices.compliance.description]",
+          "overallCompliance": "[TODO: Translate admin.identity.devices.compliance.overallCompliance]",
+          "meetsRequirements": "[TODO: Translate admin.identity.devices.compliance.meetsRequirements]",
+          "doesNotMeetRequirements": "[TODO: Translate admin.identity.devices.compliance.doesNotMeetRequirements]",
+          "complianceChecks": "[TODO: Translate admin.identity.devices.compliance.complianceChecks]"
+        },
+        "tabs": {
+          "overview": "[TODO: Translate admin.identity.devices.tabs.overview]",
+          "security": "[TODO: Translate admin.identity.devices.tabs.security]",
+          "activity": "[TODO: Translate admin.identity.devices.tabs.activity]"
+        },
+        "detail": {
+          "deviceDetails": "[TODO: Translate admin.identity.devices.detail.deviceDetails]",
+          "deviceId": "[TODO: Translate admin.identity.devices.detail.deviceId]",
+          "type": "[TODO: Translate admin.identity.devices.detail.type]",
+          "platform": "[TODO: Translate admin.identity.devices.detail.platform]",
+          "osVersion": "[TODO: Translate admin.identity.devices.detail.osVersion]",
+          "model": "[TODO: Translate admin.identity.devices.detail.model]",
+          "manufacturer": "[TODO: Translate admin.identity.devices.detail.manufacturer]",
+          "mdmManaged": "[TODO: Translate admin.identity.devices.detail.mdmManaged]",
+          "userInformation": "[TODO: Translate admin.identity.devices.detail.userInformation]",
+          "noName": "[TODO: Translate admin.identity.devices.detail.noName]",
+          "organizations": "[TODO: Translate admin.identity.devices.detail.organizations]",
+          "lastActivity": "[TODO: Translate admin.identity.devices.detail.lastActivity]",
+          "lastActive": "[TODO: Translate admin.identity.devices.detail.lastActive]",
+          "lastIp": "[TODO: Translate admin.identity.devices.detail.lastIp]",
+          "lastLocation": "[TODO: Translate admin.identity.devices.detail.lastLocation]"
+        },
+        "form": {
+          "deviceName": "[TODO: Translate admin.identity.devices.form.deviceName]",
+          "deviceNamePlaceholder": "[TODO: Translate admin.identity.devices.form.deviceNamePlaceholder]",
+          "markAsCompliant": "[TODO: Translate admin.identity.devices.form.markAsCompliant]",
+          "markAsCompliantDescription": "[TODO: Translate admin.identity.devices.form.markAsCompliantDescription]",
+          "mdmManaged": "[TODO: Translate admin.identity.devices.form.mdmManaged]",
+          "mdmManagedDescription": "[TODO: Translate admin.identity.devices.form.mdmManagedDescription]"
+        },
+        "unknown": "[TODO: Translate admin.identity.devices.unknown]",
+        "never": "[TODO: Translate admin.identity.devices.never]",
+        "security": {
+          "trustManagement": "[TODO: Translate admin.identity.devices.security.trustManagement]",
+          "trustManagementDescription": "[TODO: Translate admin.identity.devices.security.trustManagementDescription]",
+          "trustStatus": "[TODO: Translate admin.identity.devices.security.trustStatus]"
+        },
+        "activity": {
+          "title": "[TODO: Translate admin.identity.devices.activity.title]",
+          "description": "[TODO: Translate admin.identity.devices.activity.description]",
+          "action": "[TODO: Translate admin.identity.devices.activity.action]",
+          "details": "[TODO: Translate admin.identity.devices.activity.details]",
+          "date": "[TODO: Translate admin.identity.devices.activity.date]",
+          "noLogs": "[TODO: Translate admin.identity.devices.activity.noLogs]"
+        },
+        "dialogs": {
+          "deleteDevice": "[TODO: Translate admin.identity.devices.dialogs.deleteDevice]",
+          "deleteDeviceDescription": "[TODO: Translate admin.identity.devices.dialogs.deleteDeviceDescription]"
         }
       }
     },
@@ -10363,7 +11233,8 @@
         "assignPlanFailed": "Failed to assign plan",
         "grantFeatureFailed": "Failed to grant feature",
         "revokeEntitlementFailed": "Failed to revoke entitlement"
-      }
+      },
+      " ": "[TODO: Translate admin.tenants. ]"
     },
     "admins": {
       "title": "Admin Management",
@@ -10758,7 +11629,9 @@
       "selectOrganizationOptional": "Select organization (optional)",
       "organizationLaterHint": "User can be added to organizations later",
       "roleInOrganization": "Role in Organization",
-      "roleHint": "The role determines what actions the user can perform"
+      "roleHint": "The role determines what actions the user can perform",
+      " ": "[TODO: Translate admin.users. ]",
+      "ipAddress": "[TODO: Translate admin.users.ipAddress]"
     },
     "permissions": {
       "matrix": {
@@ -11029,7 +11902,8 @@
         "customRange": "Custom Range",
         "startDate": "Start Date",
         "endDate": "End Date",
-        "clear": "Clear"
+        "clear": "Clear",
+        "T": "[TODO: Translate admin.activity.filters.T]"
       },
       "recentActivity": "Recent Activity",
       "activitiesFound": "{count} activities found",
@@ -11064,8 +11938,13 @@
         "adminProductivity": "Admin Productivity",
         "unknownAdmin": "Unknown Admin",
         "unknownRole": "Unknown Role",
-        "noActivityData": "No admin activity data available"
-      }
+        "noActivityData": "No admin activity data available",
+        "T": "[TODO: Translate admin.activity.stats.T]",
+        " ": "[TODO: Translate admin.activity.stats. ]"
+      },
+      "a": "[TODO: Translate admin.activity.a]",
+      "T": "[TODO: Translate admin.activity.T]",
+      " ": "[TODO: Translate admin.activity. ]"
     },
     "entitlementFeatures": {
       "title": "Feature Management",
@@ -11409,7 +12288,42 @@
           "noPermission": "You don't have permission to create security policies"
         }
       },
-      "sessions": "Sessions",
+      "sessions": {
+        "toast": {
+          "fetchFailed": "[TODO: Translate admin.security.sessions.toast.fetchFailed]",
+          "refreshed": "[TODO: Translate admin.security.sessions.toast.refreshed]",
+          "terminated": "[TODO: Translate admin.security.sessions.toast.terminated]",
+          "terminateFailed": "[TODO: Translate admin.security.sessions.toast.terminateFailed]",
+          "bulkTerminateFailed": "[TODO: Translate admin.security.sessions.toast.bulkTerminateFailed]"
+        },
+        "unknown": "[TODO: Translate admin.security.sessions.unknown]",
+        "device": {
+          "desktop": "[TODO: Translate admin.security.sessions.device.desktop]",
+          "mobile": "[TODO: Translate admin.security.sessions.device.mobile]",
+          "tablet": "[TODO: Translate admin.security.sessions.device.tablet]"
+        },
+        "expired": "[TODO: Translate admin.security.sessions.expired]",
+        " ": "[TODO: Translate admin.security.sessions. ]",
+        "table": {
+          "user": "[TODO: Translate admin.security.sessions.table.user]",
+          "session": "[TODO: Translate admin.security.sessions.table.session]",
+          "ipAddress": "[TODO: Translate admin.security.sessions.table.ipAddress]",
+          "device": "[TODO: Translate admin.security.sessions.table.device]",
+          "status": "[TODO: Translate admin.security.sessions.table.status]",
+          "expires": "[TODO: Translate admin.security.sessions.table.expires]"
+        },
+        "unknownUser": "[TODO: Translate admin.security.sessions.unknownUser]",
+        "tooltip": {
+          "browser": "[TODO: Translate admin.security.sessions.tooltip.browser]",
+          "os": "[TODO: Translate admin.security.sessions.tooltip.os]",
+          "device": "[TODO: Translate admin.security.sessions.tooltip.device]"
+        },
+        "status": {
+          "active": "[TODO: Translate admin.security.sessions.status.active]",
+          "expired": "[TODO: Translate admin.security.sessions.status.expired]"
+        },
+        "expires": "[TODO: Translate admin.security.sessions.expires]"
+      },
       "ipBlocklist": {
         "title": "IP Blocklist",
         "description": "Manage blocked IP addresses and ranges to prevent unauthorized access",
@@ -11567,7 +12481,10 @@
           "lastUpdated": "Last Updated",
           "createdBy": "Created By"
         },
-        "addToBlocklist": "Add to Blocklist"
+        "addToBlocklist": "Add to Blocklist",
+        "": {
+          "": "[TODO: Translate admin.security.ipBlocklist..]"
+        }
       },
       "violations": {
         "title": "Security Violations",
@@ -11763,7 +12680,11 @@
           "ENFORCE": "Enforce",
           "MONITOR": "Monitor",
           "DISABLED": "Disabled"
-        }
+        },
+        "violationType": "[TODO: Translate admin.security.violations.violationType]",
+        "severity": "[TODO: Translate admin.security.violations.severity]",
+        "status": "[TODO: Translate admin.security.violations.status]",
+        "createdAt": "[TODO: Translate admin.security.violations.createdAt]"
       },
       "loading": "Loading...",
       "platformSecurityScore": "Platform Security Score",
@@ -11991,7 +12912,8 @@
           "messages": {
             "createSuccess": "Threat event created successfully"
           }
-        }
+        },
+        ",": "[TODO: Translate admin.security.threats.,]"
       }
     },
     "scim": {
@@ -12374,7 +13296,8 @@
         "allTypes": "All Types",
         "trustStatus": "Trust Status",
         "allStatus": "All Status",
-        "compliance": "Compliance"
+        "compliance": "Compliance",
+        "allPlatforms": "[TODO: Translate admin.devices.filters.allPlatforms]"
       },
       "columns": {
         "device": "Device",
@@ -12387,7 +13310,11 @@
       "actions": {
         "approveTrust": "Approve Trust",
         "revokeTrust": "Revoke Trust",
-        "deleteDevices": "Delete Devices"
+        "deleteDevices": "Delete Devices",
+        "trustDevice": "[TODO: Translate admin.devices.actions.trustDevice]",
+        "blockDevice": "[TODO: Translate admin.devices.actions.blockDevice]",
+        "bulkRevokeTrust": "[TODO: Translate admin.devices.actions.bulkRevokeTrust]",
+        "bulkBlockDevices": "[TODO: Translate admin.devices.actions.bulkBlockDevices]"
       },
       "dialogs": {
         "revokeMultiple": "Revoke Trust for Selected Devices",
@@ -12397,7 +13324,9 @@
         "deleteTitle": "Delete Device",
         "deleteDescription": "Are you sure you want to delete {deviceName}? This action cannot be undone.",
         "revokeTitle": "Revoke Device Trust",
-        "revokeDescription": "Are you sure you want to revoke trust for this device? The device will need to be re-approved to regain access."
+        "revokeDescription": "Are you sure you want to revoke trust for this device? The device will need to be re-approved to regain access.",
+        "blockMultiple": "[TODO: Translate admin.devices.dialogs.blockMultiple]",
+        "blockMultipleDescription": "[TODO: Translate admin.devices.dialogs.blockMultipleDescription]"
       },
       "errors": {
         "fetchFailed": "Failed to fetch devices",
@@ -12405,14 +13334,17 @@
         "revokeFailed": "Failed to revoke trust",
         "deleteFailed": "Failed to delete device",
         "bulkRevokeFailed": "Failed to revoke trust for devices",
-        "bulkDeleteFailed": "Failed to delete devices"
+        "bulkDeleteFailed": "Failed to delete devices",
+        "blockFailed": "[TODO: Translate admin.devices.errors.blockFailed]",
+        "bulkBlockFailed": "[TODO: Translate admin.devices.errors.bulkBlockFailed]"
       },
       "messages": {
         "deviceTrusted": "Device trusted successfully",
         "trustRevoked": "Trust revoked successfully",
         "deviceDeleted": "Device deleted successfully",
         "bulkRevoked": "Revoked trust for {count} devices",
-        "bulkDeleted": "Deleted {count} devices"
+        "bulkDeleted": "Deleted {count} devices",
+        "deviceBlocked": "[TODO: Translate admin.devices.messages.deviceBlocked]"
       },
       "new": {
         "title": "Register New Device",
@@ -12586,7 +13518,20 @@
           "deviceTrusted": "Device trusted successfully",
           "trustRevoked": "Trust revoked successfully",
           "deviceDeleted": "Device deleted successfully"
-        }
+        },
+        "revokedByAdmin": "[TODO: Translate admin.devices.detail.revokedByAdmin]",
+        "trustStatuses": {
+          "trusted": "[TODO: Translate admin.devices.detail.trustStatuses.trusted]",
+          "pending": "[TODO: Translate admin.devices.detail.trustStatuses.pending]",
+          "blocked": "[TODO: Translate admin.devices.detail.trustStatuses.blocked]",
+          "revoked": "[TODO: Translate admin.devices.detail.trustStatuses.revoked]"
+        },
+        "complianceStatuses": {
+          "compliant": "[TODO: Translate admin.devices.detail.complianceStatuses.compliant]",
+          "nonCompliant": "[TODO: Translate admin.devices.detail.complianceStatuses.nonCompliant]"
+        },
+        "never": "[TODO: Translate admin.devices.detail.never]",
+        "unknown": "[TODO: Translate admin.devices.detail.unknown]"
       },
       "policies": {
         "title": "Device Policies",
@@ -12738,10 +13683,82 @@
             "policyDeleted": "Policy deleted successfully",
             "policyEnabled": "Policy enabled successfully",
             "policyDisabled": "Policy disabled successfully"
+          },
+          "admin": {
+            "devices": {
+              "policies": {
+                "nameRequired": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.nameRequired]",
+                "created": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.created]",
+                "updated": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.updated]",
+                "disabled": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.disabled]",
+                "enabled": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.enabled]",
+                "updateStatusFailed": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.updateStatusFailed]",
+                "deleted": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleted]",
+                "notFound": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.notFound]",
+                "createTitle": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.createTitle]",
+                "title": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.title]",
+                "deleteTitle": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleteTitle]",
+                "deleteDescription": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleteDescription]",
+                "details": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.details]",
+                "editTitle": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.editTitle]",
+                "nameRequiredLabel": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.nameRequiredLabel]",
+                "namePlaceholder": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.namePlaceholder]",
+                "descriptionLabel": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.descriptionLabel]",
+                "descriptionPlaceholder": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.descriptionPlaceholder]",
+                "scopeLabel": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.scopeLabel]",
+                "priorityLabel": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.priorityLabel]",
+                "deviceRequirements": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.deviceRequirements]",
+                "requireEncryption": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireEncryption]",
+                "requirePasscode": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirePasscode]",
+                "requireBiometric": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireBiometric]",
+                "requireMdm": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireMdm]",
+                "enforcementActions": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcementActions]",
+                "blockOnViolation": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockOnViolation]",
+                "wipeOnViolation": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.wipeOnViolation]",
+                "notifyOnViolation": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.notifyOnViolation]",
+                "createButton": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.createButton]",
+                "overview": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.overview]",
+                "requirements": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirements]",
+                "enforcement": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcement]",
+                "status": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.status]",
+                "createdBy": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.createdBy]",
+                "lastUpdated": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.lastUpdated]",
+                "requirementsDescription": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirementsDescription]",
+                "platformRestrictions": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.platformRestrictions]",
+                "allowedPlatforms": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.allowedPlatforms]",
+                "allPlatforms": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.allPlatforms]",
+                "blockedPlatforms": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockedPlatforms]",
+                "enforcementDescription": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcementDescription]",
+                "blockOnViolationDescription": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockOnViolationDescription]",
+                "wipeOnViolationDescription": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.wipeOnViolationDescription]",
+                "notifyOnViolationDescription": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.notifyOnViolationDescription]",
+                "warningWipeEnabled": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.warningWipeEnabled]",
+                "warningWipeDescription": "[TODO: Translate admin.devices.policies.detail.admin.devices.policies.warningWipeDescription]"
+              }
+            }
+          },
+          "common": {
+            "back": "[TODO: Translate admin.devices.policies.detail.common.back]",
+            "active": "[TODO: Translate admin.devices.policies.detail.common.active]",
+            "inactive": "[TODO: Translate admin.devices.policies.detail.common.inactive]",
+            "disable": "[TODO: Translate admin.devices.policies.detail.common.disable]",
+            "enable": "[TODO: Translate admin.devices.policies.detail.common.enable]",
+            "delete": "[TODO: Translate admin.devices.policies.detail.common.delete]",
+            "cancel": "[TODO: Translate admin.devices.policies.detail.common.cancel]",
+            "creating": "[TODO: Translate admin.devices.policies.detail.common.creating]",
+            "name": "[TODO: Translate admin.devices.policies.detail.common.name]",
+            "noDescription": "[TODO: Translate admin.devices.policies.detail.common.noDescription]",
+            "system": "[TODO: Translate admin.devices.policies.detail.common.system]",
+            "required": "[TODO: Translate admin.devices.policies.detail.common.required]",
+            "notRequired": "[TODO: Translate admin.devices.policies.detail.common.notRequired]",
+            "enabled": "[TODO: Translate admin.devices.policies.detail.common.enabled]",
+            "disabled": "[TODO: Translate admin.devices.policies.detail.common.disabled]"
           }
         }
       },
-      "noDevicesFound": "No devices found"
+      "noDevicesFound": "No devices found",
+      "unknownModel": "[TODO: Translate admin.devices.unknownModel]",
+      "noDevices": "[TODO: Translate admin.devices.noDevices]"
     },
     "securityPolicies": {
       "title": "Security Policies",
@@ -13020,8 +14037,10 @@
           },
           "errors": {
             "createFailed": "Failed to create legal hold"
-          }
-        }
+          },
+          "T": "[TODO: Translate admin.compliance.legalHolds.new.T]"
+        },
+        "T": "[TODO: Translate admin.compliance.legalHolds.T]"
       },
       "dataExports": {
         "title": "Data Exports",
@@ -13085,7 +14104,12 @@
         },
         "fields": {
           "exportType": "Export Type",
-          "format": "Format"
+          "format": "Format",
+          "user": "[TODO: Translate admin.compliance.dataExports.fields.user]",
+          "organization": "[TODO: Translate admin.compliance.dataExports.fields.organization]",
+          "legalHold": "[TODO: Translate admin.compliance.dataExports.fields.legalHold]",
+          "status": "[TODO: Translate admin.compliance.dataExports.fields.status]",
+          "type": "[TODO: Translate admin.compliance.dataExports.fields.type]"
         },
         "formats": {
           "json": "JSON",
@@ -13097,7 +14121,58 @@
           "deleteFailed": "Failed to delete data export",
           "retryFailed": "Failed to retry data export",
           "fetchFailed": "Failed to fetch data export",
-          "updateFailed": "Failed to update data export"
+          "updateFailed": "Failed to update data export",
+          "typeRequired": "[TODO: Translate admin.compliance.dataExports.errors.typeRequired]",
+          "userRequired": "[TODO: Translate admin.compliance.dataExports.errors.userRequired]",
+          "orgRequired": "[TODO: Translate admin.compliance.dataExports.errors.orgRequired]",
+          "legalHoldRequired": "[TODO: Translate admin.compliance.dataExports.errors.legalHoldRequired]"
+        },
+        "new": {
+          "types": {
+            "userData": "[TODO: Translate admin.compliance.dataExports.new.types.userData]",
+            "orgData": "[TODO: Translate admin.compliance.dataExports.new.types.orgData]",
+            "gdprExport": "[TODO: Translate admin.compliance.dataExports.new.types.gdprExport]",
+            "legalHold": "[TODO: Translate admin.compliance.dataExports.new.types.legalHold]",
+            "backup": "[TODO: Translate admin.compliance.dataExports.new.types.backup]"
+          },
+          "title": "[TODO: Translate admin.compliance.dataExports.new.title]",
+          "description": "[TODO: Translate admin.compliance.dataExports.new.description]",
+          "exportConfiguration": "[TODO: Translate admin.compliance.dataExports.new.exportConfiguration]",
+          "configureDescription": "[TODO: Translate admin.compliance.dataExports.new.configureDescription]",
+          "optional": "[TODO: Translate admin.compliance.dataExports.new.optional]",
+          "selectUser": "[TODO: Translate admin.compliance.dataExports.new.selectUser]",
+          "noSpecificUser": "[TODO: Translate admin.compliance.dataExports.new.noSpecificUser]",
+          "selectOrganization": "[TODO: Translate admin.compliance.dataExports.new.selectOrganization]",
+          "selectLegalHold": "[TODO: Translate admin.compliance.dataExports.new.selectLegalHold]",
+          "note": "[TODO: Translate admin.compliance.dataExports.new.note]",
+          "noteDescription": "[TODO: Translate admin.compliance.dataExports.new.noteDescription]"
+        },
+        "notFound": "[TODO: Translate admin.compliance.dataExports.notFound]",
+        "detail": {
+          "title": "[TODO: Translate admin.compliance.dataExports.detail.title]",
+          "exportFailed": "[TODO: Translate admin.compliance.dataExports.detail.exportFailed]",
+          "exportExpired": "[TODO: Translate admin.compliance.dataExports.detail.exportExpired]",
+          "fileSize": "[TODO: Translate admin.compliance.dataExports.detail.fileSize]",
+          "exportDetails": "[TODO: Translate admin.compliance.dataExports.detail.exportDetails]",
+          "requested": "[TODO: Translate admin.compliance.dataExports.detail.requested]",
+          "started": "[TODO: Translate admin.compliance.dataExports.detail.started]",
+          "completed": "[TODO: Translate admin.compliance.dataExports.detail.completed]",
+          "expires": "[TODO: Translate admin.compliance.dataExports.detail.expires]",
+          "requestedBy": "[TODO: Translate admin.compliance.dataExports.detail.requestedBy]",
+          "unknownRequester": "[TODO: Translate admin.compliance.dataExports.detail.unknownRequester]",
+          "subjectUser": "[TODO: Translate admin.compliance.dataExports.detail.subjectUser]",
+          "subjectOrganization": "[TODO: Translate admin.compliance.dataExports.detail.subjectOrganization]",
+          "legalHold": "[TODO: Translate admin.compliance.dataExports.detail.legalHold]",
+          "exportSubject": "[TODO: Translate admin.compliance.dataExports.detail.exportSubject]",
+          "holdName": "[TODO: Translate admin.compliance.dataExports.detail.holdName]",
+          "caseNumber": "[TODO: Translate admin.compliance.dataExports.detail.caseNumber]",
+          "noSpecificSubject": "[TODO: Translate admin.compliance.dataExports.detail.noSpecificSubject]",
+          "exportScope": "[TODO: Translate admin.compliance.dataExports.detail.exportScope]",
+          "exportScopeDescription": "[TODO: Translate admin.compliance.dataExports.detail.exportScopeDescription]",
+          "noScopeConfiguration": "[TODO: Translate admin.compliance.dataExports.detail.noScopeConfiguration]"
+        },
+        "tabs": {
+          "scope": "[TODO: Translate admin.compliance.dataExports.tabs.scope]"
         }
       },
       "overallScore": {
@@ -13561,13 +14636,25 @@
         "dialog": {
           "scheduleTitle": "Schedule Audit",
           "scheduleDescription": "Schedule a new compliance audit",
-          "selectFramework": "Select framework"
+          "selectFramework": "Select framework",
+          "auditorPlaceholder": "[TODO: Translate admin.compliance.audits.dialog.auditorPlaceholder]",
+          "scheduling": "[TODO: Translate admin.compliance.audits.dialog.scheduling]"
         },
         "fields": {
           "framework": "Framework",
           "type": "Type",
           "scheduledDate": "Scheduled Date",
-          "auditor": "Auditor"
+          "auditor": "Auditor",
+          "organizationOptional": "[TODO: Translate admin.compliance.audits.fields.organizationOptional]",
+          "auditType": "[TODO: Translate admin.compliance.audits.fields.auditType]",
+          "notes": "[TODO: Translate admin.compliance.audits.fields.notes]",
+          "status": "[TODO: Translate admin.compliance.audits.fields.status]",
+          "scorePercent": "[TODO: Translate admin.compliance.audits.fields.scorePercent]",
+          "reportUrl": "[TODO: Translate admin.compliance.audits.fields.reportUrl]",
+          "score": "[TODO: Translate admin.compliance.audits.fields.score]",
+          "scheduled": "[TODO: Translate admin.compliance.audits.fields.scheduled]",
+          "started": "[TODO: Translate admin.compliance.audits.fields.started]",
+          "completed": "[TODO: Translate admin.compliance.audits.fields.completed]"
         },
         "errors": {
           "scheduleFailed": "Failed to schedule audit",
@@ -13575,7 +14662,38 @@
           "startFailed": "Failed to start audit",
           "cancelFailed": "Failed to cancel audit",
           "fetchFailed": "Failed to fetch audit",
-          "updateFailed": "Failed to update audit"
+          "updateFailed": "Failed to update audit",
+          "frameworkAndDateRequired": "[TODO: Translate admin.compliance.audits.errors.frameworkAndDateRequired]"
+        },
+        "new": {
+          "title": "[TODO: Translate admin.compliance.audits.new.title]",
+          "description": "[TODO: Translate admin.compliance.audits.new.description]",
+          "scheduling": "[TODO: Translate admin.compliance.audits.new.scheduling]",
+          "auditDetails": "[TODO: Translate admin.compliance.audits.new.auditDetails]",
+          "configureAudit": "[TODO: Translate admin.compliance.audits.new.configureAudit]",
+          "platformWideAudit": "[TODO: Translate admin.compliance.audits.new.platformWideAudit]",
+          "leaveEmptyForPlatformWide": "[TODO: Translate admin.compliance.audits.new.leaveEmptyForPlatformWide]",
+          "notesPlaceholder": "[TODO: Translate admin.compliance.audits.new.notesPlaceholder]"
+        },
+        "notFound": "[TODO: Translate admin.compliance.audits.notFound]",
+        "detail": {
+          "auditScore": "[TODO: Translate admin.compliance.audits.detail.auditScore]",
+          "viewReport": "[TODO: Translate admin.compliance.audits.detail.viewReport]",
+          "auditDetails": "[TODO: Translate admin.compliance.audits.detail.auditDetails]",
+          "framework": "[TODO: Translate admin.compliance.audits.detail.framework]",
+          "organization": "[TODO: Translate admin.compliance.audits.detail.organization]",
+          "scope": "[TODO: Translate admin.compliance.audits.detail.scope]",
+          "platformWideAudit": "[TODO: Translate admin.compliance.audits.detail.platformWideAudit]",
+          "auditFindings": "[TODO: Translate admin.compliance.audits.detail.auditFindings]",
+          "auditFindingsDescription": "[TODO: Translate admin.compliance.audits.detail.auditFindingsDescription]",
+          "noFindings": "[TODO: Translate admin.compliance.audits.detail.noFindings]",
+          "recommendations": "[TODO: Translate admin.compliance.audits.detail.recommendations]",
+          "recommendationsDescription": "[TODO: Translate admin.compliance.audits.detail.recommendationsDescription]",
+          "noRecommendations": "[TODO: Translate admin.compliance.audits.detail.noRecommendations]"
+        },
+        "tabs": {
+          "findings": "[TODO: Translate admin.compliance.audits.tabs.findings]",
+          "recommendations": "[TODO: Translate admin.compliance.audits.tabs.recommendations]"
         }
       },
       "attestations": {
@@ -13628,8 +14746,77 @@
         "errors": {
           "deleteFailed": "Failed to delete attestation",
           "updateFailed": "Failed to update attestation",
-          "fetchFailed": "Failed to fetch attestation"
-        }
+          "fetchFailed": "Failed to fetch attestation",
+          "frameworkAndOrgRequired": "[TODO: Translate admin.compliance.attestations.errors.frameworkAndOrgRequired]",
+          "createFailed": "[TODO: Translate admin.compliance.attestations.errors.createFailed]"
+        },
+        "new": {
+          "title": "[TODO: Translate admin.compliance.attestations.new.title]",
+          "description": "[TODO: Translate admin.compliance.attestations.new.description]",
+          "createAttestation": "[TODO: Translate admin.compliance.attestations.new.createAttestation]",
+          "attestationDetails": "[TODO: Translate admin.compliance.attestations.new.attestationDetails]",
+          "configureAttestation": "[TODO: Translate admin.compliance.attestations.new.configureAttestation]",
+          "selectOrganization": "[TODO: Translate admin.compliance.attestations.new.selectOrganization]",
+          "selectFramework": "[TODO: Translate admin.compliance.attestations.new.selectFramework]",
+          "expirationDateHint": "[TODO: Translate admin.compliance.attestations.new.expirationDateHint]",
+          "attestedByPlaceholder": "[TODO: Translate admin.compliance.attestations.new.attestedByPlaceholder]"
+        },
+        "fields": {
+          "organization": "[TODO: Translate admin.compliance.attestations.fields.organization]",
+          "framework": "[TODO: Translate admin.compliance.attestations.fields.framework]",
+          "initialStatus": "[TODO: Translate admin.compliance.attestations.fields.initialStatus]",
+          "validUntilOptional": "[TODO: Translate admin.compliance.attestations.fields.validUntilOptional]",
+          "attestedByOptional": "[TODO: Translate admin.compliance.attestations.fields.attestedByOptional]",
+          "status": "[TODO: Translate admin.compliance.attestations.fields.status]",
+          "scorePercent": "[TODO: Translate admin.compliance.attestations.fields.scorePercent]",
+          "notes": "[TODO: Translate admin.compliance.attestations.fields.notes]",
+          "score": "[TODO: Translate admin.compliance.attestations.fields.score]",
+          "attestedBy": "[TODO: Translate admin.compliance.attestations.fields.attestedBy]",
+          "attestedDate": "[TODO: Translate admin.compliance.attestations.fields.attestedDate]",
+          "validUntil": "[TODO: Translate admin.compliance.attestations.fields.validUntil]"
+        },
+        "notFound": "[TODO: Translate admin.compliance.attestations.notFound]",
+        "unknownOrganization": "[TODO: Translate admin.compliance.attestations.unknownOrganization]",
+        "detail": {
+          "complianceScore": "[TODO: Translate admin.compliance.attestations.detail.complianceScore]",
+          "attestationDetails": "[TODO: Translate admin.compliance.attestations.detail.attestationDetails]",
+          "organization": "[TODO: Translate admin.compliance.attestations.detail.organization]",
+          "framework": "[TODO: Translate admin.compliance.attestations.detail.framework]",
+          "complianceFindings": "[TODO: Translate admin.compliance.attestations.detail.complianceFindings]",
+          "complianceFindingsDescription": "[TODO: Translate admin.compliance.attestations.detail.complianceFindingsDescription]",
+          "noFindings": "[TODO: Translate admin.compliance.attestations.detail.noFindings]",
+          "evidenceDocuments": "[TODO: Translate admin.compliance.attestations.detail.evidenceDocuments]",
+          "evidenceDocumentsDescription": "[TODO: Translate admin.compliance.attestations.detail.evidenceDocumentsDescription]",
+          "uploaded": "[TODO: Translate admin.compliance.attestations.detail.uploaded]",
+          "noEvidence": "[TODO: Translate admin.compliance.attestations.detail.noEvidence]"
+        },
+        "tabs": {
+          "findings": "[TODO: Translate admin.compliance.attestations.tabs.findings]",
+          "evidence": "[TODO: Translate admin.compliance.attestations.tabs.evidence]"
+        },
+        "unknown": "[TODO: Translate admin.compliance.attestations.unknown]"
+      },
+      "severity": {
+        "critical": "[TODO: Translate admin.compliance.severity.critical]",
+        "high": "[TODO: Translate admin.compliance.severity.high]",
+        "medium": "[TODO: Translate admin.compliance.severity.medium]",
+        "low": "[TODO: Translate admin.compliance.severity.low]"
+      },
+      "tabs": {
+        "overview": "[TODO: Translate admin.compliance.tabs.overview]"
+      },
+      "fields": {
+        "name": "[TODO: Translate admin.compliance.fields.name]",
+        "slug": "[TODO: Translate admin.compliance.fields.slug]",
+        "code": "[TODO: Translate admin.compliance.fields.code]",
+        "version": "[TODO: Translate admin.compliance.fields.version]",
+        "email": "[TODO: Translate admin.compliance.fields.email]"
+      },
+      "priority": {
+        "critical": "[TODO: Translate admin.compliance.priority.critical]",
+        "high": "[TODO: Translate admin.compliance.priority.high]",
+        "medium": "[TODO: Translate admin.compliance.priority.medium]",
+        "low": "[TODO: Translate admin.compliance.priority.low]"
       }
     },
     "analytics": {
@@ -13751,7 +14938,8 @@
           "lowerBound": "Lower Bound",
           "upperBound": "Upper Bound",
           "confidenceLabel": "Confidence"
-        }
+        },
+        "a": "[TODO: Translate admin.analytics.revenue.a]"
       },
       "features": {
         "title": "Feature Usage Analytics",
@@ -13793,7 +14981,8 @@
         "errors": {
           "fetchFailed": "Failed to fetch feature usage data",
           "unknown": "An unknown error occurred"
-        }
+        },
+        "T": "[TODO: Translate admin.analytics.features.T]"
       },
       "reports": {
         "title": "Custom Reports",
@@ -14137,6 +15326,237 @@
             "triggeredBy": "Triggered By"
           }
         }
+      },
+      "featureAdoption": {
+        "title": "[TODO: Translate admin.analytics.featureAdoption.title]",
+        "description": "[TODO: Translate admin.analytics.featureAdoption.description]",
+        "noData": "[TODO: Translate admin.analytics.featureAdoption.noData]"
+      },
+      "featureHeatmap": {
+        "title": "[TODO: Translate admin.analytics.featureHeatmap.title]",
+        "description": "[TODO: Translate admin.analytics.featureHeatmap.description]",
+        "noData": "[TODO: Translate admin.analytics.featureHeatmap.noData]",
+        "table": {
+          "feature": "[TODO: Translate admin.analytics.featureHeatmap.table.feature]"
+        },
+        "legend": {
+          "usageIntensity": "[TODO: Translate admin.analytics.featureHeatmap.legend.usageIntensity]",
+          "none": "[TODO: Translate admin.analytics.featureHeatmap.legend.none]",
+          "low": "[TODO: Translate admin.analytics.featureHeatmap.legend.low]",
+          "medium": "[TODO: Translate admin.analytics.featureHeatmap.legend.medium]",
+          "high": "[TODO: Translate admin.analytics.featureHeatmap.legend.high]"
+        }
+      },
+      "adoptionTrend": {
+        "title": "[TODO: Translate admin.analytics.adoptionTrend.title]",
+        "description": "[TODO: Translate admin.analytics.adoptionTrend.description]",
+        "filterByCategory": "[TODO: Translate admin.analytics.adoptionTrend.filterByCategory]",
+        "allCategories": "[TODO: Translate admin.analytics.adoptionTrend.allCategories]",
+        "features": "[TODO: Translate admin.analytics.adoptionTrend.features]",
+        "clear": "[TODO: Translate admin.analytics.adoptionTrend.clear]",
+        "selectAll": "[TODO: Translate admin.analytics.adoptionTrend.selectAll]",
+        "selectFeaturesPrompt": "[TODO: Translate admin.analytics.adoptionTrend.selectFeaturesPrompt]",
+        "noData": "[TODO: Translate admin.analytics.adoptionTrend.noData]",
+        "adoption": "[TODO: Translate admin.analytics.adoptionTrend.adoption]"
+      },
+      "activityChart": {
+        " ": "[TODO: Translate admin.analytics.activityChart. ]",
+        "title": "[TODO: Translate admin.analytics.activityChart.title]",
+        "description": "[TODO: Translate admin.analytics.activityChart.description]",
+        "tabs": {
+          "dailyTrend": "[TODO: Translate admin.analytics.activityChart.tabs.dailyTrend]",
+          "daily": "[TODO: Translate admin.analytics.activityChart.tabs.daily]",
+          "hourly": "[TODO: Translate admin.analytics.activityChart.tabs.hourly]",
+          "hours": "[TODO: Translate admin.analytics.activityChart.tabs.hours]",
+          "topActions": "[TODO: Translate admin.analytics.activityChart.tabs.topActions]",
+          "actions": "[TODO: Translate admin.analytics.activityChart.tabs.actions]",
+          "status": "[TODO: Translate admin.analytics.activityChart.tabs.status]"
+        },
+        "sections": {
+          "dailyActivity": "[TODO: Translate admin.analytics.activityChart.sections.dailyActivity]",
+          "activityByHour": "[TODO: Translate admin.analytics.activityChart.sections.activityByHour]",
+          "topActions": "[TODO: Translate admin.analytics.activityChart.sections.topActions]",
+          "byResourceType": "[TODO: Translate admin.analytics.activityChart.sections.byResourceType]",
+          "statusBreakdown": "[TODO: Translate admin.analytics.activityChart.sections.statusBreakdown]"
+        },
+        "status": {
+          "successful": "[TODO: Translate admin.analytics.activityChart.status.successful]",
+          "failed": "[TODO: Translate admin.analytics.activityChart.status.failed]",
+          "pending": "[TODO: Translate admin.analytics.activityChart.status.pending]"
+        }
+      },
+      "healthTrend": {
+        "title": "[TODO: Translate admin.analytics.healthTrend.title]",
+        "description": "[TODO: Translate admin.analytics.healthTrend.description]",
+        "noData": "[TODO: Translate admin.analytics.healthTrend.noData]",
+        "tabs": {
+          "overall": "[TODO: Translate admin.analytics.healthTrend.tabs.overall]",
+          "breakdown": "[TODO: Translate admin.analytics.healthTrend.tabs.breakdown]"
+        },
+        "legend": {
+          "overallScore": "[TODO: Translate admin.analytics.healthTrend.legend.overallScore]",
+          "usage": "[TODO: Translate admin.analytics.healthTrend.legend.usage]",
+          "engagement": "[TODO: Translate admin.analytics.healthTrend.legend.engagement]",
+          "support": "[TODO: Translate admin.analytics.healthTrend.legend.support]",
+          "payment": "[TODO: Translate admin.analytics.healthTrend.legend.payment]",
+          "growth": "[TODO: Translate admin.analytics.healthTrend.legend.growth]",
+          "score": "[TODO: Translate admin.analytics.healthTrend.legend.score]"
+        }
+      },
+      "churnRisk": {
+        "low": "[TODO: Translate admin.analytics.churnRisk.low]",
+        "medium": "[TODO: Translate admin.analytics.churnRisk.medium]",
+        "high": "[TODO: Translate admin.analytics.churnRisk.high]",
+        "critical": "[TODO: Translate admin.analytics.churnRisk.critical]"
+      },
+      "npsDistribution": {
+        "title": "[TODO: Translate admin.analytics.npsDistribution.title]",
+        "legend": {
+          "detractors": "[TODO: Translate admin.analytics.npsDistribution.legend.detractors]",
+          "passives": "[TODO: Translate admin.analytics.npsDistribution.legend.passives]",
+          "promoters": "[TODO: Translate admin.analytics.npsDistribution.legend.promoters]"
+        }
+      },
+      "npsGauge": {
+        "labels": {
+          "noData": "[TODO: Translate admin.analytics.npsGauge.labels.noData]",
+          "needsImprovement": "[TODO: Translate admin.analytics.npsGauge.labels.needsImprovement]",
+          "excellent": "[TODO: Translate admin.analytics.npsGauge.labels.excellent]",
+          "great": "[TODO: Translate admin.analytics.npsGauge.labels.great]",
+          "good": "[TODO: Translate admin.analytics.npsGauge.labels.good]",
+          "okay": "[TODO: Translate admin.analytics.npsGauge.labels.okay]"
+        },
+        "title": "[TODO: Translate admin.analytics.npsGauge.title]",
+        "categories": {
+          "promoters": "[TODO: Translate admin.analytics.npsGauge.categories.promoters]",
+          "passives": "[TODO: Translate admin.analytics.npsGauge.categories.passives]",
+          "detractors": "[TODO: Translate admin.analytics.npsGauge.categories.detractors]"
+        }
+      },
+      "cohortAnalysis": {
+        "title": "[TODO: Translate admin.analytics.cohortAnalysis.title]",
+        "description": "[TODO: Translate admin.analytics.cohortAnalysis.description]",
+        "avgLogoRetention": "[TODO: Translate admin.analytics.cohortAnalysis.avgLogoRetention]",
+        "avgRevenueRetention": "[TODO: Translate admin.analytics.cohortAnalysis.avgRevenueRetention]",
+        "table": {
+          "cohort": "[TODO: Translate admin.analytics.cohortAnalysis.table.cohort]",
+          "initial": "[TODO: Translate admin.analytics.cohortAnalysis.table.initial]",
+          "current": "[TODO: Translate admin.analytics.cohortAnalysis.table.current]",
+          "initialMrr": "[TODO: Translate admin.analytics.cohortAnalysis.table.initialMrr]",
+          "currentMrr": "[TODO: Translate admin.analytics.cohortAnalysis.table.currentMrr]",
+          "logoRetention": "[TODO: Translate admin.analytics.cohortAnalysis.table.logoRetention]",
+          "revenueRetention": "[TODO: Translate admin.analytics.cohortAnalysis.table.revenueRetention]",
+          "months": "[TODO: Translate admin.analytics.cohortAnalysis.table.months]"
+        },
+        "retentionHeatmap": "[TODO: Translate admin.analytics.cohortAnalysis.retentionHeatmap]"
+      },
+      "revenueCards": {
+        "mrr": {
+          "title": "[TODO: Translate admin.analytics.revenueCards.mrr.title]",
+          "description": "[TODO: Translate admin.analytics.revenueCards.mrr.description]"
+        },
+        "arr": {
+          "title": "[TODO: Translate admin.analytics.revenueCards.arr.title]",
+          "description": "[TODO: Translate admin.analytics.revenueCards.arr.description]"
+        },
+        "totalCustomers": {
+          "title": "[TODO: Translate admin.analytics.revenueCards.totalCustomers.title]",
+          "description": "[TODO: Translate admin.analytics.revenueCards.totalCustomers.description]"
+        },
+        "arpu": {
+          "title": "[TODO: Translate admin.analytics.revenueCards.arpu.title]",
+          "description": "[TODO: Translate admin.analytics.revenueCards.arpu.description]"
+        },
+        "ltv": {
+          "title": "[TODO: Translate admin.analytics.revenueCards.ltv.title]",
+          "description": "[TODO: Translate admin.analytics.revenueCards.ltv.description]"
+        },
+        "churnRate": {
+          "title": "[TODO: Translate admin.analytics.revenueCards.churnRate.title]",
+          "description": "[TODO: Translate admin.analytics.revenueCards.churnRate.description]"
+        },
+        "nrr": {
+          "title": "[TODO: Translate admin.analytics.revenueCards.nrr.title]",
+          "description": "[TODO: Translate admin.analytics.revenueCards.nrr.description]"
+        },
+        "mrrGrowth": {
+          "title": "[TODO: Translate admin.analytics.revenueCards.mrrGrowth.title]",
+          "description": "[TODO: Translate admin.analytics.revenueCards.mrrGrowth.description]"
+        },
+        "vsLastPeriod": "[TODO: Translate admin.analytics.revenueCards.vsLastPeriod]"
+      },
+      "revenueByPlan": {
+        "title": "[TODO: Translate admin.analytics.revenueByPlan.title]",
+        "loading": "[TODO: Translate admin.analytics.revenueByPlan.loading]",
+        "description": "[TODO: Translate admin.analytics.revenueByPlan.description]",
+        "noData": "[TODO: Translate admin.analytics.revenueByPlan.noData]",
+        "totalMrr": "[TODO: Translate admin.analytics.revenueByPlan.totalMrr]",
+        "arpuByPlan": "[TODO: Translate admin.analytics.revenueByPlan.arpuByPlan]"
+      },
+      "churnAnalysis": {
+        "status": {
+          "excellent": "[TODO: Translate admin.analytics.churnAnalysis.status.excellent]",
+          "good": "[TODO: Translate admin.analytics.churnAnalysis.status.good]",
+          "moderate": "[TODO: Translate admin.analytics.churnAnalysis.status.moderate]",
+          "high": "[TODO: Translate admin.analytics.churnAnalysis.status.high]"
+        },
+        "title": "[TODO: Translate admin.analytics.churnAnalysis.title]",
+        "loading": "[TODO: Translate admin.analytics.churnAnalysis.loading]",
+        "description": "[TODO: Translate admin.analytics.churnAnalysis.description]",
+        "trend": {
+          "improving": "[TODO: Translate admin.analytics.churnAnalysis.trend.improving]",
+          "worsening": "[TODO: Translate admin.analytics.churnAnalysis.trend.worsening]",
+          "stable": "[TODO: Translate admin.analytics.churnAnalysis.trend.stable]"
+        },
+        "metrics": {
+          "customerChurn": "[TODO: Translate admin.analytics.churnAnalysis.metrics.customerChurn]",
+          "lastPeriod": "[TODO: Translate admin.analytics.churnAnalysis.metrics.lastPeriod]",
+          "revenueChurn": "[TODO: Translate admin.analytics.churnAnalysis.metrics.revenueChurn]",
+          "monthlyMrrChurn": "[TODO: Translate admin.analytics.churnAnalysis.metrics.monthlyMrrChurn]",
+          "nrr": "[TODO: Translate admin.analytics.churnAnalysis.metrics.nrr]",
+          "growingFromExisting": "[TODO: Translate admin.analytics.churnAnalysis.metrics.growingFromExisting]",
+          "netContraction": "[TODO: Translate admin.analytics.churnAnalysis.metrics.netContraction]"
+        },
+        "churnTrend": "[TODO: Translate admin.analytics.churnAnalysis.churnTrend]",
+        "tooltip": {
+          "customer": "[TODO: Translate admin.analytics.churnAnalysis.tooltip.customer]",
+          "revenue": "[TODO: Translate admin.analytics.churnAnalysis.tooltip.revenue]",
+          "lostRevenue": "[TODO: Translate admin.analytics.churnAnalysis.tooltip.lostRevenue]"
+        },
+        "legend": {
+          "customerChurn": "[TODO: Translate admin.analytics.churnAnalysis.legend.customerChurn]",
+          "revenueChurn": "[TODO: Translate admin.analytics.churnAnalysis.legend.revenueChurn]"
+        },
+        "benchmarks": {
+          "title": "[TODO: Translate admin.analytics.churnAnalysis.benchmarks.title]",
+          "yourCustomerChurn": "[TODO: Translate admin.analytics.churnAnalysis.benchmarks.yourCustomerChurn]",
+          "excellentTooltip": "[TODO: Translate admin.analytics.churnAnalysis.benchmarks.excellentTooltip]",
+          "averageTooltip": "[TODO: Translate admin.analytics.churnAnalysis.benchmarks.averageTooltip]",
+          "highTooltip": "[TODO: Translate admin.analytics.churnAnalysis.benchmarks.highTooltip]",
+          "excellent": "[TODO: Translate admin.analytics.churnAnalysis.benchmarks.excellent]",
+          "average": "[TODO: Translate admin.analytics.churnAnalysis.benchmarks.average]",
+          "high": "[TODO: Translate admin.analytics.churnAnalysis.benchmarks.high]"
+        }
+      },
+      "mrrTrend": {
+        "title": "[TODO: Translate admin.analytics.mrrTrend.title]",
+        "loading": "[TODO: Translate admin.analytics.mrrTrend.loading]",
+        "description": "[TODO: Translate admin.analytics.mrrTrend.description]",
+        "noData": "[TODO: Translate admin.analytics.mrrTrend.noData]",
+        "stable": "[TODO: Translate admin.analytics.mrrTrend.stable]",
+        "tooltip": {
+          "mrr": "[TODO: Translate admin.analytics.mrrTrend.tooltip.mrr]",
+          "new": "[TODO: Translate admin.analytics.mrrTrend.tooltip.new]",
+          "expansion": "[TODO: Translate admin.analytics.mrrTrend.tooltip.expansion]",
+          "contraction": "[TODO: Translate admin.analytics.mrrTrend.tooltip.contraction]",
+          "churn": "[TODO: Translate admin.analytics.mrrTrend.tooltip.churn]",
+          "netNew": "[TODO: Translate admin.analytics.mrrTrend.tooltip.netNew]"
+        },
+        "legend": {
+          "existingMrr": "[TODO: Translate admin.analytics.mrrTrend.legend.existingMrr]",
+          "expansion": "[TODO: Translate admin.analytics.mrrTrend.legend.expansion]",
+          "new": "[TODO: Translate admin.analytics.mrrTrend.legend.new]"
+        }
       }
     },
     "healthScores": {
@@ -14284,7 +15704,12 @@
         "manageIncidents": "Manage Incidents",
         "scheduleMaintenance": "Schedule Maintenance",
         "viewReleases": "View Releases",
-        "viewCapacity": "View Capacity"
+        "viewCapacity": "View Capacity",
+        "allSystemsOperational": "[TODO: Translate admin.operations.overview.allSystemsOperational]",
+        "criticalIncidentsActive": "[TODO: Translate admin.operations.overview.criticalIncidentsActive]",
+        "someSystemsAffected": "[TODO: Translate admin.operations.overview.someSystemsAffected]",
+        "noActiveIncidents": "[TODO: Translate admin.operations.overview.noActiveIncidents]",
+        "thirtyDayUptime": "[TODO: Translate admin.operations.overview.thirtyDayUptime]"
       },
       "severity": {
         "critical": "Critical",
@@ -14342,18 +15767,26 @@
         "actions": {
           "viewDetails": "View Details",
           "updateStatus": "Update Status",
-          "addUpdate": "Add Update"
+          "addUpdate": "Add Update",
+          "changeStatus": "[TODO: Translate admin.operations.incidents.actions.changeStatus]"
         },
         "bulk": {
           "resolveSelected": "Resolve Selected",
           "resolveTitle": "Resolve Incidents",
-          "resolveConfirm": "Are you sure you want to resolve the selected incidents?"
+          "resolveConfirm": "Are you sure you want to resolve the selected incidents?",
+          "markResolved": "[TODO: Translate admin.operations.incidents.bulk.markResolved]",
+          "confirmResolveTitle": "[TODO: Translate admin.operations.incidents.bulk.confirmResolveTitle]",
+          "confirmResolveDescription": "[TODO: Translate admin.operations.incidents.bulk.confirmResolveDescription]",
+          "markMonitoring": "[TODO: Translate admin.operations.incidents.bulk.markMonitoring]",
+          "markInvestigating": "[TODO: Translate admin.operations.incidents.bulk.markInvestigating]"
         },
         "dialog": {
           "createTitle": "Create Incident",
           "createDescription": "Report a new system incident",
           "updateTitle": "Add Update",
-          "updateDescription": "Add an update to this incident"
+          "updateDescription": "Add an update to this incident",
+          "title": "[TODO: Translate admin.operations.incidents.dialog.title]",
+          "description": "[TODO: Translate admin.operations.incidents.dialog.description]"
         },
         "fields": {
           "title": "Title",
@@ -14375,8 +15808,91 @@
           "updated": "Incident updated",
           "updateFailed": "Failed to update incident",
           "updatePosted": "Update posted",
-          "addUpdateFailed": "Failed to add update"
-        }
+          "addUpdateFailed": "Failed to add update",
+          "incidentCreated": "[TODO: Translate admin.operations.incidents.toast.incidentCreated]",
+          "createFailed": "[TODO: Translate admin.operations.incidents.toast.createFailed]",
+          "updateAdded": "[TODO: Translate admin.operations.incidents.toast.updateAdded]",
+          "bulkUpdateFailed": "[TODO: Translate admin.operations.incidents.toast.bulkUpdateFailed]"
+        },
+        "severityDescriptions": {
+          "minor": "[TODO: Translate admin.operations.incidents.severityDescriptions.minor]",
+          "moderate": "[TODO: Translate admin.operations.incidents.severityDescriptions.moderate]",
+          "major": "[TODO: Translate admin.operations.incidents.severityDescriptions.major]",
+          "critical": "[TODO: Translate admin.operations.incidents.severityDescriptions.critical]"
+        },
+        "typeDescriptions": {
+          "outage": "[TODO: Translate admin.operations.incidents.typeDescriptions.outage]",
+          "degradation": "[TODO: Translate admin.operations.incidents.typeDescriptions.degradation]",
+          "security": "[TODO: Translate admin.operations.incidents.typeDescriptions.security]",
+          "dataIssue": "[TODO: Translate admin.operations.incidents.typeDescriptions.dataIssue]",
+          "thirdParty": "[TODO: Translate admin.operations.incidents.typeDescriptions.thirdParty]",
+          "capacity": "[TODO: Translate admin.operations.incidents.typeDescriptions.capacity]",
+          "network": "[TODO: Translate admin.operations.incidents.typeDescriptions.network]",
+          "database": "[TODO: Translate admin.operations.incidents.typeDescriptions.database]"
+        },
+        "validation": {
+          "titleDescriptionRequired": "[TODO: Translate admin.operations.incidents.validation.titleDescriptionRequired]"
+        },
+        "new": {
+          "title": "[TODO: Translate admin.operations.incidents.new.title]",
+          "description": "[TODO: Translate admin.operations.incidents.new.description]",
+          "reporting": "[TODO: Translate admin.operations.incidents.new.reporting]",
+          "warningTitle": "[TODO: Translate admin.operations.incidents.new.warningTitle]",
+          "warningDescription": "[TODO: Translate admin.operations.incidents.new.warningDescription]",
+          "incidentDetails": "[TODO: Translate admin.operations.incidents.new.incidentDetails]",
+          "incidentDetailsDescription": "[TODO: Translate admin.operations.incidents.new.incidentDetailsDescription]",
+          "classification": "[TODO: Translate admin.operations.incidents.new.classification]",
+          "classificationDescription": "[TODO: Translate admin.operations.incidents.new.classificationDescription]",
+          "selectAffectedServices": "[TODO: Translate admin.operations.incidents.new.selectAffectedServices]",
+          "clickToSelectServices": "[TODO: Translate admin.operations.incidents.new.clickToSelectServices]"
+        },
+        "reportIncident": "[TODO: Translate admin.operations.incidents.reportIncident]",
+        "form": {
+          "incidentTitle": "[TODO: Translate admin.operations.incidents.form.incidentTitle]",
+          "titlePlaceholder": "[TODO: Translate admin.operations.incidents.form.titlePlaceholder]",
+          "description": "[TODO: Translate admin.operations.incidents.form.description]",
+          "descriptionPlaceholder": "[TODO: Translate admin.operations.incidents.form.descriptionPlaceholder]",
+          "businessImpact": "[TODO: Translate admin.operations.incidents.form.businessImpact]",
+          "impactPlaceholder": "[TODO: Translate admin.operations.incidents.form.impactPlaceholder]",
+          "severity": "[TODO: Translate admin.operations.incidents.form.severity]",
+          "incidentType": "[TODO: Translate admin.operations.incidents.form.incidentType]",
+          "affectedServices": "[TODO: Translate admin.operations.incidents.form.affectedServices]",
+          "type": "[TODO: Translate admin.operations.incidents.form.type]"
+        },
+        "table": {
+          "incident": "[TODO: Translate admin.operations.incidents.table.incident]",
+          "started": "[TODO: Translate admin.operations.incidents.table.started]",
+          "severity": "[TODO: Translate admin.operations.incidents.table.severity]",
+          "status": "[TODO: Translate admin.operations.incidents.table.status]",
+          "type": "[TODO: Translate admin.operations.incidents.table.type]",
+          "affectedServices": "[TODO: Translate admin.operations.incidents.table.affectedServices]",
+          "duration": "[TODO: Translate admin.operations.incidents.table.duration]",
+          "min": "[TODO: Translate admin.operations.incidents.table.min]",
+          "ongoing": "[TODO: Translate admin.operations.incidents.table.ongoing]"
+        },
+        "detail": {
+          "description": "[TODO: Translate admin.operations.incidents.detail.description]",
+          "affectedServices": "[TODO: Translate admin.operations.incidents.detail.affectedServices]",
+          "updateStatus": "[TODO: Translate admin.operations.incidents.detail.updateStatus]",
+          "timeline": "[TODO: Translate admin.operations.incidents.detail.timeline]",
+          "addUpdate": "[TODO: Translate admin.operations.incidents.detail.addUpdate]",
+          "updatePlaceholder": "[TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
+          "postUpdate": "[TODO: Translate admin.operations.incidents.detail.postUpdate]"
+        },
+        "stats": {
+          "totalIncidents": "[TODO: Translate admin.operations.incidents.stats.totalIncidents]",
+          "active": "[TODO: Translate admin.operations.incidents.stats.active]",
+          "resolved": "[TODO: Translate admin.operations.incidents.stats.resolved]",
+          "inPostmortem": "[TODO: Translate admin.operations.incidents.stats.inPostmortem]"
+        },
+        "searchPlaceholder": "[TODO: Translate admin.operations.incidents.searchPlaceholder]",
+        "filter": {
+          "status": "[TODO: Translate admin.operations.incidents.filter.status]",
+          "allStatus": "[TODO: Translate admin.operations.incidents.filter.allStatus]",
+          "severity": "[TODO: Translate admin.operations.incidents.filter.severity]",
+          "allSeverity": "[TODO: Translate admin.operations.incidents.filter.allSeverity]"
+        },
+        "emptyMessage": "[TODO: Translate admin.operations.incidents.emptyMessage]"
       },
       "maintenance": {
         "title": "Maintenance Windows",
@@ -14723,6 +16239,44 @@
           "updateFailed": "Failed to update capacity metric",
           "deleteFailed": "Failed to delete capacity metric"
         }
+      },
+      "stats": {
+        "activeIncidents": "[TODO: Translate admin.operations.stats.activeIncidents]",
+        "viewIncidents": "[TODO: Translate admin.operations.stats.viewIncidents]",
+        "scheduledMaintenance": "[TODO: Translate admin.operations.stats.scheduledMaintenance]",
+        "upcomingWindows": "[TODO: Translate admin.operations.stats.upcomingWindows]",
+        "viewSchedule": "[TODO: Translate admin.operations.stats.viewSchedule]",
+        "activeReleases": "[TODO: Translate admin.operations.stats.activeReleases]",
+        "rollingOut": "[TODO: Translate admin.operations.stats.rollingOut]",
+        "manageReleases": "[TODO: Translate admin.operations.stats.manageReleases]",
+        "systemHealth": "[TODO: Translate admin.operations.stats.systemHealth]",
+        "overallHealthScore": "[TODO: Translate admin.operations.stats.overallHealthScore]",
+        "viewCapacity": "[TODO: Translate admin.operations.stats.viewCapacity]"
+      },
+      "resources": {
+        "title": "[TODO: Translate admin.operations.resources.title]",
+        "description": "[TODO: Translate admin.operations.resources.description]",
+        "cpuUsage": "[TODO: Translate admin.operations.resources.cpuUsage]",
+        "memoryUsage": "[TODO: Translate admin.operations.resources.memoryUsage]",
+        "storageUsage": "[TODO: Translate admin.operations.resources.storageUsage]",
+        "apiLatency": "[TODO: Translate admin.operations.resources.apiLatency]",
+        "activeConnections": "[TODO: Translate admin.operations.resources.activeConnections]"
+      },
+      "recentIncidents": {
+        "title": "[TODO: Translate admin.operations.recentIncidents.title]",
+        "description": "[TODO: Translate admin.operations.recentIncidents.description]",
+        "noIncidents": "[TODO: Translate admin.operations.recentIncidents.noIncidents]",
+        "viewAll": "[TODO: Translate admin.operations.recentIncidents.viewAll]"
+      },
+      "quickActions": {
+        "incidents": "[TODO: Translate admin.operations.quickActions.incidents]",
+        "incidentsDescription": "[TODO: Translate admin.operations.quickActions.incidentsDescription]",
+        "maintenance": "[TODO: Translate admin.operations.quickActions.maintenance]",
+        "maintenanceDescription": "[TODO: Translate admin.operations.quickActions.maintenanceDescription]",
+        "releases": "[TODO: Translate admin.operations.quickActions.releases]",
+        "releasesDescription": "[TODO: Translate admin.operations.quickActions.releasesDescription]",
+        "capacity": "[TODO: Translate admin.operations.quickActions.capacity]",
+        "capacityDescription": "[TODO: Translate admin.operations.quickActions.capacityDescription]"
       }
     },
     "integrations": {
@@ -14762,7 +16316,9 @@
           "activate": "Activate",
           "suspend": "Suspend",
           "revoke": "Revoke",
-          "regenerateSecret": "Regenerate Secret"
+          "regenerateSecret": "Regenerate Secret",
+          "rotateSecret": "[TODO: Translate admin.integrations.apiClients.actions.rotateSecret]",
+          "revokeClient": "[TODO: Translate admin.integrations.apiClients.actions.revokeClient]"
         },
         "bulk": {
           "revokeSelected": "Revoke Selected",
@@ -14799,7 +16355,13 @@
           "editComingSoon": "Edit functionality coming soon",
           "rotateSecretComingSoon": "Secret rotation coming soon",
           "copied": "Copied to clipboard",
-          "bulkRevokeFailed": "Failed to revoke clients"
+          "bulkRevokeFailed": "Failed to revoke clients",
+          "clientCreatedSuccess": "[TODO: Translate admin.integrations.apiClients.toast.clientCreatedSuccess]",
+          "loadFailed": "[TODO: Translate admin.integrations.apiClients.toast.loadFailed]",
+          "updated": "[TODO: Translate admin.integrations.apiClients.toast.updated]",
+          "updateFailed": "[TODO: Translate admin.integrations.apiClients.toast.updateFailed]",
+          "secretRotated": "[TODO: Translate admin.integrations.apiClients.toast.secretRotated]",
+          "rotateSecretFailed": "[TODO: Translate admin.integrations.apiClients.toast.rotateSecretFailed]"
         },
         "createButton": "Create Client",
         "createDialog": {
@@ -14817,7 +16379,12 @@
           "redirectUris": "Redirect URIs",
           "redirectUrisPlaceholder": "One per line",
           "allowedScopes": "Allowed Scopes",
-          "allowedScopesPlaceholder": "Comma-separated scopes"
+          "allowedScopesPlaceholder": "Comma-separated scopes",
+          "clientNameRequired": "[TODO: Translate admin.integrations.apiClients.form.clientNameRequired]",
+          "organizationRequired": "[TODO: Translate admin.integrations.apiClients.form.organizationRequired]",
+          "selectOrganization": "[TODO: Translate admin.integrations.apiClients.form.selectOrganization]",
+          "redirectUrisPlaceholderMultiline": "[TODO: Translate admin.integrations.apiClients.form.redirectUrisPlaceholderMultiline]",
+          "redirectUrisHelp": "[TODO: Translate admin.integrations.apiClients.form.redirectUrisHelp]"
         },
         "stats": {
           "totalClients": "Total Clients",
@@ -14826,17 +16393,118 @@
           "suspended": "Suspended"
         },
         "table": {
-          "noClientsFound": "No API clients found"
+          "noClientsFound": "No API clients found",
+          "clientId": "[TODO: Translate admin.integrations.apiClients.table.clientId]",
+          "never": "[TODO: Translate admin.integrations.apiClients.table.never]",
+          "client": "[TODO: Translate admin.integrations.apiClients.table.client]",
+          "organization": "[TODO: Translate admin.integrations.apiClients.table.organization]",
+          "type": "[TODO: Translate admin.integrations.apiClients.table.type]",
+          "status": "[TODO: Translate admin.integrations.apiClients.table.status]",
+          "usage": "[TODO: Translate admin.integrations.apiClients.table.usage]",
+          "lastUsed": "[TODO: Translate admin.integrations.apiClients.table.lastUsed]"
         },
         "secretDialog": {
           "title": "Client Secret",
           "description": "Save this secret securely. You won't be able to see it again.",
-          "copySecret": "Copy Secret"
+          "copySecret": "Copy Secret",
+          "done": "[TODO: Translate admin.integrations.apiClients.secretDialog.done]",
+          "newTitle": "[TODO: Translate admin.integrations.apiClients.secretDialog.newTitle]"
         },
         "bulkActions": {
           "revokeSelected": "Revoke Selected",
           "revokeConfirmTitle": "Revoke API Clients",
           "revokeConfirmDescription": "Are you sure you want to revoke the selected API clients? This action cannot be undone."
+        },
+        "clientTypeDescriptions": {
+          "confidential": "[TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.confidential]",
+          "public": "[TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.public]",
+          "service": "[TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.service]"
+        },
+        "scopes": {
+          "read": "[TODO: Translate admin.integrations.apiClients.scopes.read]",
+          "write": "[TODO: Translate admin.integrations.apiClients.scopes.write]",
+          "delete": "[TODO: Translate admin.integrations.apiClients.scopes.delete]",
+          "admin": "[TODO: Translate admin.integrations.apiClients.scopes.admin]"
+        },
+        "scopeDescriptions": {
+          "read": "[TODO: Translate admin.integrations.apiClients.scopeDescriptions.read]",
+          "write": "[TODO: Translate admin.integrations.apiClients.scopeDescriptions.write]",
+          "delete": "[TODO: Translate admin.integrations.apiClients.scopeDescriptions.delete]",
+          "admin": "[TODO: Translate admin.integrations.apiClients.scopeDescriptions.admin]"
+        },
+        "validation": {
+          "nameAndOrgRequired": "[TODO: Translate admin.integrations.apiClients.validation.nameAndOrgRequired]"
+        },
+        "\\n": "[TODO: Translate admin.integrations.apiClients.\\n]",
+        "new": {
+          "title": "[TODO: Translate admin.integrations.apiClients.new.title]",
+          "description": "[TODO: Translate admin.integrations.apiClients.new.description]",
+          "clientDetailsDescription": "[TODO: Translate admin.integrations.apiClients.new.clientDetailsDescription]",
+          "rateLimitsDescription": "[TODO: Translate admin.integrations.apiClients.new.rateLimitsDescription]",
+          "permissions": "[TODO: Translate admin.integrations.apiClients.new.permissions]",
+          "permissionsDescription": "[TODO: Translate admin.integrations.apiClients.new.permissionsDescription]"
+        },
+        "detail": {
+          "clientDetails": "[TODO: Translate admin.integrations.apiClients.detail.clientDetails]",
+          "allowedScopes": "[TODO: Translate admin.integrations.apiClients.detail.allowedScopes]",
+          "notFound": "[TODO: Translate admin.integrations.apiClients.detail.notFound]",
+          "revokedBanner": {
+            "title": "[TODO: Translate admin.integrations.apiClients.detail.revokedBanner.title]",
+            "description": "[TODO: Translate admin.integrations.apiClients.detail.revokedBanner.description]"
+          },
+          "totalRequests": "[TODO: Translate admin.integrations.apiClients.detail.totalRequests]",
+          "rateLimit": "[TODO: Translate admin.integrations.apiClients.detail.rateLimit]",
+          "noDescription": "[TODO: Translate admin.integrations.apiClients.detail.noDescription]",
+          "created": "[TODO: Translate admin.integrations.apiClients.detail.created]",
+          "lastUsed": "[TODO: Translate admin.integrations.apiClients.detail.lastUsed]",
+          "organization": "[TODO: Translate admin.integrations.apiClients.detail.organization]",
+          "organizationDescription": "[TODO: Translate admin.integrations.apiClients.detail.organizationDescription]",
+          "viewOrganization": "[TODO: Translate admin.integrations.apiClients.detail.viewOrganization]",
+          "organizationNotFound": "[TODO: Translate admin.integrations.apiClients.detail.organizationNotFound]",
+          "scopesPermissions": "[TODO: Translate admin.integrations.apiClients.detail.scopesPermissions]",
+          "scopesPermissionsDescription": "[TODO: Translate admin.integrations.apiClients.detail.scopesPermissionsDescription]",
+          "noScopes": "[TODO: Translate admin.integrations.apiClients.detail.noScopes]",
+          "allowedGrants": "[TODO: Translate admin.integrations.apiClients.detail.allowedGrants]",
+          "redirectUris": "[TODO: Translate admin.integrations.apiClients.detail.redirectUris]",
+          "noRedirectUris": "[TODO: Translate admin.integrations.apiClients.detail.noRedirectUris]"
+        },
+        "usage": {
+          "rateLimits": "[TODO: Translate admin.integrations.apiClients.usage.rateLimits]",
+          "totalRequests": "[TODO: Translate admin.integrations.apiClients.usage.totalRequests]",
+          "allTime": "[TODO: Translate admin.integrations.apiClients.usage.allTime]",
+          "requestsPerMinute": "[TODO: Translate admin.integrations.apiClients.usage.requestsPerMinute]",
+          "noActivity": "[TODO: Translate admin.integrations.apiClients.usage.noActivity]",
+          "rateLimitsDescription": "[TODO: Translate admin.integrations.apiClients.usage.rateLimitsDescription]",
+          "perMinute": "[TODO: Translate admin.integrations.apiClients.usage.perMinute]",
+          "perMinuteDescription": "[TODO: Translate admin.integrations.apiClients.usage.perMinuteDescription]",
+          "dailyLimit": "[TODO: Translate admin.integrations.apiClients.usage.dailyLimit]",
+          "dailyLimitDescription": "[TODO: Translate admin.integrations.apiClients.usage.dailyLimitDescription]",
+          "unlimited": "[TODO: Translate admin.integrations.apiClients.usage.unlimited]",
+          "monthlyLimit": "[TODO: Translate admin.integrations.apiClients.usage.monthlyLimit]",
+          "monthlyLimitDescription": "[TODO: Translate admin.integrations.apiClients.usage.monthlyLimitDescription]"
+        },
+        "settings": {
+          "dailyLimit": "[TODO: Translate admin.integrations.apiClients.settings.dailyLimit]",
+          "noLimit": "[TODO: Translate admin.integrations.apiClients.settings.noLimit]",
+          "monthlyLimit": "[TODO: Translate admin.integrations.apiClients.settings.monthlyLimit]",
+          "editTitle": "[TODO: Translate admin.integrations.apiClients.settings.editTitle]",
+          "editDescription": "[TODO: Translate admin.integrations.apiClients.settings.editDescription]",
+          "rateLimitPerMin": "[TODO: Translate admin.integrations.apiClients.settings.rateLimitPerMin]",
+          "editSettings": "[TODO: Translate admin.integrations.apiClients.settings.editSettings]"
+        },
+        ",": "[TODO: Translate admin.integrations.apiClients.,]",
+        "rotateDialog": {
+          "title": "[TODO: Translate admin.integrations.apiClients.rotateDialog.title]",
+          "description": "[TODO: Translate admin.integrations.apiClients.rotateDialog.description]"
+        },
+        "revokeDialog": {
+          "title": "[TODO: Translate admin.integrations.apiClients.revokeDialog.title]",
+          "description": "[TODO: Translate admin.integrations.apiClients.revokeDialog.description]"
+        },
+        "tabs": {
+          "overview": "[TODO: Translate admin.integrations.apiClients.tabs.overview]",
+          "settings": "[TODO: Translate admin.integrations.apiClients.tabs.settings]",
+          "usageStats": "[TODO: Translate admin.integrations.apiClients.tabs.usageStats]"
         }
       },
       "apps": {
@@ -14879,7 +16547,8 @@
           "status": "Status",
           "category": "Category",
           "allStatus": "All Status",
-          "allCategories": "All Categories"
+          "allCategories": "All Categories",
+          "searchPlaceholder": "[TODO: Translate admin.integrations.apps.filters.searchPlaceholder]"
         },
         "actions": {
           "viewDetails": "View Details",
@@ -14977,7 +16646,14 @@
           "editDescription": "Update integration app configuration"
         },
         "table": {
-          "noReviews": "No reviews"
+          "noReviews": "No reviews",
+          "app": "[TODO: Translate admin.integrations.apps.table.app]",
+          "category": "[TODO: Translate admin.integrations.apps.table.category]",
+          "developer": "[TODO: Translate admin.integrations.apps.table.developer]",
+          "status": "[TODO: Translate admin.integrations.apps.table.status]",
+          "installs": "[TODO: Translate admin.integrations.apps.table.installs]",
+          "rating": "[TODO: Translate admin.integrations.apps.table.rating]",
+          "noAppsFound": "[TODO: Translate admin.integrations.apps.table.noAppsFound]"
         },
         "badges": {
           "official": "Official App",
@@ -15051,6 +16727,51 @@
             "createSuccess": "Integration app created successfully",
             "createFailed": "Failed to create app"
           }
+        },
+        "bulkActions": {
+          "approveSelected": "[TODO: Translate admin.integrations.apps.bulkActions.approveSelected]",
+          "approveConfirmTitle": "[TODO: Translate admin.integrations.apps.bulkActions.approveConfirmTitle]",
+          "approveConfirmDescription": "[TODO: Translate admin.integrations.apps.bulkActions.approveConfirmDescription]",
+          "publishSelected": "[TODO: Translate admin.integrations.apps.bulkActions.publishSelected]",
+          "publishConfirmTitle": "[TODO: Translate admin.integrations.apps.bulkActions.publishConfirmTitle]",
+          "publishConfirmDescription": "[TODO: Translate admin.integrations.apps.bulkActions.publishConfirmDescription]",
+          "deprecateSelected": "[TODO: Translate admin.integrations.apps.bulkActions.deprecateSelected]",
+          "deprecateConfirmTitle": "[TODO: Translate admin.integrations.apps.bulkActions.deprecateConfirmTitle]",
+          "deprecateConfirmDescription": "[TODO: Translate admin.integrations.apps.bulkActions.deprecateConfirmDescription]",
+          "deleteSelected": "[TODO: Translate admin.integrations.apps.bulkActions.deleteSelected]",
+          "deleteConfirmTitle": "[TODO: Translate admin.integrations.apps.bulkActions.deleteConfirmTitle]",
+          "deleteConfirmDescription": "[TODO: Translate admin.integrations.apps.bulkActions.deleteConfirmDescription]"
+        },
+        "createButton": "[TODO: Translate admin.integrations.apps.createButton]",
+        "createDialog": {
+          "title": "[TODO: Translate admin.integrations.apps.createDialog.title]",
+          "description": "[TODO: Translate admin.integrations.apps.createDialog.description]"
+        },
+        "form": {
+          "appNameRequired": "[TODO: Translate admin.integrations.apps.form.appNameRequired]",
+          "appNamePlaceholder": "[TODO: Translate admin.integrations.apps.form.appNamePlaceholder]",
+          "categoryRequired": "[TODO: Translate admin.integrations.apps.form.categoryRequired]",
+          "shortDescription": "[TODO: Translate admin.integrations.apps.form.shortDescription]",
+          "shortDescriptionPlaceholder": "[TODO: Translate admin.integrations.apps.form.shortDescriptionPlaceholder]",
+          "fullDescription": "[TODO: Translate admin.integrations.apps.form.fullDescription]",
+          "fullDescriptionPlaceholder": "[TODO: Translate admin.integrations.apps.form.fullDescriptionPlaceholder]",
+          "developerRequired": "[TODO: Translate admin.integrations.apps.form.developerRequired]",
+          "developerPlaceholder": "[TODO: Translate admin.integrations.apps.form.developerPlaceholder]",
+          "developerUrl": "[TODO: Translate admin.integrations.apps.form.developerUrl]",
+          "developerUrlPlaceholder": "[TODO: Translate admin.integrations.apps.form.developerUrlPlaceholder]",
+          "iconUrl": "[TODO: Translate admin.integrations.apps.form.iconUrl]",
+          "iconUrlPlaceholder": "[TODO: Translate admin.integrations.apps.form.iconUrlPlaceholder]",
+          "officialApp": "[TODO: Translate admin.integrations.apps.form.officialApp]",
+          "featuredApp": "[TODO: Translate admin.integrations.apps.form.featuredApp]"
+        },
+        "stats": {
+          "totalApps": "[TODO: Translate admin.integrations.apps.stats.totalApps]",
+          "published": "[TODO: Translate admin.integrations.apps.stats.published]",
+          "totalInstalls": "[TODO: Translate admin.integrations.apps.stats.totalInstalls]",
+          "featured": "[TODO: Translate admin.integrations.apps.stats.featured]"
+        },
+        "deleteDialog": {
+          "title": "[TODO: Translate admin.integrations.apps.deleteDialog.title]"
         }
       },
       "webhooks": {
@@ -15221,6 +16942,9 @@
             "createFailed": "Failed to create webhook",
             "copied": "Copied to clipboard"
           }
+        },
+        "": {
+          "": "[TODO: Translate admin.integrations.webhooks..]"
         }
       }
     },
@@ -15583,13 +17307,18 @@
         "enabledDescription": "Enable this feature flag",
         "rolloutPercentage": "Rollout Percentage",
         "allowedPlans": "Allowed Plans",
-        "allowAllPlans": "Leave unchecked to allow all plans"
+        "allowAllPlans": "Leave unchecked to allow all plans",
+        "displayName": "[TODO: Translate admin.features.form.displayName]"
       },
       "types": {
         "boolean": "Boolean",
         "string": "String",
         "number": "Number",
-        "json": "JSON"
+        "json": "JSON",
+        "booleanDescription": "[TODO: Translate admin.features.types.booleanDescription]",
+        "stringDescription": "[TODO: Translate admin.features.types.stringDescription]",
+        "numberDescription": "[TODO: Translate admin.features.types.numberDescription]",
+        "jsonDescription": "[TODO: Translate admin.features.types.jsonDescription]"
       },
       "plans": {
         "STARTER": "Starter",
@@ -15600,7 +17329,38 @@
       "saving": "Saving...",
       "updateFlag": "Update Flag",
       "createFlag": "Create Flag",
-      "empty": "No feature flags found"
+      "empty": "No feature flags found",
+      "validation": {
+        "keyRequired": "[TODO: Translate admin.features.validation.keyRequired]",
+        "keyFormat": "[TODO: Translate admin.features.validation.keyFormat]"
+      },
+      "new": {
+        "noPermission": "[TODO: Translate admin.features.new.noPermission]",
+        "backToFeatures": "[TODO: Translate admin.features.new.backToFeatures]",
+        "back": "[TODO: Translate admin.features.new.back]",
+        "title": "[TODO: Translate admin.features.new.title]",
+        "subtitle": "[TODO: Translate admin.features.new.subtitle]"
+      },
+      "creating": "[TODO: Translate admin.features.creating]",
+      "flagDetails": {
+        "title": "[TODO: Translate admin.features.flagDetails.title]",
+        "description": "[TODO: Translate admin.features.flagDetails.description]",
+        "keyHint": "[TODO: Translate admin.features.flagDetails.keyHint]"
+      },
+      "rolloutConfig": {
+        "title": "[TODO: Translate admin.features.rolloutConfig.title]",
+        "description": "[TODO: Translate admin.features.rolloutConfig.description]",
+        "enabled": "[TODO: Translate admin.features.rolloutConfig.enabled]",
+        "enabledDescription": "[TODO: Translate admin.features.rolloutConfig.enabledDescription]",
+        "rolloutPercentage": "[TODO: Translate admin.features.rolloutConfig.rolloutPercentage]",
+        "rolloutDescription": "[TODO: Translate admin.features.rolloutConfig.rolloutDescription]"
+      },
+      "planRestrictions": {
+        "title": "[TODO: Translate admin.features.planRestrictions.title]",
+        "description": "[TODO: Translate admin.features.planRestrictions.description]",
+        "allowedPlans": "[TODO: Translate admin.features.planRestrictions.allowedPlans]",
+        "allowAllDescription": "[TODO: Translate admin.features.planRestrictions.allowAllDescription]"
+      }
     }
   },
   "ui": {
@@ -15736,7 +17496,14 @@
       "sortAscending": "Sort ascending",
       "sortDescending": "Sort descending",
       "selectAll": "Select all",
-      "deselectAll": "Deselect all"
+      "deselectAll": "Deselect all",
+      "featureName": "[TODO: Translate ui.table.featureName]",
+      "totalEvents": "[TODO: Translate ui.table.totalEvents]",
+      "activeUsers": "[TODO: Translate ui.table.activeUsers]",
+      "adoptionRate": "[TODO: Translate ui.table.adoptionRate]",
+      "retentionRate": "[TODO: Translate ui.table.retentionRate]",
+      "deleteConfirm": "[TODO: Translate ui.table.deleteConfirm]",
+      "areYouSure": "[TODO: Translate ui.table.areYouSure]"
     },
     "shortcutKey": {
       "then": "then"
@@ -15876,6 +17643,9 @@
         "loginAlertsDesc": "Notify about new device logins",
         "systemMaintenance": "System maintenance",
         "systemMaintenanceDesc": "Scheduled downtime and updates"
+      },
+      "success": {
+        "saved": "[TODO: Translate notifications.settings.success.saved]"
       }
     },
     "admin": {
@@ -15927,7 +17697,22 @@
       },
       "empty": "No notifications created",
       "confirmDelete": "Delete Notification",
-      "confirmDeleteDescription": "Are you sure you want to delete \"{title}\"? This action cannot be undone."
+      "confirmDeleteDescription": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+      "error": {
+        "loadFailed": "[TODO: Translate notifications.admin.error.loadFailed]",
+        "updateFailed": "[TODO: Translate notifications.admin.error.updateFailed]",
+        "createFailed": "[TODO: Translate notifications.admin.error.createFailed]",
+        "saveFailed": "[TODO: Translate notifications.admin.error.saveFailed]",
+        "deleteFailed": "[TODO: Translate notifications.admin.error.deleteFailed]"
+      },
+      "success": {
+        "updated": "[TODO: Translate notifications.admin.success.updated]",
+        "created": "[TODO: Translate notifications.admin.success.created]",
+        "deleted": "[TODO: Translate notifications.admin.success.deleted]"
+      },
+      "loading": {
+        "saving": "[TODO: Translate notifications.admin.loading.saving]"
+      }
     }
   },
   "pricing": {

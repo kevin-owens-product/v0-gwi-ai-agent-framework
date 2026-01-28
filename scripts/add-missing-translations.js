@@ -10,12 +10,16 @@ const { execSync } = require('child_process')
 
 const TRANSLATION_FILE = 'messages/en.json'
 const GWI_DIRS = ['app/gwi', 'components/gwi']
+const DASHBOARD_DIRS = ['app/dashboard', 'components/dashboard']
+const ADMIN_DIRS = ['app/admin', 'components/admin']
 
 // Extract all translation keys from code
 function extractAllKeys() {
   const keysByNamespace = new Map()
   
-  for (const dir of GWI_DIRS) {
+  const allDirs = [...GWI_DIRS, ...DASHBOARD_DIRS, ...ADMIN_DIRS]
+  
+  for (const dir of allDirs) {
     if (!fs.existsSync(dir)) continue
     
     const files = execSync(`find ${dir} -name "*.tsx" -o -name "*.ts"`, { encoding: 'utf8' })
@@ -82,6 +86,9 @@ function addMissingKeys(obj, namespace, keys) {
     if (!current[part]) {
       current[part] = {}
     }
+    if (typeof current[part] !== 'object' || current[part] === null) {
+      current[part] = {}
+    }
     current = current[part]
   }
   
@@ -96,11 +103,15 @@ function addMissingKeys(obj, namespace, keys) {
       if (!keyCurrent[keyParts[i]]) {
         keyCurrent[keyParts[i]] = {}
       }
+      if (typeof keyCurrent[keyParts[i]] !== 'object' || keyCurrent[keyParts[i]] === null) {
+        keyCurrent[keyParts[i]] = {}
+      }
       keyCurrent = keyCurrent[keyParts[i]]
     }
     
     const finalKey = keyParts[keyParts.length - 1]
-    if (!keyCurrent[finalKey]) {
+    // Skip if key already exists and is a string
+    if (!keyCurrent[finalKey] || (typeof keyCurrent[finalKey] === 'object' && keyCurrent[finalKey] !== null)) {
       keyCurrent[finalKey] = `[TODO: Translate ${namespace}.${key}]`
       added++
     }
@@ -110,7 +121,7 @@ function addMissingKeys(obj, namespace, keys) {
 }
 
 function main() {
-  console.log('🔍 Scanning GWI components for translation keys...\n')
+  console.log('🔍 Scanning components for translation keys (GWI, Dashboard, Admin)...\n')
   
   const translations = JSON.parse(fs.readFileSync(TRANSLATION_FILE, 'utf8'))
   const keysByNamespace = extractAllKeys()

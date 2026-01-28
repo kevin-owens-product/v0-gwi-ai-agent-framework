@@ -29,7 +29,10 @@
     "noResults": "Результаты не найдены",
     "required": "Обязательно",
     "optional": "Необязательно",
-    "actions": "Действия",
+    "actions": {
+      "refresh": "[RU] [TODO: Translate common.actions.refresh]",
+      "export": "[RU] [TODO: Translate common.actions.export]"
+    },
     "status": "Статус",
     "name": "Название",
     "description": "Описание",
@@ -114,7 +117,45 @@
     "questionText": "[RU] [TODO: Translate common.questionText]",
     "enterQuestionText": "[RU] [TODO: Translate common.enterQuestionText]",
     "view": "[RU] [TODO: Translate common.view]",
-    "deleting": "[RU] [TODO: Translate common.deleting]"
+    "deleting": "[RU] [TODO: Translate common.deleting]",
+    "currentOrgId": "[RU] [TODO: Translate common.currentOrgId]",
+    "na": "[RU] [TODO: Translate common.na]",
+    "remove": "[RU] [TODO: Translate common.remove]",
+    "recommendations": "[RU] [TODO: Translate common.recommendations]",
+    "noData": "[RU] [TODO: Translate common.noData]",
+    "incidents": "[RU] [TODO: Translate common.incidents]",
+    "incident": "[RU] [TODO: Translate common.incident]",
+    "release": "[RU] [TODO: Translate common.release]",
+    "total": "[RU] [TODO: Translate common.total]",
+    "download": "[RU] [TODO: Translate common.download]",
+    "unit": "[RU] [TODO: Translate common.unit]",
+    "recorded": "[RU] [TODO: Translate common.recorded]",
+    "copied": "[RU] [TODO: Translate common.copied]",
+    "unnamed": "[RU] [TODO: Translate common.unnamed]",
+    "failures": "[RU] [TODO: Translate common.failures]",
+    "never": "[RU] [TODO: Translate common.never]",
+    "copy": "[RU] [TODO: Translate common.copy]",
+    "periodOptions": {
+      "daily": "[RU] [TODO: Translate common.periodOptions.daily]",
+      "weekly": "[RU] [TODO: Translate common.periodOptions.weekly]",
+      "monthly": "[RU] [TODO: Translate common.periodOptions.monthly]",
+      "quarterly": "[RU] [TODO: Translate common.periodOptions.quarterly]",
+      "yearly": "[RU] [TODO: Translate common.periodOptions.yearly]"
+    },
+    "types": {
+      "usage": "[RU] [TODO: Translate common.types.usage]",
+      "revenue": "[RU] [TODO: Translate common.types.revenue]",
+      "security": "[RU] [TODO: Translate common.types.security]",
+      "compliance": "[RU] [TODO: Translate common.types.compliance]",
+      "userActivity": "[RU] [TODO: Translate common.types.userActivity]",
+      "customSql": "[RU] [TODO: Translate common.types.customSql]"
+    },
+    "schedules": {
+      "daily": "[RU] [TODO: Translate common.schedules.daily]",
+      "weekly": "[RU] [TODO: Translate common.schedules.weekly]",
+      "monthly": "[RU] [TODO: Translate common.schedules.monthly]",
+      "onDemand": "[RU] [TODO: Translate common.schedules.onDemand]"
+    }
   },
   "auth": {
     "signIn": "Войти",
@@ -423,7 +464,8 @@
         "organizationName": "Введите название организации",
         "organizationSlug": "организация-слизняк",
         "orgDescription": "Опишите вашу организацию..."
-      }
+      },
+      " ": "[RU] [TODO: Translate settings.general. ]"
     },
     "apiKeys": {
       "title": "API-ключи",
@@ -475,6 +517,9 @@
         "loadFailed": "Не удалось загрузить API-ключи",
         "createFailed": "Не удалось создать API-ключ",
         "deleteFailed": "Не удалось удалить API-ключ"
+      },
+      "success": {
+        "copied": "[RU] [TODO: Translate settings.apiKeys.success.copied]"
       }
     },
     "help": {
@@ -544,7 +589,8 @@
         "bio": "Расскажите о себе...",
         "phone": "+1 (555) 000-0000",
         "location": "Город, Штат"
-      }
+      },
+      " ": "[RU] [TODO: Translate settings.profile. ]"
     },
     "team": {
       "title": "Управление командой",
@@ -634,7 +680,8 @@
         "memberRemoveFailed": "Не удалось удалить участника",
         "invitationRevoked": "Приглашение отозвано",
         "revokeFailed": "Не удалось отозвать приглашение."
-      }
+      },
+      " ": "[RU] [TODO: Translate settings.team. ]"
     },
     "billing": {
       "title": "Биллинг и подписка",
@@ -738,7 +785,8 @@
         },
         "toast": {
           "checkoutFailed": "Не удалось начать оформление заказа"
-        }
+        },
+        "canceled": "[RU] [TODO: Translate settings.billing.upgrade.canceled]"
       }
     },
     "auditLog": {
@@ -2177,7 +2225,45 @@
       "confidence": "{percent}% достоверность",
       "title": "Информация",
       "detail": {
-        "title": "Детали аналитики"
+        "title": "Детали аналитики",
+        "backToInsights": "[RU] [TODO: Translate dashboard.insights.detail.backToInsights]",
+        "notFound": {
+          "title": "[RU] [TODO: Translate dashboard.insights.detail.notFound.title]",
+          "description": "[RU] [TODO: Translate dashboard.insights.detail.notFound.description]"
+        },
+        "viewAllInsights": "[RU] [TODO: Translate dashboard.insights.detail.viewAllInsights]",
+        "actions": {
+          "copied": "[RU] [TODO: Translate dashboard.insights.detail.actions.copied]",
+          "copy": "[RU] [TODO: Translate dashboard.insights.detail.actions.copy]",
+          "share": "[RU] [TODO: Translate dashboard.insights.detail.actions.share]",
+          "export": "[RU] [TODO: Translate dashboard.insights.detail.actions.export]"
+        },
+        "detailsTitle": "[RU] [TODO: Translate dashboard.insights.detail.detailsTitle]",
+        "detailsDescription": "[RU] [TODO: Translate dashboard.insights.detail.detailsDescription]",
+        "exploreMore": {
+          "title": "[RU] [TODO: Translate dashboard.insights.detail.exploreMore.title]",
+          "description": "[RU] [TODO: Translate dashboard.insights.detail.exploreMore.description]",
+          "openPlayground": "[RU] [TODO: Translate dashboard.insights.detail.exploreMore.openPlayground]"
+        }
+      },
+      "description": "[RU] [TODO: Translate dashboard.insights.description]",
+      "searchPlaceholder": "[RU] [TODO: Translate dashboard.insights.searchPlaceholder]",
+      "filterByType": "[RU] [TODO: Translate dashboard.insights.filterByType]",
+      "types": {
+        "all": "[RU] [TODO: Translate dashboard.insights.types.all]",
+        "audience": "[RU] [TODO: Translate dashboard.insights.types.audience]",
+        "trend": "[RU] [TODO: Translate dashboard.insights.types.trend]",
+        "competitive": "[RU] [TODO: Translate dashboard.insights.types.competitive]",
+        "analysis": "[RU] [TODO: Translate dashboard.insights.types.analysis]"
+      },
+      "loading": "[RU] [TODO: Translate dashboard.insights.loading]",
+      "empty": {
+        "title": "[RU] [TODO: Translate dashboard.insights.empty.title]",
+        "description": "[RU] [TODO: Translate dashboard.insights.empty.description]",
+        "goToPlayground": "[RU] [TODO: Translate dashboard.insights.empty.goToPlayground]"
+      },
+      "badges": {
+        "new": "[RU] [TODO: Translate dashboard.insights.badges.new]"
       }
     },
     "sidebar": {
@@ -2480,8 +2566,15 @@
           "templates": "Шаблоны",
           "scheduled": "Запланировано",
           "sharedWithMe": "Поделились со мной"
-        }
-      }
+        },
+        "canView": "[RU] [TODO: Translate dashboard.reports.page.canView]",
+        "canEdit": "[RU] [TODO: Translate dashboard.reports.page.canEdit]",
+        "canComment": "[RU] [TODO: Translate dashboard.reports.page.canComment]"
+      },
+      "recentReports": "[RU] [TODO: Translate dashboard.reports.recentReports]",
+      "viewAll": "[RU] [TODO: Translate dashboard.reports.viewAll]",
+      "noReportsYet": "[RU] [TODO: Translate dashboard.reports.noReportsYet]",
+      "createReport": "[RU] [TODO: Translate dashboard.reports.createReport]"
     },
     "projects": {
       "activeProjects": "Активные проекты",
@@ -2643,7 +2736,8 @@
       "integrations": "Интеграции",
       "connectedServices": "Подключённые сервисы",
       "items": "{count} элементов",
-      "title": "Платформа"
+      "title": "Платформа",
+      " ": "[RU] [TODO: Translate dashboard.platform. ]"
     },
     "settings": {
       "title": "Общие настройки",
@@ -2920,7 +3014,12 @@
         "compareAudiences": "Сравнить аудитории",
         "compareDescription": "Сравнение демографических и поведенческих атрибутов между аудиториями.",
         "used": "Использовано {time}",
-        "marketsCount": "{count} рынков"
+        "marketsCount": "{count} рынков",
+        "emptyState": {
+          "title": "[RU] [TODO: Translate dashboard.pages.audiences.emptyState.title]",
+          "description": "[RU] [TODO: Translate dashboard.pages.audiences.emptyState.description]",
+          "action": "[RU] [TODO: Translate dashboard.pages.audiences.emptyState.action]"
+        }
       },
       "projects": {
         "title": "Проекты",
@@ -2993,8 +3092,11 @@
             "addMember": "Добавить участника",
             "remove": "Удалять"
           },
-          "title": "Детали проекта"
-        }
+          "title": "Детали проекта",
+          "-": "[RU] [TODO: Translate dashboard.pages.projects.detail.-]",
+          "T": "[RU] [TODO: Translate dashboard.pages.projects.detail.T]"
+        },
+        "T": "[RU] [TODO: Translate dashboard.pages.projects.T]"
       }
     },
     "audiences": {
@@ -3115,7 +3217,19 @@
           "asJson": "Экспортировать в формате JSON",
           "asCsv": "Экспортировать в формате CSV",
           "asPdf": "Экспортировать в PDF",
-          "toPowerPoint": "Экспорт в PowerPoint"
+          "toPowerPoint": "Экспорт в PowerPoint",
+          "csvHeaders": {
+            "attribute": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.attribute]",
+            "value": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.value]",
+            "behavior": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.behavior]",
+            "interest": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.interest]",
+            "audience": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.audience]",
+            "description": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.description]",
+            "size": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.size]",
+            "markets": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.markets]",
+            "behaviors": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.behaviors]",
+            "interests": "[RU] [TODO: Translate dashboard.audiences.detail.export.csvHeaders.interests]"
+          }
         },
         "overview": {
           "demographics": "Демография",
@@ -3176,7 +3290,26 @@
           "cancel": "Отмена",
           "delete": "Удалить"
         },
-        "title": "Подробности об аудиториях"
+        "title": "Подробности об аудиториях",
+        "demographics": {
+          "ageRange": "[RU] [TODO: Translate dashboard.audiences.detail.demographics.ageRange]",
+          "income": "[RU] [TODO: Translate dashboard.audiences.detail.demographics.income]",
+          "lifestyle": "[RU] [TODO: Translate dashboard.audiences.detail.demographics.lifestyle]",
+          "values": "[RU] [TODO: Translate dashboard.audiences.detail.demographics.values]"
+        },
+        "_": "[RU] [TODO: Translate dashboard.audiences.detail._]",
+        "common": {
+          "unknown": "[RU] [TODO: Translate dashboard.audiences.detail.common.unknown]",
+          "relativeTime": {
+            "justNow": "[RU] [TODO: Translate dashboard.audiences.detail.common.relativeTime.justNow]"
+          }
+        },
+        "T": "[RU] [TODO: Translate dashboard.audiences.detail.T]",
+        "a": "[RU] [TODO: Translate dashboard.audiences.detail.a]",
+        "json": "[RU] [TODO: Translate dashboard.audiences.detail.json]",
+        "csv": "[RU] [TODO: Translate dashboard.audiences.detail.csv]",
+        "pdf": "[RU] [TODO: Translate dashboard.audiences.detail.pdf]",
+        "pptx": "[RU] [TODO: Translate dashboard.audiences.detail.pptx]"
       }
     },
     "dashboards": {
@@ -3244,7 +3377,40 @@
       "title": "Панели мониторинга",
       "new": {
         "title": "Создать панель мониторинга",
-        "description": "Создайте собственную панель мониторинга с диаграммами и виджетами."
+        "description": "Создайте собственную панель мониторинга с диаграммами и виджетами.",
+        "validation": {
+          "enterName": "[RU] [TODO: Translate dashboard.dashboards.new.validation.enterName]",
+          "selectChart": "[RU] [TODO: Translate dashboard.dashboards.new.validation.selectChart]"
+        },
+        "errors": {
+          "createFailed": "[RU] [TODO: Translate dashboard.dashboards.new.errors.createFailed]",
+          "createFailedRetry": "[RU] [TODO: Translate dashboard.dashboards.new.errors.createFailedRetry]"
+        },
+        "form": {
+          "dashboardName": "[RU] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
+          "dashboardNamePlaceholder": "[RU] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
+          "descriptionLabel": "[RU] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionPlaceholder": "[RU] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
+          "publicDashboard": "[RU] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
+          "publicDescription": "[RU] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
+          "addCharts": "[RU] [TODO: Translate dashboard.dashboards.new.form.addCharts]",
+          "added": "[RU] [TODO: Translate dashboard.dashboards.new.form.added]",
+          "createNewChart": "[RU] [TODO: Translate dashboard.dashboards.new.form.createNewChart]"
+        },
+        "preview": {
+          "title": "[RU] [TODO: Translate dashboard.dashboards.new.preview.title]",
+          "name": "[RU] [TODO: Translate dashboard.dashboards.new.preview.name]",
+          "untitledDashboard": "[RU] [TODO: Translate dashboard.dashboards.new.preview.untitledDashboard]",
+          "noChartsSelected": "[RU] [TODO: Translate dashboard.dashboards.new.preview.noChartsSelected]",
+          "visibility": "[RU] [TODO: Translate dashboard.dashboards.new.preview.visibility]",
+          "public": "[RU] [TODO: Translate dashboard.dashboards.new.preview.public]",
+          "private": "[RU] [TODO: Translate dashboard.dashboards.new.preview.private]"
+        },
+        "buttons": {
+          "creating": "[RU] [TODO: Translate dashboard.dashboards.new.buttons.creating]",
+          "createDashboard": "[RU] [TODO: Translate dashboard.dashboards.new.buttons.createDashboard]",
+          "cancel": "[RU] [TODO: Translate dashboard.dashboards.new.buttons.cancel]"
+        }
       },
       "builder": {
         "title": "Конструктор информационной панели",
@@ -3252,7 +3418,12 @@
         "editTitle": "Редактировать панель мониторинга",
         "initialName": "Моя панель управления",
         "initialDescription": "Пользовательская панель мониторинга",
-        "exportFailed": "Не удалось экспортировать панель мониторинга."
+        "exportFailed": "Не удалось экспортировать панель мониторинга.",
+        "id": "[RU] [TODO: Translate dashboard.dashboards.builder.id]",
+        "saveSuccess": "[RU] [TODO: Translate dashboard.dashboards.builder.saveSuccess]",
+        "saveFailed": "[RU] [TODO: Translate dashboard.dashboards.builder.saveFailed]",
+        "a": "[RU] [TODO: Translate dashboard.dashboards.builder.a]",
+        "T": "[RU] [TODO: Translate dashboard.dashboards.builder.T]"
       },
       "detail": {
         "title": "Подробности информационной панели",
@@ -3277,7 +3448,184 @@
             "category": "[RU] Category",
             "dataSource": "[RU] Data Source"
           }
+        },
+        "@": "[RU] [TODO: Translate dashboard.dashboards.detail.@]",
+        "notFound": {
+          "title": "[RU] [TODO: Translate dashboard.dashboards.detail.notFound.title]",
+          "description": "[RU] [TODO: Translate dashboard.dashboards.detail.notFound.description]",
+          "message": "[RU] [TODO: Translate dashboard.dashboards.detail.notFound.message]",
+          "backButton": "[RU] [TODO: Translate dashboard.dashboards.detail.notFound.backButton]"
+        },
+        "a": "[RU] [TODO: Translate dashboard.dashboards.detail.a]",
+        "T": "[RU] [TODO: Translate dashboard.dashboards.detail.T]",
+        "favorites": {
+          "removeFromFavorites": "[RU] [TODO: Translate dashboard.dashboards.detail.favorites.removeFromFavorites]",
+          "addToFavorites": "[RU] [TODO: Translate dashboard.dashboards.detail.favorites.addToFavorites]"
+        },
+        "visibility": {
+          "public": "[RU] [TODO: Translate dashboard.dashboards.detail.visibility.public]",
+          "private": "[RU] [TODO: Translate dashboard.dashboards.detail.visibility.private]"
+        },
+        "tags": {
+          "addTag": "[RU] [TODO: Translate dashboard.dashboards.detail.tags.addTag]",
+          "manageTags": "[RU] [TODO: Translate dashboard.dashboards.detail.tags.manageTags]",
+          "manageTagsDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.tags.manageTagsDescription]",
+          "addNewTag": "[RU] [TODO: Translate dashboard.dashboards.detail.tags.addNewTag]",
+          "noTagsAdded": "[RU] [TODO: Translate dashboard.dashboards.detail.tags.noTagsAdded]",
+          "done": "[RU] [TODO: Translate dashboard.dashboards.detail.tags.done]"
+        },
+        "autoRefresh": {
+          "on": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
+          "off": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
+          "label": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "interval": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
+          "every1Min": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
+          "every5Min": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
+          "every15Min": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every15Min]",
+          "every30Min": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every30Min]",
+          "everyHour": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.everyHour]",
+          "refreshNow": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.refreshNow]"
+        },
+        "filters": {
+          "title": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.title]",
+          "filterCharts": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.filterCharts]",
+          "clearAll": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.clearAll]",
+          "filterDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.filterDescription]",
+          "searchCharts": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.searchCharts]",
+          "searchPlaceholder": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.searchPlaceholder]",
+          "chartTypes": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.chartTypes]",
+          "clear": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.clear]",
+          "categories": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.categories]",
+          "dataSources": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.dataSources]",
+          "activeFilters": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.activeFilters]",
+          "clearAllFilters": "[RU] [TODO: Translate dashboard.dashboards.detail.filters.clearAllFilters]"
+        },
+        "actions": {
+          "addChart": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.addChart]",
+          "share": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.share]",
+          "export": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.export]",
+          "edit": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.edit]",
+          "duplicate": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.duplicate]",
+          "copied": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.copied]",
+          "copyLink": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.copyLink]",
+          "manageAlerts": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.manageAlerts]",
+          "delete": "[RU] [TODO: Translate dashboard.dashboards.detail.actions.delete]"
+        },
+        "meta": {
+          "searchCharts": "[RU] [TODO: Translate dashboard.dashboards.detail.meta.searchCharts]"
+        },
+        "tabs": {
+          "analytics": "[RU] [TODO: Translate dashboard.dashboards.detail.tabs.analytics]",
+          "comments": "[RU] [TODO: Translate dashboard.dashboards.detail.tabs.comments]",
+          "activity": "[RU] [TODO: Translate dashboard.dashboards.detail.tabs.activity]",
+          "history": "[RU] [TODO: Translate dashboard.dashboards.detail.tabs.history]",
+          "settings": "[RU] [TODO: Translate dashboard.dashboards.detail.tabs.settings]"
+        },
+        "chartActions": {
+          "minimize": "[RU] [TODO: Translate dashboard.dashboards.detail.chartActions.minimize]",
+          "expand": "[RU] [TODO: Translate dashboard.dashboards.detail.chartActions.expand]",
+          "refreshData": "[RU] [TODO: Translate dashboard.dashboards.detail.chartActions.refreshData]",
+          "exportChart": "[RU] [TODO: Translate dashboard.dashboards.detail.chartActions.exportChart]",
+          "openInEditor": "[RU] [TODO: Translate dashboard.dashboards.detail.chartActions.openInEditor]",
+          "removeFromDashboard": "[RU] [TODO: Translate dashboard.dashboards.detail.chartActions.removeFromDashboard]"
+        },
+        "emptyState": {
+          "noChartsMatch": "[RU] [TODO: Translate dashboard.dashboards.detail.emptyState.noChartsMatch]",
+          "adjustFilters": "[RU] [TODO: Translate dashboard.dashboards.detail.emptyState.adjustFilters]",
+          "clearFilters": "[RU] [TODO: Translate dashboard.dashboards.detail.emptyState.clearFilters]"
+        },
+        "insights": {
+          "title": "[RU] [TODO: Translate dashboard.dashboards.detail.insights.title]",
+          "chartDistribution": "[RU] [TODO: Translate dashboard.dashboards.detail.insights.chartDistribution]",
+          "dataSourcesTitle": "[RU] [TODO: Translate dashboard.dashboards.detail.insights.dataSourcesTitle]",
+          "currentView": "[RU] [TODO: Translate dashboard.dashboards.detail.insights.currentView]"
+        },
+        "analytics": {
+          "totalViews": "[RU] [TODO: Translate dashboard.dashboards.detail.analytics.totalViews]",
+          "uniqueViewers": "[RU] [TODO: Translate dashboard.dashboards.detail.analytics.uniqueViewers]",
+          "avgTimeOnPage": "[RU] [TODO: Translate dashboard.dashboards.detail.analytics.avgTimeOnPage]",
+          "exports": "[RU] [TODO: Translate dashboard.dashboards.detail.analytics.exports]",
+          "viewsOverTime": "[RU] [TODO: Translate dashboard.dashboards.detail.analytics.viewsOverTime]",
+          "viewsChartComingSoon": "[RU] [TODO: Translate dashboard.dashboards.detail.analytics.viewsChartComingSoon]",
+          "mostViewedCharts": "[RU] [TODO: Translate dashboard.dashboards.detail.analytics.mostViewedCharts]"
+        },
+        "activityTab": {
+          "recentActivity": "[RU] [TODO: Translate dashboard.dashboards.detail.activityTab.recentActivity]"
+        },
+        " ": "[RU] [TODO: Translate dashboard.dashboards.detail. ]",
+        "settingsTab": {
+          "generalSettings": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.generalSettings]",
+          "publicDashboard": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.publicDashboard]",
+          "publicDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.publicDescription]",
+          "allowComments": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.allowComments]",
+          "allowCommentsDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.allowCommentsDescription]",
+          "showInSearch": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.showInSearch]",
+          "showInSearchDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.showInSearchDescription]",
+          "alertsNotifications": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.alertsNotifications]",
+          "addAlert": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.addAlert]",
+          "collaborators": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.collaborators]",
+          "inviteCollaborator": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.inviteCollaborator]",
+          "relatedDashboards": "[RU] [TODO: Translate dashboard.dashboards.detail.settingsTab.relatedDashboards]"
+        },
+        "share": {
+          "title": "[RU] [TODO: Translate dashboard.dashboards.detail.share.title]",
+          "description": "[RU] [TODO: Translate dashboard.dashboards.detail.share.description]",
+          "enterEmail": "[RU] [TODO: Translate dashboard.dashboards.detail.share.enterEmail]",
+          "viewer": "[RU] [TODO: Translate dashboard.dashboards.detail.share.viewer]",
+          "editor": "[RU] [TODO: Translate dashboard.dashboards.detail.share.editor]",
+          "admin": "[RU] [TODO: Translate dashboard.dashboards.detail.share.admin]",
+          "peopleWithAccess": "[RU] [TODO: Translate dashboard.dashboards.detail.share.peopleWithAccess]",
+          "linkSharing": "[RU] [TODO: Translate dashboard.dashboards.detail.share.linkSharing]",
+          "publicAccess": "[RU] [TODO: Translate dashboard.dashboards.detail.share.publicAccess]",
+          "publicAccessDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.share.publicAccessDescription]"
+        },
+        "exportDialog": {
+          "title": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.title]",
+          "description": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.description]",
+          "json": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.json]",
+          "jsonDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.jsonDescription]",
+          "csv": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.csv]",
+          "csvDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.csvDescription]",
+          "pdfHtml": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.pdfHtml]",
+          "pdfHtmlDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.pdfHtmlDescription]",
+          "pngImage": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.pngImage]",
+          "pngImageDescription": "[RU] [TODO: Translate dashboard.dashboards.detail.exportDialog.pngImageDescription]"
+        },
+        "json": "[RU] [TODO: Translate dashboard.dashboards.detail.json]",
+        "csv": "[RU] [TODO: Translate dashboard.dashboards.detail.csv]",
+        "pdf": "[RU] [TODO: Translate dashboard.dashboards.detail.pdf]",
+        "png": "[RU] [TODO: Translate dashboard.dashboards.detail.png]",
+        "alerts": {
+          "title": "[RU] [TODO: Translate dashboard.dashboards.detail.alerts.title]",
+          "description": "[RU] [TODO: Translate dashboard.dashboards.detail.alerts.description]",
+          "createNewAlert": "[RU] [TODO: Translate dashboard.dashboards.detail.alerts.createNewAlert]",
+          "alertName": "[RU] [TODO: Translate dashboard.dashboards.detail.alerts.alertName]",
+          "alertCondition": "[RU] [TODO: Translate dashboard.dashboards.detail.alerts.alertCondition]",
+          "addAlertButton": "[RU] [TODO: Translate dashboard.dashboards.detail.alerts.addAlertButton]",
+          "activeAlerts": "[RU] [TODO: Translate dashboard.dashboards.detail.alerts.activeAlerts]"
+        },
+        "delete": {
+          "title": "[RU] [TODO: Translate dashboard.dashboards.detail.delete.title]",
+          "cancel": "[RU] [TODO: Translate dashboard.dashboards.detail.delete.cancel]",
+          "delete": "[RU] [TODO: Translate dashboard.dashboards.detail.delete.delete]"
         }
+      },
+      "description": "[RU] [TODO: Translate dashboard.dashboards.description]",
+      "newDashboard": "[RU] [TODO: Translate dashboard.dashboards.newDashboard]",
+      "stats": {
+        "totalDashboards": "[RU] [TODO: Translate dashboard.dashboards.stats.totalDashboards]",
+        "totalViews": "[RU] [TODO: Translate dashboard.dashboards.stats.totalViews]",
+        "shared": "[RU] [TODO: Translate dashboard.dashboards.stats.shared]",
+        "exports": "[RU] [TODO: Translate dashboard.dashboards.stats.exports]"
+      },
+      "tabs": {
+        "allDashboards": "[RU] [TODO: Translate dashboard.dashboards.tabs.allDashboards]",
+        "recent": "[RU] [TODO: Translate dashboard.dashboards.tabs.recent]",
+        "favorites": "[RU] [TODO: Translate dashboard.dashboards.tabs.favorites]"
+      },
+      "grid": {
+        "noDashboardsYet": "[RU] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
+        "createFirstDashboard": "[RU] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
       }
     },
     "crosstabs": {
@@ -3444,7 +3792,205 @@
           "custom": "Пользовательский вес"
         }
       },
-      "title": "Кросс-таблицы"
+      "title": "Кросс-таблицы",
+      "analysis": {
+        "toast": {
+          "fieldUpdated": "[RU] [TODO: Translate dashboard.crosstabs.analysis.toast.fieldUpdated]",
+          "fieldDeleted": "[RU] [TODO: Translate dashboard.crosstabs.analysis.toast.fieldDeleted]",
+          "filtersApplied": "[RU] [TODO: Translate dashboard.crosstabs.analysis.toast.filtersApplied]",
+          "chartSaved": "[RU] [TODO: Translate dashboard.crosstabs.analysis.toast.chartSaved]"
+        },
+        "categories": {
+          "calculated": "[RU] [TODO: Translate dashboard.crosstabs.analysis.categories.calculated]"
+        },
+        "title": "[RU] [TODO: Translate dashboard.crosstabs.analysis.title]",
+        "more": "[RU] [TODO: Translate dashboard.crosstabs.analysis.more]",
+        "actions": {
+          "share": "[RU] [TODO: Translate dashboard.crosstabs.analysis.actions.share]",
+          "generateInsights": "[RU] [TODO: Translate dashboard.crosstabs.analysis.actions.generateInsights]"
+        },
+        "tabs": {
+          "dataGrid": "[RU] [TODO: Translate dashboard.crosstabs.analysis.tabs.dataGrid]",
+          "calculatedFields": "[RU] [TODO: Translate dashboard.crosstabs.analysis.tabs.calculatedFields]",
+          "filters": "[RU] [TODO: Translate dashboard.crosstabs.analysis.tabs.filters]",
+          "visualize": "[RU] [TODO: Translate dashboard.crosstabs.analysis.tabs.visualize]"
+        },
+        "grid": {
+          "description": "[RU] [TODO: Translate dashboard.crosstabs.analysis.grid.description]"
+        },
+        "visualize": {
+          "chartTitle": "[RU] [TODO: Translate dashboard.crosstabs.analysis.visualize.chartTitle]"
+        },
+        " - ": "[RU] [TODO: Translate dashboard.crosstabs.analysis. - ]"
+      },
+      "new": {
+        "errors": {
+          "nameRequired": "[RU] [TODO: Translate dashboard.crosstabs.new.errors.nameRequired]",
+          "audienceRequired": "[RU] [TODO: Translate dashboard.crosstabs.new.errors.audienceRequired]",
+          "metricRequired": "[RU] [TODO: Translate dashboard.crosstabs.new.errors.metricRequired]",
+          "createFailed": "[RU] [TODO: Translate dashboard.crosstabs.new.errors.createFailed]",
+          "createFailedRetry": "[RU] [TODO: Translate dashboard.crosstabs.new.errors.createFailedRetry]"
+        },
+        "title": "[RU] [TODO: Translate dashboard.crosstabs.new.title]",
+        "description": "[RU] [TODO: Translate dashboard.crosstabs.new.description]",
+        "form": {
+          "crosstabName": "[RU] [TODO: Translate dashboard.crosstabs.new.form.crosstabName]",
+          "namePlaceholder": "[RU] [TODO: Translate dashboard.crosstabs.new.form.namePlaceholder]",
+          "selectAudiences": "[RU] [TODO: Translate dashboard.crosstabs.new.form.selectAudiences]",
+          "selectMetrics": "[RU] [TODO: Translate dashboard.crosstabs.new.form.selectMetrics]"
+        },
+        "summary": {
+          "title": "[RU] [TODO: Translate dashboard.crosstabs.new.summary.title]"
+        },
+        "actions": {
+          "generating": "[RU] [TODO: Translate dashboard.crosstabs.new.actions.generating]",
+          "generate": "[RU] [TODO: Translate dashboard.crosstabs.new.actions.generate]",
+          "cancel": "[RU] [TODO: Translate dashboard.crosstabs.new.actions.cancel]"
+        }
+      },
+      "detail": {
+        "_": "[RU] [TODO: Translate dashboard.crosstabs.detail._]",
+        "notFound": {
+          "title": "[RU] [TODO: Translate dashboard.crosstabs.detail.notFound.title]",
+          "subtitle": "[RU] [TODO: Translate dashboard.crosstabs.detail.notFound.subtitle]",
+          "heading": "[RU] [TODO: Translate dashboard.crosstabs.detail.notFound.heading]",
+          "description": "[RU] [TODO: Translate dashboard.crosstabs.detail.notFound.description]",
+          "backButton": "[RU] [TODO: Translate dashboard.crosstabs.detail.notFound.backButton]"
+        },
+        "T": "[RU] [TODO: Translate dashboard.crosstabs.detail.T]",
+        "a": "[RU] [TODO: Translate dashboard.crosstabs.detail.a]",
+        "actions": {
+          "removeFromFavorites": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.removeFromFavorites]",
+          "addToFavorites": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.addToFavorites]",
+          "pauseAutoRefresh": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.pauseAutoRefresh]",
+          "enableAutoRefresh": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.enableAutoRefresh]",
+          "exitFullscreen": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.exitFullscreen]",
+          "enterFullscreen": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.enterFullscreen]",
+          "selectAll": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.selectAll]",
+          "clear": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.clear]",
+          "visualize": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.visualize]",
+          "share": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.share]",
+          "edit": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.edit]",
+          "duplicate": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.duplicate]",
+          "addToDashboard": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.addToDashboard]",
+          "copied": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.copied]",
+          "copyLink": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.copyLink]",
+          "delete": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.delete]",
+          "cancel": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.cancel]",
+          "schedule": "[RU] [TODO: Translate dashboard.crosstabs.detail.actions.schedule]"
+        },
+        "filters": {
+          "title": "[RU] [TODO: Translate dashboard.crosstabs.detail.filters.title]",
+          "clearAll": "[RU] [TODO: Translate dashboard.crosstabs.detail.filters.clearAll]",
+          "description": "[RU] [TODO: Translate dashboard.crosstabs.detail.filters.description]",
+          "quickFilters": "[RU] [TODO: Translate dashboard.crosstabs.detail.filters.quickFilters]",
+          "category": "[RU] [TODO: Translate dashboard.crosstabs.detail.filters.category]",
+          "allCategories": "[RU] [TODO: Translate dashboard.crosstabs.detail.filters.allCategories]",
+          "activeFilters": "[RU] [TODO: Translate dashboard.crosstabs.detail.filters.activeFilters]"
+        },
+        "tabs": {
+          "filters": "[RU] [TODO: Translate dashboard.crosstabs.detail.tabs.filters]",
+          "audiences": "[RU] [TODO: Translate dashboard.crosstabs.detail.tabs.audiences]",
+          "metrics": "[RU] [TODO: Translate dashboard.crosstabs.detail.tabs.metrics]"
+        },
+        "audiences": {
+          "selectAudiences": "[RU] [TODO: Translate dashboard.crosstabs.detail.audiences.selectAudiences]"
+        },
+        "metrics": {
+          "selectMetrics": "[RU] [TODO: Translate dashboard.crosstabs.detail.metrics.selectMetrics]"
+        },
+        "json": "[RU] [TODO: Translate dashboard.crosstabs.detail.json]",
+        "export": {
+          "asJson": "[RU] [TODO: Translate dashboard.crosstabs.detail.export.asJson]",
+          "asCsv": "[RU] [TODO: Translate dashboard.crosstabs.detail.export.asCsv]",
+          "asHtml": "[RU] [TODO: Translate dashboard.crosstabs.detail.export.asHtml]",
+          "asPdf": "[RU] [TODO: Translate dashboard.crosstabs.detail.export.asPdf]",
+          "asExcel": "[RU] [TODO: Translate dashboard.crosstabs.detail.export.asExcel]",
+          "asPowerPoint": "[RU] [TODO: Translate dashboard.crosstabs.detail.export.asPowerPoint]"
+        },
+        "csv": "[RU] [TODO: Translate dashboard.crosstabs.detail.csv]",
+        "html": "[RU] [TODO: Translate dashboard.crosstabs.detail.html]",
+        "pdf": "[RU] [TODO: Translate dashboard.crosstabs.detail.pdf]",
+        "excel": "[RU] [TODO: Translate dashboard.crosstabs.detail.excel]",
+        "pptx": "[RU] [TODO: Translate dashboard.crosstabs.detail.pptx]",
+        "deleteDialog": {
+          "title": "[RU] [TODO: Translate dashboard.crosstabs.detail.deleteDialog.title]"
+        },
+        "mainTabs": {
+          "data": "[RU] [TODO: Translate dashboard.crosstabs.detail.mainTabs.data]",
+          "activity": "[RU] [TODO: Translate dashboard.crosstabs.detail.mainTabs.activity]",
+          "comments": "[RU] [TODO: Translate dashboard.crosstabs.detail.mainTabs.comments]",
+          "history": "[RU] [TODO: Translate dashboard.crosstabs.detail.mainTabs.history]"
+        },
+        "insights": {
+          "title": "[RU] [TODO: Translate dashboard.crosstabs.detail.insights.title]",
+          "topPerformer": "[RU] [TODO: Translate dashboard.crosstabs.detail.insights.topPerformer]",
+          "noData": "[RU] [TODO: Translate dashboard.crosstabs.detail.insights.noData]",
+          "biggestGap": "[RU] [TODO: Translate dashboard.crosstabs.detail.insights.biggestGap]",
+          "biggestGapDesc": "[RU] [TODO: Translate dashboard.crosstabs.detail.insights.biggestGapDesc]",
+          "trending": "[RU] [TODO: Translate dashboard.crosstabs.detail.insights.trending]",
+          "noFilters": "[RU] [TODO: Translate dashboard.crosstabs.detail.insights.noFilters]"
+        },
+        "activity": {
+          "title": "[RU] [TODO: Translate dashboard.crosstabs.detail.activity.title]",
+          "description": "[RU] [TODO: Translate dashboard.crosstabs.detail.activity.description]"
+        },
+        "shareDialog": {
+          "title": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
+          "description": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
+          "emailLabel": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailPlaceholder": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
+          "role": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
+          "roles": {
+            "viewer": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.viewer]",
+            "editor": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.editor]",
+            "admin": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.admin]"
+          },
+          "shareLink": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.shareLink]"
+        },
+        "scheduleDialog": {
+          "title": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.title]",
+          "description": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.description]",
+          "recipients": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.recipients]",
+          "recipientsPlaceholder": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.recipientsPlaceholder]",
+          "frequency": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequency]",
+          "frequencies": {
+            "daily": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.daily]",
+            "weekly": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.weekly]",
+            "monthly": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.monthly]"
+          },
+          "format": "[RU] [TODO: Translate dashboard.crosstabs.detail.scheduleDialog.format]"
+        }
+      },
+      "justNow": "[RU] [TODO: Translate dashboard.crosstabs.justNow]",
+      "description": "[RU] [TODO: Translate dashboard.crosstabs.description]",
+      "newCrosstab": "[RU] [TODO: Translate dashboard.crosstabs.newCrosstab]",
+      "stats": {
+        "totalCrosstabs": "[RU] [TODO: Translate dashboard.crosstabs.stats.totalCrosstabs]",
+        "views": "[RU] [TODO: Translate dashboard.crosstabs.stats.views]",
+        "exports": "[RU] [TODO: Translate dashboard.crosstabs.stats.exports]",
+        "usedToday": "[RU] [TODO: Translate dashboard.crosstabs.stats.usedToday]"
+      },
+      "tabs": {
+        "all": "[RU] [TODO: Translate dashboard.crosstabs.tabs.all]",
+        "recent": "[RU] [TODO: Translate dashboard.crosstabs.tabs.recent]",
+        "templates": "[RU] [TODO: Translate dashboard.crosstabs.tabs.templates]"
+      },
+      "empty": {
+        "title": "[RU] [TODO: Translate dashboard.crosstabs.empty.title]",
+        "description": "[RU] [TODO: Translate dashboard.crosstabs.empty.description]"
+      },
+      "badges": {
+        "featured": "[RU] [TODO: Translate dashboard.crosstabs.badges.featured]",
+        "liveData": "[RU] [TODO: Translate dashboard.crosstabs.badges.liveData]"
+      },
+      "labels": {
+        "audienceSegments": "[RU] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
+        "metrics": "[RU] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+      },
+      "actions": {
+        "openAnalysis": "[RU] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      }
     },
     "charts": {
       "pageTracker": "Список графиков",
@@ -3504,6 +4050,38 @@
           "save": "Создать диаграмму",
           "saving": "Создание...",
           "cancel": "Отмена"
+        },
+        "errors": {
+          "nameRequired": "[RU] [TODO: Translate dashboard.charts.new.errors.nameRequired]",
+          "createFailed": "[RU] [TODO: Translate dashboard.charts.new.errors.createFailed]",
+          "createFailedRetry": "[RU] [TODO: Translate dashboard.charts.new.errors.createFailedRetry]"
+        },
+        "chartTypes": {
+          "bar": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.bar]",
+          "line": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.line]",
+          "area": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.area]",
+          "pie": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.pie]",
+          "donut": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.donut]",
+          "radar": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.radar]",
+          "scatter": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.scatter]",
+          "funnel": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.funnel]",
+          "treemap": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.treemap]",
+          "heatmap": "[RU] [TODO: Translate dashboard.charts.new.chartTypes.heatmap]"
+        },
+        "audiences": {
+          "ecoMillennials": "[RU] [TODO: Translate dashboard.charts.new.audiences.ecoMillennials]",
+          "techAdopters": "[RU] [TODO: Translate dashboard.charts.new.audiences.techAdopters]",
+          "genZCreators": "[RU] [TODO: Translate dashboard.charts.new.audiences.genZCreators]"
+        },
+        "dataSources": {
+          "socialUsage": "[RU] [TODO: Translate dashboard.charts.new.dataSources.socialUsage]",
+          "purchaseIntent": "[RU] [TODO: Translate dashboard.charts.new.dataSources.purchaseIntent]",
+          "brandAwareness": "[RU] [TODO: Translate dashboard.charts.new.dataSources.brandAwareness]"
+        },
+        "timePeriods": {
+          "last12Months": "[RU] [TODO: Translate dashboard.charts.new.timePeriods.last12Months]",
+          "last6Months": "[RU] [TODO: Translate dashboard.charts.new.timePeriods.last6Months]",
+          "last3Months": "[RU] [TODO: Translate dashboard.charts.new.timePeriods.last3Months]"
         }
       },
       "detail": {
@@ -3580,7 +4158,14 @@
         "annotations": {
           "addPlaceholder": "Добавьте примечание, наблюдение или вопрос об этой диаграмме..."
         },
-        "title": "Детали графиков"
+        "title": "Детали графиков",
+        "a": "[RU] [TODO: Translate dashboard.charts.detail.a]",
+        "T": "[RU] [TODO: Translate dashboard.charts.detail.T]",
+        "png": "[RU] [TODO: Translate dashboard.charts.detail.png]",
+        "csv": "[RU] [TODO: Translate dashboard.charts.detail.csv]",
+        "json": "[RU] [TODO: Translate dashboard.charts.detail.json]",
+        "pdf": "[RU] [TODO: Translate dashboard.charts.detail.pdf]",
+        "pptx": "[RU] [TODO: Translate dashboard.charts.detail.pptx]"
       },
       "templateGallery": {
         "title": "Шаблоны диаграмм",
@@ -3880,7 +4465,12 @@
           "description": "Вы уверены, что хотите удалить \"{name}\"? Это действие невозможно отменить.",
           "cancel": "Отмена",
           "delete": "Удалить"
-        }
+        },
+        "T": "[RU] [TODO: Translate dashboard.brandTracking.detail.T]",
+        "a": "[RU] [TODO: Translate dashboard.brandTracking.detail.a]",
+        "json": "[RU] [TODO: Translate dashboard.brandTracking.detail.json]",
+        "csv": "[RU] [TODO: Translate dashboard.brandTracking.detail.csv]",
+        "pdf": "[RU] [TODO: Translate dashboard.brandTracking.detail.pdf]"
       }
     },
     "organizationSwitcher": {
@@ -4679,7 +5269,39 @@
     },
     "changes": {
       "title": "Отслеживание изменений",
-      "description": "Отслеживайте и отслеживайте изменения данных с течением времени"
+      "description": "Отслеживайте и отслеживайте изменения данных с течением времени",
+      "tabs": {
+        "timeline": "[RU] [TODO: Translate dashboard.changes.tabs.timeline]",
+        "compare": "[RU] [TODO: Translate dashboard.changes.tabs.compare]",
+        "evolution": "[RU] [TODO: Translate dashboard.changes.tabs.evolution]",
+        "alerts": "[RU] [TODO: Translate dashboard.changes.tabs.alerts]"
+      },
+      "compare": {
+        "title": "[RU] [TODO: Translate dashboard.changes.compare.title]",
+        "description": "[RU] [TODO: Translate dashboard.changes.compare.description]",
+        "compareVersions": "[RU] [TODO: Translate dashboard.changes.compare.compareVersions]"
+      },
+      "evolution": {
+        "title": "[RU] [TODO: Translate dashboard.changes.evolution.title]",
+        "description": "[RU] [TODO: Translate dashboard.changes.evolution.description]",
+        "viewEvolution": "[RU] [TODO: Translate dashboard.changes.evolution.viewEvolution]"
+      },
+      "compareDialog": {
+        "entity": "[RU] [TODO: Translate dashboard.changes.compareDialog.entity]"
+      },
+      "evolutionDialog": {
+        "selectTitle": "[RU] [TODO: Translate dashboard.changes.evolutionDialog.selectTitle]",
+        "enterIdPlaceholder": "[RU] [TODO: Translate dashboard.changes.evolutionDialog.enterIdPlaceholder]"
+      },
+      "alerts": {
+        "loading": "[RU] [TODO: Translate dashboard.changes.alerts.loading]",
+        "noAlerts": "[RU] [TODO: Translate dashboard.changes.alerts.noAlerts]",
+        "noAlertsDescription": "[RU] [TODO: Translate dashboard.changes.alerts.noAlertsDescription]",
+        "title": "[RU] [TODO: Translate dashboard.changes.alerts.title]",
+        "markAllRead": "[RU] [TODO: Translate dashboard.changes.alerts.markAllRead]",
+        "markRead": "[RU] [TODO: Translate dashboard.changes.alerts.markRead]",
+        "dismiss": "[RU] [TODO: Translate dashboard.changes.alerts.dismiss]"
+      }
     },
     "inbox": {
       "title": "Агенты входящих сообщений",
@@ -4767,7 +5389,8 @@
         "autoRespondHelp": "Автоматически отправлять ответы отправителям запросов",
         "requireApproval": "Требовать одобрения",
         "requireApprovalHelp": "Проверяйте ответы перед отправкой"
-      }
+      },
+      " ": "[RU] [TODO: Translate dashboard.inbox. ]"
     }
   },
   "audiences": {
@@ -6240,7 +6863,29 @@
       "newPipeline": "Новый конвейер",
       "searchPlaceholder": "Поиск конвейеров...",
       "allRuns": "Все запуски",
-      "schedules": "Расписания",
+      "schedules": {
+        " ": "[RU] [TODO: Translate gwi.pipelines.schedules. ]",
+        "title": "[RU] [TODO: Translate gwi.pipelines.schedules.title]",
+        "description": "[RU] [TODO: Translate gwi.pipelines.schedules.description]",
+        "newSchedule": "[RU] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
+        "totalSchedules": "[RU] [TODO: Translate gwi.pipelines.schedules.totalSchedules]",
+        "activeSchedules": "[RU] [TODO: Translate gwi.pipelines.schedules.activeSchedules]",
+        "pausedSchedules": "[RU] [TODO: Translate gwi.pipelines.schedules.pausedSchedules]",
+        "scheduledPipelines": "[RU] [TODO: Translate gwi.pipelines.schedules.scheduledPipelines]",
+        "scheduledPipelinesDescription": "[RU] [TODO: Translate gwi.pipelines.schedules.scheduledPipelinesDescription]",
+        "pipeline": "[RU] [TODO: Translate gwi.pipelines.schedules.pipeline]",
+        "schedule": "[RU] [TODO: Translate gwi.pipelines.schedules.schedule]",
+        "lastRun": "[RU] [TODO: Translate gwi.pipelines.schedules.lastRun]",
+        "nextRun": "[RU] [TODO: Translate gwi.pipelines.schedules.nextRun]",
+        "never": "[RU] [TODO: Translate gwi.pipelines.schedules.never]",
+        "calculatedAtRuntime": "[RU] [TODO: Translate gwi.pipelines.schedules.calculatedAtRuntime]",
+        "runNow": "[RU] [TODO: Translate gwi.pipelines.schedules.runNow]",
+        "editSchedule": "[RU] [TODO: Translate gwi.pipelines.schedules.editSchedule]",
+        "noScheduledPipelines": "[RU] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
+        "noScheduledPipelinesDescription": "[RU] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
+        "createScheduledPipeline": "[RU] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
+        "loading": "[RU] [TODO: Translate gwi.pipelines.schedules.loading]"
+      },
       "validationRules": "Правила валидации",
       "pipeline": "Конвейер",
       "type": "Тип",
@@ -8901,8 +9546,10 @@
           "toast": {
             "createSuccess": "[RU] SSO configuration created successfully",
             "createFailed": "[RU] Failed to create SSO configuration"
-          }
-        }
+          },
+          ",": "[RU] [TODO: Translate admin.identity.sso.new.,]"
+        },
+        ",": "[RU] [TODO: Translate admin.identity.sso.,]"
       },
       "domains": {
         "title": "Управление доменами",
@@ -8948,7 +9595,12 @@
           "isPrimary": "Основной домен",
           "isPrimaryDescription": "Установить в качестве основного домена для этой организации",
           "autoJoin": "Автоматическое присоединение",
-          "autoJoinDescription": "Автоматически добавлять пользователей с этим доменом в организацию"
+          "autoJoinDescription": "Автоматически добавлять пользователей с этим доменом в организацию",
+          "domainHint": "[RU] [TODO: Translate admin.identity.domains.form.domainHint]",
+          "searchOrganizations": "[RU] [TODO: Translate admin.identity.domains.form.searchOrganizations]",
+          "noOrganizationsFound": "[RU] [TODO: Translate admin.identity.domains.form.noOrganizationsFound]",
+          "ssoEnforced": "[RU] [TODO: Translate admin.identity.domains.form.ssoEnforced]",
+          "ssoEnforcedDescription": "[RU] [TODO: Translate admin.identity.domains.form.ssoEnforcedDescription]"
         },
         "verification": {
           "title": "Проверка домена",
@@ -8963,7 +9615,28 @@
           "checkVerification": "Проверить проверку",
           "verificationPending": "Ожидается проверка. Для распространения изменений DNS может потребоваться до 48 часов.",
           "verificationSuccess": "Домен успешно подтвержден",
-          "verificationFailed": "Проверка не удалась. Пожалуйста, проверьте настройки DNS."
+          "verificationFailed": "Проверка не удалась. Пожалуйста, проверьте настройки DNS.",
+          "dns_txt": {
+            "instructions": "[RU] [TODO: Translate admin.identity.domains.verification.dns_txt.instructions]"
+          },
+          "host": "[RU] [TODO: Translate admin.identity.domains.verification.host]",
+          "value": "[RU] [TODO: Translate admin.identity.domains.verification.value]",
+          "dns_cname": {
+            "instructions": "[RU] [TODO: Translate admin.identity.domains.verification.dns_cname.instructions]"
+          },
+          "pointsTo": "[RU] [TODO: Translate admin.identity.domains.verification.pointsTo]",
+          "meta_tag": {
+            "instructions": "[RU] [TODO: Translate admin.identity.domains.verification.meta_tag.instructions]"
+          },
+          "file_upload": {
+            "instructions": "[RU] [TODO: Translate admin.identity.domains.verification.file_upload.instructions]"
+          },
+          "contents": "[RU] [TODO: Translate admin.identity.domains.verification.contents]",
+          "afterConfiguring": "[RU] [TODO: Translate admin.identity.domains.verification.afterConfiguring]",
+          "alreadyVerified": "[RU] [TODO: Translate admin.identity.domains.verification.alreadyVerified]",
+          "lastAttempt": "[RU] [TODO: Translate admin.identity.domains.verification.lastAttempt]",
+          "time": "[RU] [TODO: Translate admin.identity.domains.verification.time]",
+          "result": "[RU] [TODO: Translate admin.identity.domains.verification.result]"
         },
         "table": {
           "domain": "Домен",
@@ -8985,6 +9658,72 @@
           "domainRequired": "Требуется домен",
           "domainFormat": "Пожалуйста, введите действительный формат домена",
           "domainExists": "Этот домен уже зарегистрирован"
+        },
+        "errors": {
+          "domainAndOrgRequired": "[RU] [TODO: Translate admin.identity.domains.errors.domainAndOrgRequired]",
+          "invalidDomain": "[RU] [TODO: Translate admin.identity.domains.errors.invalidDomain]",
+          "addFailed": "[RU] [TODO: Translate admin.identity.domains.errors.addFailed]",
+          "noPermission": "[RU] [TODO: Translate admin.identity.domains.errors.noPermission]",
+          "fetchFailed": "[RU] [TODO: Translate admin.identity.domains.errors.fetchFailed]",
+          "updateFailed": "[RU] [TODO: Translate admin.identity.domains.errors.updateFailed]",
+          "verificationFailed": "[RU] [TODO: Translate admin.identity.domains.errors.verificationFailed]",
+          "deleteFailed": "[RU] [TODO: Translate admin.identity.domains.errors.deleteFailed]"
+        },
+        "messages": {
+          "domainAdded": "[RU] [TODO: Translate admin.identity.domains.messages.domainAdded]",
+          "settingsUpdated": "[RU] [TODO: Translate admin.identity.domains.messages.settingsUpdated]",
+          "domainVerified": "[RU] [TODO: Translate admin.identity.domains.messages.domainVerified]",
+          "domainDeleted": "[RU] [TODO: Translate admin.identity.domains.messages.domainDeleted]",
+          "copiedToClipboard": "[RU] [TODO: Translate admin.identity.domains.messages.copiedToClipboard]"
+        },
+        "backToDomains": "[RU] [TODO: Translate admin.identity.domains.backToDomains]",
+        "new": {
+          "title": "[RU] [TODO: Translate admin.identity.domains.new.title]",
+          "description": "[RU] [TODO: Translate admin.identity.domains.new.description]",
+          "adding": "[RU] [TODO: Translate admin.identity.domains.new.adding]",
+          "addDomain": "[RU] [TODO: Translate admin.identity.domains.new.addDomain]",
+          "domainDetails": "[RU] [TODO: Translate admin.identity.domains.new.domainDetails]",
+          "domainDetailsDescription": "[RU] [TODO: Translate admin.identity.domains.new.domainDetailsDescription]",
+          "domainSettings": "[RU] [TODO: Translate admin.identity.domains.new.domainSettings]",
+          "domainSettingsDescription": "[RU] [TODO: Translate admin.identity.domains.new.domainSettingsDescription]",
+          "verificationRequired": "[RU] [TODO: Translate admin.identity.domains.new.verificationRequired]"
+        },
+        "domainNotFound": "[RU] [TODO: Translate admin.identity.domains.domainNotFound]",
+        "actions": {
+          "verifyNow": "[RU] [TODO: Translate admin.identity.domains.actions.verifyNow]",
+          "viewSsoConfig": "[RU] [TODO: Translate admin.identity.domains.actions.viewSsoConfig]"
+        },
+        "dialogs": {
+          "deleteTitle": "[RU] [TODO: Translate admin.identity.domains.dialogs.deleteTitle]",
+          "deleteDescription": "[RU] [TODO: Translate admin.identity.domains.dialogs.deleteDescription]"
+        },
+        "tabs": {
+          "overview": "[RU] [TODO: Translate admin.identity.domains.tabs.overview]",
+          "verification": "[RU] [TODO: Translate admin.identity.domains.tabs.verification]",
+          "settings": "[RU] [TODO: Translate admin.identity.domains.tabs.settings]"
+        },
+        "detail": {
+          "autoJoin": "[RU] [TODO: Translate admin.identity.domains.detail.autoJoin]",
+          "ssoEnforced": "[RU] [TODO: Translate admin.identity.domains.detail.ssoEnforced]",
+          "enforced": "[RU] [TODO: Translate admin.identity.domains.detail.enforced]",
+          "optional": "[RU] [TODO: Translate admin.identity.domains.detail.optional]",
+          "domainDetails": "[RU] [TODO: Translate admin.identity.domains.detail.domainDetails]",
+          "domain": "[RU] [TODO: Translate admin.identity.domains.detail.domain]",
+          "organization": "[RU] [TODO: Translate admin.identity.domains.detail.organization]",
+          "verificationMethod": "[RU] [TODO: Translate admin.identity.domains.detail.verificationMethod]",
+          "verifiedAt": "[RU] [TODO: Translate admin.identity.domains.detail.verifiedAt]",
+          "notVerified": "[RU] [TODO: Translate admin.identity.domains.detail.notVerified]",
+          "created": "[RU] [TODO: Translate admin.identity.domains.detail.created]",
+          "expires": "[RU] [TODO: Translate admin.identity.domains.detail.expires]",
+          "linkedSsoConfig": "[RU] [TODO: Translate admin.identity.domains.detail.linkedSsoConfig]",
+          "ssoConfigured": "[RU] [TODO: Translate admin.identity.domains.detail.ssoConfigured]",
+          "provider": "[RU] [TODO: Translate admin.identity.domains.detail.provider]"
+        },
+        "settings": {
+          "title": "[RU] [TODO: Translate admin.identity.domains.settings.title]",
+          "ssoRequired": "[RU] [TODO: Translate admin.identity.domains.settings.ssoRequired]",
+          "autoAddUsers": "[RU] [TODO: Translate admin.identity.domains.settings.autoAddUsers]",
+          "requireSso": "[RU] [TODO: Translate admin.identity.domains.settings.requireSso]"
         }
       },
       "scim": {
@@ -9270,7 +10009,11 @@
           "block": "Блокировать устройство",
           "revoke": "Отозвать доверие",
           "approveSelected": "Утвердить выбранное",
-          "blockSelected": "Заблокировать выбранное"
+          "blockSelected": "Заблокировать выбранное",
+          "viewUserProfile": "[RU] [TODO: Translate admin.identity.devices.actions.viewUserProfile]",
+          "trustDevice": "[RU] [TODO: Translate admin.identity.devices.actions.trustDevice]",
+          "revokeTrust": "[RU] [TODO: Translate admin.identity.devices.actions.revokeTrust]",
+          "deleteDevice": "[RU] [TODO: Translate admin.identity.devices.actions.deleteDevice]"
         },
         "confirmations": {
           "trustTitle": "Доверительное устройство",
@@ -9284,6 +10027,81 @@
           "organizationRequired": "Требуется организация",
           "policyNameRequired": "Укажите название политики.",
           "atLeastOnePlatform": "Выберите хотя бы одну платформу"
+        },
+        "errors": {
+          "fetchFailed": "[RU] [TODO: Translate admin.identity.devices.errors.fetchFailed]",
+          "updateFailed": "[RU] [TODO: Translate admin.identity.devices.errors.updateFailed]",
+          "trustFailed": "[RU] [TODO: Translate admin.identity.devices.errors.trustFailed]",
+          "revokeFailed": "[RU] [TODO: Translate admin.identity.devices.errors.revokeFailed]",
+          "deleteFailed": "[RU] [TODO: Translate admin.identity.devices.errors.deleteFailed]"
+        },
+        "messages": {
+          "deviceUpdated": "[RU] [TODO: Translate admin.identity.devices.messages.deviceUpdated]",
+          "deviceTrusted": "[RU] [TODO: Translate admin.identity.devices.messages.deviceTrusted]",
+          "trustRevoked": "[RU] [TODO: Translate admin.identity.devices.messages.trustRevoked]",
+          "deviceDeleted": "[RU] [TODO: Translate admin.identity.devices.messages.deviceDeleted]"
+        },
+        "deviceNotFound": "[RU] [TODO: Translate admin.identity.devices.deviceNotFound]",
+        "compliance": {
+          "compliant": "[RU] [TODO: Translate admin.identity.devices.compliance.compliant]",
+          "nonCompliant": "[RU] [TODO: Translate admin.identity.devices.compliance.nonCompliant]",
+          "nonCompliantTitle": "[RU] [TODO: Translate admin.identity.devices.compliance.nonCompliantTitle]",
+          "nonCompliantDescription": "[RU] [TODO: Translate admin.identity.devices.compliance.nonCompliantDescription]",
+          "title": "[RU] [TODO: Translate admin.identity.devices.compliance.title]",
+          "description": "[RU] [TODO: Translate admin.identity.devices.compliance.description]",
+          "overallCompliance": "[RU] [TODO: Translate admin.identity.devices.compliance.overallCompliance]",
+          "meetsRequirements": "[RU] [TODO: Translate admin.identity.devices.compliance.meetsRequirements]",
+          "doesNotMeetRequirements": "[RU] [TODO: Translate admin.identity.devices.compliance.doesNotMeetRequirements]",
+          "complianceChecks": "[RU] [TODO: Translate admin.identity.devices.compliance.complianceChecks]"
+        },
+        "tabs": {
+          "overview": "[RU] [TODO: Translate admin.identity.devices.tabs.overview]",
+          "security": "[RU] [TODO: Translate admin.identity.devices.tabs.security]",
+          "activity": "[RU] [TODO: Translate admin.identity.devices.tabs.activity]"
+        },
+        "detail": {
+          "deviceDetails": "[RU] [TODO: Translate admin.identity.devices.detail.deviceDetails]",
+          "deviceId": "[RU] [TODO: Translate admin.identity.devices.detail.deviceId]",
+          "type": "[RU] [TODO: Translate admin.identity.devices.detail.type]",
+          "platform": "[RU] [TODO: Translate admin.identity.devices.detail.platform]",
+          "osVersion": "[RU] [TODO: Translate admin.identity.devices.detail.osVersion]",
+          "model": "[RU] [TODO: Translate admin.identity.devices.detail.model]",
+          "manufacturer": "[RU] [TODO: Translate admin.identity.devices.detail.manufacturer]",
+          "mdmManaged": "[RU] [TODO: Translate admin.identity.devices.detail.mdmManaged]",
+          "userInformation": "[RU] [TODO: Translate admin.identity.devices.detail.userInformation]",
+          "noName": "[RU] [TODO: Translate admin.identity.devices.detail.noName]",
+          "organizations": "[RU] [TODO: Translate admin.identity.devices.detail.organizations]",
+          "lastActivity": "[RU] [TODO: Translate admin.identity.devices.detail.lastActivity]",
+          "lastActive": "[RU] [TODO: Translate admin.identity.devices.detail.lastActive]",
+          "lastIp": "[RU] [TODO: Translate admin.identity.devices.detail.lastIp]",
+          "lastLocation": "[RU] [TODO: Translate admin.identity.devices.detail.lastLocation]"
+        },
+        "form": {
+          "deviceName": "[RU] [TODO: Translate admin.identity.devices.form.deviceName]",
+          "deviceNamePlaceholder": "[RU] [TODO: Translate admin.identity.devices.form.deviceNamePlaceholder]",
+          "markAsCompliant": "[RU] [TODO: Translate admin.identity.devices.form.markAsCompliant]",
+          "markAsCompliantDescription": "[RU] [TODO: Translate admin.identity.devices.form.markAsCompliantDescription]",
+          "mdmManaged": "[RU] [TODO: Translate admin.identity.devices.form.mdmManaged]",
+          "mdmManagedDescription": "[RU] [TODO: Translate admin.identity.devices.form.mdmManagedDescription]"
+        },
+        "unknown": "[RU] [TODO: Translate admin.identity.devices.unknown]",
+        "never": "[RU] [TODO: Translate admin.identity.devices.never]",
+        "security": {
+          "trustManagement": "[RU] [TODO: Translate admin.identity.devices.security.trustManagement]",
+          "trustManagementDescription": "[RU] [TODO: Translate admin.identity.devices.security.trustManagementDescription]",
+          "trustStatus": "[RU] [TODO: Translate admin.identity.devices.security.trustStatus]"
+        },
+        "activity": {
+          "title": "[RU] [TODO: Translate admin.identity.devices.activity.title]",
+          "description": "[RU] [TODO: Translate admin.identity.devices.activity.description]",
+          "action": "[RU] [TODO: Translate admin.identity.devices.activity.action]",
+          "details": "[RU] [TODO: Translate admin.identity.devices.activity.details]",
+          "date": "[RU] [TODO: Translate admin.identity.devices.activity.date]",
+          "noLogs": "[RU] [TODO: Translate admin.identity.devices.activity.noLogs]"
+        },
+        "dialogs": {
+          "deleteDevice": "[RU] [TODO: Translate admin.identity.devices.dialogs.deleteDevice]",
+          "deleteDeviceDescription": "[RU] [TODO: Translate admin.identity.devices.dialogs.deleteDeviceDescription]"
         }
       },
       "title": "Управление идентификацией",
@@ -9481,7 +10299,8 @@
           "messages": {
             "createSuccess": "Событие угрозы успешно создано"
           }
-        }
+        },
+        ",": "[RU] [TODO: Translate admin.security.threats.,]"
       },
       "policies": {
         "title": "Политики безопасности",
@@ -9656,7 +10475,42 @@
       },
       "title": "Центр безопасности",
       "description": "Мониторинг и управление безопасностью платформы",
-      "sessions": "Сессии",
+      "sessions": {
+        "toast": {
+          "fetchFailed": "[RU] [TODO: Translate admin.security.sessions.toast.fetchFailed]",
+          "refreshed": "[RU] [TODO: Translate admin.security.sessions.toast.refreshed]",
+          "terminated": "[RU] [TODO: Translate admin.security.sessions.toast.terminated]",
+          "terminateFailed": "[RU] [TODO: Translate admin.security.sessions.toast.terminateFailed]",
+          "bulkTerminateFailed": "[RU] [TODO: Translate admin.security.sessions.toast.bulkTerminateFailed]"
+        },
+        "unknown": "[RU] [TODO: Translate admin.security.sessions.unknown]",
+        "device": {
+          "desktop": "[RU] [TODO: Translate admin.security.sessions.device.desktop]",
+          "mobile": "[RU] [TODO: Translate admin.security.sessions.device.mobile]",
+          "tablet": "[RU] [TODO: Translate admin.security.sessions.device.tablet]"
+        },
+        "expired": "[RU] [TODO: Translate admin.security.sessions.expired]",
+        " ": "[RU] [TODO: Translate admin.security.sessions. ]",
+        "table": {
+          "user": "[RU] [TODO: Translate admin.security.sessions.table.user]",
+          "session": "[RU] [TODO: Translate admin.security.sessions.table.session]",
+          "ipAddress": "[RU] [TODO: Translate admin.security.sessions.table.ipAddress]",
+          "device": "[RU] [TODO: Translate admin.security.sessions.table.device]",
+          "status": "[RU] [TODO: Translate admin.security.sessions.table.status]",
+          "expires": "[RU] [TODO: Translate admin.security.sessions.table.expires]"
+        },
+        "unknownUser": "[RU] [TODO: Translate admin.security.sessions.unknownUser]",
+        "tooltip": {
+          "browser": "[RU] [TODO: Translate admin.security.sessions.tooltip.browser]",
+          "os": "[RU] [TODO: Translate admin.security.sessions.tooltip.os]",
+          "device": "[RU] [TODO: Translate admin.security.sessions.tooltip.device]"
+        },
+        "status": {
+          "active": "[RU] [TODO: Translate admin.security.sessions.status.active]",
+          "expired": "[RU] [TODO: Translate admin.security.sessions.status.expired]"
+        },
+        "expires": "[RU] [TODO: Translate admin.security.sessions.expires]"
+      },
       "loading": "Загрузка...",
       "platformSecurityScore": "Оценка безопасности платформы",
       "authenticationOverview": "Обзор аутентификации",
@@ -9886,7 +10740,11 @@
           "ENFORCE": "Принудить",
           "MONITOR": "Монитор",
           "DISABLED": "Неполноценный"
-        }
+        },
+        "violationType": "[RU] [TODO: Translate admin.security.violations.violationType]",
+        "severity": "[RU] [TODO: Translate admin.security.violations.severity]",
+        "status": "[RU] [TODO: Translate admin.security.violations.status]",
+        "createdAt": "[RU] [TODO: Translate admin.security.violations.createdAt]"
       },
       "ipBlocklist": {
         "title": "Черный список IP-адресов",
@@ -10045,7 +10903,10 @@
           "lastUpdated": "Последнее обновление",
           "createdBy": "Создано"
         },
-        "addToBlocklist": "Добавить в черный список"
+        "addToBlocklist": "Добавить в черный список",
+        "": {
+          "": "[RU] [TODO: Translate admin.security.ipBlocklist..]"
+        }
       }
     },
     "scim": {
@@ -10401,7 +11262,8 @@
         "auditLog": "Журнал аудита",
         "admins": "Админы",
         "settings": "Настройки"
-      }
+      },
+      " ": "[RU] [TODO: Translate admin.navigation. ]"
     },
     "plans": {
       "title": "Планы",
@@ -10836,7 +11698,8 @@
         "customRange": "Пользовательский диапазон",
         "startDate": "Дата начала",
         "endDate": "Дата окончания",
-        "clear": "Прозрачный"
+        "clear": "Прозрачный",
+        "T": "[RU] [TODO: Translate admin.activity.filters.T]"
       },
       "recentActivity": "Недавняя активность",
       "activitiesFound": "Найдено действий: {count}",
@@ -10871,8 +11734,13 @@
         "adminProductivity": "Производительность администратора",
         "unknownAdmin": "Неизвестный администратор",
         "unknownRole": "Неизвестная роль",
-        "noActivityData": "Данные о действиях администратора отсутствуют."
-      }
+        "noActivityData": "Данные о действиях администратора отсутствуют.",
+        "T": "[RU] [TODO: Translate admin.activity.stats.T]",
+        " ": "[RU] [TODO: Translate admin.activity.stats. ]"
+      },
+      "a": "[RU] [TODO: Translate admin.activity.a]",
+      "T": "[RU] [TODO: Translate admin.activity.T]",
+      " ": "[RU] [TODO: Translate admin.activity. ]"
     },
     "sso": {
       "title": "Конфигурации единого входа",
@@ -11020,12 +11888,17 @@
         "allTypes": "Все типы",
         "allStatus": "Все Статус",
         "trustStatus": "Статус доверия",
-        "compliance": "Согласие"
+        "compliance": "Согласие",
+        "allPlatforms": "[RU] [TODO: Translate admin.devices.filters.allPlatforms]"
       },
       "actions": {
         "revokeTrust": "Отозвать доверие",
         "approveTrust": "Утвердить доверие",
-        "deleteDevices": "Удалить устройства"
+        "deleteDevices": "Удалить устройства",
+        "trustDevice": "[RU] [TODO: Translate admin.devices.actions.trustDevice]",
+        "blockDevice": "[RU] [TODO: Translate admin.devices.actions.blockDevice]",
+        "bulkRevokeTrust": "[RU] [TODO: Translate admin.devices.actions.bulkRevokeTrust]",
+        "bulkBlockDevices": "[RU] [TODO: Translate admin.devices.actions.bulkBlockDevices]"
       },
       "dialogs": {
         "revokeMultiple": "Отозвать доверие для нескольких устройств",
@@ -11035,7 +11908,9 @@
         "deleteTitle": "Удалить устройство",
         "deleteDescription": "Вы уверены, что хотите удалить {deviceName}? Это действие невозможно отменить.",
         "revokeTitle": "Отозвать доверие устройства",
-        "revokeDescription": "Вы уверены, что хотите отозвать доверие для этого устройства? Чтобы восстановить доступ, устройство необходимо будет повторно утвердить."
+        "revokeDescription": "Вы уверены, что хотите отозвать доверие для этого устройства? Чтобы восстановить доступ, устройство необходимо будет повторно утвердить.",
+        "blockMultiple": "[RU] [TODO: Translate admin.devices.dialogs.blockMultiple]",
+        "blockMultipleDescription": "[RU] [TODO: Translate admin.devices.dialogs.blockMultipleDescription]"
       },
       "errors": {
         "fetchFailed": "Не удалось получить устройства.",
@@ -11043,14 +11918,17 @@
         "revokeFailed": "Не удалось отозвать доверие устройства.",
         "bulkRevokeFailed": "Не удалось отозвать некоторые устройства.",
         "deleteFailed": "Не удалось удалить устройство",
-        "bulkDeleteFailed": "Не удалось удалить устройства."
+        "bulkDeleteFailed": "Не удалось удалить устройства.",
+        "blockFailed": "[RU] [TODO: Translate admin.devices.errors.blockFailed]",
+        "bulkBlockFailed": "[RU] [TODO: Translate admin.devices.errors.bulkBlockFailed]"
       },
       "messages": {
         "deviceTrusted": "Устройство успешно проверено",
         "trustRevoked": "Доверие к устройству отозвано",
         "bulkRevoked": "Устройства ({count}) успешно аннулированы",
         "deviceDeleted": "Устройство успешно удалено",
-        "bulkDeleted": "Удалены устройства: {count}."
+        "bulkDeleted": "Удалены устройства: {count}.",
+        "deviceBlocked": "[RU] [TODO: Translate admin.devices.messages.deviceBlocked]"
       },
       "managePolicies": "Управление политиками",
       "registerDevice": "Зарегистрировать устройство",
@@ -11229,7 +12107,20 @@
           "deviceTrusted": "Устройство успешно проверено",
           "trustRevoked": "Доверие успешно отозвано",
           "deviceDeleted": "Устройство успешно удалено"
-        }
+        },
+        "revokedByAdmin": "[RU] [TODO: Translate admin.devices.detail.revokedByAdmin]",
+        "trustStatuses": {
+          "trusted": "[RU] [TODO: Translate admin.devices.detail.trustStatuses.trusted]",
+          "pending": "[RU] [TODO: Translate admin.devices.detail.trustStatuses.pending]",
+          "blocked": "[RU] [TODO: Translate admin.devices.detail.trustStatuses.blocked]",
+          "revoked": "[RU] [TODO: Translate admin.devices.detail.trustStatuses.revoked]"
+        },
+        "complianceStatuses": {
+          "compliant": "[RU] [TODO: Translate admin.devices.detail.complianceStatuses.compliant]",
+          "nonCompliant": "[RU] [TODO: Translate admin.devices.detail.complianceStatuses.nonCompliant]"
+        },
+        "never": "[RU] [TODO: Translate admin.devices.detail.never]",
+        "unknown": "[RU] [TODO: Translate admin.devices.detail.unknown]"
       },
       "policies": {
         "title": "Политики устройства",
@@ -11381,10 +12272,82 @@
             "policyDeleted": "Политика успешно удалена",
             "policyEnabled": "Политика успешно включена",
             "policyDisabled": "Политика успешно отключена"
+          },
+          "admin": {
+            "devices": {
+              "policies": {
+                "nameRequired": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.nameRequired]",
+                "created": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.created]",
+                "updated": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.updated]",
+                "disabled": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.disabled]",
+                "enabled": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.enabled]",
+                "updateStatusFailed": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.updateStatusFailed]",
+                "deleted": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleted]",
+                "notFound": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.notFound]",
+                "createTitle": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.createTitle]",
+                "title": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.title]",
+                "deleteTitle": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleteTitle]",
+                "deleteDescription": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.deleteDescription]",
+                "details": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.details]",
+                "editTitle": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.editTitle]",
+                "nameRequiredLabel": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.nameRequiredLabel]",
+                "namePlaceholder": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.namePlaceholder]",
+                "descriptionLabel": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.descriptionLabel]",
+                "descriptionPlaceholder": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.descriptionPlaceholder]",
+                "scopeLabel": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.scopeLabel]",
+                "priorityLabel": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.priorityLabel]",
+                "deviceRequirements": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.deviceRequirements]",
+                "requireEncryption": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireEncryption]",
+                "requirePasscode": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirePasscode]",
+                "requireBiometric": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireBiometric]",
+                "requireMdm": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requireMdm]",
+                "enforcementActions": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcementActions]",
+                "blockOnViolation": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockOnViolation]",
+                "wipeOnViolation": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.wipeOnViolation]",
+                "notifyOnViolation": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.notifyOnViolation]",
+                "createButton": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.createButton]",
+                "overview": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.overview]",
+                "requirements": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirements]",
+                "enforcement": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcement]",
+                "status": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.status]",
+                "createdBy": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.createdBy]",
+                "lastUpdated": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.lastUpdated]",
+                "requirementsDescription": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.requirementsDescription]",
+                "platformRestrictions": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.platformRestrictions]",
+                "allowedPlatforms": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.allowedPlatforms]",
+                "allPlatforms": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.allPlatforms]",
+                "blockedPlatforms": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockedPlatforms]",
+                "enforcementDescription": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.enforcementDescription]",
+                "blockOnViolationDescription": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.blockOnViolationDescription]",
+                "wipeOnViolationDescription": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.wipeOnViolationDescription]",
+                "notifyOnViolationDescription": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.notifyOnViolationDescription]",
+                "warningWipeEnabled": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.warningWipeEnabled]",
+                "warningWipeDescription": "[RU] [TODO: Translate admin.devices.policies.detail.admin.devices.policies.warningWipeDescription]"
+              }
+            }
+          },
+          "common": {
+            "back": "[RU] [TODO: Translate admin.devices.policies.detail.common.back]",
+            "active": "[RU] [TODO: Translate admin.devices.policies.detail.common.active]",
+            "inactive": "[RU] [TODO: Translate admin.devices.policies.detail.common.inactive]",
+            "disable": "[RU] [TODO: Translate admin.devices.policies.detail.common.disable]",
+            "enable": "[RU] [TODO: Translate admin.devices.policies.detail.common.enable]",
+            "delete": "[RU] [TODO: Translate admin.devices.policies.detail.common.delete]",
+            "cancel": "[RU] [TODO: Translate admin.devices.policies.detail.common.cancel]",
+            "creating": "[RU] [TODO: Translate admin.devices.policies.detail.common.creating]",
+            "name": "[RU] [TODO: Translate admin.devices.policies.detail.common.name]",
+            "noDescription": "[RU] [TODO: Translate admin.devices.policies.detail.common.noDescription]",
+            "system": "[RU] [TODO: Translate admin.devices.policies.detail.common.system]",
+            "required": "[RU] [TODO: Translate admin.devices.policies.detail.common.required]",
+            "notRequired": "[RU] [TODO: Translate admin.devices.policies.detail.common.notRequired]",
+            "enabled": "[RU] [TODO: Translate admin.devices.policies.detail.common.enabled]",
+            "disabled": "[RU] [TODO: Translate admin.devices.policies.detail.common.disabled]"
           }
         }
       },
-      "noDevicesFound": "Устройства не найдены"
+      "noDevicesFound": "Устройства не найдены",
+      "unknownModel": "[RU] [TODO: Translate admin.devices.unknownModel]",
+      "noDevices": "[RU] [TODO: Translate admin.devices.noDevices]"
     },
     "securityPolicies": {
       "title": "Политики безопасности",
@@ -11675,7 +12638,8 @@
         "assignPlanFailed": "[RU] Failed to assign plan",
         "grantFeatureFailed": "[RU] Failed to grant feature",
         "revokeEntitlementFailed": "[RU] Failed to revoke entitlement"
-      }
+      },
+      " ": "[RU] [TODO: Translate admin.tenants. ]"
     },
     "users": {
       "title": "Управление пользователями",
@@ -11822,7 +12786,9 @@
         "bulkRevokeSessionsSuccess": "[RU] {count} sessions revoked successfully",
         "createFailed": "[RU] Failed to create user",
         "userCreated": "[RU] User created successfully"
-      }
+      },
+      " ": "[RU] [TODO: Translate admin.users. ]",
+      "ipAddress": "[RU] [TODO: Translate admin.users.ipAddress]"
     },
     "broadcast": {
       "title": "Вещательный центр",
@@ -11936,7 +12902,9 @@
         "delivered": "{count} доставлено",
         "opened": "Открыто: {count} ({percent}%)",
         "recipients": "{count} получателей",
-        "scheduledFor": "Запланировано"
+        "scheduledFor": "Запланировано",
+        "title": "[RU] [TODO: Translate admin.broadcast.delivery.title]",
+        "description": "[RU] [TODO: Translate admin.broadcast.delivery.description]"
       },
       "deliveryStats": {
         "funnel": "Воронка доставки",
@@ -12075,7 +13043,12 @@
         "bulkDeleteSuccess": "Сообщений успешно удалено: {count}.",
         "bulkDeletePartialFailed": "Не удалось удалить сообщения ({count}).",
         "bulkDeleteFailed": "Не удалось удалить сообщения"
-      }
+      },
+      "\\n": "[RU] [TODO: Translate admin.broadcast.\\n]",
+      "T": "[RU] [TODO: Translate admin.broadcast.T]",
+      "schedule": "[RU] [TODO: Translate admin.broadcast.schedule]",
+      "search": "[RU] [TODO: Translate admin.broadcast.search]",
+      "type": "[RU] [TODO: Translate admin.broadcast.type]"
     },
     "compliance": {
       "title": "Центр соответствия",
@@ -12463,8 +13436,10 @@
           },
           "errors": {
             "createFailed": "Не удалось создать юридическое удержание."
-          }
-        }
+          },
+          "T": "[RU] [TODO: Translate admin.compliance.legalHolds.new.T]"
+        },
+        "T": "[RU] [TODO: Translate admin.compliance.legalHolds.T]"
       },
       "retentionPolicies": {
         "title": "Политика хранения данных",
@@ -12718,13 +13693,25 @@
         "dialog": {
           "scheduleTitle": "Плановый аудит",
           "scheduleDescription": "Запланируйте новый аудит соответствия",
-          "selectFramework": "Выберите фреймворк"
+          "selectFramework": "Выберите фреймворк",
+          "auditorPlaceholder": "[RU] [TODO: Translate admin.compliance.audits.dialog.auditorPlaceholder]",
+          "scheduling": "[RU] [TODO: Translate admin.compliance.audits.dialog.scheduling]"
         },
         "fields": {
           "framework": "Рамки",
           "type": "Тип",
           "scheduledDate": "Запланированная дата",
-          "auditor": "Аудитор"
+          "auditor": "Аудитор",
+          "organizationOptional": "[RU] [TODO: Translate admin.compliance.audits.fields.organizationOptional]",
+          "auditType": "[RU] [TODO: Translate admin.compliance.audits.fields.auditType]",
+          "notes": "[RU] [TODO: Translate admin.compliance.audits.fields.notes]",
+          "status": "[RU] [TODO: Translate admin.compliance.audits.fields.status]",
+          "scorePercent": "[RU] [TODO: Translate admin.compliance.audits.fields.scorePercent]",
+          "reportUrl": "[RU] [TODO: Translate admin.compliance.audits.fields.reportUrl]",
+          "score": "[RU] [TODO: Translate admin.compliance.audits.fields.score]",
+          "scheduled": "[RU] [TODO: Translate admin.compliance.audits.fields.scheduled]",
+          "started": "[RU] [TODO: Translate admin.compliance.audits.fields.started]",
+          "completed": "[RU] [TODO: Translate admin.compliance.audits.fields.completed]"
         },
         "errors": {
           "scheduleFailed": "Не удалось запланировать аудит.",
@@ -12732,7 +13719,38 @@
           "startFailed": "Не удалось начать аудит.",
           "cancelFailed": "Не удалось отменить аудит.",
           "fetchFailed": "Не удалось получить данные аудита.",
-          "updateFailed": "Не удалось обновить аудит."
+          "updateFailed": "Не удалось обновить аудит.",
+          "frameworkAndDateRequired": "[RU] [TODO: Translate admin.compliance.audits.errors.frameworkAndDateRequired]"
+        },
+        "new": {
+          "title": "[RU] [TODO: Translate admin.compliance.audits.new.title]",
+          "description": "[RU] [TODO: Translate admin.compliance.audits.new.description]",
+          "scheduling": "[RU] [TODO: Translate admin.compliance.audits.new.scheduling]",
+          "auditDetails": "[RU] [TODO: Translate admin.compliance.audits.new.auditDetails]",
+          "configureAudit": "[RU] [TODO: Translate admin.compliance.audits.new.configureAudit]",
+          "platformWideAudit": "[RU] [TODO: Translate admin.compliance.audits.new.platformWideAudit]",
+          "leaveEmptyForPlatformWide": "[RU] [TODO: Translate admin.compliance.audits.new.leaveEmptyForPlatformWide]",
+          "notesPlaceholder": "[RU] [TODO: Translate admin.compliance.audits.new.notesPlaceholder]"
+        },
+        "notFound": "[RU] [TODO: Translate admin.compliance.audits.notFound]",
+        "detail": {
+          "auditScore": "[RU] [TODO: Translate admin.compliance.audits.detail.auditScore]",
+          "viewReport": "[RU] [TODO: Translate admin.compliance.audits.detail.viewReport]",
+          "auditDetails": "[RU] [TODO: Translate admin.compliance.audits.detail.auditDetails]",
+          "framework": "[RU] [TODO: Translate admin.compliance.audits.detail.framework]",
+          "organization": "[RU] [TODO: Translate admin.compliance.audits.detail.organization]",
+          "scope": "[RU] [TODO: Translate admin.compliance.audits.detail.scope]",
+          "platformWideAudit": "[RU] [TODO: Translate admin.compliance.audits.detail.platformWideAudit]",
+          "auditFindings": "[RU] [TODO: Translate admin.compliance.audits.detail.auditFindings]",
+          "auditFindingsDescription": "[RU] [TODO: Translate admin.compliance.audits.detail.auditFindingsDescription]",
+          "noFindings": "[RU] [TODO: Translate admin.compliance.audits.detail.noFindings]",
+          "recommendations": "[RU] [TODO: Translate admin.compliance.audits.detail.recommendations]",
+          "recommendationsDescription": "[RU] [TODO: Translate admin.compliance.audits.detail.recommendationsDescription]",
+          "noRecommendations": "[RU] [TODO: Translate admin.compliance.audits.detail.noRecommendations]"
+        },
+        "tabs": {
+          "findings": "[RU] [TODO: Translate admin.compliance.audits.tabs.findings]",
+          "recommendations": "[RU] [TODO: Translate admin.compliance.audits.tabs.recommendations]"
         }
       },
       "attestations": {
@@ -12785,8 +13803,55 @@
         "errors": {
           "deleteFailed": "Не удалось удалить подтверждение.",
           "updateFailed": "Не удалось обновить подтверждение.",
-          "fetchFailed": "Не удалось получить подтверждение."
-        }
+          "fetchFailed": "Не удалось получить подтверждение.",
+          "frameworkAndOrgRequired": "[RU] [TODO: Translate admin.compliance.attestations.errors.frameworkAndOrgRequired]",
+          "createFailed": "[RU] [TODO: Translate admin.compliance.attestations.errors.createFailed]"
+        },
+        "new": {
+          "title": "[RU] [TODO: Translate admin.compliance.attestations.new.title]",
+          "description": "[RU] [TODO: Translate admin.compliance.attestations.new.description]",
+          "createAttestation": "[RU] [TODO: Translate admin.compliance.attestations.new.createAttestation]",
+          "attestationDetails": "[RU] [TODO: Translate admin.compliance.attestations.new.attestationDetails]",
+          "configureAttestation": "[RU] [TODO: Translate admin.compliance.attestations.new.configureAttestation]",
+          "selectOrganization": "[RU] [TODO: Translate admin.compliance.attestations.new.selectOrganization]",
+          "selectFramework": "[RU] [TODO: Translate admin.compliance.attestations.new.selectFramework]",
+          "expirationDateHint": "[RU] [TODO: Translate admin.compliance.attestations.new.expirationDateHint]",
+          "attestedByPlaceholder": "[RU] [TODO: Translate admin.compliance.attestations.new.attestedByPlaceholder]"
+        },
+        "fields": {
+          "organization": "[RU] [TODO: Translate admin.compliance.attestations.fields.organization]",
+          "framework": "[RU] [TODO: Translate admin.compliance.attestations.fields.framework]",
+          "initialStatus": "[RU] [TODO: Translate admin.compliance.attestations.fields.initialStatus]",
+          "validUntilOptional": "[RU] [TODO: Translate admin.compliance.attestations.fields.validUntilOptional]",
+          "attestedByOptional": "[RU] [TODO: Translate admin.compliance.attestations.fields.attestedByOptional]",
+          "status": "[RU] [TODO: Translate admin.compliance.attestations.fields.status]",
+          "scorePercent": "[RU] [TODO: Translate admin.compliance.attestations.fields.scorePercent]",
+          "notes": "[RU] [TODO: Translate admin.compliance.attestations.fields.notes]",
+          "score": "[RU] [TODO: Translate admin.compliance.attestations.fields.score]",
+          "attestedBy": "[RU] [TODO: Translate admin.compliance.attestations.fields.attestedBy]",
+          "attestedDate": "[RU] [TODO: Translate admin.compliance.attestations.fields.attestedDate]",
+          "validUntil": "[RU] [TODO: Translate admin.compliance.attestations.fields.validUntil]"
+        },
+        "notFound": "[RU] [TODO: Translate admin.compliance.attestations.notFound]",
+        "unknownOrganization": "[RU] [TODO: Translate admin.compliance.attestations.unknownOrganization]",
+        "detail": {
+          "complianceScore": "[RU] [TODO: Translate admin.compliance.attestations.detail.complianceScore]",
+          "attestationDetails": "[RU] [TODO: Translate admin.compliance.attestations.detail.attestationDetails]",
+          "organization": "[RU] [TODO: Translate admin.compliance.attestations.detail.organization]",
+          "framework": "[RU] [TODO: Translate admin.compliance.attestations.detail.framework]",
+          "complianceFindings": "[RU] [TODO: Translate admin.compliance.attestations.detail.complianceFindings]",
+          "complianceFindingsDescription": "[RU] [TODO: Translate admin.compliance.attestations.detail.complianceFindingsDescription]",
+          "noFindings": "[RU] [TODO: Translate admin.compliance.attestations.detail.noFindings]",
+          "evidenceDocuments": "[RU] [TODO: Translate admin.compliance.attestations.detail.evidenceDocuments]",
+          "evidenceDocumentsDescription": "[RU] [TODO: Translate admin.compliance.attestations.detail.evidenceDocumentsDescription]",
+          "uploaded": "[RU] [TODO: Translate admin.compliance.attestations.detail.uploaded]",
+          "noEvidence": "[RU] [TODO: Translate admin.compliance.attestations.detail.noEvidence]"
+        },
+        "tabs": {
+          "findings": "[RU] [TODO: Translate admin.compliance.attestations.tabs.findings]",
+          "evidence": "[RU] [TODO: Translate admin.compliance.attestations.tabs.evidence]"
+        },
+        "unknown": "[RU] [TODO: Translate admin.compliance.attestations.unknown]"
       },
       "dataExports": {
         "title": "Экспорт данных",
@@ -12850,7 +13915,12 @@
         },
         "fields": {
           "exportType": "Тип экспорта",
-          "format": "Формат"
+          "format": "Формат",
+          "user": "[RU] [TODO: Translate admin.compliance.dataExports.fields.user]",
+          "organization": "[RU] [TODO: Translate admin.compliance.dataExports.fields.organization]",
+          "legalHold": "[RU] [TODO: Translate admin.compliance.dataExports.fields.legalHold]",
+          "status": "[RU] [TODO: Translate admin.compliance.dataExports.fields.status]",
+          "type": "[RU] [TODO: Translate admin.compliance.dataExports.fields.type]"
         },
         "formats": {
           "json": "JSON",
@@ -12862,8 +13932,81 @@
           "deleteFailed": "Не удалось удалить экспорт данных.",
           "retryFailed": "Не удалось повторить экспорт данных.",
           "fetchFailed": "Не удалось получить экспортированные данные.",
-          "updateFailed": "Не удалось обновить экспорт данных."
+          "updateFailed": "Не удалось обновить экспорт данных.",
+          "typeRequired": "[RU] [TODO: Translate admin.compliance.dataExports.errors.typeRequired]",
+          "userRequired": "[RU] [TODO: Translate admin.compliance.dataExports.errors.userRequired]",
+          "orgRequired": "[RU] [TODO: Translate admin.compliance.dataExports.errors.orgRequired]",
+          "legalHoldRequired": "[RU] [TODO: Translate admin.compliance.dataExports.errors.legalHoldRequired]"
+        },
+        "new": {
+          "types": {
+            "userData": "[RU] [TODO: Translate admin.compliance.dataExports.new.types.userData]",
+            "orgData": "[RU] [TODO: Translate admin.compliance.dataExports.new.types.orgData]",
+            "gdprExport": "[RU] [TODO: Translate admin.compliance.dataExports.new.types.gdprExport]",
+            "legalHold": "[RU] [TODO: Translate admin.compliance.dataExports.new.types.legalHold]",
+            "backup": "[RU] [TODO: Translate admin.compliance.dataExports.new.types.backup]"
+          },
+          "title": "[RU] [TODO: Translate admin.compliance.dataExports.new.title]",
+          "description": "[RU] [TODO: Translate admin.compliance.dataExports.new.description]",
+          "exportConfiguration": "[RU] [TODO: Translate admin.compliance.dataExports.new.exportConfiguration]",
+          "configureDescription": "[RU] [TODO: Translate admin.compliance.dataExports.new.configureDescription]",
+          "optional": "[RU] [TODO: Translate admin.compliance.dataExports.new.optional]",
+          "selectUser": "[RU] [TODO: Translate admin.compliance.dataExports.new.selectUser]",
+          "noSpecificUser": "[RU] [TODO: Translate admin.compliance.dataExports.new.noSpecificUser]",
+          "selectOrganization": "[RU] [TODO: Translate admin.compliance.dataExports.new.selectOrganization]",
+          "selectLegalHold": "[RU] [TODO: Translate admin.compliance.dataExports.new.selectLegalHold]",
+          "note": "[RU] [TODO: Translate admin.compliance.dataExports.new.note]",
+          "noteDescription": "[RU] [TODO: Translate admin.compliance.dataExports.new.noteDescription]"
+        },
+        "notFound": "[RU] [TODO: Translate admin.compliance.dataExports.notFound]",
+        "detail": {
+          "title": "[RU] [TODO: Translate admin.compliance.dataExports.detail.title]",
+          "exportFailed": "[RU] [TODO: Translate admin.compliance.dataExports.detail.exportFailed]",
+          "exportExpired": "[RU] [TODO: Translate admin.compliance.dataExports.detail.exportExpired]",
+          "fileSize": "[RU] [TODO: Translate admin.compliance.dataExports.detail.fileSize]",
+          "exportDetails": "[RU] [TODO: Translate admin.compliance.dataExports.detail.exportDetails]",
+          "requested": "[RU] [TODO: Translate admin.compliance.dataExports.detail.requested]",
+          "started": "[RU] [TODO: Translate admin.compliance.dataExports.detail.started]",
+          "completed": "[RU] [TODO: Translate admin.compliance.dataExports.detail.completed]",
+          "expires": "[RU] [TODO: Translate admin.compliance.dataExports.detail.expires]",
+          "requestedBy": "[RU] [TODO: Translate admin.compliance.dataExports.detail.requestedBy]",
+          "unknownRequester": "[RU] [TODO: Translate admin.compliance.dataExports.detail.unknownRequester]",
+          "subjectUser": "[RU] [TODO: Translate admin.compliance.dataExports.detail.subjectUser]",
+          "subjectOrganization": "[RU] [TODO: Translate admin.compliance.dataExports.detail.subjectOrganization]",
+          "legalHold": "[RU] [TODO: Translate admin.compliance.dataExports.detail.legalHold]",
+          "exportSubject": "[RU] [TODO: Translate admin.compliance.dataExports.detail.exportSubject]",
+          "holdName": "[RU] [TODO: Translate admin.compliance.dataExports.detail.holdName]",
+          "caseNumber": "[RU] [TODO: Translate admin.compliance.dataExports.detail.caseNumber]",
+          "noSpecificSubject": "[RU] [TODO: Translate admin.compliance.dataExports.detail.noSpecificSubject]",
+          "exportScope": "[RU] [TODO: Translate admin.compliance.dataExports.detail.exportScope]",
+          "exportScopeDescription": "[RU] [TODO: Translate admin.compliance.dataExports.detail.exportScopeDescription]",
+          "noScopeConfiguration": "[RU] [TODO: Translate admin.compliance.dataExports.detail.noScopeConfiguration]"
+        },
+        "tabs": {
+          "scope": "[RU] [TODO: Translate admin.compliance.dataExports.tabs.scope]"
         }
+      },
+      "severity": {
+        "critical": "[RU] [TODO: Translate admin.compliance.severity.critical]",
+        "high": "[RU] [TODO: Translate admin.compliance.severity.high]",
+        "medium": "[RU] [TODO: Translate admin.compliance.severity.medium]",
+        "low": "[RU] [TODO: Translate admin.compliance.severity.low]"
+      },
+      "tabs": {
+        "overview": "[RU] [TODO: Translate admin.compliance.tabs.overview]"
+      },
+      "fields": {
+        "name": "[RU] [TODO: Translate admin.compliance.fields.name]",
+        "slug": "[RU] [TODO: Translate admin.compliance.fields.slug]",
+        "code": "[RU] [TODO: Translate admin.compliance.fields.code]",
+        "version": "[RU] [TODO: Translate admin.compliance.fields.version]",
+        "email": "[RU] [TODO: Translate admin.compliance.fields.email]"
+      },
+      "priority": {
+        "critical": "[RU] [TODO: Translate admin.compliance.priority.critical]",
+        "high": "[RU] [TODO: Translate admin.compliance.priority.high]",
+        "medium": "[RU] [TODO: Translate admin.compliance.priority.medium]",
+        "low": "[RU] [TODO: Translate admin.compliance.priority.low]"
       }
     },
     "analytics": {
@@ -12985,7 +14128,8 @@
           "lowerBound": "Нижняя граница",
           "upperBound": "Верхняя граница",
           "confidenceLabel": "Уверенность"
-        }
+        },
+        "a": "[RU] [TODO: Translate admin.analytics.revenue.a]"
       },
       "features": {
         "title": "Аналитика использования функций",
@@ -13027,7 +14171,8 @@
         "errors": {
           "fetchFailed": "Не удалось получить данные об использовании функций.",
           "unknown": "Произошла неизвестная ошибка"
-        }
+        },
+        "T": "[RU] [TODO: Translate admin.analytics.features.T]"
       },
       "reports": {
         "title": "Пользовательские отчеты",
@@ -13371,6 +14516,237 @@
             "triggeredBy": "Инициировано"
           }
         }
+      },
+      "featureAdoption": {
+        "title": "[RU] [TODO: Translate admin.analytics.featureAdoption.title]",
+        "description": "[RU] [TODO: Translate admin.analytics.featureAdoption.description]",
+        "noData": "[RU] [TODO: Translate admin.analytics.featureAdoption.noData]"
+      },
+      "featureHeatmap": {
+        "title": "[RU] [TODO: Translate admin.analytics.featureHeatmap.title]",
+        "description": "[RU] [TODO: Translate admin.analytics.featureHeatmap.description]",
+        "noData": "[RU] [TODO: Translate admin.analytics.featureHeatmap.noData]",
+        "table": {
+          "feature": "[RU] [TODO: Translate admin.analytics.featureHeatmap.table.feature]"
+        },
+        "legend": {
+          "usageIntensity": "[RU] [TODO: Translate admin.analytics.featureHeatmap.legend.usageIntensity]",
+          "none": "[RU] [TODO: Translate admin.analytics.featureHeatmap.legend.none]",
+          "low": "[RU] [TODO: Translate admin.analytics.featureHeatmap.legend.low]",
+          "medium": "[RU] [TODO: Translate admin.analytics.featureHeatmap.legend.medium]",
+          "high": "[RU] [TODO: Translate admin.analytics.featureHeatmap.legend.high]"
+        }
+      },
+      "adoptionTrend": {
+        "title": "[RU] [TODO: Translate admin.analytics.adoptionTrend.title]",
+        "description": "[RU] [TODO: Translate admin.analytics.adoptionTrend.description]",
+        "filterByCategory": "[RU] [TODO: Translate admin.analytics.adoptionTrend.filterByCategory]",
+        "allCategories": "[RU] [TODO: Translate admin.analytics.adoptionTrend.allCategories]",
+        "features": "[RU] [TODO: Translate admin.analytics.adoptionTrend.features]",
+        "clear": "[RU] [TODO: Translate admin.analytics.adoptionTrend.clear]",
+        "selectAll": "[RU] [TODO: Translate admin.analytics.adoptionTrend.selectAll]",
+        "selectFeaturesPrompt": "[RU] [TODO: Translate admin.analytics.adoptionTrend.selectFeaturesPrompt]",
+        "noData": "[RU] [TODO: Translate admin.analytics.adoptionTrend.noData]",
+        "adoption": "[RU] [TODO: Translate admin.analytics.adoptionTrend.adoption]"
+      },
+      "activityChart": {
+        " ": "[RU] [TODO: Translate admin.analytics.activityChart. ]",
+        "title": "[RU] [TODO: Translate admin.analytics.activityChart.title]",
+        "description": "[RU] [TODO: Translate admin.analytics.activityChart.description]",
+        "tabs": {
+          "dailyTrend": "[RU] [TODO: Translate admin.analytics.activityChart.tabs.dailyTrend]",
+          "daily": "[RU] [TODO: Translate admin.analytics.activityChart.tabs.daily]",
+          "hourly": "[RU] [TODO: Translate admin.analytics.activityChart.tabs.hourly]",
+          "hours": "[RU] [TODO: Translate admin.analytics.activityChart.tabs.hours]",
+          "topActions": "[RU] [TODO: Translate admin.analytics.activityChart.tabs.topActions]",
+          "actions": "[RU] [TODO: Translate admin.analytics.activityChart.tabs.actions]",
+          "status": "[RU] [TODO: Translate admin.analytics.activityChart.tabs.status]"
+        },
+        "sections": {
+          "dailyActivity": "[RU] [TODO: Translate admin.analytics.activityChart.sections.dailyActivity]",
+          "activityByHour": "[RU] [TODO: Translate admin.analytics.activityChart.sections.activityByHour]",
+          "topActions": "[RU] [TODO: Translate admin.analytics.activityChart.sections.topActions]",
+          "byResourceType": "[RU] [TODO: Translate admin.analytics.activityChart.sections.byResourceType]",
+          "statusBreakdown": "[RU] [TODO: Translate admin.analytics.activityChart.sections.statusBreakdown]"
+        },
+        "status": {
+          "successful": "[RU] [TODO: Translate admin.analytics.activityChart.status.successful]",
+          "failed": "[RU] [TODO: Translate admin.analytics.activityChart.status.failed]",
+          "pending": "[RU] [TODO: Translate admin.analytics.activityChart.status.pending]"
+        }
+      },
+      "healthTrend": {
+        "title": "[RU] [TODO: Translate admin.analytics.healthTrend.title]",
+        "description": "[RU] [TODO: Translate admin.analytics.healthTrend.description]",
+        "noData": "[RU] [TODO: Translate admin.analytics.healthTrend.noData]",
+        "tabs": {
+          "overall": "[RU] [TODO: Translate admin.analytics.healthTrend.tabs.overall]",
+          "breakdown": "[RU] [TODO: Translate admin.analytics.healthTrend.tabs.breakdown]"
+        },
+        "legend": {
+          "overallScore": "[RU] [TODO: Translate admin.analytics.healthTrend.legend.overallScore]",
+          "usage": "[RU] [TODO: Translate admin.analytics.healthTrend.legend.usage]",
+          "engagement": "[RU] [TODO: Translate admin.analytics.healthTrend.legend.engagement]",
+          "support": "[RU] [TODO: Translate admin.analytics.healthTrend.legend.support]",
+          "payment": "[RU] [TODO: Translate admin.analytics.healthTrend.legend.payment]",
+          "growth": "[RU] [TODO: Translate admin.analytics.healthTrend.legend.growth]",
+          "score": "[RU] [TODO: Translate admin.analytics.healthTrend.legend.score]"
+        }
+      },
+      "churnRisk": {
+        "low": "[RU] [TODO: Translate admin.analytics.churnRisk.low]",
+        "medium": "[RU] [TODO: Translate admin.analytics.churnRisk.medium]",
+        "high": "[RU] [TODO: Translate admin.analytics.churnRisk.high]",
+        "critical": "[RU] [TODO: Translate admin.analytics.churnRisk.critical]"
+      },
+      "npsDistribution": {
+        "title": "[RU] [TODO: Translate admin.analytics.npsDistribution.title]",
+        "legend": {
+          "detractors": "[RU] [TODO: Translate admin.analytics.npsDistribution.legend.detractors]",
+          "passives": "[RU] [TODO: Translate admin.analytics.npsDistribution.legend.passives]",
+          "promoters": "[RU] [TODO: Translate admin.analytics.npsDistribution.legend.promoters]"
+        }
+      },
+      "npsGauge": {
+        "labels": {
+          "noData": "[RU] [TODO: Translate admin.analytics.npsGauge.labels.noData]",
+          "needsImprovement": "[RU] [TODO: Translate admin.analytics.npsGauge.labels.needsImprovement]",
+          "excellent": "[RU] [TODO: Translate admin.analytics.npsGauge.labels.excellent]",
+          "great": "[RU] [TODO: Translate admin.analytics.npsGauge.labels.great]",
+          "good": "[RU] [TODO: Translate admin.analytics.npsGauge.labels.good]",
+          "okay": "[RU] [TODO: Translate admin.analytics.npsGauge.labels.okay]"
+        },
+        "title": "[RU] [TODO: Translate admin.analytics.npsGauge.title]",
+        "categories": {
+          "promoters": "[RU] [TODO: Translate admin.analytics.npsGauge.categories.promoters]",
+          "passives": "[RU] [TODO: Translate admin.analytics.npsGauge.categories.passives]",
+          "detractors": "[RU] [TODO: Translate admin.analytics.npsGauge.categories.detractors]"
+        }
+      },
+      "cohortAnalysis": {
+        "title": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.title]",
+        "description": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.description]",
+        "avgLogoRetention": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.avgLogoRetention]",
+        "avgRevenueRetention": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.avgRevenueRetention]",
+        "table": {
+          "cohort": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.table.cohort]",
+          "initial": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.table.initial]",
+          "current": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.table.current]",
+          "initialMrr": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.table.initialMrr]",
+          "currentMrr": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.table.currentMrr]",
+          "logoRetention": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.table.logoRetention]",
+          "revenueRetention": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.table.revenueRetention]",
+          "months": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.table.months]"
+        },
+        "retentionHeatmap": "[RU] [TODO: Translate admin.analytics.cohortAnalysis.retentionHeatmap]"
+      },
+      "revenueCards": {
+        "mrr": {
+          "title": "[RU] [TODO: Translate admin.analytics.revenueCards.mrr.title]",
+          "description": "[RU] [TODO: Translate admin.analytics.revenueCards.mrr.description]"
+        },
+        "arr": {
+          "title": "[RU] [TODO: Translate admin.analytics.revenueCards.arr.title]",
+          "description": "[RU] [TODO: Translate admin.analytics.revenueCards.arr.description]"
+        },
+        "totalCustomers": {
+          "title": "[RU] [TODO: Translate admin.analytics.revenueCards.totalCustomers.title]",
+          "description": "[RU] [TODO: Translate admin.analytics.revenueCards.totalCustomers.description]"
+        },
+        "arpu": {
+          "title": "[RU] [TODO: Translate admin.analytics.revenueCards.arpu.title]",
+          "description": "[RU] [TODO: Translate admin.analytics.revenueCards.arpu.description]"
+        },
+        "ltv": {
+          "title": "[RU] [TODO: Translate admin.analytics.revenueCards.ltv.title]",
+          "description": "[RU] [TODO: Translate admin.analytics.revenueCards.ltv.description]"
+        },
+        "churnRate": {
+          "title": "[RU] [TODO: Translate admin.analytics.revenueCards.churnRate.title]",
+          "description": "[RU] [TODO: Translate admin.analytics.revenueCards.churnRate.description]"
+        },
+        "nrr": {
+          "title": "[RU] [TODO: Translate admin.analytics.revenueCards.nrr.title]",
+          "description": "[RU] [TODO: Translate admin.analytics.revenueCards.nrr.description]"
+        },
+        "mrrGrowth": {
+          "title": "[RU] [TODO: Translate admin.analytics.revenueCards.mrrGrowth.title]",
+          "description": "[RU] [TODO: Translate admin.analytics.revenueCards.mrrGrowth.description]"
+        },
+        "vsLastPeriod": "[RU] [TODO: Translate admin.analytics.revenueCards.vsLastPeriod]"
+      },
+      "revenueByPlan": {
+        "title": "[RU] [TODO: Translate admin.analytics.revenueByPlan.title]",
+        "loading": "[RU] [TODO: Translate admin.analytics.revenueByPlan.loading]",
+        "description": "[RU] [TODO: Translate admin.analytics.revenueByPlan.description]",
+        "noData": "[RU] [TODO: Translate admin.analytics.revenueByPlan.noData]",
+        "totalMrr": "[RU] [TODO: Translate admin.analytics.revenueByPlan.totalMrr]",
+        "arpuByPlan": "[RU] [TODO: Translate admin.analytics.revenueByPlan.arpuByPlan]"
+      },
+      "churnAnalysis": {
+        "status": {
+          "excellent": "[RU] [TODO: Translate admin.analytics.churnAnalysis.status.excellent]",
+          "good": "[RU] [TODO: Translate admin.analytics.churnAnalysis.status.good]",
+          "moderate": "[RU] [TODO: Translate admin.analytics.churnAnalysis.status.moderate]",
+          "high": "[RU] [TODO: Translate admin.analytics.churnAnalysis.status.high]"
+        },
+        "title": "[RU] [TODO: Translate admin.analytics.churnAnalysis.title]",
+        "loading": "[RU] [TODO: Translate admin.analytics.churnAnalysis.loading]",
+        "description": "[RU] [TODO: Translate admin.analytics.churnAnalysis.description]",
+        "trend": {
+          "improving": "[RU] [TODO: Translate admin.analytics.churnAnalysis.trend.improving]",
+          "worsening": "[RU] [TODO: Translate admin.analytics.churnAnalysis.trend.worsening]",
+          "stable": "[RU] [TODO: Translate admin.analytics.churnAnalysis.trend.stable]"
+        },
+        "metrics": {
+          "customerChurn": "[RU] [TODO: Translate admin.analytics.churnAnalysis.metrics.customerChurn]",
+          "lastPeriod": "[RU] [TODO: Translate admin.analytics.churnAnalysis.metrics.lastPeriod]",
+          "revenueChurn": "[RU] [TODO: Translate admin.analytics.churnAnalysis.metrics.revenueChurn]",
+          "monthlyMrrChurn": "[RU] [TODO: Translate admin.analytics.churnAnalysis.metrics.monthlyMrrChurn]",
+          "nrr": "[RU] [TODO: Translate admin.analytics.churnAnalysis.metrics.nrr]",
+          "growingFromExisting": "[RU] [TODO: Translate admin.analytics.churnAnalysis.metrics.growingFromExisting]",
+          "netContraction": "[RU] [TODO: Translate admin.analytics.churnAnalysis.metrics.netContraction]"
+        },
+        "churnTrend": "[RU] [TODO: Translate admin.analytics.churnAnalysis.churnTrend]",
+        "tooltip": {
+          "customer": "[RU] [TODO: Translate admin.analytics.churnAnalysis.tooltip.customer]",
+          "revenue": "[RU] [TODO: Translate admin.analytics.churnAnalysis.tooltip.revenue]",
+          "lostRevenue": "[RU] [TODO: Translate admin.analytics.churnAnalysis.tooltip.lostRevenue]"
+        },
+        "legend": {
+          "customerChurn": "[RU] [TODO: Translate admin.analytics.churnAnalysis.legend.customerChurn]",
+          "revenueChurn": "[RU] [TODO: Translate admin.analytics.churnAnalysis.legend.revenueChurn]"
+        },
+        "benchmarks": {
+          "title": "[RU] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.title]",
+          "yourCustomerChurn": "[RU] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.yourCustomerChurn]",
+          "excellentTooltip": "[RU] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.excellentTooltip]",
+          "averageTooltip": "[RU] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.averageTooltip]",
+          "highTooltip": "[RU] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.highTooltip]",
+          "excellent": "[RU] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.excellent]",
+          "average": "[RU] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.average]",
+          "high": "[RU] [TODO: Translate admin.analytics.churnAnalysis.benchmarks.high]"
+        }
+      },
+      "mrrTrend": {
+        "title": "[RU] [TODO: Translate admin.analytics.mrrTrend.title]",
+        "loading": "[RU] [TODO: Translate admin.analytics.mrrTrend.loading]",
+        "description": "[RU] [TODO: Translate admin.analytics.mrrTrend.description]",
+        "noData": "[RU] [TODO: Translate admin.analytics.mrrTrend.noData]",
+        "stable": "[RU] [TODO: Translate admin.analytics.mrrTrend.stable]",
+        "tooltip": {
+          "mrr": "[RU] [TODO: Translate admin.analytics.mrrTrend.tooltip.mrr]",
+          "new": "[RU] [TODO: Translate admin.analytics.mrrTrend.tooltip.new]",
+          "expansion": "[RU] [TODO: Translate admin.analytics.mrrTrend.tooltip.expansion]",
+          "contraction": "[RU] [TODO: Translate admin.analytics.mrrTrend.tooltip.contraction]",
+          "churn": "[RU] [TODO: Translate admin.analytics.mrrTrend.tooltip.churn]",
+          "netNew": "[RU] [TODO: Translate admin.analytics.mrrTrend.tooltip.netNew]"
+        },
+        "legend": {
+          "existingMrr": "[RU] [TODO: Translate admin.analytics.mrrTrend.legend.existingMrr]",
+          "expansion": "[RU] [TODO: Translate admin.analytics.mrrTrend.legend.expansion]",
+          "new": "[RU] [TODO: Translate admin.analytics.mrrTrend.legend.new]"
+        }
       }
     },
     "bulk": {
@@ -13509,7 +14885,51 @@
       },
       "system": "Система",
       "noTemplatesFound": "Шаблоны не найдены",
-      "versions": "{count} версий"
+      "versions": "{count} версий",
+      "detail": {
+        "templateNotFound": "[RU] [TODO: Translate admin.emailTemplates.detail.templateNotFound]",
+        "sendTest": "[RU] [TODO: Translate admin.emailTemplates.detail.sendTest]",
+        "sendTestEmail": "[RU] [TODO: Translate admin.emailTemplates.detail.sendTestEmail]",
+        "sendTestDescription": "[RU] [TODO: Translate admin.emailTemplates.detail.sendTestDescription]",
+        "recipientEmail": "[RU] [TODO: Translate admin.emailTemplates.detail.recipientEmail]",
+        "testData": "[RU] [TODO: Translate admin.emailTemplates.detail.testData]",
+        "sending": "[RU] [TODO: Translate admin.emailTemplates.detail.sending]",
+        "deleteTemplate": "[RU] [TODO: Translate admin.emailTemplates.detail.deleteTemplate]",
+        "deleteConfirmation": "[RU] [TODO: Translate admin.emailTemplates.detail.deleteConfirmation]",
+        "tabs": {
+          "editor": "[RU] [TODO: Translate admin.emailTemplates.detail.tabs.editor]",
+          "preview": "[RU] [TODO: Translate admin.emailTemplates.detail.tabs.preview]",
+          "variables": "[RU] [TODO: Translate admin.emailTemplates.detail.tabs.variables]",
+          "history": "[RU] [TODO: Translate admin.emailTemplates.detail.tabs.history]"
+        },
+        "templateContent": "[RU] [TODO: Translate admin.emailTemplates.detail.templateContent]",
+        "changeNote": "[RU] [TODO: Translate admin.emailTemplates.detail.changeNote]",
+        "changeNotePlaceholder": "[RU] [TODO: Translate admin.emailTemplates.detail.changeNotePlaceholder]",
+        "templateVariables": "[RU] [TODO: Translate admin.emailTemplates.detail.templateVariables]",
+        "variablesDescription": "[RU] [TODO: Translate admin.emailTemplates.detail.variablesDescription]",
+        "variableName": "[RU] [TODO: Translate admin.emailTemplates.detail.variableName]",
+        "defaultValue": "[RU] [TODO: Translate admin.emailTemplates.detail.defaultValue]"
+      },
+      "form": {
+        "templateName": "[RU] [TODO: Translate admin.emailTemplates.form.templateName]",
+        "category": "[RU] [TODO: Translate admin.emailTemplates.form.category]",
+        "subjectLine": "[RU] [TODO: Translate admin.emailTemplates.form.subjectLine]",
+        "plainTextContent": "[RU] [TODO: Translate admin.emailTemplates.form.plainTextContent]",
+        "plainTextPlaceholder": "[RU] [TODO: Translate admin.emailTemplates.form.plainTextPlaceholder]",
+        "activeDescription": "[RU] [TODO: Translate admin.emailTemplates.form.activeDescription]",
+        "templateNamePlaceholder": "[RU] [TODO: Translate admin.emailTemplates.form.templateNamePlaceholder]",
+        "slug": "[RU] [TODO: Translate admin.emailTemplates.form.slug]",
+        "slugPlaceholder": "[RU] [TODO: Translate admin.emailTemplates.form.slugPlaceholder]",
+        "slugDescription": "[RU] [TODO: Translate admin.emailTemplates.form.slugDescription]",
+        "subjectLinePlaceholder": "[RU] [TODO: Translate admin.emailTemplates.form.subjectLinePlaceholder]",
+        "descriptionPlaceholder": "[RU] [TODO: Translate admin.emailTemplates.form.descriptionPlaceholder]",
+        "htmlContent": "[RU] [TODO: Translate admin.emailTemplates.form.htmlContent]",
+        "htmlContentPlaceholder": "[RU] [TODO: Translate admin.emailTemplates.form.htmlContentPlaceholder]",
+        "variableHint": "[RU] [TODO: Translate admin.emailTemplates.form.variableHint]"
+      },
+      "left": "[RU] [TODO: Translate admin.emailTemplates.left]",
+      "center": "[RU] [TODO: Translate admin.emailTemplates.center]",
+      "right": "[RU] [TODO: Translate admin.emailTemplates.right]"
     },
     "permissions": {
       "matrix": {
@@ -13789,7 +15209,12 @@
         "manageIncidents": "Управление инцидентами",
         "scheduleMaintenance": "Плановое обслуживание",
         "viewReleases": "Посмотреть релизы",
-        "viewCapacity": "Посмотреть емкость"
+        "viewCapacity": "Посмотреть емкость",
+        "allSystemsOperational": "[RU] [TODO: Translate admin.operations.overview.allSystemsOperational]",
+        "criticalIncidentsActive": "[RU] [TODO: Translate admin.operations.overview.criticalIncidentsActive]",
+        "someSystemsAffected": "[RU] [TODO: Translate admin.operations.overview.someSystemsAffected]",
+        "noActiveIncidents": "[RU] [TODO: Translate admin.operations.overview.noActiveIncidents]",
+        "thirtyDayUptime": "[RU] [TODO: Translate admin.operations.overview.thirtyDayUptime]"
       },
       "severity": {
         "critical": "Критический",
@@ -13836,18 +15261,26 @@
         "actions": {
           "viewDetails": "Посмотреть детали",
           "updateStatus": "Обновить статус",
-          "addUpdate": "Добавить обновление"
+          "addUpdate": "Добавить обновление",
+          "changeStatus": "[RU] [TODO: Translate admin.operations.incidents.actions.changeStatus]"
         },
         "bulk": {
           "resolveSelected": "Разрешить выбранное",
           "resolveTitle": "Разрешение инцидентов",
-          "resolveConfirm": "Вы уверены, что хотите разрешить выбранные инциденты?"
+          "resolveConfirm": "Вы уверены, что хотите разрешить выбранные инциденты?",
+          "markResolved": "[RU] [TODO: Translate admin.operations.incidents.bulk.markResolved]",
+          "confirmResolveTitle": "[RU] [TODO: Translate admin.operations.incidents.bulk.confirmResolveTitle]",
+          "confirmResolveDescription": "[RU] [TODO: Translate admin.operations.incidents.bulk.confirmResolveDescription]",
+          "markMonitoring": "[RU] [TODO: Translate admin.operations.incidents.bulk.markMonitoring]",
+          "markInvestigating": "[RU] [TODO: Translate admin.operations.incidents.bulk.markInvestigating]"
         },
         "dialog": {
           "createTitle": "Создать инцидент",
           "createDescription": "Сообщить о новом системном инциденте",
           "updateTitle": "Добавить обновление",
-          "updateDescription": "Добавить обновленную информацию об этом инциденте"
+          "updateDescription": "Добавить обновленную информацию об этом инциденте",
+          "title": "[RU] [TODO: Translate admin.operations.incidents.dialog.title]",
+          "description": "[RU] [TODO: Translate admin.operations.incidents.dialog.description]"
         },
         "fields": {
           "title": "Заголовок",
@@ -13869,8 +15302,91 @@
           "updated": "[RU] Incident updated",
           "updateFailed": "[RU] Failed to update incident",
           "updatePosted": "[RU] Update posted",
-          "addUpdateFailed": "[RU] Failed to add update"
-        }
+          "addUpdateFailed": "[RU] Failed to add update",
+          "incidentCreated": "[RU] [TODO: Translate admin.operations.incidents.toast.incidentCreated]",
+          "createFailed": "[RU] [TODO: Translate admin.operations.incidents.toast.createFailed]",
+          "updateAdded": "[RU] [TODO: Translate admin.operations.incidents.toast.updateAdded]",
+          "bulkUpdateFailed": "[RU] [TODO: Translate admin.operations.incidents.toast.bulkUpdateFailed]"
+        },
+        "severityDescriptions": {
+          "minor": "[RU] [TODO: Translate admin.operations.incidents.severityDescriptions.minor]",
+          "moderate": "[RU] [TODO: Translate admin.operations.incidents.severityDescriptions.moderate]",
+          "major": "[RU] [TODO: Translate admin.operations.incidents.severityDescriptions.major]",
+          "critical": "[RU] [TODO: Translate admin.operations.incidents.severityDescriptions.critical]"
+        },
+        "typeDescriptions": {
+          "outage": "[RU] [TODO: Translate admin.operations.incidents.typeDescriptions.outage]",
+          "degradation": "[RU] [TODO: Translate admin.operations.incidents.typeDescriptions.degradation]",
+          "security": "[RU] [TODO: Translate admin.operations.incidents.typeDescriptions.security]",
+          "dataIssue": "[RU] [TODO: Translate admin.operations.incidents.typeDescriptions.dataIssue]",
+          "thirdParty": "[RU] [TODO: Translate admin.operations.incidents.typeDescriptions.thirdParty]",
+          "capacity": "[RU] [TODO: Translate admin.operations.incidents.typeDescriptions.capacity]",
+          "network": "[RU] [TODO: Translate admin.operations.incidents.typeDescriptions.network]",
+          "database": "[RU] [TODO: Translate admin.operations.incidents.typeDescriptions.database]"
+        },
+        "validation": {
+          "titleDescriptionRequired": "[RU] [TODO: Translate admin.operations.incidents.validation.titleDescriptionRequired]"
+        },
+        "new": {
+          "title": "[RU] [TODO: Translate admin.operations.incidents.new.title]",
+          "description": "[RU] [TODO: Translate admin.operations.incidents.new.description]",
+          "reporting": "[RU] [TODO: Translate admin.operations.incidents.new.reporting]",
+          "warningTitle": "[RU] [TODO: Translate admin.operations.incidents.new.warningTitle]",
+          "warningDescription": "[RU] [TODO: Translate admin.operations.incidents.new.warningDescription]",
+          "incidentDetails": "[RU] [TODO: Translate admin.operations.incidents.new.incidentDetails]",
+          "incidentDetailsDescription": "[RU] [TODO: Translate admin.operations.incidents.new.incidentDetailsDescription]",
+          "classification": "[RU] [TODO: Translate admin.operations.incidents.new.classification]",
+          "classificationDescription": "[RU] [TODO: Translate admin.operations.incidents.new.classificationDescription]",
+          "selectAffectedServices": "[RU] [TODO: Translate admin.operations.incidents.new.selectAffectedServices]",
+          "clickToSelectServices": "[RU] [TODO: Translate admin.operations.incidents.new.clickToSelectServices]"
+        },
+        "reportIncident": "[RU] [TODO: Translate admin.operations.incidents.reportIncident]",
+        "form": {
+          "incidentTitle": "[RU] [TODO: Translate admin.operations.incidents.form.incidentTitle]",
+          "titlePlaceholder": "[RU] [TODO: Translate admin.operations.incidents.form.titlePlaceholder]",
+          "description": "[RU] [TODO: Translate admin.operations.incidents.form.description]",
+          "descriptionPlaceholder": "[RU] [TODO: Translate admin.operations.incidents.form.descriptionPlaceholder]",
+          "businessImpact": "[RU] [TODO: Translate admin.operations.incidents.form.businessImpact]",
+          "impactPlaceholder": "[RU] [TODO: Translate admin.operations.incidents.form.impactPlaceholder]",
+          "severity": "[RU] [TODO: Translate admin.operations.incidents.form.severity]",
+          "incidentType": "[RU] [TODO: Translate admin.operations.incidents.form.incidentType]",
+          "affectedServices": "[RU] [TODO: Translate admin.operations.incidents.form.affectedServices]",
+          "type": "[RU] [TODO: Translate admin.operations.incidents.form.type]"
+        },
+        "table": {
+          "incident": "[RU] [TODO: Translate admin.operations.incidents.table.incident]",
+          "started": "[RU] [TODO: Translate admin.operations.incidents.table.started]",
+          "severity": "[RU] [TODO: Translate admin.operations.incidents.table.severity]",
+          "status": "[RU] [TODO: Translate admin.operations.incidents.table.status]",
+          "type": "[RU] [TODO: Translate admin.operations.incidents.table.type]",
+          "affectedServices": "[RU] [TODO: Translate admin.operations.incidents.table.affectedServices]",
+          "duration": "[RU] [TODO: Translate admin.operations.incidents.table.duration]",
+          "min": "[RU] [TODO: Translate admin.operations.incidents.table.min]",
+          "ongoing": "[RU] [TODO: Translate admin.operations.incidents.table.ongoing]"
+        },
+        "detail": {
+          "description": "[RU] [TODO: Translate admin.operations.incidents.detail.description]",
+          "affectedServices": "[RU] [TODO: Translate admin.operations.incidents.detail.affectedServices]",
+          "updateStatus": "[RU] [TODO: Translate admin.operations.incidents.detail.updateStatus]",
+          "timeline": "[RU] [TODO: Translate admin.operations.incidents.detail.timeline]",
+          "addUpdate": "[RU] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
+          "updatePlaceholder": "[RU] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
+          "postUpdate": "[RU] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+        },
+        "stats": {
+          "totalIncidents": "[RU] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
+          "active": "[RU] [TODO: Translate admin.operations.incidents.stats.active]",
+          "resolved": "[RU] [TODO: Translate admin.operations.incidents.stats.resolved]",
+          "inPostmortem": "[RU] [TODO: Translate admin.operations.incidents.stats.inPostmortem]"
+        },
+        "searchPlaceholder": "[RU] [TODO: Translate admin.operations.incidents.searchPlaceholder]",
+        "filter": {
+          "status": "[RU] [TODO: Translate admin.operations.incidents.filter.status]",
+          "allStatus": "[RU] [TODO: Translate admin.operations.incidents.filter.allStatus]",
+          "severity": "[RU] [TODO: Translate admin.operations.incidents.filter.severity]",
+          "allSeverity": "[RU] [TODO: Translate admin.operations.incidents.filter.allSeverity]"
+        },
+        "emptyMessage": "[RU] [TODO: Translate admin.operations.incidents.emptyMessage]"
       },
       "maintenance": {
         "title": "Окна обслуживания",
@@ -14228,6 +15744,44 @@
         "analytics": "[RU] Analytics",
         "payments": "[RU] Payments",
         "notifications": "[RU] Notifications"
+      },
+      "stats": {
+        "activeIncidents": "[RU] [TODO: Translate admin.operations.stats.activeIncidents]",
+        "viewIncidents": "[RU] [TODO: Translate admin.operations.stats.viewIncidents]",
+        "scheduledMaintenance": "[RU] [TODO: Translate admin.operations.stats.scheduledMaintenance]",
+        "upcomingWindows": "[RU] [TODO: Translate admin.operations.stats.upcomingWindows]",
+        "viewSchedule": "[RU] [TODO: Translate admin.operations.stats.viewSchedule]",
+        "activeReleases": "[RU] [TODO: Translate admin.operations.stats.activeReleases]",
+        "rollingOut": "[RU] [TODO: Translate admin.operations.stats.rollingOut]",
+        "manageReleases": "[RU] [TODO: Translate admin.operations.stats.manageReleases]",
+        "systemHealth": "[RU] [TODO: Translate admin.operations.stats.systemHealth]",
+        "overallHealthScore": "[RU] [TODO: Translate admin.operations.stats.overallHealthScore]",
+        "viewCapacity": "[RU] [TODO: Translate admin.operations.stats.viewCapacity]"
+      },
+      "resources": {
+        "title": "[RU] [TODO: Translate admin.operations.resources.title]",
+        "description": "[RU] [TODO: Translate admin.operations.resources.description]",
+        "cpuUsage": "[RU] [TODO: Translate admin.operations.resources.cpuUsage]",
+        "memoryUsage": "[RU] [TODO: Translate admin.operations.resources.memoryUsage]",
+        "storageUsage": "[RU] [TODO: Translate admin.operations.resources.storageUsage]",
+        "apiLatency": "[RU] [TODO: Translate admin.operations.resources.apiLatency]",
+        "activeConnections": "[RU] [TODO: Translate admin.operations.resources.activeConnections]"
+      },
+      "recentIncidents": {
+        "title": "[RU] [TODO: Translate admin.operations.recentIncidents.title]",
+        "description": "[RU] [TODO: Translate admin.operations.recentIncidents.description]",
+        "noIncidents": "[RU] [TODO: Translate admin.operations.recentIncidents.noIncidents]",
+        "viewAll": "[RU] [TODO: Translate admin.operations.recentIncidents.viewAll]"
+      },
+      "quickActions": {
+        "incidents": "[RU] [TODO: Translate admin.operations.quickActions.incidents]",
+        "incidentsDescription": "[RU] [TODO: Translate admin.operations.quickActions.incidentsDescription]",
+        "maintenance": "[RU] [TODO: Translate admin.operations.quickActions.maintenance]",
+        "maintenanceDescription": "[RU] [TODO: Translate admin.operations.quickActions.maintenanceDescription]",
+        "releases": "[RU] [TODO: Translate admin.operations.quickActions.releases]",
+        "releasesDescription": "[RU] [TODO: Translate admin.operations.quickActions.releasesDescription]",
+        "capacity": "[RU] [TODO: Translate admin.operations.quickActions.capacity]",
+        "capacityDescription": "[RU] [TODO: Translate admin.operations.quickActions.capacityDescription]"
       }
     },
     "integrations": {
@@ -14267,7 +15821,9 @@
           "activate": "Активировать",
           "suspend": "Приостановить",
           "revoke": "Отозвать",
-          "regenerateSecret": "Регенерировать секрет"
+          "regenerateSecret": "Регенерировать секрет",
+          "rotateSecret": "[RU] [TODO: Translate admin.integrations.apiClients.actions.rotateSecret]",
+          "revokeClient": "[RU] [TODO: Translate admin.integrations.apiClients.actions.revokeClient]"
         },
         "bulk": {
           "revokeSelected": "Отозвать выбранное",
@@ -14304,7 +15860,13 @@
           "editComingSoon": "Функция редактирования появится в ближайшее время",
           "rotateSecretComingSoon": "Скоро будет секретная ротация",
           "copied": "Скопировано в буфер обмена",
-          "bulkRevokeFailed": "Не удалось отозвать клиентов"
+          "bulkRevokeFailed": "Не удалось отозвать клиентов",
+          "clientCreatedSuccess": "[RU] [TODO: Translate admin.integrations.apiClients.toast.clientCreatedSuccess]",
+          "loadFailed": "[RU] [TODO: Translate admin.integrations.apiClients.toast.loadFailed]",
+          "updated": "[RU] [TODO: Translate admin.integrations.apiClients.toast.updated]",
+          "updateFailed": "[RU] [TODO: Translate admin.integrations.apiClients.toast.updateFailed]",
+          "secretRotated": "[RU] [TODO: Translate admin.integrations.apiClients.toast.secretRotated]",
+          "rotateSecretFailed": "[RU] [TODO: Translate admin.integrations.apiClients.toast.rotateSecretFailed]"
         },
         "createButton": "Создать клиента",
         "createDialog": {
@@ -14322,7 +15884,12 @@
           "redirectUris": "URI перенаправления",
           "redirectUrisPlaceholder": "По одному на строку",
           "allowedScopes": "Разрешенные области",
-          "allowedScopesPlaceholder": "Области действия, разделенные запятыми"
+          "allowedScopesPlaceholder": "Области действия, разделенные запятыми",
+          "clientNameRequired": "[RU] [TODO: Translate admin.integrations.apiClients.form.clientNameRequired]",
+          "organizationRequired": "[RU] [TODO: Translate admin.integrations.apiClients.form.organizationRequired]",
+          "selectOrganization": "[RU] [TODO: Translate admin.integrations.apiClients.form.selectOrganization]",
+          "redirectUrisPlaceholderMultiline": "[RU] [TODO: Translate admin.integrations.apiClients.form.redirectUrisPlaceholderMultiline]",
+          "redirectUrisHelp": "[RU] [TODO: Translate admin.integrations.apiClients.form.redirectUrisHelp]"
         },
         "stats": {
           "totalClients": "Всего клиентов",
@@ -14331,17 +15898,118 @@
           "suspended": "Приостановленный"
         },
         "table": {
-          "noClientsFound": "Клиенты API не найдены"
+          "noClientsFound": "Клиенты API не найдены",
+          "clientId": "[RU] [TODO: Translate admin.integrations.apiClients.table.clientId]",
+          "never": "[RU] [TODO: Translate admin.integrations.apiClients.table.never]",
+          "client": "[RU] [TODO: Translate admin.integrations.apiClients.table.client]",
+          "organization": "[RU] [TODO: Translate admin.integrations.apiClients.table.organization]",
+          "type": "[RU] [TODO: Translate admin.integrations.apiClients.table.type]",
+          "status": "[RU] [TODO: Translate admin.integrations.apiClients.table.status]",
+          "usage": "[RU] [TODO: Translate admin.integrations.apiClients.table.usage]",
+          "lastUsed": "[RU] [TODO: Translate admin.integrations.apiClients.table.lastUsed]"
         },
         "secretDialog": {
           "title": "Секрет клиента",
           "description": "Сохраните этот секрет надежно. Вы больше не сможете его увидеть.",
-          "copySecret": "Копировать секрет"
+          "copySecret": "Копировать секрет",
+          "done": "[RU] [TODO: Translate admin.integrations.apiClients.secretDialog.done]",
+          "newTitle": "[RU] [TODO: Translate admin.integrations.apiClients.secretDialog.newTitle]"
         },
         "bulkActions": {
           "revokeSelected": "Отозвать выбранное",
           "revokeConfirmTitle": "Отзыв клиентов API",
           "revokeConfirmDescription": "Вы уверены, что хотите отозвать выбранных клиентов API? Это действие невозможно отменить."
+        },
+        "clientTypeDescriptions": {
+          "confidential": "[RU] [TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.confidential]",
+          "public": "[RU] [TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.public]",
+          "service": "[RU] [TODO: Translate admin.integrations.apiClients.clientTypeDescriptions.service]"
+        },
+        "scopes": {
+          "read": "[RU] [TODO: Translate admin.integrations.apiClients.scopes.read]",
+          "write": "[RU] [TODO: Translate admin.integrations.apiClients.scopes.write]",
+          "delete": "[RU] [TODO: Translate admin.integrations.apiClients.scopes.delete]",
+          "admin": "[RU] [TODO: Translate admin.integrations.apiClients.scopes.admin]"
+        },
+        "scopeDescriptions": {
+          "read": "[RU] [TODO: Translate admin.integrations.apiClients.scopeDescriptions.read]",
+          "write": "[RU] [TODO: Translate admin.integrations.apiClients.scopeDescriptions.write]",
+          "delete": "[RU] [TODO: Translate admin.integrations.apiClients.scopeDescriptions.delete]",
+          "admin": "[RU] [TODO: Translate admin.integrations.apiClients.scopeDescriptions.admin]"
+        },
+        "validation": {
+          "nameAndOrgRequired": "[RU] [TODO: Translate admin.integrations.apiClients.validation.nameAndOrgRequired]"
+        },
+        "\\n": "[RU] [TODO: Translate admin.integrations.apiClients.\\n]",
+        "new": {
+          "title": "[RU] [TODO: Translate admin.integrations.apiClients.new.title]",
+          "description": "[RU] [TODO: Translate admin.integrations.apiClients.new.description]",
+          "clientDetailsDescription": "[RU] [TODO: Translate admin.integrations.apiClients.new.clientDetailsDescription]",
+          "rateLimitsDescription": "[RU] [TODO: Translate admin.integrations.apiClients.new.rateLimitsDescription]",
+          "permissions": "[RU] [TODO: Translate admin.integrations.apiClients.new.permissions]",
+          "permissionsDescription": "[RU] [TODO: Translate admin.integrations.apiClients.new.permissionsDescription]"
+        },
+        "detail": {
+          "clientDetails": "[RU] [TODO: Translate admin.integrations.apiClients.detail.clientDetails]",
+          "allowedScopes": "[RU] [TODO: Translate admin.integrations.apiClients.detail.allowedScopes]",
+          "notFound": "[RU] [TODO: Translate admin.integrations.apiClients.detail.notFound]",
+          "revokedBanner": {
+            "title": "[RU] [TODO: Translate admin.integrations.apiClients.detail.revokedBanner.title]",
+            "description": "[RU] [TODO: Translate admin.integrations.apiClients.detail.revokedBanner.description]"
+          },
+          "totalRequests": "[RU] [TODO: Translate admin.integrations.apiClients.detail.totalRequests]",
+          "rateLimit": "[RU] [TODO: Translate admin.integrations.apiClients.detail.rateLimit]",
+          "noDescription": "[RU] [TODO: Translate admin.integrations.apiClients.detail.noDescription]",
+          "created": "[RU] [TODO: Translate admin.integrations.apiClients.detail.created]",
+          "lastUsed": "[RU] [TODO: Translate admin.integrations.apiClients.detail.lastUsed]",
+          "organization": "[RU] [TODO: Translate admin.integrations.apiClients.detail.organization]",
+          "organizationDescription": "[RU] [TODO: Translate admin.integrations.apiClients.detail.organizationDescription]",
+          "viewOrganization": "[RU] [TODO: Translate admin.integrations.apiClients.detail.viewOrganization]",
+          "organizationNotFound": "[RU] [TODO: Translate admin.integrations.apiClients.detail.organizationNotFound]",
+          "scopesPermissions": "[RU] [TODO: Translate admin.integrations.apiClients.detail.scopesPermissions]",
+          "scopesPermissionsDescription": "[RU] [TODO: Translate admin.integrations.apiClients.detail.scopesPermissionsDescription]",
+          "noScopes": "[RU] [TODO: Translate admin.integrations.apiClients.detail.noScopes]",
+          "allowedGrants": "[RU] [TODO: Translate admin.integrations.apiClients.detail.allowedGrants]",
+          "redirectUris": "[RU] [TODO: Translate admin.integrations.apiClients.detail.redirectUris]",
+          "noRedirectUris": "[RU] [TODO: Translate admin.integrations.apiClients.detail.noRedirectUris]"
+        },
+        "usage": {
+          "rateLimits": "[RU] [TODO: Translate admin.integrations.apiClients.usage.rateLimits]",
+          "totalRequests": "[RU] [TODO: Translate admin.integrations.apiClients.usage.totalRequests]",
+          "allTime": "[RU] [TODO: Translate admin.integrations.apiClients.usage.allTime]",
+          "requestsPerMinute": "[RU] [TODO: Translate admin.integrations.apiClients.usage.requestsPerMinute]",
+          "noActivity": "[RU] [TODO: Translate admin.integrations.apiClients.usage.noActivity]",
+          "rateLimitsDescription": "[RU] [TODO: Translate admin.integrations.apiClients.usage.rateLimitsDescription]",
+          "perMinute": "[RU] [TODO: Translate admin.integrations.apiClients.usage.perMinute]",
+          "perMinuteDescription": "[RU] [TODO: Translate admin.integrations.apiClients.usage.perMinuteDescription]",
+          "dailyLimit": "[RU] [TODO: Translate admin.integrations.apiClients.usage.dailyLimit]",
+          "dailyLimitDescription": "[RU] [TODO: Translate admin.integrations.apiClients.usage.dailyLimitDescription]",
+          "unlimited": "[RU] [TODO: Translate admin.integrations.apiClients.usage.unlimited]",
+          "monthlyLimit": "[RU] [TODO: Translate admin.integrations.apiClients.usage.monthlyLimit]",
+          "monthlyLimitDescription": "[RU] [TODO: Translate admin.integrations.apiClients.usage.monthlyLimitDescription]"
+        },
+        "settings": {
+          "dailyLimit": "[RU] [TODO: Translate admin.integrations.apiClients.settings.dailyLimit]",
+          "noLimit": "[RU] [TODO: Translate admin.integrations.apiClients.settings.noLimit]",
+          "monthlyLimit": "[RU] [TODO: Translate admin.integrations.apiClients.settings.monthlyLimit]",
+          "editTitle": "[RU] [TODO: Translate admin.integrations.apiClients.settings.editTitle]",
+          "editDescription": "[RU] [TODO: Translate admin.integrations.apiClients.settings.editDescription]",
+          "rateLimitPerMin": "[RU] [TODO: Translate admin.integrations.apiClients.settings.rateLimitPerMin]",
+          "editSettings": "[RU] [TODO: Translate admin.integrations.apiClients.settings.editSettings]"
+        },
+        ",": "[RU] [TODO: Translate admin.integrations.apiClients.,]",
+        "rotateDialog": {
+          "title": "[RU] [TODO: Translate admin.integrations.apiClients.rotateDialog.title]",
+          "description": "[RU] [TODO: Translate admin.integrations.apiClients.rotateDialog.description]"
+        },
+        "revokeDialog": {
+          "title": "[RU] [TODO: Translate admin.integrations.apiClients.revokeDialog.title]",
+          "description": "[RU] [TODO: Translate admin.integrations.apiClients.revokeDialog.description]"
+        },
+        "tabs": {
+          "overview": "[RU] [TODO: Translate admin.integrations.apiClients.tabs.overview]",
+          "settings": "[RU] [TODO: Translate admin.integrations.apiClients.tabs.settings]",
+          "usageStats": "[RU] [TODO: Translate admin.integrations.apiClients.tabs.usageStats]"
         }
       },
       "apps": {
@@ -14384,7 +16052,8 @@
           "status": "Статус",
           "category": "Категория",
           "allStatus": "Все Статус",
-          "allCategories": "Все категории"
+          "allCategories": "Все категории",
+          "searchPlaceholder": "[RU] [TODO: Translate admin.integrations.apps.filters.searchPlaceholder]"
         },
         "actions": {
           "viewDetails": "Посмотреть детали",
@@ -14449,7 +16118,14 @@
           "loadFailed": "[RU] Failed to load integration app"
         },
         "table": {
-          "noReviews": "Нет отзывов"
+          "noReviews": "Нет отзывов",
+          "app": "[RU] [TODO: Translate admin.integrations.apps.table.app]",
+          "category": "[RU] [TODO: Translate admin.integrations.apps.table.category]",
+          "developer": "[RU] [TODO: Translate admin.integrations.apps.table.developer]",
+          "status": "[RU] [TODO: Translate admin.integrations.apps.table.status]",
+          "installs": "[RU] [TODO: Translate admin.integrations.apps.table.installs]",
+          "rating": "[RU] [TODO: Translate admin.integrations.apps.table.rating]",
+          "noAppsFound": "[RU] [TODO: Translate admin.integrations.apps.table.noAppsFound]"
         },
         "badges": {
           "official": "Официальное приложение",
@@ -14556,6 +16232,51 @@
             "createSuccess": "[RU] Integration app created successfully",
             "createFailed": "[RU] Failed to create app"
           }
+        },
+        "bulkActions": {
+          "approveSelected": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.approveSelected]",
+          "approveConfirmTitle": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.approveConfirmTitle]",
+          "approveConfirmDescription": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.approveConfirmDescription]",
+          "publishSelected": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.publishSelected]",
+          "publishConfirmTitle": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.publishConfirmTitle]",
+          "publishConfirmDescription": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.publishConfirmDescription]",
+          "deprecateSelected": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.deprecateSelected]",
+          "deprecateConfirmTitle": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.deprecateConfirmTitle]",
+          "deprecateConfirmDescription": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.deprecateConfirmDescription]",
+          "deleteSelected": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.deleteSelected]",
+          "deleteConfirmTitle": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.deleteConfirmTitle]",
+          "deleteConfirmDescription": "[RU] [TODO: Translate admin.integrations.apps.bulkActions.deleteConfirmDescription]"
+        },
+        "createButton": "[RU] [TODO: Translate admin.integrations.apps.createButton]",
+        "createDialog": {
+          "title": "[RU] [TODO: Translate admin.integrations.apps.createDialog.title]",
+          "description": "[RU] [TODO: Translate admin.integrations.apps.createDialog.description]"
+        },
+        "form": {
+          "appNameRequired": "[RU] [TODO: Translate admin.integrations.apps.form.appNameRequired]",
+          "appNamePlaceholder": "[RU] [TODO: Translate admin.integrations.apps.form.appNamePlaceholder]",
+          "categoryRequired": "[RU] [TODO: Translate admin.integrations.apps.form.categoryRequired]",
+          "shortDescription": "[RU] [TODO: Translate admin.integrations.apps.form.shortDescription]",
+          "shortDescriptionPlaceholder": "[RU] [TODO: Translate admin.integrations.apps.form.shortDescriptionPlaceholder]",
+          "fullDescription": "[RU] [TODO: Translate admin.integrations.apps.form.fullDescription]",
+          "fullDescriptionPlaceholder": "[RU] [TODO: Translate admin.integrations.apps.form.fullDescriptionPlaceholder]",
+          "developerRequired": "[RU] [TODO: Translate admin.integrations.apps.form.developerRequired]",
+          "developerPlaceholder": "[RU] [TODO: Translate admin.integrations.apps.form.developerPlaceholder]",
+          "developerUrl": "[RU] [TODO: Translate admin.integrations.apps.form.developerUrl]",
+          "developerUrlPlaceholder": "[RU] [TODO: Translate admin.integrations.apps.form.developerUrlPlaceholder]",
+          "iconUrl": "[RU] [TODO: Translate admin.integrations.apps.form.iconUrl]",
+          "iconUrlPlaceholder": "[RU] [TODO: Translate admin.integrations.apps.form.iconUrlPlaceholder]",
+          "officialApp": "[RU] [TODO: Translate admin.integrations.apps.form.officialApp]",
+          "featuredApp": "[RU] [TODO: Translate admin.integrations.apps.form.featuredApp]"
+        },
+        "stats": {
+          "totalApps": "[RU] [TODO: Translate admin.integrations.apps.stats.totalApps]",
+          "published": "[RU] [TODO: Translate admin.integrations.apps.stats.published]",
+          "totalInstalls": "[RU] [TODO: Translate admin.integrations.apps.stats.totalInstalls]",
+          "featured": "[RU] [TODO: Translate admin.integrations.apps.stats.featured]"
+        },
+        "deleteDialog": {
+          "title": "[RU] [TODO: Translate admin.integrations.apps.deleteDialog.title]"
         }
       },
       "webhooks": {
@@ -14726,6 +16447,9 @@
             "createFailed": "[RU] Failed to create webhook",
             "copied": "[RU] Copied to clipboard"
           }
+        },
+        "": {
+          "": "[RU] [TODO: Translate admin.integrations.webhooks..]"
         }
       }
     },
@@ -15088,13 +16812,18 @@
         "enabledDescription": "Включить этот флаг функции",
         "rolloutPercentage": "Процент внедрения",
         "allowedPlans": "Разрешенные планы",
-        "allowAllPlans": "Оставьте флажок снятым, чтобы разрешить все планы"
+        "allowAllPlans": "Оставьте флажок снятым, чтобы разрешить все планы",
+        "displayName": "[RU] [TODO: Translate admin.features.form.displayName]"
       },
       "types": {
         "boolean": "логическое значение",
         "string": "Нить",
         "number": "Число",
-        "json": "JSON"
+        "json": "JSON",
+        "booleanDescription": "[RU] [TODO: Translate admin.features.types.booleanDescription]",
+        "stringDescription": "[RU] [TODO: Translate admin.features.types.stringDescription]",
+        "numberDescription": "[RU] [TODO: Translate admin.features.types.numberDescription]",
+        "jsonDescription": "[RU] [TODO: Translate admin.features.types.jsonDescription]"
       },
       "plans": {
         "STARTER": "Стартер",
@@ -15105,7 +16834,38 @@
       "saving": "Сохранение...",
       "updateFlag": "Обновить флаг",
       "createFlag": "Создать флаг",
-      "empty": "Флаги функций не найдены"
+      "empty": "Флаги функций не найдены",
+      "validation": {
+        "keyRequired": "[RU] [TODO: Translate admin.features.validation.keyRequired]",
+        "keyFormat": "[RU] [TODO: Translate admin.features.validation.keyFormat]"
+      },
+      "new": {
+        "noPermission": "[RU] [TODO: Translate admin.features.new.noPermission]",
+        "backToFeatures": "[RU] [TODO: Translate admin.features.new.backToFeatures]",
+        "back": "[RU] [TODO: Translate admin.features.new.back]",
+        "title": "[RU] [TODO: Translate admin.features.new.title]",
+        "subtitle": "[RU] [TODO: Translate admin.features.new.subtitle]"
+      },
+      "creating": "[RU] [TODO: Translate admin.features.creating]",
+      "flagDetails": {
+        "title": "[RU] [TODO: Translate admin.features.flagDetails.title]",
+        "description": "[RU] [TODO: Translate admin.features.flagDetails.description]",
+        "keyHint": "[RU] [TODO: Translate admin.features.flagDetails.keyHint]"
+      },
+      "rolloutConfig": {
+        "title": "[RU] [TODO: Translate admin.features.rolloutConfig.title]",
+        "description": "[RU] [TODO: Translate admin.features.rolloutConfig.description]",
+        "enabled": "[RU] [TODO: Translate admin.features.rolloutConfig.enabled]",
+        "enabledDescription": "[RU] [TODO: Translate admin.features.rolloutConfig.enabledDescription]",
+        "rolloutPercentage": "[RU] [TODO: Translate admin.features.rolloutConfig.rolloutPercentage]",
+        "rolloutDescription": "[RU] [TODO: Translate admin.features.rolloutConfig.rolloutDescription]"
+      },
+      "planRestrictions": {
+        "title": "[RU] [TODO: Translate admin.features.planRestrictions.title]",
+        "description": "[RU] [TODO: Translate admin.features.planRestrictions.description]",
+        "allowedPlans": "[RU] [TODO: Translate admin.features.planRestrictions.allowedPlans]",
+        "allowAllDescription": "[RU] [TODO: Translate admin.features.planRestrictions.allowAllDescription]"
+      }
     }
   },
   "ui": {
@@ -15238,7 +16998,14 @@
       "sortAscending": "Сортировать по возрастанию",
       "sortDescending": "Сортировать по убыванию",
       "selectAll": "Выбрать все",
-      "deselectAll": "Снять выделение со всех"
+      "deselectAll": "Снять выделение со всех",
+      "featureName": "[RU] [TODO: Translate ui.table.featureName]",
+      "totalEvents": "[RU] [TODO: Translate ui.table.totalEvents]",
+      "activeUsers": "[RU] [TODO: Translate ui.table.activeUsers]",
+      "adoptionRate": "[RU] [TODO: Translate ui.table.adoptionRate]",
+      "retentionRate": "[RU] [TODO: Translate ui.table.retentionRate]",
+      "deleteConfirm": "[RU] [TODO: Translate ui.table.deleteConfirm]",
+      "areYouSure": "[RU] [TODO: Translate ui.table.areYouSure]"
     },
     "languageSwitcher": {
       "switchLanguage": "Сменить язык"
@@ -15381,6 +17148,9 @@
         "loginAlertsDesc": "Уведомление о входе с нового устройства",
         "systemMaintenance": "Обслуживание системы",
         "systemMaintenanceDesc": "Плановые простои и обновления"
+      },
+      "success": {
+        "saved": "[RU] [TODO: Translate notifications.settings.success.saved]"
       }
     },
     "admin": {
@@ -15432,7 +17202,22 @@
       },
       "empty": "Уведомления не созданы",
       "confirmDelete": "Удалить уведомление",
-      "confirmDeleteDescription": "Вы уверены, что хотите удалить \"{title}\"? Это действие нельзя отменить."
+      "confirmDeleteDescription": "Вы уверены, что хотите удалить \"{title}\"? Это действие нельзя отменить.",
+      "error": {
+        "loadFailed": "[RU] [TODO: Translate notifications.admin.error.loadFailed]",
+        "updateFailed": "[RU] [TODO: Translate notifications.admin.error.updateFailed]",
+        "createFailed": "[RU] [TODO: Translate notifications.admin.error.createFailed]",
+        "saveFailed": "[RU] [TODO: Translate notifications.admin.error.saveFailed]",
+        "deleteFailed": "[RU] [TODO: Translate notifications.admin.error.deleteFailed]"
+      },
+      "success": {
+        "updated": "[RU] [TODO: Translate notifications.admin.success.updated]",
+        "created": "[RU] [TODO: Translate notifications.admin.success.created]",
+        "deleted": "[RU] [TODO: Translate notifications.admin.success.deleted]"
+      },
+      "loading": {
+        "saving": "[RU] [TODO: Translate notifications.admin.loading.saving]"
+      }
     }
   },
   "feedback": {
