@@ -46,8 +46,22 @@
     "running": "En ejecución",
     "cancelled": "Cancelado",
     "saveChanges": "Guardar cambios",
-    "saving": "Ahorro...",
+    "saving": "Guardando...",
     "creating": "Creando...",
+    "update": "Actualizar",
+    "action": "Acción",
+    "clear": "Limpiar",
+    "enable": "Habilitar",
+    "disable": "Deshabilitar",
+    "notRequired": "No requerido",
+    "system": "Sistema",
+    "noDescription": "Sin descripción",
+    "unknown": "Desconocido",
+    "important": "Importante",
+    "preview": "Vista previa",
+    "duration": "Duración",
+    "questionText": "Texto de la pregunta",
+    "enterQuestionText": "Ingrese el texto de la pregunta",
     "email": "Correo electrónico",
     "settings": "Ajustes",
     "createdAt": "Creado en",
@@ -3239,7 +3253,29 @@
         "exportFailed": "No se pudo exportar el panel"
       },
       "detail": {
-        "title": "Detalles del panel"
+        "title": "Detalles del panel",
+        "chartTypes": {
+          "bar": "[ES] Bar",
+          "line": "[ES] Line",
+          "pie": "[ES] Pie",
+          "donut": "[ES] Donut",
+          "area": "[ES] Area",
+          "scatter": "[ES] Scatter",
+          "heatmap": "[ES] Heatmap",
+          "treemap": "[ES] Treemap",
+          "funnel": "[ES] Funnel",
+          "radar": "[ES] Radar",
+          "metric": "[ES] Metric"
+        },
+        "export": {
+          "csvHeaders": {
+            "id": "[ES] ID",
+            "name": "[ES] Name",
+            "type": "[ES] Type",
+            "category": "[ES] Category",
+            "dataSource": "[ES] Data Source"
+          }
+        }
       }
     },
     "crosstabs": {
@@ -8234,6 +8270,55 @@
         "featureDeleted": "Característica eliminada",
         "featureDisabled": "Característica deshabilitada correctamente",
         "featureEnabled": "Característica habilitada correctamente"
+      },
+      "new": {
+        "title": "[ES] Create Entitlement Feature",
+        "description": "[ES] Define a new feature that can be assigned to subscription plans",
+        "back": "[ES] Back",
+        "creating": "[ES] Creating...",
+        "createFeature": "[ES] Create Feature",
+        "noPermission": "[ES] You don't have permission to create entitlement features",
+        "backToFeatures": "[ES] Back to Features",
+        "sections": {
+          "featureDetails": "[ES] Feature Details",
+          "featureDetailsDescription": "[ES] Basic information about the entitlement feature",
+          "categoryClassification": "[ES] Category & Classification",
+          "categoryDescription": "[ES] Organize the feature for easier management",
+          "valueConfiguration": "[ES] Value Configuration",
+          "valueDescription": "[ES] Configure the feature value type and default"
+        },
+        "fields": {
+          "displayName": "[ES] Display Name",
+          "featureKey": "[ES] Feature Key",
+          "description": "[ES] Description",
+          "category": "[ES] Category",
+          "sortOrder": "[ES] Sort Order",
+          "valueType": "[ES] Value Type",
+          "defaultValue": "[ES] Default Value",
+          "active": "[ES] Active"
+        },
+        "placeholders": {
+          "displayName": "[ES] Advanced Analytics",
+          "featureKey": "[ES] advanced_analytics",
+          "description": "[ES] Describe what this feature enables for subscribers...",
+          "jsonDefault": "[ES] {}"
+        },
+        "hints": {
+          "snakeCaseFormat": "[ES] snake_case format: lowercase letters, numbers, underscores",
+          "sortOrderLower": "[ES] Lower numbers appear first in lists",
+          "inactiveFeatures": "[ES] Inactive features are not available for plan assignment"
+        },
+        "validation": {
+          "keyAndNameRequired": "[ES] Key and name are required",
+          "keyFormatInvalid": "[ES] Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)"
+        },
+        "toast": {
+          "createFailed": "[ES] Failed to create feature"
+        },
+        "status": {
+          "enabled": "[ES] Enabled",
+          "disabled": "[ES] Disabled"
+        }
       }
     },
     "identity": {
@@ -8317,7 +8402,18 @@
           "providerUpdated": "Proveedor SSO actualizado correctamente",
           "providerDeleted": "Proveedor SSO eliminado correctamente",
           "connectionSuccess": "Prueba de conexión exitosa",
-          "connectionFailed": "Prueba de conexión fallida"
+          "connectionFailed": "Prueba de conexión fallida",
+          "loadFailed": "[ES] Failed to load SSO configuration",
+          "updated": "[ES] SSO configuration updated",
+          "updateFailed": "[ES] Failed to update SSO configuration",
+          "allTestsPassed": "[ES] All tests passed!",
+          "someTestsFailed": "[ES] Some tests failed",
+          "testFailed": "[ES] Failed to test SSO configuration",
+          "activated": "[ES] SSO activated successfully",
+          "disabled": "[ES] SSO disabled successfully",
+          "updateStatusFailed": "[ES] Failed to update status",
+          "deleted": "[ES] SSO configuration deleted successfully",
+          "deleteFailed": "[ES] Failed to delete SSO configuration"
         },
         "confirmations": {
           "deleteTitle": "Eliminar proveedor de SSO",
@@ -8334,6 +8430,89 @@
           "certificateRequired": "Se requiere certificado",
           "invalidUrl": "Por favor ingresa una URL válida",
           "invalidCertificate": "Formato de certificado no válido"
+        },
+        "new": {
+          "title": "[ES] Create SSO Configuration",
+          "description": "[ES] Configure Single Sign-On for an organization",
+          "back": "[ES] Back",
+          "creating": "[ES] Creating...",
+          "createConfiguration": "[ES] Create Configuration",
+          "noPermission": "[ES] You don't have permission to create SSO configurations",
+          "backToSSO": "[ES] Back to SSO Configurations",
+          "tabs": {
+            "basic": "[ES] Basic Settings",
+            "provider": "[ES] Provider Configuration",
+            "provisioning": "[ES] User Provisioning"
+          },
+          "sections": {
+            "organizationProvider": "[ES] Organization & Provider",
+            "organizationProviderDescription": "[ES] Select the organization and SSO provider type",
+            "samlConfiguration": "[ES] SAML Configuration",
+            "samlConfigurationDescription": "[ES] Configure SAML 2.0 settings from your Identity Provider",
+            "oidcConfiguration": "[ES] OIDC Configuration",
+            "oidcConfigurationDescription": "[ES] Configure OpenID Connect settings",
+            "userProvisioning": "[ES] User Provisioning Settings",
+            "userProvisioningDescription": "[ES] Configure how users are provisioned through SSO"
+          },
+          "fields": {
+            "organization": "[ES] Organization",
+            "ssoProvider": "[ES] SSO Provider",
+            "displayName": "[ES] Display Name",
+            "allowedEmailDomains": "[ES] Allowed Email Domains",
+            "entityId": "[ES] Entity ID / Issuer",
+            "ssoUrl": "[ES] SSO URL (Login URL)",
+            "sloUrl": "[ES] SLO URL (Logout URL)",
+            "certificate": "[ES] X.509 Certificate",
+            "clientId": "[ES] Client ID",
+            "clientSecret": "[ES] Client Secret",
+            "discoveryUrl": "[ES] Discovery URL",
+            "authorizationUrl": "[ES] Authorization URL",
+            "tokenUrl": "[ES] Token URL",
+            "userInfoUrl": "[ES] User Info URL",
+            "defaultRole": "[ES] Default Role",
+            "jitProvisioning": "[ES] Just-in-Time Provisioning",
+            "autoDeactivate": "[ES] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[ES] Select an organization",
+            "searchOrganizations": "[ES] Search organizations...",
+            "loading": "[ES] Loading...",
+            "noOrganizationsFound": "[ES] No organizations found",
+            "displayName": "[ES] e.g., Acme Corp SSO",
+            "allowedDomains": "[ES] acme.com, acme.org",
+            "entityId": "[ES] https://idp.example.com/entity",
+            "ssoUrl": "[ES] https://idp.example.com/sso",
+            "sloUrl": "[ES] https://idp.example.com/slo",
+            "certificate": "[ES] -----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+            "clientId": "[ES] your-client-id",
+            "clientSecret": "[ES] your-client-secret",
+            "discoveryUrl": "[ES] https://idp.example.com/.well-known/openid-configuration",
+            "authorizationUrl": "[ES] https://idp.example.com/authorize",
+            "tokenUrl": "[ES] https://idp.example.com/token",
+            "userInfoUrl": "[ES] https://idp.example.com/userinfo"
+          },
+          "hints": {
+            "displayName": "[ES] A friendly name for this SSO configuration",
+            "allowedDomains": "[ES] Comma-separated list of email domains allowed to use this SSO",
+            "certificate": "[ES] Paste the public certificate from your Identity Provider",
+            "discoveryUrl": "[ES] If provided, other URLs will be auto-discovered",
+            "manualUrlConfig": "[ES] Manual URL Configuration (optional if discovery URL is provided)",
+            "defaultRole": "[ES] Role assigned to users when they first sign in via SSO",
+            "jitProvisioning": "[ES] Automatically create user accounts on first SSO login",
+            "autoDeactivate": "[ES] Automatically deactivate users removed from Identity Provider"
+          },
+          "roles": {
+            "viewer": "[ES] Viewer",
+            "member": "[ES] Member",
+            "admin": "[ES] Admin"
+          },
+          "validation": {
+            "organizationAndProviderRequired": "[ES] Organization and provider are required"
+          },
+          "toast": {
+            "createSuccess": "[ES] SSO configuration created successfully",
+            "createFailed": "[ES] Failed to create SSO configuration"
+          }
         }
       },
       "domains": {
@@ -8491,7 +8670,17 @@
           "connectionUpdated": "Conexión SCIM actualizada correctamente",
           "connectionDeleted": "Conexión SCIM eliminada correctamente",
           "tokenRegenerated": "Token Bearer regenerado correctamente",
-          "syncStarted": "Sincronización iniciada correctamente"
+          "syncStarted": "Sincronización iniciada correctamente",
+          "loadFailed": "[ES] Failed to fetch SCIM integration",
+          "updated": "[ES] SCIM integration updated",
+          "updateFailed": "[ES] Failed to update SCIM integration",
+          "activated": "[ES] SCIM integration activated successfully",
+          "paused": "[ES] SCIM integration paused successfully",
+          "updateStatusFailed": "[ES] Failed to update status",
+          "regenerateTokenFailed": "[ES] Failed to regenerate token",
+          "deleted": "[ES] SCIM integration deleted successfully",
+          "deleteFailed": "[ES] Failed to delete SCIM integration",
+          "copied": "[ES] Copied to clipboard"
         },
         "confirmations": {
           "deleteTitle": "Eliminar conexión SCIM",
@@ -8504,6 +8693,61 @@
           "connectionNameRequired": "El nombre de la conexión es obligatorio.",
           "baseUrlRequired": "La URL base es obligatoria",
           "invalidUrl": "Por favor ingresa una URL válida"
+        },
+        "new": {
+          "title": "[ES] Create SCIM Integration",
+          "description": "[ES] Configure SCIM 2.0 user provisioning for an organization",
+          "back": "[ES] Back",
+          "creating": "[ES] Creating...",
+          "createIntegration": "[ES] Create Integration",
+          "noPermission": "[ES] You don't have permission to create SCIM integrations",
+          "backToSCIM": "[ES] Back to SCIM Integrations",
+          "sections": {
+            "organization": "[ES] Organization",
+            "organizationDescription": "[ES] Select the organization to configure SCIM provisioning for",
+            "syncSettings": "[ES] Sync Settings",
+            "syncSettingsDescription": "[ES] Configure what data should be synchronized from your Identity Provider"
+          },
+          "fields": {
+            "organization": "[ES] Organization",
+            "defaultRole": "[ES] Default Role",
+            "syncUsers": "[ES] Sync Users",
+            "syncGroups": "[ES] Sync Groups",
+            "autoDeactivate": "[ES] Auto-Deactivate"
+          },
+          "placeholders": {
+            "selectOrganization": "[ES] Select an organization",
+            "searchOrganizations": "[ES] Search organizations...",
+            "loading": "[ES] Loading...",
+            "noOrganizationsFound": "[ES] No organizations found"
+          },
+          "hints": {
+            "defaultRole": "[ES] Role assigned to users provisioned via SCIM",
+            "syncUsers": "[ES] Provision and deprovision users automatically",
+            "syncGroups": "[ES] Sync group memberships from Identity Provider",
+            "autoDeactivate": "[ES] Automatically deactivate users when removed from IdP",
+            "important": "[ES] After creating the integration, you will receive a bearer token and endpoint URL. The token will only be shown once, so make sure to save it securely."
+          },
+          "roles": {
+            "viewer": "[ES] Viewer",
+            "member": "[ES] Member",
+            "admin": "[ES] Admin"
+          },
+          "dialog": {
+            "title": "[ES] SCIM Integration Created",
+            "description": "[ES] Save the bearer token below. It will not be shown again.",
+            "bearerToken": "[ES] Bearer Token",
+            "scimEndpointUrl": "[ES] SCIM Endpoint URL",
+            "copyToken": "[ES] Copy Token",
+            "done": "[ES] Done"
+          },
+          "validation": {
+            "organizationRequired": "[ES] Organization is required"
+          },
+          "toast": {
+            "createSuccess": "[ES] SCIM integration created successfully",
+            "createFailed": "[ES] Failed to create SCIM integration"
+          }
         }
       },
       "devices": {
@@ -8568,7 +8812,53 @@
             "sessionDuration": "Duración de sesión (horas)",
             "requireReauth": "Requerir reautenticación",
             "requireReauthDescription": "Requerir reautenticación después de la duración de la sesión"
-          }
+          },
+          "nameRequired": "[ES] Policy name is required",
+          "created": "[ES] Created",
+          "updated": "[ES] Policy updated successfully",
+          "deleted": "[ES] Policy deleted successfully",
+          "enabled": "[ES] Policy enabled successfully",
+          "disabled": "[ES] Policy disabled successfully",
+          "updateStatusFailed": "[ES] Failed to update status",
+          "notFound": "[ES] Policy not found",
+          "createTitle": "[ES] Create Device Policy",
+          "nameRequiredLabel": "[ES] Policy Name *",
+          "descriptionLabel": "[ES] Description",
+          "scopeLabel": "[ES] Scope",
+          "priorityLabel": "[ES] Priority (higher = first)",
+          "deviceRequirements": "[ES] Device Requirements",
+          "enforcementActions": "[ES] Enforcement Actions",
+          "notifyOnViolation": "[ES] Notify on Violation",
+          "overview": "[ES] Overview",
+          "requirements": "[ES] Requirements",
+          "enforcement": "[ES] Enforcement",
+          "status": "[ES] Status",
+          "createdBy": "[ES] Created By",
+          "lastUpdated": "[ES] Last Updated",
+          "requireEncryption": "[ES] Require Encryption",
+          "requirePasscode": "[ES] Require Passcode",
+          "requireBiometric": "[ES] Require Biometric",
+          "requireMdm": "[ES] Require MDM",
+          "platformRestrictions": "[ES] Platform Restrictions",
+          "allowedPlatforms": "[ES] Allowed Platforms",
+          "allPlatforms": "[ES] All platforms",
+          "blockedPlatforms": "[ES] Blocked Platforms",
+          "blockOnViolation": "[ES] Block on Violation",
+          "blockOnViolationDescription": "[ES] Block access when device is non-compliant",
+          "wipeOnViolation": "[ES] Wipe on Violation",
+          "wipeOnViolationDescription": "[ES] Remote wipe device data on violation",
+          "notifyOnViolationDescription": "[ES] Send notification when policy is violated",
+          "warningWipeEnabled": "[ES] Warning: Wipe on Violation Enabled",
+          "warningWipeDescription": "[ES] This policy will remotely wipe device data when violations occur. Use with extreme caution.",
+          "requirementsDescription": "[ES] Requirements that devices must meet to be compliant",
+          "enforcementDescription": "[ES] Actions taken when a device violates this policy",
+          "editTitle": "[ES] Edit Policy",
+          "details": "[ES] Policy Details",
+          "deleteTitle": "[ES] Delete Policy",
+          "deleteDescription": "[ES] Are you sure you want to delete this policy? This action cannot be undone.",
+          "createButton": "[ES] Create Policy",
+          "namePlaceholder": "[ES] e.g., Enterprise Device Requirements",
+          "descriptionPlaceholder": "[ES] Describe what this policy enforces..."
         },
         "table": {
           "device": "Dispositivo",
@@ -10912,6 +11202,90 @@
         "CLIENT": "Cliente",
         "REGIONAL": "Regional",
         "PORTFOLIO_COMPANY": "Compañía de cartera"
+      },
+      "plans": {
+        "starter": "[ES] Starter",
+        "professional": "[ES] Professional",
+        "enterprise": "[ES] Enterprise"
+      },
+      "new": {
+        "title": "[ES] Create New Organization",
+        "description": "[ES] Add a new tenant organization to the platform",
+        "back": "[ES] Back",
+        "creating": "[ES] Creating...",
+        "createOrganization": "[ES] Create Organization",
+        "noPermission": "[ES] You don't have permission to create organizations",
+        "backToTenants": "[ES] Back to Tenants",
+        "sections": {
+          "organizationDetails": "[ES] Organization Details",
+          "organizationDetailsDescription": "[ES] Basic information about the organization",
+          "locationTimezone": "[ES] Location & Timezone",
+          "locationTimezoneDescription": "[ES] Regional settings for the organization",
+          "planSubscription": "[ES] Plan & Subscription",
+          "planSubscriptionDescription": "[ES] Subscription tier and billing settings",
+          "hierarchySettings": "[ES] Hierarchy Settings",
+          "hierarchySettingsDescription": "[ES] Configure organization hierarchy and parent relationships",
+          "ownerInformation": "[ES] Owner Information (Optional)",
+          "ownerInformationDescription": "[ES] Automatically create an owner user for this organization",
+          "branding": "[ES] Branding (Optional)",
+          "brandingDescription": "[ES] Custom branding settings for the organization"
+        },
+        "fields": {
+          "organizationName": "[ES] Organization Name",
+          "slug": "[ES] Slug (auto-generated if empty)",
+          "organizationType": "[ES] Organization Type",
+          "industry": "[ES] Industry",
+          "companySize": "[ES] Company Size",
+          "domain": "[ES] Domain",
+          "country": "[ES] Country",
+          "timezone": "[ES] Timezone",
+          "planTier": "[ES] Plan Tier",
+          "parentOrganization": "[ES] Parent Organization",
+          "allowChildOrgs": "[ES] Allow Child Organizations",
+          "ownerEmail": "[ES] Owner Email",
+          "ownerName": "[ES] Owner Name",
+          "logoUrl": "[ES] Logo URL",
+          "brandColor": "[ES] Brand Color"
+        },
+        "placeholders": {
+          "organizationName": "[ES] Acme Corporation",
+          "slug": "[ES] acme-corporation",
+          "industry": "[ES] Technology, Healthcare, etc.",
+          "selectSize": "[ES] Select size",
+          "domain": "[ES] acme.com",
+          "country": "[ES] United States",
+          "timezone": "[ES] UTC",
+          "noneRootOrganization": "[ES] None (root organization)",
+          "ownerEmail": "[ES] owner@example.com",
+          "ownerName": "[ES] John Doe",
+          "logoUrl": "[ES] https://example.com/logo.png",
+          "brandColor": "[ES] #3B82F6"
+        },
+        "hints": {
+          "slug": "[ES] URL-friendly identifier, lowercase with hyphens",
+          "parentOrganization": "[ES] Select a parent to create this organization as a child in the hierarchy",
+          "allowChildOrgs": "[ES] Enable hierarchy features and allow creating sub-organizations",
+          "ownerInformation": "[ES] If provided, a user will be created (or existing user added) as the organization owner"
+        },
+        "companySizes": {
+          "solo": "[ES] Solo (1)",
+          "small": "[ES] Small (2-10)",
+          "medium": "[ES] Medium (11-50)",
+          "large": "[ES] Large (51-200)",
+          "enterprise": "[ES] Enterprise (201-1000)",
+          "global": "[ES] Global (1000+)"
+        },
+        "validation": {
+          "nameRequired": "[ES] Organization name is required"
+        },
+        "toast": {
+          "createFailed": "[ES] Failed to create organization"
+        }
+      },
+      "toast": {
+        "assignPlanFailed": "[ES] Failed to assign plan",
+        "grantFeatureFailed": "[ES] Failed to grant feature",
+        "revokeEntitlementFailed": "[ES] Failed to revoke entitlement"
       }
     },
     "users": {
@@ -11034,7 +11408,32 @@
       "selectOrganizationOptional": "Seleccionar organización (opcional)",
       "organizationLaterHint": "La usuario puede agregarse a las organizaciones más tarde.",
       "roleInOrganization": "Papel en la organización",
-      "roleHint": "El rol determina qué acciones puede realizar el usuario."
+      "roleHint": "El rol determina qué acciones puede realizar el usuario.",
+      "bulkActions": {
+        "banReason": "[ES] Bulk ban action"
+      },
+      "toast": {
+        "banFailed": "[ES] Failed to ban user",
+        "userBanned": "[ES] User banned successfully",
+        "liftBanFailed": "[ES] Failed to lift ban",
+        "banLifted": "[ES] Ban lifted successfully",
+        "deleteFailed": "[ES] Failed to delete user",
+        "userDeleted": "[ES] User deleted successfully",
+        "bulkBanFailed": "[ES] Bulk ban failed",
+        "bulkBanSuccess": "[ES] {count} users banned successfully",
+        "bulkUnbanFailed": "[ES] Bulk unban failed",
+        "bulkUnbanSuccess": "[ES] {count} users unbanned successfully",
+        "bulkDeleteFailed": "[ES] Bulk delete failed",
+        "bulkDeleteSuccess": "[ES] {count} users deleted successfully",
+        "bulkVerifyFailed": "[ES] Bulk verify failed",
+        "bulkVerifySuccess": "[ES] {count} users verified successfully",
+        "bulkResetPasswordFailed": "[ES] Bulk reset password failed",
+        "bulkResetPasswordSuccess": "[ES] {count} password reset emails sent",
+        "bulkRevokeSessionsFailed": "[ES] Bulk revoke sessions failed",
+        "bulkRevokeSessionsSuccess": "[ES] {count} sessions revoked successfully",
+        "createFailed": "[ES] Failed to create user",
+        "userCreated": "[ES] User created successfully"
+      }
     },
     "broadcast": {
       "title": "Centro de transmisión",
@@ -11476,7 +11875,23 @@
           "messages": {
             "frameworkUpdated": "Marco actualizado con éxito"
           }
-        }
+        },
+        "createTitle": "[ES] Create Compliance Framework",
+        "createDescription": "[ES] Add a new compliance standard (SOC2, HIPAA, GDPR, etc.)",
+        "createButton": "[ES] Create Framework",
+        "createFailed": "[ES] Failed to create framework",
+        "details": "[ES] Framework Details",
+        "detailsDescription": "[ES] Define the compliance framework standards and requirements",
+        "nameRequired": "[ES] Framework Name *",
+        "codeRequired": "[ES] Code *",
+        "namePlaceholder": "[ES] SOC 2 Type II",
+        "codePlaceholder": "[ES] SOC2",
+        "codeHint": "[ES] Short identifier code (e.g., SOC2, HIPAA, GDPR)",
+        "versionPlaceholder": "[ES] 2023",
+        "versionHint": "[ES] The version or year of the framework standard",
+        "descriptionPlaceholder": "[ES] Service Organization Control 2 compliance framework for security, availability, processing integrity, confidentiality, and privacy...",
+        "activeStatus": "[ES] Active Status",
+        "activeStatusDescription": "[ES] Enable this framework for attestations and audits"
       },
       "frameworksOverview": {
         "title": "Marcos de cumplimiento",
@@ -12828,6 +13243,16 @@
       },
       "validation": {
         "required": "El nombre y el nombre para mostrar son obligatorios"
+      },
+      "colors": {
+        "purple": "[ES] Purple",
+        "blue": "[ES] Blue",
+        "green": "[ES] Green",
+        "amber": "[ES] Amber",
+        "red": "[ES] Red",
+        "gray": "[ES] Gray",
+        "pink": "[ES] Pink",
+        "teal": "[ES] Teal"
       }
     },
     "healthScores": {
@@ -13047,6 +13472,15 @@
           "createFailed": "No se pudo crear el incidente",
           "updateFailed": "No se pudo actualizar el incidente",
           "deleteFailed": "No se pudo eliminar el incidente"
+        },
+        "toast": {
+          "loadFailed": "[ES] Failed to load incident",
+          "statusUpdated": "[ES] Status updated",
+          "updateStatusFailed": "[ES] Failed to update status",
+          "updated": "[ES] Incident updated",
+          "updateFailed": "[ES] Failed to update incident",
+          "updatePosted": "[ES] Update posted",
+          "addUpdateFailed": "[ES] Failed to add update"
         }
       },
       "maintenance": {
@@ -13117,6 +13551,73 @@
           "windowStarted": "Ventana de mantenimiento iniciada",
           "windowCompleted": "Ventana de mantenimiento completada",
           "windowCancelled": "Ventana de mantenimiento cancelada"
+        },
+        "toast": {
+          "loadFailed": "[ES] Failed to load maintenance window",
+          "statusUpdated": "[ES] Status updated",
+          "updateStatusFailed": "[ES] Failed to update status",
+          "updated": "[ES] Maintenance window updated",
+          "updateFailed": "[ES] Failed to update maintenance window",
+          "deleted": "[ES] Maintenance window deleted",
+          "deleteFailed": "[ES] Failed to delete maintenance window"
+        },
+        "new": {
+          "title": "[ES] Schedule Maintenance",
+          "description": "[ES] Create a new scheduled maintenance window",
+          "back": "[ES] Back",
+          "scheduling": "[ES] Scheduling...",
+          "scheduleMaintenance": "[ES] Schedule Maintenance",
+          "sections": {
+            "maintenanceDetails": "[ES] Maintenance Details",
+            "maintenanceDetailsDescription": "[ES] Basic information about the maintenance window",
+            "schedule": "[ES] Schedule",
+            "scheduleDescription": "[ES] Set the maintenance window timing",
+            "affectedServices": "[ES] Affected Services",
+            "affectedServicesDescription": "[ES] Select all services that will be affected",
+            "affectedRegions": "[ES] Affected Regions",
+            "affectedRegionsDescription": "[ES] Select the geographic regions impacted"
+          },
+          "fields": {
+            "title": "[ES] Title",
+            "description": "[ES] Description",
+            "type": "[ES] Type",
+            "startTime": "[ES] Start Time",
+            "endTime": "[ES] End Time",
+            "notifyBefore": "[ES] Notify Before (hours)"
+          },
+          "placeholders": {
+            "title": "[ES] e.g., Database upgrade",
+            "description": "[ES] Describe the maintenance work being performed...",
+            "duration": "[ES] Duration: {duration}"
+          },
+          "typeDescriptions": {
+            "scheduled": "[ES] Planned maintenance window",
+            "emergency": "[ES] Urgent maintenance required",
+            "upgrade": "[ES] System or component upgrade",
+            "migration": "[ES] Data or service migration",
+            "securityPatch": "[ES] Security-related updates"
+          },
+          "regions": {
+            "usEast": "[ES] US East",
+            "usWest": "[ES] US West",
+            "euWest": "[ES] EU West",
+            "euCentral": "[ES] EU Central",
+            "asiaPacific": "[ES] Asia Pacific",
+            "global": "[ES] Global"
+          },
+          "hints": {
+            "notifyBefore": "[ES] Users will be notified {hours} hours before maintenance begins",
+            "selectServices": "[ES] Click to select affected services",
+            "selectRegions": "[ES] Click to select affected regions"
+          },
+          "validation": {
+            "titleStartEndRequired": "[ES] Title, start time, and end time are required",
+            "endAfterStart": "[ES] End time must be after start time"
+          },
+          "toast": {
+            "createSuccess": "[ES] Maintenance window scheduled",
+            "createFailed": "[ES] Failed to schedule maintenance"
+          }
         }
       },
       "releases": {
@@ -13194,6 +13695,72 @@
           "rolloutStarted": "Lanzamiento iniciado",
           "releaseCompleted": "Lanzamiento completado",
           "releaseRolledBack": "Liberación revertida"
+        },
+        "toast": {
+          "loadFailed": "[ES] Failed to load release",
+          "statusUpdated": "[ES] Status updated",
+          "updateStatusFailed": "[ES] Failed to update status",
+          "updateRolloutFailed": "[ES] Failed to update rollout percentage",
+          "updated": "[ES] Release updated",
+          "updateFailed": "[ES] Failed to update release",
+          "deleted": "[ES] Release deleted",
+          "deleteFailed": "[ES] Failed to delete release"
+        },
+        "new": {
+          "title": "[ES] Create New Release",
+          "description": "[ES] Plan and schedule a new platform release",
+          "back": "[ES] Back",
+          "creating": "[ES] Creating...",
+          "createRelease": "[ES] Create Release",
+          "sections": {
+            "releaseDetails": "[ES] Release Details",
+            "releaseDetailsDescription": "[ES] Basic information about this release",
+            "features": "[ES] Features",
+            "featuresDescription": "[ES] New features included in this release",
+            "bugFixes": "[ES] Bug Fixes",
+            "bugFixesDescription": "[ES] Bug fixes included in this release"
+          },
+          "fields": {
+            "version": "[ES] Version",
+            "name": "[ES] Name (optional)",
+            "description": "[ES] Description",
+            "type": "[ES] Type",
+            "rolloutStrategy": "[ES] Rollout Strategy",
+            "plannedDate": "[ES] Planned Date",
+            "changelogUrl": "[ES] Changelog URL"
+          },
+          "placeholders": {
+            "version": "[ES] e.g., 2.5.0",
+            "name": "[ES] e.g., Phoenix",
+            "description": "[ES] Describe the release...",
+            "changelogUrl": "[ES] https://..."
+          },
+          "typeDescriptions": {
+            "major": "[ES] Breaking changes, significant new features",
+            "minor": "[ES] New features, backward compatible",
+            "patch": "[ES] Bug fixes, minor improvements",
+            "hotfix": "[ES] Critical bug fixes"
+          },
+          "strategyDescriptions": {
+            "bigBang": "[ES] Deploy to all users at once",
+            "staged": "[ES] Deploy in stages by percentage",
+            "canary": "[ES] Deploy to small group first",
+            "blueGreen": "[ES] Switch between environments",
+            "ring": "[ES] Deploy by user rings"
+          },
+          "actions": {
+            "addFeature": "[ES] Add a feature...",
+            "addBugFix": "[ES] Add a bug fix...",
+            "noFeatures": "[ES] No features added yet",
+            "noBugFixes": "[ES] No bug fixes added yet"
+          },
+          "validation": {
+            "versionRequired": "[ES] Version is required"
+          },
+          "toast": {
+            "createSuccess": "[ES] Release created successfully",
+            "createFailed": "[ES] Failed to create release"
+          }
         }
       },
       "capacity": {
@@ -13261,6 +13828,17 @@
           "updateFailed": "No se pudo actualizar la métrica de capacidad",
           "deleteFailed": "No se pudo eliminar la métrica de capacidad"
         }
+      },
+      "services": {
+        "apiGateway": "[ES] API Gateway",
+        "authentication": "[ES] Authentication",
+        "database": "[ES] Database",
+        "fileStorage": "[ES] File Storage",
+        "messaging": "[ES] Messaging",
+        "search": "[ES] Search",
+        "analytics": "[ES] Analytics",
+        "payments": "[ES] Payments",
+        "notifications": "[ES] Notifications"
       }
     },
     "integrations": {
@@ -13477,7 +14055,9 @@
           "bulkUpdateFailed": "No se pudieron actualizar las aplicaciones",
           "bulkDeleted": "{count} aplicaciones eliminadas",
           "bulkDeleteFailed": "No se pudieron eliminar aplicaciones",
-          "updateStatusFailed": "No se pudo actualizar el estado de la aplicación"
+          "updateStatusFailed": "No se pudo actualizar el estado de la aplicación",
+          "updated": "[ES] Integration app updated",
+          "loadFailed": "[ES] Failed to load integration app"
         },
         "table": {
           "noReviews": "Sin reseñas"
@@ -13485,6 +14065,108 @@
         "badges": {
           "official": "Aplicación oficial",
           "featured": "Aplicación destacada"
+        },
+        "tabs": {
+          "overview": "[ES] Overview",
+          "installations": "[ES] Installations ({count})",
+          "settings": "[ES] Settings"
+        },
+        "overview": {
+          "status": "[ES] Status",
+          "totalInstalls": "[ES] Total Installs",
+          "rating": "[ES] Rating",
+          "category": "[ES] Category",
+          "noReviews": "[ES] No reviews",
+          "appDetails": "[ES] App Details",
+          "name": "[ES] Name",
+          "slug": "[ES] Slug",
+          "developer": "[ES] Developer",
+          "published": "[ES] Published",
+          "notPublished": "[ES] Not published",
+          "created": "[ES] Created",
+          "links": "[ES] Links",
+          "linksDescription": "[ES] External resources",
+          "description": "[ES] Description",
+          "requiredScopes": "[ES] Required Scopes",
+          "requiredScopesDescription": "[ES] Permissions required by this integration"
+        },
+        "installations": {
+          "title": "[ES] Installation History",
+          "description": "[ES] Organizations using this app",
+          "status": "[ES] Status"
+        },
+        "settings": {
+          "editTitle": "[ES] Edit App Settings",
+          "editDescription": "[ES] Update integration app configuration"
+        },
+        "new": {
+          "title": "[ES] Add Integration App",
+          "description": "[ES] Add a new integration app to the marketplace",
+          "back": "[ES] Back",
+          "creating": "[ES] Creating...",
+          "createApp": "[ES] Create App",
+          "sections": {
+            "appDetails": "[ES] App Details",
+            "appDetailsDescription": "[ES] Basic information about the integration app",
+            "developerInformation": "[ES] Developer Information",
+            "developerInformationDescription": "[ES] Information about the app developer",
+            "assetsLinks": "[ES] Assets & Links",
+            "assetsLinksDescription": "[ES] App icon and related URLs",
+            "appStatus": "[ES] App Status",
+            "appStatusDescription": "[ES] Configure app visibility and badges"
+          },
+          "fields": {
+            "appName": "[ES] App Name",
+            "shortDescription": "[ES] Short Description",
+            "fullDescription": "[ES] Full Description",
+            "category": "[ES] Category",
+            "developerName": "[ES] Developer Name",
+            "developerWebsite": "[ES] Developer Website",
+            "supportEmail": "[ES] Support Email",
+            "iconUrl": "[ES] Icon URL",
+            "appWebsite": "[ES] App Website",
+            "documentationUrl": "[ES] Documentation URL",
+            "officialApp": "[ES] Official App",
+            "featuredApp": "[ES] Featured App"
+          },
+          "placeholders": {
+            "appName": "[ES] My Integration",
+            "shortDescription": "[ES] A brief description of the app",
+            "fullDescription": "[ES] Detailed description of the integration...",
+            "developerName": "[ES] Company or developer name",
+            "developerWebsite": "[ES] https://developer.com",
+            "supportEmail": "[ES] support@developer.com",
+            "iconUrl": "[ES] https://example.com/icon.png",
+            "appWebsite": "[ES] https://myapp.com",
+            "documentationUrl": "[ES] https://docs.myapp.com"
+          },
+          "hints": {
+            "shortDescription": "[ES] Displayed in app listings and search results",
+            "officialApp": "[ES] Mark as an officially supported integration",
+            "featuredApp": "[ES] Highlight this app in the marketplace",
+            "draftStatus": "[ES] The app will be created with Draft status. You can publish it later from the app details page."
+          },
+          "categoryDescriptions": {
+            "productivity": "[ES] Tools to improve workflow efficiency",
+            "communication": "[ES] Messaging, chat, and collaboration",
+            "projectManagement": "[ES] Task tracking and planning",
+            "crm": "[ES] Customer relationship management",
+            "analytics": "[ES] Data analysis and reporting",
+            "security": "[ES] Security and compliance tools",
+            "developerTools": "[ES] Development and DevOps",
+            "hr": "[ES] Human resources management",
+            "finance": "[ES] Financial management tools",
+            "marketing": "[ES] Marketing automation",
+            "customerSupport": "[ES] Help desk and support",
+            "other": "[ES] Other integrations"
+          },
+          "validation": {
+            "nameAndDeveloperRequired": "[ES] Name and developer are required"
+          },
+          "toast": {
+            "createSuccess": "[ES] Integration app created successfully",
+            "createFailed": "[ES] Failed to create app"
+          }
         }
       },
       "webhooks": {
@@ -13568,7 +14250,93 @@
           "testFailed": "Prueba fallida: {error}",
           "testError": "No se pudo enviar el webhook de prueba",
           "deleted": "Webhook eliminado",
-          "deleteFailed": "No se pudo eliminar el webhook"
+          "deleteFailed": "No se pudo eliminar el webhook",
+          "loadFailed": "[ES] Failed to load webhook",
+          "updated": "[ES] Webhook updated",
+          "updateFailed": "[ES] Failed to update webhook",
+          "testDelivered": "[ES] Test webhook delivered successfully",
+          "unknownError": "[ES] Unknown error",
+          "sendTestFailed": "[ES] Failed to send test webhook"
+        },
+        "new": {
+          "title": "[ES] Create Webhook",
+          "description": "[ES] Create a new webhook endpoint to receive event notifications",
+          "back": "[ES] Back",
+          "creating": "[ES] Creating...",
+          "createWebhook": "[ES] Create Webhook",
+          "sections": {
+            "endpointDetails": "[ES] Endpoint Details",
+            "endpointDetailsDescription": "[ES] Configure the webhook endpoint",
+            "settings": "[ES] Settings",
+            "settingsDescription": "[ES] Configure timeout and retry behavior",
+            "eventSubscriptions": "[ES] Event Subscriptions",
+            "eventSubscriptionsDescription": "[ES] Select the events this webhook should receive ({count} selected)"
+          },
+          "fields": {
+            "webhookName": "[ES] Webhook Name",
+            "endpointUrl": "[ES] Endpoint URL",
+            "description": "[ES] Description",
+            "organization": "[ES] Organization",
+            "timeout": "[ES] Timeout (seconds)",
+            "retryCount": "[ES] Retry Count",
+            "customHeaders": "[ES] Custom Headers (JSON)"
+          },
+          "placeholders": {
+            "webhookName": "[ES] My Webhook",
+            "endpointUrl": "[ES] https://example.com/webhooks",
+            "description": "[ES] What is this webhook used for?",
+            "selectOrganization": "[ES] Select organization",
+            "loading": "[ES] Loading...",
+            "customHeaders": "[ES] {\n  \"X-Custom-Header\": \"value\"\n}"
+          },
+          "hints": {
+            "endpointUrl": "[ES] Must be a valid HTTPS URL that can receive POST requests",
+            "customHeaders": "[ES] Optional custom headers to include with webhook requests",
+            "selectEvents": "[ES] Please select at least one event to subscribe to"
+          },
+          "events": {
+            "users": "[ES] Users",
+            "organizations": "[ES] Organizations",
+            "agents": "[ES] Agents",
+            "workflows": "[ES] Workflows",
+            "reports": "[ES] Reports",
+            "billing": "[ES] Billing"
+          },
+          "eventLabels": {
+            "userCreated": "[ES] User Created",
+            "userUpdated": "[ES] User Updated",
+            "userDeleted": "[ES] User Deleted",
+            "organizationCreated": "[ES] Organization Created",
+            "organizationUpdated": "[ES] Organization Updated",
+            "agentRunCompleted": "[ES] Agent Run Completed",
+            "agentRunFailed": "[ES] Agent Run Failed",
+            "workflowCompleted": "[ES] Workflow Completed",
+            "workflowFailed": "[ES] Workflow Failed",
+            "reportGenerated": "[ES] Report Generated",
+            "subscriptionChanged": "[ES] Subscription Changed",
+            "subscriptionCancelled": "[ES] Subscription Cancelled"
+          },
+          "actions": {
+            "selectAll": "[ES] Select All",
+            "deselectAll": "[ES] Deselect All"
+          },
+          "dialog": {
+            "secretTitle": "[ES] Webhook Signing Secret",
+            "secretDescription": "[ES] Copy this secret now - it will not be shown again! Use this to verify webhook signatures.",
+            "copySecret": "[ES] Copy Secret",
+            "done": "[ES] Done"
+          },
+          "validation": {
+            "urlAndOrgRequired": "[ES] URL and organization are required",
+            "atLeastOneEvent": "[ES] Please select at least one event to subscribe to",
+            "invalidUrl": "[ES] Please enter a valid URL",
+            "invalidJsonHeaders": "[ES] Invalid JSON format for custom headers"
+          },
+          "toast": {
+            "createSuccess": "[ES] Webhook created successfully",
+            "createFailed": "[ES] Failed to create webhook",
+            "copied": "[ES] Copied to clipboard"
+          }
         }
       }
     },
@@ -14390,6 +15158,10 @@
       "defaultPlan": "Profesional",
       "requiresPlan": "Esta función requiere el plan {plan} o superior.",
       "upgradeButton": "Plan de actualización"
+    },
+    "usage": {
+      "limitReached": "[ES] You've reached your limit. Upgrade your plan to continue.",
+      "approachingLimit": "[ES] You're approaching your limit."
     }
   },
   "blog": {
