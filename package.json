@@ -20,6 +20,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:minimal": "tsx prisma/seed-minimal.ts",
     "db:seed-if-empty": "tsx prisma/seed-if-empty.ts",
+    "db:verify": "node scripts/verify-seed-data.js",
     "db:setup": "npm run db:migrate && npm run db:seed",
     "test": "vitest",
     "test:run": "vitest run",
