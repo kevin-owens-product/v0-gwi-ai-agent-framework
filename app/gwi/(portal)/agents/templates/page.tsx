@@ -106,7 +106,7 @@ async function AgentTemplatesContent() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{categories.length}</p>
-                <p className="text-sm text-muted-foreground">{t('categories')}</p>
+                <p className="text-sm text-muted-foreground">{t('category')}</p>
               </div>
             </div>
           </CardContent>

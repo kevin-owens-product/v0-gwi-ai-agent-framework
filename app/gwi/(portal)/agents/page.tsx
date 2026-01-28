@@ -145,7 +145,7 @@ async function AgentsContent() {
         <Button variant="outline" asChild>
           <Link href="/gwi/agents/capabilities">
             <Puzzle className="mr-2 h-4 w-4" />
-            {t('capabilities')}
+            {t('capabilities.title')}
           </Link>
         </Button>
       </div>

@@ -7312,7 +7312,8 @@
         "noScheduledPipelines": "No scheduled pipelines",
         "noScheduledPipelinesDescription": "Create schedules to automate pipeline execution",
         "createScheduledPipeline": "Create Scheduled Pipeline",
-        "loading": "Loading schedules..."
+        "loading": "Loading schedules...",
+        "by": "by {name}"
       },
       "validationPage": {
         "title": "Validation Rules",

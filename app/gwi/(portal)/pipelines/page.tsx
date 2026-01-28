@@ -96,7 +96,7 @@ async function PipelinesContent() {
         <Button variant="outline" asChild>
           <Link href="/gwi/pipelines/schedules">
             <Clock className="mr-2 h-4 w-4" />
-            {t('schedules')}
+            {t('schedules.title')}
           </Link>
         </Button>
         <Button variant="outline" asChild>
