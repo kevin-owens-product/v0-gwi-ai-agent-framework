@@ -5992,6 +5992,8 @@
       "getStartedSurvey": "Get started by creating your first survey",
       "settings": "Survey Settings",
       "settingsDesc": "Configure the basic settings for this survey",
+      "surveySettings": "Survey Settings",
+      "surveySettingsDescription": "Configure the basic settings for this survey",
       "surveyNameLabel": "Survey Name",
       "surveyNamePlaceholder": "Enter survey name",
       "descriptionLabel": "Description",
@@ -6000,12 +6002,22 @@
       "selectStatus": "Select status",
       "currentVersion": "Current Version: {version}",
       "saving": "Saving...",
+      "placeholders": {
+        "surveyName": "Enter survey name",
+        "description": "Enter survey description (optional)",
+        "selectStatus": "Select status"
+      },
       "statuses": {
         "draft": "Draft",
         "active": "Active",
         "paused": "Paused",
         "completed": "Completed",
-        "archived": "Archived"
+        "archived": "Archived",
+        "DRAFT": "Draft",
+        "ACTIVE": "Active",
+        "PAUSED": "Paused",
+        "COMPLETED": "Completed",
+        "ARCHIVED": "Archived"
       },
       "detail": {
         "title": "Survey Details",
