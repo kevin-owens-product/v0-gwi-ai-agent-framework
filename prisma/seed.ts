@@ -10454,6 +10454,24 @@ async function main() {
   console.log('   User Change Trackers: 4')
   console.log('   Change Alerts: 4')
 
+  // ==================== GWI PORTAL DATA ====================
+  console.log('\n🌐 Seeding GWI Portal data...')
+  try {
+    // Import and run GWI seed function
+    const gwiSeedPath = require.resolve('./seed-gwi')
+    const gwiSeed = require(gwiSeedPath)
+    // The seed-gwi.ts exports a main function, but we need to handle it differently
+    // Since it's a separate script, we'll use execSync for now
+    const { execSync } = require('child_process')
+    console.log('   Running GWI portal seed script...')
+    execSync('tsx prisma/seed-gwi.ts', { stdio: 'inherit', cwd: process.cwd() })
+    console.log('   ✅ GWI Portal data seeded successfully')
+  } catch (error) {
+    console.log('   ⚠️  GWI Portal seed failed or skipped:', error instanceof Error ? error.message : String(error))
+    console.log('   You can run it separately with: npm run db:seed:gwi')
+    // Don't fail the entire seed if GWI seed fails
+  }
+
   console.log('\n🔑 Test Credentials:')
   console.log('')
   console.log('   ═══════════════════════════════════════════════════════════')
@@ -10496,6 +10514,29 @@ async function main() {
   console.log('     Email: analyst@gwi.com')
   console.log('     Password: Analyst123!')
   console.log('     Role: ANALYST (read-only analytics)')
+  console.log('')
+  console.log('   ═══════════════════════════════════════════════════════════')
+  console.log('   GWI PORTAL LOGIN')
+  console.log('   ═══════════════════════════════════════════════════════════')
+  console.log('   GWI Admin:')
+  console.log('     Email: gwiadmin@gwi.com')
+  console.log('     Password: gwi123')
+  console.log('     Role: GWI_ADMIN (full GWI portal access)')
+  console.log('   ────────────────────────────────────────')
+  console.log('   Data Engineer:')
+  console.log('     Email: dataengineer@gwi.com')
+  console.log('     Password: dataengineer123')
+  console.log('     Role: DATA_ENGINEER (pipelines & data sources)')
+  console.log('   ────────────────────────────────────────')
+  console.log('   Taxonomy Manager:')
+  console.log('     Email: taxonomy@gwi.com')
+  console.log('     Password: gwi123')
+  console.log('     Role: TAXONOMY_MANAGER (taxonomy & surveys)')
+  console.log('   ────────────────────────────────────────')
+  console.log('   ML Engineer:')
+  console.log('     Email: mlengineer@gwi.com')
+  console.log('     Password: gwi123')
+  console.log('     Role: ML_ENGINEER (LLM & agents)')
   console.log('')
 }
 
