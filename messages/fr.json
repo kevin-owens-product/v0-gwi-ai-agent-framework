@@ -5569,7 +5569,12 @@
         "active": "Active",
         "paused": "En pause",
         "completed": "Terminee",
-        "archived": "Archivee"
+        "archived": "Archivee",
+        "DRAFT": "[FR] Draft",
+        "ACTIVE": "[FR] Active",
+        "PAUSED": "[FR] Paused",
+        "COMPLETED": "[FR] Completed",
+        "ARCHIVED": "[FR] Archived"
       },
       "detail": {
         "title": "Détails de l'enquête",
@@ -5856,7 +5861,14 @@
         }
       },
       "questionsLabel": "[FR] Questions",
-      "responsesLabel": "[FR] Responses"
+      "responsesLabel": "[FR] Responses",
+      "surveySettings": "[FR] Survey Settings",
+      "surveySettingsDescription": "[FR] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[FR] Enter survey name",
+        "description": "[FR] Enter survey description (optional)",
+        "selectStatus": "[FR] Select status"
+      }
     },
     "taxonomy": {
       "title": "Taxonomie",
@@ -5902,7 +5914,41 @@
       },
       "categories": {
         "createTitle": "Créer une nouvelle catégorie",
-        "createDescription": "Configurer une nouvelle catégorie de taxonomie pour la classification des données"
+        "createDescription": "Configurer une nouvelle catégorie de taxonomie pour la classification des données",
+        "editCategory": "[FR] Edit Category",
+        "createCategory": "[FR] Create Category",
+        "editCategoryDescription": "[FR] Update the taxonomy category settings",
+        "createCategoryDescription": "[FR] Set up a new taxonomy category for data classification",
+        "categoryName": "[FR] Category Name",
+        "categoryCode": "[FR] Category Code",
+        "codeHint": "[FR] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[FR] Code cannot be changed after creation.",
+        "parentCategory": "[FR] Parent Category",
+        "parentCategoryHint": "[FR] Select a parent category to create a hierarchy",
+        "noParent": "[FR] No Parent (Root Category)",
+        "activeStatus": "[FR] Active Status",
+        "activeStatusDescription": "[FR] Enable or disable this category",
+        "globalScope": "[FR] Global Scope",
+        "globalScopeDescription": "[FR] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[FR] Enter category name",
+          "categoryCode": "[FR] e.g., DEMOGRAPHICS",
+          "description": "[FR] Enter category description (optional)",
+          "parentCategory": "[FR] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[FR] Category name is required",
+          "nameMinLength": "[FR] Category name must be at least 2 characters",
+          "nameMaxLength": "[FR] Category name must be 100 characters or less",
+          "codeRequired": "[FR] Category code is required",
+          "codeFormat": "[FR] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[FR] Code must be 32 characters or less",
+          "descriptionMaxLength": "[FR] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[FR] Failed to save category",
+          "failedToDelete": "[FR] Failed to delete category"
+        }
       },
       "detail": {
         "title": "Détails de la catégorie",
@@ -16694,6 +16740,173 @@
         "templates": "Modèles",
         "scheduled": "Programmé",
         "sharedWithMe": "Partagé avec moi"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[FR] Save",
+        "cancel": "[FR] Cancel",
+        "delete": "[FR] Delete",
+        "saving": "[FR] Saving...",
+        "deleting": "[FR] Deleting...",
+        "active": "[FR] Active",
+        "description": "[FR] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[FR] Pipeline Settings",
+        "pipelineSettingsDescription": "[FR] Configure the basic settings for this pipeline",
+        "pipelineName": "[FR] Pipeline Name",
+        "pipelineType": "[FR] Pipeline Type",
+        "activeDescription": "[FR] Enable or disable this pipeline",
+        "schedule": "[FR] Schedule",
+        "scheduleDescription": "[FR] Configure when this pipeline should run",
+        "schedulePreset": "[FR] Schedule Preset",
+        "customCronExpression": "[FR] Custom Cron Expression",
+        "cronFormat": "[FR] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[FR] Current Schedule",
+        "configuration": "[FR] Configuration",
+        "configurationDescription": "[FR] Pipeline configuration in JSON format",
+        "configurationJson": "[FR] Configuration (JSON)",
+        "configurationHint": "[FR] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[FR] Enter pipeline name",
+          "description": "[FR] Enter pipeline description (optional)",
+          "selectType": "[FR] Select pipeline type",
+          "selectSchedule": "[FR] Select schedule preset",
+          "customCron": "[FR] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[FR] ETL",
+          "TRANSFORMATION": "[FR] Transformation",
+          "AGGREGATION": "[FR] Aggregation",
+          "EXPORT": "[FR] Export",
+          "SYNC": "[FR] Sync"
+        },
+        "validation": {
+          "nameRequired": "[FR] Pipeline name is required",
+          "typeRequired": "[FR] Pipeline type is required",
+          "invalidJsonConfig": "[FR] Invalid JSON configuration",
+          "invalidCron": "[FR] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[FR] Failed to save pipeline",
+          "failedToDelete": "[FR] Failed to delete pipeline",
+          "unexpectedError": "[FR] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[FR] Basic Information",
+        "basicInformationDescription": "[FR] Configure the LLM provider and model settings",
+        "configurationName": "[FR] Configuration Name",
+        "configurationNameHint": "[FR] A descriptive name for this LLM configuration",
+        "provider": "[FR] Provider",
+        "model": "[FR] Model",
+        "apiKeyRef": "[FR] API Key Reference",
+        "apiKeyRefHint": "[FR] Reference to the stored API key",
+        "activeStatus": "[FR] Active Status",
+        "activeStatusDescription": "[FR] Enable or disable this configuration",
+        "modelParameters": "[FR] Model Parameters",
+        "modelParametersDescription": "[FR] Default parameters for model invocations",
+        "defaultParamsJson": "[FR] Default Parameters (JSON)",
+        "defaultParamsHint": "[FR] Enter default parameters as JSON",
+        "rateLimits": "[FR] Rate Limits",
+        "rateLimitsDescription": "[FR] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[FR] Rate Limits (JSON)",
+        "rateLimitsHint": "[FR] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[FR] Enter configuration name",
+          "selectProvider": "[FR] Select provider",
+          "selectModel": "[FR] Select model",
+          "apiKeyRef": "[FR] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[FR] Configuration name is required",
+          "providerRequired": "[FR] Provider is required",
+          "modelRequired": "[FR] Model is required",
+          "apiKeyRefRequired": "[FR] API key reference is required",
+          "invalidParamsJson": "[FR] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[FR] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[FR] Failed to save LLM configuration",
+          "failedToDelete": "[FR] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[FR] Basic Information",
+        "basicInformationDescription": "[FR] Configure the data source connection",
+        "typeCannotBeChanged": "[FR] Type cannot be changed after creation",
+        "activeDescription": "[FR] Enable or disable this data source",
+        "connectionSettings": "[FR] Connection Settings",
+        "connectionSettingsDescription": "[FR] Configure connection for {type} data source",
+        "connectionStringOptional": "[FR] Connection String (Optional)",
+        "connectionStringHint": "[FR] Full connection string or leave blank to use individual fields",
+        "host": "[FR] Host",
+        "port": "[FR] Port",
+        "database": "[FR] Database",
+        "schemaOptional": "[FR] Schema (Optional)",
+        "baseUrl": "[FR] Base URL",
+        "bucketName": "[FR] Bucket Name",
+        "region": "[FR] Region",
+        "placeholders": {
+          "name": "[FR] Enter data source name",
+          "selectType": "[FR] Select data source type",
+          "description": "[FR] Enter description (optional)",
+          "connectionString": "[FR] Enter connection string",
+          "leaveBlankToKeep": "[FR] Leave blank to keep existing",
+          "host": "[FR] Enter host",
+          "database": "[FR] Enter database name"
+        },
+        "types": {
+          "postgresql": "[FR] PostgreSQL",
+          "mysql": "[FR] MySQL",
+          "bigquery": "[FR] BigQuery",
+          "snowflake": "[FR] Snowflake",
+          "api": "[FR] API",
+          "s3": "[FR] Amazon S3",
+          "salesforce": "[FR] Salesforce",
+          "mongodb": "[FR] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[FR] Failed to save data source",
+          "failedToDelete": "[FR] Failed to delete data source",
+          "unexpectedError": "[FR] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[FR] Template Settings",
+        "templateSettingsDescription": "[FR] Configure the agent template settings",
+        "templateName": "[FR] Template Name",
+        "category": "[FR] Category",
+        "published": "[FR] Published",
+        "publishedDescription": "[FR] Make this template available for use",
+        "configuration": "[FR] Configuration",
+        "configurationDescription": "[FR] Agent configuration in JSON format",
+        "configurationJson": "[FR] Configuration (JSON)",
+        "configurationExample": "[FR] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[FR] Default Tools",
+        "defaultToolsDescription": "[FR] Default tools available to this agent",
+        "toolsJson": "[FR] Tools (JSON Array)",
+        "toolsExample": "[FR] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[FR] Default Prompts",
+        "defaultPromptsDescription": "[FR] Default prompts for this agent",
+        "promptsJson": "[FR] Prompts (JSON Object)",
+        "promptsExample": "[FR] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[FR] Enter template name",
+          "description": "[FR] Enter description (optional)",
+          "selectCategory": "[FR] Select category"
+        },
+        "validation": {
+          "nameRequired": "[FR] Template name is required",
+          "categoryRequired": "[FR] Category is required",
+          "invalidJsonFormat": "[FR] Invalid JSON format",
+          "mustBeJsonArray": "[FR] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[FR] Failed to save agent template",
+          "failedToDelete": "[FR] Failed to delete agent template"
+        }
       }
     }
   }

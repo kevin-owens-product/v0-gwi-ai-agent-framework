@@ -5584,7 +5584,12 @@
         "active": "Ενεργός",
         "paused": "Σε παύση",
         "completed": "Ολοκληρώθηκε το",
-        "archived": "Αρχειοθετήθηκε"
+        "archived": "Αρχειοθετήθηκε",
+        "DRAFT": "[EL] Draft",
+        "ACTIVE": "[EL] Active",
+        "PAUSED": "[EL] Paused",
+        "COMPLETED": "[EL] Completed",
+        "ARCHIVED": "[EL] Archived"
       },
       "detail": {
         "title": "Λεπτομέρειες Έρευνας",
@@ -5871,7 +5876,14 @@
         }
       },
       "questionsLabel": "[EL] Questions",
-      "responsesLabel": "[EL] Responses"
+      "responsesLabel": "[EL] Responses",
+      "surveySettings": "[EL] Survey Settings",
+      "surveySettingsDescription": "[EL] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[EL] Enter survey name",
+        "description": "[EL] Enter survey description (optional)",
+        "selectStatus": "[EL] Select status"
+      }
     },
     "taxonomy": {
       "title": "Ταξονομία",
@@ -5879,7 +5891,41 @@
       "loading": "Φόρτωση ταξινόμησης...",
       "categories": {
         "createTitle": "Δημιουργία νέας κατηγορίας",
-        "createDescription": "Δημιουργήστε μια νέα κατηγορία ταξινόμησης για ταξινόμηση δεδομένων"
+        "createDescription": "Δημιουργήστε μια νέα κατηγορία ταξινόμησης για ταξινόμηση δεδομένων",
+        "editCategory": "[EL] Edit Category",
+        "createCategory": "[EL] Create Category",
+        "editCategoryDescription": "[EL] Update the taxonomy category settings",
+        "createCategoryDescription": "[EL] Set up a new taxonomy category for data classification",
+        "categoryName": "[EL] Category Name",
+        "categoryCode": "[EL] Category Code",
+        "codeHint": "[EL] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[EL] Code cannot be changed after creation.",
+        "parentCategory": "[EL] Parent Category",
+        "parentCategoryHint": "[EL] Select a parent category to create a hierarchy",
+        "noParent": "[EL] No Parent (Root Category)",
+        "activeStatus": "[EL] Active Status",
+        "activeStatusDescription": "[EL] Enable or disable this category",
+        "globalScope": "[EL] Global Scope",
+        "globalScopeDescription": "[EL] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[EL] Enter category name",
+          "categoryCode": "[EL] e.g., DEMOGRAPHICS",
+          "description": "[EL] Enter category description (optional)",
+          "parentCategory": "[EL] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[EL] Category name is required",
+          "nameMinLength": "[EL] Category name must be at least 2 characters",
+          "nameMaxLength": "[EL] Category name must be 100 characters or less",
+          "codeRequired": "[EL] Category code is required",
+          "codeFormat": "[EL] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[EL] Code must be 32 characters or less",
+          "descriptionMaxLength": "[EL] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[EL] Failed to save category",
+          "failedToDelete": "[EL] Failed to delete category"
+        }
       },
       "newCategory": "Νέα Κατηγορία",
       "searchPlaceholder": "Αναζήτηση κατηγοριών ανά όνομα ή κωδικό...",
@@ -16694,6 +16740,173 @@
         "templates": "Πρότυπα",
         "scheduled": "Προγραμματισμένος",
         "sharedWithMe": "Κοινή χρήση με εμένα"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[EL] Save",
+        "cancel": "[EL] Cancel",
+        "delete": "[EL] Delete",
+        "saving": "[EL] Saving...",
+        "deleting": "[EL] Deleting...",
+        "active": "[EL] Active",
+        "description": "[EL] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[EL] Pipeline Settings",
+        "pipelineSettingsDescription": "[EL] Configure the basic settings for this pipeline",
+        "pipelineName": "[EL] Pipeline Name",
+        "pipelineType": "[EL] Pipeline Type",
+        "activeDescription": "[EL] Enable or disable this pipeline",
+        "schedule": "[EL] Schedule",
+        "scheduleDescription": "[EL] Configure when this pipeline should run",
+        "schedulePreset": "[EL] Schedule Preset",
+        "customCronExpression": "[EL] Custom Cron Expression",
+        "cronFormat": "[EL] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[EL] Current Schedule",
+        "configuration": "[EL] Configuration",
+        "configurationDescription": "[EL] Pipeline configuration in JSON format",
+        "configurationJson": "[EL] Configuration (JSON)",
+        "configurationHint": "[EL] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[EL] Enter pipeline name",
+          "description": "[EL] Enter pipeline description (optional)",
+          "selectType": "[EL] Select pipeline type",
+          "selectSchedule": "[EL] Select schedule preset",
+          "customCron": "[EL] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[EL] ETL",
+          "TRANSFORMATION": "[EL] Transformation",
+          "AGGREGATION": "[EL] Aggregation",
+          "EXPORT": "[EL] Export",
+          "SYNC": "[EL] Sync"
+        },
+        "validation": {
+          "nameRequired": "[EL] Pipeline name is required",
+          "typeRequired": "[EL] Pipeline type is required",
+          "invalidJsonConfig": "[EL] Invalid JSON configuration",
+          "invalidCron": "[EL] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[EL] Failed to save pipeline",
+          "failedToDelete": "[EL] Failed to delete pipeline",
+          "unexpectedError": "[EL] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[EL] Basic Information",
+        "basicInformationDescription": "[EL] Configure the LLM provider and model settings",
+        "configurationName": "[EL] Configuration Name",
+        "configurationNameHint": "[EL] A descriptive name for this LLM configuration",
+        "provider": "[EL] Provider",
+        "model": "[EL] Model",
+        "apiKeyRef": "[EL] API Key Reference",
+        "apiKeyRefHint": "[EL] Reference to the stored API key",
+        "activeStatus": "[EL] Active Status",
+        "activeStatusDescription": "[EL] Enable or disable this configuration",
+        "modelParameters": "[EL] Model Parameters",
+        "modelParametersDescription": "[EL] Default parameters for model invocations",
+        "defaultParamsJson": "[EL] Default Parameters (JSON)",
+        "defaultParamsHint": "[EL] Enter default parameters as JSON",
+        "rateLimits": "[EL] Rate Limits",
+        "rateLimitsDescription": "[EL] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[EL] Rate Limits (JSON)",
+        "rateLimitsHint": "[EL] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[EL] Enter configuration name",
+          "selectProvider": "[EL] Select provider",
+          "selectModel": "[EL] Select model",
+          "apiKeyRef": "[EL] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[EL] Configuration name is required",
+          "providerRequired": "[EL] Provider is required",
+          "modelRequired": "[EL] Model is required",
+          "apiKeyRefRequired": "[EL] API key reference is required",
+          "invalidParamsJson": "[EL] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[EL] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[EL] Failed to save LLM configuration",
+          "failedToDelete": "[EL] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[EL] Basic Information",
+        "basicInformationDescription": "[EL] Configure the data source connection",
+        "typeCannotBeChanged": "[EL] Type cannot be changed after creation",
+        "activeDescription": "[EL] Enable or disable this data source",
+        "connectionSettings": "[EL] Connection Settings",
+        "connectionSettingsDescription": "[EL] Configure connection for {type} data source",
+        "connectionStringOptional": "[EL] Connection String (Optional)",
+        "connectionStringHint": "[EL] Full connection string or leave blank to use individual fields",
+        "host": "[EL] Host",
+        "port": "[EL] Port",
+        "database": "[EL] Database",
+        "schemaOptional": "[EL] Schema (Optional)",
+        "baseUrl": "[EL] Base URL",
+        "bucketName": "[EL] Bucket Name",
+        "region": "[EL] Region",
+        "placeholders": {
+          "name": "[EL] Enter data source name",
+          "selectType": "[EL] Select data source type",
+          "description": "[EL] Enter description (optional)",
+          "connectionString": "[EL] Enter connection string",
+          "leaveBlankToKeep": "[EL] Leave blank to keep existing",
+          "host": "[EL] Enter host",
+          "database": "[EL] Enter database name"
+        },
+        "types": {
+          "postgresql": "[EL] PostgreSQL",
+          "mysql": "[EL] MySQL",
+          "bigquery": "[EL] BigQuery",
+          "snowflake": "[EL] Snowflake",
+          "api": "[EL] API",
+          "s3": "[EL] Amazon S3",
+          "salesforce": "[EL] Salesforce",
+          "mongodb": "[EL] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[EL] Failed to save data source",
+          "failedToDelete": "[EL] Failed to delete data source",
+          "unexpectedError": "[EL] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[EL] Template Settings",
+        "templateSettingsDescription": "[EL] Configure the agent template settings",
+        "templateName": "[EL] Template Name",
+        "category": "[EL] Category",
+        "published": "[EL] Published",
+        "publishedDescription": "[EL] Make this template available for use",
+        "configuration": "[EL] Configuration",
+        "configurationDescription": "[EL] Agent configuration in JSON format",
+        "configurationJson": "[EL] Configuration (JSON)",
+        "configurationExample": "[EL] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[EL] Default Tools",
+        "defaultToolsDescription": "[EL] Default tools available to this agent",
+        "toolsJson": "[EL] Tools (JSON Array)",
+        "toolsExample": "[EL] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[EL] Default Prompts",
+        "defaultPromptsDescription": "[EL] Default prompts for this agent",
+        "promptsJson": "[EL] Prompts (JSON Object)",
+        "promptsExample": "[EL] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[EL] Enter template name",
+          "description": "[EL] Enter description (optional)",
+          "selectCategory": "[EL] Select category"
+        },
+        "validation": {
+          "nameRequired": "[EL] Template name is required",
+          "categoryRequired": "[EL] Category is required",
+          "invalidJsonFormat": "[EL] Invalid JSON format",
+          "mustBeJsonArray": "[EL] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[EL] Failed to save agent template",
+          "failedToDelete": "[EL] Failed to delete agent template"
+        }
       }
     }
   }

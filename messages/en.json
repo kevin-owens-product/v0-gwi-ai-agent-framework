@@ -6310,7 +6310,41 @@
       "loading": "Loading taxonomy...",
       "categories": {
         "createTitle": "Create New Category",
-        "createDescription": "Set up a new taxonomy category for data classification"
+        "createDescription": "Set up a new taxonomy category for data classification",
+        "editCategory": "Edit Category",
+        "createCategory": "Create Category",
+        "editCategoryDescription": "Update the taxonomy category settings",
+        "createCategoryDescription": "Set up a new taxonomy category for data classification",
+        "categoryName": "Category Name",
+        "categoryCode": "Category Code",
+        "codeHint": "Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "Code cannot be changed after creation.",
+        "parentCategory": "Parent Category",
+        "parentCategoryHint": "Select a parent category to create a hierarchy",
+        "noParent": "No Parent (Root Category)",
+        "activeStatus": "Active Status",
+        "activeStatusDescription": "Enable or disable this category",
+        "globalScope": "Global Scope",
+        "globalScopeDescription": "Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "Enter category name",
+          "categoryCode": "e.g., DEMOGRAPHICS",
+          "description": "Enter category description (optional)",
+          "parentCategory": "Select parent category"
+        },
+        "validation": {
+          "nameRequired": "Category name is required",
+          "nameMinLength": "Category name must be at least 2 characters",
+          "nameMaxLength": "Category name must be 100 characters or less",
+          "codeRequired": "Category code is required",
+          "codeFormat": "Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "Code must be 32 characters or less",
+          "descriptionMaxLength": "Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "Failed to save category",
+          "failedToDelete": "Failed to delete category"
+        }
       },
       "newCategory": "New Category",
       "searchPlaceholder": "Search categories by name or code...",
@@ -16689,6 +16723,173 @@
         "templates": "Templates",
         "scheduled": "Scheduled",
         "sharedWithMe": "Shared with Me"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "saving": "Saving...",
+        "deleting": "Deleting...",
+        "active": "Active",
+        "description": "Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "Pipeline Settings",
+        "pipelineSettingsDescription": "Configure the basic settings for this pipeline",
+        "pipelineName": "Pipeline Name",
+        "pipelineType": "Pipeline Type",
+        "activeDescription": "Enable or disable this pipeline",
+        "schedule": "Schedule",
+        "scheduleDescription": "Configure when this pipeline should run",
+        "schedulePreset": "Schedule Preset",
+        "customCronExpression": "Custom Cron Expression",
+        "cronFormat": "Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "Current Schedule",
+        "configuration": "Configuration",
+        "configurationDescription": "Pipeline configuration in JSON format",
+        "configurationJson": "Configuration (JSON)",
+        "configurationHint": "Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "Enter pipeline name",
+          "description": "Enter pipeline description (optional)",
+          "selectType": "Select pipeline type",
+          "selectSchedule": "Select schedule preset",
+          "customCron": "e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "ETL",
+          "TRANSFORMATION": "Transformation",
+          "AGGREGATION": "Aggregation",
+          "EXPORT": "Export",
+          "SYNC": "Sync"
+        },
+        "validation": {
+          "nameRequired": "Pipeline name is required",
+          "typeRequired": "Pipeline type is required",
+          "invalidJsonConfig": "Invalid JSON configuration",
+          "invalidCron": "Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "Failed to save pipeline",
+          "failedToDelete": "Failed to delete pipeline",
+          "unexpectedError": "An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "Basic Information",
+        "basicInformationDescription": "Configure the LLM provider and model settings",
+        "configurationName": "Configuration Name",
+        "configurationNameHint": "A descriptive name for this LLM configuration",
+        "provider": "Provider",
+        "model": "Model",
+        "apiKeyRef": "API Key Reference",
+        "apiKeyRefHint": "Reference to the stored API key",
+        "activeStatus": "Active Status",
+        "activeStatusDescription": "Enable or disable this configuration",
+        "modelParameters": "Model Parameters",
+        "modelParametersDescription": "Default parameters for model invocations",
+        "defaultParamsJson": "Default Parameters (JSON)",
+        "defaultParamsHint": "Enter default parameters as JSON",
+        "rateLimits": "Rate Limits",
+        "rateLimitsDescription": "Configure rate limiting for this configuration",
+        "rateLimitsJson": "Rate Limits (JSON)",
+        "rateLimitsHint": "Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "Enter configuration name",
+          "selectProvider": "Select provider",
+          "selectModel": "Select model",
+          "apiKeyRef": "Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "Configuration name is required",
+          "providerRequired": "Provider is required",
+          "modelRequired": "Model is required",
+          "apiKeyRefRequired": "API key reference is required",
+          "invalidParamsJson": "Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "Failed to save LLM configuration",
+          "failedToDelete": "Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "Basic Information",
+        "basicInformationDescription": "Configure the data source connection",
+        "typeCannotBeChanged": "Type cannot be changed after creation",
+        "activeDescription": "Enable or disable this data source",
+        "connectionSettings": "Connection Settings",
+        "connectionSettingsDescription": "Configure connection for {type} data source",
+        "connectionStringOptional": "Connection String (Optional)",
+        "connectionStringHint": "Full connection string or leave blank to use individual fields",
+        "host": "Host",
+        "port": "Port",
+        "database": "Database",
+        "schemaOptional": "Schema (Optional)",
+        "baseUrl": "Base URL",
+        "bucketName": "Bucket Name",
+        "region": "Region",
+        "placeholders": {
+          "name": "Enter data source name",
+          "selectType": "Select data source type",
+          "description": "Enter description (optional)",
+          "connectionString": "Enter connection string",
+          "leaveBlankToKeep": "Leave blank to keep existing",
+          "host": "Enter host",
+          "database": "Enter database name"
+        },
+        "types": {
+          "postgresql": "PostgreSQL",
+          "mysql": "MySQL",
+          "bigquery": "BigQuery",
+          "snowflake": "Snowflake",
+          "api": "API",
+          "s3": "Amazon S3",
+          "salesforce": "Salesforce",
+          "mongodb": "MongoDB"
+        },
+        "errors": {
+          "failedToSave": "Failed to save data source",
+          "failedToDelete": "Failed to delete data source",
+          "unexpectedError": "An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "Template Settings",
+        "templateSettingsDescription": "Configure the agent template settings",
+        "templateName": "Template Name",
+        "category": "Category",
+        "published": "Published",
+        "publishedDescription": "Make this template available for use",
+        "configuration": "Configuration",
+        "configurationDescription": "Agent configuration in JSON format",
+        "configurationJson": "Configuration (JSON)",
+        "configurationExample": "Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "Default Tools",
+        "defaultToolsDescription": "Default tools available to this agent",
+        "toolsJson": "Tools (JSON Array)",
+        "toolsExample": "Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "Default Prompts",
+        "defaultPromptsDescription": "Default prompts for this agent",
+        "promptsJson": "Prompts (JSON Object)",
+        "promptsExample": "Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "Enter template name",
+          "description": "Enter description (optional)",
+          "selectCategory": "Select category"
+        },
+        "validation": {
+          "nameRequired": "Template name is required",
+          "categoryRequired": "Category is required",
+          "invalidJsonFormat": "Invalid JSON format",
+          "mustBeJsonArray": "Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "Failed to save agent template",
+          "failedToDelete": "Failed to delete agent template"
+        }
       }
     }
   }

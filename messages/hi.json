@@ -5569,7 +5569,12 @@
         "active": "सक्रिय",
         "paused": "रोका गया",
         "completed": "पूर्ण",
-        "archived": "संग्रहीत"
+        "archived": "संग्रहीत",
+        "DRAFT": "[HI] Draft",
+        "ACTIVE": "[HI] Active",
+        "PAUSED": "[HI] Paused",
+        "COMPLETED": "[HI] Completed",
+        "ARCHIVED": "[HI] Archived"
       },
       "detail": {
         "title": "सर्वेक्षण विवरण",
@@ -5856,7 +5861,14 @@
         }
       },
       "questionsLabel": "[HI] Questions",
-      "responsesLabel": "[HI] Responses"
+      "responsesLabel": "[HI] Responses",
+      "surveySettings": "[HI] Survey Settings",
+      "surveySettingsDescription": "[HI] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[HI] Enter survey name",
+        "description": "[HI] Enter survey description (optional)",
+        "selectStatus": "[HI] Select status"
+      }
     },
     "taxonomy": {
       "title": "वर्गीकरण",
@@ -5902,7 +5914,41 @@
       },
       "categories": {
         "createTitle": "नई श्रेणी बनाएं",
-        "createDescription": "डेटा वर्गीकरण के लिए एक नई वर्गीकरण श्रेणी स्थापित करें"
+        "createDescription": "डेटा वर्गीकरण के लिए एक नई वर्गीकरण श्रेणी स्थापित करें",
+        "editCategory": "[HI] Edit Category",
+        "createCategory": "[HI] Create Category",
+        "editCategoryDescription": "[HI] Update the taxonomy category settings",
+        "createCategoryDescription": "[HI] Set up a new taxonomy category for data classification",
+        "categoryName": "[HI] Category Name",
+        "categoryCode": "[HI] Category Code",
+        "codeHint": "[HI] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[HI] Code cannot be changed after creation.",
+        "parentCategory": "[HI] Parent Category",
+        "parentCategoryHint": "[HI] Select a parent category to create a hierarchy",
+        "noParent": "[HI] No Parent (Root Category)",
+        "activeStatus": "[HI] Active Status",
+        "activeStatusDescription": "[HI] Enable or disable this category",
+        "globalScope": "[HI] Global Scope",
+        "globalScopeDescription": "[HI] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[HI] Enter category name",
+          "categoryCode": "[HI] e.g., DEMOGRAPHICS",
+          "description": "[HI] Enter category description (optional)",
+          "parentCategory": "[HI] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[HI] Category name is required",
+          "nameMinLength": "[HI] Category name must be at least 2 characters",
+          "nameMaxLength": "[HI] Category name must be 100 characters or less",
+          "codeRequired": "[HI] Category code is required",
+          "codeFormat": "[HI] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[HI] Code must be 32 characters or less",
+          "descriptionMaxLength": "[HI] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[HI] Failed to save category",
+          "failedToDelete": "[HI] Failed to delete category"
+        }
       },
       "detail": {
         "title": "श्रेणी विवरण",
@@ -16694,6 +16740,173 @@
         "templates": "टेम्पलेट्स",
         "scheduled": "अनुसूचित",
         "sharedWithMe": "मेरे साथ साझा किया गया"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[HI] Save",
+        "cancel": "[HI] Cancel",
+        "delete": "[HI] Delete",
+        "saving": "[HI] Saving...",
+        "deleting": "[HI] Deleting...",
+        "active": "[HI] Active",
+        "description": "[HI] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[HI] Pipeline Settings",
+        "pipelineSettingsDescription": "[HI] Configure the basic settings for this pipeline",
+        "pipelineName": "[HI] Pipeline Name",
+        "pipelineType": "[HI] Pipeline Type",
+        "activeDescription": "[HI] Enable or disable this pipeline",
+        "schedule": "[HI] Schedule",
+        "scheduleDescription": "[HI] Configure when this pipeline should run",
+        "schedulePreset": "[HI] Schedule Preset",
+        "customCronExpression": "[HI] Custom Cron Expression",
+        "cronFormat": "[HI] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[HI] Current Schedule",
+        "configuration": "[HI] Configuration",
+        "configurationDescription": "[HI] Pipeline configuration in JSON format",
+        "configurationJson": "[HI] Configuration (JSON)",
+        "configurationHint": "[HI] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[HI] Enter pipeline name",
+          "description": "[HI] Enter pipeline description (optional)",
+          "selectType": "[HI] Select pipeline type",
+          "selectSchedule": "[HI] Select schedule preset",
+          "customCron": "[HI] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[HI] ETL",
+          "TRANSFORMATION": "[HI] Transformation",
+          "AGGREGATION": "[HI] Aggregation",
+          "EXPORT": "[HI] Export",
+          "SYNC": "[HI] Sync"
+        },
+        "validation": {
+          "nameRequired": "[HI] Pipeline name is required",
+          "typeRequired": "[HI] Pipeline type is required",
+          "invalidJsonConfig": "[HI] Invalid JSON configuration",
+          "invalidCron": "[HI] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[HI] Failed to save pipeline",
+          "failedToDelete": "[HI] Failed to delete pipeline",
+          "unexpectedError": "[HI] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[HI] Basic Information",
+        "basicInformationDescription": "[HI] Configure the LLM provider and model settings",
+        "configurationName": "[HI] Configuration Name",
+        "configurationNameHint": "[HI] A descriptive name for this LLM configuration",
+        "provider": "[HI] Provider",
+        "model": "[HI] Model",
+        "apiKeyRef": "[HI] API Key Reference",
+        "apiKeyRefHint": "[HI] Reference to the stored API key",
+        "activeStatus": "[HI] Active Status",
+        "activeStatusDescription": "[HI] Enable or disable this configuration",
+        "modelParameters": "[HI] Model Parameters",
+        "modelParametersDescription": "[HI] Default parameters for model invocations",
+        "defaultParamsJson": "[HI] Default Parameters (JSON)",
+        "defaultParamsHint": "[HI] Enter default parameters as JSON",
+        "rateLimits": "[HI] Rate Limits",
+        "rateLimitsDescription": "[HI] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[HI] Rate Limits (JSON)",
+        "rateLimitsHint": "[HI] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[HI] Enter configuration name",
+          "selectProvider": "[HI] Select provider",
+          "selectModel": "[HI] Select model",
+          "apiKeyRef": "[HI] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[HI] Configuration name is required",
+          "providerRequired": "[HI] Provider is required",
+          "modelRequired": "[HI] Model is required",
+          "apiKeyRefRequired": "[HI] API key reference is required",
+          "invalidParamsJson": "[HI] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[HI] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[HI] Failed to save LLM configuration",
+          "failedToDelete": "[HI] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[HI] Basic Information",
+        "basicInformationDescription": "[HI] Configure the data source connection",
+        "typeCannotBeChanged": "[HI] Type cannot be changed after creation",
+        "activeDescription": "[HI] Enable or disable this data source",
+        "connectionSettings": "[HI] Connection Settings",
+        "connectionSettingsDescription": "[HI] Configure connection for {type} data source",
+        "connectionStringOptional": "[HI] Connection String (Optional)",
+        "connectionStringHint": "[HI] Full connection string or leave blank to use individual fields",
+        "host": "[HI] Host",
+        "port": "[HI] Port",
+        "database": "[HI] Database",
+        "schemaOptional": "[HI] Schema (Optional)",
+        "baseUrl": "[HI] Base URL",
+        "bucketName": "[HI] Bucket Name",
+        "region": "[HI] Region",
+        "placeholders": {
+          "name": "[HI] Enter data source name",
+          "selectType": "[HI] Select data source type",
+          "description": "[HI] Enter description (optional)",
+          "connectionString": "[HI] Enter connection string",
+          "leaveBlankToKeep": "[HI] Leave blank to keep existing",
+          "host": "[HI] Enter host",
+          "database": "[HI] Enter database name"
+        },
+        "types": {
+          "postgresql": "[HI] PostgreSQL",
+          "mysql": "[HI] MySQL",
+          "bigquery": "[HI] BigQuery",
+          "snowflake": "[HI] Snowflake",
+          "api": "[HI] API",
+          "s3": "[HI] Amazon S3",
+          "salesforce": "[HI] Salesforce",
+          "mongodb": "[HI] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[HI] Failed to save data source",
+          "failedToDelete": "[HI] Failed to delete data source",
+          "unexpectedError": "[HI] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[HI] Template Settings",
+        "templateSettingsDescription": "[HI] Configure the agent template settings",
+        "templateName": "[HI] Template Name",
+        "category": "[HI] Category",
+        "published": "[HI] Published",
+        "publishedDescription": "[HI] Make this template available for use",
+        "configuration": "[HI] Configuration",
+        "configurationDescription": "[HI] Agent configuration in JSON format",
+        "configurationJson": "[HI] Configuration (JSON)",
+        "configurationExample": "[HI] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[HI] Default Tools",
+        "defaultToolsDescription": "[HI] Default tools available to this agent",
+        "toolsJson": "[HI] Tools (JSON Array)",
+        "toolsExample": "[HI] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[HI] Default Prompts",
+        "defaultPromptsDescription": "[HI] Default prompts for this agent",
+        "promptsJson": "[HI] Prompts (JSON Object)",
+        "promptsExample": "[HI] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[HI] Enter template name",
+          "description": "[HI] Enter description (optional)",
+          "selectCategory": "[HI] Select category"
+        },
+        "validation": {
+          "nameRequired": "[HI] Template name is required",
+          "categoryRequired": "[HI] Category is required",
+          "invalidJsonFormat": "[HI] Invalid JSON format",
+          "mustBeJsonArray": "[HI] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[HI] Failed to save agent template",
+          "failedToDelete": "[HI] Failed to delete agent template"
+        }
       }
     }
   }

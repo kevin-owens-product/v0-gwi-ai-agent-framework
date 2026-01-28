@@ -5463,7 +5463,12 @@
         "active": "সক্রিয়",
         "paused": "বিরতিতে",
         "completed": "সম্পন্ন",
-        "archived": "আর্কাইভকৃত"
+        "archived": "আর্কাইভকৃত",
+        "DRAFT": "[BN] Draft",
+        "ACTIVE": "[BN] Active",
+        "PAUSED": "[BN] Paused",
+        "COMPLETED": "[BN] Completed",
+        "ARCHIVED": "[BN] Archived"
       },
       "detail": {
         "title": "সমীক্ষার বিবরণ",
@@ -5856,7 +5861,14 @@
         }
       },
       "questionsLabel": "[BN] Questions",
-      "responsesLabel": "[BN] Responses"
+      "responsesLabel": "[BN] Responses",
+      "surveySettings": "[BN] Survey Settings",
+      "surveySettingsDescription": "[BN] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[BN] Enter survey name",
+        "description": "[BN] Enter survey description (optional)",
+        "selectStatus": "[BN] Select status"
+      }
     },
     "taxonomy": {
       "title": "ট্যাক্সোনমি",
@@ -5902,7 +5914,41 @@
       },
       "categories": {
         "createTitle": "নতুন বিভাগ তৈরি করুন",
-        "createDescription": "ডেটা শ্রেণীবিভাগের জন্য একটি নতুন শ্রেণীবিন্যাস বিভাগ সেট আপ করুন"
+        "createDescription": "ডেটা শ্রেণীবিভাগের জন্য একটি নতুন শ্রেণীবিন্যাস বিভাগ সেট আপ করুন",
+        "editCategory": "[BN] Edit Category",
+        "createCategory": "[BN] Create Category",
+        "editCategoryDescription": "[BN] Update the taxonomy category settings",
+        "createCategoryDescription": "[BN] Set up a new taxonomy category for data classification",
+        "categoryName": "[BN] Category Name",
+        "categoryCode": "[BN] Category Code",
+        "codeHint": "[BN] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[BN] Code cannot be changed after creation.",
+        "parentCategory": "[BN] Parent Category",
+        "parentCategoryHint": "[BN] Select a parent category to create a hierarchy",
+        "noParent": "[BN] No Parent (Root Category)",
+        "activeStatus": "[BN] Active Status",
+        "activeStatusDescription": "[BN] Enable or disable this category",
+        "globalScope": "[BN] Global Scope",
+        "globalScopeDescription": "[BN] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[BN] Enter category name",
+          "categoryCode": "[BN] e.g., DEMOGRAPHICS",
+          "description": "[BN] Enter category description (optional)",
+          "parentCategory": "[BN] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[BN] Category name is required",
+          "nameMinLength": "[BN] Category name must be at least 2 characters",
+          "nameMaxLength": "[BN] Category name must be 100 characters or less",
+          "codeRequired": "[BN] Category code is required",
+          "codeFormat": "[BN] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[BN] Code must be 32 characters or less",
+          "descriptionMaxLength": "[BN] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[BN] Failed to save category",
+          "failedToDelete": "[BN] Failed to delete category"
+        }
       },
       "detail": {
         "title": "বিভাগ বিবরণ",
@@ -16694,6 +16740,173 @@
         "templates": "টেমপ্লেট",
         "scheduled": "নির্ধারিত",
         "sharedWithMe": "আমার সাথে শেয়ার করা হয়েছে"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[BN] Save",
+        "cancel": "[BN] Cancel",
+        "delete": "[BN] Delete",
+        "saving": "[BN] Saving...",
+        "deleting": "[BN] Deleting...",
+        "active": "[BN] Active",
+        "description": "[BN] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[BN] Pipeline Settings",
+        "pipelineSettingsDescription": "[BN] Configure the basic settings for this pipeline",
+        "pipelineName": "[BN] Pipeline Name",
+        "pipelineType": "[BN] Pipeline Type",
+        "activeDescription": "[BN] Enable or disable this pipeline",
+        "schedule": "[BN] Schedule",
+        "scheduleDescription": "[BN] Configure when this pipeline should run",
+        "schedulePreset": "[BN] Schedule Preset",
+        "customCronExpression": "[BN] Custom Cron Expression",
+        "cronFormat": "[BN] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[BN] Current Schedule",
+        "configuration": "[BN] Configuration",
+        "configurationDescription": "[BN] Pipeline configuration in JSON format",
+        "configurationJson": "[BN] Configuration (JSON)",
+        "configurationHint": "[BN] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[BN] Enter pipeline name",
+          "description": "[BN] Enter pipeline description (optional)",
+          "selectType": "[BN] Select pipeline type",
+          "selectSchedule": "[BN] Select schedule preset",
+          "customCron": "[BN] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[BN] ETL",
+          "TRANSFORMATION": "[BN] Transformation",
+          "AGGREGATION": "[BN] Aggregation",
+          "EXPORT": "[BN] Export",
+          "SYNC": "[BN] Sync"
+        },
+        "validation": {
+          "nameRequired": "[BN] Pipeline name is required",
+          "typeRequired": "[BN] Pipeline type is required",
+          "invalidJsonConfig": "[BN] Invalid JSON configuration",
+          "invalidCron": "[BN] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[BN] Failed to save pipeline",
+          "failedToDelete": "[BN] Failed to delete pipeline",
+          "unexpectedError": "[BN] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[BN] Basic Information",
+        "basicInformationDescription": "[BN] Configure the LLM provider and model settings",
+        "configurationName": "[BN] Configuration Name",
+        "configurationNameHint": "[BN] A descriptive name for this LLM configuration",
+        "provider": "[BN] Provider",
+        "model": "[BN] Model",
+        "apiKeyRef": "[BN] API Key Reference",
+        "apiKeyRefHint": "[BN] Reference to the stored API key",
+        "activeStatus": "[BN] Active Status",
+        "activeStatusDescription": "[BN] Enable or disable this configuration",
+        "modelParameters": "[BN] Model Parameters",
+        "modelParametersDescription": "[BN] Default parameters for model invocations",
+        "defaultParamsJson": "[BN] Default Parameters (JSON)",
+        "defaultParamsHint": "[BN] Enter default parameters as JSON",
+        "rateLimits": "[BN] Rate Limits",
+        "rateLimitsDescription": "[BN] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[BN] Rate Limits (JSON)",
+        "rateLimitsHint": "[BN] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[BN] Enter configuration name",
+          "selectProvider": "[BN] Select provider",
+          "selectModel": "[BN] Select model",
+          "apiKeyRef": "[BN] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[BN] Configuration name is required",
+          "providerRequired": "[BN] Provider is required",
+          "modelRequired": "[BN] Model is required",
+          "apiKeyRefRequired": "[BN] API key reference is required",
+          "invalidParamsJson": "[BN] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[BN] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[BN] Failed to save LLM configuration",
+          "failedToDelete": "[BN] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[BN] Basic Information",
+        "basicInformationDescription": "[BN] Configure the data source connection",
+        "typeCannotBeChanged": "[BN] Type cannot be changed after creation",
+        "activeDescription": "[BN] Enable or disable this data source",
+        "connectionSettings": "[BN] Connection Settings",
+        "connectionSettingsDescription": "[BN] Configure connection for {type} data source",
+        "connectionStringOptional": "[BN] Connection String (Optional)",
+        "connectionStringHint": "[BN] Full connection string or leave blank to use individual fields",
+        "host": "[BN] Host",
+        "port": "[BN] Port",
+        "database": "[BN] Database",
+        "schemaOptional": "[BN] Schema (Optional)",
+        "baseUrl": "[BN] Base URL",
+        "bucketName": "[BN] Bucket Name",
+        "region": "[BN] Region",
+        "placeholders": {
+          "name": "[BN] Enter data source name",
+          "selectType": "[BN] Select data source type",
+          "description": "[BN] Enter description (optional)",
+          "connectionString": "[BN] Enter connection string",
+          "leaveBlankToKeep": "[BN] Leave blank to keep existing",
+          "host": "[BN] Enter host",
+          "database": "[BN] Enter database name"
+        },
+        "types": {
+          "postgresql": "[BN] PostgreSQL",
+          "mysql": "[BN] MySQL",
+          "bigquery": "[BN] BigQuery",
+          "snowflake": "[BN] Snowflake",
+          "api": "[BN] API",
+          "s3": "[BN] Amazon S3",
+          "salesforce": "[BN] Salesforce",
+          "mongodb": "[BN] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[BN] Failed to save data source",
+          "failedToDelete": "[BN] Failed to delete data source",
+          "unexpectedError": "[BN] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[BN] Template Settings",
+        "templateSettingsDescription": "[BN] Configure the agent template settings",
+        "templateName": "[BN] Template Name",
+        "category": "[BN] Category",
+        "published": "[BN] Published",
+        "publishedDescription": "[BN] Make this template available for use",
+        "configuration": "[BN] Configuration",
+        "configurationDescription": "[BN] Agent configuration in JSON format",
+        "configurationJson": "[BN] Configuration (JSON)",
+        "configurationExample": "[BN] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[BN] Default Tools",
+        "defaultToolsDescription": "[BN] Default tools available to this agent",
+        "toolsJson": "[BN] Tools (JSON Array)",
+        "toolsExample": "[BN] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[BN] Default Prompts",
+        "defaultPromptsDescription": "[BN] Default prompts for this agent",
+        "promptsJson": "[BN] Prompts (JSON Object)",
+        "promptsExample": "[BN] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[BN] Enter template name",
+          "description": "[BN] Enter description (optional)",
+          "selectCategory": "[BN] Select category"
+        },
+        "validation": {
+          "nameRequired": "[BN] Template name is required",
+          "categoryRequired": "[BN] Category is required",
+          "invalidJsonFormat": "[BN] Invalid JSON format",
+          "mustBeJsonArray": "[BN] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[BN] Failed to save agent template",
+          "failedToDelete": "[BN] Failed to delete agent template"
+        }
       }
     }
   }

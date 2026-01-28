@@ -5569,7 +5569,12 @@
         "active": "活跃",
         "paused": "已暂停",
         "completed": "已完成",
-        "archived": "已归档"
+        "archived": "已归档",
+        "DRAFT": "[ZH] Draft",
+        "ACTIVE": "[ZH] Active",
+        "PAUSED": "[ZH] Paused",
+        "COMPLETED": "[ZH] Completed",
+        "ARCHIVED": "[ZH] Archived"
       },
       "detail": {
         "title": "调查详情",
@@ -5856,7 +5861,14 @@
         }
       },
       "questionsLabel": "[ZH] Questions",
-      "responsesLabel": "[ZH] Responses"
+      "responsesLabel": "[ZH] Responses",
+      "surveySettings": "[ZH] Survey Settings",
+      "surveySettingsDescription": "[ZH] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[ZH] Enter survey name",
+        "description": "[ZH] Enter survey description (optional)",
+        "selectStatus": "[ZH] Select status"
+      }
     },
     "taxonomy": {
       "title": "分类法",
@@ -6100,7 +6112,41 @@
       },
       "categories": {
         "createTitle": "创建新类别",
-        "createDescription": "为数据分类设置新的分类类别"
+        "createDescription": "为数据分类设置新的分类类别",
+        "editCategory": "[ZH] Edit Category",
+        "createCategory": "[ZH] Create Category",
+        "editCategoryDescription": "[ZH] Update the taxonomy category settings",
+        "createCategoryDescription": "[ZH] Set up a new taxonomy category for data classification",
+        "categoryName": "[ZH] Category Name",
+        "categoryCode": "[ZH] Category Code",
+        "codeHint": "[ZH] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[ZH] Code cannot be changed after creation.",
+        "parentCategory": "[ZH] Parent Category",
+        "parentCategoryHint": "[ZH] Select a parent category to create a hierarchy",
+        "noParent": "[ZH] No Parent (Root Category)",
+        "activeStatus": "[ZH] Active Status",
+        "activeStatusDescription": "[ZH] Enable or disable this category",
+        "globalScope": "[ZH] Global Scope",
+        "globalScopeDescription": "[ZH] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[ZH] Enter category name",
+          "categoryCode": "[ZH] e.g., DEMOGRAPHICS",
+          "description": "[ZH] Enter category description (optional)",
+          "parentCategory": "[ZH] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[ZH] Category name is required",
+          "nameMinLength": "[ZH] Category name must be at least 2 characters",
+          "nameMaxLength": "[ZH] Category name must be 100 characters or less",
+          "codeRequired": "[ZH] Category code is required",
+          "codeFormat": "[ZH] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[ZH] Code must be 32 characters or less",
+          "descriptionMaxLength": "[ZH] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[ZH] Failed to save category",
+          "failedToDelete": "[ZH] Failed to delete category"
+        }
       },
       "validation": {
         "title": "分类验证",
@@ -16694,6 +16740,173 @@
         "templates": "模板",
         "scheduled": "预定",
         "sharedWithMe": "与我分享"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[ZH] Save",
+        "cancel": "[ZH] Cancel",
+        "delete": "[ZH] Delete",
+        "saving": "[ZH] Saving...",
+        "deleting": "[ZH] Deleting...",
+        "active": "[ZH] Active",
+        "description": "[ZH] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[ZH] Pipeline Settings",
+        "pipelineSettingsDescription": "[ZH] Configure the basic settings for this pipeline",
+        "pipelineName": "[ZH] Pipeline Name",
+        "pipelineType": "[ZH] Pipeline Type",
+        "activeDescription": "[ZH] Enable or disable this pipeline",
+        "schedule": "[ZH] Schedule",
+        "scheduleDescription": "[ZH] Configure when this pipeline should run",
+        "schedulePreset": "[ZH] Schedule Preset",
+        "customCronExpression": "[ZH] Custom Cron Expression",
+        "cronFormat": "[ZH] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[ZH] Current Schedule",
+        "configuration": "[ZH] Configuration",
+        "configurationDescription": "[ZH] Pipeline configuration in JSON format",
+        "configurationJson": "[ZH] Configuration (JSON)",
+        "configurationHint": "[ZH] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[ZH] Enter pipeline name",
+          "description": "[ZH] Enter pipeline description (optional)",
+          "selectType": "[ZH] Select pipeline type",
+          "selectSchedule": "[ZH] Select schedule preset",
+          "customCron": "[ZH] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[ZH] ETL",
+          "TRANSFORMATION": "[ZH] Transformation",
+          "AGGREGATION": "[ZH] Aggregation",
+          "EXPORT": "[ZH] Export",
+          "SYNC": "[ZH] Sync"
+        },
+        "validation": {
+          "nameRequired": "[ZH] Pipeline name is required",
+          "typeRequired": "[ZH] Pipeline type is required",
+          "invalidJsonConfig": "[ZH] Invalid JSON configuration",
+          "invalidCron": "[ZH] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[ZH] Failed to save pipeline",
+          "failedToDelete": "[ZH] Failed to delete pipeline",
+          "unexpectedError": "[ZH] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[ZH] Basic Information",
+        "basicInformationDescription": "[ZH] Configure the LLM provider and model settings",
+        "configurationName": "[ZH] Configuration Name",
+        "configurationNameHint": "[ZH] A descriptive name for this LLM configuration",
+        "provider": "[ZH] Provider",
+        "model": "[ZH] Model",
+        "apiKeyRef": "[ZH] API Key Reference",
+        "apiKeyRefHint": "[ZH] Reference to the stored API key",
+        "activeStatus": "[ZH] Active Status",
+        "activeStatusDescription": "[ZH] Enable or disable this configuration",
+        "modelParameters": "[ZH] Model Parameters",
+        "modelParametersDescription": "[ZH] Default parameters for model invocations",
+        "defaultParamsJson": "[ZH] Default Parameters (JSON)",
+        "defaultParamsHint": "[ZH] Enter default parameters as JSON",
+        "rateLimits": "[ZH] Rate Limits",
+        "rateLimitsDescription": "[ZH] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[ZH] Rate Limits (JSON)",
+        "rateLimitsHint": "[ZH] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[ZH] Enter configuration name",
+          "selectProvider": "[ZH] Select provider",
+          "selectModel": "[ZH] Select model",
+          "apiKeyRef": "[ZH] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[ZH] Configuration name is required",
+          "providerRequired": "[ZH] Provider is required",
+          "modelRequired": "[ZH] Model is required",
+          "apiKeyRefRequired": "[ZH] API key reference is required",
+          "invalidParamsJson": "[ZH] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[ZH] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[ZH] Failed to save LLM configuration",
+          "failedToDelete": "[ZH] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[ZH] Basic Information",
+        "basicInformationDescription": "[ZH] Configure the data source connection",
+        "typeCannotBeChanged": "[ZH] Type cannot be changed after creation",
+        "activeDescription": "[ZH] Enable or disable this data source",
+        "connectionSettings": "[ZH] Connection Settings",
+        "connectionSettingsDescription": "[ZH] Configure connection for {type} data source",
+        "connectionStringOptional": "[ZH] Connection String (Optional)",
+        "connectionStringHint": "[ZH] Full connection string or leave blank to use individual fields",
+        "host": "[ZH] Host",
+        "port": "[ZH] Port",
+        "database": "[ZH] Database",
+        "schemaOptional": "[ZH] Schema (Optional)",
+        "baseUrl": "[ZH] Base URL",
+        "bucketName": "[ZH] Bucket Name",
+        "region": "[ZH] Region",
+        "placeholders": {
+          "name": "[ZH] Enter data source name",
+          "selectType": "[ZH] Select data source type",
+          "description": "[ZH] Enter description (optional)",
+          "connectionString": "[ZH] Enter connection string",
+          "leaveBlankToKeep": "[ZH] Leave blank to keep existing",
+          "host": "[ZH] Enter host",
+          "database": "[ZH] Enter database name"
+        },
+        "types": {
+          "postgresql": "[ZH] PostgreSQL",
+          "mysql": "[ZH] MySQL",
+          "bigquery": "[ZH] BigQuery",
+          "snowflake": "[ZH] Snowflake",
+          "api": "[ZH] API",
+          "s3": "[ZH] Amazon S3",
+          "salesforce": "[ZH] Salesforce",
+          "mongodb": "[ZH] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[ZH] Failed to save data source",
+          "failedToDelete": "[ZH] Failed to delete data source",
+          "unexpectedError": "[ZH] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[ZH] Template Settings",
+        "templateSettingsDescription": "[ZH] Configure the agent template settings",
+        "templateName": "[ZH] Template Name",
+        "category": "[ZH] Category",
+        "published": "[ZH] Published",
+        "publishedDescription": "[ZH] Make this template available for use",
+        "configuration": "[ZH] Configuration",
+        "configurationDescription": "[ZH] Agent configuration in JSON format",
+        "configurationJson": "[ZH] Configuration (JSON)",
+        "configurationExample": "[ZH] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[ZH] Default Tools",
+        "defaultToolsDescription": "[ZH] Default tools available to this agent",
+        "toolsJson": "[ZH] Tools (JSON Array)",
+        "toolsExample": "[ZH] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[ZH] Default Prompts",
+        "defaultPromptsDescription": "[ZH] Default prompts for this agent",
+        "promptsJson": "[ZH] Prompts (JSON Object)",
+        "promptsExample": "[ZH] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[ZH] Enter template name",
+          "description": "[ZH] Enter description (optional)",
+          "selectCategory": "[ZH] Select category"
+        },
+        "validation": {
+          "nameRequired": "[ZH] Template name is required",
+          "categoryRequired": "[ZH] Category is required",
+          "invalidJsonFormat": "[ZH] Invalid JSON format",
+          "mustBeJsonArray": "[ZH] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[ZH] Failed to save agent template",
+          "failedToDelete": "[ZH] Failed to delete agent template"
+        }
       }
     }
   }

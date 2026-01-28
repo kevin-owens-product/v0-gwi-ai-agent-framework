@@ -5569,7 +5569,12 @@
         "active": "Активный",
         "paused": "Приостановлен",
         "completed": "Завершён",
-        "archived": "В архиве"
+        "archived": "В архиве",
+        "DRAFT": "[RU] Draft",
+        "ACTIVE": "[RU] Active",
+        "PAUSED": "[RU] Paused",
+        "COMPLETED": "[RU] Completed",
+        "ARCHIVED": "[RU] Archived"
       },
       "detail": {
         "title": "Подробности опроса",
@@ -5856,7 +5861,14 @@
         }
       },
       "questionsLabel": "[RU] Questions",
-      "responsesLabel": "[RU] Responses"
+      "responsesLabel": "[RU] Responses",
+      "surveySettings": "[RU] Survey Settings",
+      "surveySettingsDescription": "[RU] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[RU] Enter survey name",
+        "description": "[RU] Enter survey description (optional)",
+        "selectStatus": "[RU] Select status"
+      }
     },
     "taxonomy": {
       "title": "Таксономия",
@@ -5902,7 +5914,41 @@
       },
       "categories": {
         "createTitle": "Создать новую категорию",
-        "createDescription": "Настройка новой категории таксономии для классификации данных."
+        "createDescription": "Настройка новой категории таксономии для классификации данных.",
+        "editCategory": "[RU] Edit Category",
+        "createCategory": "[RU] Create Category",
+        "editCategoryDescription": "[RU] Update the taxonomy category settings",
+        "createCategoryDescription": "[RU] Set up a new taxonomy category for data classification",
+        "categoryName": "[RU] Category Name",
+        "categoryCode": "[RU] Category Code",
+        "codeHint": "[RU] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[RU] Code cannot be changed after creation.",
+        "parentCategory": "[RU] Parent Category",
+        "parentCategoryHint": "[RU] Select a parent category to create a hierarchy",
+        "noParent": "[RU] No Parent (Root Category)",
+        "activeStatus": "[RU] Active Status",
+        "activeStatusDescription": "[RU] Enable or disable this category",
+        "globalScope": "[RU] Global Scope",
+        "globalScopeDescription": "[RU] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[RU] Enter category name",
+          "categoryCode": "[RU] e.g., DEMOGRAPHICS",
+          "description": "[RU] Enter category description (optional)",
+          "parentCategory": "[RU] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[RU] Category name is required",
+          "nameMinLength": "[RU] Category name must be at least 2 characters",
+          "nameMaxLength": "[RU] Category name must be 100 characters or less",
+          "codeRequired": "[RU] Category code is required",
+          "codeFormat": "[RU] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[RU] Code must be 32 characters or less",
+          "descriptionMaxLength": "[RU] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[RU] Failed to save category",
+          "failedToDelete": "[RU] Failed to delete category"
+        }
       },
       "detail": {
         "title": "Детали категории",
@@ -16694,6 +16740,173 @@
         "templates": "Шаблоны",
         "scheduled": "Запланировано",
         "sharedWithMe": "Поделились со мной"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[RU] Save",
+        "cancel": "[RU] Cancel",
+        "delete": "[RU] Delete",
+        "saving": "[RU] Saving...",
+        "deleting": "[RU] Deleting...",
+        "active": "[RU] Active",
+        "description": "[RU] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[RU] Pipeline Settings",
+        "pipelineSettingsDescription": "[RU] Configure the basic settings for this pipeline",
+        "pipelineName": "[RU] Pipeline Name",
+        "pipelineType": "[RU] Pipeline Type",
+        "activeDescription": "[RU] Enable or disable this pipeline",
+        "schedule": "[RU] Schedule",
+        "scheduleDescription": "[RU] Configure when this pipeline should run",
+        "schedulePreset": "[RU] Schedule Preset",
+        "customCronExpression": "[RU] Custom Cron Expression",
+        "cronFormat": "[RU] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[RU] Current Schedule",
+        "configuration": "[RU] Configuration",
+        "configurationDescription": "[RU] Pipeline configuration in JSON format",
+        "configurationJson": "[RU] Configuration (JSON)",
+        "configurationHint": "[RU] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[RU] Enter pipeline name",
+          "description": "[RU] Enter pipeline description (optional)",
+          "selectType": "[RU] Select pipeline type",
+          "selectSchedule": "[RU] Select schedule preset",
+          "customCron": "[RU] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[RU] ETL",
+          "TRANSFORMATION": "[RU] Transformation",
+          "AGGREGATION": "[RU] Aggregation",
+          "EXPORT": "[RU] Export",
+          "SYNC": "[RU] Sync"
+        },
+        "validation": {
+          "nameRequired": "[RU] Pipeline name is required",
+          "typeRequired": "[RU] Pipeline type is required",
+          "invalidJsonConfig": "[RU] Invalid JSON configuration",
+          "invalidCron": "[RU] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[RU] Failed to save pipeline",
+          "failedToDelete": "[RU] Failed to delete pipeline",
+          "unexpectedError": "[RU] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[RU] Basic Information",
+        "basicInformationDescription": "[RU] Configure the LLM provider and model settings",
+        "configurationName": "[RU] Configuration Name",
+        "configurationNameHint": "[RU] A descriptive name for this LLM configuration",
+        "provider": "[RU] Provider",
+        "model": "[RU] Model",
+        "apiKeyRef": "[RU] API Key Reference",
+        "apiKeyRefHint": "[RU] Reference to the stored API key",
+        "activeStatus": "[RU] Active Status",
+        "activeStatusDescription": "[RU] Enable or disable this configuration",
+        "modelParameters": "[RU] Model Parameters",
+        "modelParametersDescription": "[RU] Default parameters for model invocations",
+        "defaultParamsJson": "[RU] Default Parameters (JSON)",
+        "defaultParamsHint": "[RU] Enter default parameters as JSON",
+        "rateLimits": "[RU] Rate Limits",
+        "rateLimitsDescription": "[RU] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[RU] Rate Limits (JSON)",
+        "rateLimitsHint": "[RU] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[RU] Enter configuration name",
+          "selectProvider": "[RU] Select provider",
+          "selectModel": "[RU] Select model",
+          "apiKeyRef": "[RU] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[RU] Configuration name is required",
+          "providerRequired": "[RU] Provider is required",
+          "modelRequired": "[RU] Model is required",
+          "apiKeyRefRequired": "[RU] API key reference is required",
+          "invalidParamsJson": "[RU] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[RU] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[RU] Failed to save LLM configuration",
+          "failedToDelete": "[RU] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[RU] Basic Information",
+        "basicInformationDescription": "[RU] Configure the data source connection",
+        "typeCannotBeChanged": "[RU] Type cannot be changed after creation",
+        "activeDescription": "[RU] Enable or disable this data source",
+        "connectionSettings": "[RU] Connection Settings",
+        "connectionSettingsDescription": "[RU] Configure connection for {type} data source",
+        "connectionStringOptional": "[RU] Connection String (Optional)",
+        "connectionStringHint": "[RU] Full connection string or leave blank to use individual fields",
+        "host": "[RU] Host",
+        "port": "[RU] Port",
+        "database": "[RU] Database",
+        "schemaOptional": "[RU] Schema (Optional)",
+        "baseUrl": "[RU] Base URL",
+        "bucketName": "[RU] Bucket Name",
+        "region": "[RU] Region",
+        "placeholders": {
+          "name": "[RU] Enter data source name",
+          "selectType": "[RU] Select data source type",
+          "description": "[RU] Enter description (optional)",
+          "connectionString": "[RU] Enter connection string",
+          "leaveBlankToKeep": "[RU] Leave blank to keep existing",
+          "host": "[RU] Enter host",
+          "database": "[RU] Enter database name"
+        },
+        "types": {
+          "postgresql": "[RU] PostgreSQL",
+          "mysql": "[RU] MySQL",
+          "bigquery": "[RU] BigQuery",
+          "snowflake": "[RU] Snowflake",
+          "api": "[RU] API",
+          "s3": "[RU] Amazon S3",
+          "salesforce": "[RU] Salesforce",
+          "mongodb": "[RU] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[RU] Failed to save data source",
+          "failedToDelete": "[RU] Failed to delete data source",
+          "unexpectedError": "[RU] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[RU] Template Settings",
+        "templateSettingsDescription": "[RU] Configure the agent template settings",
+        "templateName": "[RU] Template Name",
+        "category": "[RU] Category",
+        "published": "[RU] Published",
+        "publishedDescription": "[RU] Make this template available for use",
+        "configuration": "[RU] Configuration",
+        "configurationDescription": "[RU] Agent configuration in JSON format",
+        "configurationJson": "[RU] Configuration (JSON)",
+        "configurationExample": "[RU] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[RU] Default Tools",
+        "defaultToolsDescription": "[RU] Default tools available to this agent",
+        "toolsJson": "[RU] Tools (JSON Array)",
+        "toolsExample": "[RU] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[RU] Default Prompts",
+        "defaultPromptsDescription": "[RU] Default prompts for this agent",
+        "promptsJson": "[RU] Prompts (JSON Object)",
+        "promptsExample": "[RU] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[RU] Enter template name",
+          "description": "[RU] Enter description (optional)",
+          "selectCategory": "[RU] Select category"
+        },
+        "validation": {
+          "nameRequired": "[RU] Template name is required",
+          "categoryRequired": "[RU] Category is required",
+          "invalidJsonFormat": "[RU] Invalid JSON format",
+          "mustBeJsonArray": "[RU] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[RU] Failed to save agent template",
+          "failedToDelete": "[RU] Failed to delete agent template"
+        }
       }
     }
   }

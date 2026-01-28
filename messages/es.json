@@ -5574,7 +5574,12 @@
         "active": "Activa",
         "paused": "Pausada",
         "completed": "Completada",
-        "archived": "Archivada"
+        "archived": "Archivada",
+        "DRAFT": "[ES] Draft",
+        "ACTIVE": "[ES] Active",
+        "PAUSED": "[ES] Paused",
+        "COMPLETED": "[ES] Completed",
+        "ARCHIVED": "[ES] Archived"
       },
       "detail": {
         "title": "Detalles de encuesta",
@@ -5861,7 +5866,14 @@
         }
       },
       "questionsLabel": "[ES] Questions",
-      "responsesLabel": "[ES] Responses"
+      "responsesLabel": "[ES] Responses",
+      "surveySettings": "[ES] Survey Settings",
+      "surveySettingsDescription": "[ES] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[ES] Enter survey name",
+        "description": "[ES] Enter survey description (optional)",
+        "selectStatus": "[ES] Select status"
+      }
     },
     "taxonomy": {
       "title": "Taxonomía",
@@ -6105,7 +6117,41 @@
       },
       "categories": {
         "createTitle": "Crear nueva categoría",
-        "createDescription": "Configurar una nueva categoría de taxonomía para la clasificación de datos"
+        "createDescription": "Configurar una nueva categoría de taxonomía para la clasificación de datos",
+        "editCategory": "[ES] Edit Category",
+        "createCategory": "[ES] Create Category",
+        "editCategoryDescription": "[ES] Update the taxonomy category settings",
+        "createCategoryDescription": "[ES] Set up a new taxonomy category for data classification",
+        "categoryName": "[ES] Category Name",
+        "categoryCode": "[ES] Category Code",
+        "codeHint": "[ES] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[ES] Code cannot be changed after creation.",
+        "parentCategory": "[ES] Parent Category",
+        "parentCategoryHint": "[ES] Select a parent category to create a hierarchy",
+        "noParent": "[ES] No Parent (Root Category)",
+        "activeStatus": "[ES] Active Status",
+        "activeStatusDescription": "[ES] Enable or disable this category",
+        "globalScope": "[ES] Global Scope",
+        "globalScopeDescription": "[ES] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[ES] Enter category name",
+          "categoryCode": "[ES] e.g., DEMOGRAPHICS",
+          "description": "[ES] Enter category description (optional)",
+          "parentCategory": "[ES] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[ES] Category name is required",
+          "nameMinLength": "[ES] Category name must be at least 2 characters",
+          "nameMaxLength": "[ES] Category name must be 100 characters or less",
+          "codeRequired": "[ES] Category code is required",
+          "codeFormat": "[ES] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[ES] Code must be 32 characters or less",
+          "descriptionMaxLength": "[ES] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[ES] Failed to save category",
+          "failedToDelete": "[ES] Failed to delete category"
+        }
       },
       "validation": {
         "title": "Validación de taxonomía",
@@ -16699,6 +16745,173 @@
         "templates": "Plantillas",
         "scheduled": "Programada",
         "sharedWithMe": "Compartido conmigo"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[ES] Save",
+        "cancel": "[ES] Cancel",
+        "delete": "[ES] Delete",
+        "saving": "[ES] Saving...",
+        "deleting": "[ES] Deleting...",
+        "active": "[ES] Active",
+        "description": "[ES] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[ES] Pipeline Settings",
+        "pipelineSettingsDescription": "[ES] Configure the basic settings for this pipeline",
+        "pipelineName": "[ES] Pipeline Name",
+        "pipelineType": "[ES] Pipeline Type",
+        "activeDescription": "[ES] Enable or disable this pipeline",
+        "schedule": "[ES] Schedule",
+        "scheduleDescription": "[ES] Configure when this pipeline should run",
+        "schedulePreset": "[ES] Schedule Preset",
+        "customCronExpression": "[ES] Custom Cron Expression",
+        "cronFormat": "[ES] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[ES] Current Schedule",
+        "configuration": "[ES] Configuration",
+        "configurationDescription": "[ES] Pipeline configuration in JSON format",
+        "configurationJson": "[ES] Configuration (JSON)",
+        "configurationHint": "[ES] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[ES] Enter pipeline name",
+          "description": "[ES] Enter pipeline description (optional)",
+          "selectType": "[ES] Select pipeline type",
+          "selectSchedule": "[ES] Select schedule preset",
+          "customCron": "[ES] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[ES] ETL",
+          "TRANSFORMATION": "[ES] Transformation",
+          "AGGREGATION": "[ES] Aggregation",
+          "EXPORT": "[ES] Export",
+          "SYNC": "[ES] Sync"
+        },
+        "validation": {
+          "nameRequired": "[ES] Pipeline name is required",
+          "typeRequired": "[ES] Pipeline type is required",
+          "invalidJsonConfig": "[ES] Invalid JSON configuration",
+          "invalidCron": "[ES] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[ES] Failed to save pipeline",
+          "failedToDelete": "[ES] Failed to delete pipeline",
+          "unexpectedError": "[ES] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[ES] Basic Information",
+        "basicInformationDescription": "[ES] Configure the LLM provider and model settings",
+        "configurationName": "[ES] Configuration Name",
+        "configurationNameHint": "[ES] A descriptive name for this LLM configuration",
+        "provider": "[ES] Provider",
+        "model": "[ES] Model",
+        "apiKeyRef": "[ES] API Key Reference",
+        "apiKeyRefHint": "[ES] Reference to the stored API key",
+        "activeStatus": "[ES] Active Status",
+        "activeStatusDescription": "[ES] Enable or disable this configuration",
+        "modelParameters": "[ES] Model Parameters",
+        "modelParametersDescription": "[ES] Default parameters for model invocations",
+        "defaultParamsJson": "[ES] Default Parameters (JSON)",
+        "defaultParamsHint": "[ES] Enter default parameters as JSON",
+        "rateLimits": "[ES] Rate Limits",
+        "rateLimitsDescription": "[ES] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[ES] Rate Limits (JSON)",
+        "rateLimitsHint": "[ES] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[ES] Enter configuration name",
+          "selectProvider": "[ES] Select provider",
+          "selectModel": "[ES] Select model",
+          "apiKeyRef": "[ES] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[ES] Configuration name is required",
+          "providerRequired": "[ES] Provider is required",
+          "modelRequired": "[ES] Model is required",
+          "apiKeyRefRequired": "[ES] API key reference is required",
+          "invalidParamsJson": "[ES] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[ES] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[ES] Failed to save LLM configuration",
+          "failedToDelete": "[ES] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[ES] Basic Information",
+        "basicInformationDescription": "[ES] Configure the data source connection",
+        "typeCannotBeChanged": "[ES] Type cannot be changed after creation",
+        "activeDescription": "[ES] Enable or disable this data source",
+        "connectionSettings": "[ES] Connection Settings",
+        "connectionSettingsDescription": "[ES] Configure connection for {type} data source",
+        "connectionStringOptional": "[ES] Connection String (Optional)",
+        "connectionStringHint": "[ES] Full connection string or leave blank to use individual fields",
+        "host": "[ES] Host",
+        "port": "[ES] Port",
+        "database": "[ES] Database",
+        "schemaOptional": "[ES] Schema (Optional)",
+        "baseUrl": "[ES] Base URL",
+        "bucketName": "[ES] Bucket Name",
+        "region": "[ES] Region",
+        "placeholders": {
+          "name": "[ES] Enter data source name",
+          "selectType": "[ES] Select data source type",
+          "description": "[ES] Enter description (optional)",
+          "connectionString": "[ES] Enter connection string",
+          "leaveBlankToKeep": "[ES] Leave blank to keep existing",
+          "host": "[ES] Enter host",
+          "database": "[ES] Enter database name"
+        },
+        "types": {
+          "postgresql": "[ES] PostgreSQL",
+          "mysql": "[ES] MySQL",
+          "bigquery": "[ES] BigQuery",
+          "snowflake": "[ES] Snowflake",
+          "api": "[ES] API",
+          "s3": "[ES] Amazon S3",
+          "salesforce": "[ES] Salesforce",
+          "mongodb": "[ES] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[ES] Failed to save data source",
+          "failedToDelete": "[ES] Failed to delete data source",
+          "unexpectedError": "[ES] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[ES] Template Settings",
+        "templateSettingsDescription": "[ES] Configure the agent template settings",
+        "templateName": "[ES] Template Name",
+        "category": "[ES] Category",
+        "published": "[ES] Published",
+        "publishedDescription": "[ES] Make this template available for use",
+        "configuration": "[ES] Configuration",
+        "configurationDescription": "[ES] Agent configuration in JSON format",
+        "configurationJson": "[ES] Configuration (JSON)",
+        "configurationExample": "[ES] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[ES] Default Tools",
+        "defaultToolsDescription": "[ES] Default tools available to this agent",
+        "toolsJson": "[ES] Tools (JSON Array)",
+        "toolsExample": "[ES] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[ES] Default Prompts",
+        "defaultPromptsDescription": "[ES] Default prompts for this agent",
+        "promptsJson": "[ES] Prompts (JSON Object)",
+        "promptsExample": "[ES] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[ES] Enter template name",
+          "description": "[ES] Enter description (optional)",
+          "selectCategory": "[ES] Select category"
+        },
+        "validation": {
+          "nameRequired": "[ES] Template name is required",
+          "categoryRequired": "[ES] Category is required",
+          "invalidJsonFormat": "[ES] Invalid JSON format",
+          "mustBeJsonArray": "[ES] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[ES] Failed to save agent template",
+          "failedToDelete": "[ES] Failed to delete agent template"
+        }
       }
     }
   }

@@ -5463,7 +5463,12 @@
         "active": "نشط",
         "paused": "متوقف مؤقتاً",
         "completed": "مكتمل",
-        "archived": "مؤرشف"
+        "archived": "مؤرشف",
+        "DRAFT": "[AR] Draft",
+        "ACTIVE": "[AR] Active",
+        "PAUSED": "[AR] Paused",
+        "COMPLETED": "[AR] Completed",
+        "ARCHIVED": "[AR] Archived"
       },
       "detail": {
         "title": "تفاصيل المسح",
@@ -5856,7 +5861,14 @@
         }
       },
       "questionsLabel": "[AR] Questions",
-      "responsesLabel": "[AR] Responses"
+      "responsesLabel": "[AR] Responses",
+      "surveySettings": "[AR] Survey Settings",
+      "surveySettingsDescription": "[AR] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[AR] Enter survey name",
+        "description": "[AR] Enter survey description (optional)",
+        "selectStatus": "[AR] Select status"
+      }
     },
     "taxonomy": {
       "title": "التصنيف",
@@ -5902,7 +5914,41 @@
       },
       "categories": {
         "createTitle": "إنشاء فئة جديدة",
-        "createDescription": "قم بإعداد فئة تصنيف جديدة لتصنيف البيانات"
+        "createDescription": "قم بإعداد فئة تصنيف جديدة لتصنيف البيانات",
+        "editCategory": "[AR] Edit Category",
+        "createCategory": "[AR] Create Category",
+        "editCategoryDescription": "[AR] Update the taxonomy category settings",
+        "createCategoryDescription": "[AR] Set up a new taxonomy category for data classification",
+        "categoryName": "[AR] Category Name",
+        "categoryCode": "[AR] Category Code",
+        "codeHint": "[AR] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[AR] Code cannot be changed after creation.",
+        "parentCategory": "[AR] Parent Category",
+        "parentCategoryHint": "[AR] Select a parent category to create a hierarchy",
+        "noParent": "[AR] No Parent (Root Category)",
+        "activeStatus": "[AR] Active Status",
+        "activeStatusDescription": "[AR] Enable or disable this category",
+        "globalScope": "[AR] Global Scope",
+        "globalScopeDescription": "[AR] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[AR] Enter category name",
+          "categoryCode": "[AR] e.g., DEMOGRAPHICS",
+          "description": "[AR] Enter category description (optional)",
+          "parentCategory": "[AR] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[AR] Category name is required",
+          "nameMinLength": "[AR] Category name must be at least 2 characters",
+          "nameMaxLength": "[AR] Category name must be 100 characters or less",
+          "codeRequired": "[AR] Category code is required",
+          "codeFormat": "[AR] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[AR] Code must be 32 characters or less",
+          "descriptionMaxLength": "[AR] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[AR] Failed to save category",
+          "failedToDelete": "[AR] Failed to delete category"
+        }
       },
       "detail": {
         "title": "تفاصيل الفئة",
@@ -16694,6 +16740,173 @@
         "templates": "قوالب",
         "scheduled": "المقرر",
         "sharedWithMe": "مشترك معي"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[AR] Save",
+        "cancel": "[AR] Cancel",
+        "delete": "[AR] Delete",
+        "saving": "[AR] Saving...",
+        "deleting": "[AR] Deleting...",
+        "active": "[AR] Active",
+        "description": "[AR] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[AR] Pipeline Settings",
+        "pipelineSettingsDescription": "[AR] Configure the basic settings for this pipeline",
+        "pipelineName": "[AR] Pipeline Name",
+        "pipelineType": "[AR] Pipeline Type",
+        "activeDescription": "[AR] Enable or disable this pipeline",
+        "schedule": "[AR] Schedule",
+        "scheduleDescription": "[AR] Configure when this pipeline should run",
+        "schedulePreset": "[AR] Schedule Preset",
+        "customCronExpression": "[AR] Custom Cron Expression",
+        "cronFormat": "[AR] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[AR] Current Schedule",
+        "configuration": "[AR] Configuration",
+        "configurationDescription": "[AR] Pipeline configuration in JSON format",
+        "configurationJson": "[AR] Configuration (JSON)",
+        "configurationHint": "[AR] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[AR] Enter pipeline name",
+          "description": "[AR] Enter pipeline description (optional)",
+          "selectType": "[AR] Select pipeline type",
+          "selectSchedule": "[AR] Select schedule preset",
+          "customCron": "[AR] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[AR] ETL",
+          "TRANSFORMATION": "[AR] Transformation",
+          "AGGREGATION": "[AR] Aggregation",
+          "EXPORT": "[AR] Export",
+          "SYNC": "[AR] Sync"
+        },
+        "validation": {
+          "nameRequired": "[AR] Pipeline name is required",
+          "typeRequired": "[AR] Pipeline type is required",
+          "invalidJsonConfig": "[AR] Invalid JSON configuration",
+          "invalidCron": "[AR] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[AR] Failed to save pipeline",
+          "failedToDelete": "[AR] Failed to delete pipeline",
+          "unexpectedError": "[AR] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[AR] Basic Information",
+        "basicInformationDescription": "[AR] Configure the LLM provider and model settings",
+        "configurationName": "[AR] Configuration Name",
+        "configurationNameHint": "[AR] A descriptive name for this LLM configuration",
+        "provider": "[AR] Provider",
+        "model": "[AR] Model",
+        "apiKeyRef": "[AR] API Key Reference",
+        "apiKeyRefHint": "[AR] Reference to the stored API key",
+        "activeStatus": "[AR] Active Status",
+        "activeStatusDescription": "[AR] Enable or disable this configuration",
+        "modelParameters": "[AR] Model Parameters",
+        "modelParametersDescription": "[AR] Default parameters for model invocations",
+        "defaultParamsJson": "[AR] Default Parameters (JSON)",
+        "defaultParamsHint": "[AR] Enter default parameters as JSON",
+        "rateLimits": "[AR] Rate Limits",
+        "rateLimitsDescription": "[AR] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[AR] Rate Limits (JSON)",
+        "rateLimitsHint": "[AR] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[AR] Enter configuration name",
+          "selectProvider": "[AR] Select provider",
+          "selectModel": "[AR] Select model",
+          "apiKeyRef": "[AR] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[AR] Configuration name is required",
+          "providerRequired": "[AR] Provider is required",
+          "modelRequired": "[AR] Model is required",
+          "apiKeyRefRequired": "[AR] API key reference is required",
+          "invalidParamsJson": "[AR] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[AR] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[AR] Failed to save LLM configuration",
+          "failedToDelete": "[AR] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[AR] Basic Information",
+        "basicInformationDescription": "[AR] Configure the data source connection",
+        "typeCannotBeChanged": "[AR] Type cannot be changed after creation",
+        "activeDescription": "[AR] Enable or disable this data source",
+        "connectionSettings": "[AR] Connection Settings",
+        "connectionSettingsDescription": "[AR] Configure connection for {type} data source",
+        "connectionStringOptional": "[AR] Connection String (Optional)",
+        "connectionStringHint": "[AR] Full connection string or leave blank to use individual fields",
+        "host": "[AR] Host",
+        "port": "[AR] Port",
+        "database": "[AR] Database",
+        "schemaOptional": "[AR] Schema (Optional)",
+        "baseUrl": "[AR] Base URL",
+        "bucketName": "[AR] Bucket Name",
+        "region": "[AR] Region",
+        "placeholders": {
+          "name": "[AR] Enter data source name",
+          "selectType": "[AR] Select data source type",
+          "description": "[AR] Enter description (optional)",
+          "connectionString": "[AR] Enter connection string",
+          "leaveBlankToKeep": "[AR] Leave blank to keep existing",
+          "host": "[AR] Enter host",
+          "database": "[AR] Enter database name"
+        },
+        "types": {
+          "postgresql": "[AR] PostgreSQL",
+          "mysql": "[AR] MySQL",
+          "bigquery": "[AR] BigQuery",
+          "snowflake": "[AR] Snowflake",
+          "api": "[AR] API",
+          "s3": "[AR] Amazon S3",
+          "salesforce": "[AR] Salesforce",
+          "mongodb": "[AR] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[AR] Failed to save data source",
+          "failedToDelete": "[AR] Failed to delete data source",
+          "unexpectedError": "[AR] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[AR] Template Settings",
+        "templateSettingsDescription": "[AR] Configure the agent template settings",
+        "templateName": "[AR] Template Name",
+        "category": "[AR] Category",
+        "published": "[AR] Published",
+        "publishedDescription": "[AR] Make this template available for use",
+        "configuration": "[AR] Configuration",
+        "configurationDescription": "[AR] Agent configuration in JSON format",
+        "configurationJson": "[AR] Configuration (JSON)",
+        "configurationExample": "[AR] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[AR] Default Tools",
+        "defaultToolsDescription": "[AR] Default tools available to this agent",
+        "toolsJson": "[AR] Tools (JSON Array)",
+        "toolsExample": "[AR] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[AR] Default Prompts",
+        "defaultPromptsDescription": "[AR] Default prompts for this agent",
+        "promptsJson": "[AR] Prompts (JSON Object)",
+        "promptsExample": "[AR] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[AR] Enter template name",
+          "description": "[AR] Enter description (optional)",
+          "selectCategory": "[AR] Select category"
+        },
+        "validation": {
+          "nameRequired": "[AR] Template name is required",
+          "categoryRequired": "[AR] Category is required",
+          "invalidJsonFormat": "[AR] Invalid JSON format",
+          "mustBeJsonArray": "[AR] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[AR] Failed to save agent template",
+          "failedToDelete": "[AR] Failed to delete agent template"
+        }
       }
     }
   }

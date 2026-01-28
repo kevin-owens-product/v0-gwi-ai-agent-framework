@@ -5569,7 +5569,12 @@
         "active": "アクティブ",
         "paused": "一時停止",
         "completed": "完了",
-        "archived": "アーカイブ済み"
+        "archived": "アーカイブ済み",
+        "DRAFT": "[JA] Draft",
+        "ACTIVE": "[JA] Active",
+        "PAUSED": "[JA] Paused",
+        "COMPLETED": "[JA] Completed",
+        "ARCHIVED": "[JA] Archived"
       },
       "detail": {
         "title": "調査詳細",
@@ -5856,7 +5861,14 @@
         }
       },
       "questionsLabel": "[JA] Questions",
-      "responsesLabel": "[JA] Responses"
+      "responsesLabel": "[JA] Responses",
+      "surveySettings": "[JA] Survey Settings",
+      "surveySettingsDescription": "[JA] Configure the basic settings for this survey",
+      "placeholders": {
+        "surveyName": "[JA] Enter survey name",
+        "description": "[JA] Enter survey description (optional)",
+        "selectStatus": "[JA] Select status"
+      }
     },
     "taxonomy": {
       "title": "タクソノミー",
@@ -5902,7 +5914,41 @@
       },
       "categories": {
         "createTitle": "新しいカテゴリの作成",
-        "createDescription": "データ分類のための新しい分類カテゴリを設定する"
+        "createDescription": "データ分類のための新しい分類カテゴリを設定する",
+        "editCategory": "[JA] Edit Category",
+        "createCategory": "[JA] Create Category",
+        "editCategoryDescription": "[JA] Update the taxonomy category settings",
+        "createCategoryDescription": "[JA] Set up a new taxonomy category for data classification",
+        "categoryName": "[JA] Category Name",
+        "categoryCode": "[JA] Category Code",
+        "codeHint": "[JA] Code must be uppercase letters, numbers, and underscores only.",
+        "codeCannotBeChanged": "[JA] Code cannot be changed after creation.",
+        "parentCategory": "[JA] Parent Category",
+        "parentCategoryHint": "[JA] Select a parent category to create a hierarchy",
+        "noParent": "[JA] No Parent (Root Category)",
+        "activeStatus": "[JA] Active Status",
+        "activeStatusDescription": "[JA] Enable or disable this category",
+        "globalScope": "[JA] Global Scope",
+        "globalScopeDescription": "[JA] Make this category available to all organizations",
+        "placeholders": {
+          "categoryName": "[JA] Enter category name",
+          "categoryCode": "[JA] e.g., DEMOGRAPHICS",
+          "description": "[JA] Enter category description (optional)",
+          "parentCategory": "[JA] Select parent category"
+        },
+        "validation": {
+          "nameRequired": "[JA] Category name is required",
+          "nameMinLength": "[JA] Category name must be at least 2 characters",
+          "nameMaxLength": "[JA] Category name must be 100 characters or less",
+          "codeRequired": "[JA] Category code is required",
+          "codeFormat": "[JA] Code must contain only uppercase letters, numbers, and underscores",
+          "codeMaxLength": "[JA] Code must be 32 characters or less",
+          "descriptionMaxLength": "[JA] Description must be 500 characters or less"
+        },
+        "errors": {
+          "failedToSave": "[JA] Failed to save category",
+          "failedToDelete": "[JA] Failed to delete category"
+        }
       },
       "detail": {
         "title": "カテゴリ詳細",
@@ -16694,6 +16740,173 @@
         "templates": "テンプレート",
         "scheduled": "予定されている",
         "sharedWithMe": "私と共有しました"
+      }
+    },
+    "editors": {
+      "common": {
+        "save": "[JA] Save",
+        "cancel": "[JA] Cancel",
+        "delete": "[JA] Delete",
+        "saving": "[JA] Saving...",
+        "deleting": "[JA] Deleting...",
+        "active": "[JA] Active",
+        "description": "[JA] Description"
+      },
+      "pipeline": {
+        "pipelineSettings": "[JA] Pipeline Settings",
+        "pipelineSettingsDescription": "[JA] Configure the basic settings for this pipeline",
+        "pipelineName": "[JA] Pipeline Name",
+        "pipelineType": "[JA] Pipeline Type",
+        "activeDescription": "[JA] Enable or disable this pipeline",
+        "schedule": "[JA] Schedule",
+        "scheduleDescription": "[JA] Configure when this pipeline should run",
+        "schedulePreset": "[JA] Schedule Preset",
+        "customCronExpression": "[JA] Custom Cron Expression",
+        "cronFormat": "[JA] Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "[JA] Current Schedule",
+        "configuration": "[JA] Configuration",
+        "configurationDescription": "[JA] Pipeline configuration in JSON format",
+        "configurationJson": "[JA] Configuration (JSON)",
+        "configurationHint": "[JA] Enter pipeline configuration as JSON",
+        "placeholders": {
+          "pipelineName": "[JA] Enter pipeline name",
+          "description": "[JA] Enter pipeline description (optional)",
+          "selectType": "[JA] Select pipeline type",
+          "selectSchedule": "[JA] Select schedule preset",
+          "customCron": "[JA] e.g., 0 0 * * *"
+        },
+        "types": {
+          "ETL": "[JA] ETL",
+          "TRANSFORMATION": "[JA] Transformation",
+          "AGGREGATION": "[JA] Aggregation",
+          "EXPORT": "[JA] Export",
+          "SYNC": "[JA] Sync"
+        },
+        "validation": {
+          "nameRequired": "[JA] Pipeline name is required",
+          "typeRequired": "[JA] Pipeline type is required",
+          "invalidJsonConfig": "[JA] Invalid JSON configuration",
+          "invalidCron": "[JA] Invalid cron expression"
+        },
+        "errors": {
+          "failedToSave": "[JA] Failed to save pipeline",
+          "failedToDelete": "[JA] Failed to delete pipeline",
+          "unexpectedError": "[JA] An unexpected error occurred"
+        }
+      },
+      "llmConfiguration": {
+        "basicInformation": "[JA] Basic Information",
+        "basicInformationDescription": "[JA] Configure the LLM provider and model settings",
+        "configurationName": "[JA] Configuration Name",
+        "configurationNameHint": "[JA] A descriptive name for this LLM configuration",
+        "provider": "[JA] Provider",
+        "model": "[JA] Model",
+        "apiKeyRef": "[JA] API Key Reference",
+        "apiKeyRefHint": "[JA] Reference to the stored API key",
+        "activeStatus": "[JA] Active Status",
+        "activeStatusDescription": "[JA] Enable or disable this configuration",
+        "modelParameters": "[JA] Model Parameters",
+        "modelParametersDescription": "[JA] Default parameters for model invocations",
+        "defaultParamsJson": "[JA] Default Parameters (JSON)",
+        "defaultParamsHint": "[JA] Enter default parameters as JSON",
+        "rateLimits": "[JA] Rate Limits",
+        "rateLimitsDescription": "[JA] Configure rate limiting for this configuration",
+        "rateLimitsJson": "[JA] Rate Limits (JSON)",
+        "rateLimitsHint": "[JA] Enter rate limits as JSON",
+        "placeholders": {
+          "configurationName": "[JA] Enter configuration name",
+          "selectProvider": "[JA] Select provider",
+          "selectModel": "[JA] Select model",
+          "apiKeyRef": "[JA] Enter API key reference"
+        },
+        "validation": {
+          "nameRequired": "[JA] Configuration name is required",
+          "providerRequired": "[JA] Provider is required",
+          "modelRequired": "[JA] Model is required",
+          "apiKeyRefRequired": "[JA] API key reference is required",
+          "invalidParamsJson": "[JA] Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "[JA] Invalid JSON for rate limits"
+        },
+        "errors": {
+          "failedToSave": "[JA] Failed to save LLM configuration",
+          "failedToDelete": "[JA] Failed to delete LLM configuration"
+        }
+      },
+      "dataSource": {
+        "basicInformation": "[JA] Basic Information",
+        "basicInformationDescription": "[JA] Configure the data source connection",
+        "typeCannotBeChanged": "[JA] Type cannot be changed after creation",
+        "activeDescription": "[JA] Enable or disable this data source",
+        "connectionSettings": "[JA] Connection Settings",
+        "connectionSettingsDescription": "[JA] Configure connection for {type} data source",
+        "connectionStringOptional": "[JA] Connection String (Optional)",
+        "connectionStringHint": "[JA] Full connection string or leave blank to use individual fields",
+        "host": "[JA] Host",
+        "port": "[JA] Port",
+        "database": "[JA] Database",
+        "schemaOptional": "[JA] Schema (Optional)",
+        "baseUrl": "[JA] Base URL",
+        "bucketName": "[JA] Bucket Name",
+        "region": "[JA] Region",
+        "placeholders": {
+          "name": "[JA] Enter data source name",
+          "selectType": "[JA] Select data source type",
+          "description": "[JA] Enter description (optional)",
+          "connectionString": "[JA] Enter connection string",
+          "leaveBlankToKeep": "[JA] Leave blank to keep existing",
+          "host": "[JA] Enter host",
+          "database": "[JA] Enter database name"
+        },
+        "types": {
+          "postgresql": "[JA] PostgreSQL",
+          "mysql": "[JA] MySQL",
+          "bigquery": "[JA] BigQuery",
+          "snowflake": "[JA] Snowflake",
+          "api": "[JA] API",
+          "s3": "[JA] Amazon S3",
+          "salesforce": "[JA] Salesforce",
+          "mongodb": "[JA] MongoDB"
+        },
+        "errors": {
+          "failedToSave": "[JA] Failed to save data source",
+          "failedToDelete": "[JA] Failed to delete data source",
+          "unexpectedError": "[JA] An unexpected error occurred"
+        }
+      },
+      "agentTemplate": {
+        "templateSettings": "[JA] Template Settings",
+        "templateSettingsDescription": "[JA] Configure the agent template settings",
+        "templateName": "[JA] Template Name",
+        "category": "[JA] Category",
+        "published": "[JA] Published",
+        "publishedDescription": "[JA] Make this template available for use",
+        "configuration": "[JA] Configuration",
+        "configurationDescription": "[JA] Agent configuration in JSON format",
+        "configurationJson": "[JA] Configuration (JSON)",
+        "configurationExample": "[JA] Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "[JA] Default Tools",
+        "defaultToolsDescription": "[JA] Default tools available to this agent",
+        "toolsJson": "[JA] Tools (JSON Array)",
+        "toolsExample": "[JA] Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "[JA] Default Prompts",
+        "defaultPromptsDescription": "[JA] Default prompts for this agent",
+        "promptsJson": "[JA] Prompts (JSON Object)",
+        "promptsExample": "[JA] Example: {\"system\": \"You are a helpful assistant\"}",
+        "placeholders": {
+          "templateName": "[JA] Enter template name",
+          "description": "[JA] Enter description (optional)",
+          "selectCategory": "[JA] Select category"
+        },
+        "validation": {
+          "nameRequired": "[JA] Template name is required",
+          "categoryRequired": "[JA] Category is required",
+          "invalidJsonFormat": "[JA] Invalid JSON format",
+          "mustBeJsonArray": "[JA] Must be a JSON array"
+        },
+        "errors": {
+          "failedToSave": "[JA] Failed to save agent template",
+          "failedToDelete": "[JA] Failed to delete agent template"
+        }
       }
     }
   }
