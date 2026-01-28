@@ -6293,6 +6293,21 @@
           "markComplete": "Mark Complete",
           "editResponse": "Edit Response"
         },
+        "title": "Response Details",
+        "responseFor": "Response for",
+        "notFoundTitle": "Response Not Found",
+        "notFoundDescription": "The requested response could not be found.",
+        "backToSurvey": "Back to Survey",
+        "status": {
+          "completed": "Completed",
+          "inProgress": "In Progress",
+          "incomplete": "Incomplete"
+        },
+        "actions": {
+          "saveChanges": "Save Changes",
+          "markComplete": "Mark Complete",
+          "editResponse": "Edit Response"
+        },
         "deleteDialog": {
           "title": "Delete Response",
           "description": "Are you sure you want to delete this response? This action cannot be undone.",
@@ -6311,6 +6326,7 @@
           "questionCount": "{count} question(s) in this survey",
           "required": "Required"
         },
+        "noAnswerProvided": "No answer provided",
         "errors": {
           "notFound": "Response not found",
           "loadFailed": "Failed to load response"
@@ -6342,8 +6358,13 @@
         "noParent": "No Parent (Root Category)",
         "activeStatus": "Active Status",
         "activeStatusDescription": "Enable or disable this category",
+        "globalCategory": "Global Category",
+        "globalCategoryDescription": "Make this category available to all organizations",
         "globalScope": "Global Scope",
         "globalScopeDescription": "Make this category available to all organizations",
+        "deleteCategory": "Delete Category",
+        "deleteDialogTitle": "Delete Category",
+        "deleteDialogDescription": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
         "placeholders": {
           "categoryName": "Enter category name",
           "categoryCode": "e.g., DEMOGRAPHICS",
