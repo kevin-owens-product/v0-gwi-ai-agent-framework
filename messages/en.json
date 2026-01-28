@@ -2524,44 +2524,44 @@
       "title": "Insights",
       "detail": {
         "title": "Insight Details",
-        "backToInsights": "[TODO: Translate dashboard.insights.detail.backToInsights]",
+        "backToInsights": "Back to Insights",
         "notFound": {
-          "title": "[TODO: Translate dashboard.insights.detail.notFound.title]",
-          "description": "[TODO: Translate dashboard.insights.detail.notFound.description]"
+          "title": "Insight Not Found",
+          "description": "The insight you're looking for doesn't exist or has been deleted."
         },
-        "viewAllInsights": "[TODO: Translate dashboard.insights.detail.viewAllInsights]",
+        "viewAllInsights": "View All Insights",
         "actions": {
-          "copied": "[TODO: Translate dashboard.insights.detail.actions.copied]",
-          "copy": "[TODO: Translate dashboard.insights.detail.actions.copy]",
-          "share": "[TODO: Translate dashboard.insights.detail.actions.share]",
-          "export": "[TODO: Translate dashboard.insights.detail.actions.export]"
+          "copied": "Copied!",
+          "copy": "Copy",
+          "share": "Share",
+          "export": "Export"
         },
-        "detailsTitle": "[TODO: Translate dashboard.insights.detail.detailsTitle]",
-        "detailsDescription": "[TODO: Translate dashboard.insights.detail.detailsDescription]",
+        "detailsTitle": "Details",
+        "detailsDescription": "Additional information about this insight",
         "exploreMore": {
-          "title": "[TODO: Translate dashboard.insights.detail.exploreMore.title]",
-          "description": "[TODO: Translate dashboard.insights.detail.exploreMore.description]",
-          "openPlayground": "[TODO: Translate dashboard.insights.detail.exploreMore.openPlayground]"
+          "title": "Explore More",
+          "description": "Discover related insights and analysis",
+          "openPlayground": "Open Playground"
         }
       },
-      "description": "[TODO: Translate dashboard.insights.description]",
-      "searchPlaceholder": "[TODO: Translate dashboard.insights.searchPlaceholder]",
-      "filterByType": "[TODO: Translate dashboard.insights.filterByType]",
+      "description": "Discover AI-generated insights from your research data",
+      "searchPlaceholder": "Search insights...",
+      "filterByType": "Filter by Type",
       "types": {
-        "all": "[TODO: Translate dashboard.insights.types.all]",
-        "audience": "[TODO: Translate dashboard.insights.types.audience]",
-        "trend": "[TODO: Translate dashboard.insights.types.trend]",
-        "competitive": "[TODO: Translate dashboard.insights.types.competitive]",
-        "analysis": "[TODO: Translate dashboard.insights.types.analysis]"
+        "all": "All Types",
+        "audience": "Audience",
+        "trend": "Trend",
+        "competitive": "Competitive",
+        "analysis": "Analysis"
       },
-      "loading": "[TODO: Translate dashboard.insights.loading]",
+      "loading": "Loading insights...",
       "empty": {
-        "title": "[TODO: Translate dashboard.insights.empty.title]",
-        "description": "[TODO: Translate dashboard.insights.empty.description]",
-        "goToPlayground": "[TODO: Translate dashboard.insights.empty.goToPlayground]"
+        "title": "No insights yet",
+        "description": "Run agents or workflows to generate insights",
+        "goToPlayground": "Go to Playground"
       },
       "badges": {
-        "new": "[TODO: Translate dashboard.insights.badges.new]"
+        "new": "New"
       }
     },
     "solutionAgents": {
@@ -2875,14 +2875,14 @@
           "scheduled": "Scheduled",
           "sharedWithMe": "Shared with Me"
         },
-        "canView": "[TODO: Translate dashboard.reports.page.canView]",
-        "canEdit": "[TODO: Translate dashboard.reports.page.canEdit]",
-        "canComment": "[TODO: Translate dashboard.reports.page.canComment]"
+        "canView": "Can View",
+        "canEdit": "Can Edit",
+        "canComment": "Can Comment"
       },
-      "recentReports": "[TODO: Translate dashboard.reports.recentReports]",
-      "viewAll": "[TODO: Translate dashboard.reports.viewAll]",
-      "noReportsYet": "[TODO: Translate dashboard.reports.noReportsYet]",
-      "createReport": "[TODO: Translate dashboard.reports.createReport]"
+      "recentReports": "Recent Reports",
+      "viewAll": "View All",
+      "noReportsYet": "No reports yet",
+      "createReport": "Create Report"
     },
     "dashboards": {
       "edit": {
@@ -2951,37 +2951,37 @@
         "title": "Create Dashboard",
         "description": "Build a custom dashboard with charts and widgets",
         "validation": {
-          "enterName": "[TODO: Translate dashboard.dashboards.new.validation.enterName]",
-          "selectChart": "[TODO: Translate dashboard.dashboards.new.validation.selectChart]"
+          "enterName": "Enter Name",
+          "selectChart": "Select Chart"
         },
         "errors": {
-          "createFailed": "[TODO: Translate dashboard.dashboards.new.errors.createFailed]",
-          "createFailedRetry": "[TODO: Translate dashboard.dashboards.new.errors.createFailedRetry]"
+          "createFailed": "Create Failed",
+          "createFailedRetry": "Create Failed Retry"
         },
         "form": {
-          "dashboardName": "[TODO: Translate dashboard.dashboards.new.form.dashboardName]",
-          "dashboardNamePlaceholder": "[TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
-          "descriptionPlaceholder": "[TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
-          "publicDashboard": "[TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
-          "publicDescription": "[TODO: Translate dashboard.dashboards.new.form.publicDescription]",
-          "addCharts": "[TODO: Translate dashboard.dashboards.new.form.addCharts]",
-          "added": "[TODO: Translate dashboard.dashboards.new.form.added]",
-          "createNewChart": "[TODO: Translate dashboard.dashboards.new.form.createNewChart]"
+          "dashboardName": "Dashboard Name",
+          "dashboardNamePlaceholder": "e.g., Q4 Campaign Performance",
+          "descriptionLabel": "Description",
+          "descriptionPlaceholder": "Brief description of this dashboard...",
+          "publicDashboard": "Public Dashboard",
+          "publicDescription": "Allow anyone with the link to view",
+          "addCharts": "Add Charts",
+          "added": "Added",
+          "createNewChart": "Create New Chart"
         },
         "preview": {
-          "title": "[TODO: Translate dashboard.dashboards.new.preview.title]",
-          "name": "[TODO: Translate dashboard.dashboards.new.preview.name]",
-          "untitledDashboard": "[TODO: Translate dashboard.dashboards.new.preview.untitledDashboard]",
-          "noChartsSelected": "[TODO: Translate dashboard.dashboards.new.preview.noChartsSelected]",
-          "visibility": "[TODO: Translate dashboard.dashboards.new.preview.visibility]",
-          "public": "[TODO: Translate dashboard.dashboards.new.preview.public]",
-          "private": "[TODO: Translate dashboard.dashboards.new.preview.private]"
+          "title": "Title",
+          "name": "Name",
+          "untitledDashboard": "Untitled Dashboard",
+          "noChartsSelected": "No Charts Selected",
+          "visibility": "Visibility",
+          "public": "Public",
+          "private": "Private"
         },
         "buttons": {
-          "creating": "[TODO: Translate dashboard.dashboards.new.buttons.creating]",
-          "createDashboard": "[TODO: Translate dashboard.dashboards.new.buttons.createDashboard]",
-          "cancel": "[TODO: Translate dashboard.dashboards.new.buttons.cancel]"
+          "creating": "Creating",
+          "createDashboard": "Create Dashboard",
+          "cancel": "Cancel"
         }
       },
       "builder": {
@@ -2991,11 +2991,11 @@
         "initialName": "My Dashboard",
         "initialDescription": "A custom dashboard",
         "exportFailed": "Failed to export dashboard",
-        "id": "[TODO: Translate dashboard.dashboards.builder.id]",
-        "saveSuccess": "[TODO: Translate dashboard.dashboards.builder.saveSuccess]",
-        "saveFailed": "[TODO: Translate dashboard.dashboards.builder.saveFailed]",
-        "a": "[TODO: Translate dashboard.dashboards.builder.a]",
-        "T": "[TODO: Translate dashboard.dashboards.builder.T]"
+        "id": "ID",
+        "saveSuccess": "Save Success",
+        "saveFailed": "Save Failed",
+        "a": "A",
+        "T": "T"
       },
       "detail": {
         "title": "Dashboard Details",
@@ -3021,183 +3021,245 @@
             "dataSource": "Data Source"
           }
         },
-        "@": "[TODO: Translate dashboard.dashboards.detail.@]",
+        "@": "@",
         "notFound": {
-          "title": "[TODO: Translate dashboard.dashboards.detail.notFound.title]",
-          "description": "[TODO: Translate dashboard.dashboards.detail.notFound.description]",
-          "message": "[TODO: Translate dashboard.dashboards.detail.notFound.message]",
-          "backButton": "[TODO: Translate dashboard.dashboards.detail.notFound.backButton]"
+          "title": "Title",
+          "description": "Description",
+          "message": "Message",
+          "backButton": "Back Button"
         },
-        "a": "[TODO: Translate dashboard.dashboards.detail.a]",
-        "T": "[TODO: Translate dashboard.dashboards.detail.T]",
+        "a": "A",
+        "T": "T",
         "favorites": {
-          "removeFromFavorites": "[TODO: Translate dashboard.dashboards.detail.favorites.removeFromFavorites]",
-          "addToFavorites": "[TODO: Translate dashboard.dashboards.detail.favorites.addToFavorites]"
+          "removeFromFavorites": "Remove From Favorites",
+          "addToFavorites": "Add To Favorites"
         },
         "visibility": {
-          "public": "[TODO: Translate dashboard.dashboards.detail.visibility.public]",
-          "private": "[TODO: Translate dashboard.dashboards.detail.visibility.private]"
+          "public": "Public",
+          "private": "Private"
         },
         "tags": {
-          "addTag": "[TODO: Translate dashboard.dashboards.detail.tags.addTag]",
-          "manageTags": "[TODO: Translate dashboard.dashboards.detail.tags.manageTags]",
-          "manageTagsDescription": "[TODO: Translate dashboard.dashboards.detail.tags.manageTagsDescription]",
-          "addNewTag": "[TODO: Translate dashboard.dashboards.detail.tags.addNewTag]",
-          "noTagsAdded": "[TODO: Translate dashboard.dashboards.detail.tags.noTagsAdded]",
-          "done": "[TODO: Translate dashboard.dashboards.detail.tags.done]"
+          "addTag": "Add Tag",
+          "manageTags": "Manage Tags",
+          "manageTagsDescription": "Manage Tags Description",
+          "addNewTag": "Add New Tag",
+          "noTagsAdded": "No Tags Added",
+          "done": "Done"
         },
         "autoRefresh": {
-          "on": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
-          "off": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
-          "interval": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
-          "every1Min": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
-          "every5Min": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
-          "every15Min": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.every15Min]",
-          "every30Min": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.every30Min]",
-          "everyHour": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.everyHour]",
-          "refreshNow": "[TODO: Translate dashboard.dashboards.detail.autoRefresh.refreshNow]"
+          "on": "On",
+          "off": "Off",
+          "label": "Auto Refresh",
+          "interval": "Interval",
+          "every1Min": "Every1 Min",
+          "every5Min": "Every5 Min",
+          "every15Min": "Every15 Min",
+          "every30Min": "Every30 Min",
+          "everyHour": "Every Hour",
+          "refreshNow": "Refresh Now"
         },
         "filters": {
-          "title": "[TODO: Translate dashboard.dashboards.detail.filters.title]",
-          "filterCharts": "[TODO: Translate dashboard.dashboards.detail.filters.filterCharts]",
-          "clearAll": "[TODO: Translate dashboard.dashboards.detail.filters.clearAll]",
-          "filterDescription": "[TODO: Translate dashboard.dashboards.detail.filters.filterDescription]",
-          "searchCharts": "[TODO: Translate dashboard.dashboards.detail.filters.searchCharts]",
-          "searchPlaceholder": "[TODO: Translate dashboard.dashboards.detail.filters.searchPlaceholder]",
-          "chartTypes": "[TODO: Translate dashboard.dashboards.detail.filters.chartTypes]",
-          "clear": "[TODO: Translate dashboard.dashboards.detail.filters.clear]",
-          "categories": "[TODO: Translate dashboard.dashboards.detail.filters.categories]",
-          "dataSources": "[TODO: Translate dashboard.dashboards.detail.filters.dataSources]",
-          "activeFilters": "[TODO: Translate dashboard.dashboards.detail.filters.activeFilters]",
-          "clearAllFilters": "[TODO: Translate dashboard.dashboards.detail.filters.clearAllFilters]"
+          "title": "Title",
+          "filterCharts": "Filter Charts",
+          "clearAll": "Clear All",
+          "filterDescription": "Filter Description",
+          "searchCharts": "Search Charts",
+          "searchPlaceholder": "Search Placeholder",
+          "chartTypes": "Chart Types",
+          "clear": "Clear",
+          "categories": "Categories",
+          "dataSources": "Data Sources",
+          "activeFilters": "Active Filters",
+          "clearAllFilters": "Clear All Filters"
         },
         "actions": {
-          "addChart": "[TODO: Translate dashboard.dashboards.detail.actions.addChart]",
-          "share": "[TODO: Translate dashboard.dashboards.detail.actions.share]",
-          "export": "[TODO: Translate dashboard.dashboards.detail.actions.export]",
-          "edit": "[TODO: Translate dashboard.dashboards.detail.actions.edit]",
-          "duplicate": "[TODO: Translate dashboard.dashboards.detail.actions.duplicate]",
-          "copied": "[TODO: Translate dashboard.dashboards.detail.actions.copied]",
-          "copyLink": "[TODO: Translate dashboard.dashboards.detail.actions.copyLink]",
-          "manageAlerts": "[TODO: Translate dashboard.dashboards.detail.actions.manageAlerts]",
-          "delete": "[TODO: Translate dashboard.dashboards.detail.actions.delete]"
+          "addChart": "Add Chart",
+          "share": "Share",
+          "export": "Export",
+          "edit": "Edit",
+          "duplicate": "Duplicate",
+          "copied": "Copied",
+          "copyLink": "Copy Link",
+          "manageAlerts": "Manage Alerts",
+          "delete": "Delete"
         },
         "meta": {
-          "searchCharts": "[TODO: Translate dashboard.dashboards.detail.meta.searchCharts]"
+          "searchCharts": "Search Charts"
         },
         "tabs": {
-          "analytics": "[TODO: Translate dashboard.dashboards.detail.tabs.analytics]",
-          "comments": "[TODO: Translate dashboard.dashboards.detail.tabs.comments]",
-          "activity": "[TODO: Translate dashboard.dashboards.detail.tabs.activity]",
-          "history": "[TODO: Translate dashboard.dashboards.detail.tabs.history]",
-          "settings": "[TODO: Translate dashboard.dashboards.detail.tabs.settings]"
+          "analytics": "Analytics",
+          "comments": "Comments",
+          "activity": "Activity",
+          "history": "History",
+          "settings": "Settings"
         },
         "chartActions": {
-          "minimize": "[TODO: Translate dashboard.dashboards.detail.chartActions.minimize]",
-          "expand": "[TODO: Translate dashboard.dashboards.detail.chartActions.expand]",
-          "refreshData": "[TODO: Translate dashboard.dashboards.detail.chartActions.refreshData]",
-          "exportChart": "[TODO: Translate dashboard.dashboards.detail.chartActions.exportChart]",
-          "openInEditor": "[TODO: Translate dashboard.dashboards.detail.chartActions.openInEditor]",
-          "removeFromDashboard": "[TODO: Translate dashboard.dashboards.detail.chartActions.removeFromDashboard]"
+          "minimize": "Minimize",
+          "expand": "Expand",
+          "refreshData": "Refresh Data",
+          "exportChart": "Export Chart",
+          "openInEditor": "Open In Editor",
+          "removeFromDashboard": "Remove From Dashboard"
         },
         "emptyState": {
-          "noChartsMatch": "[TODO: Translate dashboard.dashboards.detail.emptyState.noChartsMatch]",
-          "adjustFilters": "[TODO: Translate dashboard.dashboards.detail.emptyState.adjustFilters]",
-          "clearFilters": "[TODO: Translate dashboard.dashboards.detail.emptyState.clearFilters]"
+          "noChartsMatch": "No Charts Match",
+          "adjustFilters": "Adjust Filters",
+          "clearFilters": "Clear Filters"
         },
         "insights": {
-          "title": "[TODO: Translate dashboard.dashboards.detail.insights.title]",
-          "chartDistribution": "[TODO: Translate dashboard.dashboards.detail.insights.chartDistribution]",
-          "dataSourcesTitle": "[TODO: Translate dashboard.dashboards.detail.insights.dataSourcesTitle]",
-          "currentView": "[TODO: Translate dashboard.dashboards.detail.insights.currentView]"
+          "title": "Title",
+          "chartDistribution": "Chart Distribution",
+          "dataSourcesTitle": "Data Sources Title",
+          "currentView": "Current View"
         },
         "analytics": {
-          "totalViews": "[TODO: Translate dashboard.dashboards.detail.analytics.totalViews]",
-          "uniqueViewers": "[TODO: Translate dashboard.dashboards.detail.analytics.uniqueViewers]",
-          "avgTimeOnPage": "[TODO: Translate dashboard.dashboards.detail.analytics.avgTimeOnPage]",
-          "exports": "[TODO: Translate dashboard.dashboards.detail.analytics.exports]",
-          "viewsOverTime": "[TODO: Translate dashboard.dashboards.detail.analytics.viewsOverTime]",
-          "viewsChartComingSoon": "[TODO: Translate dashboard.dashboards.detail.analytics.viewsChartComingSoon]",
-          "mostViewedCharts": "[TODO: Translate dashboard.dashboards.detail.analytics.mostViewedCharts]"
+          "totalViews": "Total Views",
+          "uniqueViewers": "Unique Viewers",
+          "avgTimeOnPage": "Avg Time On Page",
+          "exports": "Exports",
+          "viewsOverTime": "Views Over Time",
+          "viewsChartComingSoon": "Views Chart Coming Soon",
+          "mostViewedCharts": "Most Viewed Charts"
         },
         "activityTab": {
-          "recentActivity": "[TODO: Translate dashboard.dashboards.detail.activityTab.recentActivity]"
+          "recentActivity": "Recent Activity"
         },
-        " ": "[TODO: Translate dashboard.dashboards.detail. ]",
+        " ": " ",
         "settingsTab": {
-          "generalSettings": "[TODO: Translate dashboard.dashboards.detail.settingsTab.generalSettings]",
-          "publicDashboard": "[TODO: Translate dashboard.dashboards.detail.settingsTab.publicDashboard]",
-          "publicDescription": "[TODO: Translate dashboard.dashboards.detail.settingsTab.publicDescription]",
-          "allowComments": "[TODO: Translate dashboard.dashboards.detail.settingsTab.allowComments]",
-          "allowCommentsDescription": "[TODO: Translate dashboard.dashboards.detail.settingsTab.allowCommentsDescription]",
-          "showInSearch": "[TODO: Translate dashboard.dashboards.detail.settingsTab.showInSearch]",
-          "showInSearchDescription": "[TODO: Translate dashboard.dashboards.detail.settingsTab.showInSearchDescription]",
-          "alertsNotifications": "[TODO: Translate dashboard.dashboards.detail.settingsTab.alertsNotifications]",
-          "addAlert": "[TODO: Translate dashboard.dashboards.detail.settingsTab.addAlert]",
-          "collaborators": "[TODO: Translate dashboard.dashboards.detail.settingsTab.collaborators]",
-          "inviteCollaborator": "[TODO: Translate dashboard.dashboards.detail.settingsTab.inviteCollaborator]",
-          "relatedDashboards": "[TODO: Translate dashboard.dashboards.detail.settingsTab.relatedDashboards]"
+          "generalSettings": "General Settings",
+          "publicDashboard": "Public Dashboard",
+          "publicDescription": "Public Description",
+          "allowComments": "Allow Comments",
+          "allowCommentsDescription": "Allow Comments Description",
+          "showInSearch": "Show In Search",
+          "showInSearchDescription": "Show In Search Description",
+          "alertsNotifications": "Alerts Notifications",
+          "addAlert": "Add Alert",
+          "collaborators": "Collaborators",
+          "inviteCollaborator": "Invite Collaborator",
+          "relatedDashboards": "Related Dashboards"
         },
         "share": {
-          "title": "[TODO: Translate dashboard.dashboards.detail.share.title]",
-          "description": "[TODO: Translate dashboard.dashboards.detail.share.description]",
-          "enterEmail": "[TODO: Translate dashboard.dashboards.detail.share.enterEmail]",
-          "viewer": "[TODO: Translate dashboard.dashboards.detail.share.viewer]",
-          "editor": "[TODO: Translate dashboard.dashboards.detail.share.editor]",
-          "admin": "[TODO: Translate dashboard.dashboards.detail.share.admin]",
-          "peopleWithAccess": "[TODO: Translate dashboard.dashboards.detail.share.peopleWithAccess]",
-          "linkSharing": "[TODO: Translate dashboard.dashboards.detail.share.linkSharing]",
-          "publicAccess": "[TODO: Translate dashboard.dashboards.detail.share.publicAccess]",
-          "publicAccessDescription": "[TODO: Translate dashboard.dashboards.detail.share.publicAccessDescription]"
+          "title": "Title",
+          "description": "Description",
+          "enterEmail": "Enter Email",
+          "viewer": "Viewer",
+          "editor": "Editor",
+          "admin": "Admin",
+          "peopleWithAccess": "People With Access",
+          "linkSharing": "Link Sharing",
+          "publicAccess": "Public Access",
+          "publicAccessDescription": "Public Access Description"
         },
         "exportDialog": {
-          "title": "[TODO: Translate dashboard.dashboards.detail.exportDialog.title]",
-          "description": "[TODO: Translate dashboard.dashboards.detail.exportDialog.description]",
-          "json": "[TODO: Translate dashboard.dashboards.detail.exportDialog.json]",
-          "jsonDescription": "[TODO: Translate dashboard.dashboards.detail.exportDialog.jsonDescription]",
-          "csv": "[TODO: Translate dashboard.dashboards.detail.exportDialog.csv]",
-          "csvDescription": "[TODO: Translate dashboard.dashboards.detail.exportDialog.csvDescription]",
-          "pdfHtml": "[TODO: Translate dashboard.dashboards.detail.exportDialog.pdfHtml]",
-          "pdfHtmlDescription": "[TODO: Translate dashboard.dashboards.detail.exportDialog.pdfHtmlDescription]",
-          "pngImage": "[TODO: Translate dashboard.dashboards.detail.exportDialog.pngImage]",
-          "pngImageDescription": "[TODO: Translate dashboard.dashboards.detail.exportDialog.pngImageDescription]"
+          "title": "Title",
+          "description": "Description",
+          "json": "JSON",
+          "jsonDescription": "JSON Description",
+          "csv": "CSV",
+          "csvDescription": "CSV Description",
+          "pdfHtml": "PDF HTML",
+          "pdfHtmlDescription": "PDF HTML Description",
+          "pngImage": "Png Image",
+          "pngImageDescription": "Png Image Description"
         },
-        "json": "[TODO: Translate dashboard.dashboards.detail.json]",
-        "csv": "[TODO: Translate dashboard.dashboards.detail.csv]",
-        "pdf": "[TODO: Translate dashboard.dashboards.detail.pdf]",
-        "png": "[TODO: Translate dashboard.dashboards.detail.png]",
+        "json": "JSON",
+        "csv": "CSV",
+        "pdf": "PDF",
+        "png": "Png",
         "alerts": {
-          "title": "[TODO: Translate dashboard.dashboards.detail.alerts.title]",
-          "description": "[TODO: Translate dashboard.dashboards.detail.alerts.description]",
-          "createNewAlert": "[TODO: Translate dashboard.dashboards.detail.alerts.createNewAlert]",
-          "alertName": "[TODO: Translate dashboard.dashboards.detail.alerts.alertName]",
-          "alertCondition": "[TODO: Translate dashboard.dashboards.detail.alerts.alertCondition]",
-          "addAlertButton": "[TODO: Translate dashboard.dashboards.detail.alerts.addAlertButton]",
-          "activeAlerts": "[TODO: Translate dashboard.dashboards.detail.alerts.activeAlerts]"
+          "title": "Title",
+          "description": "Description",
+          "createNewAlert": "Create New Alert",
+          "alertName": "Alert Name",
+          "alertCondition": "Alert Condition",
+          "addAlertButton": "Add Alert Button",
+          "activeAlerts": "Active Alerts"
         },
         "delete": {
-          "title": "[TODO: Translate dashboard.dashboards.detail.delete.title]",
-          "cancel": "[TODO: Translate dashboard.dashboards.detail.delete.cancel]",
-          "delete": "[TODO: Translate dashboard.dashboards.detail.delete.delete]"
+          "title": "Title",
+          "cancel": "Cancel",
+          "delete": "Delete"
         }
       },
-      "description": "[TODO: Translate dashboard.dashboards.description]",
-      "newDashboard": "[TODO: Translate dashboard.dashboards.newDashboard]",
+      "description": "Description",
+      "newDashboard": "New Dashboard",
       "stats": {
-        "totalDashboards": "[TODO: Translate dashboard.dashboards.stats.totalDashboards]",
-        "totalViews": "[TODO: Translate dashboard.dashboards.stats.totalViews]",
-        "shared": "[TODO: Translate dashboard.dashboards.stats.shared]",
-        "exports": "[TODO: Translate dashboard.dashboards.stats.exports]"
+        "totalDashboards": "Total Dashboards",
+        "totalViews": "Total Views",
+        "shared": "Shared",
+        "exports": "Exports"
       },
       "tabs": {
-        "allDashboards": "[TODO: Translate dashboard.dashboards.tabs.allDashboards]",
-        "recent": "[TODO: Translate dashboard.dashboards.tabs.recent]",
-        "favorites": "[TODO: Translate dashboard.dashboards.tabs.favorites]"
+        "allDashboards": "All Dashboards",
+        "recent": "Recent",
+        "favorites": "Favorites"
       },
       "grid": {
-        "noDashboardsYet": "[TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "noDashboardsYet": "No Dashboards Yet",
+        "createFirstDashboard": "Create First Dashboard",
+        "chartsCount": "{count, plural, =0 {0 charts} one {# chart} other {# charts}}",
+        "viewsCount": "{count, plural, =0 {0 views} one {# view} other {# views}}"
+      }
+    },
+    "memory": {
+      "title": "Memory & Context",
+      "description": "Manage persistent agent memory, project context, and conversation history.",
+      "actions": {
+        "settings": "Settings",
+        "clearAll": "Clear All"
+      },
+      "browser": {
+        "title": "Memory Browser",
+        "refresh": "Refresh",
+        "export": "Export",
+        "searchPlaceholder": "Search memories by content or tags...",
+        "typePlaceholder": "Type",
+        "projectPlaceholder": "Project",
+        "allProjects": "All Projects",
+        "noMemoriesFound": "No memories found matching your search criteria.",
+        "selectMemory": "Select a memory to view details",
+        "showing": "Showing {filtered} of {total} memories",
+        "types": {
+          "all": "All Types",
+          "insights": "Insights",
+          "findings": "Findings",
+          "context": "Context",
+          "preferences": "Preferences",
+          "facts": "Facts",
+          "conversations": "Conversations"
+        },
+        "detail": {
+          "source": "Source",
+          "created": "Created",
+          "tags": "Tags",
+          "citations": "Citations",
+          "confidenceScore": "Confidence Score"
+        },
+        "deleteDialog": {
+          "title": "Delete Memory",
+          "description": "Are you sure you want to delete this memory? This action cannot be undone.",
+          "cancel": "Cancel",
+          "confirm": "Delete"
+        }
+      },
+      "overview": {
+        "projectMemory": "Project Memory",
+        "viewAll": "View all",
+        "memoriesCount": "{count} memories",
+        "recentMemories": "Recent Memories",
+        "refresh": "Refresh"
+      },
+      "stats": {
+        "totalMemories": "Total Memories",
+        "storageUsed": "Storage Used",
+        "avgRetention": "Avg Retention",
+        "activeProjects": "Active Projects",
+        "thisWeek": "+{count} this week",
+        "ofTotal": "of {total}",
+        "days": "{count} days",
+        "extendedTier": "Extended tier",
+        "withMemories": "{count} with memories"
       }
     },
     "projects": {
@@ -3380,7 +3442,7 @@
       "connectedServices": "Connected services",
       "items": "{count} items",
       "title": "Platform",
-      " ": "[TODO: Translate dashboard.platform. ]"
+      " ": ""
     },
     "settings": {
       "title": "General Settings",
@@ -3659,9 +3721,9 @@
         "used": "Used {time}",
         "marketsCount": "{count} markets",
         "emptyState": {
-          "title": "[TODO: Translate dashboard.pages.audiences.emptyState.title]",
-          "description": "[TODO: Translate dashboard.pages.audiences.emptyState.description]",
-          "action": "[TODO: Translate dashboard.pages.audiences.emptyState.action]"
+          "title": "No audiences yet",
+          "description": "Create your first audience segment to get started",
+          "action": "Create Audience"
         }
       },
       "projects": {
@@ -3736,10 +3798,10 @@
             "remove": "Remove"
           },
           "title": "Project Details",
-          "-": "[TODO: Translate dashboard.pages.projects.detail.-]",
-          "T": "[TODO: Translate dashboard.pages.projects.detail.T]"
+          "-": "",
+          "T": ""
         },
-        "T": "[TODO: Translate dashboard.pages.projects.T]"
+        "T": ""
       }
     },
     "audiences": {
@@ -3862,16 +3924,16 @@
           "asPdf": "Export as PDF",
           "toPowerPoint": "Export to PowerPoint",
           "csvHeaders": {
-            "attribute": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.attribute]",
-            "value": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.value]",
-            "behavior": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.behavior]",
-            "interest": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.interest]",
-            "audience": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.audience]",
-            "description": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.description]",
-            "size": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.size]",
-            "markets": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.markets]",
-            "behaviors": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.behaviors]",
-            "interests": "[TODO: Translate dashboard.audiences.detail.export.csvHeaders.interests]"
+            "attribute": "Attribute",
+            "value": "Value",
+            "behavior": "Behavior",
+            "interest": "Interest",
+            "audience": "Audience",
+            "description": "Description",
+            "size": "Size",
+            "markets": "Markets",
+            "behaviors": "Behaviors",
+            "interests": "Interests"
           }
         },
         "overview": {
@@ -3935,24 +3997,24 @@
         },
         "title": "Audience Details",
         "demographics": {
-          "ageRange": "[TODO: Translate dashboard.audiences.detail.demographics.ageRange]",
-          "income": "[TODO: Translate dashboard.audiences.detail.demographics.income]",
-          "lifestyle": "[TODO: Translate dashboard.audiences.detail.demographics.lifestyle]",
-          "values": "[TODO: Translate dashboard.audiences.detail.demographics.values]"
+          "ageRange": "Age Range",
+          "income": "Income",
+          "lifestyle": "Lifestyle",
+          "values": "Values"
         },
-        "_": "[TODO: Translate dashboard.audiences.detail._]",
+        "_": "",
         "common": {
-          "unknown": "[TODO: Translate dashboard.audiences.detail.common.unknown]",
+          "unknown": "Unknown",
           "relativeTime": {
-            "justNow": "[TODO: Translate dashboard.audiences.detail.common.relativeTime.justNow]"
+            "justNow": "Just now"
           }
         },
-        "T": "[TODO: Translate dashboard.audiences.detail.T]",
-        "a": "[TODO: Translate dashboard.audiences.detail.a]",
-        "json": "[TODO: Translate dashboard.audiences.detail.json]",
-        "csv": "[TODO: Translate dashboard.audiences.detail.csv]",
-        "pdf": "[TODO: Translate dashboard.audiences.detail.pdf]",
-        "pptx": "[TODO: Translate dashboard.audiences.detail.pptx]"
+        "T": "",
+        "a": "",
+        "json": "JSON",
+        "csv": "CSV",
+        "pdf": "PDF",
+        "pptx": "PPTX"
       }
     },
     "agents": {
@@ -4246,201 +4308,201 @@
       "title": "Crosstabs",
       "analysis": {
         "toast": {
-          "fieldUpdated": "[TODO: Translate dashboard.crosstabs.analysis.toast.fieldUpdated]",
-          "fieldDeleted": "[TODO: Translate dashboard.crosstabs.analysis.toast.fieldDeleted]",
-          "filtersApplied": "[TODO: Translate dashboard.crosstabs.analysis.toast.filtersApplied]",
-          "chartSaved": "[TODO: Translate dashboard.crosstabs.analysis.toast.chartSaved]"
+          "fieldUpdated": "Field Updated",
+          "fieldDeleted": "Field Deleted",
+          "filtersApplied": "Filters Applied",
+          "chartSaved": "Chart Saved"
         },
         "categories": {
-          "calculated": "[TODO: Translate dashboard.crosstabs.analysis.categories.calculated]"
+          "calculated": "Calculated"
         },
-        "title": "[TODO: Translate dashboard.crosstabs.analysis.title]",
-        "more": "[TODO: Translate dashboard.crosstabs.analysis.more]",
+        "title": "Title",
+        "more": "More",
         "actions": {
-          "share": "[TODO: Translate dashboard.crosstabs.analysis.actions.share]",
-          "generateInsights": "[TODO: Translate dashboard.crosstabs.analysis.actions.generateInsights]"
+          "share": "Share",
+          "generateInsights": "Generate Insights"
         },
         "tabs": {
-          "dataGrid": "[TODO: Translate dashboard.crosstabs.analysis.tabs.dataGrid]",
-          "calculatedFields": "[TODO: Translate dashboard.crosstabs.analysis.tabs.calculatedFields]",
-          "filters": "[TODO: Translate dashboard.crosstabs.analysis.tabs.filters]",
-          "visualize": "[TODO: Translate dashboard.crosstabs.analysis.tabs.visualize]"
+          "dataGrid": "Data Grid",
+          "calculatedFields": "Calculated Fields",
+          "filters": "Filters",
+          "visualize": "Visualize"
         },
         "grid": {
-          "description": "[TODO: Translate dashboard.crosstabs.analysis.grid.description]"
+          "description": "Description"
         },
         "visualize": {
-          "chartTitle": "[TODO: Translate dashboard.crosstabs.analysis.visualize.chartTitle]"
+          "chartTitle": "Chart Title"
         },
-        " - ": "[TODO: Translate dashboard.crosstabs.analysis. - ]"
+        " - ": "-"
       },
       "new": {
         "errors": {
-          "nameRequired": "[TODO: Translate dashboard.crosstabs.new.errors.nameRequired]",
-          "audienceRequired": "[TODO: Translate dashboard.crosstabs.new.errors.audienceRequired]",
-          "metricRequired": "[TODO: Translate dashboard.crosstabs.new.errors.metricRequired]",
-          "createFailed": "[TODO: Translate dashboard.crosstabs.new.errors.createFailed]",
-          "createFailedRetry": "[TODO: Translate dashboard.crosstabs.new.errors.createFailedRetry]"
+          "nameRequired": "Name Required",
+          "audienceRequired": "Audience Required",
+          "metricRequired": "Metric Required",
+          "createFailed": "Create Failed",
+          "createFailedRetry": "Create Failed Retry"
         },
-        "title": "[TODO: Translate dashboard.crosstabs.new.title]",
-        "description": "[TODO: Translate dashboard.crosstabs.new.description]",
+        "title": "Title",
+        "description": "Description",
         "form": {
-          "crosstabName": "[TODO: Translate dashboard.crosstabs.new.form.crosstabName]",
-          "namePlaceholder": "[TODO: Translate dashboard.crosstabs.new.form.namePlaceholder]",
-          "selectAudiences": "[TODO: Translate dashboard.crosstabs.new.form.selectAudiences]",
-          "selectMetrics": "[TODO: Translate dashboard.crosstabs.new.form.selectMetrics]"
+          "crosstabName": "Crosstab Name",
+          "namePlaceholder": "Name Placeholder",
+          "selectAudiences": "Select Audiences",
+          "selectMetrics": "Select Metrics"
         },
         "summary": {
-          "title": "[TODO: Translate dashboard.crosstabs.new.summary.title]"
+          "title": "Title"
         },
         "actions": {
-          "generating": "[TODO: Translate dashboard.crosstabs.new.actions.generating]",
-          "generate": "[TODO: Translate dashboard.crosstabs.new.actions.generate]",
-          "cancel": "[TODO: Translate dashboard.crosstabs.new.actions.cancel]"
+          "generating": "Generating",
+          "generate": "Generate",
+          "cancel": "Cancel"
         }
       },
       "detail": {
-        "_": "[TODO: Translate dashboard.crosstabs.detail._]",
+        "_": "_",
         "notFound": {
-          "title": "[TODO: Translate dashboard.crosstabs.detail.notFound.title]",
-          "subtitle": "[TODO: Translate dashboard.crosstabs.detail.notFound.subtitle]",
-          "heading": "[TODO: Translate dashboard.crosstabs.detail.notFound.heading]",
-          "description": "[TODO: Translate dashboard.crosstabs.detail.notFound.description]",
-          "backButton": "[TODO: Translate dashboard.crosstabs.detail.notFound.backButton]"
+          "title": "Title",
+          "subtitle": "Subtitle",
+          "heading": "Heading",
+          "description": "Description",
+          "backButton": "Back Button"
         },
-        "T": "[TODO: Translate dashboard.crosstabs.detail.T]",
-        "a": "[TODO: Translate dashboard.crosstabs.detail.a]",
+        "T": "T",
+        "a": "A",
         "actions": {
-          "removeFromFavorites": "[TODO: Translate dashboard.crosstabs.detail.actions.removeFromFavorites]",
-          "addToFavorites": "[TODO: Translate dashboard.crosstabs.detail.actions.addToFavorites]",
-          "pauseAutoRefresh": "[TODO: Translate dashboard.crosstabs.detail.actions.pauseAutoRefresh]",
-          "enableAutoRefresh": "[TODO: Translate dashboard.crosstabs.detail.actions.enableAutoRefresh]",
-          "exitFullscreen": "[TODO: Translate dashboard.crosstabs.detail.actions.exitFullscreen]",
-          "enterFullscreen": "[TODO: Translate dashboard.crosstabs.detail.actions.enterFullscreen]",
-          "selectAll": "[TODO: Translate dashboard.crosstabs.detail.actions.selectAll]",
-          "clear": "[TODO: Translate dashboard.crosstabs.detail.actions.clear]",
-          "visualize": "[TODO: Translate dashboard.crosstabs.detail.actions.visualize]",
-          "share": "[TODO: Translate dashboard.crosstabs.detail.actions.share]",
-          "edit": "[TODO: Translate dashboard.crosstabs.detail.actions.edit]",
-          "duplicate": "[TODO: Translate dashboard.crosstabs.detail.actions.duplicate]",
-          "addToDashboard": "[TODO: Translate dashboard.crosstabs.detail.actions.addToDashboard]",
-          "copied": "[TODO: Translate dashboard.crosstabs.detail.actions.copied]",
-          "copyLink": "[TODO: Translate dashboard.crosstabs.detail.actions.copyLink]",
-          "delete": "[TODO: Translate dashboard.crosstabs.detail.actions.delete]",
-          "cancel": "[TODO: Translate dashboard.crosstabs.detail.actions.cancel]",
-          "schedule": "[TODO: Translate dashboard.crosstabs.detail.actions.schedule]"
+          "removeFromFavorites": "Remove From Favorites",
+          "addToFavorites": "Add To Favorites",
+          "pauseAutoRefresh": "Pause Auto Refresh",
+          "enableAutoRefresh": "Enable Auto Refresh",
+          "exitFullscreen": "Exit Fullscreen",
+          "enterFullscreen": "Enter Fullscreen",
+          "selectAll": "Select All",
+          "clear": "Clear",
+          "visualize": "Visualize",
+          "share": "Share",
+          "edit": "Edit",
+          "duplicate": "Duplicate",
+          "addToDashboard": "Add To Dashboard",
+          "copied": "Copied",
+          "copyLink": "Copy Link",
+          "delete": "Delete",
+          "cancel": "Cancel",
+          "schedule": "Schedule"
         },
         "filters": {
-          "title": "[TODO: Translate dashboard.crosstabs.detail.filters.title]",
-          "clearAll": "[TODO: Translate dashboard.crosstabs.detail.filters.clearAll]",
-          "description": "[TODO: Translate dashboard.crosstabs.detail.filters.description]",
-          "quickFilters": "[TODO: Translate dashboard.crosstabs.detail.filters.quickFilters]",
-          "category": "[TODO: Translate dashboard.crosstabs.detail.filters.category]",
-          "allCategories": "[TODO: Translate dashboard.crosstabs.detail.filters.allCategories]",
-          "activeFilters": "[TODO: Translate dashboard.crosstabs.detail.filters.activeFilters]"
+          "title": "Title",
+          "clearAll": "Clear All",
+          "description": "Description",
+          "quickFilters": "Quick Filters",
+          "category": "Category",
+          "allCategories": "All Categories",
+          "activeFilters": "Active Filters"
         },
         "tabs": {
-          "filters": "[TODO: Translate dashboard.crosstabs.detail.tabs.filters]",
-          "audiences": "[TODO: Translate dashboard.crosstabs.detail.tabs.audiences]",
-          "metrics": "[TODO: Translate dashboard.crosstabs.detail.tabs.metrics]"
+          "filters": "Filters",
+          "audiences": "Audiences",
+          "metrics": "Metrics"
         },
         "audiences": {
-          "selectAudiences": "[TODO: Translate dashboard.crosstabs.detail.audiences.selectAudiences]"
+          "selectAudiences": "Select Audiences"
         },
         "metrics": {
-          "selectMetrics": "[TODO: Translate dashboard.crosstabs.detail.metrics.selectMetrics]"
+          "selectMetrics": "Select Metrics"
         },
-        "json": "[TODO: Translate dashboard.crosstabs.detail.json]",
+        "json": "JSON",
         "export": {
-          "asJson": "[TODO: Translate dashboard.crosstabs.detail.export.asJson]",
-          "asCsv": "[TODO: Translate dashboard.crosstabs.detail.export.asCsv]",
-          "asHtml": "[TODO: Translate dashboard.crosstabs.detail.export.asHtml]",
-          "asPdf": "[TODO: Translate dashboard.crosstabs.detail.export.asPdf]",
-          "asExcel": "[TODO: Translate dashboard.crosstabs.detail.export.asExcel]",
-          "asPowerPoint": "[TODO: Translate dashboard.crosstabs.detail.export.asPowerPoint]"
+          "asJson": "As JSON",
+          "asCsv": "As CSV",
+          "asHtml": "As HTML",
+          "asPdf": "As PDF",
+          "asExcel": "As Excel",
+          "asPowerPoint": "As Power Point"
         },
-        "csv": "[TODO: Translate dashboard.crosstabs.detail.csv]",
-        "html": "[TODO: Translate dashboard.crosstabs.detail.html]",
-        "pdf": "[TODO: Translate dashboard.crosstabs.detail.pdf]",
-        "excel": "[TODO: Translate dashboard.crosstabs.detail.excel]",
-        "pptx": "[TODO: Translate dashboard.crosstabs.detail.pptx]",
+        "csv": "CSV",
+        "html": "HTML",
+        "pdf": "PDF",
+        "excel": "Excel",
+        "pptx": "PPTX",
         "deleteDialog": {
-          "title": "[TODO: Translate dashboard.crosstabs.detail.deleteDialog.title]"
+          "title": "Title"
         },
         "mainTabs": {
-          "data": "[TODO: Translate dashboard.crosstabs.detail.mainTabs.data]",
-          "activity": "[TODO: Translate dashboard.crosstabs.detail.mainTabs.activity]",
-          "comments": "[TODO: Translate dashboard.crosstabs.detail.mainTabs.comments]",
-          "history": "[TODO: Translate dashboard.crosstabs.detail.mainTabs.history]"
+          "data": "Data",
+          "activity": "Activity",
+          "comments": "Comments",
+          "history": "History"
         },
         "insights": {
-          "title": "[TODO: Translate dashboard.crosstabs.detail.insights.title]",
-          "topPerformer": "[TODO: Translate dashboard.crosstabs.detail.insights.topPerformer]",
-          "noData": "[TODO: Translate dashboard.crosstabs.detail.insights.noData]",
-          "biggestGap": "[TODO: Translate dashboard.crosstabs.detail.insights.biggestGap]",
-          "biggestGapDesc": "[TODO: Translate dashboard.crosstabs.detail.insights.biggestGapDesc]",
-          "trending": "[TODO: Translate dashboard.crosstabs.detail.insights.trending]",
-          "noFilters": "[TODO: Translate dashboard.crosstabs.detail.insights.noFilters]"
+          "title": "Title",
+          "topPerformer": "Top Performer",
+          "noData": "No Data",
+          "biggestGap": "Biggest Gap",
+          "biggestGapDesc": "Biggest Gap Desc",
+          "trending": "Trending",
+          "noFilters": "No Filters"
         },
         "activity": {
-          "title": "[TODO: Translate dashboard.crosstabs.detail.activity.title]",
-          "description": "[TODO: Translate dashboard.crosstabs.detail.activity.description]"
+          "title": "Title",
+          "description": "Description"
         },
         "shareDialog": {
-          "title": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
-          "description": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
-          "emailPlaceholder": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
-          "role": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
+          "title": "Title",
+          "description": "Description",
+          "emailLabel": "Email",
+          "emailPlaceholder": "Email Placeholder",
+          "role": "Role",
           "roles": {
-            "viewer": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.viewer]",
-            "editor": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.editor]",
-            "admin": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.roles.admin]"
+            "viewer": "Viewer",
+            "editor": "Editor",
+            "admin": "Admin"
           },
-          "shareLink": "[TODO: Translate dashboard.crosstabs.detail.shareDialog.shareLink]"
+          "shareLink": "Share Link"
         },
         "scheduleDialog": {
-          "title": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.title]",
-          "description": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.description]",
-          "recipients": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.recipients]",
-          "recipientsPlaceholder": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.recipientsPlaceholder]",
-          "frequency": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequency]",
+          "title": "Title",
+          "description": "Description",
+          "recipients": "Recipients",
+          "recipientsPlaceholder": "Recipients Placeholder",
+          "frequency": "Frequency",
           "frequencies": {
-            "daily": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.daily]",
-            "weekly": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.weekly]",
-            "monthly": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.frequencies.monthly]"
+            "daily": "Daily",
+            "weekly": "Weekly",
+            "monthly": "Monthly"
           },
-          "format": "[TODO: Translate dashboard.crosstabs.detail.scheduleDialog.format]"
+          "format": "Format"
         }
       },
-      "justNow": "[TODO: Translate dashboard.crosstabs.justNow]",
-      "description": "[TODO: Translate dashboard.crosstabs.description]",
-      "newCrosstab": "[TODO: Translate dashboard.crosstabs.newCrosstab]",
+      "justNow": "Just now",
+      "description": "Compare audiences across multiple dimensions",
+      "newCrosstab": "New Crosstab",
       "stats": {
-        "totalCrosstabs": "[TODO: Translate dashboard.crosstabs.stats.totalCrosstabs]",
-        "views": "[TODO: Translate dashboard.crosstabs.stats.views]",
-        "exports": "[TODO: Translate dashboard.crosstabs.stats.exports]",
-        "usedToday": "[TODO: Translate dashboard.crosstabs.stats.usedToday]"
+        "totalCrosstabs": "Total Crosstabs",
+        "views": "Views",
+        "exports": "Exports",
+        "usedToday": "Used Today"
       },
       "tabs": {
-        "all": "[TODO: Translate dashboard.crosstabs.tabs.all]",
-        "recent": "[TODO: Translate dashboard.crosstabs.tabs.recent]",
-        "templates": "[TODO: Translate dashboard.crosstabs.tabs.templates]"
+        "all": "All Crosstabs",
+        "recent": "Recent",
+        "templates": "Templates"
       },
       "empty": {
-        "title": "[TODO: Translate dashboard.crosstabs.empty.title]",
-        "description": "[TODO: Translate dashboard.crosstabs.empty.description]"
+        "title": "No crosstabs yet",
+        "description": "Create your first crosstab to compare audiences"
       },
       "badges": {
-        "featured": "[TODO: Translate dashboard.crosstabs.badges.featured]",
-        "liveData": "[TODO: Translate dashboard.crosstabs.badges.liveData]"
+        "featured": "Featured",
+        "liveData": "Live Data"
       },
       "labels": {
-        "audienceSegments": "[TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "audience segments",
+        "metrics": "metrics"
       },
       "actions": {
-        "openAnalysis": "[TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+        "openAnalysis": "Open Analysis"
       }
     },
     "charts": {
@@ -4503,36 +4565,36 @@
           "cancel": "Cancel"
         },
         "errors": {
-          "nameRequired": "[TODO: Translate dashboard.charts.new.errors.nameRequired]",
-          "createFailed": "[TODO: Translate dashboard.charts.new.errors.createFailed]",
-          "createFailedRetry": "[TODO: Translate dashboard.charts.new.errors.createFailedRetry]"
+          "nameRequired": "Please enter a chart name",
+          "createFailed": "Failed to create chart. Please try again.",
+          "createFailedRetry": "Failed to create chart. Please check your connection and try again."
         },
         "chartTypes": {
-          "bar": "[TODO: Translate dashboard.charts.new.chartTypes.bar]",
-          "line": "[TODO: Translate dashboard.charts.new.chartTypes.line]",
-          "area": "[TODO: Translate dashboard.charts.new.chartTypes.area]",
-          "pie": "[TODO: Translate dashboard.charts.new.chartTypes.pie]",
-          "donut": "[TODO: Translate dashboard.charts.new.chartTypes.donut]",
-          "radar": "[TODO: Translate dashboard.charts.new.chartTypes.radar]",
-          "scatter": "[TODO: Translate dashboard.charts.new.chartTypes.scatter]",
-          "funnel": "[TODO: Translate dashboard.charts.new.chartTypes.funnel]",
-          "treemap": "[TODO: Translate dashboard.charts.new.chartTypes.treemap]",
-          "heatmap": "[TODO: Translate dashboard.charts.new.chartTypes.heatmap]"
+          "bar": "Bar Chart",
+          "line": "Line Chart",
+          "area": "Area Chart",
+          "pie": "Pie Chart",
+          "donut": "Donut Chart",
+          "radar": "Radar Chart",
+          "scatter": "Scatter Plot",
+          "funnel": "Funnel Chart",
+          "treemap": "Treemap",
+          "heatmap": "Heatmap"
         },
         "audiences": {
-          "ecoMillennials": "[TODO: Translate dashboard.charts.new.audiences.ecoMillennials]",
-          "techAdopters": "[TODO: Translate dashboard.charts.new.audiences.techAdopters]",
-          "genZCreators": "[TODO: Translate dashboard.charts.new.audiences.genZCreators]"
+          "ecoMillennials": "Eco-Conscious Millennials",
+          "techAdopters": "Tech Early Adopters",
+          "genZCreators": "Gen Z Content Creators"
         },
         "dataSources": {
-          "socialUsage": "[TODO: Translate dashboard.charts.new.dataSources.socialUsage]",
-          "purchaseIntent": "[TODO: Translate dashboard.charts.new.dataSources.purchaseIntent]",
-          "brandAwareness": "[TODO: Translate dashboard.charts.new.dataSources.brandAwareness]"
+          "socialUsage": "Social Media Usage",
+          "purchaseIntent": "Purchase Intent",
+          "brandAwareness": "Brand Awareness"
         },
         "timePeriods": {
-          "last12Months": "[TODO: Translate dashboard.charts.new.timePeriods.last12Months]",
-          "last6Months": "[TODO: Translate dashboard.charts.new.timePeriods.last6Months]",
-          "last3Months": "[TODO: Translate dashboard.charts.new.timePeriods.last3Months]"
+          "last12Months": "Last 12 Months",
+          "last6Months": "Last 6 Months",
+          "last3Months": "Last 3 Months"
         }
       },
       "detail": {
@@ -4610,13 +4672,13 @@
           "delete": "Delete"
         },
         "title": "Chart Details",
-        "a": "[TODO: Translate dashboard.charts.detail.a]",
-        "T": "[TODO: Translate dashboard.charts.detail.T]",
-        "png": "[TODO: Translate dashboard.charts.detail.png]",
-        "csv": "[TODO: Translate dashboard.charts.detail.csv]",
-        "json": "[TODO: Translate dashboard.charts.detail.json]",
-        "pdf": "[TODO: Translate dashboard.charts.detail.pdf]",
-        "pptx": "[TODO: Translate dashboard.charts.detail.pptx]"
+        "a": "",
+        "T": "",
+        "png": "PNG",
+        "csv": "CSV",
+        "json": "JSON",
+        "pdf": "PDF",
+        "pptx": "PPTX"
       },
       "templateGallery": {
         "title": "Chart Templates",
@@ -4917,11 +4979,11 @@
           "cancel": "Cancel",
           "delete": "Delete"
         },
-        "T": "[TODO: Translate dashboard.brandTracking.detail.T]",
-        "a": "[TODO: Translate dashboard.brandTracking.detail.a]",
-        "json": "[TODO: Translate dashboard.brandTracking.detail.json]",
-        "csv": "[TODO: Translate dashboard.brandTracking.detail.csv]",
-        "pdf": "[TODO: Translate dashboard.brandTracking.detail.pdf]"
+        "T": "",
+        "a": "",
+        "json": "JSON",
+        "csv": "CSV",
+        "pdf": "PDF"
       }
     },
     "analytics": {
@@ -5561,36 +5623,36 @@
       "title": "Change Tracking",
       "description": "Track and monitor data changes over time",
       "tabs": {
-        "timeline": "[TODO: Translate dashboard.changes.tabs.timeline]",
-        "compare": "[TODO: Translate dashboard.changes.tabs.compare]",
-        "evolution": "[TODO: Translate dashboard.changes.tabs.evolution]",
-        "alerts": "[TODO: Translate dashboard.changes.tabs.alerts]"
+        "timeline": "Timeline",
+        "compare": "Compare",
+        "evolution": "Evolution",
+        "alerts": "Alerts"
       },
       "compare": {
-        "title": "[TODO: Translate dashboard.changes.compare.title]",
-        "description": "[TODO: Translate dashboard.changes.compare.description]",
-        "compareVersions": "[TODO: Translate dashboard.changes.compare.compareVersions]"
+        "title": "Compare Versions",
+        "description": "Compare different versions of your data",
+        "compareVersions": "Compare Versions"
       },
       "evolution": {
-        "title": "[TODO: Translate dashboard.changes.evolution.title]",
-        "description": "[TODO: Translate dashboard.changes.evolution.description]",
-        "viewEvolution": "[TODO: Translate dashboard.changes.evolution.viewEvolution]"
+        "title": "Data Evolution",
+        "description": "Track how your data changes over time",
+        "viewEvolution": "View Evolution"
       },
       "compareDialog": {
-        "entity": "[TODO: Translate dashboard.changes.compareDialog.entity]"
+        "entity": "Entity"
       },
       "evolutionDialog": {
-        "selectTitle": "[TODO: Translate dashboard.changes.evolutionDialog.selectTitle]",
-        "enterIdPlaceholder": "[TODO: Translate dashboard.changes.evolutionDialog.enterIdPlaceholder]"
+        "selectTitle": "Select Entity",
+        "enterIdPlaceholder": "Enter entity ID..."
       },
       "alerts": {
-        "loading": "[TODO: Translate dashboard.changes.alerts.loading]",
-        "noAlerts": "[TODO: Translate dashboard.changes.alerts.noAlerts]",
-        "noAlertsDescription": "[TODO: Translate dashboard.changes.alerts.noAlertsDescription]",
-        "title": "[TODO: Translate dashboard.changes.alerts.title]",
-        "markAllRead": "[TODO: Translate dashboard.changes.alerts.markAllRead]",
-        "markRead": "[TODO: Translate dashboard.changes.alerts.markRead]",
-        "dismiss": "[TODO: Translate dashboard.changes.alerts.dismiss]"
+        "loading": "Loading alerts...",
+        "noAlerts": "No alerts",
+        "noAlertsDescription": "You don't have any change alerts at the moment",
+        "title": "Change Alerts",
+        "markAllRead": "Mark All as Read",
+        "markRead": "Mark as Read",
+        "dismiss": "Dismiss"
       }
     },
     "inbox": {
@@ -5680,7 +5742,7 @@
         "requireApproval": "Require Approval",
         "requireApprovalHelp": "Review responses before sending"
       },
-      " ": "[TODO: Translate dashboard.inbox. ]"
+      " ": ""
     }
   },
   "audiences": {

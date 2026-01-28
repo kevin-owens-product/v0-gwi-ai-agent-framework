@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -19,94 +19,22 @@ import {
   Users,
   Zap,
   AlertCircle,
+  Loader2,
 } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { toast } from "sonner"
 
 type Notification = {
   id: string
   type: "workflow" | "agent" | "team" | "system" | "report"
-  titleKey: string
+  title: string
   description: string
   time: string
   read: boolean
   actionUrl?: string
 }
-
-// Note: In a real app, these would come from an API with already-translated titles
-// or use translation keys that are resolved at render time
-const initialNotifications: Notification[] = [
-  {
-    id: "1",
-    type: "workflow",
-    titleKey: "workflowCompleted",
-    description: "Your 'Weekly Competitive Analysis' workflow has finished running",
-    time: "5 minutes ago",
-    read: false,
-    actionUrl: "/dashboard/workflows/1",
-  },
-  {
-    id: "2",
-    type: "agent",
-    titleKey: "newAgentAvailable",
-    description: "The 'Trend Forecaster Pro' agent is now available in the Agent Store",
-    time: "1 hour ago",
-    read: false,
-    actionUrl: "/dashboard/store/trend-forecaster-pro",
-  },
-  {
-    id: "3",
-    type: "team",
-    titleKey: "teamMemberJoined",
-    description: "Sarah Chen has joined your workspace",
-    time: "2 hours ago",
-    read: false,
-  },
-  {
-    id: "4",
-    type: "system",
-    titleKey: "usageLimitApproaching",
-    description: "You've used 80% of your monthly query limit",
-    time: "3 hours ago",
-    read: true,
-    actionUrl: "/dashboard/settings/billing",
-  },
-  {
-    id: "5",
-    type: "report",
-    titleKey: "reportReady",
-    description: "Your 'Q4 Consumer Insights' report is ready",
-    time: "5 hours ago",
-    read: true,
-    actionUrl: "/dashboard/reports/q4-consumer-insights",
-  },
-  {
-    id: "6",
-    type: "workflow",
-    titleKey: "workflowFailed",
-    description: "The 'Daily Brand Tracking' workflow encountered an error",
-    time: "1 day ago",
-    read: true,
-    actionUrl: "/dashboard/workflows/2",
-  },
-  {
-    id: "7",
-    type: "agent",
-    titleKey: "agentUpdateAvailable",
-    description: "Audience Strategist Pro has been updated to v2.5.0",
-    time: "2 days ago",
-    read: true,
-  },
-  {
-    id: "8",
-    type: "system",
-    titleKey: "scheduledMaintenance",
-    description: "Platform maintenance scheduled for this Sunday, 2-4 AM UTC",
-    time: "3 days ago",
-    read: true,
-  },
-]
 
 const getIcon = (type: Notification["type"]) => {
   switch (type) {
@@ -129,23 +57,104 @@ export default function NotificationsPage() {
   const t = useTranslations("notifications")
   const tCommon = useTranslations("common")
 
-  const [notifications, setNotifications] = useState(initialNotifications)
+  const [notifications, setNotifications] = useState<Notification[]>([])
   const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [unreadCount, setUnreadCount] = useState(0)
 
-  const unreadCount = notifications.filter((n) => !n.read).length
-  const allRead = unreadCount === 0
+  const formatTimeAgo = (isoString: string) => {
+    const date = new Date(isoString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffMins = Math.floor(diffMs / 60000)
+    const diffHours = Math.floor(diffMs / 3600000)
+    const diffDays = Math.floor(diffMs / 86400000)
 
-  const markAsRead = (id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
+    if (diffMins < 60) return `${diffMins} minutes ago`
+    if (diffHours < 24) return `${diffHours} hours ago`
+    if (diffDays === 1) return 'Yesterday'
+    return `${diffDays} days ago`
   }
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+  useEffect(() => {
+    async function fetchNotifications() {
+      try {
+        const response = await fetch('/api/v1/notifications', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (response.ok) {
+          const data = await response.json()
+          const formatted = (data.notifications || []).map((n: any) => ({
+            ...n,
+            time: formatTimeAgo(n.time),
+          }))
+          setNotifications(formatted)
+          setUnreadCount(data.unreadCount || 0)
+        }
+      } catch (error) {
+        console.error('Failed to fetch notifications:', error)
+        toast.error('Failed to load notifications')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchNotifications()
+  }, [])
+
+  const markAsRead = async (id: string) => {
+    try {
+      const response = await fetch('/api/v1/notifications', {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ notificationIds: [id] }),
+      })
+      if (response.ok) {
+        setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
+        setUnreadCount((prev) => Math.max(0, prev - 1))
+      }
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error)
+    }
+  }
+
+  const markAllAsRead = async () => {
+    try {
+      const response = await fetch('/api/v1/notifications', {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ markAllAsRead: true }),
+      })
+      if (response.ok) {
+        setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+        setUnreadCount(0)
+      }
+    } catch (error) {
+      console.error('Failed to mark all as read:', error)
+    }
   }
 
   const deleteNotification = (id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id))
     setSelectedIds((prev) => prev.filter((i) => i !== id))
+  }
+
+  const allRead = unreadCount === 0
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   const deleteSelected = () => {
@@ -170,13 +179,16 @@ export default function NotificationsPage() {
     return notifications.filter((n) => n.type === type)
   }
 
-  // Get translated notification title
-  const getNotificationTitle = (titleKey: string) => {
-    try {
-      return t(`titles.${titleKey}`)
-    } catch {
-      return titleKey
+  // Get translated notification title (fallback to title if translation not found)
+  const getNotificationTitle = (title: string, titleKey?: string) => {
+    if (titleKey) {
+      try {
+        return t(`titles.${titleKey}`)
+      } catch {
+        return title
+      }
     }
+    return title
   }
 
   return (
@@ -295,7 +307,7 @@ export default function NotificationsPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <span className={cn("font-medium", !notification.read && "text-foreground")}>
-                                {getNotificationTitle(notification.titleKey)}
+                                {getNotificationTitle(notification.title)}
                               </span>
                               {!notification.read && <span className="w-2 h-2 rounded-full bg-primary" />}
                             </div>

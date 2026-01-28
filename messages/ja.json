@@ -3389,7 +3389,7 @@
         "form": {
           "dashboardName": "[JA] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
           "dashboardNamePlaceholder": "[JA] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[JA] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionLabel": "説明",
           "descriptionPlaceholder": "[JA] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
           "publicDashboard": "[JA] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
           "publicDescription": "[JA] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
@@ -3477,7 +3477,7 @@
         "autoRefresh": {
           "on": "[JA] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
           "off": "[JA] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[JA] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "label": "自動更新",
           "interval": "[JA] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
           "every1Min": "[JA] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
           "every5Min": "[JA] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
@@ -3625,7 +3625,69 @@
       },
       "grid": {
         "noDashboardsYet": "[JA] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[JA] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "createFirstDashboard": "[JA] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]",
+        "chartsCount": "{count, plural, =0 {0 チャート} one {# チャート} other {# チャート}}",
+        "viewsCount": "{count, plural, =0 {0 ビュー} one {# ビュー} other {# ビュー}}"
+      }
+    },
+    "memory": {
+      "title": "メモリとコンテキスト",
+      "description": "永続的なエージェントメモリ、プロジェクトコンテキスト、会話履歴を管理します。",
+      "actions": {
+        "settings": "設定",
+        "clearAll": "すべてクリア"
+      },
+      "browser": {
+        "title": "メモリブラウザ",
+        "refresh": "更新",
+        "export": "エクスポート",
+        "searchPlaceholder": "コンテンツまたはタグでメモリを検索...",
+        "typePlaceholder": "タイプ",
+        "projectPlaceholder": "プロジェクト",
+        "allProjects": "すべてのプロジェクト",
+        "noMemoriesFound": "検索条件に一致するメモリが見つかりませんでした。",
+        "selectMemory": "詳細を表示するメモリを選択",
+        "showing": "{total} 件中 {filtered} 件を表示",
+        "types": {
+          "all": "すべてのタイプ",
+          "insights": "インサイト",
+          "findings": "調査結果",
+          "context": "コンテキスト",
+          "preferences": "設定",
+          "facts": "事実",
+          "conversations": "会話"
+        },
+        "detail": {
+          "source": "ソース",
+          "created": "作成日",
+          "tags": "タグ",
+          "citations": "引用",
+          "confidenceScore": "信頼スコア"
+        },
+        "deleteDialog": {
+          "title": "メモリを削除",
+          "description": "このメモリを削除してもよろしいですか？この操作は元に戻せません。",
+          "cancel": "キャンセル",
+          "confirm": "削除"
+        }
+      },
+      "overview": {
+        "projectMemory": "プロジェクトメモリ",
+        "viewAll": "すべて表示",
+        "memoriesCount": "{count} 件のメモリ",
+        "recentMemories": "最近のメモリ",
+        "refresh": "更新"
+      },
+      "stats": {
+        "totalMemories": "メモリ総数",
+        "storageUsed": "使用済みストレージ",
+        "avgRetention": "平均保持期間",
+        "activeProjects": "アクティブなプロジェクト",
+        "thisWeek": "今週 +{count}",
+        "ofTotal": "{total} の",
+        "days": "{count} 日",
+        "extendedTier": "拡張レベル",
+        "withMemories": "{count} 件のメモリあり"
       }
     },
     "crosstabs": {
@@ -3938,7 +4000,7 @@
         "shareDialog": {
           "title": "[JA] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
           "description": "[JA] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[JA] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailLabel": "メール",
           "emailPlaceholder": "[JA] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
           "role": "[JA] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
           "roles": {
@@ -3985,8 +4047,8 @@
         "liveData": "[JA] [TODO: Translate dashboard.crosstabs.badges.liveData]"
       },
       "labels": {
-        "audienceSegments": "[JA] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[JA] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "視聴者セグメント",
+        "metrics": "メトリクス"
       },
       "actions": {
         "openAnalysis": "[JA] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
@@ -5955,8 +6017,7 @@
       "viewMetricsDesc": "システムパフォーマンスを監視",
       "recentActions": "最近のアクション",
       "recentActionsDesc": "最近実行したアクション",
-      "recentActionsTracking": "最近のアクション追跡は近日公開...",
-      " ": "[JA] [TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "最近のアクション追跡は近日公開..."
     },
     "navigation": {
       "surveys": "調査",
@@ -6035,7 +6096,6 @@
         "subtitle": "チームツール"
       },
       "mobileMenu": "ナビゲーションメニュー",
-      " ": "[JA] [TODO: Translate gwi.navigation. ]",
       "navigation": {
         "mobileMenu": "[JA] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
       }
@@ -6864,7 +6924,6 @@
       "searchPlaceholder": "パイプラインを検索...",
       "allRuns": "すべての実行",
       "schedules": {
-        " ": "[JA] [TODO: Translate gwi.pipelines.schedules. ]",
         "title": "[JA] [TODO: Translate gwi.pipelines.schedules.title]",
         "description": "[JA] [TODO: Translate gwi.pipelines.schedules.description]",
         "newSchedule": "[JA] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
@@ -6884,7 +6943,8 @@
         "noScheduledPipelines": "[JA] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
         "noScheduledPipelinesDescription": "[JA] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
         "createScheduledPipeline": "[JA] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[JA] [TODO: Translate gwi.pipelines.schedules.loading]"
+        "loading": "[JA] [TODO: Translate gwi.pipelines.schedules.loading]",
+        "by": "[JA] by {name}"
       },
       "validationRules": "検証ルール",
       "pipeline": "パイプライン",
@@ -7910,8 +7970,7 @@
           "capabilityDeleted": "機能が正常に削除されました",
           "capabilityEnabled": "有効な機能",
           "capabilityDisabled": "機能が無効になっています"
-        },
-        " ": "[JA] [TODO: Translate gwi.agents.capabilities. ]"
+        }
       },
       "templatesTitle": "エージェントテンプレート",
       "templatesDesc": "事前定義されたツールとプロンプトを持つ再利用可能なエージェント設定",
@@ -8190,8 +8249,7 @@
         "noQualityIssues": "品質上の問題は検出されませんでした",
         "qualityByDataSource": "データソース別の品質",
         "qualityScoresPerSource": "接続されている各ソースの品質スコア",
-        "noDataSourcesConnected": "データソースが接続されていません",
-        " ": "[JA] [TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "データソースが接続されていません"
       },
       "detail": {
         "syncNow": "今すぐ同期",
@@ -8298,9 +8356,7 @@
           "costThresholdDesc": "LLMコストが予算を超えたときにアラート",
           "errorRateSpike": "エラー率急増",
           "errorRateSpikeDesc": "異常なエラー率の増加時にアラート"
-        },
-        " ": "[JA] [TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[JA] [TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "パイプラインの健全性",
@@ -8401,9 +8457,7 @@
         "update": "更新",
         "delete": "削除",
         "view": "表示"
-      },
-      "_": "[JA] [TODO: Translate gwi.activity._]",
-      " ": "[JA] [TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "設定",
@@ -9015,8 +9069,6 @@
       "edit": "編集",
       "details": "詳細"
     },
-    "/": "[JA] [TODO: Translate gwi./]",
-    " ": "[JA] [TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
@@ -9932,23 +9984,6 @@
           "user": "ユーザー"
         },
         "policies": {
-          "title": "デバイスポリシー",
-          "description": "組織のデバイス信頼ポリシーを構成する",
-          "noPoliciesConfigured": "デバイスポリシーが設定されていません",
-          "createFirstPolicy": "デバイスの信頼を管理するためのデバイス ポリシーを作成する",
-          "form": {
-            "organization": "組織",
-            "selectOrganization": "組織を選択してください",
-            "policyName": "ポリシー名",
-            "policyNamePlaceholder": "例: 企業のデバイスポリシー",
-            "requireApproval": "承認が必要",
-            "requireApprovalDescription": "新しいデバイスはアクセスする前に管理者の承認が必要です",
-            "allowedPlatforms": "許可されるプラットフォーム",
-            "maxDevicesPerUser": "ユーザーあたりの最大デバイス数",
-            "sessionDuration": "セッション継続時間 (時間)",
-            "requireReauth": "再認証が必要",
-            "requireReauthDescription": "セッション期間終了後に再認証を要求する"
-          },
           "nameRequired": "[JA] Policy name is required",
           "created": "[JA] Created",
           "updated": "[JA] Policy updated successfully",

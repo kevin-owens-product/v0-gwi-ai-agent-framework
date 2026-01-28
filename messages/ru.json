@@ -3389,7 +3389,7 @@
         "form": {
           "dashboardName": "[RU] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
           "dashboardNamePlaceholder": "[RU] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[RU] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionLabel": "Описание",
           "descriptionPlaceholder": "[RU] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
           "publicDashboard": "[RU] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
           "publicDescription": "[RU] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
@@ -3477,7 +3477,7 @@
         "autoRefresh": {
           "on": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
           "off": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "label": "Автообновление",
           "interval": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
           "every1Min": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
           "every5Min": "[RU] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
@@ -3625,7 +3625,69 @@
       },
       "grid": {
         "noDashboardsYet": "[RU] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[RU] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "createFirstDashboard": "[RU] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]",
+        "chartsCount": "{count, plural, =0 {0 диаграмм} one {# диаграмма} other {# диаграмм}}",
+        "viewsCount": "{count, plural, =0 {0 просмотров} one {# просмотр} other {# просмотров}}"
+      }
+    },
+    "memory": {
+      "title": "Память и контекст",
+      "description": "Управляйте постоянной памятью агента, контекстом проекта и историей разговоров.",
+      "actions": {
+        "settings": "Настройки",
+        "clearAll": "Очистить все"
+      },
+      "browser": {
+        "title": "Браузер памяти",
+        "refresh": "Обновить",
+        "export": "Экспорт",
+        "searchPlaceholder": "Поиск воспоминаний по содержимому или тегам...",
+        "typePlaceholder": "Тип",
+        "projectPlaceholder": "Проект",
+        "allProjects": "Все проекты",
+        "noMemoriesFound": "Воспоминания, соответствующие вашим критериям поиска, не найдены.",
+        "selectMemory": "Выберите воспоминание для просмотра деталей",
+        "showing": "Показано {filtered} из {total} воспоминаний",
+        "types": {
+          "all": "Все типы",
+          "insights": "Инсайты",
+          "findings": "Находки",
+          "context": "Контекст",
+          "preferences": "Предпочтения",
+          "facts": "Факты",
+          "conversations": "Разговоры"
+        },
+        "detail": {
+          "source": "Источник",
+          "created": "Создано",
+          "tags": "Теги",
+          "citations": "Цитаты",
+          "confidenceScore": "Оценка уверенности"
+        },
+        "deleteDialog": {
+          "title": "Удалить воспоминание",
+          "description": "Вы уверены, что хотите удалить это воспоминание? Это действие нельзя отменить.",
+          "cancel": "Отмена",
+          "confirm": "Удалить"
+        }
+      },
+      "overview": {
+        "projectMemory": "Память проекта",
+        "viewAll": "Посмотреть все",
+        "memoriesCount": "{count} воспоминаний",
+        "recentMemories": "Недавние воспоминания",
+        "refresh": "Обновить"
+      },
+      "stats": {
+        "totalMemories": "Всего воспоминаний",
+        "storageUsed": "Использовано хранилища",
+        "avgRetention": "Средний срок хранения",
+        "activeProjects": "Активные проекты",
+        "thisWeek": "+{count} на этой неделе",
+        "ofTotal": "из {total}",
+        "days": "{count} дней",
+        "extendedTier": "Расширенный уровень",
+        "withMemories": "{count} с воспоминаниями"
       }
     },
     "crosstabs": {
@@ -3938,7 +4000,7 @@
         "shareDialog": {
           "title": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
           "description": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailLabel": "Электронная почта",
           "emailPlaceholder": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
           "role": "[RU] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
           "roles": {
@@ -3985,8 +4047,8 @@
         "liveData": "[RU] [TODO: Translate dashboard.crosstabs.badges.liveData]"
       },
       "labels": {
-        "audienceSegments": "[RU] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[RU] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "сегменты аудитории",
+        "metrics": "метрики"
       },
       "actions": {
         "openAnalysis": "[RU] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
@@ -5955,8 +6017,7 @@
       "viewMetricsDesc": "Мониторинг производительности системы",
       "recentActions": "Недавние действия",
       "recentActionsDesc": "Ваши недавно выполненные действия",
-      "recentActionsTracking": "Отслеживание недавних действий скоро появится...",
-      " ": "[RU] [TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "Отслеживание недавних действий скоро появится..."
     },
     "navigation": {
       "surveys": "Опросы",
@@ -6035,7 +6096,6 @@
         "subtitle": "Инструменты команды"
       },
       "mobileMenu": "Меню навигации",
-      " ": "[RU] [TODO: Translate gwi.navigation. ]",
       "navigation": {
         "mobileMenu": "[RU] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
       }
@@ -6864,7 +6924,6 @@
       "searchPlaceholder": "Поиск конвейеров...",
       "allRuns": "Все запуски",
       "schedules": {
-        " ": "[RU] [TODO: Translate gwi.pipelines.schedules. ]",
         "title": "[RU] [TODO: Translate gwi.pipelines.schedules.title]",
         "description": "[RU] [TODO: Translate gwi.pipelines.schedules.description]",
         "newSchedule": "[RU] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
@@ -6884,7 +6943,8 @@
         "noScheduledPipelines": "[RU] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
         "noScheduledPipelinesDescription": "[RU] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
         "createScheduledPipeline": "[RU] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[RU] [TODO: Translate gwi.pipelines.schedules.loading]"
+        "loading": "[RU] [TODO: Translate gwi.pipelines.schedules.loading]",
+        "by": "[RU] by {name}"
       },
       "validationRules": "Правила валидации",
       "pipeline": "Конвейер",
@@ -7910,8 +7970,7 @@
           "capabilityDeleted": "Возможность успешно удалена",
           "capabilityEnabled": "Возможность включена",
           "capabilityDisabled": "Возможность отключена"
-        },
-        " ": "[RU] [TODO: Translate gwi.agents.capabilities. ]"
+        }
       },
       "templatesTitle": "Шаблоны агентов",
       "templatesDesc": "Повторно используемые конфигурации агентов с предопределёнными инструментами и промптами",
@@ -8190,8 +8249,7 @@
         "noQualityIssues": "Проблем с качеством не обнаружено",
         "qualityByDataSource": "Качество по источникам данных",
         "qualityScoresPerSource": "Оценки качества для каждого подключенного источника",
-        "noDataSourcesConnected": "Источники данных не подключены",
-        " ": "[RU] [TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "Источники данных не подключены"
       },
       "detail": {
         "syncNow": "Синхронизировать сейчас",
@@ -8298,9 +8356,7 @@
           "costThresholdDesc": "Оповещение при превышении бюджета на LLM",
           "errorRateSpike": "Скачок частоты ошибок",
           "errorRateSpikeDesc": "Оповещение при необычном увеличении частоты ошибок"
-        },
-        " ": "[RU] [TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[RU] [TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "Здоровье трубопровода",
@@ -8401,9 +8457,7 @@
         "update": "Обновление",
         "delete": "Удаление",
         "view": "Просмотр"
-      },
-      "_": "[RU] [TODO: Translate gwi.activity._]",
-      " ": "[RU] [TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "Настройки",
@@ -9015,8 +9069,6 @@
       "edit": "Редактировать",
       "details": "Детали"
     },
-    "/": "[RU] [TODO: Translate gwi./]",
-    " ": "[RU] [TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
@@ -9932,23 +9984,6 @@
           "user": "Пользователь"
         },
         "policies": {
-          "title": "Политики устройства",
-          "description": "Настройка политик доверия устройств для организаций",
-          "noPoliciesConfigured": "Политики устройств не настроены",
-          "createFirstPolicy": "Создайте политику устройства для управления доверием к устройствам.",
-          "form": {
-            "organization": "Организация",
-            "selectOrganization": "Выберите организацию",
-            "policyName": "Имя политики",
-            "policyNamePlaceholder": "например, политика корпоративных устройств",
-            "requireApproval": "Требовать одобрения",
-            "requireApprovalDescription": "Перед доступом к новым устройствам требуется одобрение администратора.",
-            "allowedPlatforms": "Разрешенные платформы",
-            "maxDevicesPerUser": "Максимальное количество устройств на пользователя",
-            "sessionDuration": "Продолжительность сеанса (часы)",
-            "requireReauth": "Требовать повторной аутентификации",
-            "requireReauthDescription": "Требовать повторной аутентификации после завершения сеанса"
-          },
           "nameRequired": "[RU] Policy name is required",
           "created": "[RU] Created",
           "updated": "[RU] Policy updated successfully",

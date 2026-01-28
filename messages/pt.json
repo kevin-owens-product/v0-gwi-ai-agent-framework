@@ -3389,7 +3389,7 @@
         "form": {
           "dashboardName": "[PT] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
           "dashboardNamePlaceholder": "[PT] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[PT] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionLabel": "Descrição",
           "descriptionPlaceholder": "[PT] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
           "publicDashboard": "[PT] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
           "publicDescription": "[PT] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
@@ -3477,7 +3477,7 @@
         "autoRefresh": {
           "on": "[PT] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
           "off": "[PT] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[PT] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "label": "Atualização automática",
           "interval": "[PT] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
           "every1Min": "[PT] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
           "every5Min": "[PT] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
@@ -3625,7 +3625,69 @@
       },
       "grid": {
         "noDashboardsYet": "[PT] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[PT] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "createFirstDashboard": "[PT] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]",
+        "chartsCount": "{count, plural, =0 {0 gráficos} one {# gráfico} other {# gráficos}}",
+        "viewsCount": "{count, plural, =0 {0 visualizações} one {# visualização} other {# visualizações}}"
+      }
+    },
+    "memory": {
+      "title": "Memória e contexto",
+      "description": "Gerencie a memória persistente do agente, o contexto do projeto e o histórico de conversas.",
+      "actions": {
+        "settings": "Configurações",
+        "clearAll": "Limpar tudo"
+      },
+      "browser": {
+        "title": "Navegador de memória",
+        "refresh": "Atualizar",
+        "export": "Exportar",
+        "searchPlaceholder": "Pesquisar memórias por conteúdo ou tags...",
+        "typePlaceholder": "Tipo",
+        "projectPlaceholder": "Projeto",
+        "allProjects": "Todos os projetos",
+        "noMemoriesFound": "Nenhuma memória encontrada correspondendo aos seus critérios de pesquisa.",
+        "selectMemory": "Selecione uma memória para ver detalhes",
+        "showing": "Mostrando {filtered} de {total} memórias",
+        "types": {
+          "all": "Todos os tipos",
+          "insights": "Insights",
+          "findings": "Descobertas",
+          "context": "Contexto",
+          "preferences": "Preferências",
+          "facts": "Fatos",
+          "conversations": "Conversas"
+        },
+        "detail": {
+          "source": "Fonte",
+          "created": "Criado",
+          "tags": "Tags",
+          "citations": "Citações",
+          "confidenceScore": "Pontuação de confiança"
+        },
+        "deleteDialog": {
+          "title": "Excluir memória",
+          "description": "Tem certeza de que deseja excluir esta memória? Esta ação não pode ser desfeita.",
+          "cancel": "Cancelar",
+          "confirm": "Excluir"
+        }
+      },
+      "overview": {
+        "projectMemory": "Memória do projeto",
+        "viewAll": "Ver tudo",
+        "memoriesCount": "{count} memórias",
+        "recentMemories": "Memórias recentes",
+        "refresh": "Atualizar"
+      },
+      "stats": {
+        "totalMemories": "Total de memórias",
+        "storageUsed": "Armazenamento usado",
+        "avgRetention": "Retenção média",
+        "activeProjects": "Projetos ativos",
+        "thisWeek": "+{count} esta semana",
+        "ofTotal": "de {total}",
+        "days": "{count} dias",
+        "extendedTier": "Nível estendido",
+        "withMemories": "{count} com memórias"
       }
     },
     "crosstabs": {
@@ -3938,7 +4000,7 @@
         "shareDialog": {
           "title": "[PT] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
           "description": "[PT] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[PT] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailLabel": "E-mail",
           "emailPlaceholder": "[PT] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
           "role": "[PT] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
           "roles": {
@@ -3985,8 +4047,8 @@
         "liveData": "[PT] [TODO: Translate dashboard.crosstabs.badges.liveData]"
       },
       "labels": {
-        "audienceSegments": "[PT] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[PT] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "segmentos de público",
+        "metrics": "métricas"
       },
       "actions": {
         "openAnalysis": "[PT] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
@@ -5955,8 +6017,7 @@
       "viewMetricsDesc": "Monitore o desempenho do sistema",
       "recentActions": "Ações Recentes",
       "recentActionsDesc": "Suas ações realizadas recentemente",
-      "recentActionsTracking": "Rastreamento de ações recentes em breve...",
-      " ": "[PT] [TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "Rastreamento de ações recentes em breve..."
     },
     "navigation": {
       "surveys": "Pesquisas",
@@ -6035,7 +6096,6 @@
         "subtitle": "Ferramentas da Equipe"
       },
       "mobileMenu": "Menu de navegação",
-      " ": "[PT] [TODO: Translate gwi.navigation. ]",
       "navigation": {
         "mobileMenu": "[PT] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
       }
@@ -6864,7 +6924,6 @@
       "searchPlaceholder": "Pesquisar pipelines...",
       "allRuns": "Todas as Execuções",
       "schedules": {
-        " ": "[PT] [TODO: Translate gwi.pipelines.schedules. ]",
         "title": "[PT] [TODO: Translate gwi.pipelines.schedules.title]",
         "description": "[PT] [TODO: Translate gwi.pipelines.schedules.description]",
         "newSchedule": "[PT] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
@@ -6884,7 +6943,8 @@
         "noScheduledPipelines": "[PT] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
         "noScheduledPipelinesDescription": "[PT] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
         "createScheduledPipeline": "[PT] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[PT] [TODO: Translate gwi.pipelines.schedules.loading]"
+        "loading": "[PT] [TODO: Translate gwi.pipelines.schedules.loading]",
+        "by": "[PT] by {name}"
       },
       "validationRules": "Regras de Validação",
       "pipeline": "Pipeline",
@@ -7910,8 +7970,7 @@
           "capabilityDeleted": "Recurso excluído com sucesso",
           "capabilityEnabled": "Capacidade ativada",
           "capabilityDisabled": "Capacidade desativada"
-        },
-        " ": "[PT] [TODO: Translate gwi.agents.capabilities. ]"
+        }
       },
       "templatesTitle": "Templates de Agentes",
       "templatesDesc": "Configurações de agentes reutilizáveis com ferramentas e prompts pré-definidos",
@@ -8190,8 +8249,7 @@
         "noQualityIssues": "Nenhum problema de qualidade detectado",
         "qualityByDataSource": "Qualidade por fonte de dados",
         "qualityScoresPerSource": "Pontuações de qualidade para cada fonte conectada",
-        "noDataSourcesConnected": "Nenhuma fonte de dados conectada",
-        " ": "[PT] [TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "Nenhuma fonte de dados conectada"
       },
       "detail": {
         "syncNow": "Sincronizar agora",
@@ -8298,9 +8356,7 @@
           "costThresholdDesc": "Alerta quando os custos de LLM excedem o orçamento",
           "errorRateSpike": "Pico de Taxa de Erros",
           "errorRateSpikeDesc": "Alerta sobre aumento incomum na taxa de erros"
-        },
-        " ": "[PT] [TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[PT] [TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "Saúde do pipeline",
@@ -8401,9 +8457,7 @@
         "update": "Atualizar",
         "delete": "Excluir",
         "view": "Visualizar"
-      },
-      "_": "[PT] [TODO: Translate gwi.activity._]",
-      " ": "[PT] [TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "Configurações",
@@ -9015,8 +9069,6 @@
       "edit": "Editar",
       "details": "Detalhes"
     },
-    "/": "[PT] [TODO: Translate gwi./]",
-    " ": "[PT] [TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
@@ -9932,23 +9984,6 @@
           "user": "Usuária"
         },
         "policies": {
-          "title": "Políticas de dispositivos",
-          "description": "Configurar políticas de confiança de dispositivos para organizações",
-          "noPoliciesConfigured": "Nenhuma política de dispositivo configurada",
-          "createFirstPolicy": "Crie uma política de dispositivo para gerenciar a confiança do dispositivo",
-          "form": {
-            "organization": "Organização",
-            "selectOrganization": "Selecione uma organização",
-            "policyName": "Nome da política",
-            "policyNamePlaceholder": "por exemplo, Política Corporativa de Dispositivos",
-            "requireApproval": "Exigir aprovação",
-            "requireApprovalDescription": "Novos dispositivos exigem aprovação do administrador antes do acesso",
-            "allowedPlatforms": "Plataformas permitidas",
-            "maxDevicesPerUser": "Máximo de dispositivos por usuário",
-            "sessionDuration": "Duração da sessão (horas)",
-            "requireReauth": "Exigir nova autenticação",
-            "requireReauthDescription": "Exigir nova autenticação após a duração da sessão"
-          },
           "nameRequired": "[PT] Policy name is required",
           "created": "[PT] Created",
           "updated": "[PT] Policy updated successfully",

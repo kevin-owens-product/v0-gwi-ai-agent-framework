@@ -3389,7 +3389,7 @@
         "form": {
           "dashboardName": "[ZH] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
           "dashboardNamePlaceholder": "[ZH] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[ZH] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionLabel": "描述",
           "descriptionPlaceholder": "[ZH] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
           "publicDashboard": "[ZH] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
           "publicDescription": "[ZH] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
@@ -3477,7 +3477,7 @@
         "autoRefresh": {
           "on": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
           "off": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "label": "自动刷新",
           "interval": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
           "every1Min": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
           "every5Min": "[ZH] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
@@ -3625,7 +3625,69 @@
       },
       "grid": {
         "noDashboardsYet": "[ZH] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[ZH] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "createFirstDashboard": "[ZH] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]",
+        "chartsCount": "{count, plural, =0 {0 个图表} one {# 个图表} other {# 个图表}}",
+        "viewsCount": "{count, plural, =0 {0 次查看} one {# 次查看} other {# 次查看}}"
+      }
+    },
+    "memory": {
+      "title": "记忆和上下文",
+      "description": "管理持久代理记忆、项目上下文和对话历史。",
+      "actions": {
+        "settings": "设置",
+        "clearAll": "清除全部"
+      },
+      "browser": {
+        "title": "记忆浏览器",
+        "refresh": "刷新",
+        "export": "导出",
+        "searchPlaceholder": "按内容或标签搜索记忆...",
+        "typePlaceholder": "类型",
+        "projectPlaceholder": "项目",
+        "allProjects": "所有项目",
+        "noMemoriesFound": "未找到符合您搜索条件的记忆。",
+        "selectMemory": "选择记忆以查看详细信息",
+        "showing": "显示 {filtered} 条，共 {total} 条记忆",
+        "types": {
+          "all": "所有类型",
+          "insights": "洞察",
+          "findings": "发现",
+          "context": "上下文",
+          "preferences": "偏好",
+          "facts": "事实",
+          "conversations": "对话"
+        },
+        "detail": {
+          "source": "来源",
+          "created": "创建时间",
+          "tags": "标签",
+          "citations": "引用",
+          "confidenceScore": "置信度分数"
+        },
+        "deleteDialog": {
+          "title": "删除记忆",
+          "description": "您确定要删除此记忆吗？此操作无法撤销。",
+          "cancel": "取消",
+          "confirm": "删除"
+        }
+      },
+      "overview": {
+        "projectMemory": "项目记忆",
+        "viewAll": "查看全部",
+        "memoriesCount": "{count} 条记忆",
+        "recentMemories": "最近的记忆",
+        "refresh": "刷新"
+      },
+      "stats": {
+        "totalMemories": "总记忆数",
+        "storageUsed": "已用存储",
+        "avgRetention": "平均保留时间",
+        "activeProjects": "活跃项目",
+        "thisWeek": "本周 +{count}",
+        "ofTotal": "共 {total}",
+        "days": "{count} 天",
+        "extendedTier": "扩展层级",
+        "withMemories": "{count} 个有记忆"
       }
     },
     "crosstabs": {
@@ -3938,7 +4000,7 @@
         "shareDialog": {
           "title": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
           "description": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailLabel": "电子邮件",
           "emailPlaceholder": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
           "role": "[ZH] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
           "roles": {
@@ -3985,8 +4047,8 @@
         "liveData": "[ZH] [TODO: Translate dashboard.crosstabs.badges.liveData]"
       },
       "labels": {
-        "audienceSegments": "[ZH] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[ZH] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "受众群体",
+        "metrics": "指标"
       },
       "actions": {
         "openAnalysis": "[ZH] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
@@ -5955,8 +6017,7 @@
       "viewMetricsDesc": "监控系统性能",
       "recentActions": "最近操作",
       "recentActionsDesc": "您最近执行的操作",
-      "recentActionsTracking": "最近操作追踪即将推出...",
-      " ": "[ZH] [TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "最近操作追踪即将推出..."
     },
     "navigation": {
       "surveys": "调研",
@@ -6035,7 +6096,6 @@
         "subtitle": "团队工具"
       },
       "mobileMenu": "导航菜单",
-      " ": "[ZH] [TODO: Translate gwi.navigation. ]",
       "navigation": {
         "mobileMenu": "[ZH] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
       }
@@ -6864,7 +6924,6 @@
       "searchPlaceholder": "搜索管道...",
       "allRuns": "所有运行",
       "schedules": {
-        " ": "[ZH] [TODO: Translate gwi.pipelines.schedules. ]",
         "title": "[ZH] [TODO: Translate gwi.pipelines.schedules.title]",
         "description": "[ZH] [TODO: Translate gwi.pipelines.schedules.description]",
         "newSchedule": "[ZH] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
@@ -6884,7 +6943,8 @@
         "noScheduledPipelines": "[ZH] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
         "noScheduledPipelinesDescription": "[ZH] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
         "createScheduledPipeline": "[ZH] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[ZH] [TODO: Translate gwi.pipelines.schedules.loading]"
+        "loading": "[ZH] [TODO: Translate gwi.pipelines.schedules.loading]",
+        "by": "[ZH] by {name}"
       },
       "validationRules": "验证规则",
       "pipeline": "管道",
@@ -7910,8 +7970,7 @@
           "keyRequired": "需要能力密钥",
           "keyFormat": "键必须小写，仅包含点和下划线",
           "categoryRequired": "类别为必填项"
-        },
-        " ": "[ZH] [TODO: Translate gwi.agents.capabilities. ]"
+        }
       },
       "templatesTitle": "智能体模板",
       "templatesDesc": "具有预定义工具和提示词的可复用智能体配置",
@@ -8190,8 +8249,7 @@
         "noQualityIssues": "未发现质量问题",
         "qualityByDataSource": "数据源质量",
         "qualityScoresPerSource": "每个连接源的质量得分",
-        "noDataSourcesConnected": "没有连接数据源",
-        " ": "[ZH] [TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "没有连接数据源"
       },
       "detail": {
         "syncNow": "立即同步",
@@ -8298,9 +8356,7 @@
           "costThresholdDesc": "当 LLM 成本超出预算时告警",
           "errorRateSpike": "错误率激增",
           "errorRateSpikeDesc": "当错误率异常增加时告警"
-        },
-        " ": "[ZH] [TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[ZH] [TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "管道健康",
@@ -8401,9 +8457,7 @@
         "update": "更新",
         "delete": "删除",
         "view": "查看"
-      },
-      "_": "[ZH] [TODO: Translate gwi.activity._]",
-      " ": "[ZH] [TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "设置",
@@ -9015,8 +9069,6 @@
       "edit": "编辑",
       "details": "详情"
     },
-    "/": "[ZH] [TODO: Translate gwi./]",
-    " ": "[ZH] [TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
@@ -9924,23 +9976,6 @@
           "user": "用户"
         },
         "policies": {
-          "title": "设备策略",
-          "description": "为组织配置设备信任策略",
-          "noPoliciesConfigured": "未配置设备策略",
-          "createFirstPolicy": "创建设备策略以管理设备信任",
-          "form": {
-            "organization": "组织",
-            "selectOrganization": "选择组织",
-            "policyName": "策略名称",
-            "policyNamePlaceholder": "例如：企业设备策略",
-            "requireApproval": "需要批准",
-            "requireApprovalDescription": "新设备需要管理员批准后才能访问",
-            "allowedPlatforms": "允许的平台",
-            "maxDevicesPerUser": "每用户最大设备数",
-            "sessionDuration": "会话持续时间（小时）",
-            "requireReauth": "需要重新认证",
-            "requireReauthDescription": "会话持续时间后需要重新认证"
-          },
           "nameRequired": "[ZH] Policy name is required",
           "created": "[ZH] Created",
           "updated": "[ZH] Policy updated successfully",

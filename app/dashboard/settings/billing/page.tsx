@@ -1,23 +1,109 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Check, CreditCard, Download, Zap, ArrowUpRight } from "lucide-react"
+import { Check, CreditCard, Download, Zap, ArrowUpRight, Loader2 } from "lucide-react"
 import { PageTracker } from "@/components/tracking/PageTracker"
+import { toast } from "sonner"
 
-const invoices = [
-  { id: "INV-001", date: "Dec 1, 2024", amount: "$2,499.00", status: "Paid" },
-  { id: "INV-002", date: "Nov 1, 2024", amount: "$2,499.00", status: "Paid" },
-  { id: "INV-003", date: "Oct 1, 2024", amount: "$2,499.00", status: "Paid" },
-  { id: "INV-004", date: "Sep 1, 2024", amount: "$1,999.00", status: "Paid" },
-]
+interface BillingData {
+  subscription: {
+    planId: string
+    status: string
+    currentPeriodStart: string | null
+    currentPeriodEnd: string | null
+  } | null
+  usage: {
+    agentQueries: number
+    reportsGenerated: number
+    teamMembers: number
+    teamSeatsLimit: number
+    reportsLimit: number
+  }
+  invoices: Array<{
+    id: string
+    date: string
+    amount: string
+    status: string
+  }>
+}
 
 export default function BillingSettingsPage() {
   const t = useTranslations("settings.billing")
+  const [billingData, setBillingData] = useState<BillingData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchBillingData() {
+      try {
+        const response = await fetch('/api/v1/billing', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (response.ok) {
+          const data = await response.json()
+          setBillingData(data)
+        } else {
+          // Fallback to default data
+          setBillingData({
+            subscription: null,
+            usage: {
+              agentQueries: 0,
+              reportsGenerated: 0,
+              teamMembers: 0,
+              teamSeatsLimit: 25,
+              reportsLimit: 100,
+            },
+            invoices: [],
+          })
+        }
+      } catch (error) {
+        console.error('Failed to fetch billing data:', error)
+        toast.error('Failed to load billing information')
+        setBillingData({
+          subscription: null,
+          usage: {
+            agentQueries: 0,
+            reportsGenerated: 0,
+            teamMembers: 0,
+            teamSeatsLimit: 25,
+            reportsLimit: 100,
+          },
+          invoices: [],
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchBillingData()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="p-6 max-w-4xl">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      </div>
+    )
+  }
+
+  const invoices = billingData?.invoices || []
+  const usage = billingData?.usage || {
+    agentQueries: 0,
+    reportsGenerated: 0,
+    teamMembers: 0,
+    teamSeatsLimit: 25,
+    reportsLimit: 100,
+  }
+  const subscription = billingData?.subscription
 
   return (
     <div className="p-6 max-w-4xl">
@@ -74,30 +160,34 @@ export default function BillingSettingsPage() {
                   <div>
                     <div className="flex items-center justify-between text-sm mb-1">
                       <span>{t("usage.agentQueries")}</span>
-                      <span>12,450 / {t("usage.unlimited")}</span>
+                      <span>{usage.agentQueries.toLocaleString()} / {t("usage.unlimited")}</span>
                     </div>
                     <Progress value={100} className="h-2" />
                   </div>
                   <div>
                     <div className="flex items-center justify-between text-sm mb-1">
                       <span>{t("usage.reportsGenerated")}</span>
-                      <span>89 / 100</span>
+                      <span>{usage.reportsGenerated} / {usage.reportsLimit}</span>
                     </div>
-                    <Progress value={89} className="h-2" />
+                    <Progress value={(usage.reportsGenerated / usage.reportsLimit) * 100} className="h-2" />
                   </div>
                   <div>
                     <div className="flex items-center justify-between text-sm mb-1">
                       <span>{t("usage.teamSeats")}</span>
-                      <span>12 / 25</span>
+                      <span>{usage.teamMembers} / {usage.teamSeatsLimit}</span>
                     </div>
-                    <Progress value={48} className="h-2" />
+                    <Progress value={(usage.teamMembers / usage.teamSeatsLimit) * 100} className="h-2" />
                   </div>
                 </div>
               </div>
             </div>
           </CardContent>
           <CardFooter className="flex items-center justify-between border-t pt-6">
-            <p className="text-sm text-muted-foreground">{t("nextBillingDate", { date: "January 1, 2025" })}</p>
+            <p className="text-sm text-muted-foreground">
+              {subscription?.currentPeriodEnd
+                ? t("nextBillingDate", { date: new Date(subscription.currentPeriodEnd).toLocaleDateString() })
+                : t("noActiveSubscription")}
+            </p>
             <div className="flex items-center gap-2">
               <Button variant="outline">{t("changePlan")}</Button>
               <Button variant="outline" className="text-destructive bg-transparent">

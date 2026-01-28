@@ -9956,6 +9956,64 @@ async function main() {
     })
   })
 
+  // ==================== PROJECTS ====================
+  console.log('📁 Creating projects...')
+
+  await safeSeedSection('Projects', async () => {
+    await prisma.project.createMany({
+      data: [
+        {
+          orgId: acmeCorp.id,
+          name: 'Gen Z Sustainability',
+          description: 'Research project exploring Gen Z attitudes towards sustainable brands and eco-friendly products',
+          status: 'ACTIVE',
+          progress: 68,
+          createdBy: adminUser.id,
+        },
+        {
+          orgId: acmeCorp.id,
+          name: 'Q4 Campaign',
+          description: 'Holiday season marketing campaign analysis and audience targeting strategy',
+          status: 'ACTIVE',
+          progress: 45,
+          createdBy: johnDoe.id,
+        },
+        {
+          orgId: acmeCorp.id,
+          name: 'Market Expansion',
+          description: 'Research initiative for expanding into new geographic markets in APAC region',
+          status: 'ON_HOLD',
+          progress: 25,
+          createdBy: janeSmith.id,
+        },
+        {
+          orgId: acmeCorp.id,
+          name: 'Brand Refresh 2024',
+          description: 'Comprehensive brand refresh and repositioning strategy',
+          status: 'COMPLETED',
+          progress: 100,
+          createdBy: adminUser.id,
+        },
+        {
+          orgId: techStartup.id,
+          name: 'Product Launch Research',
+          description: 'Market research for upcoming product launch',
+          status: 'ACTIVE',
+          progress: 55,
+          createdBy: bobWilson.id,
+        },
+        {
+          orgId: enterpriseCo.id,
+          name: 'Enterprise Client Analysis',
+          description: 'Deep dive analysis for enterprise client engagement',
+          status: 'ACTIVE',
+          progress: 80,
+          createdBy: sarahEnterprise.id,
+        },
+      ]
+    })
+  })
+
   // ==================== MEMORY ====================
   console.log('🧠 Creating agent memories...')
 

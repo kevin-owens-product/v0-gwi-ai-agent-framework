@@ -53,8 +53,10 @@ import {
   PieChart,
   Globe,
   ChevronRight,
+  Loader2,
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useWorkflowTracking, useFormTracking, usePageViewTracking } from "@/hooks/useEventTracking"
 
@@ -91,6 +93,7 @@ interface WorkflowStep {
 }
 
 export function WorkflowBuilder() {
+  const router = useRouter()
   const t = useTranslations("dashboard.pages.workflows.builder")
 
   // Form state
@@ -105,6 +108,8 @@ export function WorkflowBuilder() {
   ])
   const [schedule, setSchedule] = useState("manual")
   const [enableNotifications, setEnableNotifications] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   // Event tracking hooks
   usePageViewTracking({ pageName: 'Workflow Builder' })
@@ -160,19 +165,61 @@ export function WorkflowBuilder() {
    * Handles workflow creation with tracking
    * @param isDraft - Whether to save as draft or execute
    */
-  const handleCreate = (isDraft: boolean) => {
-    // Track workflow creation
-    trackWorkflowCreate('new-workflow', {
-      stepCount: steps.length,
-      agentsUsed: steps.filter(s => s.agentId).map(s => s.agentId),
-      schedule,
-      enableNotifications,
-      isDraft,
-      hasDescription: !!description,
-    })
+  const handleCreate = async (isDraft: boolean) => {
+    if (!name.trim()) {
+      setSaveError('Workflow name is required')
+      return
+    }
 
-    // TODO: Implement actual API call
-    console.log('Creating workflow:', { name, description, steps, schedule, enableNotifications, isDraft })
+    setIsSaving(true)
+    setSaveError(null)
+
+    try {
+      // Track workflow creation
+      trackWorkflowCreate('new-workflow', {
+        stepCount: steps.length,
+        agentsUsed: steps.filter(s => s.agentId).map(s => s.agentId),
+        schedule,
+        enableNotifications,
+        isDraft,
+        hasDescription: !!description,
+      })
+
+      const response = await fetch('/api/v1/workflows', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          description: description || undefined,
+          status: isDraft ? 'DRAFT' : 'ACTIVE',
+          schedule: schedule === 'manual' ? undefined : schedule,
+          agents: steps.filter(s => s.agentId).map(s => s.agentId),
+          configuration: {
+            steps: steps.map((step, index) => ({
+              agentId: step.agentId,
+              order: index + 1,
+              config: step.config,
+            })),
+            enableNotifications,
+          },
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to create workflow')
+      }
+
+      const workflow = await response.json()
+      router.push(`/dashboard/workflows/${workflow.id}`)
+    } catch (error: any) {
+      console.error('Failed to create workflow:', error)
+      setSaveError(error.message || 'Failed to create workflow')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -195,19 +242,45 @@ export function WorkflowBuilder() {
             variant="outline"
             className="gap-2 bg-transparent"
             onClick={() => handleCreate(true)}
+            disabled={isSaving || !name.trim()}
           >
-            <Save className="h-4 w-4" />
-            {t("saveDraft")}
+            {isSaving ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {t("saving")}
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4" />
+                {t("saveDraft")}
+              </>
+            )}
           </Button>
           <Button
             className="gap-2"
             onClick={() => handleCreate(false)}
+            disabled={isSaving || !name.trim()}
           >
-            <Play className="h-4 w-4" />
-            {t("createAndRun")}
+            {isSaving ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {t("creating")}
+              </>
+            ) : (
+              <>
+                <Play className="h-4 w-4" />
+                {t("createAndRun")}
+              </>
+            )}
           </Button>
         </div>
       </div>
+
+      {saveError && (
+        <div className="bg-destructive/10 text-destructive border border-destructive/20 rounded-lg p-4">
+          <p className="text-sm">{saveError}</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Builder */}

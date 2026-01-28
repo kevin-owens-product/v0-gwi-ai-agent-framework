@@ -8,23 +8,14 @@ import { logAuditEvent, createAuditEventFromRequest } from '@/lib/audit'
 import { recordUsage } from '@/lib/billing'
 import { z } from 'zod'
 
-const updateTemplateSchema = z.object({
+const updateProjectSchema = z.object({
   name: z.string().min(1).max(200).optional(),
   description: z.string().optional(),
-  category: z.enum(['RESEARCH', 'ANALYSIS', 'BRIEFS', 'CUSTOM']).optional(),
-  prompt: z.string().min(1).optional(),
-  tags: z.array(z.string()).optional(),
-  variables: z.array(z.object({
-    name: z.string(),
-    type: z.enum(['text', 'number', 'select', 'multiselect']),
-    required: z.boolean(),
-    defaultValue: z.any().optional(),
-    options: z.array(z.string()).optional(),
-  })).optional(),
-  isFavorite: z.boolean().optional(),
-  isGlobal: z.boolean().optional(),
-  usageCount: z.number().optional(),
-  lastUsed: z.string().optional(),
+  status: z.enum(['ACTIVE', 'ON_HOLD', 'COMPLETED', 'ARCHIVED']).optional(),
+  progress: z.number().min(0).max(100).optional(),
+  color: z.string().optional(),
+  icon: z.string().optional(),
+  settings: z.record(z.unknown()).optional(),
 })
 
 export async function GET(
@@ -52,14 +43,8 @@ export async function GET(
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
-    const template = await prisma.template.findFirst({
-      where: {
-        id,
-        OR: [
-          { orgId },
-          { isGlobal: true },
-        ],
-      },
+    const project = await prisma.project.findFirst({
+      where: { id, orgId },
       include: {
         creator: {
           select: {
@@ -72,15 +57,15 @@ export async function GET(
       },
     })
 
-    if (!template) {
-      return NextResponse.json({ error: 'Template not found' }, { status: 404 })
+    if (!project) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
     }
 
     recordUsage(orgId, 'API_CALLS', 1).catch(console.error)
 
-    return NextResponse.json({ data: template })
+    return NextResponse.json({ data: project })
   } catch (error) {
-    console.error('Error fetching template:', error)
+    console.error('Error fetching project:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -106,35 +91,20 @@ export async function PATCH(
       return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
     }
 
-    const existingTemplate = await prisma.template.findFirst({
-      where: {
-        id,
-        OR: [
-          { orgId },
-          { isGlobal: true },
-        ],
-      },
-    })
-
-    if (!existingTemplate) {
-      return NextResponse.json({ error: 'Template not found' }, { status: 404 })
-    }
-
-    // Only allow editing own templates or org templates (not global unless you created them)
-    if (existingTemplate.isGlobal && existingTemplate.createdBy !== session.user.id) {
-      return NextResponse.json({ error: 'Cannot edit global templates' }, { status: 403 })
-    }
-
-    if (existingTemplate.orgId !== orgId && !existingTemplate.isGlobal) {
-      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
-    }
-
     if (!hasPermission(membership.role, 'dashboards:write')) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
+    const existingProject = await prisma.project.findFirst({
+      where: { id, orgId },
+    })
+
+    if (!existingProject) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+    }
+
     const body = await request.json()
-    const validationResult = updateTemplateSchema.safeParse(body)
+    const validationResult = updateProjectSchema.safeParse(body)
 
     if (!validationResult.success) {
       return NextResponse.json(
@@ -143,25 +113,13 @@ export async function PATCH(
       )
     }
 
-    const { variables, usageCount, lastUsed, ...rest } = validationResult.data
-    const updateData: any = {
-      ...rest,
-      ...(variables !== undefined && { variables: variables as Prisma.InputJsonValue }),
-    }
-    
-    // Handle usageCount increment
-    if (usageCount !== undefined) {
-      updateData.usageCount = { increment: 1 }
-    }
-    
-    // Handle lastUsed update
-    if (lastUsed !== undefined) {
-      updateData.lastUsed = new Date(lastUsed)
-    }
-    
-    const template = await prisma.template.update({
+    const { settings, ...rest } = validationResult.data
+    const project = await prisma.project.update({
       where: { id },
-      data: updateData,
+      data: {
+        ...rest,
+        ...(settings !== undefined && { settings: settings as Prisma.InputJsonValue }),
+      },
       include: {
         creator: {
           select: {
@@ -178,16 +136,16 @@ export async function PATCH(
       orgId,
       userId: session.user.id,
       action: 'update',
-      resourceType: 'template',
+      resourceType: 'project',
       resourceId: id,
       metadata: validationResult.data,
     }))
 
     recordUsage(orgId, 'API_CALLS', 1).catch(console.error)
 
-    return NextResponse.json({ data: template })
+    return NextResponse.json({ data: project })
   } catch (error) {
-    console.error('Error updating template:', error)
+    console.error('Error updating project:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -213,40 +171,25 @@ export async function DELETE(
       return NextResponse.json({ error: 'Not a member of this organization' }, { status: 403 })
     }
 
-    const existingTemplate = await prisma.template.findFirst({
-      where: {
-        id,
-        OR: [
-          { orgId },
-          { isGlobal: true },
-        ],
-      },
-    })
-
-    if (!existingTemplate) {
-      return NextResponse.json({ error: 'Template not found' }, { status: 404 })
-    }
-
-    // Only allow deleting own templates or org templates (not global unless you created them)
-    if (existingTemplate.isGlobal && existingTemplate.createdBy !== session.user.id) {
-      return NextResponse.json({ error: 'Cannot delete global templates' }, { status: 403 })
-    }
-
-    if (existingTemplate.orgId !== orgId && !existingTemplate.isGlobal) {
-      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
-    }
-
     if (!hasPermission(membership.role, 'dashboards:delete')) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
-    await prisma.template.delete({ where: { id } })
+    const existingProject = await prisma.project.findFirst({
+      where: { id, orgId },
+    })
+
+    if (!existingProject) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+    }
+
+    await prisma.project.delete({ where: { id } })
 
     await logAuditEvent(createAuditEventFromRequest(request, {
       orgId,
       userId: session.user.id,
       action: 'delete',
-      resourceType: 'template',
+      resourceType: 'project',
       resourceId: id,
     }))
 
@@ -254,7 +197,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error deleting template:', error)
+    console.error('Error deleting project:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

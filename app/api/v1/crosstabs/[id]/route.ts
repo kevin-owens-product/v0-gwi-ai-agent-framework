@@ -44,13 +44,38 @@ export async function GET(
 
     const crosstab = await prisma.crosstab.findFirst({
       where: { id, orgId },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+          },
+        },
+      },
     })
 
     if (!crosstab) {
       return NextResponse.json({ error: 'Crosstab not found' }, { status: 404 })
     }
 
-    // Increment view count
+    // Fetch audience details if audience IDs are provided
+    const audienceIds = crosstab.audiences || []
+    const audiences = audienceIds.length > 0 ? await prisma.audience.findMany({
+      where: {
+        id: { in: audienceIds },
+        orgId,
+      },
+      select: {
+        id: true,
+        name: true,
+        size: true,
+        description: true,
+      },
+    }) : []
+
+    // Increment views
     await prisma.crosstab.update({
       where: { id },
       data: { views: { increment: 1 } },
@@ -58,7 +83,16 @@ export async function GET(
 
     recordUsage(orgId, 'API_CALLS', 1).catch(console.error)
 
-    return NextResponse.json({ data: crosstab })
+    return NextResponse.json({
+      data: {
+        ...crosstab,
+        audiences: audiences.map(a => ({
+          id: a.id,
+          name: a.name,
+          size: a.size || 0,
+        })),
+      },
+    })
   } catch (error) {
     console.error('Error fetching crosstab:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -115,6 +149,16 @@ export async function PATCH(
         ...rest,
         ...(filters !== undefined && { filters: filters as Prisma.InputJsonValue }),
         ...(results !== undefined && { results: results as Prisma.InputJsonValue }),
+      },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+          },
+        },
       },
     })
 

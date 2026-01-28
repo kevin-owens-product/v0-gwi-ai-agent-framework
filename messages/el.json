@@ -3389,7 +3389,7 @@
         "form": {
           "dashboardName": "[EL] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
           "dashboardNamePlaceholder": "[EL] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[EL] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionLabel": "Περιγραφή",
           "descriptionPlaceholder": "[EL] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
           "publicDashboard": "[EL] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
           "publicDescription": "[EL] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
@@ -3477,7 +3477,7 @@
         "autoRefresh": {
           "on": "[EL] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
           "off": "[EL] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[EL] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "label": "Αυτόματη ανανέωση",
           "interval": "[EL] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
           "every1Min": "[EL] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
           "every5Min": "[EL] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
@@ -3625,7 +3625,69 @@
       },
       "grid": {
         "noDashboardsYet": "[EL] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[EL] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "createFirstDashboard": "[EL] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]",
+        "chartsCount": "{count, plural, =0 {0 γραφήματα} one {# γράφημα} other {# γραφήματα}}",
+        "viewsCount": "{count, plural, =0 {0 προβολές} one {# προβολή} other {# προβολές}}"
+      }
+    },
+    "memory": {
+      "title": "Μνήμη και πλαίσιο",
+      "description": "Διαχειριστείτε τη μόνιμη μνήμη του πράκτορα, το πλαίσιο του έργου και το ιστορικό συνομιλιών.",
+      "actions": {
+        "settings": "Ρυθμίσεις",
+        "clearAll": "Εκκαθάριση όλων"
+      },
+      "browser": {
+        "title": "Περιηγητής μνήμης",
+        "refresh": "Ανανέωση",
+        "export": "Εξαγωγή",
+        "searchPlaceholder": "Αναζήτηση αναμνήσεων ανά περιεχόμενο ή ετικέτες...",
+        "typePlaceholder": "Τύπος",
+        "projectPlaceholder": "Έργο",
+        "allProjects": "Όλα τα έργα",
+        "noMemoriesFound": "Δεν βρέθηκαν αναμνήσεις που να ταιριάζουν με τα κριτήρια αναζήτησής σας.",
+        "selectMemory": "Επιλέξτε μια μνήμη για να δείτε λεπτομέρειες",
+        "showing": "Εμφάνιση {filtered} από {total} αναμνήσεις",
+        "types": {
+          "all": "Όλοι οι τύποι",
+          "insights": "Ενδείξεις",
+          "findings": "Ευρήματα",
+          "context": "Πλαίσιο",
+          "preferences": "Προτιμήσεις",
+          "facts": "Γεγονότα",
+          "conversations": "Συνομιλίες"
+        },
+        "detail": {
+          "source": "Πηγή",
+          "created": "Δημιουργήθηκε",
+          "tags": "Ετικέτες",
+          "citations": "Παραπομπές",
+          "confidenceScore": "Βαθμός εμπιστοσύνης"
+        },
+        "deleteDialog": {
+          "title": "Διαγραφή μνήμης",
+          "description": "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτή τη μνήμη; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+          "cancel": "Ακύρωση",
+          "confirm": "Διαγραφή"
+        }
+      },
+      "overview": {
+        "projectMemory": "Μνήμη έργου",
+        "viewAll": "Προβολή όλων",
+        "memoriesCount": "{count} αναμνήσεις",
+        "recentMemories": "Πρόσφατες αναμνήσεις",
+        "refresh": "Ανανέωση"
+      },
+      "stats": {
+        "totalMemories": "Συνολικές αναμνήσεις",
+        "storageUsed": "Χρησιμοποιημένη αποθήκευση",
+        "avgRetention": "Μέση διατήρηση",
+        "activeProjects": "Ενεργά έργα",
+        "thisWeek": "+{count} αυτή την εβδομάδα",
+        "ofTotal": "από {total}",
+        "days": "{count} ημέρες",
+        "extendedTier": "Εκτεταμένο επίπεδο",
+        "withMemories": "{count} με αναμνήσεις"
       }
     },
     "crosstabs": {
@@ -3938,7 +4000,7 @@
         "shareDialog": {
           "title": "[EL] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
           "description": "[EL] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[EL] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailLabel": "Ηλεκτρονικό ταχυδρομείο",
           "emailPlaceholder": "[EL] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
           "role": "[EL] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
           "roles": {
@@ -3985,8 +4047,8 @@
         "liveData": "[EL] [TODO: Translate dashboard.crosstabs.badges.liveData]"
       },
       "labels": {
-        "audienceSegments": "[EL] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[EL] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "τμήματα κοινού",
+        "metrics": "μετρήσεις"
       },
       "actions": {
         "openAnalysis": "[EL] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
@@ -6076,8 +6138,7 @@
       "viewMetricsDesc": "Παρακολούθηση της απόδοσης του συστήματος",
       "recentActions": "Πρόσφατες ενέργειες",
       "recentActionsDesc": "Οι ενέργειες που πραγματοποιήσατε πρόσφατα",
-      "recentActionsTracking": "Παρακολούθηση πρόσφατων ενεργειών σύντομα...",
-      " ": "[EL] [TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "Παρακολούθηση πρόσφατων ενεργειών σύντομα..."
     },
     "surveys": {
       "title": "Έρευνες",
@@ -6875,7 +6936,6 @@
       "loading": "Φόρτωση αγωγών...",
       "newPipeline": "Νέος Αγωγός",
       "schedules": {
-        " ": "[EL] [TODO: Translate gwi.pipelines.schedules. ]",
         "title": "[EL] [TODO: Translate gwi.pipelines.schedules.title]",
         "description": "[EL] [TODO: Translate gwi.pipelines.schedules.description]",
         "newSchedule": "[EL] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
@@ -6895,7 +6955,8 @@
         "noScheduledPipelines": "[EL] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
         "noScheduledPipelinesDescription": "[EL] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
         "createScheduledPipeline": "[EL] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[EL] [TODO: Translate gwi.pipelines.schedules.loading]"
+        "loading": "[EL] [TODO: Translate gwi.pipelines.schedules.loading]",
+        "by": "[EL] by {name}"
       },
       "validationPage": {
         "title": "Κανόνες επικύρωσης",
@@ -7921,8 +7982,7 @@
           "capabilityDeleted": "Η δυνατότητα διαγράφηκε με επιτυχία",
           "capabilityEnabled": "Η δυνατότητα είναι ενεργοποιημένη",
           "capabilityDisabled": "Η δυνατότητα είναι απενεργοποιημένη"
-        },
-        " ": "[EL] [TODO: Translate gwi.agents.capabilities. ]"
+        }
       },
       "templatesTitle": "Πρότυπα αντιπροσώπων",
       "templatesDesc": "Επαναχρησιμοποιήσιμες διαμορφώσεις πρακτόρων με προκαθορισμένα εργαλεία και προτροπές",
@@ -8201,8 +8261,7 @@
         "noQualityIssues": "Δεν εντοπίστηκαν προβλήματα ποιότητας",
         "qualityByDataSource": "Ποιότητα κατά πηγή δεδομένων",
         "qualityScoresPerSource": "Δείκτες ποιότητας για κάθε συνδεδεμένη πηγή",
-        "noDataSourcesConnected": "Δεν υπάρχουν συνδεδεμένες πηγές δεδομένων",
-        " ": "[EL] [TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "Δεν υπάρχουν συνδεδεμένες πηγές δεδομένων"
       },
       "detail": {
         "syncNow": "Συγχρονισμός τώρα",
@@ -8309,9 +8368,7 @@
           "costThresholdDesc": "Ειδοποίηση όταν το κόστος LLM υπερβαίνει τον προϋπολογισμό",
           "errorRateSpike": "Αύξηση ποσοστού σφάλματος",
           "errorRateSpikeDesc": "Ειδοποίηση για ασυνήθιστη αύξηση του ποσοστού σφάλματος"
-        },
-        " ": "[EL] [TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[EL] [TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "Υγεία αγωγών",
@@ -8412,9 +8469,7 @@
         "update": "Εκσυγχρονίζω",
         "delete": "Διαγράφω",
         "view": "Θέα"
-      },
-      "_": "[EL] [TODO: Translate gwi.activity._]",
-      " ": "[EL] [TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "Ρυθμίσεις",
@@ -9103,13 +9158,10 @@
         "title": "AutuI",
         "subtitle": "Εργαλεία ομάδας"
       },
-      " ": "[EL] [TODO: Translate gwi.navigation. ]",
       "navigation": {
         "mobileMenu": "[EL] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
       }
     },
-    "/": "[EL] [TODO: Translate gwi./]",
-    " ": "[EL] [TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
@@ -10015,23 +10067,6 @@
           "user": "Μεταχειριζόμενος"
         },
         "policies": {
-          "title": "Πολιτικές συσκευής",
-          "description": "Διαμόρφωση πολιτικών αξιοπιστίας συσκευών για οργανισμούς",
-          "noPoliciesConfigured": "Δεν έχουν διαμορφωθεί πολιτικές συσκευής",
-          "createFirstPolicy": "Δημιουργήστε μια πολιτική συσκευής για τη διαχείριση της εμπιστοσύνης συσκευής",
-          "form": {
-            "organization": "Οργάνωση",
-            "selectOrganization": "Επιλέξτε έναν οργανισμό",
-            "policyName": "Όνομα πολιτικής",
-            "policyNamePlaceholder": "π.χ. Πολιτική εταιρικής συσκευής",
-            "requireApproval": "Απαιτείται Έγκριση",
-            "requireApprovalDescription": "Οι νέες συσκευές απαιτούν έγκριση από τον διαχειριστή πριν από την πρόσβαση",
-            "allowedPlatforms": "Επιτρεπόμενες πλατφόρμες",
-            "maxDevicesPerUser": "Μέγιστος αριθμός συσκευών ανά χρήστη",
-            "sessionDuration": "Διάρκεια συνεδρίας (ώρες)",
-            "requireReauth": "Απαιτείται εκ νέου έλεγχος ταυτότητας",
-            "requireReauthDescription": "Απαιτείται εκ νέου έλεγχος ταυτότητας μετά τη διάρκεια της περιόδου σύνδεσης"
-          },
           "nameRequired": "[EL] Policy name is required",
           "created": "[EL] Created",
           "updated": "[EL] Policy updated successfully",

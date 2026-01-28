@@ -13,8 +13,8 @@ const updateDashboardSchema = z.object({
   description: z.string().optional(),
   layout: z.array(z.unknown()).optional(),
   widgets: z.array(z.unknown()).optional(),
-  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
   isPublic: z.boolean().optional(),
+  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
 })
 
 export async function GET(
@@ -44,21 +44,27 @@ export async function GET(
 
     const dashboard = await prisma.dashboard.findFirst({
       where: { id, orgId },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+          },
+        },
+      },
     })
 
     if (!dashboard) {
       return NextResponse.json({ error: 'Dashboard not found' }, { status: 404 })
     }
 
-    // Increment view count
-    await prisma.dashboard.update({
-      where: { id },
-      data: { views: { increment: 1 } },
-    })
-
     recordUsage(orgId, 'API_CALLS', 1).catch(console.error)
 
-    return NextResponse.json({ data: dashboard })
+    return NextResponse.json({
+      data: dashboard,
+    })
   } catch (error) {
     console.error('Error fetching dashboard:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -115,6 +121,16 @@ export async function PATCH(
         ...rest,
         ...(layout !== undefined && { layout: layout as Prisma.InputJsonValue }),
         ...(widgets !== undefined && { widgets: widgets as Prisma.InputJsonValue }),
+      },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+          },
+        },
       },
     })
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -27,83 +27,29 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus, Search, Folder, Calendar, Users, MoreHorizontal, Bot, FileText, Workflow, Archive, Edit, Trash2 } from "lucide-react"
+import { Plus, Search, Folder, Calendar, Users, MoreHorizontal, Bot, FileText, Workflow, Archive, Edit, Trash2, Loader2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { PageTracker } from "@/components/tracking/PageTracker"
 import { useTranslations } from "next-intl"
+import { toast } from "sonner"
 
 interface Project {
   id: string
   name: string
-  description: string
+  description: string | null
   status: string
   createdAt: string
-  members: number
-  workflows: number
-  reports: number
-  agents: number
+  updatedAt: string
+  progress?: number
+  members?: number
+  workflows?: number
+  reports?: number
+  agents?: number
 }
 
-const initialProjects: Project[] = [
-  {
-    id: "gen-z-sustainability",
-    name: "Gen Z Sustainability",
-    description: "Research project exploring Gen Z attitudes towards sustainable brands and eco-friendly products",
-    status: "active",
-    createdAt: "2024-01-15",
-    members: 4,
-    workflows: 8,
-    reports: 12,
-    agents: 5,
-  },
-  {
-    id: "q4-campaign",
-    name: "Q4 Campaign",
-    description: "Holiday season marketing campaign analysis and audience targeting strategy",
-    status: "active",
-    createdAt: "2024-02-20",
-    members: 6,
-    workflows: 15,
-    reports: 23,
-    agents: 8,
-  },
-  {
-    id: "market-expansion",
-    name: "Market Expansion",
-    description: "Research initiative for expanding into new geographic markets in APAC region",
-    status: "active",
-    createdAt: "2024-03-10",
-    members: 3,
-    workflows: 5,
-    reports: 7,
-    agents: 4,
-  },
-  {
-    id: "brand-health-tracker",
-    name: "Brand Health Tracker",
-    description: "Ongoing brand perception and awareness monitoring across key demographics",
-    status: "completed",
-    createdAt: "2023-11-01",
-    members: 5,
-    workflows: 20,
-    reports: 45,
-    agents: 6,
-  },
-  {
-    id: "competitor-analysis-2024",
-    name: "Competitor Analysis 2024",
-    description: "Annual competitive landscape review and market positioning study",
-    status: "archived",
-    createdAt: "2024-01-05",
-    members: 2,
-    workflows: 10,
-    reports: 15,
-    agents: 3,
-  },
-]
-
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>(initialProjects)
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
@@ -114,33 +60,79 @@ export default function ProjectsPage() {
   const [newProjectDescription, setNewProjectDescription] = useState("")
   const [editName, setEditName] = useState("")
   const [editDescription, setEditDescription] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const t = useTranslations('dashboard.pages.projects')
   const tCommon = useTranslations('common')
+
+  useEffect(() => {
+    fetchProjects()
+  }, [])
+
+  const fetchProjects = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/v1/projects')
+      if (!response.ok) {
+        throw new Error('Failed to fetch projects')
+      }
+      const data = await response.json()
+      // Map API response to match UI expectations
+      const mappedProjects = (data.projects || data.data || []).map((p: any) => ({
+        ...p,
+        status: p.status.toLowerCase(),
+        description: p.description || '',
+        members: p.members || 0,
+        workflows: p.workflows || 0,
+        reports: p.reports || 0,
+        agents: p.agents || 0,
+      }))
+      setProjects(mappedProjects)
+    } catch (error) {
+      console.error('Error fetching projects:', error)
+      toast.error('Failed to load projects')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchQuery.toLowerCase()),
+      (project.description || '').toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const handleCreateProject = () => {
-    if (!newProjectName.trim()) return
+  const handleCreateProject = async () => {
+    if (!newProjectName.trim() || isSubmitting) return
 
-    const newProject: Project = {
-      id: `project-${Date.now()}`,
-      name: newProjectName,
-      description: newProjectDescription,
-      status: "active",
-      createdAt: new Date().toISOString().split('T')[0],
-      members: 1,
-      workflows: 0,
-      reports: 0,
-      agents: 0,
+    try {
+      setIsSubmitting(true)
+      const response = await fetch('/api/v1/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newProjectName,
+          description: newProjectDescription || undefined,
+          status: 'ACTIVE',
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to create project')
+      }
+
+      const newProject = await response.json()
+      toast.success('Project created successfully')
+      setNewProjectName("")
+      setNewProjectDescription("")
+      setIsCreateOpen(false)
+      await fetchProjects()
+    } catch (error: any) {
+      console.error('Error creating project:', error)
+      toast.error(error.message || 'Failed to create project')
+    } finally {
+      setIsSubmitting(false)
     }
-    setProjects(prev => [newProject, ...prev])
-    setNewProjectName("")
-    setNewProjectDescription("")
-    setIsCreateOpen(false)
   }
 
   const handleEditProject = (project: Project, e: React.MouseEvent) => {
@@ -148,34 +140,63 @@ export default function ProjectsPage() {
     e.stopPropagation()
     setProjectToEdit(project)
     setEditName(project.name)
-    setEditDescription(project.description)
+    setEditDescription(project.description || '')
     setIsEditOpen(true)
   }
 
-  const handleSaveEdit = () => {
-    if (!projectToEdit || !editName.trim()) return
+  const handleSaveEdit = async () => {
+    if (!projectToEdit || !editName.trim() || isSubmitting) return
 
-    setProjects(prev =>
-      prev.map(p =>
-        p.id === projectToEdit.id
-          ? { ...p, name: editName, description: editDescription }
-          : p
-      )
-    )
-    setIsEditOpen(false)
-    setProjectToEdit(null)
+    try {
+      setIsSubmitting(true)
+      const response = await fetch(`/api/v1/projects/${projectToEdit.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: editName,
+          description: editDescription || undefined,
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to update project')
+      }
+
+      toast.success('Project updated successfully')
+      setIsEditOpen(false)
+      setProjectToEdit(null)
+      await fetchProjects()
+    } catch (error: any) {
+      console.error('Error updating project:', error)
+      toast.error(error.message || 'Failed to update project')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
-  const handleArchiveProject = (project: Project, e: React.MouseEvent) => {
+  const handleArchiveProject = async (project: Project, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setProjects(prev =>
-      prev.map(p =>
-        p.id === project.id
-          ? { ...p, status: p.status === "archived" ? "active" : "archived" }
-          : p
-      )
-    )
+
+    try {
+      const newStatus = project.status === "archived" ? "ACTIVE" : "ARCHIVED"
+      const response = await fetch(`/api/v1/projects/${project.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update project status')
+      }
+
+      toast.success(`Project ${newStatus === "ARCHIVED" ? "archived" : "unarchived"} successfully`)
+      await fetchProjects()
+    } catch (error: any) {
+      console.error('Error archiving project:', error)
+      toast.error(error.message || 'Failed to update project status')
+    }
   }
 
   const handleDeleteProject = (project: Project, e: React.MouseEvent) => {
@@ -185,12 +206,30 @@ export default function ProjectsPage() {
     setDeleteDialogOpen(true)
   }
 
-  const confirmDelete = () => {
-    if (projectToDelete) {
-      setProjects(prev => prev.filter(p => p.id !== projectToDelete.id))
+  const confirmDelete = async () => {
+    if (!projectToDelete || isSubmitting) return
+
+    try {
+      setIsSubmitting(true)
+      const response = await fetch(`/api/v1/projects/${projectToDelete.id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to delete project')
+      }
+
+      toast.success('Project deleted successfully')
+      setDeleteDialogOpen(false)
+      setProjectToDelete(null)
+      await fetchProjects()
+    } catch (error: any) {
+      console.error('Error deleting project:', error)
+      toast.error(error.message || 'Failed to delete project')
+    } finally {
+      setIsSubmitting(false)
     }
-    setDeleteDialogOpen(false)
-    setProjectToDelete(null)
   }
 
   return (
@@ -237,11 +276,18 @@ export default function ProjectsPage() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
+              <Button variant="outline" onClick={() => setIsCreateOpen(false)} disabled={isSubmitting}>
                 {tCommon('cancel')}
               </Button>
-              <Button onClick={handleCreateProject} disabled={!newProjectName.trim()}>
-                {t('createProject')}
+              <Button onClick={handleCreateProject} disabled={!newProjectName.trim() || isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    {t('creating')}
+                  </>
+                ) : (
+                  t('createProject')
+                )}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -258,8 +304,13 @@ export default function ProjectsPage() {
         />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredProjects.map((project) => (
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {filteredProjects.map((project) => (
           <Link key={project.id} href={`/dashboard/projects/${project.id}`}>
             <Card className="h-full transition-colors hover:bg-muted/50 cursor-pointer">
               <CardHeader className="pb-3">
@@ -342,10 +393,11 @@ export default function ProjectsPage() {
               </CardContent>
             </Card>
           </Link>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {filteredProjects.length === 0 && (
+      {!loading && filteredProjects.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <Folder className="h-12 w-12 text-muted-foreground/50" />
           <h3 className="mt-4 text-lg font-semibold">{t('noProjectsFound')}</h3>
@@ -384,11 +436,18 @@ export default function ProjectsPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditOpen(false)}>
+            <Button variant="outline" onClick={() => setIsEditOpen(false)} disabled={isSubmitting}>
               {tCommon('cancel')}
             </Button>
-            <Button onClick={handleSaveEdit} disabled={!editName.trim()}>
-              {t('saveChanges')}
+            <Button onClick={handleSaveEdit} disabled={!editName.trim() || isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  {t('saving')}
+                </>
+              ) : (
+                t('saveChanges')
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -404,9 +463,20 @@ export default function ProjectsPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              {tCommon('delete')}
+            <AlertDialogCancel disabled={isSubmitting}>{tCommon('cancel')}</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmDelete} 
+              disabled={isSubmitting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  {t('deleting')}
+                </>
+              ) : (
+                tCommon('delete')
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

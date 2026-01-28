@@ -3389,7 +3389,7 @@
         "form": {
           "dashboardName": "[AR] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
           "dashboardNamePlaceholder": "[AR] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[AR] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionLabel": "الوصف",
           "descriptionPlaceholder": "[AR] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
           "publicDashboard": "[AR] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
           "publicDescription": "[AR] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
@@ -3477,7 +3477,7 @@
         "autoRefresh": {
           "on": "[AR] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
           "off": "[AR] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[AR] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "label": "تحديث تلقائي",
           "interval": "[AR] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
           "every1Min": "[AR] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
           "every5Min": "[AR] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
@@ -3625,7 +3625,69 @@
       },
       "grid": {
         "noDashboardsYet": "[AR] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[AR] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "createFirstDashboard": "[AR] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]",
+        "chartsCount": "{count, plural, =0 {0 مخططات} one {# مخطط} other {# مخططات}}",
+        "viewsCount": "{count, plural, =0 {0 مشاهدات} one {# مشاهدة} other {# مشاهدات}}"
+      }
+    },
+    "memory": {
+      "title": "الذاكرة والسياق",
+      "description": "إدارة ذاكرة الوكيل المستمرة وسياق المشروع وسجل المحادثات.",
+      "actions": {
+        "settings": "الإعدادات",
+        "clearAll": "مسح الكل"
+      },
+      "browser": {
+        "title": "متصفح الذاكرة",
+        "refresh": "تحديث",
+        "export": "تصدير",
+        "searchPlaceholder": "البحث في الذكريات حسب المحتوى أو العلامات...",
+        "typePlaceholder": "النوع",
+        "projectPlaceholder": "المشروع",
+        "allProjects": "جميع المشاريع",
+        "noMemoriesFound": "لم يتم العثور على ذكريات تطابق معايير البحث الخاصة بك.",
+        "selectMemory": "حدد ذاكرة لعرض التفاصيل",
+        "showing": "عرض {filtered} من {total} ذاكرة",
+        "types": {
+          "all": "جميع الأنواع",
+          "insights": "رؤى",
+          "findings": "نتائج",
+          "context": "سياق",
+          "preferences": "التفضيلات",
+          "facts": "حقائق",
+          "conversations": "محادثات"
+        },
+        "detail": {
+          "source": "المصدر",
+          "created": "تم الإنشاء",
+          "tags": "العلامات",
+          "citations": "الاقتباسات",
+          "confidenceScore": "درجة الثقة"
+        },
+        "deleteDialog": {
+          "title": "حذف الذاكرة",
+          "description": "هل أنت متأكد من أنك تريد حذف هذه الذاكرة؟ لا يمكن التراجع عن هذا الإجراء.",
+          "cancel": "إلغاء",
+          "confirm": "حذف"
+        }
+      },
+      "overview": {
+        "projectMemory": "ذاكرة المشروع",
+        "viewAll": "عرض الكل",
+        "memoriesCount": "{count} ذاكرة",
+        "recentMemories": "الذكريات الأخيرة",
+        "refresh": "تحديث"
+      },
+      "stats": {
+        "totalMemories": "إجمالي الذكريات",
+        "storageUsed": "التخزين المستخدم",
+        "avgRetention": "متوسط الاحتفاظ",
+        "activeProjects": "المشاريع النشطة",
+        "thisWeek": "+{count} هذا الأسبوع",
+        "ofTotal": "من {total}",
+        "days": "{count} يوم",
+        "extendedTier": "المستوى الممتد",
+        "withMemories": "{count} مع ذكريات"
       }
     },
     "crosstabs": {
@@ -3938,7 +4000,7 @@
         "shareDialog": {
           "title": "[AR] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
           "description": "[AR] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[AR] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailLabel": "البريد الإلكتروني",
           "emailPlaceholder": "[AR] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
           "role": "[AR] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
           "roles": {
@@ -3985,8 +4047,8 @@
         "liveData": "[AR] [TODO: Translate dashboard.crosstabs.badges.liveData]"
       },
       "labels": {
-        "audienceSegments": "[AR] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[AR] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "شرائح الجمهور",
+        "metrics": "المقاييس"
       },
       "actions": {
         "openAnalysis": "[AR] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
@@ -5955,8 +6017,7 @@
       "viewMetricsDesc": "مراقبة أداء النظام",
       "recentActions": "الإجراءات الأخيرة",
       "recentActionsDesc": "إجراءاتك التي تم تنفيذها مؤخراً",
-      "recentActionsTracking": "تتبع الإجراءات الأخيرة قريباً...",
-      " ": "[AR] [TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "تتبع الإجراءات الأخيرة قريباً..."
     },
     "navigation": {
       "surveys": "الاستطلاعات",
@@ -6035,7 +6096,6 @@
         "subtitle": "أدوات الفريق"
       },
       "mobileMenu": "قائمة التنقل",
-      " ": "[AR] [TODO: Translate gwi.navigation. ]",
       "navigation": {
         "mobileMenu": "[AR] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
       }
@@ -6864,7 +6924,6 @@
       "searchPlaceholder": "البحث عن خطوط الأنابيب...",
       "allRuns": "جميع العمليات",
       "schedules": {
-        " ": "[AR] [TODO: Translate gwi.pipelines.schedules. ]",
         "title": "[AR] [TODO: Translate gwi.pipelines.schedules.title]",
         "description": "[AR] [TODO: Translate gwi.pipelines.schedules.description]",
         "newSchedule": "[AR] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
@@ -6884,7 +6943,8 @@
         "noScheduledPipelines": "[AR] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
         "noScheduledPipelinesDescription": "[AR] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
         "createScheduledPipeline": "[AR] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[AR] [TODO: Translate gwi.pipelines.schedules.loading]"
+        "loading": "[AR] [TODO: Translate gwi.pipelines.schedules.loading]",
+        "by": "[AR] by {name}"
       },
       "validationRules": "قواعد التحقق",
       "pipeline": "خط الأنابيب",
@@ -8091,8 +8151,7 @@
           "capabilityDeleted": "تم حذف الإمكانية بنجاح",
           "capabilityEnabled": "تم تمكين القدرة",
           "capabilityDisabled": "القدرة معطلة"
-        },
-        " ": "[AR] [TODO: Translate gwi.agents.capabilities. ]"
+        }
       }
     },
     "dataSources": {
@@ -8190,8 +8249,7 @@
         "noQualityIssues": "لم يتم اكتشاف أي مشكلات تتعلق بالجودة",
         "qualityByDataSource": "الجودة حسب مصدر البيانات",
         "qualityScoresPerSource": "نقاط الجودة لكل مصدر متصل",
-        "noDataSourcesConnected": "لا توجد مصادر بيانات متصلة",
-        " ": "[AR] [TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "لا توجد مصادر بيانات متصلة"
       },
       "detail": {
         "syncNow": "مزامنة الآن",
@@ -8298,9 +8356,7 @@
           "costThresholdDesc": "تنبيه عند تجاوز تكاليف LLM للميزانية",
           "errorRateSpike": "ارتفاع معدل الأخطاء",
           "errorRateSpikeDesc": "تنبيه عند زيادة غير عادية في معدل الأخطاء"
-        },
-        " ": "[AR] [TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[AR] [TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "صحة خطوط الأنابيب",
@@ -8401,9 +8457,7 @@
         "update": "تحديث",
         "delete": "حذف",
         "view": "عرض"
-      },
-      "_": "[AR] [TODO: Translate gwi.activity._]",
-      " ": "[AR] [TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "الإعدادات",
@@ -9015,8 +9069,6 @@
       "edit": "تعديل",
       "details": "التفاصيل"
     },
-    "/": "[AR] [TODO: Translate gwi./]",
-    " ": "[AR] [TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
@@ -9932,23 +9984,6 @@
           "user": "مستخدم"
         },
         "policies": {
-          "title": "سياسات الجهاز",
-          "description": "تكوين سياسات الثقة في الأجهزة للمؤسسات",
-          "noPoliciesConfigured": "لم يتم تكوين سياسات الجهاز",
-          "createFirstPolicy": "قم بإنشاء سياسة جهاز لإدارة ثقة الجهاز",
-          "form": {
-            "organization": "منظمة",
-            "selectOrganization": "اختر منظمة",
-            "policyName": "اسم السياسة",
-            "policyNamePlaceholder": "على سبيل المثال، سياسة الأجهزة الخاصة بالشركة",
-            "requireApproval": "تتطلب الموافقة",
-            "requireApprovalDescription": "تتطلب الأجهزة الجديدة موافقة المسؤول قبل الوصول إليها",
-            "allowedPlatforms": "المنصات المسموح بها",
-            "maxDevicesPerUser": "الحد الأقصى للأجهزة لكل مستخدم",
-            "sessionDuration": "مدة الجلسة (ساعات)",
-            "requireReauth": "تتطلب إعادة المصادقة",
-            "requireReauthDescription": "تتطلب إعادة المصادقة بعد مدة الجلسة"
-          },
           "nameRequired": "[AR] Policy name is required",
           "created": "[AR] Created",
           "updated": "[AR] Policy updated successfully",

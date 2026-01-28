@@ -3389,7 +3389,7 @@
         "form": {
           "dashboardName": "[BN] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
           "dashboardNamePlaceholder": "[BN] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[BN] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionLabel": "বিবরণ",
           "descriptionPlaceholder": "[BN] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
           "publicDashboard": "[BN] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
           "publicDescription": "[BN] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
@@ -3477,7 +3477,7 @@
         "autoRefresh": {
           "on": "[BN] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
           "off": "[BN] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[BN] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "label": "স্বয়ংক্রিয় রিফ্রেশ",
           "interval": "[BN] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
           "every1Min": "[BN] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
           "every5Min": "[BN] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
@@ -3625,7 +3625,69 @@
       },
       "grid": {
         "noDashboardsYet": "[BN] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[BN] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "createFirstDashboard": "[BN] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]",
+        "chartsCount": "{count, plural, =0 {0 চার্ট} one {# চার্ট} other {# চার্ট}}",
+        "viewsCount": "{count, plural, =0 {0 ভিউ} one {# ভিউ} other {# ভিউ}}"
+      }
+    },
+    "memory": {
+      "title": "মেমরি এবং প্রসঙ্গ",
+      "description": "স্থায়ী এজেন্ট মেমরি, প্রকল্প প্রসঙ্গ এবং কথোপকথন ইতিহাস পরিচালনা করুন।",
+      "actions": {
+        "settings": "সেটিংস",
+        "clearAll": "সব সাফ করুন"
+      },
+      "browser": {
+        "title": "মেমরি ব্রাউজার",
+        "refresh": "রিফ্রেশ করুন",
+        "export": "রপ্তানি করুন",
+        "searchPlaceholder": "বিষয়বস্তু বা ট্যাগ দ্বারা মেমরি অনুসন্ধান করুন...",
+        "typePlaceholder": "টাইপ",
+        "projectPlaceholder": "প্রকল্প",
+        "allProjects": "সব প্রকল্প",
+        "noMemoriesFound": "আপনার অনুসন্ধান মানদণ্ডের সাথে মিলে যাওয়া কোন মেমরি পাওয়া যায়নি।",
+        "selectMemory": "বিবরণ দেখতে একটি মেমরি নির্বাচন করুন",
+        "showing": "{total} মেমরির মধ্যে {filtered} দেখাচ্ছে",
+        "types": {
+          "all": "সব ধরনের",
+          "insights": "ইনসাইট",
+          "findings": "খুঁজে পাওয়া",
+          "context": "প্রসঙ্গ",
+          "preferences": "পছন্দ",
+          "facts": "তথ্য",
+          "conversations": "কথোপকথন"
+        },
+        "detail": {
+          "source": "উৎস",
+          "created": "তৈরি করা হয়েছে",
+          "tags": "ট্যাগ",
+          "citations": "উদ্ধৃতি",
+          "confidenceScore": "আত্মবিশ্বাস স্কোর"
+        },
+        "deleteDialog": {
+          "title": "মেমরি মুছুন",
+          "description": "আপনি কি নিশ্চিত যে আপনি এই মেমরি মুছতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।",
+          "cancel": "বাতিল",
+          "confirm": "মুছুন"
+        }
+      },
+      "overview": {
+        "projectMemory": "প্রকল্প মেমরি",
+        "viewAll": "সব দেখুন",
+        "memoriesCount": "{count} মেমরি",
+        "recentMemories": "সাম্প্রতিক মেমরি",
+        "refresh": "রিফ্রেশ করুন"
+      },
+      "stats": {
+        "totalMemories": "মোট মেমরি",
+        "storageUsed": "ব্যবহৃত স্টোরেজ",
+        "avgRetention": "গড় ধারণ",
+        "activeProjects": "সক্রিয় প্রকল্প",
+        "thisWeek": "এই সপ্তাহে +{count}",
+        "ofTotal": "{total} এর",
+        "days": "{count} দিন",
+        "extendedTier": "বর্ধিত স্তর",
+        "withMemories": "{count} মেমরি সহ"
       }
     },
     "crosstabs": {
@@ -3938,7 +4000,7 @@
         "shareDialog": {
           "title": "[BN] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
           "description": "[BN] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[BN] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailLabel": "ইমেইল",
           "emailPlaceholder": "[BN] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
           "role": "[BN] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
           "roles": {
@@ -3985,8 +4047,8 @@
         "liveData": "[BN] [TODO: Translate dashboard.crosstabs.badges.liveData]"
       },
       "labels": {
-        "audienceSegments": "[BN] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[BN] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "দর্শক বিভাগ",
+        "metrics": "মেট্রিক্স"
       },
       "actions": {
         "openAnalysis": "[BN] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
@@ -5955,8 +6017,7 @@
       "viewMetricsDesc": "সিস্টেম পারফরম্যান্স পর্যবেক্ষণ করুন",
       "recentActions": "সাম্প্রতিক কার্যক্রম",
       "recentActionsDesc": "আপনার সম্প্রতি সম্পাদিত কার্যক্রম",
-      "recentActionsTracking": "সাম্প্রতিক কার্যক্রম ট্র্যাকিং শীঘ্রই আসছে...",
-      " ": "[BN] [TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "সাম্প্রতিক কার্যক্রম ট্র্যাকিং শীঘ্রই আসছে..."
     },
     "navigation": {
       "surveys": "সার্ভে",
@@ -6035,7 +6096,6 @@
         "subtitle": "টিম টুলস"
       },
       "mobileMenu": "নেভিগেশন মেনু",
-      " ": "[BN] [TODO: Translate gwi.navigation. ]",
       "navigation": {
         "mobileMenu": "[BN] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
       }
@@ -6864,7 +6924,6 @@
       "searchPlaceholder": "পাইপলাইন অনুসন্ধান করুন...",
       "allRuns": "সব রান",
       "schedules": {
-        " ": "[BN] [TODO: Translate gwi.pipelines.schedules. ]",
         "title": "[BN] [TODO: Translate gwi.pipelines.schedules.title]",
         "description": "[BN] [TODO: Translate gwi.pipelines.schedules.description]",
         "newSchedule": "[BN] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
@@ -6884,7 +6943,8 @@
         "noScheduledPipelines": "[BN] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
         "noScheduledPipelinesDescription": "[BN] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
         "createScheduledPipeline": "[BN] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[BN] [TODO: Translate gwi.pipelines.schedules.loading]"
+        "loading": "[BN] [TODO: Translate gwi.pipelines.schedules.loading]",
+        "by": "[BN] by {name}"
       },
       "validationRules": "যাচাইকরণ নিয়ম",
       "pipeline": "পাইপলাইন",
@@ -8091,8 +8151,7 @@
           "capabilityDeleted": "ক্ষমতা সফলভাবে মুছে ফেলা হয়েছে",
           "capabilityEnabled": "সক্ষমতা সক্ষম",
           "capabilityDisabled": "সক্ষমতা অক্ষম"
-        },
-        " ": "[BN] [TODO: Translate gwi.agents.capabilities. ]"
+        }
       }
     },
     "dataSources": {
@@ -8190,8 +8249,7 @@
         "noQualityIssues": "কোন মানের সমস্যা সনাক্ত করা হয়নি",
         "qualityByDataSource": "ডেটা উত্স দ্বারা গুণমান",
         "qualityScoresPerSource": "প্রতিটি সংযুক্ত উৎসের জন্য গুণমানের স্কোর",
-        "noDataSourcesConnected": "কোন তথ্য উৎস সংযুক্ত",
-        " ": "[BN] [TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "কোন তথ্য উৎস সংযুক্ত"
       },
       "detail": {
         "syncNow": "এখন সিঙ্ক করুন",
@@ -8298,9 +8356,7 @@
           "costThresholdDesc": "LLM খরচ বাজেট অতিক্রম করলে অ্যালার্ট",
           "errorRateSpike": "ত্রুটি হারে বৃদ্ধি",
           "errorRateSpikeDesc": "অস্বাভাবিক ত্রুটি হার বৃদ্ধিতে অ্যালার্ট"
-        },
-        " ": "[BN] [TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[BN] [TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "পাইপলাইন স্বাস্থ্য",
@@ -8401,9 +8457,7 @@
         "update": "আপডেট",
         "delete": "মুছুন",
         "view": "দেখুন"
-      },
-      "_": "[BN] [TODO: Translate gwi.activity._]",
-      " ": "[BN] [TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "সেটিংস",
@@ -9015,8 +9069,6 @@
       "edit": "সম্পাদনা",
       "details": "বিবরণ"
     },
-    "/": "[BN] [TODO: Translate gwi./]",
-    " ": "[BN] [TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
@@ -9932,23 +9984,6 @@
           "user": "ব্যবহারকারী"
         },
         "policies": {
-          "title": "ডিভাইস নীতি",
-          "description": "সংস্থাগুলির জন্য ডিভাইস ট্রাস্ট নীতিগুলি কনফিগার করুন৷",
-          "noPoliciesConfigured": "কোনো ডিভাইস নীতি কনফিগার করা নেই",
-          "createFirstPolicy": "ডিভাইস বিশ্বাস পরিচালনা করার জন্য একটি ডিভাইস নীতি তৈরি করুন",
-          "form": {
-            "organization": "সংগঠন",
-            "selectOrganization": "একটি সংস্থা নির্বাচন করুন",
-            "policyName": "নীতির নাম",
-            "policyNamePlaceholder": "যেমন, কর্পোরেট ডিভাইস নীতি",
-            "requireApproval": "অনুমোদন প্রয়োজন",
-            "requireApprovalDescription": "নতুন ডিভাইস অ্যাক্সেস করার আগে প্রশাসক অনুমোদন প্রয়োজন",
-            "allowedPlatforms": "অনুমোদিত প্ল্যাটফর্ম",
-            "maxDevicesPerUser": "ব্যবহারকারী প্রতি সর্বোচ্চ ডিভাইস",
-            "sessionDuration": "সেশনের সময়কাল (ঘন্টা)",
-            "requireReauth": "পুনরায় প্রমাণীকরণ প্রয়োজন",
-            "requireReauthDescription": "সেশনের সময়কালের পরে পুনরায় প্রমাণীকরণের প্রয়োজন"
-          },
           "nameRequired": "[BN] Policy name is required",
           "created": "[BN] Created",
           "updated": "[BN] Policy updated successfully",

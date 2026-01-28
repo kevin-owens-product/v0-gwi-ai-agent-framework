@@ -38,23 +38,63 @@ export default function ServicesDashboardPage() {
   const t = useTranslations('gwi.services.dashboard')
 
   useEffect(() => {
-    // In a real implementation, this would fetch from an API
-    // For now, we'll use placeholder data
-    setTimeout(() => {
-      setStats({
-        clients: { total: 24, active: 18 },
-        projects: { total: 42, inProgress: 12 },
-        invoices: { draft: 5, sent: 8, overdue: 2, totalDue: 45000 },
-        team: { total: 15, onProjects: 12 },
-        recentActivity: [
-          { id: "1", type: "invoice", title: "Invoice INV-00042 sent to Acme Corp", time: "2 hours ago" },
-          { id: "2", type: "project", title: "Project PRJ-0015 completed", time: "5 hours ago" },
-          { id: "3", type: "time", title: "8 hours logged on Project PRJ-0012", time: "Yesterday" },
-          { id: "4", type: "client", title: "New client TechStart Inc added", time: "2 days ago" },
-        ],
-      })
-      setLoading(false)
-    }, 500)
+    async function fetchStats() {
+      try {
+        const response = await fetch('/api/gwi/services/stats', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (response.ok) {
+          const data = await response.json()
+          // Format time relative to now
+          const formatTimeAgo = (isoString: string) => {
+            const date = new Date(isoString)
+            const now = new Date()
+            const diffMs = now.getTime() - date.getTime()
+            const diffMins = Math.floor(diffMs / 60000)
+            const diffHours = Math.floor(diffMs / 3600000)
+            const diffDays = Math.floor(diffMs / 86400000)
+
+            if (diffMins < 60) return `${diffMins} minutes ago`
+            if (diffHours < 24) return `${diffHours} hours ago`
+            if (diffDays === 1) return 'Yesterday'
+            return `${diffDays} days ago`
+          }
+
+          setStats({
+            ...data,
+            recentActivity: data.recentActivity.map((a: any) => ({
+              ...a,
+              time: formatTimeAgo(a.time),
+            })),
+          })
+        } else {
+          // Fallback to empty stats
+          setStats({
+            clients: { total: 0, active: 0 },
+            projects: { total: 0, inProgress: 0 },
+            invoices: { draft: 0, sent: 0, overdue: 0, totalDue: 0 },
+            team: { total: 0, onProjects: 0 },
+            recentActivity: [],
+          })
+        }
+      } catch (error) {
+        console.error('Failed to fetch stats:', error)
+        // Fallback to empty stats
+        setStats({
+          clients: { total: 0, active: 0 },
+          projects: { total: 0, inProgress: 0 },
+          invoices: { draft: 0, sent: 0, overdue: 0, totalDue: 0 },
+          team: { total: 0, onProjects: 0 },
+          recentActivity: [],
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchStats()
   }, [])
 
   if (loading) {

@@ -3389,7 +3389,7 @@
         "form": {
           "dashboardName": "[HI] [TODO: Translate dashboard.dashboards.new.form.dashboardName]",
           "dashboardNamePlaceholder": "[HI] [TODO: Translate dashboard.dashboards.new.form.dashboardNamePlaceholder]",
-          "descriptionLabel": "[HI] [TODO: Translate dashboard.dashboards.new.form.descriptionLabel]",
+          "descriptionLabel": "विवरण",
           "descriptionPlaceholder": "[HI] [TODO: Translate dashboard.dashboards.new.form.descriptionPlaceholder]",
           "publicDashboard": "[HI] [TODO: Translate dashboard.dashboards.new.form.publicDashboard]",
           "publicDescription": "[HI] [TODO: Translate dashboard.dashboards.new.form.publicDescription]",
@@ -3477,7 +3477,7 @@
         "autoRefresh": {
           "on": "[HI] [TODO: Translate dashboard.dashboards.detail.autoRefresh.on]",
           "off": "[HI] [TODO: Translate dashboard.dashboards.detail.autoRefresh.off]",
-          "label": "[HI] [TODO: Translate dashboard.dashboards.detail.autoRefresh.label]",
+          "label": "स्वचालित रीफ़्रेश",
           "interval": "[HI] [TODO: Translate dashboard.dashboards.detail.autoRefresh.interval]",
           "every1Min": "[HI] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every1Min]",
           "every5Min": "[HI] [TODO: Translate dashboard.dashboards.detail.autoRefresh.every5Min]",
@@ -3625,7 +3625,69 @@
       },
       "grid": {
         "noDashboardsYet": "[HI] [TODO: Translate dashboard.dashboards.grid.noDashboardsYet]",
-        "createFirstDashboard": "[HI] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]"
+        "createFirstDashboard": "[HI] [TODO: Translate dashboard.dashboards.grid.createFirstDashboard]",
+        "chartsCount": "{count, plural, =0 {0 चार्ट} one {# चार्ट} other {# चार्ट}}",
+        "viewsCount": "{count, plural, =0 {0 दृश्य} one {# दृश्य} other {# दृश्य}}"
+      }
+    },
+    "memory": {
+      "title": "मेमोरी और संदर्भ",
+      "description": "स्थायी एजेंट मेमोरी, प्रोजेक्ट संदर्भ और बातचीत इतिहास प्रबंधित करें।",
+      "actions": {
+        "settings": "सेटिंग्स",
+        "clearAll": "सभी साफ करें"
+      },
+      "browser": {
+        "title": "मेमोरी ब्राउज़र",
+        "refresh": "रिफ्रेश करें",
+        "export": "निर्यात करें",
+        "searchPlaceholder": "सामग्री या टैग द्वारा मेमोरी खोजें...",
+        "typePlaceholder": "प्रकार",
+        "projectPlaceholder": "प्रोजेक्ट",
+        "allProjects": "सभी प्रोजेक्ट",
+        "noMemoriesFound": "आपकी खोज मानदंड से मेल खाने वाली कोई मेमोरी नहीं मिली।",
+        "selectMemory": "विवरण देखने के लिए एक मेमोरी चुनें",
+        "showing": "{total} मेमोरी में से {filtered} दिखा रहे हैं",
+        "types": {
+          "all": "सभी प्रकार",
+          "insights": "अंतर्दृष्टि",
+          "findings": "निष्कर्ष",
+          "context": "संदर्भ",
+          "preferences": "प्राथमिकताएं",
+          "facts": "तथ्य",
+          "conversations": "बातचीत"
+        },
+        "detail": {
+          "source": "स्रोत",
+          "created": "बनाया गया",
+          "tags": "टैग",
+          "citations": "उद्धरण",
+          "confidenceScore": "आत्मविश्वास स्कोर"
+        },
+        "deleteDialog": {
+          "title": "मेमोरी हटाएं",
+          "description": "क्या आप वाकई इस मेमोरी को हटाना चाहते हैं? इस क्रिया को पूर्ववत नहीं किया जा सकता।",
+          "cancel": "रद्द करें",
+          "confirm": "हटाएं"
+        }
+      },
+      "overview": {
+        "projectMemory": "प्रोजेक्ट मेमोरी",
+        "viewAll": "सभी देखें",
+        "memoriesCount": "{count} मेमोरी",
+        "recentMemories": "हाल की मेमोरी",
+        "refresh": "रिफ्रेश करें"
+      },
+      "stats": {
+        "totalMemories": "कुल मेमोरी",
+        "storageUsed": "उपयोग किया गया स्टोरेज",
+        "avgRetention": "औसत प्रतिधारण",
+        "activeProjects": "सक्रिय प्रोजेक्ट",
+        "thisWeek": "इस सप्ताह +{count}",
+        "ofTotal": "{total} का",
+        "days": "{count} दिन",
+        "extendedTier": "विस्तारित स्तर",
+        "withMemories": "{count} मेमोरी के साथ"
       }
     },
     "crosstabs": {
@@ -3938,7 +4000,7 @@
         "shareDialog": {
           "title": "[HI] [TODO: Translate dashboard.crosstabs.detail.shareDialog.title]",
           "description": "[HI] [TODO: Translate dashboard.crosstabs.detail.shareDialog.description]",
-          "emailLabel": "[HI] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailLabel]",
+          "emailLabel": "ईमेल",
           "emailPlaceholder": "[HI] [TODO: Translate dashboard.crosstabs.detail.shareDialog.emailPlaceholder]",
           "role": "[HI] [TODO: Translate dashboard.crosstabs.detail.shareDialog.role]",
           "roles": {
@@ -3985,8 +4047,8 @@
         "liveData": "[HI] [TODO: Translate dashboard.crosstabs.badges.liveData]"
       },
       "labels": {
-        "audienceSegments": "[HI] [TODO: Translate dashboard.crosstabs.labels.audienceSegments]",
-        "metrics": "[HI] [TODO: Translate dashboard.crosstabs.labels.metrics]"
+        "audienceSegments": "दर्शक वर्ग",
+        "metrics": "मेट्रिक्स"
       },
       "actions": {
         "openAnalysis": "[HI] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
@@ -5955,8 +6017,7 @@
       "viewMetricsDesc": "सिस्टम प्रदर्शन मॉनिटर करें",
       "recentActions": "हाल के कार्य",
       "recentActionsDesc": "आपके हाल ही में किए गए कार्य",
-      "recentActionsTracking": "हाल के कार्यों की ट्रैकिंग जल्द आ रही है...",
-      " ": "[HI] [TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "हाल के कार्यों की ट्रैकिंग जल्द आ रही है..."
     },
     "navigation": {
       "surveys": "सर्वेक्षण",
@@ -6035,7 +6096,6 @@
         "subtitle": "टीम टूल्स"
       },
       "mobileMenu": "नेविगेशन मेनू",
-      " ": "[HI] [TODO: Translate gwi.navigation. ]",
       "navigation": {
         "mobileMenu": "[HI] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
       }
@@ -6864,7 +6924,6 @@
       "searchPlaceholder": "पाइपलाइन खोजें...",
       "allRuns": "सभी रन",
       "schedules": {
-        " ": "[HI] [TODO: Translate gwi.pipelines.schedules. ]",
         "title": "[HI] [TODO: Translate gwi.pipelines.schedules.title]",
         "description": "[HI] [TODO: Translate gwi.pipelines.schedules.description]",
         "newSchedule": "[HI] [TODO: Translate gwi.pipelines.schedules.newSchedule]",
@@ -6884,7 +6943,8 @@
         "noScheduledPipelines": "[HI] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
         "noScheduledPipelinesDescription": "[HI] [TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
         "createScheduledPipeline": "[HI] [TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[HI] [TODO: Translate gwi.pipelines.schedules.loading]"
+        "loading": "[HI] [TODO: Translate gwi.pipelines.schedules.loading]",
+        "by": "[HI] by {name}"
       },
       "validationRules": "सत्यापन नियम",
       "pipeline": "पाइपलाइन",
@@ -7910,8 +7970,7 @@
           "capabilityDeleted": "क्षमता सफलतापूर्वक हटा दी गई",
           "capabilityEnabled": "क्षमता सक्षम",
           "capabilityDisabled": "क्षमता अक्षम"
-        },
-        " ": "[HI] [TODO: Translate gwi.agents.capabilities. ]"
+        }
       },
       "templatesTitle": "एजेंट टेम्पलेट्स",
       "templatesDesc": "पूर्व-परिभाषित टूल्स और प्रॉम्प्ट्स के साथ पुन: प्रयोज्य एजेंट कॉन्फ़िगरेशन",
@@ -8190,8 +8249,7 @@
         "noQualityIssues": "कोई गुणवत्ता संबंधी समस्या नहीं पाई गई",
         "qualityByDataSource": "डेटा स्रोत द्वारा गुणवत्ता",
         "qualityScoresPerSource": "प्रत्येक जुड़े स्रोत के लिए गुणवत्ता स्कोर",
-        "noDataSourcesConnected": "कोई डेटा स्रोत कनेक्ट नहीं है",
-        " ": "[HI] [TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "कोई डेटा स्रोत कनेक्ट नहीं है"
       },
       "detail": {
         "syncNow": "अभी सिंक करें",
@@ -8298,9 +8356,7 @@
           "costThresholdDesc": "जब LLM लागत बजट पार हो तो अलर्ट करें",
           "errorRateSpike": "त्रुटि दर स्पाइक",
           "errorRateSpikeDesc": "असामान्य त्रुटि दर वृद्धि पर अलर्ट करें"
-        },
-        " ": "[HI] [TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[HI] [TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "पाइपलाइन स्वास्थ्य",
@@ -8401,9 +8457,7 @@
         "update": "अपडेट करें",
         "delete": "हटाएं",
         "view": "देखें"
-      },
-      "_": "[HI] [TODO: Translate gwi.activity._]",
-      " ": "[HI] [TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "सेटिंग्स",
@@ -9015,8 +9069,6 @@
       "edit": "संपादित करें",
       "details": "विवरण"
     },
-    "/": "[HI] [TODO: Translate gwi./]",
-    " ": "[HI] [TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
@@ -9932,23 +9984,6 @@
           "user": "उपयोगकर्ता"
         },
         "policies": {
-          "title": "डिवाइस नीतियाँ",
-          "description": "संगठनों के लिए डिवाइस ट्रस्ट नीतियां कॉन्फ़िगर करें",
-          "noPoliciesConfigured": "कोई डिवाइस नीति कॉन्फ़िगर नहीं की गई",
-          "createFirstPolicy": "डिवाइस ट्रस्ट को प्रबंधित करने के लिए एक डिवाइस नीति बनाएं",
-          "form": {
-            "organization": "संगठन",
-            "selectOrganization": "एक संगठन चुनें",
-            "policyName": "पॉलिसी का नाम",
-            "policyNamePlaceholder": "उदाहरण के लिए, कॉर्पोरेट डिवाइस नीति",
-            "requireApproval": "अनुमोदन की आवश्यकता है",
-            "requireApprovalDescription": "नए उपकरणों तक पहुंच से पहले व्यवस्थापक अनुमोदन की आवश्यकता होती है",
-            "allowedPlatforms": "अनुमत प्लेटफार्म",
-            "maxDevicesPerUser": "प्रति उपयोगकर्ता अधिकतम डिवाइस",
-            "sessionDuration": "सत्र अवधि (घंटे)",
-            "requireReauth": "पुन:प्रमाणीकरण की आवश्यकता है",
-            "requireReauthDescription": "सत्र अवधि के बाद पुनः प्रमाणीकरण की आवश्यकता है"
-          },
           "nameRequired": "[HI] Policy name is required",
           "created": "[HI] Created",
           "updated": "[HI] Policy updated successfully",

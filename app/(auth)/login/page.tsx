@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect, Suspense, useTransition, useRef } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
@@ -21,6 +21,8 @@ function LoginForm() {
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
   const error = searchParams.get("error")
   const t = useTranslations('auth')
+  const [isPending, startTransition] = useTransition()
+  const isNavigatingRef = useRef(false)
 
   const [loginType, setLoginType] = useState<LoginType>("platform")
 
@@ -40,8 +42,21 @@ function LoginForm() {
     password: "",
   })
 
+  // Prevent navigation if already navigating
+  useEffect(() => {
+    return () => {
+      isNavigatingRef.current = false
+    }
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Prevent double submission
+    if (isLoading || isNavigatingRef.current) {
+      return
+    }
+
     setIsLoading(true)
     setFormError(null)
 
@@ -58,11 +73,23 @@ function LoginForm() {
 
         if (!response.ok) {
           setFormError(data.error || t('errors.invalidCredentials'))
+          setIsLoading(false)
           return
         }
 
-        router.push("/admin")
-        router.refresh()
+        // Use startTransition to defer navigation and prevent DOM conflicts
+        isNavigatingRef.current = true
+        startTransition(() => {
+          try {
+            router.push("/admin")
+          } catch (error) {
+            console.error('Navigation error:', error)
+            isNavigatingRef.current = false
+            setIsLoading(false)
+            // Fallback to window.location if router.push fails
+            window.location.href = "/admin"
+          }
+        })
       } else if (loginType === "gwi") {
         // GWI login uses separate API endpoint
         const response = await fetch("/api/gwi/auth/login", {
@@ -75,11 +102,23 @@ function LoginForm() {
 
         if (!response.ok) {
           setFormError(data.error || t('errors.invalidCredentials'))
+          setIsLoading(false)
           return
         }
 
-        router.push("/gwi")
-        router.refresh()
+        // Use startTransition to defer navigation and prevent DOM conflicts
+        isNavigatingRef.current = true
+        startTransition(() => {
+          try {
+            router.push("/gwi")
+          } catch (error) {
+            console.error('Navigation error:', error)
+            isNavigatingRef.current = false
+            setIsLoading(false)
+            // Fallback to window.location if router.push fails
+            window.location.href = "/gwi"
+          }
+        })
       } else {
         // Platform login uses NextAuth
         const result = await signIn("credentials", {
@@ -90,15 +129,28 @@ function LoginForm() {
 
         if (result?.error) {
           setFormError(t('errors.invalidCredentials'))
+          setIsLoading(false)
         } else {
-          router.push(callbackUrl)
-          router.refresh()
+          // Use startTransition to defer navigation and prevent DOM conflicts
+          isNavigatingRef.current = true
+          startTransition(() => {
+            try {
+              router.push(callbackUrl)
+            } catch (error) {
+              console.error('Navigation error:', error)
+              isNavigatingRef.current = false
+              setIsLoading(false)
+              // Fallback to window.location if router.push fails
+              window.location.href = callbackUrl
+            }
+          })
         }
       }
-    } catch {
+    } catch (error) {
+      console.error('Login error:', error)
       setFormError(t('errors.genericError'))
-    } finally {
       setIsLoading(false)
+      isNavigatingRef.current = false
     }
   }
 
@@ -108,6 +160,10 @@ function LoginForm() {
   }
 
   const handleTabChange = (value: string) => {
+    // Prevent tab changes during loading or navigation
+    if (isLoading || isPending || isNavigatingRef.current) {
+      return
+    }
     setLoginType(value as LoginType)
     setFormError(null)
     setFormData({ email: "", password: "" })
@@ -131,18 +187,22 @@ function LoginForm() {
       </div>
 
       {/* Login Type Tabs */}
-      <Tabs value={loginType} onValueChange={handleTabChange} className="w-full">
+      <Tabs 
+        value={loginType} 
+        onValueChange={handleTabChange} 
+        className="w-full"
+      >
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="platform" className="flex items-center gap-1.5 text-xs sm:text-sm">
+          <TabsTrigger value="platform" className="flex items-center gap-1.5 text-xs sm:text-sm" disabled={isLoading || isPending || isNavigatingRef.current}>
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">{t('tabs.platform')}</span>
             <span className="sm:hidden">{t('tabs.user')}</span>
           </TabsTrigger>
-          <TabsTrigger value="admin" className="flex items-center gap-1.5 text-xs sm:text-sm">
+          <TabsTrigger value="admin" className="flex items-center gap-1.5 text-xs sm:text-sm" disabled={isLoading || isPending || isNavigatingRef.current}>
             <Shield className="h-4 w-4" />
             {t('tabs.admin')}
           </TabsTrigger>
-          <TabsTrigger value="gwi" className="flex items-center gap-1.5 text-xs sm:text-sm">
+          <TabsTrigger value="gwi" className="flex items-center gap-1.5 text-xs sm:text-sm" disabled={isLoading || isPending || isNavigatingRef.current}>
             <Database className="h-4 w-4" />
             {t('tabs.gwi')}
           </TabsTrigger>
@@ -202,8 +262,8 @@ function LoginForm() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" className="w-full" disabled={isLoading || isPending}>
+              {isLoading || isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {t('signingIn')}
@@ -334,8 +394,8 @@ function LoginForm() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" className="w-full" disabled={isLoading || isPending}>
+              {isLoading || isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {t('signingIn')}
@@ -411,8 +471,8 @@ function LoginForm() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={isLoading || isPending}>
+              {isLoading || isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {t('signingIn')}
