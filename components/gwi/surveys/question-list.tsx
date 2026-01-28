@@ -3,7 +3,9 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
+import { toast } from "sonner"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
+import { QuestionBuilder } from "./question-builder"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -94,7 +96,20 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
     text: "",
     type: "SINGLE_SELECT",
     required: true,
-    options: "",
+    // For SINGLE_SELECT and MULTI_SELECT: array of option strings
+    optionList: [] as string[],
+    newOption: "",
+    // For SCALE: numeric scale configuration
+    scaleMin: 1,
+    scaleMax: 10,
+    scaleStep: 1,
+    scaleLeftLabel: "",
+    scaleRightLabel: "",
+    // For MATRIX: rows and columns
+    matrixRows: [] as string[],
+    matrixColumns: [] as string[],
+    newMatrixRow: "",
+    newMatrixColumn: "",
   })
 
   const toggleExpanded = (id: string) => {
@@ -109,12 +124,58 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
 
   const openEditDialog = (question: Question) => {
     setEditingQuestion(question)
+    
+    // Parse options based on question type
+    let optionList: string[] = []
+    let scaleConfig = { min: 1, max: 10, step: 1, leftLabel: "", rightLabel: "" }
+    let matrixConfig = { rows: [] as string[], columns: [] as string[] }
+    
+    if (question.options) {
+      const options = question.options as unknown
+      if (question.type === "SINGLE_SELECT" || question.type === "MULTI_SELECT") {
+        if (Array.isArray(options)) {
+          optionList = options.map((opt: unknown) => 
+            typeof opt === 'string' ? opt : typeof opt === 'object' && opt !== null && 'label' in opt ? String(opt.label) : String(opt)
+          )
+        }
+      } else if (question.type === "SCALE") {
+        if (typeof options === 'object' && options !== null) {
+          const scale = options as Record<string, unknown>
+          scaleConfig = {
+            min: typeof scale.min === 'number' ? scale.min : 1,
+            max: typeof scale.max === 'number' ? scale.max : 10,
+            step: typeof scale.step === 'number' ? scale.step : 1,
+            leftLabel: typeof scale.leftLabel === 'string' ? scale.leftLabel : "",
+            rightLabel: typeof scale.rightLabel === 'string' ? scale.rightLabel : "",
+          }
+        }
+      } else if (question.type === "MATRIX") {
+        if (typeof options === 'object' && options !== null) {
+          const matrix = options as Record<string, unknown>
+          matrixConfig = {
+            rows: Array.isArray(matrix.rows) ? matrix.rows.map(String) : [],
+            columns: Array.isArray(matrix.columns) ? matrix.columns.map(String) : [],
+          }
+        }
+      }
+    }
+    
     setFormData({
       code: question.code,
       text: question.text,
       type: question.type,
       required: question.required,
-      options: question.options ? JSON.stringify(question.options, null, 2) : "",
+      optionList,
+      newOption: "",
+      scaleMin: scaleConfig.min,
+      scaleMax: scaleConfig.max,
+      scaleStep: scaleConfig.step,
+      scaleLeftLabel: scaleConfig.leftLabel,
+      scaleRightLabel: scaleConfig.rightLabel,
+      matrixRows: matrixConfig.rows,
+      matrixColumns: matrixConfig.columns,
+      newMatrixRow: "",
+      newMatrixColumn: "",
     })
     setIsDialogOpen(true)
   }
@@ -126,36 +187,101 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
       text: "",
       type: "SINGLE_SELECT",
       required: true,
-      options: "",
+      optionList: [],
+      newOption: "",
+      scaleMin: 1,
+      scaleMax: 10,
+      scaleStep: 1,
+      scaleLeftLabel: "",
+      scaleRightLabel: "",
+      matrixRows: [],
+      matrixColumns: [],
+      newMatrixRow: "",
+      newMatrixColumn: "",
     })
     setIsDialogOpen(true)
   }
 
   const handleSubmit = async () => {
+    // Validate required fields
+    if (!formData.code?.trim()) {
+      toast.error("Question code is required")
+      return
+    }
+    if (!formData.text?.trim()) {
+      toast.error("Question text is required")
+      return
+    }
+    if (!formData.type) {
+      toast.error("Question type is required")
+      return
+    }
+
+    // Validate type-specific requirements
+    if ((formData.type === "SINGLE_SELECT" || formData.type === "MULTI_SELECT") && formData.optionList.length === 0) {
+      toast.error("Please add at least one option")
+      return
+    }
+    if (formData.type === "SCALE" && formData.scaleMin >= formData.scaleMax) {
+      toast.error("Maximum value must be greater than minimum value")
+      return
+    }
+    if (formData.type === "MATRIX" && (formData.matrixRows.length === 0 || formData.matrixColumns.length === 0)) {
+      toast.error("Please add at least one row and one column")
+      return
+    }
+
     try {
       const url = editingQuestion
         ? `/api/gwi/surveys/${surveyId}/questions/${editingQuestion.id}`
         : `/api/gwi/surveys/${surveyId}/questions`
       const method = editingQuestion ? "PATCH" : "POST"
 
+      // Build options object based on question type
+      let parsedOptions: unknown = null
+      if (formData.type === "SINGLE_SELECT" || formData.type === "MULTI_SELECT") {
+        parsedOptions = formData.optionList.filter(opt => opt.trim() !== "")
+      } else if (formData.type === "SCALE") {
+        parsedOptions = {
+          min: formData.scaleMin,
+          max: formData.scaleMax,
+          step: formData.scaleStep,
+          leftLabel: formData.scaleLeftLabel || undefined,
+          rightLabel: formData.scaleRightLabel || undefined,
+        }
+      } else if (formData.type === "MATRIX") {
+        parsedOptions = {
+          rows: formData.matrixRows.filter(r => r.trim() !== ""),
+          columns: formData.matrixColumns.filter(c => c.trim() !== ""),
+        }
+      }
+
       const body = {
-        ...formData,
-        options: formData.options ? JSON.parse(formData.options) : null,
+        code: formData.code.trim(),
+        text: formData.text.trim(),
+        type: formData.type,
+        required: formData.required,
+        options: parsedOptions,
         order: editingQuestion ? editingQuestion.order : questions.length,
       }
 
       const response = await fetch(url, {
         method,
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       })
 
-      if (response.ok) {
-        setIsDialogOpen(false)
-        window.location.reload()
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || "Failed to save question")
       }
+
+      setIsDialogOpen(false)
+      window.location.reload()
     } catch (error) {
       console.error("Failed to save question:", error)
+      toast.error(error instanceof Error ? error.message : "Failed to save question")
     }
   }
 
@@ -193,110 +319,58 @@ export function QuestionList({ surveyId, questions }: QuestionListProps) {
             {t("description")}
           </CardDescription>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={openNewDialog}>
-              <Plus className="mr-2 h-4 w-4" />
-              {t("addQuestion")}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle>
-                {editingQuestion ? t("editQuestion") : t("addNewQuestion")}
-              </DialogTitle>
-              <DialogDescription>
-                {t("configureSettings")}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="code">{t("questionCode")}</Label>
-                  <Input
-                    id="code"
-                    value={formData.code}
-                    onChange={(e) =>
-                      setFormData({ ...formData, code: e.target.value })
-                    }
-                    placeholder="Q1"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="type">{t("questionType")}</Label>
-                  <Select
-                    value={formData.type}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, type: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="SINGLE_SELECT">{t("types.singleSelect")}</SelectItem>
-                      <SelectItem value="MULTI_SELECT">{t("types.multiSelect")}</SelectItem>
-                      <SelectItem value="SCALE">{t("types.scale")}</SelectItem>
-                      <SelectItem value="OPEN_TEXT">{t("types.openText")}</SelectItem>
-                      <SelectItem value="NUMERIC">{t("types.numeric")}</SelectItem>
-                      <SelectItem value="DATE">{t("types.date")}</SelectItem>
-                      <SelectItem value="MATRIX">{t("types.matrix")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+        {isDialogOpen ? (
+          <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
+            <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-6xl translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg overflow-y-auto max-h-[95vh]">
+              <QuestionBuilder
+                surveyId={surveyId}
+                question={editingQuestion || null}
+                onSave={async (data) => {
+                  try {
+                    const url = editingQuestion
+                      ? `/api/gwi/surveys/${surveyId}/questions/${editingQuestion.id}`
+                      : `/api/gwi/surveys/${surveyId}/questions`
+                    const method = editingQuestion ? "PATCH" : "POST"
 
-              <div className="space-y-2">
-                <Label htmlFor="text">{t("questionText")}</Label>
-                <Textarea
-                  id="text"
-                  value={formData.text}
-                  onChange={(e) =>
-                    setFormData({ ...formData, text: e.target.value })
+                    const body = {
+                      ...data,
+                      order: editingQuestion ? editingQuestion.order : questions.length,
+                    }
+
+                    const response = await fetch(url, {
+                      method,
+                      credentials: 'include',
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(body),
+                    })
+
+                    if (!response.ok) {
+                      const errorData = await response.json().catch(() => ({}))
+                      throw new Error(errorData.error || "Failed to save question")
+                    }
+
+                    setIsDialogOpen(false)
+                    setEditingQuestion(null)
+                    window.location.reload()
+                  } catch (error) {
+                    console.error("Failed to save question:", error)
+                    toast.error(error instanceof Error ? error.message : "Failed to save question")
+                    throw error
                   }
-                  placeholder={t("questionTextPlaceholder")}
-                  rows={3}
-                />
-              </div>
-
-              {(formData.type === "SINGLE_SELECT" ||
-                formData.type === "MULTI_SELECT") && (
-                <div className="space-y-2">
-                  <Label htmlFor="options">{t("optionsJson")}</Label>
-                  <Textarea
-                    id="options"
-                    value={formData.options}
-                    onChange={(e) =>
-                      setFormData({ ...formData, options: e.target.value })
-                    }
-                    placeholder={t("optionsPlaceholder")}
-                    rows={4}
-                    className="font-mono text-sm"
-                  />
-                </div>
-              )}
-
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="required"
-                  checked={formData.required}
-                  onCheckedChange={(checked) =>
-                    setFormData({ ...formData, required: checked })
-                  }
-                />
-                <Label htmlFor="required">{t("requiredQuestion")}</Label>
-              </div>
+                }}
+                onCancel={() => {
+                  setIsDialogOpen(false)
+                  setEditingQuestion(null)
+                }}
+              />
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                {tCommon("cancel")}
-              </Button>
-              <Button onClick={handleSubmit}>
-                {editingQuestion ? tCommon("saveChanges") : t("addQuestion")}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+          </div>
+        ) : (
+          <Button onClick={openNewDialog}>
+            <Plus className="mr-2 h-4 w-4" />
+            {t("addQuestion")}
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         {questions.length > 0 ? (

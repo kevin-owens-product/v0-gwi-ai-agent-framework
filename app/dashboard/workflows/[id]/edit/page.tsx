@@ -11,8 +11,10 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { ArrowLeft, Save, Loader2 } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ArrowLeft, Save, Loader2, AlertCircle } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { useSession } from "next-auth/react"
 
 interface WorkflowData {
   id: string
@@ -142,48 +144,130 @@ const initialWorkflows: Record<string, WorkflowData> = {
 export default function WorkflowEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
+  const { status: sessionStatus } = useSession()
+  const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [workflow, setWorkflow] = useState<WorkflowData | null>(null)
   const t = useTranslations('dashboard.pages.workflows.edit')
   const tCommon = useTranslations('common')
 
   useEffect(() => {
-    // Load workflow data
-    const existingWorkflow = initialWorkflows[id]
-    if (existingWorkflow) {
-      setWorkflow(existingWorkflow)
-    } else {
-      // For dynamically created workflows, create default values
-      setWorkflow({
-        id,
-        name: t('newWorkflowName'),
-        description: "",
-        status: "active",
-        schedule: "on-demand",
-        agents: [],
-        notifications: ["email"],
-        autoRetry: true,
-        retryAttempts: 3,
-      })
+    if (sessionStatus === "loading") return
+    if (sessionStatus === "unauthenticated") {
+      router.push("/login")
+      return
     }
-  }, [id, t])
+    fetchWorkflow()
+  }, [id, sessionStatus, router])
+
+  async function fetchWorkflow() {
+    setIsLoading(true)
+    setError(null)
+    try {
+      const response = await fetch(`/api/v1/workflows/${id}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      
+      if (response.status === 404) {
+        setError("Workflow not found")
+        return
+      }
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to fetch workflow")
+      }
+
+      const data = await response.json()
+      const workflowData = data.data || data
+      
+      // Map API response to component state
+      const config = workflowData.configuration || {}
+      setWorkflow({
+        id: workflowData.id,
+        name: workflowData.name || "",
+        description: workflowData.description || "",
+        status: workflowData.status?.toLowerCase() || "active",
+        schedule: workflowData.schedule || "on-demand",
+        agents: workflowData.agents || [],
+        notifications: config.notifications || ["email"],
+        autoRetry: config.autoRetry ?? true,
+        retryAttempts: config.retryAttempts || 3,
+      })
+    } catch (err) {
+      console.error("Error fetching workflow:", err)
+      setError(err instanceof Error ? err.message : tCommon('errors.workflowLoadFailed'))
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleSave = async () => {
     if (!workflow) return
 
     setIsSaving(true)
-    // Simulate save delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsSaving(false)
-    router.push(`/dashboard/workflows/${id}`)
+    setError(null)
+
+    try {
+      const response = await fetch(`/api/v1/workflows/${id}`, {
+        method: "PATCH",
+        credentials: 'include',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: workflow.name.trim(),
+          description: workflow.description.trim() || undefined,
+          status: workflow.status.toUpperCase(),
+          schedule: workflow.schedule,
+          agents: workflow.agents,
+          configuration: {
+            notifications: workflow.notifications,
+            autoRetry: workflow.autoRetry,
+            retryAttempts: workflow.retryAttempts,
+          },
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || tCommon('errors.workflowUpdateFailed'))
+      }
+
+      router.push(`/dashboard/workflows/${id}`)
+    } catch (err) {
+      console.error("Failed to update workflow:", err)
+      setError(err instanceof Error ? err.message : tCommon('errors.workflowUpdateFailed'))
+    } finally {
+      setIsSaving(false)
+    }
   }
 
-  if (!workflow) {
+  if (sessionStatus === "loading" || isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     )
+  }
+
+  if (error && !workflow) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
+        <p className="text-lg font-medium mb-2">{tCommon('errors.error')}</p>
+        <p className="text-sm text-muted-foreground mb-4">{error}</p>
+        <Link href="/dashboard/workflows">
+          <Button>{tCommon('back')}</Button>
+        </Link>
+      </div>
+    )
+  }
+
+  if (!workflow) {
+    return null
   }
 
   return (
@@ -211,6 +295,13 @@ export default function WorkflowEditPage({ params }: { params: Promise<{ id: str
           </Button>
         </div>
       </div>
+
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
       {/* Basic Info */}
       <Card className="bg-card border-border">

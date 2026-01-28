@@ -493,7 +493,12 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
     async function fetchDashboard() {
       setIsLoading(true)
       try {
-        const response = await fetch(`/api/v1/dashboards/${id}`)
+        const response = await fetch(`/api/v1/dashboards/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           const apiDashboard = data.data || data
@@ -918,7 +923,13 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
   const handleDelete = async () => {
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/v1/dashboards/${id}`, { method: "DELETE" })
+      const response = await fetch(`/api/v1/dashboards/${id}`, {
+        method: "DELETE",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         router.push("/dashboard/dashboards")
       }
@@ -940,6 +951,7 @@ ${filteredCharts.map(c => `<li>${c.name} - ${c.type}</li>`).join("\n")}
     try {
       const response = await fetch("/api/v1/dashboards", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: `${dashboard.name} (Copy)`,

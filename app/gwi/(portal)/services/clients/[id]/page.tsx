@@ -173,7 +173,12 @@ export default function ClientDetailPage({
 
   const fetchClient = async () => {
     try {
-      const res = await fetch(`/api/gwi/services/clients/${id}`)
+      const res = await fetch(`/api/gwi/services/clients/${id}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (!res.ok) throw new Error("Failed to fetch client")
       const data = await res.json()
       setClient(data)
@@ -200,6 +205,7 @@ export default function ClientDetailPage({
     try {
       const res = await fetch(`/api/gwi/services/clients/${id}`, {
         method: "PATCH",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
@@ -228,6 +234,10 @@ export default function ClientDetailPage({
     try {
       const res = await fetch(`/api/gwi/services/clients/${id}`, {
         method: "DELETE",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
 
       if (!res.ok) {

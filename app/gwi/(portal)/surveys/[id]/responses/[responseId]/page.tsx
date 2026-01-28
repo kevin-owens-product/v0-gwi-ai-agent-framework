@@ -34,6 +34,7 @@ import {
   Loader2,
 } from "lucide-react"
 import { toast } from "sonner"
+import { gwiGet, gwiPatch, gwiDelete } from "@/lib/gwi-api-client"
 
 interface SurveyQuestion {
   id: string
@@ -83,22 +84,23 @@ export default function ResponseDetailPage() {
   async function fetchResponse() {
     try {
       setLoading(true)
-      const res = await fetch(`/api/gwi/surveys/${surveyId}/responses/${responseId}`)
-
-      if (!res.ok) {
-        if (res.status === 404) {
+      const data = await gwiGet<SurveyResponse>(
+        `/api/gwi/surveys/${surveyId}/responses/${responseId}`
+      )
+      setResponse(data)
+      setEditedAnswers(data.answers || {})
+    } catch (error) {
+      if (error instanceof Error && 'status' in error) {
+        if (error.status === 404) {
           setError(t("errors.notFound"))
+        } else if (error.status === 403) {
+          setError("Access denied. Please check your permissions.")
         } else {
           setError(t("errors.loadFailed"))
         }
-        return
+      } else {
+        setError(t("errors.loadFailed"))
       }
-
-      const data = await res.json()
-      setResponse(data)
-      setEditedAnswers(data.answers || {})
-    } catch {
-      setError(t("errors.loadFailed"))
     } finally {
       setLoading(false)
     }
@@ -109,20 +111,15 @@ export default function ResponseDetailPage() {
 
     try {
       setSaving(true)
-      const res = await fetch(`/api/gwi/surveys/${surveyId}/responses/${responseId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers: editedAnswers }),
-      })
-
-      if (!res.ok) {
-        throw new Error("Failed to save")
-      }
-
-      const updated = await res.json()
+      const updated = await gwiPatch<SurveyResponse>(
+        `/api/gwi/surveys/${surveyId}/responses/${responseId}`,
+        { answers: editedAnswers }
+      )
       setResponse({ ...response, answers: updated.answers })
       setIsEditing(false)
-    } catch {
+      toast.success(tCommon("saveChanges"))
+    } catch (error) {
+      console.error("Failed to save:", error)
       toast.error(t("toast.saveFailed"))
     } finally {
       setSaving(false)
@@ -132,16 +129,11 @@ export default function ResponseDetailPage() {
   async function handleDelete() {
     try {
       setDeleting(true)
-      const res = await fetch(`/api/gwi/surveys/${surveyId}/responses/${responseId}`, {
-        method: "DELETE",
-      })
-
-      if (!res.ok) {
-        throw new Error("Failed to delete")
-      }
-
+      await gwiDelete(`/api/gwi/surveys/${surveyId}/responses/${responseId}`)
+      toast.success(tCommon("delete"))
       router.push(`/gwi/surveys/${surveyId}`)
-    } catch {
+    } catch (error) {
+      console.error("Failed to delete:", error)
       toast.error(t("toast.deleteFailed"))
       setDeleting(false)
     }
@@ -152,19 +144,14 @@ export default function ResponseDetailPage() {
 
     try {
       setSaving(true)
-      const res = await fetch(`/api/gwi/surveys/${surveyId}/responses/${responseId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ completedAt: new Date().toISOString() }),
-      })
-
-      if (!res.ok) {
-        throw new Error("Failed to update")
-      }
-
-      const updated = await res.json()
+      const updated = await gwiPatch<SurveyResponse>(
+        `/api/gwi/surveys/${surveyId}/responses/${responseId}`,
+        { completedAt: new Date().toISOString() }
+      )
       setResponse({ ...response, completedAt: updated.completedAt })
-    } catch {
+      toast.success(t("actions.markComplete"))
+    } catch (error) {
+      console.error("Failed to mark complete:", error)
       toast.error(t("toast.markCompleteFailed"))
     } finally {
       setSaving(false)

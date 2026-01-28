@@ -56,7 +56,23 @@ export async function GET(request: NextRequest) {
       orderBy: { issueDate: "desc" },
     })
 
-    return NextResponse.json(invoices)
+    // Transform invoices to ensure all Decimal fields are strings and dates are formatted
+    const transformedInvoices = invoices.map((invoice) => ({
+      ...invoice,
+      subtotal: invoice.subtotal.toString(),
+      taxAmount: invoice.taxAmount.toString(),
+      total: invoice.total.toString(),
+      amountPaid: invoice.amountPaid.toString(),
+      amountDue: invoice.amountDue.toString(),
+      taxRate: invoice.taxRate.toString(),
+      discountAmount: invoice.discountAmount.toString(),
+      issueDate: invoice.issueDate.toISOString(),
+      dueDate: invoice.dueDate.toISOString(),
+      sentAt: invoice.sentAt ? invoice.sentAt.toISOString() : null,
+      paidAt: invoice.paidAt ? invoice.paidAt.toISOString() : null,
+    }))
+
+    return NextResponse.json(transformedInvoices)
   } catch (error) {
     console.error("Failed to fetch invoices:", error)
     return NextResponse.json(

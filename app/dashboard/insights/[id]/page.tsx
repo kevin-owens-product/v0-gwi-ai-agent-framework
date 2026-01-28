@@ -72,7 +72,12 @@ export default function InsightDetailPage({
   useEffect(() => {
     async function fetchInsight() {
       try {
-        const response = await fetch(`/api/v1/insights/${id}`)
+        const response = await fetch(`/api/v1/insights/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (!response.ok) {
           if (response.status === 404) {
             setError("Insight not found")

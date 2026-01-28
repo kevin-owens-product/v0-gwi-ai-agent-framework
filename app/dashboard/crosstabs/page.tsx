@@ -110,7 +110,12 @@ export default function CrosstabsPage() {
   useEffect(() => {
     async function fetchCrosstabs() {
       try {
-        const response = await fetch('/api/v1/crosstabs')
+        const response = await fetch('/api/v1/crosstabs', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           const apiCrosstabs = data.crosstabs || data.data || []

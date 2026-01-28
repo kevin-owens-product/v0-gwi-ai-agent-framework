@@ -97,7 +97,12 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
       setIsLoading(true)
       setError(null)
       try {
-        const response = await fetch(`/api/v1/agents/${id}`)
+        const response = await fetch(`/api/v1/agents/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (!response.ok) {
           const data = await response.json()
           throw new Error(data.error || "Failed to fetch agent")
@@ -221,6 +226,7 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
 
       const response = await fetch(`/api/v1/agents/${id}`, {
         method: "PATCH",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),

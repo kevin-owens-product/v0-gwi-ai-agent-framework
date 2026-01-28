@@ -303,7 +303,12 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
 
   async function fetchBrandTracking() {
     try {
-      const response = await fetch(`/api/v1/brand-tracking/${id}`)
+      const response = await fetch(`/api/v1/brand-tracking/${id}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         const data = await response.json()
         // Transform API response to frontend format
@@ -388,6 +393,10 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
     try {
       const response = await fetch(`/api/v1/brand-tracking/${id}/snapshot`, {
         method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
       if (response.ok) {
         await fetchBrandTracking()
@@ -458,7 +467,13 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
   const handleDelete = async () => {
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/v1/brand-tracking/${id}`, { method: "DELETE" })
+      const response = await fetch(`/api/v1/brand-tracking/${id}`, {
+        method: "DELETE",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         router.push("/dashboard/brand-tracking")
       }
@@ -481,6 +496,7 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
     try {
       const response = await fetch("/api/v1/brand-tracking", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           brandName: `${brandTracking.brandName} (Copy)`,

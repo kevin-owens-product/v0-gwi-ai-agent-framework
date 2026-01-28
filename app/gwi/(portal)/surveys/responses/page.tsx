@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -13,15 +12,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Search, Download, Eye, CheckCircle, Clock, MessageSquare } from "lucide-react"
+import { Download, Eye, CheckCircle, Clock, MessageSquare } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
+import { ResponseFilters } from "./filters"
+import { formatDate } from "@/lib/i18n/date"
 
 async function getResponses(searchParams: { surveyId?: string; status?: string }) {
   const where: Record<string, unknown> = {}
@@ -80,38 +74,7 @@ async function ResponsesList({
       {/* Filters */}
       <Card>
         <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder={t('searchPlaceholder')}
-                className="pl-9"
-              />
-            </div>
-            <Select defaultValue={searchParams.surveyId || "all"}>
-              <SelectTrigger className="w-[220px]">
-                <SelectValue placeholder={t('filterBySurvey')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t('allSurveys')}</SelectItem>
-                {surveys.map((survey) => (
-                  <SelectItem key={survey.id} value={survey.id}>
-                    {survey.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select defaultValue={searchParams.status || "all"}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={t('filterByStatus')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t('allStatuses')}</SelectItem>
-                <SelectItem value="completed">{t('completed')}</SelectItem>
-                <SelectItem value="incomplete">{t('incomplete')}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <ResponseFilters surveys={surveys} />
         </CardContent>
       </Card>
 
@@ -158,11 +121,11 @@ async function ResponsesList({
                       )}
                     </TableCell>
                     <TableCell>
-                      {new Date(response.createdAt).toLocaleString()}
+                      {formatDate(new Date(response.createdAt))}
                     </TableCell>
                     <TableCell>
                       {response.completedAt
-                        ? new Date(response.completedAt).toLocaleString()
+                        ? formatDate(new Date(response.completedAt))
                         : "-"}
                     </TableCell>
                     <TableCell>

@@ -81,7 +81,12 @@ export default function DashboardsPage() {
       }
 
       try {
-        const response = await fetch('/api/v1/dashboards')
+        const response = await fetch('/api/v1/dashboards', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           const apiDashboards = data.dashboards || data.data || []

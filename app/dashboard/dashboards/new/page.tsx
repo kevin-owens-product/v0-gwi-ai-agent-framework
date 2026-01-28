@@ -63,6 +63,7 @@ export default function NewDashboardPage() {
     try {
       const response = await fetch("/api/v1/dashboards", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),

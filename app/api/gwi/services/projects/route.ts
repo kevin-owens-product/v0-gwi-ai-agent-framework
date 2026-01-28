@@ -62,7 +62,16 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "desc" },
     })
 
-    return NextResponse.json(projects)
+    // Transform projects to ensure all fields are properly formatted
+    const transformedProjects = projects.map((project) => ({
+      ...project,
+      completionPercent: project.completionPercent ?? 0,
+      budgetAmount: project.budgetAmount ? project.budgetAmount.toString() : null,
+      budgetHours: project.budgetHours ? project.budgetHours.toString() : null,
+      defaultHourlyRate: project.defaultHourlyRate ? project.defaultHourlyRate.toString() : null,
+    }))
+
+    return NextResponse.json(transformedProjects)
   } catch (error) {
     console.error("Failed to fetch projects:", error)
     return NextResponse.json(

@@ -103,7 +103,12 @@ export default function AuditLogPage() {
       if (selectedAction && selectedAction !== "all") params.append('action', selectedAction)
       if (selectedResource && selectedResource !== "all") params.append('resourceType', selectedResource)
 
-      const response = await fetch(`/api/v1/audit-logs?${params.toString()}`)
+      const response = await fetch(`/api/v1/audit-logs?${params.toString()}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         const data = await response.json()
         setLogs(data.logs || [])

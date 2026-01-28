@@ -116,9 +116,18 @@ export default function QuestionDetailPage({
     async function fetchQuestion() {
       try {
         const response = await fetch(
-          `/api/gwi/surveys/${surveyId}/questions/${questionId}`
+          `/api/gwi/surveys/${surveyId}/questions/${questionId}`,
+          {
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
         )
         if (!response.ok) {
+          if (response.status === 403) {
+            throw new Error("Access denied. Please check your permissions.")
+          }
           throw new Error("Failed to fetch question")
         }
         const data = await response.json()
@@ -171,6 +180,7 @@ export default function QuestionDetailPage({
         `/api/gwi/surveys/${surveyId}/questions/${questionId}`,
         {
           method: "PATCH",
+          credentials: 'include',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             code: formData.code,
@@ -190,7 +200,13 @@ export default function QuestionDetailPage({
 
       // Refresh the question data
       const refreshResponse = await fetch(
-        `/api/gwi/surveys/${surveyId}/questions/${questionId}`
+        `/api/gwi/surveys/${surveyId}/questions/${questionId}`,
+        {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
       )
       if (refreshResponse.ok) {
         const data = await refreshResponse.json()
@@ -210,7 +226,13 @@ export default function QuestionDetailPage({
     try {
       const response = await fetch(
         `/api/gwi/surveys/${surveyId}/questions/${questionId}`,
-        { method: "DELETE" }
+        {
+          method: "DELETE",
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
       )
 
       if (!response.ok) {

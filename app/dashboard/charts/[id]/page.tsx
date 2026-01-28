@@ -383,7 +383,12 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
   useEffect(() => {
     async function fetchChart() {
       try {
-        const response = await fetch(`/api/v1/charts/${id}`)
+        const response = await fetch(`/api/v1/charts/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           const apiChart = data.data || data
@@ -565,7 +570,13 @@ export default function ChartDetailPage({ params }: { params: Promise<{ id: stri
   const handleDelete = async () => {
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/v1/charts/${id}`, { method: "DELETE" })
+      const response = await fetch(`/api/v1/charts/${id}`, {
+        method: "DELETE",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         router.push("/dashboard/charts")
       }

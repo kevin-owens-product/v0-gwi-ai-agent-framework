@@ -266,7 +266,12 @@ export default function PlaygroundPage() {
       }
 
       // Finally, try to fetch from API (custom agent)
-      fetch(`/api/v1/agents/${agentIdFromUrl}`)
+      fetch(`/api/v1/agents/${agentIdFromUrl}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           if (data.data) {

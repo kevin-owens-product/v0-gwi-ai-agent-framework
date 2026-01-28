@@ -25,21 +25,27 @@ import { FileText, Search, Download, User, Clock } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 
 async function getAuditLogs() {
-  const logs = await prisma.gWIAuditLog.findMany({
-    include: {
-      admin: { select: { name: true, email: true } },
-    },
-    orderBy: { createdAt: "desc" },
-    take: 100,
-  })
+  try {
+    const logs = await prisma.gWIAuditLog.findMany({
+      include: {
+        admin: { select: { name: true, email: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+    })
 
-  return logs
+    return logs
+  } catch (error) {
+    console.error("Error fetching audit logs:", error)
+    throw error
+  }
 }
 
 async function AuditLogsContent() {
-  const logs = await getAuditLogs()
-  const t = await getTranslations('gwi.system.audit')
-  const tCommon = await getTranslations('common')
+  try {
+    const logs = await getAuditLogs()
+    const t = await getTranslations('gwi.system.audit')
+    const tCommon = await getTranslations('common')
 
   const actionColors: Record<string, string> = {
     CREATE: "bg-green-100 text-green-700",
@@ -174,6 +180,19 @@ async function AuditLogsContent() {
       </Card>
     </div>
   )
+  } catch (error) {
+    console.error("Error in AuditLogsContent:", error)
+    const t = await getTranslations('gwi.system.audit')
+    const tCommon = await getTranslations('common')
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+          <p className="text-muted-foreground">{tCommon('errors.loadFailed')}</p>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default async function AuditPage() {

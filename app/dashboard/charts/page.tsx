@@ -222,7 +222,12 @@ export default function ChartsPage() {
       }
 
       try {
-        const response = await fetch("/api/v1/charts")
+        const response = await fetch("/api/v1/charts", {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           const chartsData = data.charts || data.data || []

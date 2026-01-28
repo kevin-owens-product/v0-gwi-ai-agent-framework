@@ -2138,6 +2138,12 @@ Format each insight as:
     })
   })
 
+  // Seed Services data
+  await safeSeedSection('Services Module', async () => {
+    const { seedServices } = await import('./seed-services')
+    await seedServices()
+  })
+
   console.log('\n✅ GWI Portal test data seed completed!')
   console.log('\nSummary (reflecting GWI data coverage from gwi.com/data-coverage):')
   console.log(`- 5 GWI Surveys: Core (${ALL_MARKETS.length} markets), Gaming, USA, Zeitgeist, Sports`)
@@ -2151,6 +2157,7 @@ Format each insight as:
   console.log('- 8 Data source connections (BigQuery, Snowflake, Panel APIs, etc.)')
   console.log('- 6 Monitoring alerts and sample error logs')
   console.log('- Audit log entries for compliance')
+  console.log('- Services Module: 6 clients, 5 projects, 5 employees, 4 vendors, time entries, and invoices')
 }
 
 main()

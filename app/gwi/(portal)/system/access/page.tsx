@@ -52,37 +52,43 @@ const roleConfig: Record<string, { color: string; label: string }> = {
 }
 
 async function getAccessData() {
-  const [admins, roles, apiKeys] = await Promise.all([
-    prisma.superAdmin.findMany({
-      include: {
-        adminRole: { select: { name: true, displayName: true, description: true } },
-      },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.adminRole.findMany({
-      include: {
-        _count: { select: { superAdmins: true } },
-      },
-      orderBy: { name: "asc" },
-    }),
-    prisma.gWIApiKey.findMany({
-      include: {
-        createdBy: { select: { name: true } },
-      },
-      orderBy: { createdAt: "desc" },
-    }),
-  ])
+  try {
+    const [admins, roles, apiKeys] = await Promise.all([
+      prisma.superAdmin.findMany({
+        include: {
+          adminRole: { select: { name: true, displayName: true, description: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.adminRole.findMany({
+        include: {
+          _count: { select: { superAdmins: true } },
+        },
+        orderBy: { name: "asc" },
+      }),
+      prisma.gWIApiKey.findMany({
+        include: {
+          createdBy: { select: { name: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+    ])
 
-  const activeUsers = admins.filter((a) => a.isActive).length
-  const activeKeys = apiKeys.filter((k) => k.isActive).length
+    const activeUsers = admins.filter((a) => a.isActive).length
+    const activeKeys = apiKeys.filter((k) => k.isActive).length
 
-  return { admins, roles, apiKeys, activeUsers, activeKeys }
+    return { admins, roles, apiKeys, activeUsers, activeKeys }
+  } catch (error) {
+    console.error("Error fetching access data:", error)
+    throw error
+  }
 }
 
 async function AccessControlContent() {
-  const { admins, roles, apiKeys, activeUsers, activeKeys } = await getAccessData()
-  const t = await getTranslations('gwi.system.access')
-  const tCommon = await getTranslations('common')
+  try {
+    const { admins, roles, apiKeys, activeUsers, activeKeys } = await getAccessData()
+    const t = await getTranslations('gwi.system.access')
+    const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
@@ -346,7 +352,7 @@ async function AccessControlContent() {
                     <div>
                       <p className="font-medium">{key.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {key.keyPrefix}... - {t('createdBy', { name: key.createdBy.name })}
+                        {key.keyPrefix}... - {t('createdBy', { name: key.createdBy?.name || tCommon('unknown') })}
                       </p>
                     </div>
                   </div>
@@ -372,6 +378,19 @@ async function AccessControlContent() {
       </Card>
     </div>
   )
+  } catch (error) {
+    console.error("Error in AccessControlContent:", error)
+    const t = await getTranslations('gwi.system.access')
+    const tCommon = await getTranslations('common')
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+          <p className="text-muted-foreground">{tCommon('errors.loadFailed')}</p>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default async function AccessControlPage() {

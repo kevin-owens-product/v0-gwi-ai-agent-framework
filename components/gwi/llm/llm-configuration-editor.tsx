@@ -134,14 +134,29 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
         : "/api/gwi/llm/configurations"
       const method = configuration ? "PATCH" : "POST"
 
+      // Parse JSON fields safely
+      let parsedParams, parsedRateLimits
+      try {
+        parsedParams = formData.defaultParams?.trim()
+          ? JSON.parse(formData.defaultParams.trim())
+          : {}
+        parsedRateLimits = formData.rateLimits?.trim()
+          ? JSON.parse(formData.rateLimits.trim())
+          : {}
+      } catch (parseError) {
+        setError(t("validation.invalidJsonFormat") || "Invalid JSON format")
+        setIsLoading(false)
+        return
+      }
+
       const payload = {
         name: formData.name.trim(),
         provider: formData.provider,
         model: formData.model,
         apiKeyRef: formData.apiKeyRef.trim(),
         isActive: formData.isActive,
-        defaultParams: JSON.parse(formData.defaultParams),
-        rateLimits: JSON.parse(formData.rateLimits),
+        defaultParams: parsedParams,
+        rateLimits: parsedRateLimits,
       }
 
       const response = await fetch(url, {

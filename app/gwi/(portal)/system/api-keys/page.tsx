@@ -28,20 +28,26 @@ import { Key, Plus, Search, Copy, Trash2, Clock, Shield } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 
 async function getApiKeys() {
-  const keys = await prisma.gWIApiKey.findMany({
-    include: {
-      createdBy: { select: { name: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  })
+  try {
+    const keys = await prisma.gWIApiKey.findMany({
+      include: {
+        createdBy: { select: { name: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    })
 
-  return keys
+    return keys
+  } catch (error) {
+    console.error("Error fetching API keys:", error)
+    throw error
+  }
 }
 
 async function ApiKeysContent() {
-  const keys = await getApiKeys()
-  const t = await getTranslations('gwi.system.apiKeys')
-  const tc = await getTranslations('gwi.common')
+  try {
+    const keys = await getApiKeys()
+    const t = await getTranslations('gwi.system.apiKeys')
+    const tc = await getTranslations('gwi.common')
 
   return (
     <div className="space-y-6">
@@ -165,7 +171,7 @@ async function ApiKeysContent() {
                         {key.keyPrefix}...
                       </code>
                     </TableCell>
-                    <TableCell>{key.createdBy.name}</TableCell>
+                    <TableCell>{key.createdBy?.name || tc('unknown')}</TableCell>
                     <TableCell>
                       {key.lastUsedAt
                         ? new Date(key.lastUsedAt).toLocaleDateString()
@@ -236,6 +242,19 @@ async function ApiKeysContent() {
       </Card>
     </div>
   )
+  } catch (error) {
+    console.error("Error in ApiKeysContent:", error)
+    const t = await getTranslations('gwi.system.apiKeys')
+    const tc = await getTranslations('gwi.common')
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+          <p className="text-muted-foreground">{tc('loading')}</p>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default async function ApiKeysPage() {

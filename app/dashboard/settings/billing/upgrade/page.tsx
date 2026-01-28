@@ -91,6 +91,7 @@ export default function UpgradePage() {
     try {
       const response = await fetch("/api/billing/create-checkout", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           planTier: tier,

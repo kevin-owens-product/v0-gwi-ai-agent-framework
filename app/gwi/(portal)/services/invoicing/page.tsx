@@ -38,6 +38,7 @@ import {
   Loader2,
 } from "lucide-react"
 import { toast } from "sonner"
+import { useDebounce } from "@/hooks/use-debounce"
 
 interface Invoice {
   id: string
@@ -78,28 +79,50 @@ export default function InvoicingPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
+  
+  // Debounce search to avoid too many API calls
+  const debouncedSearch = useDebounce(search, 500)
 
   useEffect(() => {
-    fetchInvoices()
-  }, [statusFilter, search])
+    const fetchInvoices = async () => {
+      try {
+        setLoading(true)
+        const params = new URLSearchParams()
+        if (statusFilter !== "all") params.set("status", statusFilter)
+        if (debouncedSearch) params.set("search", debouncedSearch)
 
-  const fetchInvoices = async () => {
-    try {
-      const params = new URLSearchParams()
-      if (statusFilter !== "all") params.set("status", statusFilter)
-      if (search) params.set("search", search)
-
-      const res = await fetch(`/api/gwi/services/invoicing/invoices?${params}`)
-      if (!res.ok) throw new Error("Failed to fetch invoices")
-      const data = await res.json()
-      setInvoices(data)
-    } catch (error) {
-      console.error("Failed to fetch invoices:", error)
-      toast.error(t("failedToLoad"))
-    } finally {
-      setLoading(false)
+        const res = await fetch(`/api/gwi/services/invoicing/invoices?${params}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || "Failed to fetch invoices")
+        }
+        const data = await res.json()
+        // Ensure all amount fields are strings
+        const normalizedData = Array.isArray(data) ? data.map((inv: Invoice) => ({
+          ...inv,
+          subtotal: typeof inv.subtotal === 'string' ? inv.subtotal : String(inv.subtotal || '0'),
+          taxAmount: typeof inv.taxAmount === 'string' ? inv.taxAmount : String(inv.taxAmount || '0'),
+          total: typeof inv.total === 'string' ? inv.total : String(inv.total || '0'),
+          amountPaid: typeof inv.amountPaid === 'string' ? inv.amountPaid : String(inv.amountPaid || '0'),
+          amountDue: typeof inv.amountDue === 'string' ? inv.amountDue : String(inv.amountDue || '0'),
+        })) : []
+        setInvoices(normalizedData)
+      } catch (error) {
+        console.error("Failed to fetch invoices:", error)
+        toast.error(t("failedToLoad"))
+        setInvoices([]) // Set empty array on error
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    
+    fetchInvoices()
+  }, [statusFilter, debouncedSearch, t])
 
   const totalOutstanding = invoices
     .filter((i) => ["SENT", "VIEWED", "PARTIAL", "OVERDUE"].includes(i.status))

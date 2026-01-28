@@ -61,7 +61,12 @@ interface Webhook {
 
   const fetchWebhooks = async () => {
     try {
-      const response = await fetch('/api/v1/webhooks')
+      const response = await fetch('/api/v1/webhooks', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         const data = await response.json()
         setWebhooks(data)
@@ -83,6 +88,7 @@ interface Webhook {
     try {
       const response = await fetch('/api/v1/webhooks', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url, events: selectedEvents, description }),
       })

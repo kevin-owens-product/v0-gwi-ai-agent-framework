@@ -38,6 +38,7 @@ import {
   Loader2,
 } from "lucide-react"
 import { toast } from "sonner"
+import { useDebounce } from "@/hooks/use-debounce"
 
 interface Vendor {
   id: string
@@ -75,29 +76,42 @@ export default function VendorsPage() {
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [typeFilter, setTypeFilter] = useState("all")
+  
+  // Debounce search to avoid too many API calls
+  const debouncedSearch = useDebounce(search, 500)
 
   useEffect(() => {
-    fetchVendors()
-  }, [statusFilter, typeFilter, search])
+    const fetchVendors = async () => {
+      try {
+        setLoading(true)
+        const params = new URLSearchParams()
+        if (statusFilter !== "all") params.set("status", statusFilter)
+        if (typeFilter !== "all") params.set("type", typeFilter)
+        if (debouncedSearch) params.set("search", debouncedSearch)
 
-  const fetchVendors = async () => {
-    try {
-      const params = new URLSearchParams()
-      if (statusFilter !== "all") params.set("status", statusFilter)
-      if (typeFilter !== "all") params.set("type", typeFilter)
-      if (search) params.set("search", search)
-
-      const res = await fetch(`/api/gwi/services/vendors?${params}`)
-      if (!res.ok) throw new Error("Failed to fetch vendors")
-      const data = await res.json()
-      setVendors(data)
-    } catch (error) {
-      console.error("Failed to fetch vendors:", error)
-      toast.error(t("failedToLoad"))
-    } finally {
-      setLoading(false)
+        const res = await fetch(`/api/gwi/services/vendors?${params}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || "Failed to fetch vendors")
+        }
+        const data = await res.json()
+        setVendors(Array.isArray(data) ? data : [])
+      } catch (error) {
+        console.error("Failed to fetch vendors:", error)
+        toast.error(t("failedToLoad"))
+        setVendors([]) // Set empty array on error
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    
+    fetchVendors()
+  }, [statusFilter, typeFilter, debouncedSearch, t])
 
   const stats = {
     total: vendors.length,

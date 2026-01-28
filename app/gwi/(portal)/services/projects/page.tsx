@@ -39,6 +39,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
+import { useDebounce } from "@/hooks/use-debounce"
 
 interface Project {
   id: string
@@ -78,28 +79,46 @@ export default function ProjectsPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const t = useTranslations('gwi.services.projects')
   const tCommon = useTranslations('common')
+  
+  // Debounce search to avoid too many API calls
+  const debouncedSearch = useDebounce(search, 500)
 
   useEffect(() => {
-    fetchProjects()
-  }, [statusFilter, search])
+    const fetchProjects = async () => {
+      try {
+        setLoading(true)
+        const params = new URLSearchParams()
+        if (statusFilter !== "all") params.set("status", statusFilter)
+        if (debouncedSearch) params.set("search", debouncedSearch)
 
-  const fetchProjects = async () => {
-    try {
-      const params = new URLSearchParams()
-      if (statusFilter !== "all") params.set("status", statusFilter)
-      if (search) params.set("search", search)
-
-      const res = await fetch(`/api/gwi/services/projects?${params}`)
-      if (!res.ok) throw new Error("Failed to fetch projects")
-      const data = await res.json()
-      setProjects(data)
-    } catch (error) {
-      console.error("Failed to fetch projects:", error)
-      toast.error(t('loadError'))
-    } finally {
-      setLoading(false)
+        const res = await fetch(`/api/gwi/services/projects?${params}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || "Failed to fetch projects")
+        }
+        const data = await res.json()
+        // Ensure completionPercent is a number
+        const normalizedData = Array.isArray(data) ? data.map((p: Project) => ({
+          ...p,
+          completionPercent: typeof p.completionPercent === 'number' ? p.completionPercent : parseInt(p.completionPercent || '0', 10),
+        })) : []
+        setProjects(normalizedData)
+      } catch (error) {
+        console.error("Failed to fetch projects:", error)
+        toast.error(t('loadError'))
+        setProjects([]) // Set empty array on error
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    
+    fetchProjects()
+  }, [statusFilter, debouncedSearch, t])
 
   const stats = {
     total: projects.length,

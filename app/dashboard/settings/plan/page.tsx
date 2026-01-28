@@ -76,6 +76,7 @@ export default function PlanPage() {
     try {
       const response = await fetch('/api/v1/organization/plan/upgrade', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tier: newTier }),
       })

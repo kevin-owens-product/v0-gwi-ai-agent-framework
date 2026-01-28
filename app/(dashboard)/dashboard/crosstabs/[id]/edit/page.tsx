@@ -189,7 +189,12 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch(`/api/crosstabs/${id}`)
+        const response = await fetch(`/api/v1/crosstabs/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
 
         if (!response.ok) {
           if (response.status === 404) {
@@ -313,8 +318,9 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
         },
       }
 
-      const response = await fetch(`/api/crosstabs/${id}`, {
+      const response = await fetch(`/api/v1/crosstabs/${id}`, {
         method: "PATCH",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
         },

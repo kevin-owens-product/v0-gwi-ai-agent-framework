@@ -86,8 +86,14 @@ export default function TeamSettingsPage() {
   const fetchTeamData = async () => {
     try {
       const [membersRes, invitationsRes] = await Promise.all([
-        fetch('/api/v1/organization/team'),
-        fetch('/api/v1/organization/team/invitations'),
+        fetch('/api/v1/organization/team', {
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        }),
+        fetch('/api/v1/organization/team/invitations', {
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        }),
       ])
 
       if (membersRes.ok) {
@@ -119,6 +125,7 @@ export default function TeamSettingsPage() {
     try {
       const response = await fetch('/api/v1/organization/team/invite', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ emails: [inviteEmail], role: inviteRole }),
       })
@@ -145,6 +152,7 @@ export default function TeamSettingsPage() {
     try {
       const response = await fetch(`/api/v1/organization/team/members/${memberId}`, {
         method: 'PUT',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role: newRole }),
       })
@@ -169,6 +177,10 @@ export default function TeamSettingsPage() {
     try {
       const response = await fetch(`/api/v1/organization/team/members/${removeMember.id}`, {
         method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
 
       if (!response.ok) {
@@ -188,6 +200,10 @@ export default function TeamSettingsPage() {
     try {
       const response = await fetch(`/api/v1/organization/team/invitations/${invitationId}`, {
         method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
 
       if (!response.ok) {

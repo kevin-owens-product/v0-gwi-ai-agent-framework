@@ -116,11 +116,23 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
         : "/api/gwi/pipelines"
       const method = pipeline ? "PATCH" : "POST"
 
+      // Parse configuration safely
+      let parsedConfiguration
+      try {
+        parsedConfiguration = formData.configuration?.trim() 
+          ? JSON.parse(formData.configuration.trim())
+          : {}
+      } catch (parseError) {
+        setErrors({ submit: t("errors.invalidJsonConfig") || "Invalid JSON format for configuration" })
+        setIsLoading(false)
+        return
+      }
+
       const payload = {
         name: formData.name.trim(),
         description: formData.description.trim() || null,
         type: formData.type,
-        configuration: JSON.parse(formData.configuration),
+        configuration: parsedConfiguration,
         schedule: formData.schedule || null,
         isActive: formData.isActive,
       }

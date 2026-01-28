@@ -34,6 +34,7 @@ export default function NewChartPage() {
     try {
       const response = await fetch("/api/v1/charts", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: chartName.trim(),

@@ -156,7 +156,12 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
     setIsLoading(true)
     setError(null)
     try {
-      const response = await fetch(`/api/v1/brand-tracking/${id}`)
+      const response = await fetch(`/api/v1/brand-tracking/${id}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
       if (response.status === 404) {
         setNotFound(true)
@@ -292,6 +297,7 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
 
       const response = await fetch(`/api/v1/brand-tracking/${id}`, {
         method: "PUT",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })

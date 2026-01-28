@@ -276,7 +276,12 @@ export default function AudiencesPage() {
       }
 
       try {
-        const response = await fetch('/api/v1/audiences')
+        const response = await fetch('/api/v1/audiences', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           const apiAudiences = data.audiences || data.data || []

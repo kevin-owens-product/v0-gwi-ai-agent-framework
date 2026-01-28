@@ -136,13 +136,31 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
         : "/api/gwi/agents/templates"
       const method = template ? "PATCH" : "POST"
 
+      // Parse JSON fields safely
+      let parsedConfiguration, parsedTools, parsedPrompts
+      try {
+        parsedConfiguration = formData.configuration?.trim()
+          ? JSON.parse(formData.configuration.trim())
+          : {}
+        parsedTools = formData.defaultTools?.trim()
+          ? JSON.parse(formData.defaultTools.trim())
+          : []
+        parsedPrompts = formData.defaultPrompts?.trim()
+          ? JSON.parse(formData.defaultPrompts.trim())
+          : {}
+      } catch (parseError) {
+        setErrors({ submit: t("errors.invalidJsonFormat") || "Invalid JSON format" })
+        setIsLoading(false)
+        return
+      }
+
       const payload = {
         name: formData.name,
         description: formData.description || null,
         category: formData.category,
-        configuration: JSON.parse(formData.configuration),
-        defaultTools: JSON.parse(formData.defaultTools),
-        defaultPrompts: JSON.parse(formData.defaultPrompts),
+        configuration: parsedConfiguration,
+        defaultTools: parsedTools,
+        defaultPrompts: parsedPrompts,
         isPublished: formData.isPublished,
       }
 

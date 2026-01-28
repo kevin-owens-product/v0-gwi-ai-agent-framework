@@ -316,7 +316,12 @@ function AlertsSection() {
   async function fetchAlerts() {
     setLoading(true)
     try {
-      const response = await fetch("/api/v1/changes/alerts?limit=50")
+      const response = await fetch("/api/v1/changes/alerts?limit=50", {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         const data = await response.json()
         setAlerts(data.alerts)
@@ -332,6 +337,7 @@ function AlertsSection() {
     try {
       await fetch("/api/v1/changes/alerts", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "markRead", alertId }),
       })
@@ -345,6 +351,7 @@ function AlertsSection() {
     try {
       await fetch("/api/v1/changes/alerts", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "dismiss", alertId }),
       })

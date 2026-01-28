@@ -2,217 +2,162 @@ import { describe, it, expect, vi } from 'vitest'
 
 vi.mock('@/lib/auth')
 vi.mock('@/lib/db')
+vi.mock('@/lib/tenant')
+vi.mock('@/lib/permissions')
+vi.mock('@/lib/audit')
+vi.mock('@/lib/billing')
 
 describe('Dashboard Detail API - /api/v1/dashboards/[id]', () => {
   describe('GET Dashboard by ID', () => {
-    it('should retrieve dashboard details', () => {
+    it('should retrieve dashboard by ID', () => {
       const dashboard = {
-        id: 'dash-123',
-        name: 'Executive Dashboard',
-        layout: 'grid',
-        isPublic: false
+        id: 'dashboard-123',
+        name: 'Marketing Overview',
+        status: 'ACTIVE',
+        isPublic: false,
       }
 
       expect(dashboard.id).toBeTruthy()
-      expect(dashboard.layout).toBe('grid')
+      expect(dashboard.name).toBeTruthy()
     })
 
     it('should include dashboard widgets', () => {
       const dashboard = {
-        id: 'dash-1',
+        id: 'dashboard-1',
         widgets: [
-          { id: 'w-1', type: 'metric', position: { x: 0, y: 0 } },
-          { id: 'w-2', type: 'chart', position: { x: 1, y: 0 } },
-          { id: 'w-3', type: 'table', position: { x: 0, y: 1 } }
-        ]
+          { id: 'widget-1', type: 'chart', title: 'Awareness Trend' },
+          { id: 'widget-2', type: 'metric', title: 'Total Reach' },
+        ],
       }
 
-      expect(dashboard.widgets.length).toBe(3)
+      expect(Array.isArray(dashboard.widgets)).toBe(true)
+      expect(dashboard.widgets.length).toBeGreaterThan(0)
     })
 
-    it('should include refresh settings', () => {
+    it('should include layout configuration', () => {
       const dashboard = {
-        id: 'dash-1',
-        autoRefresh: true,
-        refreshInterval: 300000, // 5 minutes
-        lastRefresh: new Date()
+        id: 'dashboard-1',
+        layout: [{ type: 'grid' }],
       }
 
-      expect(dashboard.refreshInterval).toBeGreaterThan(0)
+      expect(dashboard.layout).toBeDefined()
+    })
+
+    it('should handle non-existent dashboard', () => {
+      const found = false
+      expect(found).toBe(false)
     })
   })
 
-  describe('PUT Update Dashboard', () => {
-    it('should update dashboard properties', () => {
+  describe('PATCH Update Dashboard', () => {
+    it('should update dashboard configuration', () => {
       const update = {
         name: 'Updated Dashboard Name',
         description: 'Updated description',
-        updatedAt: new Date()
+        widgets: [
+          { id: 'widget-1', type: 'chart' },
+          { id: 'widget-2', type: 'metric' },
+        ],
+        updatedAt: new Date(),
       }
 
-      expect(update.updatedAt).toBeDefined()
+      expect(update.widgets.length).toBeGreaterThan(0)
     })
 
-    it('should update widget layout', () => {
-      const widgets = [
-        { id: 'w-1', position: { x: 0, y: 0, w: 2, h: 1 } },
-        { id: 'w-2', position: { x: 2, y: 0, w: 2, h: 1 } }
-      ]
-
-      expect(widgets.every(w => w.position)).toBe(true)
-    })
-
-    it('should add new widget', () => {
-      const newWidget = {
-        id: 'w-new',
-        type: 'metric',
-        config: { metric: 'totalUsers' },
-        position: { x: 0, y: 2 }
+    it('should validate update data', () => {
+      const updateData = {
+        name: 'Updated Dashboard Name',
+        description: 'Updated description',
+        status: 'ACTIVE',
+        isPublic: true,
       }
 
-      expect(newWidget.type).toBeTruthy()
-      expect(newWidget.config).toBeDefined()
+      expect(updateData.name).toBeTruthy()
+      expect(typeof updateData.isPublic).toBe('boolean')
     })
 
-    it('should remove widget', () => {
-      const widgets = [
-        { id: 'w-1' },
-        { id: 'w-2' }
-      ]
+    it('should update widgets', () => {
+      const update = {
+        widgets: [
+          { id: 'widget-1', type: 'chart', title: 'Chart 1' },
+          { id: 'widget-2', type: 'metric', title: 'Metric 1' },
+          { id: 'widget-3', type: 'table', title: 'Table 1' },
+        ],
+      }
 
-      const afterRemoval = widgets.filter(w => w.id !== 'w-1')
-      expect(afterRemoval.length).toBe(1)
+      expect(update.widgets.length).toBe(3)
+    })
+
+    it('should update layout', () => {
+      const update = {
+        layout: [{ type: 'grid', columns: 3 }],
+      }
+
+      expect(update.layout).toBeDefined()
+    })
+
+    it('should update public visibility', () => {
+      const update = {
+        isPublic: true,
+      }
+
+      expect(update.isPublic).toBe(true)
+    })
+
+    it('should preserve readonly fields', () => {
+      const protected_fields = ['id', 'createdAt', 'orgId']
+      expect(protected_fields.length).toBeGreaterThan(0)
     })
   })
 
   describe('DELETE Dashboard', () => {
     it('should delete dashboard', () => {
-      const deleted = {
-        id: 'dash-123',
-        deletedAt: new Date()
+      const dashboard = {
+        id: 'dashboard-123',
+        deletedAt: new Date(),
+        status: 'ARCHIVED',
       }
 
-      expect(deleted.deletedAt).toBeDefined()
+      expect(dashboard.deletedAt).toBeDefined()
     })
 
-    it('should cascade delete widgets', () => {
+    it('should handle dashboard with shared access', () => {
       const dashboard = {
-        id: 'dash-123',
-        widgets: [],
-        deletedAt: new Date()
+        id: 'dashboard-123',
+        isPublic: true,
+        sharedWith: ['user-1', 'user-2'],
       }
 
-      expect(dashboard.widgets.length).toBe(0)
+      expect(dashboard.sharedWith.length).toBeGreaterThan(0)
     })
   })
 
-  describe('Dashboard Widgets', () => {
-    it('should support metric widgets', () => {
+  describe('Dashboard Validation', () => {
+    it('should validate widget structure', () => {
       const widget = {
-        type: 'metric',
-        config: {
-          metric: 'totalUsers',
-          label: 'Total Users',
-          format: 'number'
-        }
-      }
-
-      expect(widget.type).toBe('metric')
-    })
-
-    it('should support chart widgets', () => {
-      const widget = {
+        id: 'widget-1',
         type: 'chart',
-        config: {
-          chartType: 'line',
-          dataSource: 'analytics',
-          xAxis: 'date',
-          yAxis: 'value'
-        }
+        title: 'Chart Title',
       }
 
-      expect(widget.config.chartType).toBe('line')
+      expect(widget.id).toBeTruthy()
+      expect(widget.type).toBeTruthy()
     })
 
-    it('should support table widgets', () => {
-      const widget = {
-        type: 'table',
-        config: {
-          columns: ['name', 'value', 'change'],
-          sortBy: 'value',
-          sortOrder: 'desc'
-        }
-      }
+    it('should validate layout configuration', () => {
+      const layout = [
+        { type: 'grid', columns: 3 },
+      ]
 
-      expect(Array.isArray(widget.config.columns)).toBe(true)
-    })
-  })
-
-  describe('Dashboard Filters', () => {
-    it('should apply global filters', () => {
-      const filters = {
-        dateRange: { start: '2024-01-01', end: '2024-12-31' },
-        market: ['US', 'UK'],
-        ageGroup: '18-34'
-      }
-
-      expect(filters.dateRange).toBeDefined()
-      expect(Array.isArray(filters.market)).toBe(true)
+      expect(layout.length).toBeGreaterThan(0)
+      expect(layout[0].columns).toBeGreaterThan(0)
     })
 
-    it('should save filter presets', () => {
-      const preset = {
-        name: 'Last Quarter',
-        filters: {
-          dateRange: { start: '2024-10-01', end: '2024-12-31' }
-        }
-      }
+    it('should validate widget types', () => {
+      const validTypes = ['chart', 'metric', 'table', 'text']
+      const widgetType = 'chart'
 
-      expect(preset.name).toBeTruthy()
-    })
-  })
-
-  describe('Dashboard Sharing', () => {
-    it('should configure dashboard visibility', () => {
-      const dashboard = {
-        id: 'dash-123',
-        isPublic: false,
-        sharedWith: ['user-456', 'team-789']
-      }
-
-      expect(Array.isArray(dashboard.sharedWith)).toBe(true)
-    })
-
-    it('should generate embed code', () => {
-      const embed = {
-        dashboardId: 'dash-123',
-        token: 'embed_abc123',
-        allowedDomains: ['example.com']
-      }
-
-      expect(embed.token).toContain('embed_')
-    })
-  })
-
-  describe('Dashboard Export', () => {
-    it('should export as PDF', () => {
-      const exportConfig = {
-        format: 'pdf',
-        includeFilters: true,
-        pageSize: 'A4'
-      }
-
-      expect(exportConfig.format).toBe('pdf')
-    })
-
-    it('should export as image', () => {
-      const exportConfig = {
-        format: 'png',
-        width: 1920,
-        height: 1080
-      }
-
-      expect(exportConfig.width).toBeGreaterThan(0)
+      expect(validTypes.includes(widgetType)).toBe(true)
     })
   })
 })

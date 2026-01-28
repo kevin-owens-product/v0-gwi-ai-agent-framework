@@ -132,7 +132,7 @@ export const GWI_ROLE_PERMISSIONS: Record<SuperAdminRole, GWIPermission[]> = {
     'services:time:read', 'services:time:write',
   ],
   ADMIN: [
-    'surveys:read',
+    'surveys:read', 'surveys:write', 'surveys:delete', 'surveys:responses',
     'taxonomy:read',
     'pipelines:read',
     'llm:read',

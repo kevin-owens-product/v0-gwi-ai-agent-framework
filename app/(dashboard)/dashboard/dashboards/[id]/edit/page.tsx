@@ -109,7 +109,12 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
       try {
         setIsLoading(true)
         setError(null)
-        const response = await fetch(`/api/v1/dashboards/${id}`)
+        const response = await fetch(`/api/v1/dashboards/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
 
         if (!response.ok) {
           if (response.status === 404) {
@@ -170,6 +175,7 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
 
       const response = await fetch(`/api/v1/dashboards/${id}`, {
         method: "PATCH",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),
@@ -206,6 +212,10 @@ export default function EditDashboardPage({ params }: EditDashboardPageProps) {
 
       const response = await fetch(`/api/v1/dashboards/${id}`, {
         method: "DELETE",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
 
       if (!response.ok) {

@@ -170,7 +170,12 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch(`/api/v1/charts/${id}`)
+        const response = await fetch(`/api/v1/charts/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
 
         if (!response.ok) {
           if (response.status === 404) {
@@ -258,6 +263,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
     try {
       const response = await fetch(`/api/v1/charts/${id}`, {
         method: "PATCH",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),

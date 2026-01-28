@@ -62,6 +62,7 @@ export default function NewClientPage() {
     try {
       const res = await fetch("/api/gwi/services/clients", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,

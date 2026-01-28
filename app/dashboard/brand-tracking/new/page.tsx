@@ -48,6 +48,7 @@ export default function NewBrandTrackingPage() {
     try {
       const response = await fetch('/api/v1/brand-tracking', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           brandName,

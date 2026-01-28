@@ -56,7 +56,12 @@ export default function DataExportsPage() {
     }
 
     try {
-      const response = await fetch('/api/v1/data-export/status')
+      const response = await fetch('/api/v1/data-export/status', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         const data = await response.json()
         setExports(data.exports)

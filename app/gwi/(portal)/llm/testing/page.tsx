@@ -36,6 +36,7 @@ export default function LLMTestingPage() {
     try {
       const res = await fetch("/api/gwi/llm/test", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt,

@@ -77,7 +77,12 @@ export default function InsightsPage() {
         if (typeFilter && typeFilter !== "all") {
           params.set("type", typeFilter)
         }
-        const response = await fetch(`/api/v1/insights?${params}`)
+        const response = await fetch(`/api/v1/insights?${params}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           setInsights(data.insights || [])

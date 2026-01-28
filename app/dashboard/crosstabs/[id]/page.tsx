@@ -632,7 +632,12 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
   useEffect(() => {
     async function fetchCrosstab() {
       try {
-        const response = await fetch(`/api/v1/crosstabs/${id}`)
+        const response = await fetch(`/api/v1/crosstabs/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           const apiCrosstab = data.data || data
@@ -1015,7 +1020,13 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
   const handleDelete = async () => {
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/v1/crosstabs/${id}`, { method: "DELETE" })
+      const response = await fetch(`/api/v1/crosstabs/${id}`, {
+        method: "DELETE",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         router.push("/dashboard/crosstabs")
       }
@@ -1037,6 +1048,7 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
     try {
       const response = await fetch("/api/v1/crosstabs", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: `${crosstab.name} (Copy)`, audiences: crosstab.audiences, metrics: crosstab.metrics }),
       })

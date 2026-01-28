@@ -11,16 +11,22 @@ import { Save, Settings, Bell, Shield, Database, Zap } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 
 async function getSettings() {
-  const settings = await prisma.gWIPortalSettings.findMany({
-    orderBy: { category: "asc" },
-  })
+  try {
+    const settings = await prisma.gWIPortalSettings.findMany({
+      orderBy: { category: "asc" },
+    })
 
-  return settings
+    return settings
+  } catch (error) {
+    console.error("Error fetching settings:", error)
+    throw error
+  }
 }
 
 async function SettingsContent() {
-  const settings = await getSettings()
-  const t = await getTranslations('gwi.settings')
+  try {
+    const settings = await getSettings()
+    const t = await getTranslations('gwi.settings')
 
   // Settings grouped by category (used for dynamic settings rendering)
   void settings.reduce((acc, setting) => {
@@ -283,6 +289,18 @@ async function SettingsContent() {
       </Tabs>
     </div>
   )
+  } catch (error) {
+    console.error("Error in SettingsContent:", error)
+    const t = await getTranslations('gwi.settings')
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+          <p className="text-muted-foreground">{t('loading')}</p>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default async function SettingsPage() {

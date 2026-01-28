@@ -38,6 +38,7 @@ export default function NewCrosstabPage() {
     try {
       const response = await fetch("/api/v1/crosstabs", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name.trim(), audiences: selectedAudiences, metrics: selectedMetrics }),
       })

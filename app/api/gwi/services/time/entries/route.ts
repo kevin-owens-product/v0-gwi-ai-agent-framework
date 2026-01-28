@@ -66,7 +66,15 @@ export async function GET(request: NextRequest) {
       orderBy: { date: "desc" },
     })
 
-    return NextResponse.json(entries)
+    // Transform entries to ensure Decimal fields are strings
+    const transformedEntries = entries.map((entry) => ({
+      ...entry,
+      hours: entry.hours.toString(),
+      hourlyRate: entry.hourlyRate ? entry.hourlyRate.toString() : null,
+      date: entry.date.toISOString().split("T")[0], // Format date as YYYY-MM-DD
+    }))
+
+    return NextResponse.json(transformedEntries)
   } catch (error) {
     console.error("Failed to fetch time entries:", error)
     return NextResponse.json(

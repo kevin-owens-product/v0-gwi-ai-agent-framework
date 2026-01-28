@@ -63,7 +63,12 @@ export default function ApiKeysSettingsPage() {
 
   const fetchApiKeys = async () => {
     try {
-      const response = await fetch('/api/v1/api-keys')
+      const response = await fetch('/api/v1/api-keys', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         const data = await response.json()
         setApiKeys(data.apiKeys || [])
@@ -87,6 +92,7 @@ export default function ApiKeysSettingsPage() {
     try {
       const response = await fetch('/api/v1/api-keys', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newKeyName }),
       })
@@ -114,6 +120,10 @@ export default function ApiKeysSettingsPage() {
     try {
       const response = await fetch(`/api/v1/api-keys?id=${deleteKey.id}`, {
         method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
 
       if (!response.ok) {

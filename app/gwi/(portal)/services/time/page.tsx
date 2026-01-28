@@ -105,16 +105,31 @@ export default function TimeTrackingPage() {
 
   const fetchEntries = async () => {
     try {
+      setLoading(true)
       const params = new URLSearchParams()
       if (statusFilter !== "all") params.set("status", statusFilter)
 
-      const res = await fetch(`/api/gwi/services/time/entries?${params}`)
-      if (!res.ok) throw new Error("Failed to fetch time entries")
+      const res = await fetch(`/api/gwi/services/time/entries?${params}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(errorData.error || "Failed to fetch time entries")
+      }
       const data = await res.json()
-      setEntries(data)
+      // Ensure hours is a string
+      const normalizedData = Array.isArray(data) ? data.map((entry: TimeEntry) => ({
+        ...entry,
+        hours: typeof entry.hours === 'string' ? entry.hours : String(entry.hours || '0'),
+      })) : []
+      setEntries(normalizedData)
     } catch (error) {
       console.error("Failed to fetch time entries:", error)
       toast.error("Failed to load time entries")
+      setEntries([]) // Set empty array on error
     } finally {
       setLoading(false)
     }

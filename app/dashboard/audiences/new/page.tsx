@@ -35,6 +35,7 @@ export default function NewAudiencePage() {
     try {
       const response = await fetch("/api/v1/audiences", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),

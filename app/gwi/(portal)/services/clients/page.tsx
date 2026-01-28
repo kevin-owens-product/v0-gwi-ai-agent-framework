@@ -39,6 +39,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
+import { useDebounce } from "@/hooks/use-debounce"
 
 interface Client {
   id: string
@@ -76,28 +77,41 @@ export default function ClientsPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const t = useTranslations('gwi.services.clients')
   const tCommon = useTranslations('common')
+  
+  // Debounce search to avoid too many API calls
+  const debouncedSearch = useDebounce(search, 500)
 
   useEffect(() => {
-    fetchClients()
-  }, [statusFilter, search])
+    const fetchClients = async () => {
+      try {
+        setLoading(true)
+        const params = new URLSearchParams()
+        if (statusFilter !== "all") params.set("status", statusFilter)
+        if (debouncedSearch) params.set("search", debouncedSearch)
 
-  const fetchClients = async () => {
-    try {
-      const params = new URLSearchParams()
-      if (statusFilter !== "all") params.set("status", statusFilter)
-      if (search) params.set("search", search)
-
-      const res = await fetch(`/api/gwi/services/clients?${params}`)
-      if (!res.ok) throw new Error("Failed to fetch clients")
-      const data = await res.json()
-      setClients(data)
-    } catch (error) {
-      console.error("Failed to fetch clients:", error)
-      toast.error(t('loadError'))
-    } finally {
-      setLoading(false)
+        const res = await fetch(`/api/gwi/services/clients?${params}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || "Failed to fetch clients")
+        }
+        const data = await res.json()
+        setClients(Array.isArray(data) ? data : [])
+      } catch (error) {
+        console.error("Failed to fetch clients:", error)
+        toast.error(t('loadError'))
+        setClients([]) // Set empty array on error
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    
+    fetchClients()
+  }, [statusFilter, debouncedSearch, t])
 
   const stats = {
     total: clients.length,

@@ -147,7 +147,12 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
       setError(null)
 
       try {
-        const response = await fetch(`/api/v1/audiences/${id}`)
+        const response = await fetch(`/api/v1/audiences/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
 
         if (response.status === 404) {
           setNotFound(true)
@@ -213,6 +218,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
     try {
       const response = await fetch(`/api/v1/audiences/${id}`, {
         method: "PATCH",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),

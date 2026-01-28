@@ -39,6 +39,7 @@ import {
   Loader2,
 } from "lucide-react"
 import { toast } from "sonner"
+import { useDebounce } from "@/hooks/use-debounce"
 
 interface Employee {
   id: string
@@ -85,28 +86,41 @@ export default function TeamPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
+  
+  // Debounce search to avoid too many API calls
+  const debouncedSearch = useDebounce(search, 500)
 
   useEffect(() => {
-    fetchEmployees()
-  }, [statusFilter, search])
+    const fetchEmployees = async () => {
+      try {
+        setLoading(true)
+        const params = new URLSearchParams()
+        if (statusFilter !== "all") params.set("status", statusFilter)
+        if (debouncedSearch) params.set("search", debouncedSearch)
 
-  const fetchEmployees = async () => {
-    try {
-      const params = new URLSearchParams()
-      if (statusFilter !== "all") params.set("status", statusFilter)
-      if (search) params.set("search", search)
-
-      const res = await fetch(`/api/gwi/services/team/employees?${params}`)
-      if (!res.ok) throw new Error("Failed to fetch employees")
-      const data = await res.json()
-      setEmployees(data)
-    } catch (error) {
-      console.error("Failed to fetch employees:", error)
-      toast.error(t("failedToLoad"))
-    } finally {
-      setLoading(false)
+        const res = await fetch(`/api/gwi/services/team/employees?${params}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || "Failed to fetch employees")
+        }
+        const data = await res.json()
+        setEmployees(Array.isArray(data) ? data : [])
+      } catch (error) {
+        console.error("Failed to fetch employees:", error)
+        toast.error(t("failedToLoad"))
+        setEmployees([]) // Set empty array on error
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    
+    fetchEmployees()
+  }, [statusFilter, debouncedSearch, t])
 
   const stats = {
     total: employees.length,

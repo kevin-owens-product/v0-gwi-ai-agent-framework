@@ -529,7 +529,12 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
     async function fetchAudience() {
       setIsLoading(true)
       try {
-        const response = await fetch(`/api/v1/audiences/${id}`)
+        const response = await fetch(`/api/v1/audiences/${id}`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         if (response.ok) {
           const data = await response.json()
           const apiAudience = data.data || data
@@ -734,7 +739,13 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
   const handleDelete = async () => {
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/v1/audiences/${id}`, { method: "DELETE" })
+      const response = await fetch(`/api/v1/audiences/${id}`, {
+        method: "DELETE",
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.ok) {
         router.push("/dashboard/audiences")
       }
@@ -756,6 +767,7 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
     try {
       const response = await fetch("/api/v1/audiences", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: `${audience.name} (Copy)`,

@@ -6495,8 +6495,7 @@
       "viewMetricsDesc": "Monitor system performance",
       "recentActions": "Recent Actions",
       "recentActionsDesc": "Your recently performed actions",
-      "recentActionsTracking": "Recent actions tracking coming soon...",
-      " ": "[TODO: Translate gwi.quickActions. ]"
+      "recentActionsTracking": "Recent actions tracking coming soon..."
     },
     "surveys": {
       "title": "Surveys",
@@ -6595,7 +6594,7 @@
           "multiSelect": "Multi Select",
           "openText": "Open Text"
         },
-        "type": "[TODO: Translate gwi.surveys.questions.type]"
+        "type": "Question Type"
       },
       "responses": {
         "title": "Survey Responses",
@@ -6635,7 +6634,7 @@
           "backToSurvey": "Back to Survey",
           "metadata": "Metadata"
         },
-        "status": "[TODO: Translate gwi.surveys.responses.status]"
+        "status": "Response Status"
       },
       "createdBy": "Created By",
       "createdAt": "Created At",
@@ -7294,27 +7293,26 @@
       "loading": "Loading pipelines...",
       "newPipeline": "New Pipeline",
       "schedules": {
-        " ": "[TODO: Translate gwi.pipelines.schedules. ]",
-        "title": "[TODO: Translate gwi.pipelines.schedules.title]",
-        "description": "[TODO: Translate gwi.pipelines.schedules.description]",
-        "newSchedule": "[TODO: Translate gwi.pipelines.schedules.newSchedule]",
-        "totalSchedules": "[TODO: Translate gwi.pipelines.schedules.totalSchedules]",
-        "activeSchedules": "[TODO: Translate gwi.pipelines.schedules.activeSchedules]",
-        "pausedSchedules": "[TODO: Translate gwi.pipelines.schedules.pausedSchedules]",
-        "scheduledPipelines": "[TODO: Translate gwi.pipelines.schedules.scheduledPipelines]",
-        "scheduledPipelinesDescription": "[TODO: Translate gwi.pipelines.schedules.scheduledPipelinesDescription]",
-        "pipeline": "[TODO: Translate gwi.pipelines.schedules.pipeline]",
-        "schedule": "[TODO: Translate gwi.pipelines.schedules.schedule]",
-        "lastRun": "[TODO: Translate gwi.pipelines.schedules.lastRun]",
-        "nextRun": "[TODO: Translate gwi.pipelines.schedules.nextRun]",
-        "never": "[TODO: Translate gwi.pipelines.schedules.never]",
-        "calculatedAtRuntime": "[TODO: Translate gwi.pipelines.schedules.calculatedAtRuntime]",
-        "runNow": "[TODO: Translate gwi.pipelines.schedules.runNow]",
-        "editSchedule": "[TODO: Translate gwi.pipelines.schedules.editSchedule]",
-        "noScheduledPipelines": "[TODO: Translate gwi.pipelines.schedules.noScheduledPipelines]",
-        "noScheduledPipelinesDescription": "[TODO: Translate gwi.pipelines.schedules.noScheduledPipelinesDescription]",
-        "createScheduledPipeline": "[TODO: Translate gwi.pipelines.schedules.createScheduledPipeline]",
-        "loading": "[TODO: Translate gwi.pipelines.schedules.loading]"
+        "title": "Pipeline Schedules",
+        "description": "Manage scheduled pipeline executions",
+        "newSchedule": "New Schedule",
+        "totalSchedules": "Total Schedules",
+        "activeSchedules": "Active Schedules",
+        "pausedSchedules": "Paused Schedules",
+        "scheduledPipelines": "Scheduled Pipelines",
+        "scheduledPipelinesDescription": "Pipelines configured to run on a schedule",
+        "pipeline": "Pipeline",
+        "schedule": "Schedule",
+        "lastRun": "Last Run",
+        "nextRun": "Next Run",
+        "never": "Never",
+        "calculatedAtRuntime": "Calculated at runtime",
+        "runNow": "Run Now",
+        "editSchedule": "Edit Schedule",
+        "noScheduledPipelines": "No scheduled pipelines",
+        "noScheduledPipelinesDescription": "Create schedules to automate pipeline execution",
+        "createScheduledPipeline": "Create Scheduled Pipeline",
+        "loading": "Loading schedules..."
       },
       "validationPage": {
         "title": "Validation Rules",
@@ -7679,7 +7677,7 @@
         "errorLogDescription": "Errors encountered during pipeline execution",
         "runInformation": "Run Information",
         "type": "Type",
-        "noRecordsProcessed": "[TODO: Translate gwi.pipelines.runDetail.noRecordsProcessed]"
+        "noRecordsProcessed": "No records processed"
       }
     },
     "llm": {
@@ -8340,8 +8338,7 @@
           "capabilityDeleted": "Capability deleted successfully",
           "capabilityEnabled": "Capability enabled",
           "capabilityDisabled": "Capability disabled"
-        },
-        " ": "[TODO: Translate gwi.agents.capabilities. ]"
+        }
       },
       "templatesTitle": "Agent Templates",
       "templatesDesc": "Reusable agent configurations with pre-defined tools and prompts",
@@ -8620,8 +8617,7 @@
         "noQualityIssues": "No quality issues detected",
         "qualityByDataSource": "Quality by Data Source",
         "qualityScoresPerSource": "Quality scores for each connected source",
-        "noDataSourcesConnected": "No data sources connected",
-        " ": "[TODO: Translate gwi.dataSources.quality. ]"
+        "noDataSourcesConnected": "No data sources connected"
       },
       "detail": {
         "syncNow": "Sync Now",
@@ -8645,7 +8641,7 @@
         "host": "Host",
         "schema": "Schema"
       },
-      "active": "[TODO: Translate gwi.dataSources.active]"
+      "active": "Active"
     },
     "monitoring": {
       "errorLogs": {
@@ -8677,7 +8673,7 @@
           "agent": "Agent",
           "dataSource": "Data Source"
         },
-        "type": "[TODO: Translate gwi.monitoring.errorLogs.type]"
+        "type": "Error Type"
       },
       "alerts": {
         "title": "Alerts Management",
@@ -8728,9 +8724,7 @@
           "costThresholdDesc": "Alert when LLM costs exceed budget",
           "errorRateSpike": "Error Rate Spike",
           "errorRateSpikeDesc": "Alert on unusual error rate increase"
-        },
-        " ": "[TODO: Translate gwi.monitoring.alerts. ]",
-        "@": "[TODO: Translate gwi.monitoring.alerts.@]"
+        }
       },
       "pipelineHealth": {
         "title": "Pipeline Health",
@@ -8831,9 +8825,7 @@
         "update": "Update",
         "delete": "Delete",
         "view": "View"
-      },
-      "_": "[TODO: Translate gwi.activity._]",
-      " ": "[TODO: Translate gwi.activity. ]"
+      }
     },
     "settings": {
       "title": "Settings",
@@ -9246,7 +9238,7 @@
           "billed": "Billed",
           "paid": "Paid"
         },
-        "T": "[TODO: Translate gwi.services.time.T]"
+        "T": "Time"
       },
       "invoicing": {
         "title": "Invoicing",
@@ -9384,7 +9376,7 @@
           "on_leave": "On Leave",
           "contractor": "Contractor",
           "terminated": "Terminated",
-          "onLeave": "[TODO: Translate gwi.services.team.statuses.onLeave]"
+          "onLeave": "On Leave"
         }
       }
     },
@@ -9522,179 +9514,176 @@
         "title": "GWI Portal",
         "subtitle": "Team Tools"
       },
-      " ": "[TODO: Translate gwi.navigation. ]",
       "navigation": {
-        "mobileMenu": "[TODO: Translate gwi.navigation.navigation.mobileMenu]"
+        "mobileMenu": "Navigation Menu"
       }
     },
-    "/": "[TODO: Translate gwi./]",
-    " ": "[TODO: Translate gwi. ]",
     "editors": {
       "llmConfiguration": {
         "validation": {
-          "nameRequired": "[TODO: Translate gwi.editors.llmConfiguration.validation.nameRequired]",
-          "providerRequired": "[TODO: Translate gwi.editors.llmConfiguration.validation.providerRequired]",
-          "modelRequired": "[TODO: Translate gwi.editors.llmConfiguration.validation.modelRequired]",
-          "apiKeyRefRequired": "[TODO: Translate gwi.editors.llmConfiguration.validation.apiKeyRefRequired]",
-          "invalidParamsJson": "[TODO: Translate gwi.editors.llmConfiguration.validation.invalidParamsJson]",
-          "invalidRateLimitsJson": "[TODO: Translate gwi.editors.llmConfiguration.validation.invalidRateLimitsJson]"
+          "nameRequired": "Configuration name is required",
+          "providerRequired": "Provider is required",
+          "modelRequired": "Model is required",
+          "apiKeyRefRequired": "API key reference is required",
+          "invalidParamsJson": "Invalid JSON for default parameters",
+          "invalidRateLimitsJson": "Invalid JSON for rate limits"
         },
         "errors": {
-          "failedToSave": "[TODO: Translate gwi.editors.llmConfiguration.errors.failedToSave]",
-          "failedToDelete": "[TODO: Translate gwi.editors.llmConfiguration.errors.failedToDelete]"
+          "failedToSave": "Failed to save LLM configuration",
+          "failedToDelete": "Failed to delete LLM configuration"
         },
-        "basicInformation": "[TODO: Translate gwi.editors.llmConfiguration.basicInformation]",
-        "basicInformationDescription": "[TODO: Translate gwi.editors.llmConfiguration.basicInformationDescription]",
-        "configurationName": "[TODO: Translate gwi.editors.llmConfiguration.configurationName]",
+        "basicInformation": "Basic Information",
+        "basicInformationDescription": "Configure the LLM provider and model settings",
+        "configurationName": "Configuration Name",
         "placeholders": {
-          "configurationName": "[TODO: Translate gwi.editors.llmConfiguration.placeholders.configurationName]",
-          "selectProvider": "[TODO: Translate gwi.editors.llmConfiguration.placeholders.selectProvider]",
-          "selectModel": "[TODO: Translate gwi.editors.llmConfiguration.placeholders.selectModel]",
-          "apiKeyRef": "[TODO: Translate gwi.editors.llmConfiguration.placeholders.apiKeyRef]"
+          "configurationName": "Enter configuration name",
+          "selectProvider": "Select provider",
+          "selectModel": "Select model",
+          "apiKeyRef": "Enter API key reference"
         },
-        "configurationNameHint": "[TODO: Translate gwi.editors.llmConfiguration.configurationNameHint]",
-        "provider": "[TODO: Translate gwi.editors.llmConfiguration.provider]",
-        "model": "[TODO: Translate gwi.editors.llmConfiguration.model]",
-        "apiKeyRef": "[TODO: Translate gwi.editors.llmConfiguration.apiKeyRef]",
-        "apiKeyRefHint": "[TODO: Translate gwi.editors.llmConfiguration.apiKeyRefHint]",
-        "activeStatus": "[TODO: Translate gwi.editors.llmConfiguration.activeStatus]",
-        "activeStatusDescription": "[TODO: Translate gwi.editors.llmConfiguration.activeStatusDescription]",
-        "modelParameters": "[TODO: Translate gwi.editors.llmConfiguration.modelParameters]",
-        "modelParametersDescription": "[TODO: Translate gwi.editors.llmConfiguration.modelParametersDescription]",
-        "defaultParamsJson": "[TODO: Translate gwi.editors.llmConfiguration.defaultParamsJson]",
-        "defaultParamsHint": "[TODO: Translate gwi.editors.llmConfiguration.defaultParamsHint]",
-        "rateLimits": "[TODO: Translate gwi.editors.llmConfiguration.rateLimits]",
-        "rateLimitsDescription": "[TODO: Translate gwi.editors.llmConfiguration.rateLimitsDescription]",
-        "rateLimitsJson": "[TODO: Translate gwi.editors.llmConfiguration.rateLimitsJson]",
-        "rateLimitsHint": "[TODO: Translate gwi.editors.llmConfiguration.rateLimitsHint]",
-        "configurationInformation": "[TODO: Translate gwi.editors.llmConfiguration.configurationInformation]",
-        "id": "[TODO: Translate gwi.editors.llmConfiguration.id]",
-        "createdAt": "[TODO: Translate gwi.editors.llmConfiguration.createdAt]",
-        "lastUpdated": "[TODO: Translate gwi.editors.llmConfiguration.lastUpdated]",
-        "deleteConfiguration": "[TODO: Translate gwi.editors.llmConfiguration.deleteConfiguration]",
-        "deleteDialogTitle": "[TODO: Translate gwi.editors.llmConfiguration.deleteDialogTitle]",
-        "deleteDialogDescription": "[TODO: Translate gwi.editors.llmConfiguration.deleteDialogDescription]",
-        "createConfiguration": "[TODO: Translate gwi.editors.llmConfiguration.createConfiguration]"
+        "configurationNameHint": "A descriptive name for this LLM configuration",
+        "provider": "Provider",
+        "model": "Model",
+        "apiKeyRef": "API Key Reference",
+        "apiKeyRefHint": "Reference to the stored API key",
+        "activeStatus": "Active Status",
+        "activeStatusDescription": "Enable or disable this configuration",
+        "modelParameters": "Model Parameters",
+        "modelParametersDescription": "Default parameters for model invocations",
+        "defaultParamsJson": "Default Parameters (JSON)",
+        "defaultParamsHint": "Enter default parameters as JSON",
+        "rateLimits": "Rate Limits",
+        "rateLimitsDescription": "Configure rate limiting for this configuration",
+        "rateLimitsJson": "Rate Limits (JSON)",
+        "rateLimitsHint": "Enter rate limits as JSON",
+        "configurationInformation": "Configuration Information",
+        "id": "ID",
+        "createdAt": "Created At",
+        "lastUpdated": "Last Updated",
+        "deleteConfiguration": "Delete Configuration",
+        "deleteDialogTitle": "Delete Configuration",
+        "deleteDialogDescription": "Are you sure you want to delete this configuration?",
+        "createConfiguration": "Create Configuration"
       },
       "agentTemplate": {
         "validation": {
-          "nameRequired": "[TODO: Translate gwi.editors.agentTemplate.validation.nameRequired]",
-          "categoryRequired": "[TODO: Translate gwi.editors.agentTemplate.validation.categoryRequired]",
-          "invalidJsonFormat": "[TODO: Translate gwi.editors.agentTemplate.validation.invalidJsonFormat]",
-          "mustBeJsonArray": "[TODO: Translate gwi.editors.agentTemplate.validation.mustBeJsonArray]"
+          "nameRequired": "Template name is required",
+          "categoryRequired": "Category is required",
+          "invalidJsonFormat": "Invalid JSON format",
+          "mustBeJsonArray": "Must be a JSON array"
         },
         "errors": {
-          "failedToSave": "[TODO: Translate gwi.editors.agentTemplate.errors.failedToSave]",
-          "failedToDelete": "[TODO: Translate gwi.editors.agentTemplate.errors.failedToDelete]"
+          "failedToSave": "Failed to save agent template",
+          "failedToDelete": "Failed to delete agent template"
         },
-        "templateSettings": "[TODO: Translate gwi.editors.agentTemplate.templateSettings]",
-        "templateSettingsDescription": "[TODO: Translate gwi.editors.agentTemplate.templateSettingsDescription]",
-        "templateName": "[TODO: Translate gwi.editors.agentTemplate.templateName]",
+        "templateSettings": "Template Settings",
+        "templateSettingsDescription": "Configure the agent template settings",
+        "templateName": "Template Name",
         "placeholders": {
-          "templateName": "[TODO: Translate gwi.editors.agentTemplate.placeholders.templateName]",
-          "description": "[TODO: Translate gwi.editors.agentTemplate.placeholders.description]",
-          "selectCategory": "[TODO: Translate gwi.editors.agentTemplate.placeholders.selectCategory]"
+          "templateName": "Enter template name",
+          "description": "Enter description (optional)",
+          "selectCategory": "Select category"
         },
-        "category": "[TODO: Translate gwi.editors.agentTemplate.category]",
-        "published": "[TODO: Translate gwi.editors.agentTemplate.published]",
-        "publishedDescription": "[TODO: Translate gwi.editors.agentTemplate.publishedDescription]",
-        "configuration": "[TODO: Translate gwi.editors.agentTemplate.configuration]",
-        "configurationDescription": "[TODO: Translate gwi.editors.agentTemplate.configurationDescription]",
-        "configurationJson": "[TODO: Translate gwi.editors.agentTemplate.configurationJson]",
-        "configurationExample": "[TODO: Translate gwi.editors.agentTemplate.configurationExample]",
-        "defaultTools": "[TODO: Translate gwi.editors.agentTemplate.defaultTools]",
-        "defaultToolsDescription": "[TODO: Translate gwi.editors.agentTemplate.defaultToolsDescription]",
-        "toolsJson": "[TODO: Translate gwi.editors.agentTemplate.toolsJson]",
-        "toolsExample": "[TODO: Translate gwi.editors.agentTemplate.toolsExample]",
-        "defaultPrompts": "[TODO: Translate gwi.editors.agentTemplate.defaultPrompts]",
-        "defaultPromptsDescription": "[TODO: Translate gwi.editors.agentTemplate.defaultPromptsDescription]",
-        "promptsJson": "[TODO: Translate gwi.editors.agentTemplate.promptsJson]",
-        "promptsExample": "[TODO: Translate gwi.editors.agentTemplate.promptsExample]",
-        "templateInformation": "[TODO: Translate gwi.editors.agentTemplate.templateInformation]",
-        "deleteTemplate": "[TODO: Translate gwi.editors.agentTemplate.deleteTemplate]",
-        "deleteDialogTitle": "[TODO: Translate gwi.editors.agentTemplate.deleteDialogTitle]",
-        "createTemplate": "[TODO: Translate gwi.editors.agentTemplate.createTemplate]"
+        "category": "Category",
+        "published": "Published",
+        "publishedDescription": "Make this template available for use",
+        "configuration": "Configuration",
+        "configurationDescription": "Agent configuration in JSON format",
+        "configurationJson": "Configuration (JSON)",
+        "configurationExample": "Example: {\"model\": \"gpt-4-turbo\", \"temperature\": 0.3}",
+        "defaultTools": "Default Tools",
+        "defaultToolsDescription": "Default tools available to this agent",
+        "toolsJson": "Tools (JSON Array)",
+        "toolsExample": "Example: [\"tool1\", \"tool2\"]",
+        "defaultPrompts": "Default Prompts",
+        "defaultPromptsDescription": "Default prompts for this agent",
+        "promptsJson": "Prompts (JSON Object)",
+        "promptsExample": "Example: {\"system\": \"You are a helpful assistant\"}",
+        "templateInformation": "Template Information",
+        "deleteTemplate": "Delete Template",
+        "deleteDialogTitle": "Delete Template",
+        "createTemplate": "Create Template"
       },
       "pipeline": {
         "validation": {
-          "nameRequired": "[TODO: Translate gwi.editors.pipeline.validation.nameRequired]",
-          "typeRequired": "[TODO: Translate gwi.editors.pipeline.validation.typeRequired]",
-          "invalidJsonConfig": "[TODO: Translate gwi.editors.pipeline.validation.invalidJsonConfig]",
-          "invalidCron": "[TODO: Translate gwi.editors.pipeline.validation.invalidCron]"
+          "nameRequired": "Pipeline name is required",
+          "typeRequired": "Pipeline type is required",
+          "invalidJsonConfig": "Invalid JSON configuration",
+          "invalidCron": "Invalid cron expression"
         },
         "errors": {
-          "failedToSave": "[TODO: Translate gwi.editors.pipeline.errors.failedToSave]",
-          "unexpectedError": "[TODO: Translate gwi.editors.pipeline.errors.unexpectedError]",
-          "failedToDelete": "[TODO: Translate gwi.editors.pipeline.errors.failedToDelete]"
+          "failedToSave": "Failed to save pipeline",
+          "unexpectedError": "An unexpected error occurred",
+          "failedToDelete": "Failed to delete pipeline"
         },
-        "pipelineSettings": "[TODO: Translate gwi.editors.pipeline.pipelineSettings]",
-        "pipelineSettingsDescription": "[TODO: Translate gwi.editors.pipeline.pipelineSettingsDescription]",
-        "pipelineName": "[TODO: Translate gwi.editors.pipeline.pipelineName]",
+        "pipelineSettings": "Pipeline Settings",
+        "pipelineSettingsDescription": "Configure the basic settings for this pipeline",
+        "pipelineName": "Pipeline Name",
         "placeholders": {
-          "pipelineName": "[TODO: Translate gwi.editors.pipeline.placeholders.pipelineName]",
-          "description": "[TODO: Translate gwi.editors.pipeline.placeholders.description]",
-          "selectType": "[TODO: Translate gwi.editors.pipeline.placeholders.selectType]",
-          "selectSchedule": "[TODO: Translate gwi.editors.pipeline.placeholders.selectSchedule]",
-          "customCron": "[TODO: Translate gwi.editors.pipeline.placeholders.customCron]"
+          "pipelineName": "Enter pipeline name",
+          "description": "Enter pipeline description (optional)",
+          "selectType": "Select pipeline type",
+          "selectSchedule": "Select schedule preset",
+          "customCron": "e.g., 0 0 * * *"
         },
-        "pipelineType": "[TODO: Translate gwi.editors.pipeline.pipelineType]",
-        "activeDescription": "[TODO: Translate gwi.editors.pipeline.activeDescription]",
-        "schedule": "[TODO: Translate gwi.editors.pipeline.schedule]",
-        "scheduleDescription": "[TODO: Translate gwi.editors.pipeline.scheduleDescription]",
-        "schedulePreset": "[TODO: Translate gwi.editors.pipeline.schedulePreset]",
-        "customCronExpression": "[TODO: Translate gwi.editors.pipeline.customCronExpression]",
-        "cronFormat": "[TODO: Translate gwi.editors.pipeline.cronFormat]",
-        "currentSchedule": "[TODO: Translate gwi.editors.pipeline.currentSchedule]",
-        "configuration": "[TODO: Translate gwi.editors.pipeline.configuration]",
-        "configurationDescription": "[TODO: Translate gwi.editors.pipeline.configurationDescription]",
-        "configurationJson": "[TODO: Translate gwi.editors.pipeline.configurationJson]",
-        "configurationHint": "[TODO: Translate gwi.editors.pipeline.configurationHint]",
-        "deletePipeline": "[TODO: Translate gwi.editors.pipeline.deletePipeline]",
-        "deleteDialogTitle": "[TODO: Translate gwi.editors.pipeline.deleteDialogTitle]",
-        "createPipeline": "[TODO: Translate gwi.editors.pipeline.createPipeline]"
+        "pipelineType": "Pipeline Type",
+        "activeDescription": "Enable or disable this pipeline",
+        "schedule": "Schedule",
+        "scheduleDescription": "Configure when this pipeline should run",
+        "schedulePreset": "Schedule Preset",
+        "customCronExpression": "Custom Cron Expression",
+        "cronFormat": "Format: minute hour day month weekday (e.g., 0 0 * * * for daily at midnight)",
+        "currentSchedule": "Current Schedule",
+        "configuration": "Configuration",
+        "configurationDescription": "Pipeline configuration in JSON format",
+        "configurationJson": "Configuration (JSON)",
+        "configurationHint": "Enter pipeline configuration as JSON",
+        "deletePipeline": "Delete Pipeline",
+        "deleteDialogTitle": "Delete Pipeline",
+        "createPipeline": "Create Pipeline"
       },
       "dataSource": {
         "errors": {
-          "failedToSave": "[TODO: Translate gwi.editors.dataSource.errors.failedToSave]",
-          "unexpectedError": "[TODO: Translate gwi.editors.dataSource.errors.unexpectedError]",
-          "failedToDelete": "[TODO: Translate gwi.editors.dataSource.errors.failedToDelete]"
+          "failedToSave": "Failed to save data source",
+          "unexpectedError": "An unexpected error occurred",
+          "failedToDelete": "Failed to delete data source"
         },
-        "basicInformation": "[TODO: Translate gwi.editors.dataSource.basicInformation]",
-        "basicInformationDescription": "[TODO: Translate gwi.editors.dataSource.basicInformationDescription]",
+        "basicInformation": "Basic Information",
+        "basicInformationDescription": "Configure the data source connection",
         "placeholders": {
-          "name": "[TODO: Translate gwi.editors.dataSource.placeholders.name]",
-          "selectType": "[TODO: Translate gwi.editors.dataSource.placeholders.selectType]",
-          "description": "[TODO: Translate gwi.editors.dataSource.placeholders.description]",
-          "leaveBlankToKeep": "[TODO: Translate gwi.editors.dataSource.placeholders.leaveBlankToKeep]",
-          "connectionString": "[TODO: Translate gwi.editors.dataSource.placeholders.connectionString]",
-          "host": "[TODO: Translate gwi.editors.dataSource.placeholders.host]",
-          "database": "[TODO: Translate gwi.editors.dataSource.placeholders.database]",
-          "apiKey": "[TODO: Translate gwi.editors.dataSource.placeholders.apiKey]",
-          "username": "[TODO: Translate gwi.editors.dataSource.placeholders.username]",
-          "password": "[TODO: Translate gwi.editors.dataSource.placeholders.password]"
+          "name": "Enter data source name",
+          "selectType": "Select data source type",
+          "description": "Enter description (optional)",
+          "leaveBlankToKeep": "Leave blank to keep existing",
+          "connectionString": "Enter connection string",
+          "host": "Enter host",
+          "database": "Enter database name",
+          "apiKey": "Enter API key",
+          "username": "Enter username",
+          "password": "Enter password"
         },
-        "typeCannotBeChanged": "[TODO: Translate gwi.editors.dataSource.typeCannotBeChanged]",
-        "activeDescription": "[TODO: Translate gwi.editors.dataSource.activeDescription]",
-        "connectionSettings": "[TODO: Translate gwi.editors.dataSource.connectionSettings]",
-        "connectionStringOptional": "[TODO: Translate gwi.editors.dataSource.connectionStringOptional]",
-        "connectionStringHint": "[TODO: Translate gwi.editors.dataSource.connectionStringHint]",
-        "host": "[TODO: Translate gwi.editors.dataSource.host]",
-        "port": "[TODO: Translate gwi.editors.dataSource.port]",
-        "database": "[TODO: Translate gwi.editors.dataSource.database]",
-        "schemaOptional": "[TODO: Translate gwi.editors.dataSource.schemaOptional]",
-        "baseUrl": "[TODO: Translate gwi.editors.dataSource.baseUrl]",
-        "bucketName": "[TODO: Translate gwi.editors.dataSource.bucketName]",
-        "region": "[TODO: Translate gwi.editors.dataSource.region]",
-        "authentication": "[TODO: Translate gwi.editors.dataSource.authentication]",
-        "authenticationDescriptionEdit": "[TODO: Translate gwi.editors.dataSource.authenticationDescriptionEdit]",
-        "authenticationDescriptionCreate": "[TODO: Translate gwi.editors.dataSource.authenticationDescriptionCreate]",
-        "apiKey": "[TODO: Translate gwi.editors.dataSource.apiKey]",
-        "username": "[TODO: Translate gwi.editors.dataSource.username]",
-        "password": "[TODO: Translate gwi.editors.dataSource.password]",
-        "credentialsConfigured": "[TODO: Translate gwi.editors.dataSource.credentialsConfigured]",
-        "deleteDataSource": "[TODO: Translate gwi.editors.dataSource.deleteDataSource]",
-        "deleteDialogTitle": "[TODO: Translate gwi.editors.dataSource.deleteDialogTitle]",
-        "createDataSource": "[TODO: Translate gwi.editors.dataSource.createDataSource]"
+        "typeCannotBeChanged": "Type cannot be changed after creation",
+        "activeDescription": "Enable or disable this data source",
+        "connectionSettings": "Connection Settings",
+        "connectionStringOptional": "Connection String (Optional)",
+        "connectionStringHint": "Full connection string or leave blank to use individual fields",
+        "host": "Host",
+        "port": "Port",
+        "database": "Database",
+        "schemaOptional": "Schema (Optional)",
+        "baseUrl": "Base URL",
+        "bucketName": "Bucket Name",
+        "region": "Region",
+        "authentication": "Authentication",
+        "authenticationDescriptionEdit": "Update authentication credentials",
+        "authenticationDescriptionCreate": "Configure authentication for this data source",
+        "apiKey": "API Key",
+        "username": "Username",
+        "password": "Password",
+        "credentialsConfigured": "Credentials configured",
+        "deleteDataSource": "Delete Data Source",
+        "deleteDialogTitle": "Delete Data Source",
+        "createDataSource": "Create Data Source"
       }
     }
   },
