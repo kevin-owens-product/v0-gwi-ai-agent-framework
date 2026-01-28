@@ -42,6 +42,8 @@
     "i18n:scan": "node scripts/scan-hardcoded-strings.js",
     "i18n:scan:fix": "node scripts/scan-hardcoded-strings.js --fix",
     "i18n:scan:strict": "node scripts/scan-hardcoded-strings.js --strict",
+    "i18n:scan:gwi": "node scripts/scan-gwi-translations.js",
+    "i18n:add:missing": "node scripts/add-missing-translations.js",
     "i18n:audit": "npm run i18n:validate && npm run i18n:scan",
     "i18n:audit:strict": "npm run i18n:validate --strict && npm run i18n:scan --strict",
     "ci": "npm run type-check && npm run lint && npm run i18n:validate && npm run test:coverage && npm run build",

@@ -107,7 +107,14 @@
     "unknown": "[AR] Unknown",
     "important": "[AR] Important",
     "preview": "[AR] Preview",
-    "duration": "[AR] Duration"
+    "duration": "[AR] Duration",
+    "action": "[AR] [TODO: Translate common.action]",
+    "update": "[AR] [TODO: Translate common.update]",
+    "clear": "[AR] [TODO: Translate common.clear]",
+    "questionText": "[AR] [TODO: Translate common.questionText]",
+    "enterQuestionText": "[AR] [TODO: Translate common.enterQuestionText]",
+    "view": "[AR] [TODO: Translate common.view]",
+    "deleting": "[AR] [TODO: Translate common.deleting]"
   },
   "auth": {
     "signIn": "تسجيل الدخول",
@@ -5325,7 +5332,8 @@
       "viewMetricsDesc": "مراقبة أداء النظام",
       "recentActions": "الإجراءات الأخيرة",
       "recentActionsDesc": "إجراءاتك التي تم تنفيذها مؤخراً",
-      "recentActionsTracking": "تتبع الإجراءات الأخيرة قريباً..."
+      "recentActionsTracking": "تتبع الإجراءات الأخيرة قريباً...",
+      " ": "[AR] [TODO: Translate gwi.quickActions. ]"
     },
     "navigation": {
       "surveys": "الاستطلاعات",
@@ -5403,7 +5411,11 @@
         "title": "بوابة GWI",
         "subtitle": "أدوات الفريق"
       },
-      "mobileMenu": "قائمة التنقل"
+      "mobileMenu": "قائمة التنقل",
+      " ": "[AR] [TODO: Translate gwi.navigation. ]",
+      "navigation": {
+        "mobileMenu": "[AR] [TODO: Translate gwi.navigation.navigation.mobileMenu]"
+      }
     },
     "common": {
       "viewDetails": "عرض التفاصيل",
@@ -5793,7 +5805,8 @@
         "startBuilding": "[AR] Start building your survey",
         "addFirstQuestion": "[AR] Add First Question",
         "deleteQuestion": "[AR] Delete Question",
-        "deleteConfirmation": "[AR] Are you sure you want to delete this question?"
+        "deleteConfirmation": "[AR] Are you sure you want to delete this question?",
+        "type": "[AR] [TODO: Translate gwi.surveys.questions.type]"
       },
       "responses": {
         "title": "ردود الاستطلاع",
@@ -5832,7 +5845,8 @@
           "requestedResponseNotFound": "لا يمكن العثور على الاستجابة المطلوبة.",
           "backToSurvey": "العودة إلى المسح",
           "metadata": "البيانات الوصفية"
-        }
+        },
+        "status": "[AR] [TODO: Translate gwi.surveys.responses.status]"
       },
       "responseDetail": {
         "title": "تفاصيل الرد",
@@ -6589,7 +6603,8 @@
         "errorLog": "سجل الأخطاء",
         "errorLogDescription": "تمت مواجهة الأخطاء أثناء تنفيذ خط الأنابيب",
         "runInformation": "تشغيل المعلومات",
-        "type": "يكتب"
+        "type": "يكتب",
+        "noRecordsProcessed": "[AR] [TODO: Translate gwi.pipelines.runDetail.noRecordsProcessed]"
       }
     },
     "llm": {
@@ -7431,7 +7446,8 @@
           "capabilityDeleted": "تم حذف الإمكانية بنجاح",
           "capabilityEnabled": "تم تمكين القدرة",
           "capabilityDisabled": "القدرة معطلة"
-        }
+        },
+        " ": "[AR] [TODO: Translate gwi.agents.capabilities. ]"
       }
     },
     "dataSources": {
@@ -7529,7 +7545,8 @@
         "noQualityIssues": "لم يتم اكتشاف أي مشكلات تتعلق بالجودة",
         "qualityByDataSource": "الجودة حسب مصدر البيانات",
         "qualityScoresPerSource": "نقاط الجودة لكل مصدر متصل",
-        "noDataSourcesConnected": "لا توجد مصادر بيانات متصلة"
+        "noDataSourcesConnected": "لا توجد مصادر بيانات متصلة",
+        " ": "[AR] [TODO: Translate gwi.dataSources.quality. ]"
       },
       "detail": {
         "syncNow": "مزامنة الآن",
@@ -7552,7 +7569,8 @@
         "database": "قاعدة البيانات",
         "host": "يستضيف",
         "schema": "مخطط"
-      }
+      },
+      "active": "[AR] [TODO: Translate gwi.dataSources.active]"
     },
     "monitoring": {
       "errorLogs": {
@@ -7583,7 +7601,8 @@
           "llm": "LLM",
           "agent": "الوكيل",
           "dataSource": "مصدر البيانات"
-        }
+        },
+        "type": "[AR] [TODO: Translate gwi.monitoring.errorLogs.type]"
       },
       "alerts": {
         "title": "إدارة التنبيهات",
@@ -7634,7 +7653,9 @@
           "costThresholdDesc": "تنبيه عند تجاوز تكاليف LLM للميزانية",
           "errorRateSpike": "ارتفاع معدل الأخطاء",
           "errorRateSpikeDesc": "تنبيه عند زيادة غير عادية في معدل الأخطاء"
-        }
+        },
+        " ": "[AR] [TODO: Translate gwi.monitoring.alerts. ]",
+        "@": "[AR] [TODO: Translate gwi.monitoring.alerts.@]"
       },
       "pipelineHealth": {
         "title": "صحة خطوط الأنابيب",
@@ -7735,7 +7756,9 @@
         "update": "تحديث",
         "delete": "حذف",
         "view": "عرض"
-      }
+      },
+      "_": "[AR] [TODO: Translate gwi.activity._]",
+      " ": "[AR] [TODO: Translate gwi.activity. ]"
     },
     "settings": {
       "title": "الإعدادات",
@@ -8147,7 +8170,8 @@
           "rejected": "مرفوض",
           "billed": "فاتورة",
           "paid": "مدفوع"
-        }
+        },
+        "T": "[AR] [TODO: Translate gwi.services.time.T]"
       },
       "invoicing": {
         "title": "الفواتير",
@@ -8284,7 +8308,8 @@
           "active": "نشيط",
           "on_leave": "في إجازة",
           "contractor": "مقاول",
-          "terminated": "تم إنهاؤه"
+          "terminated": "تم إنهاؤه",
+          "onLeave": "[AR] [TODO: Translate gwi.services.team.statuses.onLeave]"
         }
       }
     },
@@ -8344,6 +8369,176 @@
       "new": "جديد",
       "edit": "تعديل",
       "details": "التفاصيل"
+    },
+    "/": "[AR] [TODO: Translate gwi./]",
+    " ": "[AR] [TODO: Translate gwi. ]",
+    "editors": {
+      "llmConfiguration": {
+        "validation": {
+          "nameRequired": "[AR] [TODO: Translate gwi.editors.llmConfiguration.validation.nameRequired]",
+          "providerRequired": "[AR] [TODO: Translate gwi.editors.llmConfiguration.validation.providerRequired]",
+          "modelRequired": "[AR] [TODO: Translate gwi.editors.llmConfiguration.validation.modelRequired]",
+          "apiKeyRefRequired": "[AR] [TODO: Translate gwi.editors.llmConfiguration.validation.apiKeyRefRequired]",
+          "invalidParamsJson": "[AR] [TODO: Translate gwi.editors.llmConfiguration.validation.invalidParamsJson]",
+          "invalidRateLimitsJson": "[AR] [TODO: Translate gwi.editors.llmConfiguration.validation.invalidRateLimitsJson]"
+        },
+        "errors": {
+          "failedToSave": "[AR] [TODO: Translate gwi.editors.llmConfiguration.errors.failedToSave]",
+          "failedToDelete": "[AR] [TODO: Translate gwi.editors.llmConfiguration.errors.failedToDelete]"
+        },
+        "basicInformation": "[AR] [TODO: Translate gwi.editors.llmConfiguration.basicInformation]",
+        "basicInformationDescription": "[AR] [TODO: Translate gwi.editors.llmConfiguration.basicInformationDescription]",
+        "configurationName": "[AR] [TODO: Translate gwi.editors.llmConfiguration.configurationName]",
+        "placeholders": {
+          "configurationName": "[AR] [TODO: Translate gwi.editors.llmConfiguration.placeholders.configurationName]",
+          "selectProvider": "[AR] [TODO: Translate gwi.editors.llmConfiguration.placeholders.selectProvider]",
+          "selectModel": "[AR] [TODO: Translate gwi.editors.llmConfiguration.placeholders.selectModel]",
+          "apiKeyRef": "[AR] [TODO: Translate gwi.editors.llmConfiguration.placeholders.apiKeyRef]"
+        },
+        "configurationNameHint": "[AR] [TODO: Translate gwi.editors.llmConfiguration.configurationNameHint]",
+        "provider": "[AR] [TODO: Translate gwi.editors.llmConfiguration.provider]",
+        "model": "[AR] [TODO: Translate gwi.editors.llmConfiguration.model]",
+        "apiKeyRef": "[AR] [TODO: Translate gwi.editors.llmConfiguration.apiKeyRef]",
+        "apiKeyRefHint": "[AR] [TODO: Translate gwi.editors.llmConfiguration.apiKeyRefHint]",
+        "activeStatus": "[AR] [TODO: Translate gwi.editors.llmConfiguration.activeStatus]",
+        "activeStatusDescription": "[AR] [TODO: Translate gwi.editors.llmConfiguration.activeStatusDescription]",
+        "modelParameters": "[AR] [TODO: Translate gwi.editors.llmConfiguration.modelParameters]",
+        "modelParametersDescription": "[AR] [TODO: Translate gwi.editors.llmConfiguration.modelParametersDescription]",
+        "defaultParamsJson": "[AR] [TODO: Translate gwi.editors.llmConfiguration.defaultParamsJson]",
+        "defaultParamsHint": "[AR] [TODO: Translate gwi.editors.llmConfiguration.defaultParamsHint]",
+        "rateLimits": "[AR] [TODO: Translate gwi.editors.llmConfiguration.rateLimits]",
+        "rateLimitsDescription": "[AR] [TODO: Translate gwi.editors.llmConfiguration.rateLimitsDescription]",
+        "rateLimitsJson": "[AR] [TODO: Translate gwi.editors.llmConfiguration.rateLimitsJson]",
+        "rateLimitsHint": "[AR] [TODO: Translate gwi.editors.llmConfiguration.rateLimitsHint]",
+        "configurationInformation": "[AR] [TODO: Translate gwi.editors.llmConfiguration.configurationInformation]",
+        "id": "[AR] [TODO: Translate gwi.editors.llmConfiguration.id]",
+        "createdAt": "[AR] [TODO: Translate gwi.editors.llmConfiguration.createdAt]",
+        "lastUpdated": "[AR] [TODO: Translate gwi.editors.llmConfiguration.lastUpdated]",
+        "deleteConfiguration": "[AR] [TODO: Translate gwi.editors.llmConfiguration.deleteConfiguration]",
+        "deleteDialogTitle": "[AR] [TODO: Translate gwi.editors.llmConfiguration.deleteDialogTitle]",
+        "deleteDialogDescription": "[AR] [TODO: Translate gwi.editors.llmConfiguration.deleteDialogDescription]",
+        "createConfiguration": "[AR] [TODO: Translate gwi.editors.llmConfiguration.createConfiguration]"
+      },
+      "agentTemplate": {
+        "validation": {
+          "nameRequired": "[AR] [TODO: Translate gwi.editors.agentTemplate.validation.nameRequired]",
+          "categoryRequired": "[AR] [TODO: Translate gwi.editors.agentTemplate.validation.categoryRequired]",
+          "invalidJsonFormat": "[AR] [TODO: Translate gwi.editors.agentTemplate.validation.invalidJsonFormat]",
+          "mustBeJsonArray": "[AR] [TODO: Translate gwi.editors.agentTemplate.validation.mustBeJsonArray]"
+        },
+        "errors": {
+          "failedToSave": "[AR] [TODO: Translate gwi.editors.agentTemplate.errors.failedToSave]",
+          "failedToDelete": "[AR] [TODO: Translate gwi.editors.agentTemplate.errors.failedToDelete]"
+        },
+        "templateSettings": "[AR] [TODO: Translate gwi.editors.agentTemplate.templateSettings]",
+        "templateSettingsDescription": "[AR] [TODO: Translate gwi.editors.agentTemplate.templateSettingsDescription]",
+        "templateName": "[AR] [TODO: Translate gwi.editors.agentTemplate.templateName]",
+        "placeholders": {
+          "templateName": "[AR] [TODO: Translate gwi.editors.agentTemplate.placeholders.templateName]",
+          "description": "[AR] [TODO: Translate gwi.editors.agentTemplate.placeholders.description]",
+          "selectCategory": "[AR] [TODO: Translate gwi.editors.agentTemplate.placeholders.selectCategory]"
+        },
+        "category": "[AR] [TODO: Translate gwi.editors.agentTemplate.category]",
+        "published": "[AR] [TODO: Translate gwi.editors.agentTemplate.published]",
+        "publishedDescription": "[AR] [TODO: Translate gwi.editors.agentTemplate.publishedDescription]",
+        "configuration": "[AR] [TODO: Translate gwi.editors.agentTemplate.configuration]",
+        "configurationDescription": "[AR] [TODO: Translate gwi.editors.agentTemplate.configurationDescription]",
+        "configurationJson": "[AR] [TODO: Translate gwi.editors.agentTemplate.configurationJson]",
+        "configurationExample": "[AR] [TODO: Translate gwi.editors.agentTemplate.configurationExample]",
+        "defaultTools": "[AR] [TODO: Translate gwi.editors.agentTemplate.defaultTools]",
+        "defaultToolsDescription": "[AR] [TODO: Translate gwi.editors.agentTemplate.defaultToolsDescription]",
+        "toolsJson": "[AR] [TODO: Translate gwi.editors.agentTemplate.toolsJson]",
+        "toolsExample": "[AR] [TODO: Translate gwi.editors.agentTemplate.toolsExample]",
+        "defaultPrompts": "[AR] [TODO: Translate gwi.editors.agentTemplate.defaultPrompts]",
+        "defaultPromptsDescription": "[AR] [TODO: Translate gwi.editors.agentTemplate.defaultPromptsDescription]",
+        "promptsJson": "[AR] [TODO: Translate gwi.editors.agentTemplate.promptsJson]",
+        "promptsExample": "[AR] [TODO: Translate gwi.editors.agentTemplate.promptsExample]",
+        "templateInformation": "[AR] [TODO: Translate gwi.editors.agentTemplate.templateInformation]",
+        "deleteTemplate": "[AR] [TODO: Translate gwi.editors.agentTemplate.deleteTemplate]",
+        "deleteDialogTitle": "[AR] [TODO: Translate gwi.editors.agentTemplate.deleteDialogTitle]",
+        "createTemplate": "[AR] [TODO: Translate gwi.editors.agentTemplate.createTemplate]"
+      },
+      "pipeline": {
+        "validation": {
+          "nameRequired": "[AR] [TODO: Translate gwi.editors.pipeline.validation.nameRequired]",
+          "typeRequired": "[AR] [TODO: Translate gwi.editors.pipeline.validation.typeRequired]",
+          "invalidJsonConfig": "[AR] [TODO: Translate gwi.editors.pipeline.validation.invalidJsonConfig]",
+          "invalidCron": "[AR] [TODO: Translate gwi.editors.pipeline.validation.invalidCron]"
+        },
+        "errors": {
+          "failedToSave": "[AR] [TODO: Translate gwi.editors.pipeline.errors.failedToSave]",
+          "unexpectedError": "[AR] [TODO: Translate gwi.editors.pipeline.errors.unexpectedError]",
+          "failedToDelete": "[AR] [TODO: Translate gwi.editors.pipeline.errors.failedToDelete]"
+        },
+        "pipelineSettings": "[AR] [TODO: Translate gwi.editors.pipeline.pipelineSettings]",
+        "pipelineSettingsDescription": "[AR] [TODO: Translate gwi.editors.pipeline.pipelineSettingsDescription]",
+        "pipelineName": "[AR] [TODO: Translate gwi.editors.pipeline.pipelineName]",
+        "placeholders": {
+          "pipelineName": "[AR] [TODO: Translate gwi.editors.pipeline.placeholders.pipelineName]",
+          "description": "[AR] [TODO: Translate gwi.editors.pipeline.placeholders.description]",
+          "selectType": "[AR] [TODO: Translate gwi.editors.pipeline.placeholders.selectType]",
+          "selectSchedule": "[AR] [TODO: Translate gwi.editors.pipeline.placeholders.selectSchedule]",
+          "customCron": "[AR] [TODO: Translate gwi.editors.pipeline.placeholders.customCron]"
+        },
+        "pipelineType": "[AR] [TODO: Translate gwi.editors.pipeline.pipelineType]",
+        "activeDescription": "[AR] [TODO: Translate gwi.editors.pipeline.activeDescription]",
+        "schedule": "[AR] [TODO: Translate gwi.editors.pipeline.schedule]",
+        "scheduleDescription": "[AR] [TODO: Translate gwi.editors.pipeline.scheduleDescription]",
+        "schedulePreset": "[AR] [TODO: Translate gwi.editors.pipeline.schedulePreset]",
+        "customCronExpression": "[AR] [TODO: Translate gwi.editors.pipeline.customCronExpression]",
+        "cronFormat": "[AR] [TODO: Translate gwi.editors.pipeline.cronFormat]",
+        "currentSchedule": "[AR] [TODO: Translate gwi.editors.pipeline.currentSchedule]",
+        "configuration": "[AR] [TODO: Translate gwi.editors.pipeline.configuration]",
+        "configurationDescription": "[AR] [TODO: Translate gwi.editors.pipeline.configurationDescription]",
+        "configurationJson": "[AR] [TODO: Translate gwi.editors.pipeline.configurationJson]",
+        "configurationHint": "[AR] [TODO: Translate gwi.editors.pipeline.configurationHint]",
+        "deletePipeline": "[AR] [TODO: Translate gwi.editors.pipeline.deletePipeline]",
+        "deleteDialogTitle": "[AR] [TODO: Translate gwi.editors.pipeline.deleteDialogTitle]",
+        "createPipeline": "[AR] [TODO: Translate gwi.editors.pipeline.createPipeline]"
+      },
+      "dataSource": {
+        "errors": {
+          "failedToSave": "[AR] [TODO: Translate gwi.editors.dataSource.errors.failedToSave]",
+          "unexpectedError": "[AR] [TODO: Translate gwi.editors.dataSource.errors.unexpectedError]",
+          "failedToDelete": "[AR] [TODO: Translate gwi.editors.dataSource.errors.failedToDelete]"
+        },
+        "basicInformation": "[AR] [TODO: Translate gwi.editors.dataSource.basicInformation]",
+        "basicInformationDescription": "[AR] [TODO: Translate gwi.editors.dataSource.basicInformationDescription]",
+        "placeholders": {
+          "name": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.name]",
+          "selectType": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.selectType]",
+          "description": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.description]",
+          "leaveBlankToKeep": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.leaveBlankToKeep]",
+          "connectionString": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.connectionString]",
+          "host": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.host]",
+          "database": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.database]",
+          "apiKey": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.apiKey]",
+          "username": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.username]",
+          "password": "[AR] [TODO: Translate gwi.editors.dataSource.placeholders.password]"
+        },
+        "typeCannotBeChanged": "[AR] [TODO: Translate gwi.editors.dataSource.typeCannotBeChanged]",
+        "activeDescription": "[AR] [TODO: Translate gwi.editors.dataSource.activeDescription]",
+        "connectionSettings": "[AR] [TODO: Translate gwi.editors.dataSource.connectionSettings]",
+        "connectionStringOptional": "[AR] [TODO: Translate gwi.editors.dataSource.connectionStringOptional]",
+        "connectionStringHint": "[AR] [TODO: Translate gwi.editors.dataSource.connectionStringHint]",
+        "host": "[AR] [TODO: Translate gwi.editors.dataSource.host]",
+        "port": "[AR] [TODO: Translate gwi.editors.dataSource.port]",
+        "database": "[AR] [TODO: Translate gwi.editors.dataSource.database]",
+        "schemaOptional": "[AR] [TODO: Translate gwi.editors.dataSource.schemaOptional]",
+        "baseUrl": "[AR] [TODO: Translate gwi.editors.dataSource.baseUrl]",
+        "bucketName": "[AR] [TODO: Translate gwi.editors.dataSource.bucketName]",
+        "region": "[AR] [TODO: Translate gwi.editors.dataSource.region]",
+        "authentication": "[AR] [TODO: Translate gwi.editors.dataSource.authentication]",
+        "authenticationDescriptionEdit": "[AR] [TODO: Translate gwi.editors.dataSource.authenticationDescriptionEdit]",
+        "authenticationDescriptionCreate": "[AR] [TODO: Translate gwi.editors.dataSource.authenticationDescriptionCreate]",
+        "apiKey": "[AR] [TODO: Translate gwi.editors.dataSource.apiKey]",
+        "username": "[AR] [TODO: Translate gwi.editors.dataSource.username]",
+        "password": "[AR] [TODO: Translate gwi.editors.dataSource.password]",
+        "credentialsConfigured": "[AR] [TODO: Translate gwi.editors.dataSource.credentialsConfigured]",
+        "deleteDataSource": "[AR] [TODO: Translate gwi.editors.dataSource.deleteDataSource]",
+        "deleteDialogTitle": "[AR] [TODO: Translate gwi.editors.dataSource.deleteDialogTitle]",
+        "createDataSource": "[AR] [TODO: Translate gwi.editors.dataSource.createDataSource]"
+      }
     }
   },
   "admin": {
